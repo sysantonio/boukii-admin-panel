@@ -17,6 +17,8 @@ export class WidgetQuickValueCenterComponent implements OnInit {
   @Input() change: number;
   @Input() helpText: string;
   @Input() iconClass: string;
+  @Input() canShare: boolean;
+  @Input() withPercent: boolean = true;
 
   showButton: boolean;
 

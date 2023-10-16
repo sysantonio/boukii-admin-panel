@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CustomLayoutModule } from './custom-layout/custom-layout.module';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ComponentsModule } from 'src/@vex/components/components.module';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';

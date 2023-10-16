@@ -16,6 +16,7 @@ export class WidgetQuickValueStartComponent implements OnInit {
   @Input() change: number;
   @Input() changeSuffix: string;
   @Input() helpText: string;
+  @Input() canShare: boolean;
 
   showButton: boolean;
 

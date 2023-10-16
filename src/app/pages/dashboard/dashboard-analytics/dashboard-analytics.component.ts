@@ -9,7 +9,16 @@ import { tableSalesData } from 'src/app/static-data/table-sales-data';
   styleUrls: ['./dashboard-analytics.component.scss']
 })
 export class DashboardAnalyticsComponent {
-  tableColumns: TableColumn<any>[] = [
+
+  entity = 'users';
+  columns: TableColumn<any>[] = [
+    { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Mail', property: 'email', type: 'text', visible: true },
+    { label: 'Rol', property: 'rol', type: 'text', visible: true },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true }
+  ];
+
+  /*tableColumns: TableColumn<any>[] = [
     {
       label: '',
       property: 'status',
@@ -72,5 +81,5 @@ export class DashboardAnalyticsComponent {
       height: 100
     },
     colors: ['#ff9800']
-  });
+  });*/
 }

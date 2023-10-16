@@ -32,7 +32,7 @@
   </button>
 
   <button (click)="openSheet()"
-          *ngIf="showButton"
+          *ngIf="showButton && canShare"
           @scaleInOut
           class="absolute -top-3 -right-3 bg-foreground shadow-xl"
           color="primary"

@@ -14,17 +14,17 @@ export class AuthService {
   user: User | null = null;
 
   constructor(private auth: Auth,private router: Router, private userService: UserService) {
-    const user = JSON.parse(localStorage.getItem('sotanoUser'));
+    const user = JSON.parse(localStorage.getItem('boukiiUser'));
     if (user) {
       this.user = user;
     }
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.user = user;
-        localStorage.setItem('sotanoUser', JSON.stringify(user));
+        localStorage.setItem('boukiiUser', JSON.stringify(user));
       } else {
         this.user = null;
-        localStorage.removeItem('sotanoUser');
+        localStorage.removeItem('boukiiUser');
       }
     });
   }
@@ -34,8 +34,8 @@ export class AuthService {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       if (userCredential.user) {
-        localStorage.setItem('sotanoUser', JSON.stringify(userCredential.user));
-        this.router.navigate(['/menu']);
+        localStorage.setItem('boukiiUser', JSON.stringify(userCredential.user));
+        this.router.navigate(['/user']);
       }
     } catch (error) {
       console.error('Error during login:', error);
@@ -46,7 +46,7 @@ export class AuthService {
     try {
       const auth = getAuth();
       await createUserWithEmailAndPassword(auth, email, password);
-      this.router.navigate(['/menu']);
+      this.router.navigate(['/user']);
     } catch (error) {
       console.error('Error during registration:', error);
     }
@@ -55,7 +55,7 @@ export class AuthService {
   async logout() {
     await signOut(this.auth);
     this.user = null;
-    localStorage.removeItem('sotanoUser');
+    localStorage.removeItem('boukiiUser');
   }
 
   isLoggedIn() {

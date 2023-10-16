@@ -40,7 +40,7 @@ import { BreadcrumbsModule } from './breadcrumbs/breadcrumbs.module';
         MatDialogModule,
         LayoutModule,
         MatSnackBarModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
     ],
   declarations: [AioTableComponent],
   entryComponents: [AioTableComponent],

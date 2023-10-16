@@ -10,7 +10,7 @@
     <h1 [class.hidden]="!mobileQuery" class="title ltr:pl-4 rtl:pr-4 m-0 select-none">EL SOTANO</h1>
   </a>
 
-  <!--<button *ngIf="isHorizontalLayout$ | async"
+  <button *ngIf="isHorizontalLayout$ | async"
           [class.hidden]="mobileQuery"
           [matMenuTriggerFor]="addNewMenu"
           color="primary"
@@ -68,7 +68,7 @@
       <span>Mega Menu</span>
       <mat-icon class="icon-sm" svgIcon="mat:arrow_drop_down"></mat-icon>
     </button>
-  </div>-->
+  </div>
 
 
   <div *ngIf="(isVerticalLayout$ | async) && isNavbarInToolbar$ | async"
@@ -80,7 +80,7 @@
   <span class="flex-1"></span>
 
   <div class="-mx-1 flex items-center">
-    <!--<div class="px-1">
+    <div class="px-1">
       <button (click)="openSearch()" mat-icon-button type="button">
         <mat-icon color="primary" svgIcon="mat:search"></mat-icon>
       </button>
@@ -88,9 +88,9 @@
 
     <div class="px-1">
       <vex-toolbar-notifications></vex-toolbar-notifications>
-    </div>-->
+    </div>
 
-    <!--<div class="px-1">
+    <div class="px-1">
       <button (click)="openQuickpanel()" mat-icon-button type="button">
         <mat-icon color="primary" svgIcon="mat:bookmarks"></mat-icon>
       </button>
@@ -100,7 +100,7 @@
       <button [matMenuTriggerFor]="languageMenu" mat-icon-button type="button">
         <mat-icon svgIcon="flag:united-states"></mat-icon>
       </button>
-    </div>-->
+    </div>
 
     <div *ngIf="userVisible$ | async" class="px-1">
       <vex-toolbar-user></vex-toolbar-user>
@@ -120,5 +120,4 @@
   </div>
 </div>
 
-<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async"
-                [class.hidden]="mobileQuery"></vex-navigation>
+<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async" [class.hidden]="mobileQuery"></vex-navigation>

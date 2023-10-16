@@ -6,19 +6,19 @@ import { AuthGuard } from './auth.guard';
 
 const childrenRoutes: VexRoutes = [
   {
-    path: 'dashboard',
-    redirectTo: '/dashboard'
+    path: 'home',
+    redirectTo: '/home'
   },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/user'
+    redirectTo: '/home'
   },
   {
     path: '',
     children: [
       {
-        path: 'dashboard',
+        path: 'home',
         loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard],
       },

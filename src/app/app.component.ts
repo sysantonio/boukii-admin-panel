@@ -125,33 +125,117 @@ export class AppComponent {
         route: '/dashboard',
         icon: 'mat:insights',
         routerLinkActiveOptions: { exact: true }
-      },*/{
-        type: 'link',
-        label: '',
-        route: '',
-        icon: '',
-        routerLinkActiveOptions: { exact: true }
-      },
+      },*/
+
       {
-        type: 'link',
-        label: 'Usuarios',
-        route: '/user',
-        icon: 'mat:supervised_user_circle',
-        routerLinkActiveOptions: { exact: true }
-      },
-      /*{
         type: 'subheading',
-        label: 'Dashboards',
+        label: 'Gestion',
         children: [
           {
             type: 'link',
-            label: 'Analytics',
-            route: '/dashboard',
-            icon: 'mat:insights',
+            label: 'Home',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Planification',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Calendrier',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Calendrier',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Calendrier',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Calendrier',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Calendrier',
+            route: '/home',
+            icon: 'mat:home',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Calendrier',
+            route: '/home',
+            icon: 'mat:home',
             routerLinkActiveOptions: { exact: true }
           }
         ]
-      }*/
+      },
+      // Otra seccion
+      {
+        type: 'subheading',
+        label: 'Personees',
+        children: [
+          {
+            type: 'link',
+            label: 'Moniteurs',
+            route: '/user',
+            icon: 'mat:supervised_user_circle',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Clients',
+            route: '/user',
+            icon: 'mat:supervised_user_circle',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
+            type: 'link',
+            label: 'Administrateurs',
+            route: '/user',
+            icon: 'mat:supervised_user_circle',
+            routerLinkActiveOptions: { exact: true }
+          }
+        ]
+      },
+      {
+        type: 'subheading',
+        label: 'Configuration',
+        children: [{
+          type: 'link',
+          label: 'Boukii Pay',
+          route: '/user',
+          icon: 'mat:supervised_user_circle',
+          routerLinkActiveOptions: { exact: true }
+        },
+        {
+          type: 'link',
+          label: 'Réglages',
+          route: '/user',
+          icon: 'mat:supervised_user_circle',
+          routerLinkActiveOptions: { exact: true }
+        }]
+      }
+
     ];
   }
 }

@@ -55,6 +55,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   title: string;
   @Input()
   route: string;
+  @Input()
+  withHeader: boolean = true;
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   dataSource: MatTableDataSource<any> | null;
