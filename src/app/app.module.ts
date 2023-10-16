@@ -14,7 +14,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { AuthService } from 'src/service/auth.service';
-
 @NgModule({
   declarations: [AppComponent, DashboardComponent],
   imports: [

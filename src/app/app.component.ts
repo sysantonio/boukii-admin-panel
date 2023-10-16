@@ -141,50 +141,50 @@ export class AppComponent {
           {
             type: 'link',
             label: 'Planification',
-            route: '/home',
-            icon: 'mat:home',
+            route: '/timeline',
+            icon: 'mat:schedule',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Calendrier',
-            route: '/home',
-            icon: 'mat:home',
+            route: '/calendar',
+            icon: 'mat:calendar_today',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
-            label: 'Calendrier',
-            route: '/home',
-            icon: 'mat:home',
+            label: 'Reservations',
+            route: '/bookings',
+            icon: 'mat:event_available',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
-            label: 'Calendrier',
-            route: '/home',
-            icon: 'mat:home',
+            label: 'Courses',
+            route: '/courses',
+            icon: 'mat:book',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
-            label: 'Calendrier',
-            route: '/home',
-            icon: 'mat:home',
+            label: "Bons d'achat",
+            route: '/bonuses',
+            icon: 'mat:local_play',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
-            label: 'Calendrier',
-            route: '/home',
-            icon: 'mat:home',
+            label: 'Communication',
+            route: '/messages',
+            icon: 'mat:message',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
-            label: 'Calendrier',
-            route: '/home',
-            icon: 'mat:home',
+            label: 'Statistiques',
+            route: '/stats',
+            icon: 'mat:poll',
             routerLinkActiveOptions: { exact: true }
           }
         ]
@@ -197,21 +197,21 @@ export class AppComponent {
           {
             type: 'link',
             label: 'Moniteurs',
-            route: '/user',
-            icon: 'mat:supervised_user_circle',
+            route: '/monitors',
+            icon: 'mat:school',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Clients',
-            route: '/user',
-            icon: 'mat:supervised_user_circle',
+            route: '/clients',
+            icon: 'mat:person_pin',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Administrateurs',
-            route: '/user',
+            route: '/admins',
             icon: 'mat:supervised_user_circle',
             routerLinkActiveOptions: { exact: true }
           }
@@ -230,8 +230,8 @@ export class AppComponent {
         {
           type: 'link',
           label: 'Réglages',
-          route: '/user',
-          icon: 'mat:supervised_user_circle',
+          route: '/settings',
+          icon: 'mat:settings',
           routerLinkActiveOptions: { exact: true }
         }]
       }

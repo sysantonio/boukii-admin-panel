@@ -23,8 +23,58 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'user',
-        loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule),
+        path: 'timeline',
+        loadChildren: () => import('./pages/timeline/timeline.module').then(m => m.TimelineModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'calendar',
+        loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'bookings',
+        loadChildren: () => import('./pages/bookings/bookings.module').then(m => m.BookingsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'courses',
+        loadChildren: () => import('./pages/courses/courses.module').then(m => m.CoursesModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'bonuses',
+        loadChildren: () => import('./pages/bonuses/bonuses.module').then(m => m.BonusesModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'messages',
+        loadChildren: () => import('./pages/communications/communications.module').then(m => m.CommunicationsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'stats',
+        loadChildren: () => import('./pages/analytics/analytics.module').then(m => m.AnalyticsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'monitors',
+        loadChildren: () => import('./pages/monitors/monitors.module').then(m => m.MonitorsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'clients',
+        loadChildren: () => import('./pages/clients/clients.module').then(m => m.ClientsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'admins',
+        loadChildren: () => import('./pages/admins/admins.module').then(m => m.AdminsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
         canActivate: [AuthGuard],
       },
       {
