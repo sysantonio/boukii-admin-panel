@@ -1,0 +1,209 @@
+<form (ngSubmit)="save()" [formGroup]="form" *ngIf="!loading">
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Nouvelle réservation</h2>
+
+    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+      <mat-icon svgIcon="mat:more_vert"></mat-icon>
+    </button>-->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="text-border"></mat-divider>
+
+  <mat-dialog-content class="flex flex-col">
+    <h2>Chercher Clients</h2>
+
+    <mat-form-field class="flex-auto">
+      <mat-label>Client</mat-label>
+      <input type="text"
+       placeholder="Pick one"
+       aria-label="Number"
+       matInput
+       [formControl]="clientsForm"
+       [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let client of filteredOptions | async" [value]="client">
+          {{client.full_name}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+    </mat-form-field>
+
+    <vex-widget-clients-group></vex-widget-clients-group>
+
+    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+
+    <h2>Type</h2>
+    <div class="flex">
+      <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
+          <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <mat-form-field class="flex-auto" *ngIf="sportTypeSelected > -1">
+      <mat-label>Deporte</mat-label>
+      <input type="text"
+       placeholder="Elije uno"
+       matInput
+       [formControl]="sportForm"
+       [matAutocomplete]="autoSport">
+      <mat-autocomplete #autoSport="matAutocomplete" [displayWith]="displayFnSport">
+        <mat-option *ngFor="let sport of filteredSports | async" [value]="sport">
+          {{ sport.name }}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-icon matPrefix svgIcon="mat:sports"></mat-icon>
+    </mat-form-field>
+
+    <!--<vex-widget-clients-sports *ngIf="form.get('sportType').value" [data]="mockSportData" [type]="form.get('sportType').value"></vex-widget-clients-sports>-->
+
+    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+    <h2>Niveaux</h2>
+
+    <mat-form-field class="flex-auto">
+      <mat-label>Niveaux</mat-label>
+      <input type="text"
+       placeholder="Pick one"
+       aria-label="Number"
+       matInput
+       [formControl]="levelForm"
+       [matAutocomplete]="autoLevel">
+      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
+          {{level.annotation}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+    </mat-form-field>
+
+
+    <div class="flex flex-col sm:flex-row" style="text-align: center;">
+      <div class="flex-auto">
+        <mat-card class="custom-card"
+                  [class.selected]="courseType === 'collectif'"
+                  (click)="setCourseType('collectif')">
+          <mat-card-content>
+            <p>Cours Collectif</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="flex-auto sm:flex-row" style="text-align: center;">
+        <mat-card class="custom-card"
+                  [class.selected]="courseType === 'privee'"
+                  (click)="setCourseType('privee')">
+          <mat-card-content>
+            <p>Cours Privés</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+
+    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+
+    <div class="columns-container">
+      <!-- Columna del calendario -->
+      <div class="calendar-column">
+        <mat-calendar class="smaller-calendar" [startAt]="minDate" [minDate]="minDate" [(selected)]="selectedDate"></mat-calendar>
+      </div>
+
+      <!-- Columna de la lista -->
+      <div class="list-column">
+        <div class="list-overflow-container">
+          <mat-list class="list mat-elevation-z1">
+            <mat-list-item class="custom-list-item"
+            *ngFor="let course of mockCourses"
+            (click)="selectItem(course)"
+            [ngClass]="{'selected-item': selectedItem === course}">
+
+                <div class="avatar-container">
+                    <img mat-list-avatar class="custom-avatar" [src]="course.icon">
+                </div>
+                <div class="content-container">
+                  <div class="title-container">
+                    <h3 class="title">{{ course.name | uppercase}}</h3>
+                    <h3 class="price">{{course.price}} {{ course.currency }}</h3>
+                  </div>
+                    <p>{{course.subtitle}} - {{course.duration}}h</p>
+                    <p>{{course.date_start_format}} - {{course.date_end_format}}</p>
+                </div>
+            </mat-list-item>
+        </mat-list>
+
+        </div>
+      </div>
+    </div>
+
+    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+
+    <p>Sélectionnez une date, une heure et un moniteur pour la réservation</p>
+
+    <div class="flex flex-col sm:flex-row">
+      <mat-form-field class="flex-auto">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" [min]="minDate" placeholder="Elige una fecha">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker [startAt]="minDate"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="sm:ml-6 flex-auto">
+        <mat-label>Heure</mat-label>
+        <input type="text" placeholder="Selecciona una hora" matInput [matAutocomplete]="autoTime" [formControl]="timeControl">
+        <mat-autocomplete #autoTime="matAutocomplete">
+          <mat-option *ngFor="let time of filteredTimes | async" [value]="time">
+            {{ time }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="flex-auto">
+      <mat-label>Chercher Moniteur</mat-label>
+      <input type="text"
+       placeholder="Pick one"
+       aria-label="Number"
+       matInput
+       [formControl]="monitorsForm"
+       [matAutocomplete]="autoMoniteur">
+      <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
+        <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor">
+          {{monitor.full_name}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+    </mat-form-field>
+
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    <button *ngIf="isCreateMode()" color="primary" mat-flat-button type="submit">Create Booking</button>
+    <button *ngIf="isUpdateMode()" color="primary" mat-flat-button type="submit">Update Booking</button>
+  </mat-dialog-actions>
+</form>
+
+<mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
+  <button mat-menu-item>
+    <mat-icon svgIcon="mat:print"></mat-icon>
+    <span>Print</span>
+  </button>
+
+  <button mat-menu-item>
+    <mat-icon svgIcon="mat:download"></mat-icon>
+    <span>Export</span>
+  </button>
+
+  <button mat-menu-item>
+    <mat-icon svgIcon="mat:delete"></mat-icon>
+    <span>Delete</span>
+  </button>
+</mat-menu>

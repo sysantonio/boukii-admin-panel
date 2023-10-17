@@ -57,6 +57,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   route: string;
   @Input()
   withHeader: boolean = true;
+  @Input()
+  createComponent: any;
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   dataSource: MatTableDataSource<any> | null;
@@ -112,9 +114,32 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  create() {
+  /*create() {
     const route = '/' + this.route + '/create';
     this.router.navigate([route]);
+  }*/
+
+  create() {
+
+    const dialogRef = this.dialog.open(this.createComponent, {
+      width: '90vw',
+      height: '90vh',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog'  // Si necesitas estilos adicionales
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      /**
+       * Customer is the updated customer (if the user pressed Save - otherwise it's null)
+       */
+      if (data) {
+        /**
+         * Here we are updating our local array.
+         * You would probably make an HTTP request here.
+         */
+
+      }
+    });
   }
 
   update(row: any) {

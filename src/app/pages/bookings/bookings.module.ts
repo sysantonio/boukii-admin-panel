@@ -38,8 +38,8 @@ import { BookingsRoutingModule } from './bookings-routing.module';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
     MatDialogModule,
+    MatIconModule,
     ComponentsModule
   ]
 })

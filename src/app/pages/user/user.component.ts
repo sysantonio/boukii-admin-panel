@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { UserCreateUpdateComponent } from './user-create-update/user-create-update.component';
 
 @Component({
   selector: 'vex-user',
@@ -8,6 +9,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 })
 export class UserComponent {
 
+  createComponent = UserCreateUpdateComponent;
   entity = 'users';
   columns: TableColumn<any>[] = [
     { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
