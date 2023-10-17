@@ -7,6 +7,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import { WidgetQuickValueCenterModule } from '../widget-quick-value-center/widget-quick-value-center.module';
 import { WidgetSummaryMonitorsComponent } from './widget-summary-monitors.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { WidgetSummaryMonitorsComponent } from './widget-summary-monitors.compon
     MatCardModule,
     MatDividerModule,
     WidgetQuickValueCenterModule,
-    ChartModule
+    ChartModule,
+    MatTabsModule
   ],
   exports: [WidgetSummaryMonitorsComponent]
 })

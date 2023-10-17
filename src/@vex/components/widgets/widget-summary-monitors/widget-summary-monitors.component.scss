@@ -6,3 +6,13 @@
 .swiper-slide {
   width: 25% !important; /* Ajusta este valor según el ancho que quieras para cada slide */
 }
+
+/* Estilo por defecto de los botones */
+button[mat-button] {
+  color: gray;
+}
+
+/* Estilo del botón seleccionado */
+.selected {
+  color: white;
+}

@@ -3,6 +3,7 @@ import { ApexOptions } from '../../chart/chart.component';
 import { defaultChartOptions } from '../../../utils/default-chart-options';
 import { createDateArray } from '../../../utils/create-date-array';
 import Swiper, { Navigation } from 'swiper';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 Swiper.use([Navigation]);
 
@@ -14,6 +15,8 @@ Swiper.use([Navigation]);
 })
 export class WidgetSummaryMonitorsComponent implements OnInit {
 
+  selectedStatus = 'available';  // Disponible está seleccionado por defecto
+  nonDisponiblesSwiperInitialized = false;
   @Input() total: string;
   @Input() series: ApexNonAxisChartSeries | ApexAxisChartSeries;
   @Input() options: ApexOptions = defaultChartOptions({
@@ -55,14 +58,35 @@ export class WidgetSummaryMonitorsComponent implements OnInit {
   constructor() { }
 
   ngAfterViewInit() {
-    const mySwiper = new Swiper('.swiper-container', {
+    const mySwiper = new Swiper('.swiper-container-disponibles', {
       slidesPerView: 4,     // Muestra 4 slides a la vez
       slidesPerGroup: 4,   // Desplaza 4 slides a la vez
       navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: '.swiper-button-next-disponibles',
+        prevEl: '.swiper-button-prev-disponibles',
       },
     });
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    // Si el índice de la pestaña es 1 (No Disponibles)
+    if (event.index === 1 && !this.nonDisponiblesSwiperInitialized) {
+      const mySwiper2 = new Swiper('.swiper-container-non-disponibles', {
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+        navigation: {
+          nextEl: '.swiper-button-next-non-disponibles',
+          prevEl: '.swiper-button-prev-non-disponibles',
+        },
+      });
+      this.nonDisponiblesSwiperInitialized = true; // Asegúrate de inicializarlo solo una vez
+    }
+  }
+
+  filterStatus(status: string) {
+      this.selectedStatus = status;
+      // Aquí va el resto de tu lógica para filtrar según el estado.
+      console.log('Filtrando por:', status);
   }
 
   ngOnInit() {
