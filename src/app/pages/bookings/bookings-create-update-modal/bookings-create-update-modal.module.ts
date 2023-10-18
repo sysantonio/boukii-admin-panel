@@ -9,7 +9,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { BookingsCreateUpdateComponent } from './bookings-create-update.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-clients-group/widget-clients-group.module';
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
@@ -19,12 +18,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
-import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { MatStepperModule } from '@angular/material/stepper';
-import {MatChipsModule} from '@angular/material/chips';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BookingsCreateUpdateModalModule } from '../bookings-create-update-modal/bookings-create-update-modal.module';
+import { BookingsCreateUpdateModalComponent } from './bookings-create-update-modal.component';
 
 @NgModule({
   imports: [
@@ -48,17 +42,10 @@ import { BookingsCreateUpdateModalModule } from '../bookings-create-update-modal
     MatDatepickerModule,
     MatListModule,
     NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    SecondaryToolbarModule,
-    BreadcrumbsModule,
-    MatStepperModule,
-    MatChipsModule,
-    MatSlideToggleModule,
-    MatDialogModule,
-    BookingsCreateUpdateModalModule
+    NgxMatTimepickerModule
   ],
-  declarations: [BookingsCreateUpdateComponent],
-  exports: [BookingsCreateUpdateComponent]
+  declarations: [BookingsCreateUpdateModalComponent],
+  exports: [BookingsCreateUpdateModalComponent]
 })
-export class BookingsCreateUpdateModule {
+export class BookingsCreateUpdateModalModule {
 }

@@ -1,0 +1,185 @@
+<form (ngSubmit)="save()">
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Info de cours</h2>
+
+    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+      <mat-icon svgIcon="mat:more_vert"></mat-icon>
+    </button>-->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="text-border"></mat-divider>
+
+  <mat-dialog-content class="flex flex-col">
+    <div @stagger class="p-gutter container" style="max-width: none">
+
+      <div @fadeInUp class="card overflow-hidden">
+        <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+          <ng-template matStepperIcon="edit">
+            <mat-icon svgIcon="mat:done_all"></mat-icon>
+          </ng-template>
+
+          <ng-template matStepperIcon="done">
+            <mat-icon svgIcon="mat:done_all"></mat-icon>
+          </ng-template>
+
+          <mat-step [stepControl]="courseInformationFormGroup">
+            <form [formGroup]="courseInformationFormGroup">
+              <ng-template matStepLabel>Info de cours</ng-template>
+
+              <h2 class="title m-0" style="width:100%">Type</h2>
+              <div class="subheading-1">Set up your course type.</div>
+
+              <div class="mt-4 flex flex-col gap-2">
+                <mat-form-field>
+                  <mat-label>Course Type</mat-label>
+
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControl" [matAutocomplete]="auto" formControlName="courseType">
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+
+              <div class="mt-4 flex flex-col gap-2">
+                <mat-form-field>
+                  <mat-label>Sport type</mat-label>
+
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlSportType" [matAutocomplete]="autoSportType" formControlName="sportType">
+                  <mat-autocomplete #autoSportType="matAutocomplete" [displayWith]="displayFn" (optionSelected)="filterSportsByType($event)">
+                    <mat-option *ngFor="let option of filteredSportTypes | async" [value]="option">
+                      {{option.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+
+              <div class="mt-4 flex flex-col gap-2">
+                <mat-form-field class="flex-auto" *ngIf="sportTypeSelected > -1">
+                  <mat-label>Sport</mat-label>
+                  <input type="text"
+                   placeholder="Elije uno"
+                   matInput
+                   formControlName="sport"
+                   [formControl]="myControlSport"
+                   [matAutocomplete]="autoSport">
+                  <mat-autocomplete #autoSport="matAutocomplete" [displayWith]="displayFnSport">
+                    <mat-option *ngFor="let sport of filteredSports | async" [value]="sport">
+                      {{ sport.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+
+                  <mat-icon matPrefix svgIcon="mat:sports"></mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="actions flex items-center justify-end gap-2">
+                <button (click)="stepper.reset()" [disabled]="courseInformationFormGroup.pristine" color="primary" mat-button type="button">Reset
+                </button>
+                <button [disabled]="courseInformationFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step [stepControl]="courseDatesFormGroup" >
+            <form [formGroup]="courseDatesFormGroup">
+              <ng-template matStepLabel>Les dates</ng-template>
+
+              <h2 class="title m-0" style="width:100%">Données générales</h2>
+              <div class="subheading-1">Configura los datos y fechas del curso.</div>
+
+              <div class="mt-4 flex flex-col gap-2">
+                <div class="flex-auto">
+                  <mat-label>Cours avec des dates séparables?</mat-label><br>
+                  <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>NOM DU COURS</mat-label>
+                    <input formControlName="course_name" matInput required>
+                  </mat-form-field>
+
+                  <div class="flex-auto flex gap-2">
+                    <mat-form-field class="flex-auto">
+                      <mat-label>PRIX (CHF)</mat-label>
+                      <input formControlName="price" type="number" matInput required>
+                    </mat-form-field>
+
+                    <mat-form-field class="vex-flex-form-field flex-auto">
+                      <mat-label>Station</mat-label>
+
+                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+
+                      <mat-autocomplete #autoStation="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredStations | async" [value]="option">
+                          {{option}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+                <div>
+
+                  <div *ngIf="imagePreviewUrl" class="image-container">
+                    <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290">
+                  </div>
+                  <div class="input-container">
+
+                    <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
+                    <label for="file" class="btn-1">upload file</label>
+                    <p>Maximum 1mb</p>
+                    <p>Formats supportés: PNG, JPG</p>
+                    <p>Taille recommandée: 400x290px</p>
+                  </div>
+                </div>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>RÉSUMÉ</mat-label>
+                  <textarea formControlName="summary" matInput></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>LA DESCRIPTION</mat-label>
+                  <textarea formControlName="description" matInput></textarea>
+                </mat-form-field>
+                <!--<mat-form-field class="flex-auto">
+                  <mat-label>Name</mat-label>
+                  <input formControlName="name" matInput required>
+                  <mat-hint>How may we call you?</mat-hint>
+                </mat-form-field>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>E-Mail</mat-label>
+                    <input formControlName="email" matInput required>
+                    <mat-hint align="end">example@example.com</mat-hint>
+                  </mat-form-field>
+                </div>-->
+              </div>
+
+              <div class="actions flex items-center justify-end gap-2">
+                <button (click)="stepper.reset()" [disabled]="courseDatesFormGroup.pristine" color="primary" mat-button type="button">Reset
+                </button>
+              </div>
+            </form>
+          </mat-step>
+        </mat-vertical-stepper>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    <button *ngIf="isCreateMode()" color="primary" mat-flat-button type="submit">Create Course</button>
+    <button *ngIf="isUpdateMode()" color="primary" mat-flat-button type="submit">Update Course</button>
+  </mat-dialog-actions>
+</form>

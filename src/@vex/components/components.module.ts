@@ -20,6 +20,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PageLayoutModule } from './page-layout/page-layout.module';
 import { BreadcrumbsModule } from './breadcrumbs/breadcrumbs.module';
 import { BookingsCreateUpdateModule } from 'src/app/pages/bookings/bookings-create-update/bookings-create-update.module';
+import { CoursesCreateUpdateModule } from 'src/app/pages/courses/courses-create-update/courses-create-update.module';
 
 @NgModule({
     imports: [
@@ -42,7 +43,8 @@ import { BookingsCreateUpdateModule } from 'src/app/pages/bookings/bookings-crea
         LayoutModule,
         MatSnackBarModule,
         MatProgressSpinnerModule,
-        BookingsCreateUpdateModule
+        BookingsCreateUpdateModule,
+        CoursesCreateUpdateModule
     ],
   declarations: [AioTableComponent],
   entryComponents: [AioTableComponent],

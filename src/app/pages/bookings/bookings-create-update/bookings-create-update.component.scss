@@ -92,11 +92,6 @@
   width: 90%;
 }
 
-.title {
-  width: 50%;
-  float: left;
-}
-
 .price {
   width: 50%;
   text-align: right;
@@ -112,4 +107,180 @@ mat-list {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.12);
   border: 2px solid #ff3085;
   background-color: rgba(255, 48, 133, 0.1);
+  border-radius: 3%;
+}
+
+
+.reservation-detail-card {
+  width: 31%;
+  position: relative;
+  margin: 1%;
+  float: left;
+}
+
+.delete-icon {
+  position: absolute; /* Posiciona el icono en relación a la card */
+  top: 8px;           /* Ajusta según tu necesidad */
+  right: 8px;         /* Ajusta según tu necesidad */
+  cursor: pointer;    /* Cambia el cursor a una mano cuando pasas sobre el icono */
+}
+
+.column-container {
+  padding: 1rem; /* Añade un pequeño padding alrededor para separar el contenido de las bordas */
+}
+
+.column-container:nth-child(1) { /* Selecciona la primera columna */
+  flex: 7; /* Esto representa el 70% */
+}
+
+.column-container:nth-child(2) { /* Selecciona la segunda columna */
+  flex: 3; /* Esto representa el 30% */
+}
+
+.card-container {
+  display: flex; /* Habilita flexbox */
+  flex-wrap: nowrap; /* Asegura que las cards no se envuelvan al siguiente renglón */
+  gap: 1rem; /* Espacio entre las cards */
+}
+
+/* Ajusta la imagen de fondo de mat-card-avatar */
+mat-card-avatar {
+  background-size: cover;  /* Ajusta la imagen para que cubra completamente el elemento */
+  background-position: center;  /* Centra la imagen */
+  background-repeat: no-repeat;  /* Asegura que la imagen no se repita */
+  color: red;
+}
+
+::ng-deep .mat-mdc-card-avatar {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* Estilos para el contenido de la tarjeta */
+.content-title {
+  margin: 16px 0;  /* Esto añade un poco de espacio arriba y abajo del título, ajusta según lo que necesites */
+}
+
+/* Alinea horizontalmente el avatar y el nombre del usuario */
+.user-info {
+  display: flex;  /* Habilita flexbox */
+  align-items: center;  /* Alinea verticalmente al centro los ítems */
+  gap: 8px;  /* Espacio entre el avatar y el nombre, puedes ajustarlo según tus necesidades */
+}
+
+.user-avatar {
+  width: 50px;  /* Puedes ajustar según tus necesidades */
+  height: 50px;
+  border-radius: 50%;  /* Hace que la imagen sea redonda */
+  object-fit: cover;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
+}
+
+.centered-chip-list {
+  display: flex;
+  justify-content: center;  /* Centra el chip horizontalmente */
+  align-items: center;      /* Centra el chip verticalmente, aunque esto podría no ser necesario si el contenedor es del tamaño del chip */
+  width: 100%;  /* Ocupa el ancho total de su contenedor padre */
+  margin-top: 16px;  /* Espacio arriba del chip list, ajusta según lo que necesites */
+}
+.opaque-box {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo negro con opacidad del 70% */
+  padding: 1rem; /* Espacio interior */
+  border-radius: 8px; /* Bordes redondeados */
+  margin: 10px auto; /* Centrar la caja */
+}
+
+.opaque-box p {
+  color: white; /* Texto en blanco para que sea legible contra el fondo negro */
+  margin-bottom: 0.5rem; /* Espacio entre los párrafos */
+}
+
+.opaque-box p:last-child {
+  margin-bottom: 0; /* Elimina el espacio extra en el último párrafo */
+}
+
+.reservation-multiple {
+  float: left;
+  width: 100%;
+}
+
+.reservation-multiple .text {
+  float: left;
+}
+
+.reservation-multiple .title {
+  font-size: 1.25rem!important
+}
+
+.reservation-multiple .subtitle {
+  color: grey;
+}
+
+.reservation-multiple .button {
+  float: right;
+  margin: 1% 0 0 0;
+}
+
+.square-buttons-container {
+  display: flex;
+}
+
+.square-button {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 10px;
+  background: #FFF !important;
+  color: #F53D7C !important;
+}
+
+.square-button:active, .square-button:hover, .square-button.selected {
+  background: #F53D7C !important;
+  color: #FFF !important;
+}
+
+
+
+
+@media only screen and (max-width: 1024px) {
+  .reservation-detail-card {
+    width: 90%;
+    position: relative;
+    margin: 1% 0 1% 10%;
+    float: left;
+  }
+
+  .column-container:nth-child(1) { /* Selecciona la primera columna */
+    flex: 1; /* Esto representa el 70% */
+  }
+
+  .column-container:nth-child(2) { /* Selecciona la segunda columna */
+    flex: 1; /* Esto representa el 30% */
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .reservation-detail-card {
+    width: 90%;
+    position: relative;
+    margin: 1% 0 1% 7%;
+    float: left;
+  }
+
+  .column-container:nth-child(1) { /* Selecciona la primera columna */
+    flex: 1; /* Esto representa el 70% */
+  }
+
+  .column-container:nth-child(2) { /* Selecciona la segunda columna */
+    flex: 1; /* Esto representa el 30% */
+  }
+}
+
+@media only screen and (min-width: 2100px) {
+  .reservation-detail-card {
+    width: 23%;
+  }
 }

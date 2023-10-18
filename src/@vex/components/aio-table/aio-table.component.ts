@@ -114,12 +114,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  /*create() {
+  create() {
     const route = '/' + this.route + '/create';
     this.router.navigate([route]);
-  }*/
+  }
 
-  create() {
+  /*create() {
 
     const dialogRef = this.dialog.open(this.createComponent, {
       width: '90vw',
@@ -129,18 +129,11 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
-      /**
-       * Customer is the updated customer (if the user pressed Save - otherwise it's null)
-       */
       if (data) {
-        /**
-         * Here we are updating our local array.
-         * You would probably make an HTTP request here.
-         */
 
       }
     });
-  }
+  }*/
 
   update(row: any) {
     this.router.navigate(['/' + this.route + '/update/' + row.id]);

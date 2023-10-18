@@ -38,6 +38,16 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'bookings/create',
+        loadChildren: () => import('./pages/bookings/bookings-create-update/bookings-create-update.module').then(m => m.BookingsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'bookings/update/:id',
+        loadChildren: () => import('./pages/bookings/bookings-create-update/bookings-create-update.module').then(m => m.BookingsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'courses',
         loadChildren: () => import('./pages/courses/courses.module').then(m => m.CoursesModule),
         canActivate: [AuthGuard],

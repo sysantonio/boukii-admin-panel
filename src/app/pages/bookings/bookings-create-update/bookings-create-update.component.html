@@ -1,209 +1,740 @@
-<form (ngSubmit)="save()" [formGroup]="form" *ngIf="!loading">
-  <div class="flex items-center" mat-dialog-title>
-    <h2 class="headline m-0 flex-auto">Nouvelle réservation</h2>
-
-    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
-      <mat-icon svgIcon="mat:more_vert"></mat-icon>
-    </button>-->
-
-    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
-      <mat-icon svgIcon="mat:close"></mat-icon>
-    </button>
-  </div>
-
-  <mat-divider class="text-border"></mat-divider>
-
-  <mat-dialog-content class="flex flex-col">
-    <h2>Chercher Clients</h2>
-
-    <mat-form-field class="flex-auto">
-      <mat-label>Client</mat-label>
-      <input type="text"
-       placeholder="Pick one"
-       aria-label="Number"
-       matInput
-       [formControl]="clientsForm"
-       [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let client of filteredOptions | async" [value]="client">
-          {{client.full_name}}
-        </mat-option>
-      </mat-autocomplete>
-
-      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-    </mat-form-field>
-
-    <vex-widget-clients-group></vex-widget-clients-group>
-
-    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-
-    <h2>Type</h2>
-    <div class="flex">
-      <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
-          <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <mat-form-field class="flex-auto" *ngIf="sportTypeSelected > -1">
-      <mat-label>Deporte</mat-label>
-      <input type="text"
-       placeholder="Elije uno"
-       matInput
-       [formControl]="sportForm"
-       [matAutocomplete]="autoSport">
-      <mat-autocomplete #autoSport="matAutocomplete" [displayWith]="displayFnSport">
-        <mat-option *ngFor="let sport of filteredSports | async" [value]="sport">
-          {{ sport.name }}
-        </mat-option>
-      </mat-autocomplete>
-
-      <mat-icon matPrefix svgIcon="mat:sports"></mat-icon>
-    </mat-form-field>
-
-    <!--<vex-widget-clients-sports *ngIf="form.get('sportType').value" [data]="mockSportData" [type]="form.get('sportType').value"></vex-widget-clients-sports>-->
-
-    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-    <h2>Niveaux</h2>
-
-    <mat-form-field class="flex-auto">
-      <mat-label>Niveaux</mat-label>
-      <input type="text"
-       placeholder="Pick one"
-       aria-label="Number"
-       matInput
-       [formControl]="levelForm"
-       [matAutocomplete]="autoLevel">
-      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
-          {{level.annotation}}
-        </mat-option>
-      </mat-autocomplete>
-
-      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-    </mat-form-field>
-
-
-    <div class="flex flex-col sm:flex-row" style="text-align: center;">
-      <div class="flex-auto">
-        <mat-card class="custom-card"
-                  [class.selected]="courseType === 'collectif'"
-                  (click)="setCourseType('collectif')">
-          <mat-card-content>
-            <p>Cours Collectif</p>
-          </mat-card-content>
-        </mat-card>
+<vex-secondary-toolbar current="Bookings">
+  <vex-breadcrumbs
+    [crumbs]="['Bookings', 'Nouvelle réservation']"
+    class="flex-auto"
+  ></vex-breadcrumbs>
+  <button class="ml-2" color="primary" mat-icon-button type="button">
+    <mat-icon svgIcon="mat:more_vert"></mat-icon>
+  </button>
+</vex-secondary-toolbar>
+<div
+  [@stagger]="true"
+  class="p-gutter container"
+  style="max-width: none"
+  *ngIf="!loading"
+>
+  <div class="flex flex-col sm:flex-row gap-4">
+    <div @fadeInUp class="card flex-auto">
+      <div class="px-6 py-4 border-b flex items-center">
+        <h2 class="title m-0">Nouvelle réservation</h2>
       </div>
-
-      <div class="flex-auto sm:flex-row" style="text-align: center;">
-        <mat-card class="custom-card"
-                  [class.selected]="courseType === 'privee'"
-                  (click)="setCourseType('privee')">
-          <mat-card-content>
-            <p>Cours Privés</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-
-
-    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-
-    <div class="columns-container">
-      <!-- Columna del calendario -->
-      <div class="calendar-column">
-        <mat-calendar class="smaller-calendar" [startAt]="minDate" [minDate]="minDate" [(selected)]="selectedDate"></mat-calendar>
-      </div>
-
-      <!-- Columna de la lista -->
-      <div class="list-column">
-        <div class="list-overflow-container">
-          <mat-list class="list mat-elevation-z1">
-            <mat-list-item class="custom-list-item"
-            *ngFor="let course of mockCourses"
-            (click)="selectItem(course)"
-            [ngClass]="{'selected-item': selectedItem === course}">
-
-                <div class="avatar-container">
-                    <img mat-list-avatar class="custom-avatar" [src]="course.icon">
-                </div>
-                <div class="content-container">
-                  <div class="title-container">
-                    <h3 class="title">{{ course.name | uppercase}}</h3>
-                    <h3 class="price">{{course.price}} {{ course.currency }}</h3>
+      <div class="px-6 py-4 flex flex-col" [formGroup]="form">
+        <h2>Chercher Clients</h2>
+        <mat-form-field class="flex-auto">
+          <mat-label>Client</mat-label>
+          <input
+            type="text"
+            placeholder="Pick one"
+            aria-label="Number"
+            matInput
+            [formControl]="clientsForm"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option
+              *ngFor="let client of filteredOptions | async"
+              [value]="client"
+            >
+              {{client.full_name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+        </mat-form-field>
+        <vex-widget-clients-group></vex-widget-clients-group>
+        <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+        <h2>Type</h2>
+        <div class="flex">
+          <mat-radio-group
+            aria-label="Select an option"
+            formControlName="sportType"
+            (change)="filterSportsByType()"
+          >
+            <mat-radio-button
+              *ngFor="let sport of mockSportType"
+              class="mr-4"
+              [value]="sport.id"
+              >{{sport.name}}</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+        <mat-form-field class="flex-auto" *ngIf="sportTypeSelected > -1">
+          <mat-label>Deporte</mat-label>
+          <input
+            type="text"
+            placeholder="Elije uno"
+            matInput
+            [formControl]="sportForm"
+            [matAutocomplete]="autoSport"
+          />
+          <mat-autocomplete
+            #autoSport="matAutocomplete"
+            [displayWith]="displayFnSport"
+          >
+            <mat-option
+              *ngFor="let sport of filteredSports | async"
+              [value]="sport"
+            >
+              {{ sport.name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-icon matPrefix svgIcon="mat:sports"></mat-icon>
+        </mat-form-field>
+        <!--<vex-widget-clients-sports *ngIf="form.get('sportType').value" [data]="mockSportData" [type]="form.get('sportType').value"></vex-widget-clients-sports>-->
+        <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+        <h2>Niveaux</h2>
+        <mat-form-field class="flex-auto">
+          <mat-label>Niveaux</mat-label>
+          <input
+            type="text"
+            placeholder="Pick one"
+            aria-label="Number"
+            matInput
+            [formControl]="levelForm"
+            [matAutocomplete]="autoLevel"
+          />
+          <mat-autocomplete
+            #autoLevel="matAutocomplete"
+            [displayWith]="displayFnLevel"
+          >
+            <mat-option
+              *ngFor="let level of filteredLevel | async"
+              [value]="level"
+            >
+              {{level.annotation}} - {{level.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+        </mat-form-field>
+        <div class="flex flex-col sm:flex-row" style="text-align: center;">
+          <div class="flex-auto">
+            <mat-card
+              class="custom-card"
+              [class.selected]="courseType === 'collectif'"
+              (click)="setCourseType('collectif')"
+            >
+              <mat-card-content>
+                <p>Cours Collectif</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="flex-auto sm:flex-row" style="text-align: center;">
+            <mat-card
+              class="custom-card"
+              [class.selected]="courseType === 'privee'"
+              (click)="setCourseType('privee')"
+            >
+              <mat-card-content>
+                <p>Cours Privés</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+        <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+        <div class="columns-container">
+          <!-- Columna del calendario -->
+          <div class="calendar-column">
+            <mat-calendar
+              class="smaller-calendar"
+              [startAt]="minDate"
+              [minDate]="minDate"
+              [(selected)]="selectedDate"
+            ></mat-calendar>
+          </div>
+          <!-- Columna de la lista -->
+          <div class="list-column">
+            <div class="list-overflow-container">
+              <mat-list class="list mat-elevation-z1">
+                <mat-list-item
+                  class="custom-list-item"
+                  *ngFor="let course of mockCourses"
+                  (click)="selectItem(course)"
+                  [ngClass]="{'selected-item': selectedItem === course}"
+                >
+                  <div class="avatar-container">
+                    <img
+                      mat-list-avatar
+                      class="custom-avatar"
+                      [src]="course.icon"
+                    />
                   </div>
+                  <div class="content-container">
+                    <div class="title-container">
+                      <h3 class="title">{{ course.name | uppercase}}</h3>
+                      <h3 class="price">
+                        {{course.price}} {{ course.currency }}
+                      </h3>
+                    </div>
                     <p>{{course.subtitle}} - {{course.duration}}h</p>
-                    <p>{{course.date_start_format}} - {{course.date_end_format}}</p>
-                </div>
-            </mat-list-item>
-        </mat-list>
+                    <p>
+                      {{course.date_start_format}} - {{course.date_end_format}}
+                    </p>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </div>
+        </div>
+        <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+        <p>
+          Sélectionnez une date, une heure et un moniteur pour la réservation
+        </p>
+        <div class="flex flex-col sm:flex-row">
+          <mat-form-field class="flex-auto">
+            <mat-label>Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [min]="minDate"
+              placeholder="Elige una fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker [startAt]="minDate"></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="sm:ml-6 flex-auto">
+            <mat-label>Heure</mat-label>
+            <input
+              type="text"
+              placeholder="Selecciona una hora"
+              matInput
+              [matAutocomplete]="autoTime"
+              [formControl]="timeControl"
+            />
+            <mat-autocomplete #autoTime="matAutocomplete">
+              <mat-option
+                *ngFor="let time of filteredTimes | async"
+                [value]="time"
+              >
+                {{ time }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <mat-form-field class="flex-auto">
+          <mat-label>Chercher Moniteur</mat-label>
+          <input
+            type="text"
+            placeholder="Pick one"
+            aria-label="Number"
+            matInput
+            [formControl]="monitorsForm"
+            [matAutocomplete]="autoMoniteur"
+          />
+          <mat-autocomplete
+            #autoMoniteur="matAutocomplete"
+            [displayWith]="displayFnMoniteurs"
+          >
+            <mat-option
+              *ngFor="let monitor of filteredMonitors | async"
+              [value]="monitor"
+            >
+              {{monitor.full_name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+        </mat-form-field>
+        <div class="flex items-center justify-end gap-2">
+          <button mat-button type="button">Cancelar</button>
+          <!-- Added (click) event here -->
+          <button
+            color="primary"
+            mat-raised-button
+            type="button"
+            (click)="save()"
+          >
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;">
+  <div class="flex flex-col sm:flex-row gap-4">
+    <div class="column-container">
+      <!-- Aquí añade tu otro contenedor o lo que necesites -->
+
+      <div class="card-container">
+        <!-- Nuevo contenedor para las cards -->
+
+        <div @fadeInUp class="card flex-auto" style="padding: 1px;">
+          <div class="px-6 py-4 border-b flex items-center">
+            <h2 class="title m-0">Information de la réserve</h2>
+          </div>
+
+          <mat-card class="reservation-detail-card">
+            <mat-card-header>
+              <button mat-icon-button color="warn" class="delete-icon">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+
+              <div
+                mat-card-avatar
+                [style.background-image]="'url(' + imagePath + ')'"
+              ></div>
+              <mat-card-title>{{ title }}</mat-card-title>
+              <mat-card-subtitle
+                >Collective Ski | {{ usersCount }} utilisateurs |
+                {{ duration }}</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <h3 class="content-title">Fechas reservadas:</h3>
+              <ul>
+                <li *ngFor="let date of reservedDates">
+                  <mat-icon svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                </li>
+              </ul>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userName }}</span>
+              </div>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userNameSub }}</span>
+              </div>
+
+              <mat-chip-listbox class="centered-chip-list">
+                <mat-chip color="primary" selected style="margin: 1% 0 0 38%;"
+                  ><span>{{ userLevel }}</span></mat-chip
+                >
+              </mat-chip-listbox>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="reservation-detail-card">
+            <mat-card-header>
+              <button mat-icon-button color="warn" class="delete-icon">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+
+              <div
+                mat-card-avatar
+                [style.background-image]="'url(' + imagePath + ')'"
+              ></div>
+              <mat-card-title>{{ title }}</mat-card-title>
+              <mat-card-subtitle
+                >Collective Ski | {{ usersCount }} utilisateurs |
+                {{ duration }}</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <h3 class="content-title">Fechas reservadas:</h3>
+              <ul>
+                <li *ngFor="let date of reservedDates">
+                  <mat-icon svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                </li>
+              </ul>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userName }}</span>
+              </div>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userNameSub }}</span>
+              </div>
+
+              <mat-chip-listbox class="centered-chip-list">
+                <mat-chip color="primary" selected style="margin: 1% 0 0 38%;"
+                  ><span>{{ userLevel }}</span></mat-chip
+                >
+              </mat-chip-listbox>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="reservation-detail-card">
+            <mat-card-header>
+              <button mat-icon-button color="warn" class="delete-icon">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+
+              <div
+                mat-card-avatar
+                [style.background-image]="'url(' + imagePath + ')'"
+              ></div>
+              <mat-card-title>{{ title }}</mat-card-title>
+              <mat-card-subtitle
+                >Collective Ski | {{ usersCount }} utilisateurs |
+                {{ duration }}</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <h3 class="content-title">Fechas reservadas:</h3>
+              <ul>
+                <li *ngFor="let date of reservedDates">
+                  <mat-icon svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                </li>
+              </ul>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userName }}</span>
+              </div>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userNameSub }}</span>
+              </div>
+
+              <mat-chip-listbox class="centered-chip-list">
+                <mat-chip color="primary" selected style="margin: 1% 0 0 38%;"
+                  ><span>{{ userLevel }}</span></mat-chip
+                >
+              </mat-chip-listbox>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="reservation-detail-card">
+            <mat-card-header>
+              <button mat-icon-button color="warn" class="delete-icon">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+
+              <div
+                mat-card-avatar
+                [style.background-image]="'url(' + imagePath + ')'"
+              ></div>
+              <mat-card-title>{{ title }}</mat-card-title>
+              <mat-card-subtitle
+                >Collective Ski | {{ usersCount }} utilisateurs |
+                {{ duration }}</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <h3 class="content-title">Fechas reservadas:</h3>
+              <ul>
+                <li *ngFor="let date of reservedDates">
+                  <mat-icon svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                </li>
+              </ul>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userName }}</span>
+              </div>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userNameSub }}</span>
+              </div>
+
+              <mat-chip-listbox class="centered-chip-list">
+                <mat-chip color="primary" selected style="margin: 1% 0 0 38%;"
+                  ><span>{{ userLevel }}</span></mat-chip
+                >
+              </mat-chip-listbox>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="reservation-detail-card">
+            <mat-card-header>
+              <button mat-icon-button color="warn" class="delete-icon">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+
+              <div
+                mat-card-avatar
+                [style.background-image]="'url(' + imagePath + ')'"
+              ></div>
+              <mat-card-title>{{ title }}</mat-card-title>
+              <mat-card-subtitle
+                >Collective Ski | {{ usersCount }} utilisateurs |
+                {{ duration }}</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <h3 class="content-title">Fechas reservadas:</h3>
+              <ul>
+                <li *ngFor="let date of reservedDates">
+                  <mat-icon svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                </li>
+              </ul>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userName }}</span>
+              </div>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userNameSub }}</span>
+              </div>
+
+              <mat-chip-listbox class="centered-chip-list">
+                <mat-chip color="primary" selected style="margin: 1% 0 0 38%;"
+                  ><span>{{ userLevel }}</span></mat-chip
+                >
+              </mat-chip-listbox>
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="reservation-detail-card">
+            <mat-card-header>
+              <button mat-icon-button color="warn" class="delete-icon">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+
+              <div
+                mat-card-avatar
+                [style.background-image]="'url(' + imagePath + ')'"
+              ></div>
+              <mat-card-title>{{ title }}</mat-card-title>
+              <mat-card-subtitle
+                >Collective Ski | {{ usersCount }} utilisateurs |
+                {{ duration }}</mat-card-subtitle
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <h3 class="content-title">Fechas reservadas:</h3>
+              <ul>
+                <li *ngFor="let date of reservedDates">
+                  <mat-icon svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                </li>
+              </ul>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userName }}</span>
+              </div>
+
+              <div class="user-info">
+                <img
+                  [src]="userAvatar"
+                  alt="Avatar de usuario"
+                  class="user-avatar"
+                />
+                <span>{{ userNameSub }}</span>
+              </div>
+
+              <mat-chip-listbox class="centered-chip-list">
+                <mat-chip color="primary" selected style="margin: 1% 0 0 38%;"
+                  ><span>{{ userLevel }}</span></mat-chip
+                >
+              </mat-chip-listbox>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <div class="column-container">
+      <div class="card-container">
+
+      <div @fadeInUp class="card flex-auto" style="padding: 1%">
+
+
+        <div class="px-6 py-4 border-b flex items-center">
+          <h2 class="title m-0">Information del moniteur</h2>
+        </div>
+        <mat-card style="width: 100%;padding:1%">
+          <mat-card-header>
+
+            <div
+              mat-card-avatar
+              [style.background-image]="'url(' + userAvatar + ')'"
+            ></div>
+            <mat-card-title>{{ titleMoniteur }}</mat-card-title>
+            <mat-card-subtitle>
+              <button mat-icon-button color="primary">
+                <mat-icon svgIcon="mat:chat"></mat-icon>
+              </button>
+              <button mat-icon-button color="accent">
+                <mat-icon svgIcon="mat:phone"></mat-icon>
+              </button>
+              <button mat-icon-button color="warn">
+                <mat-icon svgIcon="mat:mail"></mat-icon>
+              </button>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+            <mat-divider
+            class="text-border"
+            style="margin: 10px 0 10px 0"
+          ></mat-divider>
+          <button mat-raised-button color="accent">Appliquer une réduction</button>
+
+
+
+          <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+
+          <button mat-raised-button color="accent">Utiliziser un bon d'achat</button>
+
+
+
+          <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+
+        <div style="float: left;width: 100%;">
+          <p style="float: left;">Option Remboursement (10%)</p>
+          <mat-slide-toggle color="primary" [checked]="false" style="float: right;"></mat-slide-toggle>
+
+        </div>
+
+          <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
+
+        <h3 style="font-size: 1.5rem!important;">Résumé</h3>
+        <div class="opaque-box">
+          <span style="width: 100%; float:left"><p style="float:left">SOUS-TOTAL</p><p style="float:right">400 CHF</p></span>
+          <span style="width: 100%; float:left"><p style="float:left">REMISE</p><p style="float:right">-50 CHF</p></span>
+          <span style="width: 100%; float:left"><p style="float:left">MONTANT TOTAL</p><p style="float:right">350 CHF</p></span>
+        </div>
+
+        <mat-divider
+        class="text-border"
+        style="margin: 10px 0 10px 0"
+      ></mat-divider>
+
+        <div class="square-buttons-container">
+          <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0'" [class.selected]="selectedButton==='1'">Direct</button>
+          <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0'" [class.selected]="selectedButton==='2'">Online</button>
+          <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0'" [class.selected]="selectedButton==='3'">Confirmer sans paiment</button>
+        </div>
+
+        <mat-divider
+        class="text-border"
+        style="margin: 10px 0 10px 0"
+      ></mat-divider>
+
+        <div class="square-buttons-container" *ngIf="selectedButton==='1'">
+          <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1'" [class.selected]="selectedSubButton==='1'">Cash</button>
+          <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'" [class.selected]="selectedSubButton==='2'">Autre</button>
+          <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
+        </div>
+
+
+        <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'"
+        class="text-border"
+        style="margin: 10px 0 10px 0"
+      ></mat-divider>
+
+        <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
+          <p style="float:left">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
+          <mat-slide-toggle color="primary" [checked]="false" style="float: right;"></mat-slide-toggle>
+        </div>
+
+        <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
+        class="text-border"
+        style="margin: 10px 0 10px 0"
+      ></mat-divider>
+
+        <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
+          <button mat-raised-button color="accent" class="square-button">Confirmer Reservation</button>
+        </div>
+
+        <div class="square-buttons-container" *ngIf="selectedButton==='2'">
+          <button style="width:100%" mat-raised-button color="primary" class="square-button">Confirm by email</button>
+        </div>
+
+        <div class="square-buttons-container"  *ngIf="selectedButton==='3'">
+          <button style="width:100%" mat-raised-button color="primary" class="square-button">Confirmer reservation</button>
+        </div>
+        </mat-card>
 
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+<div
+  [@stagger]="true"
+  class="p-gutter container"
+  style="max-width: none"
+  *ngIf="!loading"
+>
+  <div class="flex flex-col sm:flex-row gap-4">
+    <div @fadeInUp class="card flex-auto">
+      <div class="px-6 py-4 border-b flex items-center">
+        <h2 class="title m-0">Remarques</h2>
+      </div>
+      <div class="px-6 py-4 flex flex-col" [formGroup]="form">
+        <mat-form-field class="flex-auto">
+          <mat-label>Remarques</mat-label>
+          <textarea formControlName="observations" matInput></textarea>
+        </mat-form-field>
 
-    <p>Sélectionnez une date, une heure et un moniteur pour la réservation</p>
+        <mat-divider
+          class="text-border"
+          style="margin: 10px 0 10px 0"
+        ></mat-divider>
 
-    <div class="flex flex-col sm:flex-row">
-      <mat-form-field class="flex-auto">
-        <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" [min]="minDate" placeholder="Elige una fecha">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker [startAt]="minDate"></mat-datepicker>
-      </mat-form-field>
+        <div class="reservation-multiple">
 
-      <mat-form-field class="sm:ml-6 flex-auto">
-        <mat-label>Heure</mat-label>
-        <input type="text" placeholder="Selecciona una hora" matInput [matAutocomplete]="autoTime" [formControl]="timeControl">
-        <mat-autocomplete #autoTime="matAutocomplete">
-          <mat-option *ngFor="let time of filteredTimes | async" [value]="time">
-            {{ time }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+          <div class="text">
+
+          <p class="title">Réservation multiple?</p><br>
+          <p class="subtitle">Vous réservez pour un groupe de clients. Vous pouvez réserver pour plusieurs membres du groupe.</p>
+          </div>
+          <div class="button">
+            <button mat-raised-button color="primary" (click)="openBookingModal()">Ajouter une reservation</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <mat-form-field class="flex-auto">
-      <mat-label>Chercher Moniteur</mat-label>
-      <input type="text"
-       placeholder="Pick one"
-       aria-label="Number"
-       matInput
-       [formControl]="monitorsForm"
-       [matAutocomplete]="autoMoniteur">
-      <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
-        <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor">
-          {{monitor.full_name}}
-        </mat-option>
-      </mat-autocomplete>
-
-      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-    </mat-form-field>
-
-
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close type="button">Cancel</button>
-    <button *ngIf="isCreateMode()" color="primary" mat-flat-button type="submit">Create Booking</button>
-    <button *ngIf="isUpdateMode()" color="primary" mat-flat-button type="submit">Update Booking</button>
-  </mat-dialog-actions>
-</form>
-
-<mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
-  <button mat-menu-item>
-    <mat-icon svgIcon="mat:print"></mat-icon>
-    <span>Print</span>
-  </button>
-
-  <button mat-menu-item>
-    <mat-icon svgIcon="mat:download"></mat-icon>
-    <span>Export</span>
-  </button>
-
-  <button mat-menu-item>
-    <mat-icon svgIcon="mat:delete"></mat-icon>
-    <span>Delete</span>
-  </button>
-</mat-menu>
+  </div>
+</div>

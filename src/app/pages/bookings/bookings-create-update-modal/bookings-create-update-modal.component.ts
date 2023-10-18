@@ -1,45 +1,20 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {NgFor, AsyncPipe} from '@angular/common';
 import { Observable, map, of, startWith } from 'rxjs';
 import { MOCK_SPORT_DATA, MOCK_SPORT_TYPES } from 'src/app/static-data/sports-data';
 import { CLIENTS, SUB_CLIENTS } from 'src/app/static-data/clients-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_COURSES } from 'src/app/static-data/courses-data';
 import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
-import { stagger20ms } from 'src/@vex/animations/stagger.animation';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { MatDialog } from '@angular/material/dialog';
-import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
 
 @Component({
-  selector: 'vex-bookings-create-update',
-  templateUrl: './bookings-create-update.component.html',
-  styleUrls: ['./bookings-create-update.component.scss'],
-  animations: [fadeInUp400ms, stagger20ms]
+  selector: 'vex-bookings-create-update-modal',
+  templateUrl: './bookings-create-update-modal.component.html',
+  styleUrls: ['./bookings-create-update-modal.component.scss']
 })
-export class BookingsCreateUpdateComponent implements OnInit {
-
-  createComponent = BookingsCreateUpdateModalComponent;
-
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
-  title = 'Título de la Reserva';
-  titleMoniteur = 'Nombre monitor';
-  usersCount = 5;
-  duration = '3 horas';
-  reservedDates = [
-    new Date(),
-    new Date(),
-    new Date(),
-    new Date(),
-    new Date(),
-    // ... otras fechas
-  ];
-  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
-  userName = 'Nombre de Usuario';
-  userNameSub = 'Nombre de Utilizador';
-  userLevel = 'Intermedio';
-  selectedButton: string = '';
-  selectedSubButton: string = '';
+export class BookingsCreateUpdateModalComponent implements OnInit {
 
   static id = 100;
   minDate: Date;
@@ -65,7 +40,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
   courseType: any;
 
   form: UntypedFormGroup;
-  defaults: any = {};
 
   options: string[] = ['One', 'Two', 'Three'];
   mode: 'create' | 'update' = 'create';
@@ -80,7 +54,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
   mockCourses = MOCK_COURSES;
   mockMonitors = MOCK_MONITORS;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog) {
+  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any,
+              private dialogRef: MatDialogRef<any>,
+              private fb: UntypedFormBuilder) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.selectedDate = this.minDate; // Puede ser cualquier fecha que quieras tener seleccionada por defecto
@@ -133,8 +109,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.defaults = {};
       this.form = this.fb.group({
         sportType: [null], // Posiblemente establezcas un valor predeterminado aquí
-        sportForm: [null],
-        observations: [null],
+        sportForm: ['']
       })
     }
 
@@ -170,12 +145,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
       booking.imageSrc = 'assets/img/avatars/1.jpg';
     }
 
+    this.dialogRef.close(booking);
   }
 
   update() {
     const booking = this.form.value;
     booking.id = this.defaults.id;
 
+    this.dialogRef.close(booking);
   }
 
   isCreateMode() {
@@ -225,9 +202,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return sport && sport.name ? sport.name : '';
   }
 
-  displayFnLevel(level: any): string {
-    return level && level.name ? level.name : '';
-  }
 
   displayFnTime(time: any): string {
     return time && time.name ? time.name : '';
@@ -244,22 +218,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
       dt.setMinutes(dt.getMinutes() + 5); // Incrementa en 5 minutos
     }
     return times;
-  }
-
-  openBookingModal() {
-
-    const dialogRef = this.dialog.open(this.createComponent, {
-      width: '90vw',
-      height: '90vh',
-      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
-      panelClass: 'full-screen-dialog'  // Si necesitas estilos adicionales
-    });
-
-    dialogRef.afterClosed().subscribe((data: any) => {
-      if (data) {
-
-      }
-    });
   }
 
 }

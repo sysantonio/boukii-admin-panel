@@ -35,7 +35,7 @@ export class AuthService {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       if (userCredential.user) {
         localStorage.setItem('boukiiUser', JSON.stringify(userCredential.user));
-        this.router.navigate(['/user']);
+        this.router.navigate(['/home']);
       }
     } catch (error) {
       console.error('Error during login:', error);
@@ -46,7 +46,7 @@ export class AuthService {
     try {
       const auth = getAuth();
       await createUserWithEmailAndPassword(auth, email, password);
-      this.router.navigate(['/user']);
+      this.router.navigate(['/home']);
     } catch (error) {
       console.error('Error during registration:', error);
     }
