@@ -88,6 +88,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
 
+    this.form = this.fb.group({
+      sportType: [null], // Posiblemente establezcas un valor predeterminado aquí
+      sportForm: [null],
+      observations: [null],
+    })
+
     this.filteredOptions = this.clientsForm.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.full_name),
@@ -131,11 +137,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.mode = 'update';
     } else {
       this.defaults = {};
-      this.form = this.fb.group({
-        sportType: [null], // Posiblemente establezcas un valor predeterminado aquí
-        sportForm: [null],
-        observations: [null],
-      })
+
     }
 
     this.loading = false;
