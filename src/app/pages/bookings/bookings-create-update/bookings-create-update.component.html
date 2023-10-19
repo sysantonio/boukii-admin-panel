@@ -12,6 +12,7 @@
   class="p-gutter container"
   style="max-width: none"
   *ngIf="!loading"
+  [hidden]="bookingComplete"
 >
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
@@ -264,7 +265,7 @@
   </div>
 </div>
 
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;">
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" [hidden]="!bookingComplete">
   <div class="flex flex-col sm:flex-row gap-4">
     <div class="column-container">
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
@@ -673,7 +674,7 @@
       ></mat-divider>
 
         <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
-          <p style="float:left">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
+          <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
           <mat-slide-toggle color="primary" [checked]="false" style="float: right;"></mat-slide-toggle>
         </div>
 
@@ -706,6 +707,7 @@
   class="p-gutter container"
   style="max-width: none"
   *ngIf="!loading"
+  [hidden]="!bookingComplete"
 >
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">

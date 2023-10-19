@@ -10,7 +10,7 @@ import { BookingsCreateUpdateComponent } from './bookings-create-update/bookings
 export class BookingsComponent {
 
   createComponent = BookingsCreateUpdateComponent;
-  entity = 'users';
+  entity = 'bookings';
   columns: TableColumn<any>[] = [
     { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Mail', property: 'email', type: 'text', visible: true },

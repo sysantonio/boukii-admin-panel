@@ -40,6 +40,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   userLevel = 'Intermedio';
   selectedButton: string = '';
   selectedSubButton: string = '';
+  bookingComplete: boolean = false;
 
   static id = 100;
   minDate: Date;
@@ -65,7 +66,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   courseType: any;
 
   form: UntypedFormGroup;
-  defaults: any = {};
+  defaults: any = null;
 
   options: string[] = ['One', 'Two', 'Three'];
   mode: 'create' | 'update' = 'create';
@@ -137,7 +138,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.mode = 'update';
     } else {
       this.defaults = {};
-
+      this.mode = 'create';
     }
 
     this.loading = false;
@@ -167,11 +168,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   create() {
     const booking = this.form.value;
-
-    if (!booking.imageSrc) {
-      booking.imageSrc = 'assets/img/avatars/1.jpg';
-    }
-
+    this.bookingComplete = true;
   }
 
   update() {
