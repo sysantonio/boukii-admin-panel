@@ -158,8 +158,8 @@
 
               <mat-form-field class="flex-auto">
                 <mat-form-field>
-                  <input type="text" placeholder="Selecciona una duración" matInput [matAutocomplete]="auto">
-                  <mat-autocomplete #auto="matAutocomplete">
+                  <input type="text" placeholder="Selecciona una duración" matInput [matAutocomplete]="autoTimes">
+                  <mat-autocomplete #autoTimes="matAutocomplete">
                     <mat-option *ngFor="let duration of durations" [value]="duration">
                       {{duration}}
                     </mat-option>
