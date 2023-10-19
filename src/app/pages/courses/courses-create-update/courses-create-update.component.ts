@@ -32,6 +32,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   imagePreviewUrl: string | ArrayBuffer;
 
+  defaults: any = null;
 
   sportTypeSelected: number = -1;
   mockSportData = MOCK_SPORT_DATA;
@@ -41,10 +42,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   loading: boolean = true;
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any,
-              private dialogRef: MatDialogRef<any>,
-              private fb: UntypedFormBuilder) {
-              }
+  constructor(private fb: UntypedFormBuilder) {}
 
   ngOnInit() {
 
@@ -120,11 +118,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   create() {
     const booking = this.courseInformationFormGroup.value;
 
-    if (!booking.imageSrc) {
-      booking.imageSrc = 'assets/img/avatars/1.jpg';
-    }
-
-    this.dialogRef.close(booking);
   }
 
   filterSportsByType(event: any) {
@@ -150,8 +143,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   update() {
     const booking = this.courseInformationFormGroup.value;
     booking.id = this.defaults.id;
-
-    this.dialogRef.close(booking);
   }
 
   isCreateMode() {

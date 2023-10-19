@@ -21,6 +21,8 @@ import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
+import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 
 @NgModule({
   imports: [
@@ -46,7 +48,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     MatStepperModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    BreadcrumbsModule,
+    SecondaryToolbarModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

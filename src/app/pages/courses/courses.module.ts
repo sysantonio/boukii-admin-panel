@@ -18,6 +18,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CoursesComponent } from './courses.component';
 import { CoursesRoutingModule } from './courses-routing.module';
+import { CoursesCreateUpdateModule } from './courses-create-update/courses-create-update.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -38,7 +39,7 @@ import { CoursesRoutingModule } from './courses-routing.module';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
+    CoursesCreateUpdateModule,
     MatDialogModule,
     ComponentsModule
   ]
