@@ -41,8 +41,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
 
+  durations: string[] = [];
 
-  constructor(private fb: UntypedFormBuilder) {}
+  constructor(private fb: UntypedFormBuilder) {
+    this.generateDurations();
+
+  }
 
   ngOnInit() {
 
@@ -58,6 +62,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       station: [null, Validators.required],
       summary: [null, Validators.required],
       description: [null, Validators.required],
+      duration: [null, Validators.required],
+      participants: [null, Validators.required],
       image: [null],
     })
 
@@ -180,5 +186,20 @@ export class CoursesCreateUpdateComponent implements OnInit {
   private _filterSport(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.mockSportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
+  }
+
+  generateDurations() {
+    let minutes = 15;
+    const maxMinutes = 7 * 60; // 7 horas en minutos
+
+    while (minutes <= maxMinutes) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+
+      const durationString = `${hours ? hours + 'h ' : ''}${remainingMinutes}min`;
+      this.durations.push(durationString);
+
+      minutes += 15;
+    }
   }
 }

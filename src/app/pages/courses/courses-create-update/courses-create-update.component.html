@@ -152,19 +152,26 @@
                 <mat-label>LA DESCRIPTION</mat-label>
                 <textarea formControlName="description" matInput></textarea>
               </mat-form-field>
-              <!--<mat-form-field class="flex-auto">
-                <mat-label>Name</mat-label>
-                <input formControlName="name" matInput required>
-                <mat-hint>How may we call you?</mat-hint>
-              </mat-form-field>
+
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>E-Mail</mat-label>
-                  <input formControlName="email" matInput required>
-                  <mat-hint align="end">example@example.com</mat-hint>
+
+              <mat-form-field class="flex-auto">
+                <mat-form-field>
+                  <input type="text" placeholder="Selecciona una duración" matInput [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let duration of durations" [value]="duration">
+                      {{duration}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
-              </div>-->
+              </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>PARTICIPANTS MÁX.</mat-label>
+                  <input formControlName="participants" matInput required type="number">
+                </mat-form-field>
+              </div>
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
