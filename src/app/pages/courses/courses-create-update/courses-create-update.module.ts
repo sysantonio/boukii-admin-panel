@@ -23,6 +23,9 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -50,7 +53,11 @@ import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/se
     MatStepperModule,
     MatSlideToggleModule,
     BreadcrumbsModule,
-    SecondaryToolbarModule
+    SecondaryToolbarModule,
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatChipsModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

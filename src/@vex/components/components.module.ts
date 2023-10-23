@@ -21,32 +21,43 @@ import { PageLayoutModule } from './page-layout/page-layout.module';
 import { BreadcrumbsModule } from './breadcrumbs/breadcrumbs.module';
 import { BookingsCreateUpdateModule } from 'src/app/pages/bookings/bookings-create-update/bookings-create-update.module';
 import { CoursesCreateUpdateModule } from 'src/app/pages/courses/courses-create-update/courses-create-update.module';
+import { DateTimeDialogComponent } from './date-time-dialog/date-time-dialog.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     imports: [
-        CommonModule,
-        PageLayoutModule,
-        BreadcrumbsModule,
-        MatPaginatorModule,
-        MatTableModule,
-        MatSortModule,
-        MatCheckboxModule,
-        MatIconModule,
-        MatButtonModule,
-        MatMenuModule,
-        FormsModule,
-        MatTooltipModule,
-        ReactiveFormsModule,
-        MatSelectModule,
-        MatButtonToggleModule,
-        MatDialogModule,
-        LayoutModule,
-        MatSnackBarModule,
-        MatProgressSpinnerModule,
-        BookingsCreateUpdateModule,
-        CoursesCreateUpdateModule
+      FormsModule,
+      ReactiveFormsModule,
+      CommonModule,
+      PageLayoutModule,
+      BreadcrumbsModule,
+      MatPaginatorModule,
+      MatTableModule,
+      MatSortModule,
+      MatCheckboxModule,
+      MatIconModule,
+      MatButtonModule,
+      MatMenuModule,
+      FormsModule,
+      MatTooltipModule,
+      ReactiveFormsModule,
+      MatSelectModule,
+      MatButtonToggleModule,
+      MatDialogModule,
+      LayoutModule,
+      MatSnackBarModule,
+      MatProgressSpinnerModule,
+      BookingsCreateUpdateModule,
+      CoursesCreateUpdateModule,
+      MatAutocompleteModule,
+      MatDatepickerModule,
+      MatNativeDateModule,
+      MatInputModule
     ],
-  declarations: [AioTableComponent],
+  declarations: [AioTableComponent, DateTimeDialogComponent],
   entryComponents: [AioTableComponent],
   exports: [AioTableComponent]
 })

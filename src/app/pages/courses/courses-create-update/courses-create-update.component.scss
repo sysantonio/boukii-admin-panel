@@ -169,3 +169,7 @@ img {
 .image-container, .input-container {
   float:left;
 }
+
+::ng-deep .mdc-evolution-chip__text-label {
+  color: white !important;
+}

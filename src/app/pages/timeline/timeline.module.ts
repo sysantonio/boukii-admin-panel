@@ -38,7 +38,6 @@ import { TimelineRoutingModule } from './timeline-routing.module';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
     MatDialogModule,
     ComponentsModule
   ]

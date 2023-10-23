@@ -1,11 +1,15 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, map, of, startWith } from 'rxjs';
 import { MOCK_SPORT_DATA, MOCK_SPORT_TYPES } from 'src/app/static-data/sports-data';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
-
+import { DateTimeDialogComponent } from 'src/@vex/components/date-time-dialog/date-time-dialog.component';
+import { MatSort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import * as moment from 'moment';
+import { LEVELS } from 'src/app/static-data/level-data';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -14,12 +18,19 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 })
 export class CoursesCreateUpdateComponent implements OnInit {
 
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('levelTable') table: MatTable<any>;
+
+  separatedDates = false;
+  displayedColumns: string[] = ['date', 'hour'];
+  dataSource = new MatTableDataSource([]);
+
   myControl = new FormControl();
   myControlSportType = new FormControl();
   myControlSport = new FormControl();
   myControlStations = new FormControl();
 
-  options: string[] = ['Cours collectif', 'Cours privés'];
+  options: any[] = [{id: 1, name:'Cours collectif'}, {id:2, name: 'Cours privés'}];
   optionsStation: string[] = ['Les Pacots', 'Andorra'];
 
   filteredOptions: Observable<any[]>;
@@ -28,7 +39,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   filteredStations: Observable<any[]>;
 
   courseInformationFormGroup: UntypedFormGroup;
-  courseDatesFormGroup: UntypedFormGroup;
+  courseTypeFormGroup: UntypedFormGroup;
+  courseInfoFormGroup: UntypedFormGroup;
+  courseInfoCollecDateSplitFormGroup: UntypedFormGroup;
+  courseLevelFormGroup: UntypedFormGroup;
 
   imagePreviewUrl: string | ArrayBuffer;
 
@@ -37,26 +51,48 @@ export class CoursesCreateUpdateComponent implements OnInit {
   sportTypeSelected: number = -1;
   mockSportData = MOCK_SPORT_DATA;
   mockSportType = MOCK_SPORT_TYPES;
+  mockLevels = LEVELS;
+
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+  selectedCourses = new MatTableDataSource([])
+  displayedCourseColumns: string[] = ['course', 'min', 'max', 'levels', 'checkbox', 'delete'];
 
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
 
   durations: string[] = [];
 
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog) {
     this.generateDurations();
+    this.mockLevels.forEach(level => {
+      if (!this.groupedByColor[level.color]) {
+        this.groupedByColor[level.color] = [];
+      }
+      this.groupedByColor[level.color].push(level);
+    });
 
+    this.colorKeys = Object.keys(this.groupedByColor);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
 
     this.courseInformationFormGroup = this.fb.group({
-      courseType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
       sportType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
       sport: [null, Validators.required]
     })
 
-    this.courseDatesFormGroup = this.fb.group({
+    this.courseTypeFormGroup = this.fb.group({
+      courseType: [null, Validators.required],
+      separatedDates: [false]
+    })
+
+    this.courseInfoFormGroup = this.fb.group({
+
       course_name: [null, Validators.required],
       price: [null, Validators.required],
       station: [null, Validators.required],
@@ -66,6 +102,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       participants: [null, Validators.required],
       image: [null],
     })
+
+    this.courseLevelFormGroup = this.fb.group({});
 
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
@@ -92,7 +130,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     );
 
     this.myControl.valueChanges.subscribe(value => {
-      this.courseInformationFormGroup.get('courseType').setValue(value);
+      this.courseTypeFormGroup.get('courseType').setValue(value);
     });
 
     this.myControlSportType.valueChanges.subscribe(value => {
@@ -101,6 +139,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.myControlSport.valueChanges.subscribe(value => {
         this.courseInformationFormGroup.get('sport').setValue(value);
+    });
+
+    this.myControlStations.valueChanges.subscribe(value => {
+        this.courseInfoFormGroup.get('station').setValue(value);
     });
 
     if (this.defaults) {
@@ -161,7 +203,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
 
@@ -183,6 +225,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
     return sport && sport.name ? sport.name : '';
   }
 
+  displayFnCourse(course: any): string {
+    return course && course.name ? course.name : '';
+  }
+
+  displayFnLevel(sportType: any): string {
+    return sportType && sportType.annotation && sportType.name ? sportType.annotation + ' - ' + sportType.name : '';
+  }
+
   private _filterSport(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.mockSportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
@@ -201,5 +251,44 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       minutes += 15;
     }
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DateTimeDialogComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSource.data.push({date: moment(result.date).format('DD-MM-YYYY'), hour: result.hour});
+      }
+    });
+  }
+
+  onChipClick(level: any) {
+    const selectedCourse: any = {
+      annotation: level.annotation,
+      name: level.name
+    };
+    this.selectedCourses.data.push(selectedCourse);
+    this.table.renderRows();
+
+  }
+
+  removeCourse(course: any) {
+
+    let index = -1;
+
+    this.selectedCourses.data.forEach((element, idx) => {
+      if (course.annotation === element.annotation && course.name === element.name) {
+        index = idx;
+      }
+    });
+    if (index > -1) {
+      this.selectedCourses.data.splice(index, 1);
+      this.table.renderRows();
+
+    }
+    // Aquí también puedes deseleccionar el chip correspondiente
   }
 }

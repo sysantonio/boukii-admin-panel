@@ -10,7 +10,7 @@ import { tableSalesData } from 'src/app/static-data/table-sales-data';
 })
 export class DashboardAnalyticsComponent {
 
-  entity = 'users';
+  entity = 'bookings';
   columns: TableColumn<any>[] = [
     { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Mail', property: 'email', type: 'text', visible: true },
