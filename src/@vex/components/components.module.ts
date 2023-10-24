@@ -26,6 +26,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { ReductionDialogComponent } from './reduction-dialog/reduction-dialog.component';
 
 @NgModule({
     imports: [
@@ -57,7 +58,7 @@ import { MatInputModule } from '@angular/material/input';
       MatNativeDateModule,
       MatInputModule
     ],
-  declarations: [AioTableComponent, DateTimeDialogComponent],
+  declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent],
   entryComponents: [AioTableComponent],
   exports: [AioTableComponent]
 })

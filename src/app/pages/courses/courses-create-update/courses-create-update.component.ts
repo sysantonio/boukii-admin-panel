@@ -10,6 +10,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { LEVELS } from 'src/app/static-data/level-data';
+import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/reduction-dialog.component';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -19,11 +20,20 @@ import { LEVELS } from 'src/app/static-data/level-data';
 export class CoursesCreateUpdateComponent implements OnInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('dateTable') dateTable: MatTable<any>;
+  @ViewChild('reductionTable') reductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
+
+  days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  startDayControl = new FormControl();
+  endDayControl = new FormControl();
+  availableEndDays: string[] = [];
 
   separatedDates = false;
   displayedColumns: string[] = ['date', 'hour'];
+  displayedReductionsColumns: string[] = ['date', 'hour'];
   dataSource = new MatTableDataSource([]);
+  dataSourceReductions = new MatTableDataSource([]);
 
   myControl = new FormControl();
   myControlSportType = new FormControl();
@@ -41,10 +51,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
   courseInformationFormGroup: UntypedFormGroup;
   courseTypeFormGroup: UntypedFormGroup;
   courseInfoFormGroup: UntypedFormGroup;
+  courseInfoPriveFormGroup: UntypedFormGroup;
+  courseInfoPriveSeparatedFormGroup: UntypedFormGroup;
   courseInfoCollecDateSplitFormGroup: UntypedFormGroup;
   courseLevelFormGroup: UntypedFormGroup;
 
   imagePreviewUrl: string | ArrayBuffer;
+
+  today = new Date();
+  from: any = null;
+  to: any = null;
 
   defaults: any = null;
 
@@ -73,6 +89,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
 
     this.colorKeys = Object.keys(this.groupedByColor);
+
+    this.startDayControl.valueChanges.subscribe(startDay => {
+      const index = this.days.indexOf(startDay);
+      if (index !== -1) {
+        this.availableEndDays = this.days.slice(index + 1);
+        this.endDayControl.enable();
+        this.endDayControl.setValue(null); // Reset end day if start day changes
+      } else {
+        this.endDayControl.disable();
+      }
+    });
+
   }
 
   ngAfterViewInit() {
@@ -88,7 +116,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.courseTypeFormGroup = this.fb.group({
       courseType: [null, Validators.required],
-      separatedDates: [false]
+      separatedDates: [false],
+      fromDate: [null],
+      toDate: [null],
+      reservableFromDate: [null],
+      reservableToDate: [false],
+      debutFromDate: [null],
+      debutToDate: [null],
+      startDay: [null],
+      endDay: [null]
     })
 
     this.courseInfoFormGroup = this.fb.group({
@@ -103,7 +139,44 @@ export class CoursesCreateUpdateComponent implements OnInit {
       image: [null],
     })
 
+
+    this.courseInfoPriveFormGroup = this.fb.group({
+
+      course_name: [null, Validators.required],
+      price: [null, Validators.required],
+      station: [null, Validators.required],
+      summary: [null, Validators.required],
+      description: [null, Validators.required],
+      duration: [null, Validators.required],
+      participants: [null, Validators.required],
+      fromDate: [null, Validators.required],
+      toDate: [null, Validators.required],
+      image: [null],
+    })
+
     this.courseLevelFormGroup = this.fb.group({});
+
+    this.courseInfoCollecDateSplitFormGroup = this.fb.group({
+      course_name: [null, Validators.required],
+      price: [null, Validators.required],
+      station: [null, Validators.required],
+      summary: [null, Validators.required],
+      description: [null, Validators.required],
+      duration: [null, Validators.required],
+      participants: [null, Validators.required],
+      image: [null],
+    });
+
+    this.courseInfoPriveSeparatedFormGroup = this.fb.group({
+      course_name: [null, Validators.required],
+      price: ['Flexible', Validators.required],
+      station: [null, Validators.required],
+      summary: [null, Validators.required],
+      description: [null, Validators.required],
+      duration: [null, Validators.required],
+      participants: [null, Validators.required],
+      image: [null],
+    });
 
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
@@ -261,6 +334,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.dataSource.data.push({date: moment(result.date).format('DD-MM-YYYY'), hour: result.hour});
+        this.dateTable?.renderRows();
+      }
+    });
+  }
+
+  openDialogReductions(): void {
+    const dialogRef = this.dialog.open(ReductionDialogComponent, {
+      width: '300px',
+      data: {iterations: this.dataSource.data.length}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSourceReductions.data.push({date: moment(result.date).format('DD-MM-YYYY'), hour: result.hour});
+        this.reductionTable?.renderRows();
       }
     });
   }
