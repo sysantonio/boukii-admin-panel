@@ -1,0 +1,25 @@
+<vex-secondary-toolbar current="Moniteurs">
+  <vex-breadcrumbs
+    [crumbs]="['Moniteurs', 'Nouvelle moniteur']"
+    class="flex-auto"
+  ></vex-breadcrumbs>
+  <button class="ml-2" color="primary" mat-icon-button type="button">
+    <mat-icon svgIcon="mat:more_vert"></mat-icon>
+  </button>
+</vex-secondary-toolbar>
+<div
+  [@stagger]="true"
+  class="p-gutter container"
+  style="max-width: none"
+>
+  <div class="flex flex-col sm:flex-row gap-4">
+    <div @fadeInUp class="card flex-auto">
+      <div class="px-6 py-4 border-b flex items-center">
+        <h2 class="title m-0">Nouvelle moniteur</h2>
+      </div>
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+
+      </mat-vertical-stepper>
+    </div>
+  </div>
+</div>

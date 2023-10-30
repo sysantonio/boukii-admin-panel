@@ -68,6 +68,16 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'bonuses/create',
+        loadChildren: () => import('./pages/bonuses/bonuses-create-update/bonuses-create-update.module').then(m => m.BonusesCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'bonuses/update/:id',
+        loadChildren: () => import('./pages/bonuses/bonuses-create-update/bonuses-create-update.module').then(m => m.BonusesCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'messages',
         loadChildren: () => import('./pages/communications/communications.module').then(m => m.CommunicationsModule),
         canActivate: [AuthGuard],
@@ -80,6 +90,16 @@ const childrenRoutes: VexRoutes = [
       {
         path: 'monitors',
         loadChildren: () => import('./pages/monitors/monitors.module').then(m => m.MonitorsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'monitors/create',
+        loadChildren: () => import('./pages/monitors/monitors-create-update/monitors-create-update.module').then(m => m.MonitorsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'monitors/update/:id',
+        loadChildren: () => import('./pages/monitors/monitors-create-update/monitors-create-update.module').then(m => m.MonitorsCreateUpdateModule),
         canActivate: [AuthGuard],
       },
       {

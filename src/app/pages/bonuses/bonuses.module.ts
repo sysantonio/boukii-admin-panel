@@ -18,6 +18,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BonusesComponent } from './bonuses.component';
 import { BonusesRoutingModule } from './bonuses-routing.module';
+import { BonusesCreateUpdateComponent } from './bonuses-create-update/bonuses-create-update.component';
 
 @NgModule({
   declarations: [BonusesComponent],

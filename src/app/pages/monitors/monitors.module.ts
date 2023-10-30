@@ -18,6 +18,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MonitorsRoutingModule } from './monitors-routing.module';
 import { MonitorsComponent } from './monitors.component';
+import { MonitorsCreateUpdateComponent } from './monitors-create-update/monitors-create-update.component';
 
 @NgModule({
   declarations: [MonitorsComponent],
