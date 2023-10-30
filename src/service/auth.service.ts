@@ -59,8 +59,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    //return this.user !== null;
-    return true;
+    return this.user !== null;
   }
 
   async getUserByEmail(email: string) {
