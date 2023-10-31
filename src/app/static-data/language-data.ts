@@ -1,0 +1,22 @@
+export const MOCK_LANGS = [
+  {"code": "en", "name": "English"},
+  {"code": "es", "name": "Spanish"},
+  {"code": "fr", "name": "French"},
+  {"code": "de", "name": "German"},
+  {"code": "it", "name": "Italian"},
+  {"code": "pt", "name": "Portuguese"},
+  {"code": "zh", "name": "Chinese"},
+  {"code": "ja", "name": "Japanese"},
+  {"code": "ko", "name": "Korean"},
+  {"code": "ar", "name": "Arabic"},
+  {"code": "ru", "name": "Russian"},
+  {"code": "hi", "name": "Hindi"},
+  {"code": "bn", "name": "Bengali"},
+  {"code": "pa", "name": "Punjabi"},
+  {"code": "jv", "name": "Javanese"},
+  {"code": "vi", "name": "Vietnamese"},
+  {"code": "tr", "name": "Turkish"},
+  {"code": "th", "name": "Thai"},
+  {"code": "fa", "name": "Persian"},
+  {"code": "my", "name": "Burmese"}
+];

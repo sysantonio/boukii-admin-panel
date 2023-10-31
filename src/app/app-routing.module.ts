@@ -108,6 +108,16 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'clients/create',
+        loadChildren: () => import('./pages/clients/client-create-update/client-create-update.module').then(m => m.ClientsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'monitors/update/:id',
+        loadChildren: () => import('./pages/clients/client-create-update/client-create-update.module').then(m => m.ClientsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'admins',
         loadChildren: () => import('./pages/admins/admins.module').then(m => m.AdminsModule),
         canActivate: [AuthGuard],

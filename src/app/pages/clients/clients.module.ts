@@ -18,6 +18,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ClientsRoutingModule } from './clients-routing.module';
 import { ClientsComponent } from './clients.component';
+import { ClientsCreateUpdateModule } from './client-create-update/client-create-update.module';
 
 @NgModule({
   declarations: [ClientsComponent],
@@ -38,7 +39,7 @@ import { ClientsComponent } from './clients.component';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
+    ClientsCreateUpdateModule,
     MatDialogModule,
     ComponentsModule
   ]

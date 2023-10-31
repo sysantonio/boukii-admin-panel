@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { ClientsComponent } from './clients.component';
+import { ClientCreateUpdateComponent } from './client-create-update/client-create-update.component';
 
 
 const routes: VexRoutes = [
@@ -11,21 +12,21 @@ const routes: VexRoutes = [
     data: {
       toolbarShadowEnabled: true
     }
-  },/*
+  },
   {
     path: 'create',
-    component: UserCreateUpdateComponent,
+    component: ClientCreateUpdateComponent,
     data: {
       toolbarShadowEnabled: true
     }
   },
   {
     path: 'update/:id',
-    component: UserCreateUpdateComponent,
+    component: ClientCreateUpdateComponent,
     data: {
       toolbarShadowEnabled: true
     }
-  }*/
+  }
 ];
 
 @NgModule({

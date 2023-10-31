@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatTable, _MatTableDataSource } from '@angular/material/table';
+import { _MatTableDataSource } from '@angular/material/table';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -12,36 +11,29 @@ import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 
 @Component({
-  selector: 'vex-monitors-create-update',
-  templateUrl: './monitors-create-update.component.html',
-  styleUrls: ['./monitors-create-update.component.scss'],
+  selector: 'vex-client-create-update',
+  templateUrl: './client-create-update.component.html',
+  styleUrls: ['./client-create-update.component.scss'],
   animations: [fadeInUp400ms, stagger20ms]
-})
-export class MonitorsCreateUpdateComponent implements OnInit {
 
-  @ViewChild('childrenTable') table: MatTable<any>;
+})
+export class ClientCreateUpdateComponent implements OnInit {
+
   displayedColumns: string[] = ['name', 'date'];
 
   imagePreviewUrl: string | ArrayBuffer;
   formInfoAccount: UntypedFormGroup;
   formPersonalInfo: UntypedFormGroup;
-  formWorkInfo: UntypedFormGroup;
-  formCivilStatusInfo: UntypedFormGroup;
+  formSportInfo: UntypedFormGroup;
   myControlStations = new FormControl();
   myControlCountries = new FormControl();
-  myControlWorkCountries = new FormControl();
   myControlProvinces = new FormControl();
-  myControlCivilStatus = new FormControl();
   levelForm = new FormControl();
-  languagesControl = new FormControl([]);
 
   filteredStations: Observable<any[]>;
   filteredCountries: Observable<any[]>;
-  filteredWorkCountries: Observable<any[]>;
   filteredProvinces: Observable<any[]>;
-  filteredCivilStatus: Observable<string[]>;
   filteredLevel: Observable<any[]>;
-  filteredLanguages: Observable<any[]>;
 
   sportsControl = new FormControl();
   selectedSports: any[] = [];
@@ -49,27 +41,25 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   allSports: any[] = MOCK_SPORT_DATA;
   sportsData = new _MatTableDataSource([]);
 
-  optionsStation: string[] = ['Les Pacots', 'Andorra'];
+  languagesControl = new FormControl([]);
+  languages = MOCK_LANGS;
+  filteredLanguages: Observable<any[]>;
   selectedLanguages = [];
+
+  optionsStation: string[] = ['Les Pacots', 'Andorra'];
 
   today: Date;
   minDate: Date;
-  minDateChild: Date;
-  childrenData = new _MatTableDataSource([]);
 
   mockCivilStatus: string[] = ['Single', 'Mariée', 'Veuf', 'Divorcé'];
   mockCountriesData = MOCK_COUNTRIES;
-  mockWorkCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData = LEVELS;
-  languages = MOCK_LANGS;
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
     this.today = new Date();
     this.minDate = new Date(this.today);
-    this.minDateChild = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
-    this.minDateChild.setFullYear(this.today.getFullYear() - 3);
   }
 
   ngOnInit(): void {
@@ -95,25 +85,11 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
     });
 
-    this.formWorkInfo = this.fb.group({
-      avs: [],
-      workId: [],
-      iban: [],
-      countryWork: this.myControlWorkCountries,
-      children: [],
-      childName: [],
-      childAge: [],
-      sports: [],
-      sportName: []
-    });
-
-    this.formCivilStatusInfo = this.fb.group({
-
-      civilStatus: [],
-      spouse: ['No'],
-      workMobility: ['No'],
-      spouseWorkId: [],
-      spousePercentage: []
+    this.formSportInfo = this.fb.group({
+      sportName: [''],
+      summary: [''],
+      notes: [''],
+      hitorical: ['']
     });
 
     this.filteredStations = this.myControlStations.valueChanges
@@ -136,21 +112,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
       this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
       this.filteredProvinces = this._filterProvinces(country.id);
     });
-
-    this.filteredWorkCountries = this.myControlWorkCountries.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filterCountries(name) : this.mockWorkCountriesData.slice())
-    );
-
-    /*this.myControlWorkCountries.valueChanges.subscribe(country => {
-      this.formWorkInfo.get('countryWork').setValue(country);
-    });*/
-
-    this.filteredCivilStatus = this.myControlCivilStatus.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterCivilStatus(value))
-    );
 
     this.filteredSports = this.sportsControl.valueChanges.pipe(
       startWith(''),
@@ -182,11 +143,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     }
   }
 
-  private _filterStations(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.optionsStation.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
   passwordValidator(formControl: FormControl) {
     const { value } = formControl;
     const hasUpperCase = /[A-Z]/.test(value);
@@ -199,6 +155,11 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     } else {
       return { passwordStrength: true };
     }
+  }
+
+  private _filterStations(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.optionsStation.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   /**Countries */
@@ -219,11 +180,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   private _filter(name: string, countryId: number): any[] {
     const filterValue = name.toLowerCase();
     return this.mockProvincesData.filter(province => province.id_country === countryId && province.name.toLowerCase().includes(filterValue));
-  }
-
-  private _filterCivilStatus(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.mockCivilStatus.filter(civilStatus => civilStatus.toLowerCase().includes(filterValue));
   }
 
   private _filterSports(value: any): any[] {
@@ -251,45 +207,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   displayFnLevel(level: any): string {
     return level && level.name ? level.name : '';
-  }
-
-  removeChild(course: any) {
-
-    let index = -1;
-
-    this.childrenData.data.forEach((element, idx) => {
-      if (course.annotation === element.annotation && course.name === element.name) {
-        index = idx;
-      }
-    });
-    if (index > -1) {
-      this.childrenData.data.splice(index, 1);
-      this.table.renderRows();
-
-    }
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  updateChildren(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const num = parseInt(inputElement.value, 10);
-
-    if (isNaN(num) || num < 0) {
-      return;
-    }
-
-    const currentData = this.childrenData.data;
-    const difference = num - currentData.length;
-
-    if (difference > 0) {
-      for (let i = 0; i < difference; i++) {
-        currentData.push({ name: '', date: null });
-      }
-    } else if (difference < 0) {
-      currentData.splice(num);
-    }
-
-    this.childrenData.data = [...currentData];
   }
 
   updateSelectedSports(selected: any[]) {
@@ -329,7 +246,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     if (index >= 0) {
       this.selectedLanguages.splice(index, 1);
     } else {
-      this.selectedLanguages.push({ namr: language.name, code: language.code });
+      this.selectedLanguages.push({ name: language.name, code: language.code });
     }
     console.log(this.selectedLanguages);
   }

@@ -1,6 +1,6 @@
-<vex-secondary-toolbar current="Moniteurs">
+<vex-secondary-toolbar current="Clients">
   <vex-breadcrumbs
-    [crumbs]="['Moniteurs', 'Nouvelle moniteur']"
+    [crumbs]="['Clients', 'Nouvelle Client']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -188,91 +188,11 @@
             </div>
           </form>
         </mat-step>
+        <mat-step [stepControl]="formSportInfo">
+          <form [formGroup]="formSportInfo">
+            <ng-template matStepLabel>Sports</ng-template>
 
-        <mat-step [stepControl]="formWorkInfo">
-          <form [formGroup]="formWorkInfo">
-            <ng-template matStepLabel>Information de travail</ng-template>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-              <mat-form-field class="flex-auto">
-                <mat-label>Nº AVS</mat-label>
-                <input formControlName="avs" matInput required type="text">
-
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Permis de travail</mat-label>
-                <input formControlName="workId" matInput required type="text">
-              </mat-form-field>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
-                <mat-label>IBAN</mat-label>
-                <input formControlName="iban" matInput required type="text">
-
-              </mat-form-field>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Pays</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
-                <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country">
-                    {{country.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Children</mat-label>
-                <input formControlName="children" matInput required type="number" (input)="updateChildren($event)">
-
-              </mat-form-field>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-             <!-- Añadir niños con modal -->
-              <mat-table #childrenTable [dataSource]="childrenData" *ngIf="formWorkInfo.value.children > 0">
-
-                <!-- Otros contenedores según tu descripción -->
-
-                <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Name</mat-label>
-                      <input matInput [(ngModel)]="element.name" formControlName="childName" type="text">
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="date">
-                  <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <input matInput [matDatepicker]="pickerFromChild" placeholder="Date de naissance" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
-                      <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
-                      <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
-
-                <!-- Ícono para eliminar
-                <ng-container matColumnDef="delete">
-                  <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
-                  </mat-cell>
-                </ng-container> -->
-
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-              </mat-table>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0;">
               <mat-form-field class="flex-auto" appearance="fill">
                 <mat-label>Deportes</mat-label>
                 <mat-select [formControl]="sportsControl" multiple>
@@ -291,7 +211,6 @@
               </mat-form-field>
             </div>
 
-
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <!-- Añadir niños con modal -->
@@ -304,7 +223,7 @@
                    <mat-cell *matCellDef="let element">
                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                        <mat-label>Name</mat-label>
-                       <input matInput [value]="element.sportName"type="text" [readonly]="true">
+                       <input matInput [value]="element.sportName" type="text" [readonly]="true">
                      </mat-form-field>
                    </mat-cell>
                  </ng-container>
@@ -337,59 +256,27 @@
                </mat-table>
              </div>
 
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
-
-        <mat-step [stepControl]="formCivilStatusInfo">
-          <form [formGroup]="formCivilStatusInfo">
-            <ng-template matStepLabel>Etat civil</ng-template>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
-                <mat-label>Estado Civil</mat-label>
-                <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus">
-                <mat-autocomplete #autoCivilStatus="matAutocomplete">
-                  <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus">
-                    {{ civilStatus }}
-                  </mat-option>
-                </mat-autocomplete>
-
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Conjoint travaille?</mat-label>
-                <mat-select formControlName="spouse">
-                  <mat-option value="Yes">Yes</mat-option>
-                  <mat-option value="No">No</mat-option>
-                </mat-select>              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Demande d'allocation familiales?</mat-label>
-                <mat-select formControlName="workMobility">
-                  <mat-option value="Yes">Yes</mat-option>
-                  <mat-option value="No">No</mat-option>
-                </mat-select>
+                <mat-label>Généralites</mat-label>
+                <textarea formControlName="summary" matInput></textarea>
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
-                <mat-label>Permis travail du conjoint</mat-label>
-                <input formControlName="spouseWorkId" matInput required type="text">
-
-              </mat-form-field>
-              <mat-form-field class="flex-auto">
-                <mat-label>Pourcentage du conjoint (%)</mat-label>
-                <input formControlName="spousePercentage" matInput required type="text">
-
+                <mat-label>Notes de l'école</mat-label>
+                <textarea formControlName="notes" matInput></textarea>
               </mat-form-field>
             </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Hisotrique</mat-label>
+                <textarea formControlName="hitorical" matInput></textarea>
+              </mat-form-field>
+            </div>
+
             <div class="actions flex items-center justify-end gap-2">
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
@@ -397,6 +284,7 @@
               </button>
             </div>
           </form>
+
         </mat-step>
       </mat-vertical-stepper>
     </div>
