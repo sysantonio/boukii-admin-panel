@@ -71,7 +71,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
-  selectedCourses = new MatTableDataSource([])
+  selectedCourses = new MatTableDataSource([]);
   displayedCourseColumns: string[] = ['course', 'min', 'max', 'levels', 'checkbox', 'delete'];
 
   mode: 'create' | 'update' = 'create';
