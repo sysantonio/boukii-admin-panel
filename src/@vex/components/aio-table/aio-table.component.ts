@@ -58,6 +58,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @Input()
   withHeader: boolean = true;
   @Input()
+  createOnModal: boolean = false;
+  @Input()
+  widthModal?: string = '90vw';
+  @Input()
+  heigthModal?: string = '90vh';
+  @Input()
   createComponent: any;
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
@@ -115,15 +121,19 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   create() {
-    const route = '/' + this.route + '/create';
-    this.router.navigate([route]);
+    if (!this.createOnModal) {
+      const route = '/' + this.route + '/create';
+      this.router.navigate([route]);
+    } else {
+      this.createModal();
+    }
   }
 
-  /*create() {
+  createModal() {
 
     const dialogRef = this.dialog.open(this.createComponent, {
-      width: '90vw',
-      height: '90vh',
+      width: this.widthModal,
+      height: this.heigthModal,
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog'  // Si necesitas estilos adicionales
     });
@@ -133,7 +143,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
       }
     });
-  }*/
+  }
 
   update(row: any) {
     this.router.navigate(['/' + this.route + '/update/' + row.id]);

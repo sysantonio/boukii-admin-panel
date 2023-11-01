@@ -1,1 +1,149 @@
-<p>settings works!</p>
+<vex-page-layout mode="card">
+
+  <vex-page-layout-header class="flex flex-col items-start justify-center">
+    <div class="container">
+      <h2 class="title m-0">Card - Large Header & Tabbed</h2>
+      <vex-breadcrumbs [crumbs]="['Page Layouts', 'Card', 'Large Header & Tabbed']"></vex-breadcrumbs>
+    </div>
+  </vex-page-layout-header>
+
+  <vex-page-layout-content class="container" style="max-width: none !important;">
+    <div class="card">
+      <mat-tab-group>
+        <mat-tab label="Niveau de salaire">
+          <vex-page-layout>
+            <vex-page-layout-content class="-mt-6 fullwidth">
+                <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Reglages'" [route]="'settings'" [createComponent]="createComponent" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
+            </vex-page-layout-content>
+          </vex-page-layout>
+        </mat-tab>
+        <mat-tab label="Sports">
+          <div class="p-6">
+
+              <mat-tab-group>
+                <mat-tab label="Hiver">
+
+                    <div
+                    @stagger
+                    class="overflow-y-auto flex-auto">
+                    <div
+                      class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                      <ng-container *ngFor="let sport of mockSportData">
+                        <vex-widget-clients-sports-no-swiper *ngIf="sport.sport_type === 1" [sport]="sport" [type]="1"></vex-widget-clients-sports-no-swiper>
+                      </ng-container>
+                    </div>
+                  </div>
+                </mat-tab>
+
+
+                <mat-tab label="Été">
+
+                  <div
+                  @stagger
+                  class="overflow-y-auto flex-auto">
+                  <div
+                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                    <ng-container *ngFor="let sport of mockSportData">
+                      <vex-widget-clients-sports-no-swiper *ngIf="sport.sport_type === 2" [sport]="sport" [type]="2"></vex-widget-clients-sports-no-swiper>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-tab>
+
+
+              <mat-tab label="Autres">
+
+                <div
+                @stagger
+                class="overflow-y-auto flex-auto">
+                <div
+                  class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                  <ng-container *ngFor="let sport of mockSportData">
+                    <vex-widget-clients-sports-no-swiper *ngIf="sport.sport_type === 3" [sport]="sport" [type]="3"></vex-widget-clients-sports-no-swiper>
+                  </ng-container>
+                </div>
+              </div>
+            </mat-tab>
+              </mat-tab-group>
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Niveaux">
+          <div class="p-6">
+            <mat-tab-group>
+              <mat-tab label="SKi">
+                <div
+                @stagger
+                class="overflow-y-auto flex-auto">
+                  <div
+                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                    <ng-container *ngFor="let level of mockLevelData">
+                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Snowboard">
+                <div
+                @stagger
+                class="overflow-y-auto flex-auto">
+                  <div
+                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                    <ng-container *ngFor="let level of mockLevelData">
+                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Ski De Randonné">
+                <div
+                @stagger
+                class="overflow-y-auto flex-auto">
+                  <div
+                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                    <ng-container *ngFor="let level of mockLevelData">
+                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Raquettes De Neige">
+                <div
+                @stagger
+                class="overflow-y-auto flex-auto">
+                  <div
+                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                    <ng-container *ngFor="let level of mockLevelData">
+                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="VTT">
+                <div
+                @stagger
+                class="overflow-y-auto flex-auto">
+                  <div
+                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
+                    <ng-container *ngFor="let level of mockLevelData">
+                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
+                    </ng-container>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </mat-tab>
+        <mat-tab label="Blocage">
+          <div class="p-6">
+          </div>
+        </mat-tab>
+        <mat-tab label="Durée flexible">
+          <div class="p-6">
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </vex-page-layout-content>
+
+</vex-page-layout>

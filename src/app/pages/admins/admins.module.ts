@@ -18,6 +18,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AdminsComponent } from './admins.component';
 import { AdminsRoutingModule } from './admins-routing.module';
+import { AdminCreateUpdateComponent } from './admin-create-update/admin-create-update.component';
 @NgModule({
   declarations: [AdminsComponent],
   imports: [
@@ -37,7 +38,6 @@ import { AdminsRoutingModule } from './admins-routing.module';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
     MatDialogModule,
     ComponentsModule
   ]
