@@ -27,12 +27,11 @@
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
 
-        <mat-step [stepControl]="courseInformationFormGroup">
-          <form [formGroup]="courseInformationFormGroup">
-            <ng-template matStepLabel>Info de cours</ng-template>
-
-            <h2 class="title m-0" style="width:100%">Type</h2>
-            <div class="subheading-1">Set up your course type.</div>
+        <mat-step [stepControl]="courseTypeFormGroup" >
+          <form [formGroup]="courseTypeFormGroup">
+            <ng-template matStepLabel>Course Type</ng-template>
+            <h2 class="title m-0" style="width:100%">Données générales</h2>
+            <div class="subheading-1">Configura los datos y fechas del curso.</div>
 
             <div class="mt-4 flex flex-col gap-2">
               <mat-form-field>
@@ -66,23 +65,7 @@
               </mat-form-field>
             </div>
 
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="courseInformationFormGroup.pristine" color="primary" mat-button type="button">Reset
-              </button>
-              <button [disabled]="courseInformationFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
-
-        <mat-step [stepControl]="courseTypeFormGroup" >
-          <form [formGroup]="courseTypeFormGroup">
-            <ng-template matStepLabel>Course Type</ng-template>
-            <h2 class="title m-0" style="width:100%">Données générales</h2>
-            <div class="subheading-1">Configura los datos y fechas del curso.</div>
-
-            <div class="mt-4 flex flex-col gap-2">
+            <div class="mt-4 flex flex-col gap-2" *ngIf="courseTypeFormGroup.value.sport !== null">
               <div class="flex-auto">
                 <mat-label>Cours avec des dates séparables?</mat-label><br>
                 <mat-slide-toggle formControlName="separatedDates"></mat-slide-toggle>
@@ -90,7 +73,7 @@
 
             </div>
 
-            <div class="mt-4 flex flex-col gap-2">
+            <div class="mt-4 flex flex-col gap-2" *ngIf="courseTypeFormGroup.value.sport !== null">
               <mat-form-field>
                 <mat-label>Course Type</mat-label>
 

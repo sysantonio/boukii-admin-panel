@@ -23,11 +23,16 @@ import { SalaryCreateUpdateModalModule } from './salary-create-update-modal/sala
 import { WidgetClientsSportsNoSwiperModule } from 'src/@vex/components/widgets/widget-clients-sports-no-swiper/widget-clients-sports-no-swiper.module';
 import { WidgetSportsLevelModule } from 'src/@vex/components/widgets/widget-sports-level/widget-sports-level.module';
 import { LevelSportUpdateModalModule } from './level-sport-update-modal/level-sport-update-modal.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [SettingsComponent],
   imports: [
     CommonModule,
     LayoutModule,
+    FormsModule,
     PageLayoutModule,
     BreadcrumbsModule,
     RouterModule,
@@ -48,7 +53,10 @@ import { LevelSportUpdateModalModule } from './level-sport-update-modal/level-sp
     SalaryCreateUpdateModalModule,
     WidgetClientsSportsNoSwiperModule,
     WidgetSportsLevelModule,
-    LevelSportUpdateModalModule
+    LevelSportUpdateModalModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule
   ]
 })
 export class SettingsModule {

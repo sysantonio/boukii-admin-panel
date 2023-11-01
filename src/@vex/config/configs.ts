@@ -8,7 +8,7 @@ const defaultConfig: VexConfig = {
   id: VexConfigName.apollo,
   name: 'Apollo',
   style: {
-    colorScheme: ColorSchemeName.default,
+    colorScheme: ColorSchemeName.dark,
     colors: {
       primary: colorVariables.blue
     },

@@ -48,7 +48,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   filteredSports: Observable<any[]>;
   filteredStations: Observable<any[]>;
 
-  courseInformationFormGroup: UntypedFormGroup;
   courseTypeFormGroup: UntypedFormGroup;
   courseInfoFormGroup: UntypedFormGroup;
   courseInfoPriveFormGroup: UntypedFormGroup;
@@ -109,12 +108,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
 
-    this.courseInformationFormGroup = this.fb.group({
-      sportType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
-      sport: [null, Validators.required]
-    })
-
     this.courseTypeFormGroup = this.fb.group({
+
+      sportType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
+      sport: [null, Validators.required],
       courseType: [null, Validators.required],
       separatedDates: [false],
       fromDate: [null],
@@ -207,11 +204,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
 
     this.myControlSportType.valueChanges.subscribe(value => {
-        this.courseInformationFormGroup.get('sportType').setValue(value);
+        this.courseTypeFormGroup.get('sportType').setValue(value);
     });
 
     this.myControlSport.valueChanges.subscribe(value => {
-        this.courseInformationFormGroup.get('sport').setValue(value);
+        this.courseTypeFormGroup.get('sport').setValue(value);
     });
 
     this.myControlStations.valueChanges.subscribe(value => {
@@ -237,7 +234,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   create() {
-    const booking = this.courseInformationFormGroup.value;
 
   }
 
@@ -262,8 +258,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   update() {
-    const booking = this.courseInformationFormGroup.value;
-    booking.id = this.defaults.id;
   }
 
   isCreateMode() {

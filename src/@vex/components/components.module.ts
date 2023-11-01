@@ -1,7 +1,6 @@
 
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
@@ -27,6 +26,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { ReductionDialogComponent } from './reduction-dialog/reduction-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -42,9 +42,7 @@ import { ReductionDialogComponent } from './reduction-dialog/reduction-dialog.co
       MatIconModule,
       MatButtonModule,
       MatMenuModule,
-      FormsModule,
       MatTooltipModule,
-      ReactiveFormsModule,
       MatSelectModule,
       MatButtonToggleModule,
       MatDialogModule,
@@ -59,7 +57,6 @@ import { ReductionDialogComponent } from './reduction-dialog/reduction-dialog.co
       MatInputModule
     ],
   declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent],
-  entryComponents: [AioTableComponent],
   exports: [AioTableComponent]
 })
 

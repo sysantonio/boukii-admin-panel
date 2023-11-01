@@ -2,30 +2,30 @@ import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { CommunicationsComponent } from './communications.component';
-
+import { ChatEmptyComponent } from './chat-empty/chat-empty.component';
+import { ChatConversationComponent } from './chat-conversation/chat-conversation.component';
 
 const routes: VexRoutes = [
   {
     path: '',
     component: CommunicationsComponent,
     data: {
-      toolbarShadowEnabled: true
-    }
-  },/*
-  {
-    path: 'create',
-    component: UserCreateUpdateComponent,
-    data: {
-      toolbarShadowEnabled: true
-    }
-  },
-  {
-    path: 'update/:id',
-    component: UserCreateUpdateComponent,
-    data: {
-      toolbarShadowEnabled: true
-    }
-  }*/
+      scrollDisabled: true,
+      toolbarShadowEnabled: false,
+      footerVisible: false
+    },
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ChatEmptyComponent
+      },
+      {
+        path: ':chatId',
+        component: ChatConversationComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({

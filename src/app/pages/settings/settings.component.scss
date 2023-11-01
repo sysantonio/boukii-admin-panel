@@ -1,0 +1,30 @@
+.square-prefix {
+  color: white;
+  padding: 18px;
+}
+
+.mat-form-field-infix {
+  align-items: center;
+  display: flex;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.centered-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table caption {
+  text-align: left;
+  font-weight: bold;
+  padding: 8px;
+}
+

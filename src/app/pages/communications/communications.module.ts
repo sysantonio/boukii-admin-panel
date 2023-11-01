@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { LayoutModule } from '../../../@vex/layout/layout.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { MatIconModule } from '@angular/material/icon';
 import { WidgetLargeGoalChartModule } from 'src/@vex/components/widgets/widget-large-goal-chart/widget-large-goal-chart.module';
@@ -18,6 +18,14 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommunicationsComponent } from './communications.component';
 import { CommunicationsRoutingModule } from './communications-routing.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
+import { VexScrollbarComponent } from 'src/@vex/components/vex-scrollbar/vex-scrollbar.component';
+import { MatRippleModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [CommunicationsComponent],
@@ -38,9 +46,23 @@ import { CommunicationsRoutingModule } from './communications-routing.module';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
+    MatTabsModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    MatSidenavModule,
+    MatMenuModule,
+    NgClass,
+    NgIf,
+    VexScrollbarComponent,
+    NgFor,
+    MatRippleModule,
+    RouterLinkActive,
+    RouterLink,
+    RouterOutlet,
+    AsyncPipe,
+    MatButtonModule,
+    MatDividerModule,
+    MatInputModule
   ]
 })
 export class CommunicationsModule {
