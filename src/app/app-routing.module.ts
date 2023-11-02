@@ -29,7 +29,7 @@ const childrenRoutes: VexRoutes = [
       },
       {
         path: 'calendar',
-        loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarModule),
+        loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarMonitorModule),
         canActivate: [AuthGuard],
       },
       {

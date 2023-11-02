@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgSwitch, NgSwitchCase } from '@angular/common';
 import { LayoutModule } from '../../../@vex/layout/layout.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
@@ -18,6 +18,11 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CalendarRoutingModule } from './calendar-routing.module';
 import { CalendarComponent } from './calendar.component';
+import { VexScrollbarComponent } from 'src/@vex/components/vex-scrollbar/vex-scrollbar.component';
+import { CalendarA11y, CalendarCommonModule, CalendarDateFormatter, CalendarDayModule, CalendarEventTitleFormatter, CalendarModule, CalendarMonthModule, CalendarUtils, CalendarWeekModule, DateAdapter } from 'angular-calendar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   declarations: [CalendarComponent],
@@ -38,10 +43,28 @@ import { CalendarComponent } from './calendar.component';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
+    MatButtonModule,
+    CalendarCommonModule,
+    VexScrollbarComponent,
+    NgSwitch,
+    NgSwitchCase,
+    CalendarMonthModule,
+    CalendarWeekModule,
+    CalendarDayModule,
+    CalendarModule,
+    MatSnackBarModule,
     MatDialogModule,
     ComponentsModule
+  ], providers: [
+    {
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    },
+    CalendarEventTitleFormatter,
+    CalendarDateFormatter,
+    CalendarUtils,
+    CalendarA11y
   ]
 })
-export class CalendarModule {
+export class CalendarMonitorModule {
 }
