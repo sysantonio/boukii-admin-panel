@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
@@ -65,6 +65,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   heigthModal?: string = '90vh';
   @Input()
   createComponent: any;
+  @Input()
+  showDetail: boolean = false;
+  @Output()
+  showDetailEvent = new EventEmitter<any>();
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   dataSource: MatTableDataSource<any> | null;
@@ -147,6 +151,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   update(row: any) {
     this.router.navigate(['/' + this.route + '/update/' + row.id]);
+  }
+
+  showDetailFn(row: any) {
+    this.showDetailEvent.emit({showDetail: !this.showDetail, item: row});
   }
 
   async delete(item: any) {

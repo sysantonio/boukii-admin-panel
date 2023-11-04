@@ -8,6 +8,9 @@ import { BookingsCreateUpdateComponent } from './bookings-create-update/bookings
   styleUrls: ['./bookings.component.scss']
 })
 export class BookingsComponent {
+  showDetail: boolean = false;
+  detailData: any;
+  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
 
   createComponent = BookingsCreateUpdateComponent;
   entity = 'bookings';
@@ -28,4 +31,13 @@ export class BookingsComponent {
     { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
+  constructor() {
+
+  }
+
+  showDetailEvent(event: any) {
+    this.showDetail = event.showDetail;
+    this.detailData = event.item;
+  }
 }

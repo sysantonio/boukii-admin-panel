@@ -18,6 +18,9 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BookingsComponent } from './bookings.component';
 import { BookingsRoutingModule } from './bookings-routing.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [BookingsComponent],
@@ -40,7 +43,10 @@ import { BookingsRoutingModule } from './bookings-routing.module';
     WidgetTableModule,
     MatDialogModule,
     MatIconModule,
-    ComponentsModule
+    ComponentsModule,
+    MatCardModule,
+    MatDividerModule,
+    MatSlideToggleModule
   ]
 })
 export class BookingsModule {

@@ -19,6 +19,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { BookingsCreateUpdateModalComponent } from './bookings-create-update-modal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { BookingsCreateUpdateModalComponent } from './bookings-create-update-mod
     MatDatepickerModule,
     MatListModule,
     NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule
+    NgxMatTimepickerModule,
+    MatCheckboxModule
   ],
   declarations: [BookingsCreateUpdateModalComponent],
   exports: [BookingsCreateUpdateModalComponent]
