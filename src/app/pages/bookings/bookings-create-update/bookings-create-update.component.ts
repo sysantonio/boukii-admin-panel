@@ -19,6 +19,8 @@ import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-mo
 })
 export class BookingsCreateUpdateComponent implements OnInit {
 
+  borderActive: boolean = false;
+
   createComponent = BookingsCreateUpdateModalComponent;
 
   imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
@@ -26,6 +28,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
   titleMoniteur = 'Nombre monitor';
   usersCount = 5;
   duration = '3 horas';
+  dates = ['03/11/2023', '04/11/2023', '05/11/2023']; // Ejemplo de fechas
+  durations = ['1h 30', '2h 00', '2h 30']; // Ejemplo de duraciones
+  persons = [1, 2, 3, 4]; // Ejemplo de número de personas
+
   reservedDates = [
     new Date(),
     new Date(),
@@ -50,7 +56,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
   times: string[] = this.generateTimes();
   filteredTimes: Observable<string[]>;
 
+  dateControl = new FormControl();
   timeControl = new FormControl();
+  durationControl = new FormControl();
+  personsControl = new FormControl();
   clientsForm = new FormControl('');
   subClientForm = new FormControl();
   sportForm = new FormControl();
@@ -63,7 +72,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   filteredLevel: Observable<any[]>;
   filteredMonitors: Observable<any[]>;
 
-  courseType: any;
+  courseType: any = null;;
 
   form: UntypedFormGroup;
   defaults: any = null;
@@ -93,6 +102,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       sportType: [null], // Posiblemente establezcas un valor predeterminado aquí
       sportForm: [null],
       observations: [null],
+      observations_school: [null],
     })
 
     this.filteredOptions = this.clientsForm.valueChanges.pipe(
@@ -261,4 +271,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
   }
 
+  toggleBorder() {
+    this.borderActive = !this.borderActive;
+  }
 }

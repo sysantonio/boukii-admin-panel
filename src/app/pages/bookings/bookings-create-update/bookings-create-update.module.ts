@@ -25,6 +25,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {MatChipsModule} from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BookingsCreateUpdateModalModule } from '../bookings-create-update-modal/bookings-create-update-modal.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { BookingsCreateUpdateModalModule } from '../bookings-create-update-modal
     MatChipsModule,
     MatSlideToggleModule,
     MatDialogModule,
-    BookingsCreateUpdateModalModule
+    BookingsCreateUpdateModalModule,
+    MatCheckboxModule
   ],
   declarations: [BookingsCreateUpdateComponent],
   exports: [BookingsCreateUpdateComponent]

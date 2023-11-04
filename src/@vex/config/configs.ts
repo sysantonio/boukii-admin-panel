@@ -8,9 +8,9 @@ const defaultConfig: VexConfig = {
   id: VexConfigName.apollo,
   name: 'Apollo',
   style: {
-    colorScheme: ColorSchemeName.dark,
+    colorScheme: ColorSchemeName.light,
     colors: {
-      primary: colorVariables.blue
+      primary: colorVariables.pink
     },
     borderRadius: {
       value: 0.25,
