@@ -20,6 +20,7 @@ import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-mo
 export class BookingsCreateUpdateComponent implements OnInit {
 
   borderActive: boolean = false;
+  showDetail: boolean = false;
 
   createComponent = BookingsCreateUpdateModalComponent;
 
@@ -274,5 +275,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   toggleBorder() {
     this.borderActive = !this.borderActive;
+  }
+
+  showDetailFn(event: boolean) {
+    this.showDetail = event;
   }
 }
