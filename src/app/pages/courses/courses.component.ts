@@ -12,15 +12,18 @@ export class CoursesComponent {
   createComponent = CoursesCreateUpdateComponent;
   entity = 'courses';
   columns: TableColumn<any>[] = [
-    { label: 'Course', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Type', property: 'type', type: 'image', visible: true },
+    { label: 'Course', property: 'name', type: 'text', visible: true},
     { label: 'Sport', property: 'sport', type: 'text', visible: true },
-    { label: 'Jours', property: 'journey', type: 'text', visible: true },
-    { label: 'Jours', property: 'duration', type: 'text', visible: true },
-    { label: 'Máx Participants', property: 'max_participants', type: 'text', visible: true },
-    { label: 'Prix', property: 'price', type: 'text', visible: true },
-    { label: 'Depuis', property: 'start_date', type: 'text', visible: true },
-    { label: "Jusqu'à", property: 'end_date', type: 'text', visible: true },
-    { label: 'Etat', property: 'status', type: 'text', visible: true },
+    { label: 'FX-FI', property: 'max_participants', type: 'text', visible: true },
+    { label: 'Dates', property: 'dates', type: 'dates', visible: true },
+    { label: 'Duration', property: 'duration', type: 'text', visible: true },
+    { label: 'Price', property: 'price', type: 'price', visible: true },
+    { label: 'Enregistrée', property: 'register', type: 'register_date', visible: true },
+    { label: 'Reservas', property: 'bookings', type: 'bookings', visible: true },
+    { label: 'Status', property: 'status', type: 'light', visible: true },
+    { label: 'Options', property: 'options', type: 'light', visible: true },
+    { label: 'Online', property: 'online', type: 'light', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 }
