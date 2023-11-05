@@ -8,6 +8,100 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
-      <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Courses'" [route]="'courses'" [createComponent]="createComponent"></vex-aio-table>
+      <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Courses'" [route]="'courses'" [createComponent]="createComponent" [ngClass]="{'table-show-detail': this.showDetail}"
+      (showDetailEvent)="showDetailEvent($event)"
+      [showDetail]="showDetail"
+      ></vex-aio-table>
+  </vex-page-layout-content>
+
+  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left" *ngIf="showDetail">
+    <mat-card style="padding: 0 3%;">
+      <mat-card-header style="display:block">
+        <div style="width: 100%;float: left;">
+          <mat-icon svgIcon="mat:close" (click)="showDetail = false"></mat-icon>
+
+        </div>
+        <div style="width: 100%;float:left;">
+          <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0;"></div>
+          <div style="float: left;background-color: #EDEDED;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
+          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"></div>
+          <mat-icon style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
+        </div>
+        <div style="width:100%; margin-top:5%;float:left">
+          <div style="width: 100%;">
+            <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>01/11/2023</b> 13:02</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>05/11/2023</b> 13:02</p>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+
+        <div style="width:100%; margin-top:5%;float:left">
+          <div style="width: 100%;">
+            <p style="float: left;width: 80%;text-align: left;"><b>Precio</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>180</b> CHF</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>6</b></p>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+        <div style="float: left; width: 100%;margin-top: 5%;">
+          <ul>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+          </ul>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+
+      </mat-card-header>
+      <mat-card-content>
+        <div style="float: left; width: 100%;">
+          <div style="float: left;width: 100%;">
+            <div style="float: left; width: 20%; margin-top: 5%">
+              <img [src]="imagePath" width="100" height="100">
+            </div>
+            <div style="float: left; width: 75%;margin:6% 0 0 2%">
+              <p><strong>Classes de ski / Samedis Jeunesse / dès 5ans</strong></p>
+              <p>Colectif Ski</p>
+              <p>Les Pacots</p>
+            </div>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+        <div style="float: left; width: 100%;">
+          <p><strong>Niveles / Grupos</strong></p>
+
+          <ng-container *ngFor="let colorKey of colorKeys">
+            <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                {{level.annotation}} - {{level.name}}
+              </div>
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #ededed;margin: 0 0 0 2%;">
+                Grupos 8g - 6p
+              </div>
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #ededed;margin: 0 0 0 2%;">
+                Días 5
+              </div>
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #ededed;margin: 0 0 0 2%;">
+                Duración <strong>2h 30m</strong>
+              </div>
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #ededed;margin: 0 0 0 2%;">
+                Alumnos <strong>30/60</strong>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
   </vex-page-layout-content>
 </vex-page-layout>

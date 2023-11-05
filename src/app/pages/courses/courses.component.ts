@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { CoursesCreateUpdateComponent } from './courses-create-update/courses-create-update.component';
+import { LEVELS } from 'src/app/static-data/level-data';
 
 @Component({
   selector: 'vex-courses',
@@ -8,6 +9,15 @@ import { CoursesCreateUpdateComponent } from './courses-create-update/courses-cr
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent {
+
+  showDetail: boolean = false;
+  detailData: any;
+  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
+
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+  mockLevels = LEVELS;
 
   createComponent = CoursesCreateUpdateComponent;
   entity = 'courses';
@@ -26,4 +36,20 @@ export class CoursesComponent {
     { label: 'Online', property: 'online', type: 'light', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
+  constructor() {
+    this.mockLevels.forEach(level => {
+      if (!this.groupedByColor[level.color]) {
+        this.groupedByColor[level.color] = [];
+      }
+      this.groupedByColor[level.color].push(level);
+    });
+
+    this.colorKeys = Object.keys(this.groupedByColor);
+  }
+
+  showDetailEvent(event: any) {
+    this.showDetail = event.showDetail;
+    this.detailData = event.item;
+  }
 }

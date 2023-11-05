@@ -19,6 +19,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CoursesComponent } from './courses.component';
 import { CoursesRoutingModule } from './courses-routing.module';
 import { CoursesCreateUpdateModule } from './courses-create-update/courses-create-update.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -41,7 +44,10 @@ import { CoursesCreateUpdateModule } from './courses-create-update/courses-creat
     WidgetTableModule,
     CoursesCreateUpdateModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    MatSlideToggleModule,
+    MatDividerModule,
+    MatCardModule
   ]
 })
 export class CoursesModule {
