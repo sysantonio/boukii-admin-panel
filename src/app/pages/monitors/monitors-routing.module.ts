@@ -3,6 +3,7 @@ import {RouterModule} from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { MonitorsComponent } from './monitors.component';
 import { MonitorsCreateUpdateComponent } from './monitors-create-update/monitors-create-update.component';
+import { MonitorDetailComponent } from './monitor-detail/monitor-detail.component';
 
 
 const routes: VexRoutes = [
@@ -22,7 +23,7 @@ const routes: VexRoutes = [
   },
   {
     path: 'update/:id',
-    component: MonitorsCreateUpdateComponent,
+    component: MonitorDetailComponent,
     data: {
       toolbarShadowEnabled: true
     }

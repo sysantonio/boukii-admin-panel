@@ -19,6 +19,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ClientsRoutingModule } from './clients-routing.module';
 import { ClientsComponent } from './clients.component';
 import { ClientsCreateUpdateModule } from './client-create-update/client-create-update.module';
+import { ClientDetailComponent } from './client-detail/client-detail.component';
+import { ClientDetailModule } from './client-detail/client-detail.module';
 
 @NgModule({
   declarations: [ClientsComponent],
@@ -41,7 +43,8 @@ import { ClientsCreateUpdateModule } from './client-create-update/client-create-
     WidgetTableModule,
     ClientsCreateUpdateModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    ClientDetailModule
   ]
 })
 export class ClientsModule {

@@ -18,7 +18,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MonitorsRoutingModule } from './monitors-routing.module';
 import { MonitorsComponent } from './monitors.component';
-import { MonitorsCreateUpdateComponent } from './monitors-create-update/monitors-create-update.component';
+import { MonitorDetailModule } from './monitor-detail/monitor-detail.module';
 
 @NgModule({
   declarations: [MonitorsComponent],
@@ -41,7 +41,8 @@ import { MonitorsCreateUpdateComponent } from './monitors-create-update/monitors
     WidgetTableModule,
     //LanguageCreateUpdateModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    MonitorDetailModule
   ]
 })
 export class MonitorsModule {

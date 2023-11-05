@@ -3,6 +3,7 @@ import {RouterModule} from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { ClientsComponent } from './clients.component';
 import { ClientCreateUpdateComponent } from './client-create-update/client-create-update.component';
+import { ClientDetailComponent } from './client-detail/client-detail.component';
 
 
 const routes: VexRoutes = [
@@ -22,7 +23,7 @@ const routes: VexRoutes = [
   },
   {
     path: 'update/:id',
-    component: ClientCreateUpdateComponent,
+    component: ClientDetailComponent,
     data: {
       toolbarShadowEnabled: true
     }
