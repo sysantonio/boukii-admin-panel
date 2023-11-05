@@ -103,6 +103,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       sportForm: [null],
       observations: [null],
       observations_school: [null],
+      fromDate: [null]
     })
 
     this.filteredOptions = this.clientsForm.valueChanges.pipe(

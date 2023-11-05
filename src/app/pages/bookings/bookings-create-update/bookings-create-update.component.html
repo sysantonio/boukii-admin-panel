@@ -77,7 +77,7 @@
 
             </mat-card-header>
             <mat-card-content>
-              <mat-card-title style="text-align: center;position: relative;top: 35px;">Nuevo usuario</mat-card-title>
+              <mat-card-title style="text-align: center;position: relative;top: 35px;left: 65px;">Nuevo usuario</mat-card-title>
             </mat-card-content>
             <mat-card-actions>
               <!-- Botones de acción, si son necesarios -->
@@ -120,21 +120,10 @@
             </div>
           </div>
         </div>
-        <!--<mat-form-field class="flex-auto" *ngIf="sportTypeSelected > -1">
-          <mat-label>Deporte</mat-label>
-          <input type="text" placeholder="Elije uno" matInput [formControl]="sportForm" [matAutocomplete]="autoSport" />
-          <mat-autocomplete #autoSport="matAutocomplete" [displayWith]="displayFnSport">
-            <mat-option *ngFor="let sport of filteredSports | async" [value]="sport">
-              {{ sport.name }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-icon matPrefix svgIcon="mat:sports"></mat-icon>
-        </mat-form-field>
-        <vex-widget-clients-sports *ngIf="sportTypeSelected > -1" [data]="mockSportData" [type]="form.get('sportType').value"></vex-widget-clients-sports>-->
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-        <h2>Niveaux</h2>
 
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
           <div class="flex-auto" style="width:20%">
             <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
               <mat-card-content>
@@ -161,9 +150,15 @@
         </div>
 
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+        <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee'">
+          <input matInput [matDatepicker]="pickerFrom" placeholder="Select a date" formControlName="fromDate">
+          <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+        </mat-form-field>
+
         <div class="columns-container" *ngIf="courseType !== null">
           <!-- Columna de la lista -->
-          <div class="list-column">
+          <div class="list-column" *ngIf="courseType === 'privee'">
             <div class="list-overflow-container">
               <mat-list class="list mat-elevation-z1">
                 <mat-list-item class="custom-list-item" *ngFor="let course of mockCourses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
@@ -193,6 +188,59 @@
             </div>
           </div>
 
+          <div class="list-column" *ngIf="courseType === 'collectif'">
+            <div class="list-overflow-container">
+              <mat-list class="list mat-elevation-z1">
+                <mat-list-item class="custom-list-item" *ngFor="let course of mockCourses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
+                  <div class="avatar-container">
+                    <img mat-list-avatar class="custom-avatar" [src]="course.icon" />
+                  </div>
+                  <div class="content-container">
+                    <div class="title-container">
+                      <h3 class="title" style="width: 70%;float: left;">{{ course.name | uppercase}}</h3>
+                      <h3 class="price">
+                        {{course.price}} {{ course.currency }}
+                      </h3>
+                    </div>
+                    <p>{{course.subtitle}}</p>
+                    <div style="float: left; width: 100%;margin-top: 5%;">
+                      <ul>
+                        <li>07-01-2024 09:00 <i>09h30 - 11h00</i></li>
+                        <li>14-01-2024 09:00 <i>09h30 - 11h00</i></li>
+                        <li>21-01-2024 09:00 <i>09h30 - 11h00</i></li>
+                        <li>28-01-2024 09:00 <i>09h30 - 11h00</i></li>
+                        <li>04-02-2024 09:00 <i>09h30 - 11h00</i></li>
+                      </ul>
+                    </div>
+                    <div style="float: left; width: 100%;margin-top: 5%;">
+                      <div style="float: left; width: 50%;">
+                        <div style="background: #2D9BF0;width: 60%;text-align: center;padding: 5%;">
+                          RB-ROI / REINE BLEU
+                        </div>
+                        <div >
+                          Sous-groupe 1
+                        </div>
+                      </div>
+                      <div style="float: left; width: 50%;">
+
+                        <div style="float: left; width: 20%;">
+                          <img [src]="userAvatar">
+                        </div>
+                        <div style="float: left; width: 80%;">
+                          <p>Arsène Garcia</p>
+                          <p style="font-size:8px"><i>FR · Switzerland · 39 ans</i></p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </mat-list-item>
+
+
+              </mat-list>
+            </div>
+          </div>
+
 
           <!-- Columna del calendario -->
           <div class="calendar-column" *ngIf="courseType === 'collectif'">
@@ -200,7 +248,8 @@
 
           </div>
 
-          <div class="calendar-column" *ngIf="courseType === 'privee'">
+          <div class="calendar-column" *ngIf="courseType === 'privee'">.
+
             <ng-container>
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
@@ -375,7 +424,7 @@
                 <div style="float: left;width: 70%;font-size: 14px;"> Título de la Reserva </div>
                 <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> 168 CHF </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0">Collective Ski</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0">collectife Ski</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
@@ -543,7 +592,7 @@
                 <div style="float: left;width: 70%;font-size: 14px;"> Título de la Reserva </div>
                 <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> 168 CHF </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0">Collective Ski</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0">collectife Ski</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
@@ -711,7 +760,7 @@
                 <div style="float: left;width: 70%;font-size: 14px;"> Título de la Reserva </div>
                 <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> 168 CHF </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0">Collective Ski</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0">collectife Ski</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
