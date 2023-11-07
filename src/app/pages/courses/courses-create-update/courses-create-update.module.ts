@@ -26,6 +26,10 @@ import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/se
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
   imports: [
@@ -57,7 +61,9 @@ import { MatChipsModule } from '@angular/material/chips';
     MatDialogModule,
     MatTableModule,
     MatSortModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCheckboxModule,
+    AngularEditorModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

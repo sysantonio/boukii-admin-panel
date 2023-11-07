@@ -7,18 +7,242 @@
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
 </vex-secondary-toolbar>
-<div
-  [@stagger]="true"
-  class="p-gutter container"
-  style="max-width: none"
-  *ngIf="!loading"
->
-  <div class="flex flex-col sm:flex-row gap-4">
+<div [@stagger]="true"class="p-gutter container"style="max-width: none"*ngIf="!loading">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 60%;">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Nouvelle réservation</h2>
+        <h2 class="title m-0">Nouvelle course</h2>
       </div>
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
+        <ng-template matStepperIcon="edit">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+        <ng-template matStepperIcon="done">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+        <mat-step [stepControl]="courseTypeFormGroup" [completed]="false" [editable]="true">
+          <ng-template matStepLabel>Info de cours</ng-template>
+
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseTypeFormGroup">
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+                <mat-label>Temporada - Sport</mat-label><br>
+                <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
+                  <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 0">
+                <div style="float:left">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski.png">
+                  </span>
+                  <p style="text-align: center;">ski</p>
+                </div>
+                <div style="float:left;margin:0 0 0 4%">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Snowboard.png">
+                  </span>
+                  <p style="text-align: center;">Snowboard</p>
+                </div>
+                <div style="float:left;margin:0 0 0 4%">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski_randonée.png">
+                  </span>
+                  <p style="text-align: center;">Ski randonée</p>
+                </div>
+                <div style="float:left;margin:0 0 0 4%">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Raquettés.png">
+                  </span>
+                  <p style="text-align: center;">Raquettés</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0">
+
+              <div style="width: 100%;float:left">
+                <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
+                  <mat-card-content>
+                    <p>Cours Collectif</p>
+                  </mat-card-content>
+                </mat-card>
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">
+                  Dates flexibles
+
+                </mat-checkbox>
+                <div style="float: left; margin: 17px">
+                  <mat-icon svgIcon="mat:info"></mat-icon>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0">
+
+              <div style="width: 100%;float:left">
+                <mat-card class="custom-card" [class.selected-privee]="courseType === 'privee'" (click)="setCourseType('privee')">
+                  <mat-card-content>
+                    <p>Cours privee</p>
+                  </mat-card-content>
+                </mat-card>
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">Dates flexibles
+                </mat-checkbox>
+                <div style="float: left; margin: 17px">
+                  <mat-icon svgIcon="mat:info"></mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="courseInfoFormGroup">
+          <ng-template matStepLabel>Données générales</ng-template>
+
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto" style="width: 60%">
+                <label for="courseName">Nom de cours</label>
+                <mat-form-field style="width: 100%">
+                  <input id="courseName" formControlName="name" matInput required type="text">
+                </mat-form-field>
+              </div>
+
+              <div class="flex-auto" style="width: 20%">
+                <label for="courseName">Prix (CHF)</label>
+                <mat-form-field style="width: 100%">
+                  <input id="courseName" formControlName="name" matInput required type="text">
+                </mat-form-field>
+              </div>
+
+              <div class="flex-auto" style="width: 20%">
+                <label for="courseName">Station</label>
+                <mat-form-field class="vex-flex-form-field flex-auto">
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+
+                  <mat-autocomplete #autoStation="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredStations | async" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto" style="width: 50%;">
+                <label style="width: 100%; font-size: 16px;">IMAGE</label>
+
+                <div style="float:left; width: 100%">
+                  <div class="image-container" style="float: left;width: 50%;">
+
+                    <img [src]="imagePreviewUrl !== null ? imagePreviewUrl : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style="border:1px solid #e6e6e6; height: 150px">
+                  </div>
+
+                  <div class="input-container">
+
+                    <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
+                    <label for="file" class="btn-1"><i class="fa fa-camera" aria-hidden="true"></i> Charger</label>
+                    <p style="font-size: 12px">Maximum 1mb</p>
+                    <p style="font-size: 12px">Formats supportés: PNG, JPG</p>
+                    <p style="font-size: 12px">Taille recommanée: 400x290px</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-auto" style="width: 50%;">
+
+                <label for="age">Edad</label>
+                <mat-form-field style="width: 100%">
+                  <mat-select id="age" >
+                    <mat-option>
+                      De 5 a 18 años de edad
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
+
+              <div class="flex-auto" style="width: 60%">
+                <label for="summary" style="font-size: 18px">RESUME</label>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="summary"></angular-editor>
+
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
+
+              <div class="flex-auto" style="width: 60%">
+                <label for="summary" style="font-size: 18px">DESCRIPTION</label>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="description"></angular-editor>
+
+              </div>
+            </div>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="courseConfigForm">
+          <ng-template matStepLabel>Configuration</ng-template>
+
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto">
+
+                <label for="dateFrom">DATE RÉSERVABLE À PARTIR DE</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
+                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+
+                <label for="dateTo">DATE RÉSERVABLE JUSQU'À</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="dateTo" [max]="today">
+                  <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+                <label for="duration">DURÉE</label>
+
+                <mat-form-field style="width: 100%">
+                  <input id="duration" type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
+                  <mat-autocomplete #autoTimes="matAutocomplete">
+                    <mat-option *ngFor="let duration of durations" [value]="duration">
+                      {{duration}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+                <label for="participants">PARTICIPANTS MÁX</label>
+
+                <mat-form-field style="width: 100%">
+                  <mat-label>PARTICIPANTS MÁX.</mat-label>
+                  <input id="participants" formControlName="participants" matInput required type="number">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
+
+    </div>
+  </div>
+<!--<mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
@@ -92,13 +316,11 @@
 
               <table #dateTable *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort>
 
-                <!-- Columna Fecha -->
                 <ng-container matColumnDef="date">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
                   <td mat-cell *matCellDef="let element"> {{element.date}} </td>
                 </ng-container>
 
-                <!-- Columna Hora -->
                 <ng-container matColumnDef="hour">
                   <th mat-header-cell *matHeaderCellDef> Hour </th>
                   <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
@@ -118,13 +340,11 @@
 
               <table #reductionTable *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSourceReductions" matSort>
 
-                <!-- Columna Fecha -->
                 <ng-container matColumnDef="date">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
                   <td mat-cell *matCellDef="let element"> {{element.date}} </td>
                 </ng-container>
 
-                <!-- Columna Hora -->
                 <ng-container matColumnDef="hour">
                   <th mat-header-cell *matHeaderCellDef> Hour </th>
                   <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
@@ -422,18 +642,15 @@
                   {{ level.name }}
                 </mat-chip>
               </mat-chip-listbox>
-              <br> <!-- espacio entre grupos -->
+              <br>
             </div>
 
-            <!-- Mat Table para los contenedores seleccionados -->
             <mat-table #levelTable [dataSource]="selectedCourses" *ngIf="selectedCourses.data.length > 0">
-              <!-- Nombre de Curso -->
               <ng-container matColumnDef="course">
                 <mat-header-cell *matHeaderCellDef> Curso </mat-header-cell>
                 <mat-cell *matCellDef="let element"> {{element.annotation}} - {{element.name}} </mat-cell>
               </ng-container>
 
-              <!-- Otros contenedores según tu descripción -->
 
               <ng-container matColumnDef="min">
                 <mat-header-cell *matHeaderCellDef> PROF EXPO MIN </mat-header-cell>
@@ -475,11 +692,9 @@
                 </mat-cell>
               </ng-container>
 
-              <!-- Ícono para eliminar -->
               <ng-container matColumnDef="delete">
                 <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <!-- Aquí el ícono para eliminar -->
                   <mat-icon svgIcon="mat:delete" (click)="removeCourse(element)"></mat-icon>
                 </mat-cell>
               </ng-container>
@@ -677,7 +892,5 @@
 
           </form>
         </mat-step>
-      </mat-vertical-stepper>
-    </div>
-  </div>
-</div>
+      </mat-vertical-stepper>-->
+

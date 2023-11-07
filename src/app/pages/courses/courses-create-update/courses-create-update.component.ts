@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, map, of, startWith } from 'rxjs';
 import { MOCK_SPORT_DATA, MOCK_SPORT_TYPES } from 'src/app/static-data/sports-data';
@@ -14,7 +14,10 @@ import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/r
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
-  styleUrls: ['./courses-create-update.component.scss'],
+  styleUrls: ['./courses-create-update.component.scss',
+    '../../../../../node_modules/quill/dist/quill.snow.css',
+    '../../../../@vex/styles/partials/plugins/quill/_quill.scss'
+  ],
   animations: [fadeInUp400ms,stagger20ms]
 })
 export class CoursesCreateUpdateComponent implements OnInit {
@@ -23,6 +26,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   @ViewChild('dateTable') dateTable: MatTable<any>;
   @ViewChild('reductionTable') reductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
+
+  summary = ``;
+  description = ``;
 
   days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   startDayControl = new FormControl();
@@ -36,7 +42,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   dataSourceReductions = new MatTableDataSource([]);
 
   myControl = new FormControl();
-  myControlSportType = new FormControl();
   myControlSport = new FormControl();
   myControlStations = new FormControl();
 
@@ -44,7 +49,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   optionsStation: string[] = ['Les Pacots', 'Andorra'];
 
   filteredOptions: Observable<any[]>;
-  filteredSportTypes: Observable<any[]>;
   filteredSports: Observable<any[]>;
   filteredStations: Observable<any[]>;
 
@@ -55,7 +59,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   courseInfoCollecDateSplitFormGroup: UntypedFormGroup;
   courseLevelFormGroup: UntypedFormGroup;
 
-  imagePreviewUrl: string | ArrayBuffer;
+  // Nuevos
+  courseConfigForm: UntypedFormGroup;
+
+  imagePreviewUrl: string | ArrayBuffer = null;
 
   today = new Date();
   from: any = null;
@@ -77,6 +84,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   loading: boolean = true;
 
   durations: string[] = [];
+  courseType: any = null;
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog) {
     this.generateDurations();
@@ -175,6 +183,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       image: [null],
     });
 
+    this.courseConfigForm = this.fb.group({});
+
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),
@@ -187,12 +197,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         map(value => this._filterStations(value))
       );
 
-    this.filteredSportTypes = this.myControlSportType.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filterSportType(value))
-    );
-
     this.filteredSports = this.myControlSport.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.name),
@@ -201,10 +205,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.myControl.valueChanges.subscribe(value => {
       this.courseTypeFormGroup.get('courseType').setValue(value);
-    });
-
-    this.myControlSportType.valueChanges.subscribe(value => {
-        this.courseTypeFormGroup.get('sportType').setValue(value);
     });
 
     this.myControlSport.valueChanges.subscribe(value => {
@@ -237,10 +237,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   }
 
-  filterSportsByType(event: any) {
-    this.myControlSport.reset();  // Esta línea resetea el mat-autocomplete.
-    this.sportTypeSelected = event.option.value.id;
-    let selectedSportType = event.option.value.id;
+  filterSportsByType() {
+    this.sportTypeSelected = this.courseTypeFormGroup.get('sportType').value;
+    let selectedSportType = this.courseTypeFormGroup.get('sportType').value;
     this.filteredSports = of(this.mockSportData.filter(sport => sport.sport_type === selectedSportType));
   }
 
@@ -372,5 +371,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     }
     // Aquí también puedes deseleccionar el chip correspondiente
+  }
+
+  setCourseType(type: string) {
+    this.courseType = type;
   }
 }

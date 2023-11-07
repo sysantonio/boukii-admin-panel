@@ -329,7 +329,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     if (index >= 0) {
       this.selectedLanguages.splice(index, 1);
     } else {
-      this.selectedLanguages.push({ namr: language.name, code: language.code });
+      this.selectedLanguages.push({ name: language.name, code: language.code });
     }
     console.log(this.selectedLanguages);
   }

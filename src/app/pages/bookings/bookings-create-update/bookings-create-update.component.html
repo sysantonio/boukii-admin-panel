@@ -138,7 +138,7 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <mat-form-field class="flex-auto" style="width: 60%">
+          <mat-form-field class="flex-auto" style="width: 48%">
             <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
               <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
@@ -213,22 +213,22 @@
                       </ul>
                     </div>
                     <div style="float: left; width: 100%;margin-top: 5%;">
-                      <div style="float: left; width: 50%;">
-                        <div style="background: #2D9BF0;width: 80%;text-align: center;padding: 5%;">
+                      <div style="float: left;width: 95%;margin: 0 10px 0 0;">
+                        <div style="background: #2D9BF0;width: 60%;text-align: center;padding: 5%;color: #fff">
                           RB-ROI / REINE BLEU
                         </div>
                         <div >
                           Sous-groupe 1
                         </div>
                       </div>
-                      <div style="float: left; width: 50%;">
+                      <div style="float: left;width: 70%;">
 
                         <div style="float: left; width: 20%;">
                           <img [src]="userAvatar">
                         </div>
                         <div style="float: left; width: 80%;">
-                          <p>Arsène Garcia</p>
-                          <p style="font-size:8px"><i>FR · Switzerland · 39 ans</i></p>
+                          <p style="margin: 0 0 0 10px;">Arsène Garcia</p>
+                          <p style="font-size:8px;margin: 0 0 0 10px;"><i>FR · Switzerland · 39 ans</i></p>
                         </div>
                       </div>
 
