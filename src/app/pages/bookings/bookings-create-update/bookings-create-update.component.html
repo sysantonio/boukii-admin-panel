@@ -4,9 +4,9 @@
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
 </vex-secondary-toolbar>
-<div [@stagger]="true" class="p-gutter container" style="max-width: none" *ngIf="!loading" [hidden]="bookingComplete">
-  <div class="flex flex-col sm:flex-row gap-4">
-    <div @fadeInUp class="card flex-auto">
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;" *ngIf="!loading" [hidden]="bookingComplete">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 65%">
+    <div @fadeInUp class="card flex-auto" style="width: 65%">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle réservation</h2>
       </div>
@@ -71,13 +71,13 @@
 
           <mat-card class="card-users" (click)="toggleBorder()">
             <mat-card-header>
-              <button mat-fab color="accent" style="margin: 0 auto; position: relative;top: 20px;">
+              <button mat-fab color="accent" style="margin: 0 auto;position: relative;top: 20px;right: 35%;">
                 <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
               </button>
 
             </mat-card-header>
             <mat-card-content>
-              <mat-card-title style="text-align: center;position: relative;top: 35px;left: 65px;">Nuevo usuario</mat-card-title>
+              <mat-card-title style="text-align: center;position: relative;top: 100%;">Nuevo usuario</mat-card-title>
             </mat-card-content>
             <mat-card-actions>
               <!-- Botones de acción, si son necesarios -->
@@ -214,7 +214,7 @@
                     </div>
                     <div style="float: left; width: 100%;margin-top: 5%;">
                       <div style="float: left; width: 50%;">
-                        <div style="background: #2D9BF0;width: 60%;text-align: center;padding: 5%;">
+                        <div style="background: #2D9BF0;width: 80%;text-align: center;padding: 5%;">
                           RB-ROI / REINE BLEU
                         </div>
                         <div >
@@ -990,7 +990,7 @@
 </div>
 
 
-<mat-card style="padding: 0 1%;width: 40%;position: absolute; top:6%;left:59%;" >
+<mat-card style="padding: 0 1%;width: 35%;position: absolute; top:7%;left:65%;" *ngIf="!bookingComplete" >
   <mat-card-header style="display:block">
     <div style="width: 100%;float: left;">
       <mat-icon svgIcon="mat:close"></mat-icon>
