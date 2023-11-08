@@ -1,23 +1,43 @@
 <mat-dialog-content>
 
-  <mat-form-field>
-    <input matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="selectedDate" [min]="today">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker [startAt]="today"></mat-datepicker>
-  </mat-form-field>
+  <div class="flex-auto">
+    <label for="date">Date</label>
 
-  <mat-form-field style="width: 100%;">
-    <input type="text" placeholder="Hora" matInput [matAutocomplete]="auto" [(ngModel)]="selectedHour">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let hour of hours" [value]="hour">
-        {{hour}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+    <mat-form-field>
+      <input id="date" matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="selectedDate" [min]="today">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [startAt]="today"></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="flex-auto">
+    <label for="duration">Durée</label>
+
+    <mat-form-field style="width: 100%">
+      <input id="duration" type="text" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes"  [(ngModel)]="selectedDuration">
+      <mat-autocomplete #autoTimes="matAutocomplete">
+        <mat-option *ngFor="let duration of durations" [value]="duration">
+          {{duration}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div class="flex-auto">
+    <label for="hour">Hour</label>
+    <mat-form-field style="width: 100%;">
+      <input id="hour" type="text" placeholder="Hora" matInput [matAutocomplete]="auto" [(ngModel)]="selectedHour">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let hour of hours" [value]="hour">
+          {{hour}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button [mat-dialog-close]="{date: selectedDate, hour: selectedHour}">Aceptar</button>
+  <button mat-button [mat-dialog-close]="{date: selectedDate, duration: selectedDuration, hour: selectedHour}">Aceptar</button>
 </mat-dialog-actions>

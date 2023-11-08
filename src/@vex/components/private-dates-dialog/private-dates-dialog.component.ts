@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'vex-date-time-dialog',
-  templateUrl: './date-time-dialog.component.html',
-  styleUrls: ['./date-time-dialog.component.scss']
+  selector: 'vex-private-dates-dialog',
+  templateUrl: './private-dates-dialog.component.html',
+  styleUrls: ['./private-dates-dialog.component.scss']
 })
-export class DateTimeDialogComponent implements OnInit {
+export class PrivateDatesDialogComponent implements OnInit {
 
   durations: string[] = [];
 
@@ -14,7 +15,8 @@ export class DateTimeDialogComponent implements OnInit {
   hours: string[] = [];
   selectedHour: any;
   selectedDuration: any;
-  selectedDate: Date;
+  selectedDateFrom: Date;
+  selectedDateTo: Date;
 
   constructor() { }
 

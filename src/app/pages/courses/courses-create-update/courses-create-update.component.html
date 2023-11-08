@@ -8,7 +8,7 @@
   </button>
 </vex-secondary-toolbar>
 <div [@stagger]="true"class="p-gutter container"style="max-width: none"*ngIf="!loading">
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 60%;">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 48%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle course</h2>
@@ -85,7 +85,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0">
 
               <div style="width: 100%;float:left">
-                <mat-card class="custom-card" [class.selected-privee]="courseType === 'privee'" (click)="setCourseType('privee')">
+                <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee')">
                   <mat-card-content>
                     <p>Cours privee</p>
                   </mat-card-content>
@@ -97,6 +97,13 @@
                 </div>
               </div>
             </div>
+
+          </div>
+          <div class="actions flex items-center justify-end gap-2">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Siguiente
+            </button>
           </div>
         </mat-step>
 
@@ -104,23 +111,24 @@
           <ng-template matStepLabel>Données générales</ng-template>
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <div class="flex-auto" style="width: 60%">
+              <div class="flex-auto" style="width: 40%">
                 <label for="courseName">Nom de cours</label>
                 <mat-form-field style="width: 100%">
                   <input id="courseName" formControlName="name" matInput required type="text">
                 </mat-form-field>
               </div>
 
-              <div class="flex-auto" style="width: 20%">
+              <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
                   <input id="courseName" formControlName="name" matInput required type="text">
                 </mat-form-field>
               </div>
 
-              <div class="flex-auto" style="width: 20%">
+              <div class="flex-auto" style="width: 30%">
                 <label for="courseName">Station</label>
                 <mat-form-field class="vex-flex-form-field flex-auto">
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
@@ -134,7 +142,8 @@
               </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto" style="width: 50%;">
+
+              <div class="flex-auto" style="width: 60%;">
                 <label style="width: 100%; font-size: 16px;">IMAGE</label>
 
                 <div style="float:left; width: 100%">
@@ -153,7 +162,7 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-auto" style="width: 50%;">
+              <div class="flex-auto" style="width: 40%;">
 
                 <label for="age">Edad</label>
                 <mat-form-field style="width: 100%">
@@ -175,7 +184,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">
 
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">DESCRIPTION</label>
@@ -184,9 +193,15 @@
               </div>
             </div>
           </div>
+          <div class="actions flex items-center justify-end gap-2">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Siguiente
+            </button>
+          </div>
         </mat-step>
 
-        <mat-step [stepControl]="courseConfigForm">
+        <mat-step [stepControl]="courseConfigForm" *ngIf="courseType === 'collectif'">
           <ng-template matStepLabel>Configuration</ng-template>
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
@@ -236,12 +251,354 @@
                 </mat-form-field>
               </div>
             </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="courseType === 'collectif'">
+              <div class="flex-auto" style="width: 100%">
+                <label for="table-dates">DATES</label>
+
+                <table #dateTable id="table-dates" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort style="border: 1px solid #e6e6e6">
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="duration">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Durée </th>
+                    <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="hour">
+                    <th mat-header-cell *matHeaderCellDef> Hour </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-icon svgIcon="mat:delete" (click)="removeCourse(element)"></mat-icon>
+                      <mat-icon svgIcon="mat:edit" (click)="removeCourse(element)"></mat-icon>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+
+              <div class="flex-auto">
+                <button class="add-date" mat-fab (click)="openDialog()">
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 10% 0 0 0" *ngIf="courseType === 'collectif'">
+              <div class="flex-auto" style="width: 100%">
+                <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
+
+                <table #reductionTable id="table-reduction" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSourceReductions" matSort style="border: 1px solid #e6e6e6">
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef> Reduction (%) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.percentage}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element; let idx = index">
+                      <mat-icon svgIcon="mat:delete" (click)="removeReduction(element, idx)"></mat-icon>
+                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedReductionsColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
+                </table>
+              </div>
+              <div class="flex-auto">
+                <button class="add-date" mat-fab (click)="openDialogReductions()">
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="actions flex items-center justify-end gap-2">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Guardar
+            </button>
           </div>
         </mat-step>
       </mat-vertical-stepper>
-
     </div>
   </div>
+
+
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 50%;float:left;" *ngIf="courseType === 'privee'">
+    <div @fadeInUp class="card flex-auto">
+      <div class="px-6 py-4 border-b flex items-center">
+        <h2 class="title m-0">Configuration</h2>
+      </div>
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
+        <ng-template matStepperIcon="edit">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+        <ng-template matStepperIcon="done">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+
+        <mat-step [stepControl]="courseInfoPriveFormGroup" [completed]="false" [editable]="true">
+          <ng-template matStepLabel>Info de cours</ng-template>
+
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoPriveFormGroup">
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+
+                <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="dateFrom" [max]="today">
+                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+
+                <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="dateTo" [max]="today">
+                  <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+
+                <label for="durationPrivate">DURÉ</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimesPrivate">
+                  <mat-autocomplete #autoTimesPrivate="matAutocomplete">
+                    <mat-option *ngFor="let duration of durations" [value]="duration">
+                      {{duration}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                </div>
+              <div class="flex-auto">
+
+                <label for="participants">PARTICIPANTS MÁX.</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <mat-label>PARTICIPANTS MÁX.</mat-label>
+                  <input id="participants" formControlName="participants" matInput required type="number">
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+
+                <label for="durationPrivate" style="font-size: 20px;">Quand peut-on suivre le cours?</label>
+              </div>
+              <div class="flex-auto">
+
+                <mat-checkbox [checked]="false">Periode Unique</mat-checkbox>
+              </div>
+              <div class="flex-auto">
+
+                <mat-checkbox [checked]="true">Plusieurs Periodes</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee'">
+              <div class="flex-auto" style="width: 100%">
+
+                <table #privateDatesTable id="private-date-table" mat-table [dataSource]="dataSourceDatePrivate" matSort style="border: 1px solid #e6e6e6">
+
+                  <ng-container matColumnDef="dateFrom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date de début </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateFrom}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dateTo">
+                    <th mat-header-cell *matHeaderCellDef> Date de fin </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateTo}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element; let idx = index">
+                      <mat-icon svgIcon="mat:delete" (click)="removePrivateDate(idx)"></mat-icon>
+                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedPrivateDateColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedPrivateDateColumns;"></tr>
+                </table>
+              </div>
+              <div class="flex-auto">
+                <button class="add-date" mat-fab (click)="openDialogPrivateDate()">
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0">
+
+              <div class="flex-auto">
+
+                <label for="all-days">Jours</label>
+                <div style="width: 100%">
+
+                  <mat-checkbox id="all-days" [checked]="false">Touts selectionner</mat-checkbox>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto" style="padding-left: 5%">
+
+                <div style="width: 100%">
+                  <ul style="float: left;width: 25%;">
+                    <li><mat-checkbox [checked]="false">Lundi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="true">Mardi</mat-checkbox></li>
+                  </ul>
+                  <ul style="float: left;width: 25%;">
+                    <li><mat-checkbox [checked]="false">Mercedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="true">Jeudi</mat-checkbox></li>
+                  </ul>
+                  <ul style="float: left;width: 25%;">
+                    <li><mat-checkbox [checked]="true">Vendredi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false">Samedi</mat-checkbox></li>
+                  </ul>
+                  <ul style="float: left;width: 25%;">
+                    <li><mat-checkbox [checked]="false">Diamanche</mat-checkbox></li>
+
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 5%;">
+              <div class="flex-auto">
+
+                <label for="minDuration">DURÉE MINIMALE</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <input type="text" id="minDuration" formControlName="minDuration" placeholder="DURÉE MINIMALE" matInput [matAutocomplete]="autoTimesMinDuration">
+                  <mat-autocomplete #autoTimesMinDuration="matAutocomplete">
+                    <mat-option *ngFor="let duration of durations" [value]="duration">
+                      {{duration}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+
+                <label for="maxDuration">DURÉE MAXIMALE</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <input type="text" id="maxDuration" formControlName="maxDuration" placeholder="DURÉE MAXIMALE" matInput [matAutocomplete]="autoTimesMmaxDuration">
+                  <mat-autocomplete #autoTimesMmaxDuration="matAutocomplete">
+                    <mat-option *ngFor="let duration of durations" [value]="duration">
+                      {{duration}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+
+                <label for="fromHour">HEURE DEBUT</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <input type="text" id="fromHour" formControlName="fromHour" placeholder="HEURE DEBUT" matInput [matAutocomplete]="autoHourFrom">
+                  <mat-autocomplete #autoHourFrom="matAutocomplete">
+                    <mat-option *ngFor="let hour of hours" [value]="hour">
+                      {{hour}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+
+                <label for="maxDuration">HEURE DE FIN</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <input type="text" id="toHour" formControlName="maxDuration" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo">
+                  <mat-autocomplete #autoHourTo="matAutocomplete">
+                    <mat-option *ngFor="let hour of hours" [value]="hour">
+                      {{hour}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 10% 0 0 0" *ngIf="courseType === 'privee'">
+              <div class="flex-auto" style="width: 100%">
+                <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
+
+                <table #privateReductionTable id="table-private-reduction" mat-table [dataSource]="dataSourceReductionsPrivate" matSort style="border: 1px solid #e6e6e6">
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef> Reduction (%) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.percentage}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element; let idx = index">
+                      <mat-icon svgIcon="mat:delete" (click)="removePrivateReduction(element, idx)"></mat-icon>
+                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedReductionsColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
+                </table>
+              </div>
+              <div class="flex-auto">
+                <button class="add-date" mat-fab (click)="openDialogPrivateReductions()">
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+          <div class="actions flex items-center justify-end gap-2">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Siguiente
+            </button>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
+    </div>
+  </div>
+</div>
 <!--<mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>

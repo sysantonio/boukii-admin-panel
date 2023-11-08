@@ -1,0 +1,28 @@
+<mat-dialog-content>
+
+  <div class="flex-auto">
+    <label for="dateFrom">Date de Début</label>
+
+    <mat-form-field>
+      <input id="dateFrom" matInput [matDatepicker]="picker"[(ngModel)]="selectedDateFrom" [min]="today">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [startAt]="today"></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="flex-auto">
+    <label for="DateTo">Date de fin</label>
+
+    <mat-form-field>
+      <input id="DateTo" matInput [matDatepicker]="pickerTo" [(ngModel)]="selectedDateTo" [min]="today">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button [mat-dialog-close]="{dateFrom: selectedDateFrom, dateTo: selectedDateTo}">Aceptar</button>
+</mat-dialog-actions>

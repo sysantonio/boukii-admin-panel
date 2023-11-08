@@ -27,6 +27,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { ReductionDialogComponent } from './reduction-dialog/reduction-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PrivateDatesDialogComponent } from './private-dates-dialog/private-dates-dialog.component';
 
 @NgModule({
     imports: [
@@ -56,7 +57,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       MatNativeDateModule,
       MatInputModule
     ],
-  declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent],
+  declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent, PrivateDatesDialogComponent],
   exports: [AioTableComponent]
 })
 

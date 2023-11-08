@@ -11,6 +11,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/reduction-dialog.component';
+import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -25,7 +26,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('dateTable') dateTable: MatTable<any>;
   @ViewChild('reductionTable') reductionTable: MatTable<any>;
+  @ViewChild('privateDatesTable') privateDatesTable: MatTable<any>;
+  @ViewChild('table-private-reduction') privateReductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
+
+  hours = [
+    '00:00', '01:00', '02:00', '03:00', '04:00',
+    '05:00', '06:00', '07:00', '08:00', '09:00',
+    '10:00', '11:00', '12:00', '13:00', '14:00',
+    '15:00', '16:00', '17:00', '18:00', '19:00',
+    '20:00', '21:00', '22:00', '23:00'
+  ];
 
   summary = ``;
   description = ``;
@@ -36,10 +47,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
   availableEndDays: string[] = [];
 
   separatedDates = false;
-  displayedColumns: string[] = ['date', 'hour'];
-  displayedReductionsColumns: string[] = ['date', 'hour'];
+  displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
+  displayedReductionsColumns: string[] = ['date', 'percentage'];
+  displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
   dataSource = new MatTableDataSource([]);
   dataSourceReductions = new MatTableDataSource([]);
+  dataSourceDatePrivate = new MatTableDataSource([]);
+  dataSourceReductionsPrivate = new MatTableDataSource([]);
 
   myControl = new FormControl();
   myControlSport = new FormControl();
@@ -116,6 +130,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
 
+
+    this.dataSource.data.push({date: moment(this.today).format('DD-MM-YYYY'), duration: '2h 30m', hour: '08:30'});
+    this.dateTable?.renderRows();
+
     this.courseTypeFormGroup = this.fb.group({
 
       sportType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
@@ -153,6 +171,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
       summary: [null, Validators.required],
       description: [null, Validators.required],
       duration: [null, Validators.required],
+      minDuration: [null, Validators.required],
+      maxDuration: [null, Validators.required],
+      fromHour: [null, Validators.required],
+      toHour: [null, Validators.required],
       participants: [null, Validators.required],
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
@@ -326,7 +348,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data.push({date: moment(result.date).format('DD-MM-YYYY'), hour: result.hour});
+        this.dataSource.data.push({date: moment(result.date).format('DD-MM-YYYY'), duration: result.duration, hour: result.hour});
         this.dateTable?.renderRows();
       }
     });
@@ -340,8 +362,36 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceReductions.data.push({date: moment(result.date).format('DD-MM-YYYY'), hour: result.hour});
+        this.dataSourceReductions.data.push({date: moment(result.date).format('DD-MM-YYYY'), percentage: result.percentage});
         this.reductionTable?.renderRows();
+      }
+    });
+  }
+
+  openDialogPrivateReductions(): void {
+    const dialogRef = this.dialog.open(ReductionDialogComponent, {
+      width: '300px',
+      data: {iterations: this.dataSourceDatePrivate.data.length}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSourceReductionsPrivate.data.push({date: moment(result.date).format('DD-MM-YYYY'), percentage: result.percentage});
+        this.privateReductionTable?.renderRows();
+      }
+    });
+  }
+
+  openDialogPrivateDate(): void {
+    const dialogRef = this.dialog.open(PrivateDatesDialogComponent, {
+      width: '300px',
+      data: {iterations: this.dataSource.data.length}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY')});
+        this.privateDatesTable?.renderRows();
       }
     });
   }
@@ -370,6 +420,27 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.table.renderRows();
 
     }
+    // Aquí también puedes deseleccionar el chip correspondiente
+  }
+
+  removeReduction(redcution: any, index: any) {
+    this.dataSourceReductions.data.splice(index, 1);
+    this.reductionTable.renderRows();
+
+    // Aquí también puedes deseleccionar el chip correspondiente
+  }
+
+  removePrivateReduction(redcution: any, index: any) {
+    this.dataSourceReductionsPrivate.data.splice(index, 1);
+    this.privateReductionTable.renderRows();
+
+    // Aquí también puedes deseleccionar el chip correspondiente
+  }
+
+  removePrivateDate(index: any) {
+    this.dataSourceDatePrivate.data.splice(index, 1);
+    this.table.renderRows();
+
     // Aquí también puedes deseleccionar el chip correspondiente
   }
 
