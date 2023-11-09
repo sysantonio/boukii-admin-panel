@@ -110,6 +110,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   durations: string[] = [];
   courseType: any = null;
+  courseComplete: boolean = false;
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog) {
     this.generateDurations();
