@@ -202,15 +202,34 @@ mat-list {
   color: #fff
 }
 
-/* Asegúrate de que el label tenga el estilo deseado */
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  /* Otros estilos para la etiqueta, si son necesarios */
+.square-prefix {
+  color: white;
+  padding: 18px;
 }
 
-
-::ng-deep .ql-snow .ql-editor h1 {
-  font-size: 18px;
+.mat-form-field-infix {
+  align-items: center;
+  display: flex;
 }
+
+.table-container {
+  overflow-x: auto;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.centered-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table caption {
+  text-align: left;
+  font-weight: bold;
+  padding: 8px;
+}
+
 

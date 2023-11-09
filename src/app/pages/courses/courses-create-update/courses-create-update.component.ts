@@ -30,6 +30,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   @ViewChild('table-private-reduction') privateReductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
 
+  people = 6; // Aquí puedes cambiar el número de personas
+  intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
+
   hours = [
     '00:00', '01:00', '02:00', '03:00', '04:00',
     '05:00', '06:00', '07:00', '08:00', '09:00',
@@ -50,10 +53,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
   displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
+  displayedColumnsFlexiblePrices: string[] =['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSource = new MatTableDataSource([]);
   dataSourceReductions = new MatTableDataSource([]);
   dataSourceDatePrivate = new MatTableDataSource([]);
   dataSourceReductionsPrivate = new MatTableDataSource([]);
+  dataSourceFlexiblePrices = this.intervalos.map(intervalo => {
+    const fila: any = { intervalo: this.formatIntervalo(intervalo) };
+    for (let i = 1; i <= this.people; i++) {
+      fila[`persona ${i}`] = '';
+    }
+    return fila;
+  });
 
   myControl = new FormControl();
   myControlSport = new FormControl();
@@ -446,5 +457,24 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   setCourseType(type: string) {
     this.courseType = type;
+  }
+
+  updateTable() {
+    // Lógica para actualizar la tabla basándote en el valor de this.people
+
+    // Por ejemplo, podrías actualizar las columnas mostradas:
+    this.displayedColumns = ['intervalo']; // Inicializa con la columna de intervalo
+    for (let i = 1; i <= this.people; i++) {
+      this.displayedColumns.push(i + ' Persona'); // Añade columnas para cada persona
+    }
+
+    // También podrías necesitar actualizar los datos mostrados en la tabla
+    // ...
+  }
+
+  formatIntervalo(minutos: number): string {
+    const horas = Math.floor(minutos / 60);
+    const mins = minutos % 60;
+    return `${horas > 0 ? horas + 'h ' : ''}${mins > 0 ? mins + 'm' : ''}`.trim();
   }
 }
