@@ -7,13 +7,13 @@
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
 </vex-secondary-toolbar>
-<div [@stagger]="true"class="p-gutter container"style="max-width: none"*ngIf="!loading">
+<div [@stagger]="true"class="p-gutter container"style="max-width: none"*ngIf="!loading && (courseType === null || courseType === 'privee')">
   <div class="flex flex-col sm:flex-row gap-4" style="width: 48%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle course</h2>
       </div>
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
+      <mat-vertical-stepper #stepper="matVerticalStepper" [linear]="false">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
@@ -129,9 +129,9 @@
               </div>
 
               <div class="flex-auto" style="width: 30%">
-                <label for="courseName">Station</label>
-                <mat-form-field class="vex-flex-form-field flex-auto">
-                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+                <label for="station">Station</label>
+                <mat-form-field  style="width: 100%">
+                  <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
                   <mat-autocomplete #autoStation="matAutocomplete">
                     <mat-option *ngFor="let option of filteredStations | async" [value]="option">
@@ -338,10 +338,11 @@
           </div>
         </mat-step>
       </mat-vertical-stepper>
+
     </div>
   </div>
 
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 50%;float:left;" *ngIf="courseType === 'collectif'">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 50%;float:left;" *ngIf="false">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Selección de niveles y grupos</h2>
@@ -399,20 +400,67 @@
           <div style="width: 100%;float:left;">
             <ng-container *ngFor="let colorKey of colorKeys">
               <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
-                <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;" [style.background-color]="colorKey">
-                  {{level.annotation}} - {{level.name}}
+                <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
+                  <mat-slide-toggle></mat-slide-toggle>
                 </div>
-                <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align: center;">
-                  Grupos 8g - 6p
+                <div style="float: left;width: 16%;">
+                  <div style="width:100%;text-align: center;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                    {{level.annotation}} - {{level.name}}
+                  </div>
+                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;">
+                    <mat-select placeholder="Nivel minimo del profesor">
+                      <mat-option>
+                        Opcion 1
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
-                <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align: center;">
-                  Días 5
+                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                    Grupos 8g - 6p
+                  </div>
+                  <div style="width: 100%; margin-top: 10%;height: 60px">
+                    <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%">Añadir profesor</button>
+                  </div>
                 </div>
-                <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align: center;">
-                  Duración <strong>2h 30m</strong>
+
+                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                    Días 5
+                  </div>
+                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                    <mat-select placeholder="Nivel minimo del profesor">
+                      <mat-option>
+                        Opcion 1
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
-                <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align: center;">
-                  Alumnos <strong>30/60</strong>
+
+                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                    Duración <strong>2h 30m</strong>
+                  </div>
+                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                    <mat-select placeholder="Nivel minimo del profesor">
+                      <mat-option>
+                        Opcion 1
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                    Alumnos <strong>30/60</strong>
+                  </div>
+                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                    <mat-select placeholder="Nivel minimo del profesor">
+                      <mat-option>
+                        Opcion 1
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </ng-container>
@@ -712,6 +760,615 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumnsFlexiblePrices;"></tr>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Inferior -->
+<div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float: left;margin: 2% 0 0 0;" *ngIf="false">
+  <div @fadeInUp class="card flex-auto" style=" background: transparent;">
+    <div class="px-6 py-4 border-b flex items-center" style="background: white;margin: 0 auto;width: 70%;box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);">
+      <h2 class="title m-0">Selección de niveles y grupos</h2>
+    </div>
+    <mat-card style="padding: 0 3%;margin: 0 auto; background: #fff;width: 70%;border-radius:0;">
+      <mat-card-header style="display:block">
+        <div style="width: 100%;float:left;">
+          <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+          <div style="float:right;width: 65%">
+            <div style="float: right;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
+            <div style="float: right;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
+            <div style="float: right;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0;"></div>
+          </div>
+        </div>
+        <div style="width:100%; margin-top:5%;float:left">
+          <div style="width: 100%;">
+            <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>01/11/2023</b> 13:02</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>05/11/2023</b> 13:02</p>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+
+        <div style="width:100%; margin-top:5%;float:left">
+          <div style="width: 100%;">
+            <p style="float: left;width: 80%;text-align: left;"><b>Precio</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>180</b> CHF</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>6</b></p>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+        <div style="float: left; width: 100%;margin-top: 5%;">
+          <ul>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+          </ul>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+      </mat-card-header>
+      <mat-card-content style="margin-top: 5%;">
+
+        <div style="width: 100%;float:left;">
+          <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+        </div>
+
+        <div style="width: 100%;float:left;">
+          <ng-container *ngFor="let colorKey of colorKeys">
+            <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
+              <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
+                <mat-slide-toggle></mat-slide-toggle>
+              </div>
+              <div style="float: left;width: 16%;">
+                <div style="width:100%;text-align: center;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                  {{level.annotation}} - {{level.name}}
+                </div>
+                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;">
+                  <mat-select placeholder="Nivel minimo del profesor">
+                    <mat-option>
+                      Opcion 1
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                  Grupos 8g - 6p
+                </div>
+                <div style="width: 100%; margin-top: 10%;height: 60px">
+                  <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%">Añadir profesor</button>
+                </div>
+              </div>
+
+              <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                  Días 5
+                </div>
+                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                  <mat-select placeholder="Nivel minimo del profesor">
+                    <mat-option>
+                      Opcion 1
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                  Duración <strong>2h 30m</strong>
+                </div>
+                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                  <mat-select placeholder="Nivel minimo del profesor">
+                    <mat-option>
+                      Opcion 1
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                  Alumnos <strong>30/60</strong>
+                </div>
+                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                  <mat-select placeholder="Nivel minimo del profesor">
+                    <mat-option>
+                      Opcion 1
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div style="float:left; width: 100%">
+                <div>
+                  <ul>
+                    <li [style.color]="colorKey">
+                      {{level.annotation}} - {{level.name}}
+                    </li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<!-- Horizontal -->
+<div [@stagger]="true"class="p-gutter container"style="max-width: none" [hidden]="courseType !== 'collectif'">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
+    <div @fadeInUp class="card flex-auto">
+      <div class="px-6 py-4 border-b flex items-center">
+        <h2 class="title m-0">Nouvelle course</h2>
+      </div>
+
+      <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="false" [hidden]="courseType !== 'collectif'">
+        <ng-template matStepperIcon="edit">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+        <ng-template matStepperIcon="done">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+        <mat-step [stepControl]="courseTypeFormGroup" [completed]="false" [editable]="true">
+          <ng-template matStepLabel>Info de cours</ng-template>
+
+          <div [formGroup]="courseTypeFormGroup">
+
+            <div  style="width:50%; float:left" >
+              <div class="flex-auto">
+                <mat-label>Temporada - Sport</mat-label><br>
+                <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
+                  <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 0; width:100%; float:left">
+                <div style="float:left">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski.png">
+                  </span>
+                  <p style="text-align: center;">ski</p>
+                </div>
+                <div style="float:left;margin:0 0 0 4%">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Snowboard.png">
+                  </span>
+                  <p style="text-align: center;">Snowboard</p>
+                </div>
+                <div style="float:left;margin:0 0 0 4%">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski_randonée.png">
+                  </span>
+                  <p style="text-align: center;">Ski randonée</p>
+                </div>
+                <div style="float:left;margin:0 0 0 4%">
+                  <span style="width: 100%;float: left;">
+                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Raquettés.png">
+                  </span>
+                  <p style="text-align: center;">Raquettés</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin: 2% 0 0 0;width: 50%;float: left;">
+
+              <div style="width: 100%;float:left">
+                <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
+                  <mat-card-content>
+                    <p>Cours Collectif</p>
+                  </mat-card-content>
+                </mat-card>
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">
+                  Dates flexibles
+
+                </mat-checkbox>
+                <div style="float: left; margin: 17px">
+                  <mat-icon svgIcon="mat:info"></mat-icon>
+                </div>
+              </div>
+
+              <div style="width: 100%;float:left">
+                <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee')">
+                  <mat-card-content>
+                    <p>Cours privee</p>
+                  </mat-card-content>
+                </mat-card>
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">Dates flexibles
+                </mat-checkbox>
+                <div style="float: left; margin: 17px">
+                  <mat-icon svgIcon="mat:info"></mat-icon>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="actions flex items-center justify-end gap-2" style="width:100%">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Siguiente
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="courseInfoFormGroup">
+          <ng-template matStepLabel>Données générales</ng-template>
+
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto" style="width: 40%">
+                <label for="courseName">Nom de cours</label>
+                <mat-form-field style="width: 100%">
+                  <input id="courseName" formControlName="name" matInput required type="text">
+                </mat-form-field>
+              </div>
+
+              <div class="flex-auto" style="width: 15%">
+                <label for="courseName">Prix (CHF)</label>
+                <mat-form-field style="width: 100%">
+                  <input id="courseName" formControlName="name" matInput required type="text">
+                </mat-form-field>
+              </div>
+
+              <div class="flex-auto" style="width: 11%">
+                <label for="station">Station</label>
+                <mat-form-field style="width: 100%">
+                  <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+
+                  <mat-autocomplete #autoStation="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredStations | async" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto" style="width: 60%;">
+                <label style="width: 100%; font-size: 16px;">IMAGE</label>
+
+                <div style="float:left; width: 100%">
+                  <div class="image-container" style="float: left;width: 50%;">
+
+                    <img [src]="imagePreviewUrl !== null ? imagePreviewUrl : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style="border:1px solid #e6e6e6; height: 150px">
+                  </div>
+
+                  <div class="input-container">
+
+                    <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
+                    <label for="file" class="btn-1"><i class="fa fa-camera" aria-hidden="true"></i> Charger</label>
+                    <p style="font-size: 12px">Maximum 1mb</p>
+                    <p style="font-size: 12px">Formats supportés: PNG, JPG</p>
+                    <p style="font-size: 12px">Taille recommanée: 400x290px</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-auto" style="width: 40%;">
+
+                <label for="age">Edad</label>
+                <mat-form-field style="width: 100%">
+                  <mat-select id="age" >
+                    <mat-option>
+                      De 5 a 18 años de edad
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
+
+              <div class="flex-auto" style="width: 60%">
+                <label for="summary" style="font-size: 18px">RESUME</label>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="summary"></angular-editor>
+
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">
+
+              <div class="flex-auto" style="width: 60%">
+                <label for="summary" style="font-size: 18px">DESCRIPTION</label>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="description"></angular-editor>
+
+              </div>
+            </div>
+          </div>
+          <div class="actions flex items-center justify-end gap-2">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Siguiente
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="courseConfigForm" *ngIf="courseType === 'collectif'">
+          <ng-template matStepLabel>Configuration</ng-template>
+
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto">
+
+                <label for="dateFrom">DATE RÉSERVABLE À PARTIR DE</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
+                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+
+                <label for="dateTo">DATE RÉSERVABLE JUSQU'À</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="dateTo" [max]="today">
+                  <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div class="flex-auto">
+                <label for="duration">DURÉE</label>
+
+                <mat-form-field style="width: 100%">
+                  <input id="duration" type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
+                  <mat-autocomplete #autoTimes="matAutocomplete">
+                    <mat-option *ngFor="let duration of durations" [value]="duration">
+                      {{duration}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto">
+                <label for="participants">PARTICIPANTS MÁX</label>
+
+                <mat-form-field style="width: 100%">
+                  <mat-label>PARTICIPANTS MÁX.</mat-label>
+                  <input id="participants" formControlName="participants" matInput required type="number">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="courseType === 'collectif'">
+              <div class="flex-auto" style="width: 100%">
+                <label for="table-dates">DATES</label>
+
+                <table #dateTable id="table-dates" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort style="border: 1px solid #e6e6e6">
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="duration">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Durée </th>
+                    <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="hour">
+                    <th mat-header-cell *matHeaderCellDef> Hour </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-icon svgIcon="mat:delete" (click)="removeCourse(element)"></mat-icon>
+                      <mat-icon svgIcon="mat:edit" (click)="removeCourse(element)"></mat-icon>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+
+              <div class="flex-auto">
+                <button class="add-date" mat-fab (click)="openDialog()">
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 10% 0 0 0" *ngIf="courseType === 'collectif'">
+              <div class="flex-auto" style="width: 100%">
+                <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
+
+                <table #reductionTable id="table-reduction" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSourceReductions" matSort style="border: 1px solid #e6e6e6">
+
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef> Reduction (%) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.percentage}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element; let idx = index">
+                      <mat-icon svgIcon="mat:delete" (click)="removeReduction(element, idx)"></mat-icon>
+                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedReductionsColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
+                </table>
+              </div>
+              <div class="flex-auto">
+                <button class="add-date" mat-fab (click)="openDialogReductions()">
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="actions flex items-center justify-end gap-2">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+              Guardar
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Selección de niveles y grupos</ng-template>
+
+          <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;" *ngIf="courseType === 'collectif'">
+            <div @fadeInUp class="card flex-auto">
+              <mat-card style="padding: 0 3%;">
+                <mat-card-header style="display:block">
+                  <div style="width: 100%;float:left;">
+                    <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+                    <div style="float:right;width: 65%">
+                      <div style="float: right;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
+                      <div style="float: right;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
+                      <div style="float: right;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0;"></div>
+                    </div>
+                  </div>
+                  <div style="width:100%; margin-top:5%;float:left">
+                    <div style="width: 100%;">
+                      <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
+                      <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                    </div>
+                    <div style="width: 100%;">
+                      <p style="float: left;width: 50%;text-align: left;"><b>01/11/2023</b> 13:02</p>
+                      <p style="float: left;width: 50%;text-align: right;"><b>05/11/2023</b> 13:02</p>
+                    </div>
+                  </div>
+                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+
+                  <div style="width:100%; margin-top:5%;float:left">
+                    <div style="width: 100%;">
+                      <p style="float: left;width: 80%;text-align: left;"><b>Precio</b></p>
+                      <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
+                    </div>
+                    <div style="width: 100%;">
+                      <p style="float: left;width: 50%;text-align: left;"><b>180</b> CHF</p>
+                      <p style="float: left;width: 50%;text-align: right;"><b>6</b></p>
+                    </div>
+                  </div>
+                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <div style="float: left; width: 100%;margin-top: 5%;">
+                    <ul>
+                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+                    </ul>
+                  </div>
+                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                </mat-card-header>
+                <mat-card-content style="margin-top: 5%;">
+
+                  <div style="width: 100%;float:left;">
+                    <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+                  </div>
+
+                  <div style="width: 100%;float:left;">
+                    <ng-container *ngFor="let colorKey of colorKeys">
+                      <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
+                        <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
+                          <mat-slide-toggle></mat-slide-toggle>
+                        </div>
+                        <div style="float: left;width: 16%;">
+                          <div style="width:100%;text-align: center;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                            {{level.annotation}} - {{level.name}}
+                          </div>
+                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;">
+                            <mat-select placeholder="Nivel minimo del profesor">
+                              <mat-option>
+                                Opcion 1
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Grupos 8g - 6p
+                          </div>
+                          <div style="width: 100%; margin-top: 10%;height: 60px">
+                            <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%">Añadir profesor</button>
+                          </div>
+                        </div>
+
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Días 5
+                          </div>
+                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                            <mat-select placeholder="Nivel minimo del profesor">
+                              <mat-option>
+                                Opcion 1
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Duración <strong>2h 30m</strong>
+                          </div>
+                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                            <mat-select placeholder="Nivel minimo del profesor">
+                              <mat-option>
+                                Opcion 1
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
+                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Alumnos <strong>30/60</strong>
+                          </div>
+                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                            <mat-select placeholder="Nivel minimo del profesor">
+                              <mat-option>
+                                Opcion 1
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+
+        </mat-step>
+
+      </mat-horizontal-stepper>
     </div>
   </div>
 </div>
