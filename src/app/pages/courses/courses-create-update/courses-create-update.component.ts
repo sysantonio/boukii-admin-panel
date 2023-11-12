@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/reduction-dialog.component';
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
+import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -29,6 +30,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   @ViewChild('privateDatesTable') privateDatesTable: MatTable<any>;
   @ViewChild('table-private-reduction') privateReductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
+
+  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
 
   people = 6; // Aquí puedes cambiar el número de personas
   intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
@@ -69,6 +72,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   myControl = new FormControl();
   myControlSport = new FormControl();
   myControlStations = new FormControl();
+  monitorsForm = new FormControl();
 
   options: any[] = [{id: 1, name:'Cours collectif'}, {id:2, name: 'Cours privés'}];
   optionsStation: string[] = ['Les Pacots', 'Andorra'];
@@ -76,6 +80,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   filteredOptions: Observable<any[]>;
   filteredSports: Observable<any[]>;
   filteredStations: Observable<any[]>;
+  filteredMonitors: Observable<any[]>;
 
   courseTypeFormGroup: UntypedFormGroup;
   courseInfoFormGroup: UntypedFormGroup;
@@ -99,6 +104,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   mockSportData = MOCK_SPORT_DATA;
   mockSportType = MOCK_SPORT_TYPES;
   mockLevels = LEVELS;
+  mockMonitors = MOCK_MONITORS;
 
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
@@ -237,6 +243,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
       map(name => name ? this._filterSport(name) : this.mockSportData.slice())
     );
 
+    this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+      startWith(''),
+      map((value: any) => typeof value === 'string' ? value : value?.full_name),
+      map(full_name => full_name ? this._filterMonitor(full_name) : this.mockMonitors.slice())
+    );
+
     this.myControl.valueChanges.subscribe(value => {
       this.courseTypeFormGroup.get('courseType').setValue(value);
     });
@@ -333,9 +345,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
     return sportType && sportType.annotation && sportType.name ? sportType.annotation + ' - ' + sportType.name : '';
   }
 
+  displayFnMoniteurs(monitor: any): string {
+    return monitor && monitor.full_name ? monitor.full_name : '';
+  }
+
   private _filterSport(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.mockSportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
+  }
+
+  private _filterMonitor(name: string): any[] {
+    const filterValue = name.toLowerCase();
+    return this.mockMonitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
   }
 
   generateDurations() {
