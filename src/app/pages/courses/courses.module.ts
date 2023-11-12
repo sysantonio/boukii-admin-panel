@@ -22,6 +22,8 @@ import { CoursesCreateUpdateModule } from './courses-create-update/courses-creat
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { CourseDetailComponent } from './course-detail/course-detail.component';
+import { CoursesDetailModule } from './course-detail/course-detail.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -43,6 +45,7 @@ import { MatCardModule } from '@angular/material/card';
     WidgetLargeChartModule,
     WidgetTableModule,
     CoursesCreateUpdateModule,
+    CoursesDetailModule,
     MatDialogModule,
     ComponentsModule,
     MatSlideToggleModule,
