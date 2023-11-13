@@ -1,0 +1,155 @@
+.header-navigation {
+    display: flex;justify-content: space-between;align-items: center;padding: 16px;margin-top: 24px;font-size:15px
+}  
+.date-navigation span {
+    margin-right: 24px;font-weight:500;
+}
+.date-navigation button {
+    font-size:20px;margin-right:12px;
+}  
+.view-selection {
+    text-align: right;
+}  
+.view-option {
+    margin-left: 16px;cursor: pointer;
+}  
+.view-option.selected {
+    text-decoration: underline;color:rgb(233, 30, 99);
+}  
+
+.schedule-container {
+    display: flex;
+}  
+.monitors-column {
+    flex-shrink: 0;width: 270px;display: flex;flex-direction: column;padding-top:40px;
+}
+.monitor {
+    height: 100px;border-top: 1px solid #bbb;display: flex;align-items: center;justify-content: space-between;gap:8px;padding:0px 28px 0px 2px;position:relative;
+}
+.monitor-left {
+    display:flex;align-items:center;gap:6px;
+}
+.monitor-img {
+    width:50px;min-width:50px;
+}
+.monitor-text {
+    display:flex;align-items:flex-start;gap:4px;flex-direction:column;
+}
+.monitor-lang {
+    font-size:12px;color:#444;
+}
+.monitor-title {
+    font-size:15px;font-weight:500;color:#333;
+}
+.monitor-icons {
+    display:flex;align-items:center;gap:12px;
+}
+.monitor-icons img {
+    height:14px;
+}
+.monitor-right {
+    display:flex;flex-direction:column;gap:8px;align-items:flex-start;
+}
+.monitor-sport {
+    display:flex;align-items:center;gap:6px;
+}
+.monitor-sport img {
+    width:24px;
+}
+.monitor-sport div {
+    font-size:9px;color:#666;
+}
+.day-start-week {
+    position:absolute;top:0px;right:1px;color: #000;font-size: 10px;font-weight: 500;
+}
+.day-end-week {
+    position:absolute;bottom:0px;right:1px;color: #000;font-size: 10px;font-weight: 500;
+}
+.hours-container {
+    flex-grow: 1;overflow-x: auto;
+}
+.hours-row {
+    display: flex;
+}  
+.hour {
+    min-width: 220px;width: 220px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
+}
+.day {
+    min-width: 400px;width: 400px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
+}
+.grid-container {
+    min-width: max-content;position:relative;
+}
+.grid-row {
+    display: flex;width: fit-content;
+}  
+.grid-cell {
+    border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 220px;width: 220px;height: 100px;position:relative;
+}
+.grid-cell-day {
+    border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 400px;width: 400px;height: 100px;display: flex;justify-content: space-between;position:relative;
+}
+.grid-cell-inside {
+    border-left:1px solid #ddd;
+}
+.grid-row:last-child .grid-cell {
+    border-bottom: none;
+}  
+.grid-cell:last-child {
+    border-right: none;
+}
+.task-wrapper {
+    height:100px;position:absolute;padding:4px 6px;display:flex;align-items:flex-start;justify-content:space-between;gap:6px;
+}
+.task-collective {
+    border:2px solid rgba(252,196,47,1);background:rgba(252,196,47,0.5);
+}
+.task-private {
+    border:2px solid rgba(147,206,90,1);background:rgba(147,206,90,0.5);
+}
+.task-other {
+    border:2px solid rgba(241,36,120,1);background:rgba(241,36,120,0.5);
+}
+.task-block {
+    border:2px solid rgba(137,173,209,1);background:rgba(137,173,209,0.5);
+}
+.task-block-payed {
+    border:2px solid rgba(148,93,179,1);background:rgba(148,93,179,0.5);
+}
+.task-text {
+    display:flex;flex-direction:column;align-items:flex-start;gap:6px;
+}
+.task-text div {
+    font-size:14px;color:#000;font-weight:500;
+}
+.task-blocks {
+    height:100%;display:flex;align-items:flex-end;justify-content:space-between;flex-direction:column;width: 54px;min-width: 54px;
+}
+.task-block-level {
+    font-size:14px;color:#fff;padding:2px 6px;width:fit-content;background:#93ce5a;border-radius:6px;
+}
+.task-block-people {
+    font-size:14px;color:#fff;padding:2px 6px;width:fit-content;background:#f24628;border-radius:6px;
+}
+.task-wrapper-week {
+    height:100px;position:absolute;padding:3px 1px;display:block;
+}
+.task-blocks-week {
+    height:100%;display:flex;align-items:center;justify-content:space-between;flex-direction:column;width:100%;
+}
+.task-block-level-week {
+    font-size:10px;color:#fff;padding:1px 1px;width:fit-content;background:#93ce5a;border-radius:4px;
+}
+.task-block-people-week {
+    font-size:10px;color:#fff;padding:1px 1px;width:fit-content;background:#f24628;border-radius:4px;
+}
+
+.outside-month {
+    background-color: #999;display: block;
+}
+.big-border {
+    border-top:2px solid #fe3583;
+}
+.hour-day-scroll {
+    position:absolute;top:-12px;left:0px;font-size:9px;background:#eee;color:#444;border:1px solid #bbb;border-radius:4px;padding:0px 2px;z-index:10;
+}
