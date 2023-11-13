@@ -20,6 +20,10 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 export class SettingsComponent implements OnInit {
 
   @ViewChild('table-level') dateTable: MatTable<any>;
+  @ViewChild('table-extras-sports') dateTableSport: MatTable<any>;
+  @ViewChild('table-extras-forfaits') dateTableForfait: MatTable<any>;
+  @ViewChild('table-extras-transport') dateTableTransport: MatTable<any>;
+  @ViewChild('table-extras-food') dateTableFood: MatTable<any>;
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
 
   seasonForm: UntypedFormGroup;
@@ -49,6 +53,13 @@ export class SettingsComponent implements OnInit {
   displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSourceLevels = new MatTableDataSource([]);
   displayedLevelsColumns: string[] = ['id', 'age', 'annotation', 'name', 'status', 'color', 'medal', 'edit'];
+
+  dataSourceSport = new MatTableDataSource([]);
+  dataSourceForfait = new MatTableDataSource([]);
+  dataSourceTransport = new MatTableDataSource([]);
+  dataSourceFood = new MatTableDataSource([]);
+  displayedSportColumns: string[] = ['id', 'sport', 'name', 'price', 'tva', 'status', 'edit', 'delete'];
+  displayedExtrasColumns: string[] = ['id', 'product', 'name', 'price', 'tva', 'status', 'edit', 'delete'];
 
   today = new Date();
 

@@ -191,12 +191,12 @@ export class TimelineComponent {
     }
     this.filterTasksForDate(this.currentDate);
   }
-  
+
   filterTasksForDate(date: Date) {
     if (this.timelineView === 'week') {
       const startOfWeekDate = startOfWeek(date, { weekStartsOn: 1 });
       const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
-  
+
       this.filteredTasks = this.tasksCalendarStyle.filter(task => {
         const taskDate = new Date(task.date);
         return taskDate >= startOfWeekDate && taskDate <= endOfWeekDate;
@@ -204,7 +204,7 @@ export class TimelineComponent {
     } else if (this.timelineView === 'month') {
       const startMonth = startOfMonth(date);
       const endMonth = endOfMonth(date);
-  
+
       this.filteredTasks = this.tasksCalendarStyle.filter(task => {
         const taskDate = new Date(task.date);
         return taskDate >= startMonth && taskDate <= endMonth;
@@ -218,23 +218,23 @@ export class TimelineComponent {
   calculateWeeksInMonth() {
     const startMonth = startOfWeek(startOfMonth(this.currentDate), { weekStartsOn: 1 });
     const endMonth = endOfWeek(endOfMonth(this.currentDate), { weekStartsOn: 1 });
-  
+
     this.weeksInMonth = [];
     let currentWeekStart = startMonth;
-  
+
     while (currentWeekStart <= endMonth) {
       const currentWeekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 1 });
-  
+
       const week = {
         startWeek: format(currentWeekStart, 'yyyy-MM-dd'),
         startDay: this.formatDayWithFrenchInitial(max([startOfMonth(this.currentDate), currentWeekStart])),
         endDay: this.formatDayWithFrenchInitial(min([endOfMonth(this.currentDate), currentWeekEnd]))
       };
-  
+
       this.weeksInMonth.push(week);
       currentWeekStart = addWeeks(currentWeekStart, 1);
     }
-  }  
+  }
 
   formatDayWithFrenchInitial(date: Date): string {
     const frenchDayInitials = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
@@ -248,7 +248,7 @@ export class TimelineComponent {
     const weekStartDate = new Date(week.startWeek);
     const specificDate = addDays(weekStartDate, dayIndex);
     return isSameMonth(specificDate, this.currentDate);
-  }  
+  }
 
   generateHoursRange(start: string, end: string): string[] {
     const startTime = this.parseTime(start);
@@ -316,7 +316,7 @@ export class TimelineComponent {
       //Style for months
       const taskMonthInfo = this.getMonthWeekInfo(task.date);
       const topPixelsMonth = (taskMonthInfo.weekIndex * 100) + (monitorIndex * taskMonthInfo.totalWeeks * 100);
-      
+
       const styleMonth = {
         'left': styleWeek.left,
         'width': styleWeek.width,
@@ -339,23 +339,23 @@ export class TimelineComponent {
     const month = date.getMonth();
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
-  
+
     //Week index
     const startDay = firstDayOfMonth.getDay() || 7;
     //Subtract 1 so that it starts on 0
     let weekIndex = Math.ceil((date.getDate() + startDay - 1) / 7) - 1;
-  
+
     //Total weeks
     const lastDayWeekDay = lastDayOfMonth.getDay() || 7;
     const daysInLastWeek = 7 - lastDayWeekDay;
     const totalWeeks = Math.ceil((lastDayOfMonth.getDate() + daysInLastWeek) / 7);
-  
+
     return {
       weekIndex,
       totalWeeks
     };
   }
-  
+
 
   parseTime(timeStr: string): Date {
     const [hours, minutes] = timeStr.split(':').map(Number);

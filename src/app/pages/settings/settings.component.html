@@ -509,6 +509,341 @@
           </vex-page-layout>
         </mat-tab>
 
+        <mat-tab label="Extras">
+          <mat-tab-group>
+
+            <mat-tab label="Alquiler">
+
+
+              <vex-page-layout>
+                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+                  <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Extras / Opciones de curso</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Esta funcionalidad permite configurar los productos / servicios asociados a un curso.<br>
+                      Al asociarlos tomarán como referencia tantas fechas como fechas tenga el curso.<br>
+                      Ejemplo: <strong>5 días de curso colectivo</strong> (si activamos la opcion Material se relaizará un alquiler por los 5 días / fechas de ese curso)
+                    </p>
+
+                  </div>
+
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Alquiler</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
+                      Podrás crear un máximo de 5 items por deporte para sección.<br>
+                    </p>
+
+                  </div>
+
+                  <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Elije que deportes de tu escuela tienen opciones para alquilar
+                    </p>
+                    <div style="float: left;width: 100%;padding: 1%">
+                      <p style="color:#808080;float: left; width: 100%;">
+                        Deporte
+                      </p>
+                      <mat-checkbox [checked]="true">Ski</mat-checkbox>
+                      <mat-checkbox>Snowboard</mat-checkbox>
+                      <mat-checkbox>Randonée</mat-checkbox>
+                    </div>
+                    <div style="float: left;width: 100%;padding: 1%">
+                      <div style="float: left; width: 10%;">
+                        <div style="float: left; width: 100%;">
+                          <img style="float: left; width: 40%;background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" src="https://school.boukii.com/assets/apps/sports/Ski.png"/>
+                        </div>
+                      </div>
+                      <div style="float: left;width: 90%;">
+
+                        <table #extrasSportTable id="table-extras-sports" mat-table [dataSource]="dataSourceSport" matSort style="border: 1px solid #e6e6e6">
+
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                            <td mat-cell *matCellDef="let element"> 1 </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="sport">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Deporte </th>
+                            <td mat-cell *matCellDef="let element"> Ski </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                            <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="price">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
+                            <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="tva">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                            <td mat-cell *matCellDef="let element">
+                              0%
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                            <td mat-cell *matCellDef="let element">
+                              <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="edit">
+                            <th mat-header-cell *matHeaderCellDef>  </th>
+                            <td mat-cell *matCellDef="let element; let idx = index">
+                              <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="delete">
+                            <th mat-header-cell *matHeaderCellDef>  </th>
+                            <td mat-cell *matCellDef="let element; let idx = index">
+                              <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="displayedSportColumns"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedSportColumns;"></tr>
+                        </table>
+                        <div class="flex-auto" style="margin: 1% 0 0 0">
+                          <button class="add-date" mat-fab >
+                            <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </vex-page-layout-content>
+              </vex-page-layout>
+            </mat-tab>
+            <mat-tab label="Otros">
+              <vex-page-layout>
+                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+                  <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Extras / Opciones de curso</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Esta funcionalidad permite configurar los productos / servicios asociados a un curso.<br>
+                      Al asociarlos tomarán como referencia tantas fechas como fechas tenga el curso.<br>
+                      Ejemplo: <strong>5 días de curso colectivo</strong> (si activamos la opcion Material se relaizará un alquiler por los 5 días / fechas de ese curso)
+                    </p>
+
+                  </div>
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Forfait</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
+                      Podrás crear un máximo de 2 variables para sección.<br>
+                    </p>
+
+                  </div>
+
+                  <table #forfaitTable id="table-extras-forfait" mat-table [dataSource]="dataSourceForfait" matSort style="border: 1px solid #e6e6e6">
+
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                      <td mat-cell *matCellDef="let element"> 1 </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="product">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+                      <td mat-cell *matCellDef="let element"> Ski </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                      <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="price">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
+                      <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tva">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                      <td mat-cell *matCellDef="let element">
+                        0%
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <td mat-cell *matCellDef="let element">
+                        <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="edit">
+                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <td mat-cell *matCellDef="let element; let idx = index">
+                        <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete">
+                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <td mat-cell *matCellDef="let element; let idx = index">
+                        <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
+                  </table>
+                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                    <button class="add-date" mat-fab >
+                      <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                    </button>
+                  </div>
+
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Trnasporte</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
+                      Podrás crear un máximo de 2 variables para sección.<br>
+                    </p>
+
+                  </div>
+
+                  <table #transportTable id="table-extras-transport" mat-table [dataSource]="dataSourceTransport" matSort style="border: 1px solid #e6e6e6">
+
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                      <td mat-cell *matCellDef="let element"> 1 </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="product">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+                      <td mat-cell *matCellDef="let element"> Ski </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                      <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="price">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
+                      <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tva">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                      <td mat-cell *matCellDef="let element">
+                        0%
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <td mat-cell *matCellDef="let element">
+                        <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="edit">
+                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <td mat-cell *matCellDef="let element; let idx = index">
+                        <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete">
+                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <td mat-cell *matCellDef="let element; let idx = index">
+                        <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
+                  </table>
+                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                    <button class="add-date" mat-fab >
+                      <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                    </button>
+                  </div>
+
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Comida</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
+                      Podrás crear un máximo de 2 variables para sección.<br>
+                    </p>
+
+                  </div>
+
+                  <table #foodTable id="table-extras-food" mat-table [dataSource]="dataSourceFood" matSort style="border: 1px solid #e6e6e6">
+
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                      <td mat-cell *matCellDef="let element"> 1 </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="product">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+                      <td mat-cell *matCellDef="let element"> Ski </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                      <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="price">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
+                      <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tva">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                      <td mat-cell *matCellDef="let element">
+                        0%
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <td mat-cell *matCellDef="let element">
+                        <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="edit">
+                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <td mat-cell *matCellDef="let element; let idx = index">
+                        <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete">
+                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <td mat-cell *matCellDef="let element; let idx = index">
+                        <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
+                  </table>
+                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                    <button class="add-date" mat-fab >
+                      <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                    </button>
+                  </div>
+                </vex-page-layout-content>
+              </vex-page-layout>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-tab>
       </mat-tab-group>
     </div>
   </vex-page-layout-content>
