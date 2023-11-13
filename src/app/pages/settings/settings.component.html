@@ -148,7 +148,7 @@
             <mat-tab label="Deportes Activos">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;">
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Deportes activos</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       Selecciona los deportes de tu escuela.<br>
@@ -249,12 +249,50 @@
                   </div>
 
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <!-- añadir mat table de niveles
+                    <!-- añadir mat table de niveles-->
                     <table #reductionTable id="table-level" mat-table [dataSource]="dataSourceLevels" matSort style="border: 1px solid #e6e6e6">
 
                       <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                        <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="age">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
+                        <td mat-cell *matCellDef="let element"> No existe el campo </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="annotation">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acrónimo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.annotation}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="color">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+                        <td mat-cell *matCellDef="let element">
+                          <div style="width: 50%;float: left;height: 35px;border-radius: 5px;" [style.background-color]="element.color">
+
+                          </div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="medal">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Medalla </th>
+                        <td mat-cell *matCellDef="let element">
+                          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"></div>
+                        </td>
                       </ng-container>
 
                       <ng-container matColumnDef="edit">
@@ -266,7 +304,7 @@
 
                       <tr mat-header-row *matHeaderRowDef="displayedLevelsColumns"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedLevelsColumns;"></tr>
-                    </table>-->
+                    </table>
                   </div>
                 </vex-page-layout-content>
               </vex-page-layout>
@@ -274,81 +312,8 @@
           </mat-tab-group>
 
         </mat-tab>
-        <mat-tab label="Niveaux">
-          <div class="p-6">
-            <mat-tab-group>
-              <mat-tab label="SKi">
-                <div
-                @stagger
-                class="overflow-y-auto flex-auto">
-                  <div
-                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
-                    <ng-container *ngFor="let level of mockLevelData">
-                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
-                    </ng-container>
-                  </div>
-                </div>
-              </mat-tab>
-              <mat-tab label="Snowboard">
-                <div
-                @stagger
-                class="overflow-y-auto flex-auto">
-                  <div
-                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
-                    <ng-container *ngFor="let level of mockLevelData">
-                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
-                    </ng-container>
-                  </div>
-                </div>
-              </mat-tab>
-              <mat-tab label="Ski De Randonné">
-                <div
-                @stagger
-                class="overflow-y-auto flex-auto">
-                  <div
-                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
-                    <ng-container *ngFor="let level of mockLevelData">
-                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
-                    </ng-container>
-                  </div>
-                </div>
-              </mat-tab>
-              <mat-tab label="Raquettes De Neige">
-                <div
-                @stagger
-                class="overflow-y-auto flex-auto">
-                  <div
-                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
-                    <ng-container *ngFor="let level of mockLevelData">
-                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
-                    </ng-container>
-                  </div>
-                </div>
-              </mat-tab>
-              <mat-tab label="VTT">
-                <div
-                @stagger
-                class="overflow-y-auto flex-auto">
-                  <div
-                    class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 container">
-                    <ng-container *ngFor="let level of mockLevelData">
-                      <vex-widget-sports-level [level]="level"></vex-widget-sports-level>
-                    </ng-container>
-                  </div>
-                </div>
-              </mat-tab>
-            </mat-tab-group>
-          </div>
-        </mat-tab>
-        <mat-tab label="Blocage">
-          <div class="p-6">
-            <mat-form-field class="flex-auto" *ngFor="let item of mockBlockageData" style="width: 30%; margin: 0 2% 0 0">
-              <span matPrefix class="square-prefix" [ngStyle]="{'background-color': item.color}"></span>
-              <input matInput placeholder="Enter text" [value]="item.name" [(ngModel)]="item.name">
-            </mat-form-field>
-          </div>
-        </mat-tab>
-        <mat-tab label="Durée flexible">
+        <mat-tab label="Cursos">
+          <ng-template matStepLabel>Prices</ng-template>
           <div class="p-6">
 
             <mat-form-field class="flex-auto">
@@ -380,6 +345,168 @@
               </table>
             </div>
           </div>
+        </mat-tab>
+        <mat-tab label="Profesores">
+
+          <mat-tab-group>
+
+            <mat-tab label="Salaries">
+              <vex-page-layout>
+                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Salarios</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Esta funcionalidad permite configurar los salarios de los empleados / profesores de tu escuela.<br>
+                      Puedes crear tantos salarios como necesites. Luego, deberás asignarlos a cada profesor.<br>
+                    </p>
+
+                  </div>
+
+                    <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
+                </vex-page-layout-content>
+              </vex-page-layout>
+            </mat-tab>
+            <mat-tab label="Bloqueos pagados">
+              <vex-page-layout>
+                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Bloqueos</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Esta funcionalidad permite configurar los bloqueaos de los empleados / profesores de tu escuela.<br>
+                      Puedes crear tantos bloqueaos como necesites. Luego, deberás asignarlos a cada profesor.<br>
+                    </p>
+
+                  </div>
+
+                  <div class="p-6">
+                    <mat-form-field class="flex-auto" *ngFor="let item of mockBlockageData" style="width: 30%; margin: 0 2% 0 0">
+                      <span matPrefix class="square-prefix" [ngStyle]="{'background-color': item.color}"></span>
+                      <input matInput placeholder="Enter text" [value]="item.name" [(ngModel)]="item.name">
+                    </mat-form-field>
+                  </div>
+                </vex-page-layout-content>
+              </vex-page-layout>
+            </mat-tab>
+            <mat-tab label="Autorizaciones">
+              <vex-page-layout>
+                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Mensajes a clientes desde la app</h1>
+                    <div style="width:100%; float:left;">
+                      <p style="width:100%; float:left;">Por defecto</p>
+                      <div>
+                        <mat-checkbox [checked]="true">Autorizado</mat-checkbox>
+                        <mat-checkbox>No autorizado</mat-checkbox>
+                      </div>
+                    </div>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Este parámetro permite por defecto que los profesores se comuniquen con sus alumnos<br>
+                      mediante el sistema de mensajería de la app Boukii Teach.<br><br>
+                      Con cualquiera de las dos opciones podrás activarlo individualmente desde la ficha del profesor.
+                    </p>
+
+                  </div>
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Reservas desde la app Boukii Teach</h1>
+                    <div style="width:100%; float:left;">
+                      <p style="width:100%; float:left;">Por defecto</p>
+                      <div>
+                        <mat-checkbox [checked]="true">Autorizado</mat-checkbox>
+                        <mat-checkbox>No autorizado</mat-checkbox>
+                      </div>
+                    </div>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Este parámetro permite por defecto que los profesores se comuniquen con sus alumnos<br>
+                      mediante el sistema de mensajería de la app Boukii Teach.<br><br>
+                      Con cualquiera de las dos opciones podrás activarlo individualmente desde la ficha del profesor.
+                    </p>
+
+                  </div>
+                </vex-page-layout-content>
+              </vex-page-layout>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Reservas">
+          <vex-page-layout>
+            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> Opción Reembolso</h1>
+                <div style="width:100%; float:left;">
+                  <p style="width:100%; float:left;color:#808080;">Porcentaje que retiene la escuela</p>
+                  <mat-form-field class="flex-auto">
+                    <mat-select>
+                      <mat-option value="10">
+                        10%
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  Este porcentaje se aplica al importe total de la reserva y no es reembolsable en ningún caso.<br>
+                  Es opcional para el cliente.<br>
+                  La activación lo hace visible a la finalización del proceso de reserva junto con los importes a pagar.
+                </p>
+
+              </div>
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> Boukii Care <span style="color: #e6e6e6">(Seguro adicional)</span></h1>
+                <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  Boukii Care es un seguro que ponemos a vuestra disposición para cubrir posibles.<br>
+                  eventualidades del cliente, desligando a la escuela de cualquier trámite burocrático.<br>
+                  El importe será deducido de la factura final emitida desde la plataforma Boukii Pay.<br><br>
+                  Puedes consultar las condiciones de utilización aqui: <a href="" style="text-decoration:none; color: #f53d7c;">Enlace</a>
+                </p>
+
+              </div>
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Anulaciones</h1>
+                <div style="width:100%; float:left;">
+                  <p style="width:100%; float:left;color:#808080;">Anulación posible con reembolso total (Sin "Opción reembolso")</p>
+                  <mat-form-field class="flex-auto">
+                    <mat-select>
+                      <mat-option value="10">
+                        78h antes del inicio del curso
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div style="width:100%; float:left;">
+                  <p style="width:100%; float:left;color:#808080;">Anulación posible con reembolso total (Con "Opción reembolso")</p>
+                  <mat-form-field class="flex-auto">
+                    <mat-select>
+                      <mat-option value="10">
+                        24h antes del inicio del curso
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  Estas limitaciones afectan únicamente a las reservas realizadas por el cliente desde.<br>
+                  la página de reservas y la app. La escuela tiene libre control desde el panel de admin.<br>
+                </p>
+
+              </div>
+
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> TVA</h1>
+                <div style="width:100%; float:left;">
+                  <p style="width:100%; float:left;color:#808080;">Porcentaje del impuesto</p>
+                  <mat-form-field class="flex-auto">
+                    <mat-select>
+                      <mat-option value="10">
+                        10%
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  Se aplica al importe total de la reserva
+                </p>
+
+              </div>
+            </vex-page-layout-content>
+          </vex-page-layout>
         </mat-tab>
 
       </mat-tab-group>

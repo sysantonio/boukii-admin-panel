@@ -9,6 +9,7 @@ import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/form
 import { Observable, map, startWith } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'vex-settings',
@@ -18,6 +19,7 @@ import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 })
 export class SettingsComponent implements OnInit {
 
+  @ViewChild('table-level') dateTable: MatTable<any>;
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
 
   seasonForm: UntypedFormGroup;
@@ -45,6 +47,9 @@ export class SettingsComponent implements OnInit {
   });
 
   displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
+  dataSourceLevels = new MatTableDataSource([]);
+  displayedLevelsColumns: string[] = ['id', 'age', 'annotation', 'name', 'status', 'color', 'medal', 'edit'];
+
   today = new Date();
 
   selectedFromHour: any;
@@ -73,6 +78,7 @@ export class SettingsComponent implements OnInit {
     { label: '#', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nom', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Paiment', property: 'pay', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Status', property: 'status', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
 
   ];
@@ -81,6 +87,7 @@ export class SettingsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.dataSourceLevels.data = this.mockLevelData;
     this.generateHours();
 
     this.seasonForm = this.fb.group({
@@ -160,4 +167,7 @@ export class SettingsComponent implements OnInit {
       map(name => name ? this._filter(name, countryId) : this.mockProvincesData.filter(p => p.id_country === countryId).slice())
     );
   }
+
+  editGoal(data: any, id: number) {}
+
 }

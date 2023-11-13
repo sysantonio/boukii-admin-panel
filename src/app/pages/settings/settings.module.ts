@@ -30,6 +30,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [SettingsComponent],
   imports: [
@@ -63,7 +66,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatTableModule,
     MatCardModule,
     MatDatepickerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    MatSelectModule
   ]
 })
 export class SettingsModule {
