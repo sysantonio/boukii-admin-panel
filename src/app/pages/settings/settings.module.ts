@@ -25,14 +25,18 @@ import { WidgetSportsLevelModule } from 'src/@vex/components/widgets/widget-spor
 import { LevelSportUpdateModalModule } from './level-sport-update-modal/level-sport-update-modal.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
   declarations: [SettingsComponent],
   imports: [
     CommonModule,
     LayoutModule,
     FormsModule,
+    ReactiveFormsModule,
     PageLayoutModule,
     BreadcrumbsModule,
     RouterModule,
@@ -56,7 +60,10 @@ import { MatTableModule } from '@angular/material/table';
     LevelSportUpdateModalModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatAutocompleteModule
   ]
 })
 export class SettingsModule {

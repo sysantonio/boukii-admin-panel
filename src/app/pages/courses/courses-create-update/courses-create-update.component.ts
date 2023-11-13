@@ -223,7 +223,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
       image: [null],
     });
 
-    this.courseConfigForm = this.fb.group({});
+    this.courseConfigForm = this.fb.group({
+
+      fromDate: [''],
+      dateTo: [''],
+      duration: [''],
+      participants: [''],
+    });
 
     this.filteredOptions = this.myControl.valueChanges
       .pipe(

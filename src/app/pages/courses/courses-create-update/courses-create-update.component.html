@@ -8,12 +8,12 @@
   </button>
 </vex-secondary-toolbar>
 <div [@stagger]="true"class="p-gutter container"style="max-width: none"*ngIf="!loading && (courseType === null || courseType === 'privee')">
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 48%;float:left; margin: 0 2% 0 0">
-    <div @fadeInUp class="card flex-auto">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
+    <div @fadeInUp class="card flex-auto" style="width: 100%;">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle course</h2>
       </div>
-      <mat-vertical-stepper #stepper="matVerticalStepper" [linear]="false">
+      <mat-horizontal-stepper #stepper="matVerticalStepper" [linear]="false">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
@@ -24,9 +24,9 @@
         <mat-step [stepControl]="courseTypeFormGroup" [completed]="false" [editable]="true">
           <ng-template matStepLabel>Info de cours</ng-template>
 
-          <div class="px-6 py-4 flex flex-col" [formGroup]="courseTypeFormGroup">
+          <div [formGroup]="courseTypeFormGroup">
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div  style="width:50%; float:left" >
               <div class="flex-auto">
                 <mat-label>Temporada - Sport</mat-label><br>
                 <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
@@ -34,9 +34,7 @@
                 </mat-radio-group>
               </div>
 
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 0">
+              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 0; width:100%; float:left">
                 <div style="float:left">
                   <span style="width: 100%;float: left;">
                     <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski.png">
@@ -64,7 +62,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0">
+            <div style="margin: 2% 0 0 0;width: 50%;float: left;">
 
               <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
@@ -80,9 +78,6 @@
                   <mat-icon svgIcon="mat:info"></mat-icon>
                 </div>
               </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0">
 
               <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee')">
@@ -98,8 +93,9 @@
               </div>
             </div>
 
+
           </div>
-          <div class="actions flex items-center justify-end gap-2">
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Siguiente
@@ -117,14 +113,14 @@
               <div class="flex-auto" style="width: 40%">
                 <label for="courseName">Nom de cours</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="name" matInput required type="text">
+                  <input id="courseName" formControlName="course_name" matInput required type="text">
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="name" matInput required type="text">
+                  <input id="courseName" formControlName="price" matInput required type="text">
                 </mat-form-field>
               </div>
 
@@ -193,297 +189,13 @@
               </div>
             </div>
           </div>
-          <div class="actions flex items-center justify-end gap-2">
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Siguiente
             </button>
           </div>
         </mat-step>
-
-        <mat-step [stepControl]="courseConfigForm" *ngIf="courseType === 'collectif'">
-          <ng-template matStepLabel>Configuration</ng-template>
-
-          <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-              <div class="flex-auto">
-
-                <label for="dateFrom">DATE RÉSERVABLE À PARTIR DE</label>
-                <mat-form-field style="width: 100%">
-
-                  <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
-                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto">
-
-                <label for="dateTo">DATE RÉSERVABLE JUSQU'À</label>
-                <mat-form-field style="width: 100%">
-
-                  <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="dateTo" [max]="today">
-                  <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto">
-                <label for="duration">DURÉE</label>
-
-                <mat-form-field style="width: 100%">
-                  <input id="duration" type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
-                  <mat-autocomplete #autoTimes="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto">
-                <label for="participants">PARTICIPANTS MÁX</label>
-
-                <mat-form-field style="width: 100%">
-                  <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input id="participants" formControlName="participants" matInput required type="number">
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="courseType === 'collectif'">
-              <div class="flex-auto" style="width: 100%">
-                <label for="table-dates">DATES</label>
-
-                <table #dateTable id="table-dates" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort style="border: 1px solid #e6e6e6">
-
-                  <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="duration">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Durée </th>
-                    <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="hour">
-                    <th mat-header-cell *matHeaderCellDef> Hour </th>
-                    <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="delete">
-                    <th mat-header-cell *matHeaderCellDef>  </th>
-                    <td mat-cell *matCellDef="let element">
-                      <mat-icon svgIcon="mat:delete" (click)="removeCourse(element)"></mat-icon>
-                      <mat-icon svgIcon="mat:edit" (click)="removeCourse(element)"></mat-icon>
-                    </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-              </div>
-
-              <div class="flex-auto">
-                <button class="add-date" mat-fab (click)="openDialog()">
-                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                </button>
-              </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 10% 0 0 0" *ngIf="courseType === 'collectif'">
-              <div class="flex-auto" style="width: 100%">
-                <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
-
-                <table #reductionTable id="table-reduction" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSourceReductions" matSort style="border: 1px solid #e6e6e6">
-
-                  <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="percentage">
-                    <th mat-header-cell *matHeaderCellDef> Reduction (%) </th>
-                    <td mat-cell *matCellDef="let element"> {{element.percentage}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="delete">
-                    <th mat-header-cell *matHeaderCellDef>  </th>
-                    <td mat-cell *matCellDef="let element; let idx = index">
-                      <mat-icon svgIcon="mat:delete" (click)="removeReduction(element, idx)"></mat-icon>
-                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
-                    </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedReductionsColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
-                </table>
-              </div>
-              <div class="flex-auto">
-                <button class="add-date" mat-fab (click)="openDialogReductions()">
-                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="actions flex items-center justify-end gap-2">
-            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-              Guardar
-            </button>
-          </div>
-        </mat-step>
-      </mat-vertical-stepper>
-
-    </div>
-  </div>
-
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 50%;float:left;" *ngIf="false">
-    <div @fadeInUp class="card flex-auto">
-      <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Selección de niveles y grupos</h2>
-      </div>
-      <mat-card style="padding: 0 3%;">
-        <mat-card-header style="display:block">
-          <div style="width: 100%;float:left;">
-            <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
-            <div style="float:right;width: 65%">
-              <div style="float: right;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
-              <div style="float: right;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
-              <div style="float: right;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0;"></div>
-            </div>
-          </div>
-          <div style="width:100%; margin-top:5%;float:left">
-            <div style="width: 100%;">
-              <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-              <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
-            </div>
-            <div style="width: 100%;">
-              <p style="float: left;width: 50%;text-align: left;"><b>01/11/2023</b> 13:02</p>
-              <p style="float: left;width: 50%;text-align: right;"><b>05/11/2023</b> 13:02</p>
-            </div>
-          </div>
-          <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-
-          <div style="width:100%; margin-top:5%;float:left">
-            <div style="width: 100%;">
-              <p style="float: left;width: 80%;text-align: left;"><b>Precio</b></p>
-              <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
-            </div>
-            <div style="width: 100%;">
-              <p style="float: left;width: 50%;text-align: left;"><b>180</b> CHF</p>
-              <p style="float: left;width: 50%;text-align: right;"><b>6</b></p>
-            </div>
-          </div>
-          <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-          <div style="float: left; width: 100%;margin-top: 5%;">
-            <ul>
-              <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-              <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-              <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-              <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-              <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-            </ul>
-          </div>
-          <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-        </mat-card-header>
-        <mat-card-content style="margin-top: 5%;">
-
-          <div style="width: 100%;float:left;">
-            <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
-          </div>
-
-          <div style="width: 100%;float:left;">
-            <ng-container *ngFor="let colorKey of colorKeys">
-              <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
-                <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
-                  <mat-slide-toggle></mat-slide-toggle>
-                </div>
-                <div style="float: left;width: 16%;">
-                  <div style="width:100%;text-align: center;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
-                    {{level.annotation}} - {{level.name}}
-                  </div>
-                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;">
-                    <mat-select placeholder="Nivel minimo del profesor">
-                      <mat-option>
-                        Opcion 1
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                    Grupos 8g - 6p
-                  </div>
-                  <div style="width: 100%; margin-top: 10%;height: 60px">
-                    <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%">Añadir profesor</button>
-                  </div>
-                </div>
-
-                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                    Días 5
-                  </div>
-                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                    <mat-select placeholder="Nivel minimo del profesor">
-                      <mat-option>
-                        Opcion 1
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                    Duración <strong>2h 30m</strong>
-                  </div>
-                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                    <mat-select placeholder="Nivel minimo del profesor">
-                      <mat-option>
-                        Opcion 1
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                  <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                    Alumnos <strong>30/60</strong>
-                  </div>
-                  <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                    <mat-select placeholder="Nivel minimo del profesor">
-                      <mat-option>
-                        Opcion 1
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 50%;float:left;" *ngIf="courseType === 'privee'">
-    <div @fadeInUp class="card flex-auto">
-      <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Configuration</h2>
-      </div>
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
-        <ng-template matStepperIcon="edit">
-          <mat-icon svgIcon="mat:done_all"></mat-icon>
-        </ng-template>
-
-        <ng-template matStepperIcon="done">
-          <mat-icon svgIcon="mat:done_all"></mat-icon>
-        </ng-template>
-
 
         <mat-step [stepControl]="courseInfoPriveFormGroup" [completed]="false" [editable]="true">
           <ng-template matStepLabel>Info de cours</ng-template>
@@ -496,7 +208,7 @@
                 <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="dateFrom" [max]="today">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
                 </mat-form-field>
@@ -506,7 +218,7 @@
                 <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="dateTo" [max]="today">
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [max]="today">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
                 </mat-form-field>
@@ -716,57 +428,58 @@
             </div>
 
           </div>
-          <div class="actions flex items-center justify-end gap-2">
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Siguiente
             </button>
           </div>
         </mat-step>
-      </mat-vertical-stepper>
+        <mat-step>
 
+          <ng-template matStepLabel>Prices</ng-template>
+          <div class="p-6">
+
+            <mat-form-field class="flex-auto">
+              <input matInput placeholder="Enter people number" type="number" [value]="people" [(ngModel)]="people" (ngModelChange)="updateTable()">
+            </mat-form-field>
+
+            <div class="table-container" >
+              <table mat-table [dataSource]="dataSourceFlexiblePrices" class="mat-elevation-z8" #scrollContainer>
+                <caption>Price in CFH</caption>
+
+                <!-- Intervalo Column -->
+                <ng-container matColumnDef="intervalo">
+                  <th mat-header-cell *matHeaderCellDef> Intervalo </th>
+                  <td mat-cell *matCellDef="let row"> {{row.intervalo}} </td>
+                </ng-container>
+
+                <!-- Personas Columns -->
+                <ng-container *ngFor="let col of displayedColumnsFlexiblePrices.slice(1)" [matColumnDef]="col">
+                  <th mat-header-cell *matHeaderCellDef> {{col}} </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-form-field class="flex-auto">
+                      <input class="flex-auto" matInput [(ngModel)]="row[col]" style="margin-top:3%">
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsFlexiblePrices"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsFlexiblePrices;"></tr>
+              </table>
+            </div>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
 
     </div>
   </div>
 
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;margin-top:5%;background: #fff;" *ngIf="courseType === 'privee'">
-    <div class="p-6">
-
-      <mat-form-field class="flex-auto">
-        <input matInput placeholder="Enter people number" type="number" [value]="people" [(ngModel)]="people" (ngModelChange)="updateTable()">
-      </mat-form-field>
-
-      <div class="table-container" >
-        <table mat-table [dataSource]="dataSourceFlexiblePrices" class="mat-elevation-z8" #scrollContainer>
-          <caption>Price in CFH</caption>
-
-          <!-- Intervalo Column -->
-          <ng-container matColumnDef="intervalo">
-            <th mat-header-cell *matHeaderCellDef> Intervalo </th>
-            <td mat-cell *matCellDef="let row"> {{row.intervalo}} </td>
-          </ng-container>
-
-          <!-- Personas Columns -->
-          <ng-container *ngFor="let col of displayedColumnsFlexiblePrices.slice(1)" [matColumnDef]="col">
-            <th mat-header-cell *matHeaderCellDef> {{col}} </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-form-field class="flex-auto">
-                <input class="flex-auto" matInput [(ngModel)]="row[col]" style="margin-top:3%">
-              </mat-form-field>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsFlexiblePrices"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsFlexiblePrices;"></tr>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
 
 
 <!-- Horizontal -->
-<div [@stagger]="true"class="p-gutter container"style="max-width: none" [hidden]="courseType !== 'collectif'">
+<div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading &&  (courseType === 'collectif')">
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
@@ -873,14 +586,14 @@
               <div class="flex-auto" style="width: 40%">
                 <label for="courseName">Nom de cours</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="name" matInput required type="text">
+                  <input id="courseName" formControlName="course_name" matInput required type="text">
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="name" matInput required type="text">
+                  <input id="courseName" formControlName="price" matInput required type="text">
                 </mat-form-field>
               </div>
 
@@ -949,7 +662,7 @@
               </div>
             </div>
           </div>
-          <div class="actions flex items-center justify-end gap-2">
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Siguiente
@@ -1086,7 +799,7 @@
 
           </div>
 
-          <div class="actions flex items-center justify-end gap-2">
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Guardar
@@ -1319,655 +1032,4 @@
   </div>
 </div>
 
-<!--<mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
-        <ng-template matStepperIcon="edit">
-          <mat-icon svgIcon="mat:done_all"></mat-icon>
-        </ng-template>
-
-        <ng-template matStepperIcon="done">
-          <mat-icon svgIcon="mat:done_all"></mat-icon>
-        </ng-template>
-
-        <mat-step [stepControl]="courseTypeFormGroup" >
-          <form [formGroup]="courseTypeFormGroup">
-            <ng-template matStepLabel>Course Type</ng-template>
-            <h2 class="title m-0" style="width:100%">Données générales</h2>
-            <div class="subheading-1">Configura los datos y fechas del curso.</div>
-
-            <div class="mt-4 flex flex-col gap-2">
-              <mat-form-field>
-                <mat-label>Sport type</mat-label>
-
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlSportType" [matAutocomplete]="autoSportType" formControlName="sportType">
-                <mat-autocomplete #autoSportType="matAutocomplete" [displayWith]="displayFn" (optionSelected)="filterSportsByType($event)">
-                  <mat-option *ngFor="let option of filteredSportTypes | async" [value]="option">
-                    {{option.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-
-            <div class="mt-4 flex flex-col gap-2">
-              <mat-form-field class="flex-auto" *ngIf="sportTypeSelected > -1">
-                <mat-label>Sport</mat-label>
-                <input type="text"
-                 placeholder="Elije uno"
-                 matInput
-                 formControlName="sport"
-                 [formControl]="myControlSport"
-                 [matAutocomplete]="autoSport">
-                <mat-autocomplete #autoSport="matAutocomplete" [displayWith]="displayFnSport">
-                  <mat-option *ngFor="let sport of filteredSports | async" [value]="sport">
-                    {{ sport.name }}
-                  </mat-option>
-                </mat-autocomplete>
-
-                <mat-icon matPrefix svgIcon="mat:sports"></mat-icon>
-              </mat-form-field>
-            </div>
-
-            <div class="mt-4 flex flex-col gap-2" *ngIf="courseTypeFormGroup.value.sport !== null">
-              <div class="flex-auto">
-                <mat-label>Cours avec des dates séparables?</mat-label><br>
-                <mat-slide-toggle formControlName="separatedDates"></mat-slide-toggle>
-              </div>
-
-            </div>
-
-            <div class="mt-4 flex flex-col gap-2" *ngIf="courseTypeFormGroup.value.sport !== null">
-              <mat-form-field>
-                <mat-label>Course Type</mat-label>
-
-                <input class="flex-auto" type="text" placeholder="Selecciona una opción" matInput [formControl]="myControl" [matAutocomplete]="auto" formControlName="courseType">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnSport">
-                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-            <div class="flex-auto" *ngIf="courseTypeFormGroup.value?.courseType?.id !== null && courseTypeFormGroup.value?.courseType?.id === 1">
-
-              <mat-label>DATES SÉPARABLES</mat-label><br>
-              <button mat-raised-button (click)="openDialog()">Add date</button>
-
-              <table #dateTable *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort>
-
-                <ng-container matColumnDef="date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="hour">
-                  <th mat-header-cell *matHeaderCellDef> Hour </th>
-                  <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
-
-            </div>
-
-            <div class="flex-auto" *ngIf="courseTypeFormGroup.value?.courseType?.id === 1 && courseTypeFormGroup.value.separatedDates && dataSource.data.length > 0">
-
-              <mat-label>RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</mat-label><br>
-
-              <button mat-raised-button (click)="openDialogReductions()">Add date</button>
-
-              <table #reductionTable *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSourceReductions" matSort>
-
-                <ng-container matColumnDef="date">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                  <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="hour">
-                  <th mat-header-cell *matHeaderCellDef> Hour </th>
-                  <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedReductionsColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
-              </table>
-
-            </div>
-
-            <div class="flex flex-col sm:flex-row" *ngIf="courseTypeFormGroup.value?.courseType?.id !== null && courseTypeFormGroup.value?.courseType?.id === 2 && !courseTypeFormGroup.value.separatedDates">
-
-              <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="DEPUIS" formControlName="fromDate" [min]="today">
-                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto sm:ml-6">
-                <input matInput [matDatepicker]="pickerTo" placeholder="JUSQU'À" formControlName="toDate" [min]="courseTypeFormGroup.controls.fromDate.value" [disabled]="courseTypeFormGroup.controls.fromDate.value === null">
-                <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
-              </mat-form-field>
-            </div>
-
-            <div *ngIf="courseTypeFormGroup.value?.courseType?.id !== null && courseTypeFormGroup.value?.courseType?.id === 2 && courseTypeFormGroup.value.separatedDates">
-              <div class="flex flex-col sm:flex-row" >
-
-                <mat-form-field class="flex-auto">
-                  <input matInput [matDatepicker]="pickerReservableFrom" placeholder="DATE RÉSERVABLE À PARTIR DE" formControlName="reservableFromDate" [min]="today">
-                  <mat-datepicker-toggle matSuffix [for]="pickerReservableFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerReservableFrom [startAt]="today"></mat-datepicker>
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto sm:ml-6">
-                  <input matInput [matDatepicker]="pickerReservableTo" placeholder="DATE RÉSERVABLE JUSQU'À" formControlName="reservableToDate"
-                    [min]="courseTypeFormGroup.controls.reservableFromDate.value" [disabled]="courseTypeFormGroup.controls.reservableFromDate.value === null">
-                  <mat-datepicker-toggle matSuffix [for]="pickerReservableTo"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerReservableTo [startAt]="today"></mat-datepicker>
-                </mat-form-field>
-
-                </div>
-                <mat-divider class="text-border"></mat-divider>
-
-                <h3>Quand peut-on suivre le cours?</h3>
-
-                <div class="flex flex-col sm:flex-row" >
-
-                <mat-form-field class="flex-auto">
-                  <input matInput [matDatepicker]="pickerDebutFrom" placeholder="DATE DE DÉBUTE" formControlName="debutFromDate" [min]="today">
-                  <mat-datepicker-toggle matSuffix [for]="pickerDebutFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerDebutFrom [startAt]="today"></mat-datepicker>
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto sm:ml-6">
-                  <input matInput [matDatepicker]="pickerDebutTo" placeholder="DATE DE FIN" formControlName="debutToDate"
-                    [min]="courseTypeFormGroup.controls.debutFromDate.value" [disabled]="courseTypeFormGroup.controls.debutFromDate.value === null">
-                  <mat-datepicker-toggle matSuffix [for]="pickerDebutTo"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerDebutTo [startAt]="today"></mat-datepicker>
-                </mat-form-field>
-
-                </div>
-
-                <mat-divider class="text-border"></mat-divider>
-
-                <div class="flex flex-col sm:flex-row" >
-                  <mat-form-field class="flex-auto">
-                    <mat-label>Día de inicio</mat-label>
-                    <mat-select [formControl]="startDayControl">
-                      <mat-option *ngFor="let day of days" [value]="day">{{day}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-
-                  <mat-form-field class="flex-auto sm:ml-6">
-                    <mat-label>Día de fin</mat-label>
-                    <mat-select [formControl]="endDayControl">
-                      <mat-option *ngFor="let day of availableEndDays" [value]="day">{{day}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-
-              </div>
-
-            </div>
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="courseTypeFormGroup.pristine" color="primary" mat-button type="button">Reset
-              </button>
-
-              <button [disabled]="courseTypeFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
-
-        <mat-step [stepControl]="courseInfoFormGroup" *ngIf="!courseTypeFormGroup.value.separatedDates && courseTypeFormGroup.value?.courseType?.id === 1">
-          <form [formGroup]="courseInfoFormGroup">
-            <ng-template matStepLabel>Données générales</ng-template>
-
-            <h2 class="title m-0" style="width:100%">Données générales</h2>
-            <div class="subheading-1">Configura los datos y fechas del curso.</div>
-
-            <div class="mt-4 flex flex-col gap-2">
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>NOM DU COURS</mat-label>
-                  <input formControlName="course_name" matInput required>
-                </mat-form-field>
-
-                <div class="flex-auto flex gap-2">
-                  <mat-form-field class="flex-auto">
-                    <mat-label>PRIX (CHF)</mat-label>
-                    <input formControlName="price" type="number" matInput required>
-                  </mat-form-field>
-
-                  <mat-form-field class="vex-flex-form-field flex-auto">
-                    <mat-label>Station</mat-label>
-
-                    <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                    <mat-autocomplete #autoStation="matAutocomplete">
-                      <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                        {{option}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-
-              </div>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>RÉSUMÉ</mat-label>
-                <textarea formControlName="summary" matInput></textarea>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>LA DESCRIPTION</mat-label>
-                <textarea formControlName="description" matInput></textarea>
-              </mat-form-field>
-
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-              <mat-form-field class="flex-auto">
-                  <input type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
-                  <mat-autocomplete #autoTimes="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
-                    </mat-option>
-                  </mat-autocomplete>
-              </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input formControlName="participants" matInput required type="number">
-                </mat-form-field>
-              </div>
-
-
-              <div>
-
-                <div *ngIf="imagePreviewUrl" class="image-container">
-                  <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290">
-                </div>
-                <div class="input-container">
-
-                  <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                  <label for="file" class="btn-1">upload file</label>
-                  <p>Maximum 1mb</p>
-                  <p>Formats supportés: PNG, JPG</p>
-                  <p>Taille recommandée: 400x290px</p>
-                </div>
-              </div>
-              <mat-divider class="text-border"></mat-divider>
-
-            </div>
-
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="courseInfoFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="courseInfoFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-
-
-          </form>
-        </mat-step>
-
-        <mat-step [stepControl]="courseInfoCollecDateSplitFormGroup" *ngIf="courseTypeFormGroup.value.separatedDates && courseTypeFormGroup.value?.courseType?.id === 1">
-          <form [formGroup]="courseInfoCollecDateSplitFormGroup">
-            <ng-template matStepLabel>Données générales</ng-template>
-
-            <h2 class="title m-0" style="width:100%">Données générales</h2>
-            <div class="subheading-1">Configura los datos y fechas del curso.</div>
-
-            <div class="mt-4 flex flex-col gap-2">
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>NOM DU COURS GLOBAL</mat-label>
-                  <input formControlName="course_name" matInput required>
-                </mat-form-field>
-
-                <div class="flex-auto flex gap-2">
-                  <mat-form-field class="flex-auto">
-                    <mat-label>PRIX PAR DATE (CHF)</mat-label>
-                    <input formControlName="price" type="number" matInput required>
-                  </mat-form-field>
-
-                  <mat-form-field class="vex-flex-form-field flex-auto">
-                    <mat-label>Station</mat-label>
-
-                    <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                    <mat-autocomplete #autoStation="matAutocomplete">
-                      <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                        {{option}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-
-              </div>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>RÉSUMÉ</mat-label>
-                <textarea formControlName="summary" matInput></textarea>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>LA DESCRIPTION</mat-label>
-                <textarea formControlName="description" matInput></textarea>
-              </mat-form-field>
-
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-              <mat-form-field class="flex-auto">
-                  <input type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
-                  <mat-autocomplete #autoTimes="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
-                    </mat-option>
-                  </mat-autocomplete>
-              </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input formControlName="participants" matInput required type="number">
-                </mat-form-field>
-              </div>
-
-
-              <div>
-
-                <div *ngIf="imagePreviewUrl" class="image-container">
-                  <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290">
-                </div>
-                <div class="input-container">
-
-                  <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                  <label for="file" class="btn-1">upload file</label>
-                  <p>Maximum 1mb</p>
-                  <p>Formats supportés: PNG, JPG</p>
-                  <p>Taille recommandée: 400x290px</p>
-                </div>
-              </div>
-              <mat-divider class="text-border"></mat-divider>
-
-            </div>
-
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="courseInfoFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="courseInfoFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-
-
-          </form>
-        </mat-step>
-
-        <mat-step [stepControl]="courseInfoFormGroup" *ngIf="courseTypeFormGroup.value?.courseType?.id === 1">
-          <div>
-
-            <ng-template matStepLabel>Level</ng-template>
-            <h2 class="title m-0" style="width:100%">Level</h2>
-            <div class="subheading-1">Configura los niveles del curso.</div>
-
-            <div *ngFor="let colorKey of colorKeys">
-              <mat-chip-listbox>
-                <mat-chip *ngFor="let level of groupedByColor[colorKey]" [style.background-color]="colorKey" [style.color]="'#ffffff'" [style.width]="'250px'"
-                (click)="onChipClick(level)">
-                  {{ level.name }}
-                </mat-chip>
-              </mat-chip-listbox>
-              <br>
-            </div>
-
-            <mat-table #levelTable [dataSource]="selectedCourses" *ngIf="selectedCourses.data.length > 0">
-              <ng-container matColumnDef="course">
-                <mat-header-cell *matHeaderCellDef> Curso </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.annotation}} - {{element.name}} </mat-cell>
-              </ng-container>
-
-
-              <ng-container matColumnDef="min">
-                <mat-header-cell *matHeaderCellDef> PROF EXPO MIN </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <mat-form-field>
-
-                    <input matInput [(ngModel)]="element.min" type="number">
-                  </mat-form-field>
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="max">
-                <mat-header-cell *matHeaderCellDef> PROF EXPO MAX </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <mat-form-field>
-                    <input matInput [(ngModel)]="element.max" type="number">
-                  </mat-form-field>
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="levels">
-                <mat-header-cell *matHeaderCellDef> NIVEAUS MIN. DU PROF </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <mat-form-field>
-                    <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="element.level">
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnLevel">
-                      <mat-option *ngFor="let level of mockLevels" [value]="level">
-                        {{level.annotation}} - {{level.name}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="checkbox">
-                <mat-header-cell *matHeaderCellDef> AJOUTER GROUPE </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <mat-slide-toggle></mat-slide-toggle>
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="delete">
-                <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <mat-icon svgIcon="mat:delete" (click)="removeCourse(element)"></mat-icon>
-                </mat-cell>
-              </ng-container>
-
-              <mat-header-row *matHeaderRowDef="displayedCourseColumns"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedCourseColumns;"></mat-row>
-            </mat-table>
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="courseInfoPriveFormGroup" *ngIf="!courseTypeFormGroup.value.separatedDates && courseTypeFormGroup.value?.courseType?.id === 2">
-          <form [formGroup]="courseInfoPriveFormGroup">
-            <ng-template matStepLabel>Données générales</ng-template>
-
-            <h2 class="title m-0" style="width:100%">Données générales</h2>
-            <div class="subheading-1">Configura los datos y fechas del curso.</div>
-
-            <div class="mt-4 flex flex-col gap-2">
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>NOM DU COURS</mat-label>
-                  <input formControlName="course_name" matInput required>
-                </mat-form-field>
-
-                <div class="flex-auto flex gap-2">
-                  <mat-form-field class="flex-auto">
-                    <mat-label>PRIX (CHF)</mat-label>
-                    <input formControlName="price" type="number" matInput required>
-                  </mat-form-field>
-
-                  <mat-form-field class="vex-flex-form-field flex-auto">
-                    <mat-label>Station</mat-label>
-
-                    <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                    <mat-autocomplete #autoStation="matAutocomplete">
-                      <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                        {{option}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-
-              </div>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>RÉSUMÉ</mat-label>
-                <textarea formControlName="summary" matInput></textarea>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>LA DESCRIPTION</mat-label>
-                <textarea formControlName="description" matInput></textarea>
-              </mat-form-field>
-
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-              <mat-form-field class="flex-auto">
-                  <input type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
-                  <mat-autocomplete #autoTimes="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
-                    </mat-option>
-                  </mat-autocomplete>
-              </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input formControlName="participants" matInput required type="number">
-                </mat-form-field>
-              </div>
-
-
-              <div>
-
-                <div *ngIf="imagePreviewUrl" class="image-container">
-                  <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290">
-                </div>
-                <div class="input-container">
-
-                  <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                  <label for="file" class="btn-1">upload file</label>
-                  <p>Maximum 1mb</p>
-                  <p>Formats supportés: PNG, JPG</p>
-                  <p>Taille recommandée: 400x290px</p>
-                </div>
-              </div>
-              <mat-divider class="text-border"></mat-divider>
-
-            </div>
-
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-
-
-          </form>
-        </mat-step>
-
-        <mat-step [stepControl]="courseInfoPriveSeparatedFormGroup" *ngIf="courseTypeFormGroup.value.separatedDates && courseTypeFormGroup.value?.courseType?.id === 2">
-          <form [formGroup]="courseInfoPriveFormGroup">
-            <ng-template matStepLabel>Données générales</ng-template>
-
-            <h2 class="title m-0" style="width:100%">Données générales</h2>
-            <div class="subheading-1">Configura los datos y fechas del curso.</div>
-
-            <div class="mt-4 flex flex-col gap-2">
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>NOM DU COURS</mat-label>
-                  <input formControlName="course_name" matInput required>
-                </mat-form-field>
-
-                <div class="flex-auto flex gap-2">
-                  <mat-form-field class="flex-auto">
-                    <mat-label>PRIX (CHF)</mat-label>
-                    <input formControlName="price" type="text" matInput required [value]="courseInfoPriveSeparatedFormGroup.value.price">
-                  </mat-form-field>
-
-                  <mat-form-field class="vex-flex-form-field flex-auto">
-                    <mat-label>Station</mat-label>
-
-                    <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                    <mat-autocomplete #autoStation="matAutocomplete">
-                      <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                        {{option}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-
-              </div>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>RÉSUMÉ</mat-label>
-                <textarea formControlName="summary" matInput></textarea>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>LA DESCRIPTION</mat-label>
-                <textarea formControlName="description" matInput></textarea>
-              </mat-form-field>
-
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-              <mat-form-field class="flex-auto">
-                  <input type="text" formControlName="duration" placeholder="DURÉE MINIMALE" matInput [matAutocomplete]="autoTimes">
-                  <mat-autocomplete #autoTimes="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
-                    </mat-option>
-                  </mat-autocomplete>
-              </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input formControlName="participants" matInput required type="number">
-                </mat-form-field>
-              </div>
-
-
-              <div>
-
-                <div *ngIf="imagePreviewUrl" class="image-container">
-                  <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290">
-                </div>
-                <div class="input-container">
-
-                  <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                  <label for="file" class="btn-1">upload file</label>
-                  <p>Maximum 1mb</p>
-                  <p>Formats supportés: PNG, JPG</p>
-                  <p>Taille recommandée: 400x290px</p>
-                </div>
-              </div>
-              <mat-divider class="text-border"></mat-divider>
-
-            </div>
-
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-
-
-          </form>
-        </mat-step>
-      </mat-vertical-stepper>-->
 

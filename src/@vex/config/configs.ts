@@ -26,7 +26,7 @@ const defaultConfig: VexConfig = {
   boxed: false,
   sidenav: {
     title: 'BOUKII',
-    imageUrl: 'assets/img/3.png',
+    imageUrl: '',
     showCollapsePin: true,
     user: {
       visible: true
