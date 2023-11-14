@@ -24,10 +24,15 @@ export class MonitorDetailComponent {
   showPersonalInfo = true;
   showWorkInfo = true;
   showCivilStatusInfo = true;
+  showSportInfo = true;
+  showWork = true;
+
   editInfo = false;
   editPersonalInfo = false;
   editWorkInfo = false;
   editCivilStatusInfo = false;
+  editSportInfo = false;
+  editWork = false;
 
 
   imagePreviewUrl: string | ArrayBuffer;
@@ -72,8 +77,19 @@ export class MonitorDetailComponent {
   mockLevelData = LEVELS;
   languages = MOCK_LANGS;
 
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+    this.mockLevelData.forEach(level => {
+      if (!this.groupedByColor[level.color]) {
+        this.groupedByColor[level.color] = [];
+      }
+      this.groupedByColor[level.color].push(level);
+    });
+
+    this.colorKeys = Object.keys(this.groupedByColor);
+  }
 
   ngOnInit(): void {
 
@@ -212,6 +228,23 @@ export class MonitorDetailComponent {
     this.editCivilStatusInfo = event;
   }
 
+  showSportInfoEvent(event: boolean) {
+    this.showSportInfo = event;
+  }
+
+  showSportInfoEditEvent(event: boolean) {
+    this.editSportInfo = event;
+  }
+
+  showWorkEvent(event: boolean) {
+    this.showWork = event;
+  }
+
+  showWorkEditEvent(event: boolean) {
+    this.editWork = event;
+  }
+
+
   private _filter(name: string, countryId: number): any[] {
     const filterValue = name.toLowerCase();
     return this.mockProvincesData.filter(province => province.id_country === countryId && province.name.toLowerCase().includes(filterValue));
@@ -260,6 +293,10 @@ export class MonitorDetailComponent {
 
   displayFnProvince(province: any): string {
     return province && province.name ? province.name : '';
+  }
+
+  displayFnLevel(level: any): string {
+    return level && level.name ? level.name : '';
   }
 
   passwordValidator(formControl: FormControl) {

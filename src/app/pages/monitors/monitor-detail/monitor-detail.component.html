@@ -19,8 +19,14 @@
         src="../../../../assets/img/demo/1.jpg" />
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
-        <div class="h-16 flex items-end">
-          <h1 @fadeInRight class="headline text-white pb-2 m-0">David Smith</h1>
+        <div class="h-16 items-end">
+          <p @fadeInRight class="headline text-white" style="font-size: 12px;">FR · Switzerland · 43 ans</p>
+
+          <h1 @fadeInRight class="headline text-white">David Smith</h1>
+
+          <mat-icon svgIcon="mat:chat"></mat-icon>
+          <mat-icon svgIcon="mat:mail_outline"></mat-icon>
+          <mat-icon svgIcon="mat:contact_phone"></mat-icon>
         </div>
 
       </div>
@@ -31,11 +37,11 @@
 
 <div class="mt-6 flex flex-col md:flex-row md:items-start" [formGroup]="formInfoAccount">
   <mat-tab-group style="width: 100%">
-    <mat-tab label="About">
+    <mat-tab label="Profile">
       <div class="flex-auto">
         <div class="card">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">Moniteur Information
+            <h2 class="title m-0">Données Personnelles
               <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
               <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
               <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showInfoEditEvent(false)"></mat-icon>
@@ -45,6 +51,63 @@
 
           <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo">
             <div class="py-3 flex items-center">
+              <div
+                @scaleIn
+                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                <mat-icon class="icon-sm" svgIcon="mat:account_circle"></mat-icon>
+              </div>
+
+              <div @fadeInRight *ngIf="!editInfo">
+                <p class="m-0 caption text-hint">Nom</p>
+                <p class="m-0 body-1">David</p>
+              </div>
+
+              <mat-form-field class="flex-auto" *ngIf="editInfo">
+                <mat-label>Nom</mat-label>
+                <input formControlName="name" matInput required type="text">
+
+              </mat-form-field>
+
+            </div>
+            <div class="py-3 flex items-center">
+              <div
+                @scaleIn
+                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                <mat-icon class="icon-sm" svgIcon="mat:account_circle"></mat-icon>
+              </div>
+
+              <div @fadeInRight *ngIf="!editInfo">
+                <p class="m-0 caption text-hint">Prenom</p>
+                <p class="m-0 body-1">Smith</p>
+              </div>
+
+              <mat-form-field class="flex-auto" *ngIf="editInfo">
+                <mat-label>Prenom</mat-label>
+                <input formControlName="surname" matInput required type="text">
+
+              </mat-form-field>
+
+            </div>
+            <div class="py-3 flex items-center">
+              <div
+                @scaleIn
+                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
+              </div>
+
+              <div @fadeInRight *ngIf="!editInfo">
+                <p class="m-0 caption text-hint">Portable</p>
+                <p class="m-0 body-1">123456789
+                </p>
+              </div>
+
+              <mat-form-field class="flex-auto" *ngIf="editInfo">
+                <mat-label>Portable</mat-label>
+                <input formControlName="mobile" matInput required type="tel">
+
+              </mat-form-field>
+            </div>
+            <!--<div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
@@ -88,10 +151,29 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-            </div>
+            </div>-->
 
             <div class="py-3 flex items-center">
+
+
               <div
+                @scaleIn
+                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
+              </div>
+
+              <div @fadeInRight *ngIf="!editInfo">
+                <p class="m-0 caption text-hint">DATE DE NAISSANCE</p>
+                <p class="m-0 body-1">10/12/1995</p>
+              </div>
+
+              <mat-form-field class="flex-auto" *ngIf="editInfo">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+              </mat-form-field>
+
+              <!--<div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
                 <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
@@ -106,10 +188,10 @@
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput required type="text">
 
-              </mat-form-field>
+              </mat-form-field>-->
             </div>
 
-            <div class="py-3 flex items-center">
+            <!--<div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
@@ -123,13 +205,13 @@
                 </p>
                 <mat-slide-toggle></mat-slide-toggle>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
 
         <div class="card" style="margin: 3% 0 0 0;">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">Données Personnelles
+            <h2 class="title m-0">Informacion de la cuenta
               <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
               <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
               <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editPersonalInfo"  (click)="showPersonalInfoEditEvent(false)"></mat-icon>
@@ -142,37 +224,57 @@
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
+                <mat-icon class="icon-sm" svgIcon="mat:account_circle"></mat-icon>
               </div>
 
               <div @fadeInRight *ngIf="!editPersonalInfo">
-                <p class="m-0 caption text-hint">DATE DE NAISSANCE</p>
-                <p class="m-0 body-1">10/12/1995</p>
+                <p class="m-0 caption text-hint">Nombre de usuario</p>
+                <p class="m-0 body-1">Cocoloco93</p>
               </div>
 
               <mat-form-field class="flex-auto" *ngIf="editPersonalInfo">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate">
-                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+                <mat-label>Nombre de usuario</mat-label>
+                <input formControlName="username" matInput required type="text">
+
               </mat-form-field>
+
             </div>
 
             <div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
+                <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
               </div>
 
               <div @fadeInRight *ngIf="!editPersonalInfo">
-                <p class="m-0 caption text-hint">TELÉPHONE</p>
-                <p class="m-0 body-1">123456789
-                </p>
+                <p class="m-0 caption text-hint">Email</p>
+                <p class="m-0 body-1">ale3@example.com</p>
               </div>
 
               <mat-form-field class="flex-auto" *ngIf="editPersonalInfo">
-                <mat-label>Portable</mat-label>
-                <input formControlName="mobile" matInput required type="tel">
+                <mat-label>Email</mat-label>
+                <input formControlName="email" matInput required type="mail">
+
+              </mat-form-field>
+
+            </div>
+
+            <div class="py-3 flex items-center">
+              <div
+                @scaleIn
+                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+              </div>
+
+              <div @fadeInRight *ngIf="!editPersonalInfo">
+                <p class="m-0 caption text-hint">Password</p>
+                <p class="m-0 body-1">***********</p>
+              </div>
+
+              <mat-form-field class="flex-auto" *ngIf="editPersonalInfo">
+                <mat-label>Password</mat-label>
+                <input formControlName="password" matInput required type="text">
 
               </mat-form-field>
             </div>
@@ -204,7 +306,20 @@
                 </mat-select>
               </mat-form-field>
             </div>
+          </div>
+        </div>
 
+        <div class="card" style="margin: 3% 0 0 0;">
+          <div class="px-6 py-4 border-b">
+            <h2 class="title m-0">Dirección
+              <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showWorkInfo" (click)="showWorkInfoEvent(true)"></mat-icon>
+              <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showWorkInfo" (click)="showWorkInfoEvent(false)"></mat-icon>
+              <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editWorkInfo"  (click)="showWorkInfoEditEvent(false)"></mat-icon>
+              <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editWorkInfo"  (click)="showWorkInfoEditEvent(true)"></mat-icon>
+            </h2>
+          </div>
+
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showWorkInfo">
             <div class="py-3 flex items-center">
               <div
                 @scaleIn
@@ -212,15 +327,15 @@
                 <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
               </div>
 
-              <div @fadeInRight *ngIf="!editPersonalInfo">
+              <div @fadeInRight *ngIf="!editWorkInfo">
 
                 <p class="m-0 caption text-hint">
                   ADRESSE
                 </p>
-                <p class="m-0 body-1">Calle imaginación 5, 12345 - Nord, Haiti</p>
+                <p class="m-0 body-1">Calle imaginación 5</p>
               </div>
 
-                <mat-form-field class="flex-auto"  *ngIf="editPersonalInfo">
+                <mat-form-field class="flex-auto"  *ngIf="editWorkInfo">
                   <mat-label>Addresse</mat-label>
 
                   <input formControlName="address" matInput required type="text">
@@ -229,14 +344,22 @@
 
               </div>
 
-              <div class="py-3 flex items-center" *ngIf="editPersonalInfo">
+              <div class="py-3 flex items-center">
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
                   <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
                 </div>
 
-                <mat-form-field class="flex-auto">
+                <div @fadeInRight *ngIf="!editWorkInfo">
+
+                  <p class="m-0 caption text-hint">
+                    Code Postal
+                  </p>
+                  <p class="m-0 body-1">12345</p>
+                </div>
+
+                <mat-form-field class="flex-auto" *ngIf="editWorkInfo">
                   <mat-label>Code Postal</mat-label>
                   <input formControlName="postalCode" matInput required type="text">
 
@@ -245,14 +368,22 @@
 
               </div>
 
-              <div class="py-3 flex items-center" *ngIf="editPersonalInfo">
+              <div class="py-3 flex items-center">
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
                   <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
                 </div>
 
-                <mat-form-field class="vex-flex-form-field flex-auto">
+                <div @fadeInRight *ngIf="!editWorkInfo">
+
+                  <p class="m-0 caption text-hint">
+                    Pays
+                  </p>
+                  <p class="m-0 body-1">Haiti</p>
+                </div>
+
+                <mat-form-field class="vex-flex-form-field flex-auto" *ngIf="editWorkInfo">
                   <mat-label>Pays</mat-label>
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                   <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
@@ -264,14 +395,22 @@
               </div>
 
 
-              <div class="py-3 flex items-center" *ngIf="editPersonalInfo">
+              <div class="py-3 flex items-center">
 
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
                   <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
                 </div>
-                <mat-form-field class="vex-flex-form-field flex-auto">
+
+                <div @fadeInRight *ngIf="!editWorkInfo">
+
+                  <p class="m-0 caption text-hint">
+                    Canton
+                  </p>
+                  <p class="m-0 body-1">Haiti</p>
+                </div>
+                <mat-form-field class="vex-flex-form-field flex-auto" *ngIf="editWorkInfo">
                   <mat-label>Canton</mat-label>
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                   <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
@@ -286,213 +425,284 @@
 
         <div class="card" style="margin: 3% 0 0 0;">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">Information de travail
+            <h2 class="title m-0">Sports Info
 
-              <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showWorkInfo" (click)="showWorkInfoEvent(true)"></mat-icon>
-              <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showWorkInfo" (click)="showWorkInfoEvent(false)"></mat-icon>
-              <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editWorkInfo"  (click)="showWorkInfoEditEvent(false)"></mat-icon>
-              <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editWorkInfo"  (click)="showWorkInfoEditEvent(true)"></mat-icon>
+              <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
+              <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
+              <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editSportInfo" (click)="showSportInfoEditEvent(false)"></mat-icon>
+              <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editSportInfo" (click)="showSportInfoEditEvent(true)"></mat-icon>
             </h2>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showWorkInfo">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo && !editSportInfo">
             <div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
+                <i class="fa fa-fw fa-snowflake-o"></i>
               </div>
 
-              <div @fadeInRight *ngIf="!editWorkInfo">
-                <p class="m-0 caption text-hint">N° AVS</p>
-                <p class="m-0 body-1">------</p>
+              <div @fadeInRight>
+                <p class="m-0 caption text-hint">Type</p>
+                <p class="m-0 body-1">Hiver</p>
               </div>
-
-              <mat-form-field class="flex-auto" *ngIf="editWorkInfo">
-                <mat-label>Nº AVS</mat-label>
-                <input formControlName="avs" matInput required type="text">
-
-              </mat-form-field>
             </div>
 
             <div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
+                <img src="https://school.boukii.com/assets/apps/sports/Ski.png">
               </div>
 
-              <div @fadeInRight *ngIf="!editWorkInfo">
-                <p class="m-0 caption text-hint">PERMIS DE TRAVAIL</p>
-                <p class="m-0 body-1">----------------
+              <div @fadeInRight>
+                <p class="m-0 caption text-hint">Sport</p>
+                <p class="m-0 body-1">Ski
                 </p>
               </div>
-
-              <mat-form-field class="flex-auto" *ngIf="editWorkInfo">
-                <mat-label>Permis de travail</mat-label>
-                <input formControlName="workId" matInput required type="text">
-              </mat-form-field>
             </div>
 
             <div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
+                <i class="fa fa-fw fa-certificate"></i>
               </div>
 
-              <div @fadeInRight *ngIf="!editWorkInfo">
-                <p class="m-0 caption text-hint">COORDONNÉES BANCAIRES</p>
-                <p class="m-0 body-1">E----------------</p>
+              <div @fadeInRight style="width: 60%">
+                <p class="m-0 caption text-hint">Niveaux</p>
+                <p class="m-0 body-1" style="padding: 5%;background: #0E3991;color: #fff;border-radius: 10px;width: 100%;text-align: center;">PB PRINCE / PRICESSE BLEU</p>
               </div>
-
-              <mat-form-field class="flex-auto" *ngIf="editWorkInfo">
-                <mat-label>IBAN</mat-label>
-                <input formControlName="iban" matInput required type="text">
-
-              </mat-form-field>
             </div>
 
             <div class="py-3 flex items-center">
               <div
                 @scaleIn
                 class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
+                <mat-icon class="icon-sm" svgIcon="mat:attach_money"></mat-icon>
               </div>
 
-              <div @fadeInRight *ngIf="!editWorkInfo">
+              <div @fadeInRight>
 
                 <p class="m-0 caption text-hint">
-                  NATIONALITÉ
+                  Niveau de salaraire
                 </p>
-                <p class="m-0 body-1">---------------------</p>
+                <p class="m-0 body-1">Stagiere 12 ans	</p>
+              </div>
+            </div>
+
+            <div class="py-3 flex items-center">
+              <div
+                @scaleIn
+                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                <i class="fa fa-fw fa-user"></i>
               </div>
 
-              <mat-form-field class="vex-flex-form-field flex-auto" *ngIf="editWorkInfo">
-                <mat-label>Pays</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
-                <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country">
-                    {{country.name}}
+              <div @fadeInRight>
+
+                <p class="m-0 caption text-hint">
+                  Niveaux autorisés
+                </p>
+                <p class="m-0 body-1"> pintar cuadrados
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="padding: 1rem" *ngIf="editSportInfo">
+
+            <div class="py-3 flex items-center" style="width: 100%">
+
+
+              <mat-form-field class="flex-auto">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="py-3 flex items-center">
+
+
+              <mat-form-field class="flex-auto" style="width: 100%">
+                <input type="text" placeholder="Select max level" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" />
+                <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                  <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
+                    {{level.annotation}} - {{level.name}}
                   </mat-option>
                 </mat-autocomplete>
+                <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
               </mat-form-field>
             </div>
 
-            <div class="py-3 flex items-center">
-              <div
-                @scaleIn
-                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
-              </div>
+            <div class="py-3 flex items-center" style="width: 100%">
 
-              <div @fadeInRight *ngIf="!editWorkInfo">
 
-                <p class="m-0 caption text-hint">
-                  NATIONALITÉ
-                </p>
-                <p class="m-0 body-1">0</p>
-              </div>
-
-              <mat-form-field class="flex-auto" *ngIf="editWorkInfo">
-                <mat-label>Children</mat-label>
-                <input formControlName="children" matInput required type="number">
-
+              <mat-form-field class="flex-auto">
+                <mat-select>
+                  <mat-option>Salario minimo</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
-          </div>
-        </div>
 
-        <div class="card" style="margin: 3% 0 0 0;">
-          <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">Etat civil
-              <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showCivilStatusInfo" (click)="showCivilStatusInfoEvent(true)"></mat-icon>
-              <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showCivilStatusInfo" (click)="showCivilStatusInfoEvent(false)"></mat-icon>
-              <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showCivilStatusInfoEditEvent(false)"></mat-icon>
-              <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showCivilStatusInfoEditEvent(true)"></mat-icon>
-            </h2>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showCivilStatusInfo">
-            <div class="py-3 flex items-center">
-              <div
-                @scaleIn
-                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
-              </div>
+          <div class="sm:flex-row gap-2 sm:gap-6" *ngIf="editSportInfo" style="padding: 1rem;height: 100px;">
 
-              <div @fadeInRight>
-                <p class="m-0 caption text-hint">ETAT CIVIL</p>
-                <p class="m-0 body-1">Single</p>
-              </div>
-            </div>
+            <p style="width: 100%; float:left">Nivel autorizado</p>
+            <div *ngFor="let colorKey of colorKeys">
+              <div style="float:left; width: 5%; margin: 0 0 0 2%;height: 25px;" *ngFor="let level of groupedByColor[colorKey]" [style.background-color]="colorKey">
 
-            <div class="py-3 flex items-center">
-              <div
-                @scaleIn
-                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
-              </div>
-
-              <div @fadeInRight>
-                <p class="m-0 caption text-hint">PERMIS TRAVAIL DU CONJOINT</p>
-                <p class="m-0 body-1">----------------
-                </p>
-              </div>
-            </div>
-
-            <div class="py-3 flex items-center">
-              <div
-                @scaleIn
-                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
-              </div>
-
-              <div @fadeInRight>
-                <p class="m-0 caption text-hint">POURCENTAGE DU CONJOINT</p>
-                <p class="m-0 body-1">0</p>
-              </div>
-            </div>
-
-            <div class="py-3 flex items-center">
-              <div
-                @scaleIn
-                class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
-              </div>
-
-              <div @fadeInRight>
-
-                <p class="m-0 caption text-hint">
-                  DEMANDE D'ALLOCATION FAMILIALES?
-                </p>
-                <p class="m-0 body-1">Non</p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </mat-tab>
-    <mat-tab label="Sports">
+
+    <mat-tab label="Dossier">
+
       <div class="card" style="margin: 3% 0 0 0;">
         <div class="px-6 py-4 border-b">
-          <h2 class="title m-0">Sports Info
-            <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showWorkInfoEditEvent(false)"></mat-icon>
-            <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showWorkInfoEditEvent(true)"></mat-icon>
+          <h2 class="title m-0">Information de travail
+
+            <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showWork" (click)="showWorkEvent(true)"></mat-icon>
+            <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showWork" (click)="showWorkEvent(false)"></mat-icon>
+            <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editWork"  (click)="showWorkEditEvent(false)"></mat-icon>
+            <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editWork"  (click)="showWorkEditEvent(true)"></mat-icon>
           </h2>
         </div>
 
-        <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showWork">
           <div class="py-3 flex items-center">
             <div
               @scaleIn
               class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-              <i class="fa fa-fw fa-snowflake-o"></i>
+              <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
+            </div>
+
+            <div @fadeInRight *ngIf="!editWork">
+              <p class="m-0 caption text-hint">N° AVS</p>
+              <p class="m-0 body-1">------</p>
+            </div>
+
+            <mat-form-field class="flex-auto" *ngIf="editWork">
+              <mat-label>Nº AVS</mat-label>
+              <input formControlName="avs" matInput required type="text">
+
+            </mat-form-field>
+          </div>
+
+          <div class="py-3 flex items-center">
+            <div
+              @scaleIn
+              class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
+            </div>
+
+            <div @fadeInRight *ngIf="!editWork">
+              <p class="m-0 caption text-hint">PERMIS DE TRAVAIL</p>
+              <p class="m-0 body-1">----------------
+              </p>
+            </div>
+
+            <mat-form-field class="flex-auto" *ngIf="editWork">
+              <mat-label>Permis de travail</mat-label>
+              <input formControlName="workId" matInput required type="text">
+            </mat-form-field>
+          </div>
+
+          <div class="py-3 flex items-center">
+            <div
+              @scaleIn
+              class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
+            </div>
+
+            <div @fadeInRight *ngIf="!editWork">
+              <p class="m-0 caption text-hint">COORDONNÉES BANCAIRES</p>
+              <p class="m-0 body-1">E----------------</p>
+            </div>
+
+            <mat-form-field class="flex-auto" *ngIf="editWork">
+              <mat-label>IBAN</mat-label>
+              <input formControlName="iban" matInput required type="text">
+
+            </mat-form-field>
+          </div>
+
+          <div class="py-3 flex items-center">
+            <div
+              @scaleIn
+              class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
+            </div>
+
+            <div @fadeInRight *ngIf="!editWork">
+
+              <p class="m-0 caption text-hint">
+                NATIONALITÉ
+              </p>
+              <p class="m-0 body-1">---------------------</p>
+            </div>
+
+            <mat-form-field class="vex-flex-form-field flex-auto" *ngIf="editWork">
+              <mat-label>Pays</mat-label>
+              <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
+              <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
+                <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country">
+                  {{country.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="py-3 flex items-center">
+            <div
+              @scaleIn
+              class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
+            </div>
+
+            <div @fadeInRight *ngIf="!editWork">
+
+              <p class="m-0 caption text-hint">
+                NATIONALITÉ
+              </p>
+              <p class="m-0 body-1">0</p>
+            </div>
+
+            <mat-form-field class="flex-auto" *ngIf="editWork">
+              <mat-label>Children</mat-label>
+              <input formControlName="children" matInput required type="number">
+
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin: 3% 0 0 0;">
+        <div class="px-6 py-4 border-b">
+          <h2 class="title m-0">Etat civil
+            <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showCivilStatusInfo" (click)="showCivilStatusInfoEvent(true)"></mat-icon>
+            <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showCivilStatusInfo" (click)="showCivilStatusInfoEvent(false)"></mat-icon>
+            <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showCivilStatusInfoEditEvent(false)"></mat-icon>
+            <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showCivilStatusInfoEditEvent(true)"></mat-icon>
+          </h2>
+        </div>
+
+        <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showCivilStatusInfo">
+          <div class="py-3 flex items-center">
+            <div
+              @scaleIn
+              class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+              <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
             </div>
 
             <div @fadeInRight>
-              <p class="m-0 caption text-hint">Type</p>
-              <p class="m-0 body-1">Hiver</p>
+              <p class="m-0 caption text-hint">ETAT CIVIL</p>
+              <p class="m-0 body-1">Single</p>
             </div>
           </div>
 
@@ -500,12 +710,12 @@
             <div
               @scaleIn
               class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-              <img src="https://school.boukii.com/assets/apps/sports/Ski.png">
+              <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
             </div>
 
             <div @fadeInRight>
-              <p class="m-0 caption text-hint">Sport</p>
-              <p class="m-0 body-1">Ski
+              <p class="m-0 caption text-hint">PERMIS TRAVAIL DU CONJOINT</p>
+              <p class="m-0 body-1">----------------
               </p>
             </div>
           </div>
@@ -514,12 +724,12 @@
             <div
               @scaleIn
               class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-              <i class="fa fa-fw fa-certificate"></i>
+              <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
             </div>
 
-            <div @fadeInRight style="width: 60%">
-              <p class="m-0 caption text-hint">Niveaux</p>
-              <p class="m-0 body-1" style="padding: 5%;background: #0E3991;color: #fff;border-radius: 10px;width: 100%;text-align: center;">PB PRINCE / PRICESSE BLEU</p>
+            <div @fadeInRight>
+              <p class="m-0 caption text-hint">POURCENTAGE DU CONJOINT</p>
+              <p class="m-0 body-1">0</p>
             </div>
           </div>
 
@@ -527,41 +737,25 @@
             <div
               @scaleIn
               class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-              <mat-icon class="icon-sm" svgIcon="mat:attach_money"></mat-icon>
+              <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
             </div>
 
             <div @fadeInRight>
 
               <p class="m-0 caption text-hint">
-                Niveau de salaraire
+                DEMANDE D'ALLOCATION FAMILIALES?
               </p>
-              <p class="m-0 body-1">Stagiere 12 ans	</p>
-            </div>
-          </div>
-
-          <div class="py-3 flex items-center">
-            <div
-              @scaleIn
-              class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-              <i class="fa fa-fw fa-user"></i>
-            </div>
-
-            <div @fadeInRight>
-
-              <p class="m-0 caption text-hint">
-                Niveaux autorisés
-              </p>
-              <p class="m-0 body-1"> pintar cuadrados
-              </p>
+              <p class="m-0 body-1">Non</p>
             </div>
           </div>
         </div>
       </div>
     </mat-tab>
+
     <mat-tab label="Cours">
 
     </mat-tab>
-    <mat-tab label="Disponibilité">
+    <mat-tab label="Planning">
 
     </mat-tab>
     <mat-tab label="Statistiques">
