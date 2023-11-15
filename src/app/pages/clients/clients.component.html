@@ -7,7 +7,103 @@
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
   </vex-secondary-toolbar>
-  <vex-page-layout-content class="-mt-6 fullwidth">
-      <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Clients'" [route]="'clients'" [createComponent]="createComponent"></vex-aio-table>
+  <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
+      <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Clients'" [route]="'clients'" [createComponent]="createComponent"
+      (showDetailEvent)="showDetailEvent($event)"
+      [showDetail]="showDetail"></vex-aio-table>
+  </vex-page-layout-content>
+
+  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left" *ngIf="showDetail">
+    <mat-card style="padding: 0 3%;">
+      <mat-card-header style="display:block">
+        <div style="width: 100%;float: left;">
+          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
+
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="float: left; width: 100%;">
+          <div style="float: left; width: 100%;">
+            <p style="font-size: 20px;">Moniteur</p>
+          </div>
+          <div style="float: left;width: 100%;">
+            <div style="float: left; width: 20%; margin-top: 5%">
+              <img [src]="imageAvatar" width="100" height="100">
+            </div>
+            <div style="float: left; width: 75%;margin:6% 0 0 2%">
+              <p>FR · Switzerland · 43 ans</p>
+              <p><strong>Maternini Mirko (+3)</strong></p>
+              <div>
+                <mat-icon svgIcon="mat:chat"></mat-icon>
+                <mat-icon svgIcon="mat:mail_outline"></mat-icon>
+                <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="float: left; width: 100%;margin-top:5%">
+          <div style="float: left; width: 25%;">
+            <img [src]="imageAvatar" width="50" height="50"  style="border-radius: 100%;">
+          </div>
+          <div style="float: left; width: 25%;">
+            <img [src]="imageAvatar" width="50" height="50"  style="border-radius: 100%;">
+          </div>
+          <div style="float: left; width: 25%;">
+            <img [src]="imageAvatar" width="50" height="50"  style="border-radius: 100%;">
+          </div>
+          <div style="float: left; width: 25%;">
+            <img [src]="imageAvatar" width="50" height="50"  style="border-radius: 100%;">
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+        <div style="float: left; width: 100%;">
+          <div style="float: left; width: 100%; margin: 0 0 5% 0">
+            <p style="font-size: 20px;">Sports</p>
+          </div>
+          <div style="float: left; width: 15%;">
+            <img [src]="skiImage" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080">
+          </div>
+          <div style="float: left; width: 100%; margin: 2% 0 0 0">
+            <div *ngFor="let colorKey of colorKeys">
+              <div *ngFor="let level of groupedByColor[colorKey]" [ngStyle]="{
+                'background-color': colorKey,
+                'border-color': colorKey,
+                'width': '5%',
+                'border-radius': '3px',
+                'margin-left': '2%',
+                'height': '15px',
+                'border-style': 'solid',
+                'border-width': '1px',
+                'float': 'left'
+              }">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width:100%; margin-top:5%;float:left">
+          <div style="float: left; width: 100%; margin: 0 0 5% 0">
+            <p style="font-size: 20px;">Données</p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>Email</b></p>
+            <p style="float: left;width: 50%;text-align: right;">fabienne_abreu@yahoo.fr</p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>Teléphone</b></p>
+            <p style="float: left;width: 50%;text-align: right;">786443627</p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>Date de Naissance</b></p>
+            <p style="float: left;width: 50%;text-align: right;">11/11/1981</p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>Address</b></p>
+            <p style="float: left;width: 50%;text-align: right;">Chemin de Maillefer 67, 1052</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </vex-page-layout-content>
 </vex-page-layout>

@@ -21,6 +21,9 @@ import { ClientsComponent } from './clients.component';
 import { ClientsCreateUpdateModule } from './client-create-update/client-create-update.module';
 import { ClientDetailComponent } from './client-detail/client-detail.component';
 import { ClientDetailModule } from './client-detail/client-detail.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [ClientsComponent],
@@ -44,7 +47,10 @@ import { ClientDetailModule } from './client-detail/client-detail.module';
     ClientsCreateUpdateModule,
     MatDialogModule,
     ComponentsModule,
-    ClientDetailModule
+    ClientDetailModule,
+    MatDividerModule,
+    MatCardModule,
+    MatSlideToggleModule
   ]
 })
 export class ClientsModule {

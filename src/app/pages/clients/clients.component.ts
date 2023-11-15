@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ClientsCreateUpdateModule } from './client-create-update/client-create-update.module';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { LEVELS } from 'src/app/static-data/level-data';
 
 @Component({
   selector: 'vex-clients',
@@ -10,7 +11,19 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 export class ClientsComponent {
 
   createComponent = ClientsCreateUpdateModule;
-  entity = 'clients';
+  entity = 'clients'; showDetail: boolean = false;
+
+  detailData: any;
+  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  skiImage = 'https://school.boukii.com/assets/apps/sports/Ski.png';
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+  mockLevelData = LEVELS;
+
+  constructor() {
+
+  }
+
   columns: TableColumn<any>[] = [
     { label: 'Tipo', property: 'type', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
@@ -23,4 +36,9 @@ export class ClientsComponent {
     { label: 'Status', property: 'status', type: 'light', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
+  showDetailEvent(event: any) {
+    this.showDetail = event.showDetail;
+    this.detailData = event.item;
+  }
 }
