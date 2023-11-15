@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { ClientDetailComponent } from './client-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTableModule,
     MatSortModule,
     MatChipsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatProgressBarModule
   ],
   declarations: [ClientDetailComponent],
   exports: [ClientDetailComponent]

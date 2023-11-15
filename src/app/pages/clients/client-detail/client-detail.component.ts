@@ -26,8 +26,12 @@ export class ClientDetailComponent {
   suggestions = friendSuggestions;
   showInfo = true;
   showPersonalInfo = true;
+  showAddressInfo: boolean = true;
+  showSportInfo: boolean = true;
   editInfo = false;
   editPersonalInfo = false;
+  editAddressInfo: boolean = false;
+  editSportInfo: boolean = false;
 
   displayedColumns: string[] = ['name', 'date'];
 
@@ -66,10 +70,22 @@ export class ClientDetailComponent {
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData = LEVELS;
 
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
+
+    this.mockLevelData.forEach(level => {
+      if (!this.groupedByColor[level.color]) {
+        this.groupedByColor[level.color] = [];
+      }
+      this.groupedByColor[level.color].push(level);
+    });
+
+    this.colorKeys = Object.keys(this.groupedByColor);
   }
 
   ngOnInit(): void {
@@ -281,6 +297,23 @@ export class ClientDetailComponent {
   showPersonalInfoEditEvent(event: boolean) {
     this.editPersonalInfo = event;
   }
+
+  showAddressInfoEvent(event: boolean) {
+    this.showAddressInfo = event;
+  }
+
+  showAddressInfoEditEvent(event: boolean) {
+    this.editAddressInfo = event;
+  }
+
+  showSportInfoEvent(event: boolean) {
+    this.showSportInfo = event;
+  }
+
+  showSportInfoEditEvent(event: boolean) {
+    this.editSportInfo = event;
+  }
+
 
   addFriend(friend: any) {
     friend.added = true;
