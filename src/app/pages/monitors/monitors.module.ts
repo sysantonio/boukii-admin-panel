@@ -19,6 +19,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MonitorsRoutingModule } from './monitors-routing.module';
 import { MonitorsComponent } from './monitors.component';
 import { MonitorDetailModule } from './monitor-detail/monitor-detail.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [MonitorsComponent],
@@ -42,7 +45,10 @@ import { MonitorDetailModule } from './monitor-detail/monitor-detail.module';
     //LanguageCreateUpdateModule,
     MatDialogModule,
     ComponentsModule,
-    MonitorDetailModule
+    MonitorDetailModule,
+    MatDividerModule,
+    MatCardModule,
+    MatSlideToggleModule
   ]
 })
 export class MonitorsModule {

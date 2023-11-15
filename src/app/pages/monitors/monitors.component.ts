@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MonitorsCreateUpdateComponent } from './monitors-create-update/monitors-create-update.component';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { LEVELS } from 'src/app/static-data/level-data';
 
 @Component({
   selector: 'vex-monitors',
@@ -9,22 +10,41 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 })
 export class MonitorsComponent {
 
-  constructor() {
+  showDetail: boolean = false;
+  detailData: any;
+  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  skiImage = 'https://school.boukii.com/assets/apps/sports/Ski.png';
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+  mockLevelData = LEVELS;
 
+  constructor() {
+    this.mockLevelData.forEach(level => {
+      if (!this.groupedByColor[level.color]) {
+        this.groupedByColor[level.color] = [];
+      }
+      this.groupedByColor[level.color].push(level);
+    });
+
+    this.colorKeys = Object.keys(this.groupedByColor);
   }
 
   createComponent = MonitorsCreateUpdateComponent;
-  entity = 'courses';
+  entity = 'monitors';
   columns: TableColumn<any>[] = [
-    { label: 'Course', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Sport', property: 'sport', type: 'text', visible: true },
-    { label: 'Jours', property: 'journey', type: 'text', visible: true },
-    { label: 'Jours', property: 'duration', type: 'text', visible: true },
-    { label: 'Máx Participants', property: 'max_participants', type: 'text', visible: true },
-    { label: 'Prix', property: 'price', type: 'text', visible: true },
-    { label: 'Depuis', property: 'start_date', type: 'text', visible: true },
-    { label: "Jusqu'à", property: 'end_date', type: 'text', visible: true },
-    { label: 'Etat', property: 'status', type: 'text', visible: true },
+    { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Age', property: 'age', type: 'text', visible: true },
+    { label: 'Email', property: 'email', type: 'text', visible: true },
+    { label: 'Phone', property: 'phone', type: 'text', visible: true },
+    { label: 'Sports', property: 'sport', type: 'text', visible: true },
+    { label: 'Level', property: 'niveaux', type: 'level', visible: true },
+    { label: 'Register', property: 'register', type: 'register_date', visible: true },
+    { label: "Status", property: 'status', type: 'light', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
+  showDetailEvent(event: any) {
+    this.showDetail = event.showDetail;
+    this.detailData = event.item;
+  }
 }

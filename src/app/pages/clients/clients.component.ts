@@ -12,7 +12,15 @@ export class ClientsComponent {
   createComponent = ClientsCreateUpdateModule;
   entity = 'clients';
   columns: TableColumn<any>[] = [
+    { label: 'Tipo', property: 'type', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Edad', property: 'age', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Usuarios', property: 'users', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Sports', property: 'sport', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Nivel', property: 'level', type: 'level', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Registro', property: 'register', type: 'register_date', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Status', property: 'status', type: 'light', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 }
