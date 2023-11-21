@@ -30,47 +30,30 @@
               <div class="flex-auto">
                 <mat-label>Temporada - Sport</mat-label><br>
                 <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
-                  <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
+                  <mat-radio-button *ngFor="let sport of sportTypeData.reverse()" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
                 </mat-radio-group>
               </div>
 
-              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 0; width:100%; float:left">
-                <div style="float:left">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski.png">
+              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 4%; width:100%; float:left">
+                <div style="float:left; width: 20%" *ngFor="let item of sportDataList.reverse()">
+                  <span style="width: 100%;margin: 0 auto">
+                    <img style="background: #E6E6E6;margin: 0 auto; border-radius: 20%;border: #808080 solid 1px; cursor:pointer"
+                    [src]="item.id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
                   </span>
-                  <p style="text-align: center;">ski</p>
-                </div>
-                <div style="float:left;margin:0 0 0 4%">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Snowboard.png">
-                  </span>
-                  <p style="text-align: center;">Snowboard</p>
-                </div>
-                <div style="float:left;margin:0 0 0 4%">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski_randonée.png">
-                  </span>
-                  <p style="text-align: center;">Ski randonée</p>
-                </div>
-                <div style="float:left;margin:0 0 0 4%">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Raquettés.png">
-                  </span>
-                  <p style="text-align: center;">Raquettés</p>
+                  <p style="text-align: center;">{{ item.name }}</p>
                 </div>
               </div>
             </div>
 
-            <div style="margin: 2% 0 0 0;width: 50%;float: left;">
+            <div style="margin: 2% 0 0 2%;width: 48%;float: left;">
 
               <div style="width: 100%;float:left">
-                <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
+                <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif', 1)" >
                   <mat-card-content>
                     <p>Cours Collectif</p>
                   </mat-card-content>
                 </mat-card>
-                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;"[disabled]="courseType === null ||courseType === 'privee'" (click)="setFlexibility($event)">
                   Dates flexibles
 
                 </mat-checkbox>
@@ -80,12 +63,12 @@
               </div>
 
               <div style="width: 100%;float:left">
-                <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee')">
+                <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee', 2)">
                   <mat-card-content>
                     <p>Cours privee</p>
                   </mat-card-content>
                 </mat-card>
-                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">Dates flexibles
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;" [disabled]="courseType === null || courseType === 'collectif'" (click)="setFlexibility($event)">Dates flexibles
                 </mat-checkbox>
                 <div style="float: left; margin: 17px">
                   <mat-icon svgIcon="mat:info"></mat-icon>
@@ -96,8 +79,8 @@
 
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
-            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+            <button (click)="stepper.reset()" [disabled]="courseTypeFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseTypeFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Siguiente
             </button>
           </div>
@@ -113,29 +96,29 @@
               <div class="flex-auto" style="width: 40%">
                 <label for="courseName">Nom de cours</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="course_name" matInput required type="text">
+                  <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="price" matInput required type="text">
+                  <input id="courseName" formControlName="price" matInput required type="text" [(ngModel)]="defaults.price">
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 30%">
                 <label for="station">Station</label>
-                <mat-form-field  style="width: 100%">
-                  <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                  <mat-autocomplete #autoStation="matAutocomplete">
+                <mat-form-field style="width: 100%">
+                  <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" [(ngModel)]="defaults.station_id">
+                  <mat-autocomplete #autoStation="matAutocomplete" [displayWith]="displayFnStation">
                     <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                      {{option}}
+                      {{option.name}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
+
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
@@ -158,24 +141,31 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-auto" style="width: 40%;">
 
-                <label for="age">Edad</label>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <div class="flex-auto" style="width: 40%">
+                <label for="ageFrom">Edad Mínima</label>
                 <mat-form-field style="width: 100%">
-                  <mat-select id="age" >
-                    <mat-option>
-                      De 5 a 18 años de edad
-                    </mat-option>
-                  </mat-select>
+                  <input id="ageFrom" type="number" placeholder="Edad Minima" formControlName="ageFrom" aria-label="Number" matInput [(ngModel)]="defaults.min_age"/>
                 </mat-form-field>
-
               </div>
+
+              <div class="flex-auto" style="width: 40%">
+                <label for="ageTo">Edad Máxima</label>
+                <mat-form-field style="width: 100%">
+                  <input id="ageTo" type="number" placeholder="Edad Máxima" formControlName="ageTo" aria-label="Number" matInput [(ngModel)]="defaults.max_age"/>
+                </mat-form-field>
+              </div>
+
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">RESUME</label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="summary"></angular-editor>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
 
               </div>
             </div>
@@ -184,7 +174,7 @@
 
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">DESCRIPTION</label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="description"></angular-editor>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
 
               </div>
             </div>
@@ -208,7 +198,7 @@
                 <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
                 </mat-form-field>
@@ -218,9 +208,10 @@
                 <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [max]="today">
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [min]="courseInfoPriveFormGroup.value.fromDate" [(ngModel)]="defaults.date_end_res"
+                  [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+                  <mat-datepicker #pickerTo [startAt]="courseInfoPriveFormGroup.value.fromDate"></mat-datepicker>
                 </mat-form-field>
               </div>
 
@@ -231,10 +222,10 @@
 
                 <label for="durationPrivate">DURÉ</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
-                  <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimesPrivate">
+                  <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimesPrivate" [(ngModel)]="defaults.duration">
                   <mat-autocomplete #autoTimesPrivate="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
+                    <mat-option *ngFor="let duration of durations" [value]="duration.text">
+                      {{duration.text}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -244,28 +235,28 @@
                 <label for="participants">PARTICIPANTS MÁX.</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input id="participants" formControlName="participants" matInput required type="number">
+                  <input id="participants" formControlName="participants" matInput required type="number" [(ngModel)]="defaults.max_participants">
                 </mat-form-field>
               </div>
 
             </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="this.defaults.is_flexible">
               <div class="flex-auto">
 
                 <label for="durationPrivate" style="font-size: 20px;">Quand peut-on suivre le cours?</label>
               </div>
               <div class="flex-auto">
 
-                <mat-checkbox [checked]="false">Periode Unique</mat-checkbox>
+                <mat-checkbox (change)="onCheckboxChange('unique')" [checked]="periodeUnique" formControlName="periodeUnique">Periode Unique</mat-checkbox>
               </div>
               <div class="flex-auto">
 
-                <mat-checkbox [checked]="true">Plusieurs Periodes</mat-checkbox>
+                <mat-checkbox (change)="onCheckboxChange('multiple')" [checked]="periodeMultiple" formControlName="periodeMultiple">Plusieurs Periodes</mat-checkbox>
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee'">
-              <div class="flex-auto" style="width: 100%">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee' && this.courseInfoPriveFormGroup.value.periodeMultiple && this.defaults.is_flexible">
+              <div style="width: 100%">
 
                 <table #privateDatesTable id="private-date-table" mat-table [dataSource]="dataSourceDatePrivate" matSort style="border: 1px solid #e6e6e6">
 
@@ -291,45 +282,52 @@
                   <tr mat-row *matRowDef="let row; columns: displayedPrivateDateColumns;"></tr>
                 </table>
               </div>
-              <div class="flex-auto">
-                <button class="add-date" mat-fab (click)="openDialogPrivateDate()">
-                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                </button>
+              <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                <div style="width: 5%; float:left;">
+
+                  <button class="add-date" mat-fab (click)="openDialogPrivateDate()">
+                    <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                  </button>
+                </div>
+                <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                  <p> Ajouter date</p>
+                </div>
               </div>
+
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple && this.defaults.is_flexible">
 
               <div class="flex-auto">
 
                 <label for="all-days">Jours</label>
                 <div style="width: 100%">
 
-                  <mat-checkbox id="all-days" [checked]="false">Touts selectionner</mat-checkbox>
+                  <mat-checkbox id="all-days" [checked]="false" [disabled]="daysDates.length === 0">Touts selectionner</mat-checkbox>
                 </div>
               </div>
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="this.defaults.is_flexible">
 
-              <div class="flex-auto" style="padding-left: 5%">
+              <div class="flex-auto" style="padding-left: 5%" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple">
 
                 <div style="width: 100%">
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false">Lundi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="true">Mardi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('monday')">Lundi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('tuesday')">Mardi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false">Mercedi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="true">Jeudi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('wednesday')">Mercedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('thursday')">Jeudi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="true">Vendredi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="false">Samedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('friday')">Vendredi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('saturday')">Samedi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false">Diamanche</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('sunday')">Diamanche</mat-checkbox></li>
 
                   </ul>
                 </div>
@@ -337,15 +335,15 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 5%;">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 5%;" *ngIf="this.defaults.is_flexible">
               <div class="flex-auto">
 
                 <label for="minDuration">DURÉE MINIMALE</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="minDuration" formControlName="minDuration" placeholder="DURÉE MINIMALE" matInput [matAutocomplete]="autoTimesMinDuration">
                   <mat-autocomplete #autoTimesMinDuration="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
+                    <mat-option *ngFor="let duration of durations" [value]="duration.text">
+                      {{duration.text}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -356,20 +354,20 @@
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="maxDuration" formControlName="maxDuration" placeholder="DURÉE MAXIMALE" matInput [matAutocomplete]="autoTimesMmaxDuration">
                   <mat-autocomplete #autoTimesMmaxDuration="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
+                    <mat-option *ngFor="let duration of filteredMaxDurations" [value]="duration.text">
+                      {{duration.text}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="this.defaults.is_flexible">
               <div class="flex-auto">
 
                 <label for="fromHour">HEURE DEBUT</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
-                  <input type="text" id="fromHour" formControlName="fromHour" placeholder="HEURE DEBUT" matInput [matAutocomplete]="autoHourFrom">
+                  <input type="text" id="fromHour" formControlName="fromHour" placeholder="HEURE DEBUT" matInput [matAutocomplete]="autoHourFrom" [(ngModel)]="defaults.hour_min">
                   <mat-autocomplete #autoHourFrom="matAutocomplete">
                     <mat-option *ngFor="let hour of hours" [value]="hour">
                       {{hour}}
@@ -381,9 +379,9 @@
 
                 <label for="maxDuration">HEURE DE FIN</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
-                  <input type="text" id="toHour" formControlName="maxDuration" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo">
+                  <input type="text" id="toHour" formControlName="maxDuration" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo" [(ngModel)]="defaults.hour_max">
                   <mat-autocomplete #autoHourTo="matAutocomplete">
-                    <mat-option *ngFor="let hour of hours" [value]="hour">
+                    <mat-option *ngFor="let hour of filteredToHours" [value]="hour">
                       {{hour}}
                     </mat-option>
                   </mat-autocomplete>
@@ -392,7 +390,7 @@
             </div>
 
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 10% 0 0 0" *ngIf="courseType === 'privee'">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee' && this.defaults.is_flexible">
               <div class="flex-auto" style="width: 100%">
                 <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
 
@@ -420,10 +418,16 @@
                   <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
                 </table>
               </div>
-              <div class="flex-auto">
-                <button class="add-date" mat-fab (click)="openDialogPrivateReductions()">
-                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                </button>
+              <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                <div style="width: 5%; float:left;">
+
+                  <button class="add-date" mat-fab (click)="openDialogPrivateReductions()">
+                    <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                  </button>
+                </div>
+                <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                  <p> Ajouter reduction</p>
+                </div>
               </div>
             </div>
 
@@ -479,14 +483,14 @@
 
 
 <!-- Horizontal -->
-<div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading &&  (courseType === 'collectif')">
+<div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading && (courseType === 'collectif')">
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle course</h2>
       </div>
 
-      <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="false" [hidden]="courseType !== 'collectif'">
+      <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="false" [hidden]="courseType !== 'collectif'" (selectionChange)="loadData($event)">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
@@ -500,51 +504,34 @@
 
           <div [formGroup]="courseTypeFormGroup">
 
-            <div  style="width:50%; float:left" >
+            <div style="width:50%; float:left" >
               <div class="flex-auto">
                 <mat-label>Temporada - Sport</mat-label><br>
                 <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
-                  <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
+                  <mat-radio-button *ngFor="let sport of sportTypeData.reverse()" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
                 </mat-radio-group>
               </div>
 
-              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 0; width:100%; float:left">
-                <div style="float:left">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski.png">
+              <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 4%; width:100%; float:left">
+                <div style="float:left; width: 20%" *ngFor="let item of sportDataList.reverse()">
+                  <span style="width: 100%;margin: 0 auto">
+                    <img style="background: #E6E6E6;margin: 0 auto; border-radius: 20%;border: #808080 solid 1px; cursor:pointer"
+                    [src]="item.id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
                   </span>
-                  <p style="text-align: center;">ski</p>
-                </div>
-                <div style="float:left;margin:0 0 0 4%">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Snowboard.png">
-                  </span>
-                  <p style="text-align: center;">Snowboard</p>
-                </div>
-                <div style="float:left;margin:0 0 0 4%">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Ski_randonée.png">
-                  </span>
-                  <p style="text-align: center;">Ski randonée</p>
-                </div>
-                <div style="float:left;margin:0 0 0 4%">
-                  <span style="width: 100%;float: left;">
-                    <img style="background: #E6E6E6; float:left;border-radius: 20%;border: #808080 solid 1px" src="https://school.boukii.com/assets/apps/sports/Raquettés.png">
-                  </span>
-                  <p style="text-align: center;">Raquettés</p>
+                  <p style="text-align: center;">{{ item.name }}</p>
                 </div>
               </div>
             </div>
 
-            <div style="margin: 2% 0 0 0;width: 50%;float: left;">
+            <div style="margin: 2% 0 0 2%;width: 48%;float: left;">
 
               <div style="width: 100%;float:left">
-                <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
+                <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif', 1)" >
                   <mat-card-content>
                     <p>Cours Collectif</p>
                   </mat-card-content>
                 </mat-card>
-                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;"[disabled]="courseType === null ||courseType === 'privee'" (click)="setFlexibility($event)">
                   Dates flexibles
 
                 </mat-checkbox>
@@ -554,12 +541,12 @@
               </div>
 
               <div style="width: 100%;float:left">
-                <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee')">
+                <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee', 2)">
                   <mat-card-content>
                     <p>Cours privee</p>
                   </mat-card-content>
                 </mat-card>
-                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;">Dates flexibles
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;" [disabled]="courseType === null || courseType === 'collectif'" (click)="setFlexibility($event)">Dates flexibles
                 </mat-checkbox>
                 <div style="float: left; margin: 17px">
                   <mat-icon svgIcon="mat:info"></mat-icon>
@@ -568,9 +555,9 @@
             </div>
 
           </div>
-          <div class="actions flex items-center justify-end gap-2" style="width:100%">
-            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
+            <button (click)="stepper.reset()" [disabled]="courseTypeFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button [disabled]="courseTypeFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
               Siguiente
             </button>
           </div>
@@ -586,29 +573,29 @@
               <div class="flex-auto" style="width: 40%">
                 <label for="courseName">Nom de cours</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="course_name" matInput required type="text">
+                  <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="price" matInput required type="text">
+                  <input id="courseName" formControlName="price" matInput required type="text" [(ngModel)]="defaults.price">
                 </mat-form-field>
               </div>
 
-              <div class="flex-auto" style="width: 11%">
+              <div class="flex-auto" style="width: 30%">
                 <label for="station">Station</label>
                 <mat-form-field style="width: 100%">
-                  <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                  <mat-autocomplete #autoStation="matAutocomplete">
+                  <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" [(ngModel)]="defaults.station_id">
+                  <mat-autocomplete #autoStation="matAutocomplete" [displayWith]="displayFnStation">
                     <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                      {{option}}
+                      {{option.name}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
+
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
@@ -631,24 +618,12 @@
                   </div>
                 </div>
               </div>
-              <div class="flex-auto" style="width: 40%;">
-
-                <label for="age">Edad</label>
-                <mat-form-field style="width: 100%">
-                  <mat-select id="age" >
-                    <mat-option>
-                      De 5 a 18 años de edad
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-              </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">RESUME</label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="summary"></angular-editor>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
 
               </div>
             </div>
@@ -657,7 +632,7 @@
 
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">DESCRIPTION</label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="description"></angular-editor>
+                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
 
               </div>
             </div>
@@ -674,58 +649,50 @@
           <ng-template matStepLabel>Configuration</ng-template>
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
               <div class="flex-auto">
 
-                <label for="dateFrom">DATE RÉSERVABLE À PARTIR DE</label>
+                <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
-                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start_res">
+                  <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerDateFrom [startAt]="today"></mat-datepicker>
                 </mat-form-field>
               </div>
               <div class="flex-auto">
 
-                <label for="dateTo">DATE RÉSERVABLE JUSQU'À</label>
+                <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="dateTo" [max]="today">
-                  <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [min]="courseConfigForm.value.fromDate" [(ngModel)]="defaults.date_end_res"
+                  [disabled]="courseConfigForm.value.fromDate === null">
+                  <mat-datepicker-toggle matSuffix [for]="pickerDateTo"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerDateTo [startAt]="courseConfigForm.value.fromDate"></mat-datepicker>
                 </mat-form-field>
               </div>
+
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto">
-                <label for="duration">DURÉE</label>
 
-                <mat-form-field style="width: 100%">
-                  <input id="duration" type="text" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes">
-                  <mat-autocomplete #autoTimes="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">
-                      {{duration}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </div>
               <div class="flex-auto">
-                <label for="participants">PARTICIPANTS MÁX</label>
 
-                <mat-form-field style="width: 100%">
+                <label for="participants">PARTICIPANTS MÁX.</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
                   <mat-label>PARTICIPANTS MÁX.</mat-label>
-                  <input id="participants" formControlName="participants" matInput required type="number">
+                  <input id="participants" formControlName="participants" matInput required type="number" [(ngModel)]="defaults.max_participants">
                 </mat-form-field>
               </div>
+
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="courseType === 'collectif'">
-              <div class="flex-auto" style="width: 100%">
+            <div class="sm:flex-row gap-2 sm:gap-6" *ngIf="courseType === 'collectif'">
+              <div class="flex-auto" style="width: 100%" *ngIf="dataSource.data.length > 0">
                 <label for="table-dates">DATES</label>
 
-                <table #dateTable id="table-dates" *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort style="border: 1px solid #e6e6e6">
+                <table #dateTable id="table-dates" mat-table [dataSource]="dataSource" matSort style="border: 1px solid #e6e6e6">
 
                   <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
@@ -755,14 +722,20 @@
                 </table>
               </div>
 
-              <div class="flex-auto">
-                <button class="add-date" mat-fab (click)="openDialog()">
-                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                </button>
+              <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                <div style="width: 5%; float:left;">
+
+                  <button class="add-date" mat-fab (click)="openDialog()">
+                    <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                  </button>
+                </div>
+                <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                  <p> Ajouter date</p>
+                </div>
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 10% 0 0 0" *ngIf="courseType === 'collectif'">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 8% 0 0 0" *ngIf="courseType === 'collectif' && this.defaults.is_flexible">
               <div class="flex-auto" style="width: 100%">
                 <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
 
@@ -790,10 +763,17 @@
                   <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
                 </table>
               </div>
-              <div class="flex-auto">
-                <button class="add-date" mat-fab (click)="openDialogReductions()">
-                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                </button>
+
+              <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                <div style="width: 5%; float:left;">
+
+                  <button class="add-date" mat-fab (click)="openDialogReductions()">
+                    <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                  </button>
+                </div>
+                <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                  <p> Ajouter reduction</p>
+                </div>
               </div>
             </div>
 
@@ -807,7 +787,7 @@
           </div>
         </mat-step>
 
-        <mat-step>
+        <mat-step >
           <ng-template matStepLabel>Selección de niveles y grupos</ng-template>
 
           <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;" *ngIf="courseType === 'collectif'">
@@ -847,11 +827,7 @@
                   <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
                   <div style="float: left; width: 100%;margin-top: 5%;">
                     <ul>
-                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-                      <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+                      <li *ngFor="let item of defaults.course_dates; let i = index"> {{ daysDatesLevels[i] }} <i style="text-align: right;float:right">{{ item.hour_start}} - {{ item.hour_end }}</i></li>
                     </ul>
                   </div>
                   <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -864,159 +840,150 @@
 
                   <div style="width: 100%;float:left;">
                     <ng-container *ngFor="let colorKey of colorKeys">
-                      <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
+                      <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]; let i = index">
                         <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
-                          <mat-slide-toggle></mat-slide-toggle>
+                          <mat-slide-toggle (change)="activeGroup($event, i, level)"></mat-slide-toggle>
                         </div>
                         <div style="float: left;width: 16%;">
-                          <div style="width:100%;text-align: center;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                          <div style="width:100%;text-align: center;border-radius: 0;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
                             {{level.annotation}} - {{level.name}}
                           </div>
-                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;">
-                            <mat-select placeholder="Nivel minimo del profesor">
-                              <mat-option>
-                                Opcion 1
+                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="level.active">
+                            <mat-select placeholder="Nivel minimo del profesor" (selectionChange)="setLevelTeacher($event, level)">
+                              <mat-option *ngFor="let item of levels" [value]="level">
+                                {{ item.league }} - {{ item.name }}
                               </mat-option>
                             </mat-select>
                           </mat-form-field>
                         </div>
-                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Grupos 8g - 6p
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="level.active">
+                          <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Grupos 2g
                           </div>
                           <div style="width: 100%; margin-top: 10%;height: 60px">
-                            <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%">Añadir profesor</button>
+                            <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(level)">Añadir grupo</button>
                           </div>
                         </div>
 
-                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Días 5
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="level.active">
+                          <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Edad
+                          </div>
+                          <form [formGroup]="rangeForm" novalidate>
+                            <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                              <input type="number" placeholder="Edad Minima" formControlName="minAge" aria-label="Number" matInput (blur)="setMinAge($event, level)"/>
+                              <mat-error *ngIf="minAge.errors?.['min']">
+                                La edad mínima debe ser al menos 3.
+                              </mat-error>
+                              <mat-error *ngIf="minAge.errors?.['required']">
+                                Este campo es obligatorio.
+                              </mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                              <input type="number" placeholder="Edad Máxima" formControlName="maxAge" aria-label="Number" matInput (blur)="setMaxAge($event, level)"/>
+                              <mat-error *ngIf="maxAge.errors?.['ageRange']">
+                                La edad máxima debe ser mayor que la edad mínima y menor o igual a 80.
+                              </mat-error>
+                              <mat-error *ngIf="maxAge.errors?.['max']">
+                                La edad máxima no debe ser mayor a 80.
+                              </mat-error>
+                              <mat-error *ngIf="maxAge.errors?.['required']">
+                                Este campo es obligatorio.
+                              </mat-error>
+                            </mat-form-field>
+                          </form>
+                        </div>
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="level.active">
+                          <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Alumnos <strong>0/{{defaults?.course_dates[0]?.groups[0]?.subgroups.max_participants || '0' }}</strong>
                           </div>
                           <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                            <mat-select placeholder="Nivel minimo del profesor">
-                              <mat-option>
-                                Opcion 1
-                              </mat-option>
-                            </mat-select>
+                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, level, i)"/>
+
                           </mat-form-field>
                         </div>
 
-                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Duración <strong>2h 30m</strong>
-                          </div>
-                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                            <mat-select placeholder="Nivel minimo del profesor">
-                              <mat-option>
-                                Opcion 1
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
+                        <ng-container *ngIf="level.active">
 
-                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                          <div style="width:100%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Alumnos <strong>30/60</strong>
-                          </div>
-                          <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                            <mat-select placeholder="Nivel minimo del profesor">
-                              <mat-option>
-                                Opcion 1
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
+                          <div style="width:100%;float:left;overflow: scroll;" *ngFor="let item of readSubGroups(level.id); let i = index">
+                            <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
+                              <div>
+                                <ul style="display: flex">
+                                  <li style="float: left; width: 20%;font-size: 18px">
+                                    <span [style.color]="colorKey"><strong>{{level.annotation}}</strong> - {{level.name}} - {{ i + 1 }}</span>
+                                  </li>
+                                  <li *ngFor="let item of daysDatesLevels"
+                                      (click)="selectItem(item)"
+                                      [style.color]="selectedItem === item ? '#FF3085' : ''"
+                                      style="float: left; width: 13%; text-align: center; cursor: pointer;">
+                                    {{ item }}
+                                  </li>
 
-                        <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
-                          <div>
-                            <ul>
-                              <li style="float: left; width: 20%;font-size: 18px">
-                                <span [style.color]="colorKey"><strong>{{level.annotation}}</strong> - {{level.name}}</span>
-                              </li>
-                              <li style="float: left; width: 13%;text-align:center">13 Enero 2024</li>
-                              <li style="float: left; width: 13%;text-align:center">13 Enero 2024</li>
-                              <li style="float: left; width: 13%;text-align:center">13 Enero 2024</li>
-                              <li style="float: left; width: 13%;text-align:center">13 Enero 2024</li>
-                              <li style="float: left; width: 13%;text-align:center">13 Enero 2024</li>
-                              <li style="float: left; width: 13%;text-align:center">13 Enero 2024</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
-                          <div>
-                            <ul>
-                              <li style="float: left; width: 20%;">
-                                <mat-form-field class="flex-auto">
-                                  <mat-label>Moniteur</mat-label>
-                                  <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="monitorsForm" [matAutocomplete]="autoMoniteur" />
-                                  <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
-                                    <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor">
-                                      {{monitor.full_name}}
-                                    </mat-option>
-                                  </mat-autocomplete>
-                                  <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-                                </mat-form-field>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <mat-divider class="text-border" style="float: left;width: 100%;border: 4px solid #f0f0f0;"></mat-divider>
+                                </ul>
+                              </div>
+                            </div>
+                            <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
+                              <div>
+                                <ul>
+                                  <li style="float: left; width: 20%;">
+                                    <mat-form-field class="flex-auto">
+                                      <mat-label>Moniteur</mat-label>
+                                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="monitorsForm" [matAutocomplete]="autoMoniteur"/>
+                                      <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
+                                        <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="setSubGroupMonitor(monitor, level, i)">
+                                          {{monitor.full_name}}
+                                        </mat-option>
+                                      </mat-autocomplete>
+                                      <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+                                    </mat-form-field>
+                                  </li>
+                                  <li style="float: left; width: 13%;" *ngFor="let item of daysDatesLevels">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <mat-divider class="text-border" style="float: left;width: 100%;border: 4px solid #f0f0f0;"></mat-divider>
 
-                        <!-- n iteraciones por alumno-->
-                        <div style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%">
-                          <div>
-                            <ul>
-                              <li style="float: left; width: 20%;">
-                                <div style="float: left; width: 100%;">
-                                  <div style="float: left; width: 15%;margin: 5% 5% 0 0;">
-                                    <img [src]="userAvatar" width="50" height="50">
-                                  </div>
-                                  <div style="float: left; width: 80%;">
-                                    <p style="font-size: 16px;">Maternini Mirko (+3)</p>
-                                    <p style="font-size: 10px;">FR · Switzerland · 43 ans</p>
-                                  </div>
-                                </div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                              <li style="float: left; width: 13%;">
-                                <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
-                              </li>
-                            </ul>
+                            <!-- n iteraciones por alumno-->
+                            <div style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%" *ngIf="!isCreateMode">
+                              <div>
+                                <ul>
+                                  <li style="float: left; width: 20%;">
+                                    <div style="float: left; width: 100%;">
+                                      <div style="float: left; width: 15%;margin: 5% 5% 0 0;">
+                                        <img [src]="userAvatar" width="50" height="50">
+                                      </div>
+                                      <div style="float: left; width: 80%;">
+                                        <p style="font-size: 16px;">Maternini Mirko (+3)</p>
+                                        <p style="font-size: 10px;">FR · Switzerland · 43 ans</p>
+                                      </div>
+                                    </div>
+                                  </li>
+                                  <li style="float: left; width: 13%;">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                  <li style="float: left; width: 13%;">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                  <li style="float: left; width: 13%;">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                  <li style="float: left; width: 13%;">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                  <li style="float: left; width: 13%;">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                  <li style="float: left; width: 13%;">
+                                    <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"></div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
                           </div>
-                        </div>
+
+                        </ng-container>
                       </div>
                     </ng-container>
                   </div>

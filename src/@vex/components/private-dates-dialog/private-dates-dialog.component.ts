@@ -18,8 +18,8 @@ export class PrivateDatesDialogComponent implements OnInit {
   selectedDateFrom: Date;
   selectedDateTo: Date;
 
-  constructor() { }
-
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  }
   ngOnInit(): void {
     this.generateDurations();
 

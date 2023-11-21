@@ -6,19 +6,24 @@ import { createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { UserService } from './userService';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { getFirestore } from '@angular/fire/firestore';
+import { ApiService } from './api.service';
+import { HttpClient } from '@angular/common/http';
+import { ApiCrudService } from './crud.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService extends ApiService {
   user: User | null = null;
 
-  constructor(private auth: Auth,private router: Router, private userService: UserService) {
+  constructor(private auth: Auth,private router: Router, http: HttpClient, private crudService: ApiCrudService) {
+    super(http)
     const user = JSON.parse(localStorage.getItem('boukiiUser'));
     if (user) {
       this.user = user;
     }
-    onAuthStateChanged(auth, (user) => {
+
+    /*onAuthStateChanged(auth, (user) => {
       if (user) {
         this.user = user;
         localStorage.setItem('boukiiUser', JSON.stringify(user));
@@ -26,17 +31,19 @@ export class AuthService {
         this.user = null;
         localStorage.removeItem('boukiiUser');
       }
-    });
+    });*/
   }
 
   async login(email: string, password: string) {
     try {
-      const auth = getAuth();
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      if (userCredential.user) {
-        localStorage.setItem('boukiiUser', JSON.stringify(userCredential.user));
-        this.router.navigate(['/home']);
-      }
+
+      this.crudService.create('/admin/login', {email: email, password: password})
+        .subscribe((data: any) => {
+
+          localStorage.setItem('boukiiUser', JSON.stringify(data.data.user));
+          localStorage.setItem('boukiiUserToken', JSON.stringify(data.data.token));
+          this.router.navigate(['/home']);
+        })
     } catch (error) {
       console.error('Error during login:', error);
     }

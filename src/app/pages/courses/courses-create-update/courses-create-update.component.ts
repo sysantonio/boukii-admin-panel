@@ -13,6 +13,7 @@ import { LEVELS } from 'src/app/static-data/level-data';
 import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/reduction-dialog.component';
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
+import { ApiCrudService } from 'src/service/crud.service';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -43,10 +44,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
     '15:00', '16:00', '17:00', '18:00', '19:00',
     '20:00', '21:00', '22:00', '23:00'
   ];
+  filteredToHours = [];
 
   summary = ``;
   description = ``;
 
+  daysDates = [];
+  daysDatesLevels = [];
   days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   startDayControl = new FormControl();
   endDayControl = new FormControl();
@@ -75,7 +79,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   monitorsForm = new FormControl();
 
   options: any[] = [{id: 1, name:'Cours collectif'}, {id:2, name: 'Cours privés'}];
-  optionsStation: string[] = ['Les Pacots', 'Andorra'];
+  stations = [];
 
   filteredOptions: Observable<any[]>;
   filteredSports: Observable<any[]>;
@@ -88,6 +92,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   courseInfoPriveSeparatedFormGroup: UntypedFormGroup;
   courseInfoCollecDateSplitFormGroup: UntypedFormGroup;
   courseLevelFormGroup: UntypedFormGroup;
+  rangeForm: UntypedFormGroup;
 
   // Nuevos
   courseConfigForm: UntypedFormGroup;
@@ -97,13 +102,73 @@ export class CoursesCreateUpdateComponent implements OnInit {
   today = new Date();
   from: any = null;
   to: any = null;
+  selectedDate: string;
+  selectedItem: any;
 
-  defaults: any = null;
+  defaults: any = {
+    course_type: null,
+    is_flexible: null,
+    name: null,
+    short_description: null,
+    description: null,
+    price: null,
+    currency: 'CHF',
+    date_start: null,
+    date_end: null,
+    date_start_res: null,
+    date_end_res: null,
+    confirm_attendance: null,
+    active: null,
+    online: null,
+    image: this.imagePreviewUrl,
+    translations: null,
+    price_range: this.dataSourceFlexiblePrices,
+    discounts: null,
+    settings: null,
+    sport_id: null,
+    school_id: null,
+    station_id: null,
+    max_participants: null,
+    duration: null,
+    hour_min: null,
+    hour_max: null,
+    course_dates: []
+  };
+
+  defaults_course_date = {
+    date: null,
+    hour_start: null,
+    hour_end: null,
+  }
+
+  defaults_groups = {
+    course_id: null,
+    course_date_id: null,
+    degree_id: null,
+    age_min: null,
+    age_max: null,
+    recommended_age: null,
+    teachers_min: null,
+    teachers_max: null,
+    teacher_min_degree: null,
+    observations: null,
+    auto: null
+  }
+
+  defaults_subgroups = {
+    course_id: null,
+    course_date_id: null,
+    degree_id: null,
+    course_group_id: null,
+    monitor_id: null,
+    max_participants:null,
+  }
 
   sportTypeSelected: number = -1;
-  mockSportData = MOCK_SPORT_DATA;
-  mockSportType = MOCK_SPORT_TYPES;
-  mockLevels = LEVELS;
+  sportData = [];
+  sportDataList = [];
+  sportTypeData = [];
+  levels = [];
   mockMonitors = MOCK_MONITORS;
 
   groupedByColor = {};
@@ -114,20 +179,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
 
-  durations: string[] = [];
+  durations = [];
+  filteredMaxDurations = [];
   courseType: any = null;
   courseComplete: boolean = false;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog) {
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService) {
     this.generateDurations();
-    this.mockLevels.forEach(level => {
-      if (!this.groupedByColor[level.color]) {
-        this.groupedByColor[level.color] = [];
-      }
-      this.groupedByColor[level.color].push(level);
-    });
-
-    this.colorKeys = Object.keys(this.groupedByColor);
 
     this.startDayControl.valueChanges.subscribe(startDay => {
       const index = this.days.indexOf(startDay);
@@ -140,6 +198,25 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
     });
 
+    this.rangeForm = this.fb.group({
+      minAge: ['', [Validators.required, Validators.min(3)]],
+      maxAge: ['', [Validators.required, Validators.max(80)]]
+    }, { validator: this.ageRangeValidator });
+
+  }
+
+  ageRangeValidator(group: UntypedFormGroup): { [key: string]: any } | null {
+    const minAge = group.get('minAge').value;
+    const maxAge = group.get('maxAge').value;
+    return minAge && maxAge && minAge < maxAge ? null : { 'ageRange': true };
+  }
+
+  get minAge() {
+    return this.rangeForm.get('minAge');
+  }
+
+  get maxAge() {
+    return this.rangeForm.get('maxAge');
   }
 
   ngAfterViewInit() {
@@ -148,24 +225,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
 
-
-    this.dataSource.data.push({date: moment(this.today).format('DD-MM-YYYY'), duration: '2h 30m', hour: '08:30'});
-    this.dateTable?.renderRows();
-
     this.courseTypeFormGroup = this.fb.group({
 
       sportType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
       sport: [null, Validators.required],
       courseType: [null, Validators.required],
-      separatedDates: [false],
-      fromDate: [null],
-      toDate: [null],
-      reservableFromDate: [null],
-      reservableToDate: [false],
-      debutFromDate: [null],
-      debutToDate: [null],
-      startDay: [null],
-      endDay: [null]
+      separatedDates: [false]
     })
 
     this.courseInfoFormGroup = this.fb.group({
@@ -175,8 +240,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
       station: [null, Validators.required],
       summary: [null, Validators.required],
       description: [null, Validators.required],
-      duration: [null, Validators.required],
-      participants: [null, Validators.required],
+      duration: [null],
+      participants: [null],
+      ageFrom: [null, Validators.required],
+      ageTo: [null, Validators.required],
       image: [null],
     })
 
@@ -197,6 +264,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
       image: [null],
+      periodeUnique: new FormControl(false),
+      periodeMultiple: new FormControl(false)
     })
 
     this.courseLevelFormGroup = this.fb.group({});
@@ -225,10 +294,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.courseConfigForm = this.fb.group({
 
-      fromDate: [''],
-      dateTo: [''],
-      duration: [''],
-      participants: [''],
+      fromDate: [null],
+      toDate: [null],
+      from: [null],
+      to: [null],
+      duration: [null],
+      participants: [null],
     });
 
     this.filteredOptions = this.myControl.valueChanges
@@ -237,16 +308,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
         map(value => this._filter(value))
       );
 
-    this.filteredStations = this.myControlStations.valueChanges
+      this.filteredStations = this.myControlStations.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filterStations(value))
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filterStations(name) : this.stations.slice())
       );
 
     this.filteredSports = this.myControlSport.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.name),
-      map(name => name ? this._filterSport(name) : this.mockSportData.slice())
+      map(name => name ? this._filterSport(name) : this.sportData.slice())
     );
 
     this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
@@ -267,6 +339,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.courseInfoFormGroup.get('station').setValue(value);
     });
 
+    this.courseInfoPriveFormGroup.get('minDuration').valueChanges.subscribe(selectedDuration => {
+      this.updateMaxDurationOptions(selectedDuration);
+    });
+
+    this.courseInfoPriveFormGroup.get('fromHour').valueChanges.subscribe(selectedStartHour => {
+      this.updateToHourOptions(selectedStartHour);
+    });
+
     if (this.defaults) {
       this.mode = 'update';
     } else {
@@ -274,7 +354,30 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     }
 
-    this.loading = false;
+
+    this.getSportsType();
+    this.getSports();
+    this.getStations();
+    this.getDegrees();
+  }
+
+  get periodeUnique() {
+    return this.courseInfoPriveFormGroup.get('periodeUnique').value;
+  }
+
+  get periodeMultiple() {
+    return this.courseInfoPriveFormGroup.get('periodeMultiple').value;
+  }
+
+  onCheckboxChange(type: string) {
+    if (type === 'unique') {
+      this.courseInfoPriveFormGroup.patchValue({ periodeMultiple: false });
+      this.dataSourceDatePrivate.data = [];
+      this.privateDatesTable?.renderRows();
+
+    } else {
+      this.courseInfoPriveFormGroup.patchValue({ periodeUnique: false });
+    }
   }
 
   save() {
@@ -292,7 +395,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   filterSportsByType() {
     this.sportTypeSelected = this.courseTypeFormGroup.get('sportType').value;
     let selectedSportType = this.courseTypeFormGroup.get('sportType').value;
-    this.filteredSports = of(this.mockSportData.filter(sport => sport.sport_type === selectedSportType));
+    this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === selectedSportType));
+    this.sportDataList = this.sportData.filter(sport => sport.sport_type === selectedSportType);
   }
 
   onFileChanged(event: Event) {
@@ -327,16 +431,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   private _filterStations(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.optionsStation.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
-  private _filterSportType(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.mockSportType.filter(option => option?.name.toLowerCase().includes(filterValue));
+    return this.stations.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
   displayFn(sportType: any): string {
     return sportType && sportType.name ? sportType.name : '';
+  }
+
+  displayFnStation(station: any): string {
+    return station && station.name ? station.name : '';
   }
 
   displayFnSport(sport: any): string {
@@ -357,7 +460,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   private _filterSport(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockSportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
+    return this.sportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
   }
 
   private _filterMonitor(name: string): any[] {
@@ -368,13 +471,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
   generateDurations() {
     let minutes = 15;
     const maxMinutes = 7 * 60; // 7 horas en minutos
+    this.durations = [];
 
     while (minutes <= maxMinutes) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
 
       const durationString = `${hours ? hours + 'h ' : ''}${remainingMinutes}min`;
-      this.durations.push(durationString);
+      this.durations.push({ text: durationString, value: minutes });
 
       minutes += 15;
     }
@@ -424,13 +528,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
   openDialogPrivateDate(): void {
     const dialogRef = this.dialog.open(PrivateDatesDialogComponent, {
       width: '300px',
-      data: {iterations: this.dataSource.data.length}
+      data: {
+        iterations: this.dataSource.data.length,
+        dateFrom: this.courseInfoPriveFormGroup.value.fromDate,
+        toDate: this.courseInfoPriveFormGroup.value.toDate,
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY')});
         this.privateDatesTable?.renderRows();
+        this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
       }
     });
   }
@@ -478,13 +587,66 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   removePrivateDate(index: any) {
     this.dataSourceDatePrivate.data.splice(index, 1);
-    this.table.renderRows();
+    this.privateDatesTable.renderRows();
 
     // Aquí también puedes deseleccionar el chip correspondiente
   }
 
-  setCourseType(type: string) {
+  selectSport(sport: any) {
+    this.defaults.sport_id = sport.id;
+    this.courseTypeFormGroup.get("sport").patchValue(sport.id);
+
+  }
+
+  setCourseType(type: string, id: number) {
+
+    this.defaults = {
+      course_type: null,
+      is_flexible: null,
+      name: null,
+      short_description: null,
+      description: null,
+      price: null,
+      currency: 'CHF',
+      date_start: null,
+      date_end: null,
+      date_start_res: null,
+      date_end_res: null,
+      confirm_attendance: null,
+      active: null,
+      online: null,
+      image: this.imagePreviewUrl,
+      translations: null,
+      price_range: this.dataSourceFlexiblePrices,
+      discounts: null,
+      settings: null,
+      sport_id: this.defaults.sport_id,
+      school_id: null,
+      station_id: null,
+      max_participants: null,
+      duration: null,
+      hour_min: null,
+      hour_max: null,
+      course_dates: [],
+      groups: this.generateGroups()
+    };
+
     this.courseType = type;
+    this.courseTypeFormGroup.get("courseType").patchValue(id);
+    this.defaults.course_type = id;
+
+    this.courseInfoFormGroup.reset();
+    this.courseInfoPriveFormGroup.reset();
+    this.courseInfoPriveSeparatedFormGroup.reset();
+    this.courseInfoCollecDateSplitFormGroup.reset();
+    this.courseLevelFormGroup.reset();
+  }
+
+  setFlexibility(event: any) {
+    this.defaults.is_flexible = event.target.checked;
+    this.daysDates = [];
+    this.daysDatesLevels = [];
+
   }
 
   updateTable() {
@@ -505,4 +667,280 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const mins = minutos % 60;
     return `${horas > 0 ? horas + 'h ' : ''}${mins > 0 ? mins + 'm' : ''}`.trim();
   }
+
+  getSportsType() {
+    this.crudService.list('/sport-types', 1, 1000)
+      .subscribe((data) => {
+        this.sportTypeData = data.data;
+        this.loading = false;
+      });
+  }
+
+  getSports() {
+    this.crudService.list('/sports', 1, 1000)
+      .subscribe((data) => {
+        this.sportData = data.data;
+        this.loading = false;
+      });
+  }
+
+  getStations() {
+    this.crudService.list('/stations', 1, 1000)
+      .subscribe((data) => {
+        this.stations = data.data;
+        this.loading = false;
+      });
+  }
+
+  getMonitors() {
+    this.crudService.list('/monitors', 1, 1000)
+      .subscribe((data) => {
+        this.stations = data.data;
+        this.loading = false;
+      });
+  }
+
+  getDegrees() {
+    this.crudService.list('/degrees', 1, 1000)
+      .subscribe((data) => {
+        this.levels = data.data;
+        this.levels.reverse().forEach(level => {
+          if (!this.groupedByColor[level.color]) {
+            this.groupedByColor[level.color] = [];
+          }
+          level.active = false;
+          this.groupedByColor[level.color].push(level);
+        });
+
+        this.colorKeys = Object.keys(this.groupedByColor);
+        this.generateGroups();
+      })
+  }
+
+  getDatesBetween(startDate, endDate, process) {
+
+    if (process) {
+      this.daysDatesLevels = [];
+      let daysOfWeekAdded = new Set();
+      let currentDate = moment(startDate);
+
+      while (currentDate <= moment(endDate)) {
+        let dayOfWeek = currentDate.format('dddd');
+
+        if (!daysOfWeekAdded.has(dayOfWeek)) {
+          this.daysDates.push(dayOfWeek.toLowerCase());
+
+          /*{
+            date: currentDate.format('YYYY-MM-DD'),
+            dayOfWeek: dayOfWeek.toLowerCase()
+          }*/
+          daysOfWeekAdded.add(dayOfWeek);
+        }
+
+        this.daysDatesLevels.push(currentDate.locale('en').format('LLL').replace(' 0:00', ''));
+        this.defaults.course_dates.push({
+          date: currentDate.format('YYYY-MM-DD'),
+          hour_start: null,
+          hour_end: null,
+        })
+        currentDate = currentDate.add(1, 'days');
+      }
+    }
+
+  }
+
+  getSeparatedDates(dates: any) {
+
+    this.daysDates = [];
+    this.daysDatesLevels = [];
+    this.defaults.course_dates = [];
+
+    dates.forEach(element => {
+      const hour = element.hour;
+      const duration = element.duration;
+      const [hours, minutes] = duration.split(' ').reduce((acc, part) => {
+        if (part.includes('h')) {
+          acc[0] = parseInt(part, 10);
+        } else if (part.includes('min')) {
+          acc[1] = parseInt(part, 10);
+        }
+        return acc;
+      }, [0, 0]);
+
+      this.daysDatesLevels.push(moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''));
+      this.defaults.course_dates.push({
+        date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+        hour_start: element.hour,
+        hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
+        groups: this.generateGroups()
+      })
+    });
+
+  }
+
+  updateMaxDurationOptions(selectedMinDuration) {
+    const minDurationValue = this.durations.find(d => d.text === selectedMinDuration)?.value;
+    this.filteredMaxDurations = this.durations.filter(d => d.value >= minDurationValue);
+  }
+
+  updateToHourOptions(selectedStartHour) {
+    const startIndex = this.hours.indexOf(selectedStartHour);
+    this.filteredToHours = this.hours.slice(startIndex + 1);
+  }
+
+  loadData(event: any) {
+    if (event.selectedIndex === 3 && this.courseType === 'collectif') {
+
+      this.getSeparatedDates(this.dataSource.data);
+    }
+  }
+
+  generateGroups() {
+    const ret = [];
+    this.levels.forEach(element => {
+      ret.push({
+        course_id: null,
+        course_date_id: null,
+        degree_id: element.id,
+        age_min: null,
+        age_max: null,
+        recommended_age: null,
+        teachers_min: null,
+        teachers_max: null,
+        teacher_min_degree: null,
+        observations: null,
+        auto: null,
+        subgroups: []
+      })
+    });
+
+    return ret;
+  }
+
+  activeGroup(event: any, index: number, level: any) {
+
+    this.selectedItem = 0;
+    this.selectedDate = this.defaults.course_dates[0].date;
+    level.active = event.source.checked;
+    if(event.source.checked) {
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (group.degree_id === level.id) {
+            group.active = event.source.checked;
+            group.subgroups.push({
+              degree_id: level.id,
+              monitor_id: null,
+              max_participants:null
+            })
+          }
+
+        });
+      });
+    } else {
+      // eliminar el curso o desactivarlo
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          group.active = event.source.checked;
+          group.subgroups = [];
+        });
+      });
+    }
+
+  }
+
+  addSubGroup(level: any) {
+    this.defaults.course_dates.forEach(element => {
+      element.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          group.subgroups.push({
+            degree_id: level.id,
+            monitor_id: null,
+            max_participants:null
+          })
+        }
+
+      });
+    });
+  }
+
+  readSubGroups(levelId: number) {
+
+    let ret = [];
+    this.defaults.course_dates[0].groups.forEach((group) => {
+      if (group.degree_id === levelId) {
+        ret = group.subgroups;
+      }
+    });
+
+    return ret;
+  }
+
+  setLevelTeacher(event: any, level: any) {
+    this.defaults.course_dates.forEach(element => {
+      element.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          group.teacher_min_degree = event.value.id;
+        }
+
+      });
+    });
+  }
+
+  setMinAge(event: any, level: any) {
+    if (+event.target.value > 3) {
+
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (level.id === group.degree_id) {
+            group.min_age = event.value;
+          }
+
+        });
+      });
+    }
+  }
+
+  setMaxAge(event: any, level: any) {
+    if (+event.target.value < 81) {
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (level.id === group.degree_id) {
+            group.max_age = event.value;
+          }
+
+        });
+      });
+    }
+  }
+
+  setSubGroupMonitor(monitor: any, level: any, index: number) {
+
+    this.defaults.course_dates.forEach(element => {
+      element.groups.forEach(group => {
+        if (level.id === group.degree_id && element.date === this.selectedDate) {
+          group.subgroups[index].monitor_id = monitor.id;
+        }
+
+      });
+    });
+  }
+
+  setSubGroupPax(event: any, level: any, index: number) {
+
+    this.defaults.course_dates.forEach(element => {
+      element.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          group.subgroups.forEach(subGroup => {
+            subGroup.max_participants = +event.targe.value;
+          });
+        }
+      });
+    });
+  }
+
+  selectItem(item: any) {
+    this.selectedItem = item;
+    this.selectedDate = item.date; // Asumiendo que 'item' tiene una propiedad 'date'
+  }
+
 }

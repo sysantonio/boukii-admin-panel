@@ -13,7 +13,7 @@ export class ReductionDialogComponent implements OnInit {
   percentage: number;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.setIterations(data.iterations);
-}
+  }
 
 
   ngOnInit(): void {
