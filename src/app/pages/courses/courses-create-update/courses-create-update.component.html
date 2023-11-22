@@ -112,7 +112,7 @@
                 <mat-form-field style="width: 100%">
                   <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" [(ngModel)]="defaults.station_id">
                   <mat-autocomplete #autoStation="matAutocomplete" [displayWith]="displayFnStation">
-                    <mat-option *ngFor="let option of filteredStations | async" [value]="option">
+                    <mat-option *ngFor="let option of filteredStations | async" [value]="option" (onSelectionChange)="setStation(option)">
                       {{option.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -195,20 +195,20 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
-                <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
+                <label for="dateFromPrivate">DEPUIS</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start_res">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
                 </mat-form-field>
               </div>
               <div class="flex-auto">
 
-                <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
+                <label for="dateToPrivate">JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [min]="courseInfoPriveFormGroup.value.fromDate" [(ngModel)]="defaults.date_end_res"
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [min]="courseInfoPriveFormGroup.value.fromDate" [(ngModel)]="defaults.date_end"
                   [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerTo [startAt]="courseInfoPriveFormGroup.value.fromDate"></mat-datepicker>
@@ -303,7 +303,7 @@
                 <label for="all-days">Jours</label>
                 <div style="width: 100%">
 
-                  <mat-checkbox id="all-days" [checked]="false" [disabled]="daysDates.length === 0">Touts selectionner</mat-checkbox>
+                  <mat-checkbox id="all-days" [checked]="false" [disabled]="daysDates.length === 0" (change)="addWeekDay($event, 'all')">Touts selectionner</mat-checkbox>
                 </div>
               </div>
 
@@ -315,19 +315,19 @@
 
                 <div style="width: 100%">
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('monday')">Lundi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('tuesday')">Mardi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.monday" [disabled]="!daysDates.includes('monday')" (change)="addWeekDay($event, 'monday')">Lundi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.tuesday" [disabled]="!daysDates.includes('tuesday')" (change)="addWeekDay($event, 'tuesday')">Mardi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('wednesday')">Mercedi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('thursday')">Jeudi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.wednesday" [disabled]="!daysDates.includes('wednesday')" (change)="addWeekDay($event, 'wednesday')">Mercedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.thursday" [disabled]="!daysDates.includes('thursday')" (change)="addWeekDay($event, 'thursday')">Jeudi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('friday')">Vendredi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('saturday')">Samedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.friday" [disabled]="!daysDates.includes('friday')" (change)="addWeekDay($event, 'friday')">Vendredi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.saturday" [disabled]="!daysDates.includes('saturday')" (change)="addWeekDay($event, 'saturday')">Samedi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="false" [disabled]="!daysDates.includes('sunday')">Diamanche</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.sunday" [disabled]="!daysDates.includes('sunday')" (change)="addWeekDay($event, 'sunday')">Diamanche</mat-checkbox></li>
 
                   </ul>
                 </div>
@@ -473,6 +473,13 @@
               </table>
             </div>
           </div>
+
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button color="primary" mat-raised-button (click)="save()">
+              Guardar
+            </button>
+          </div>
         </mat-step>
       </mat-horizontal-stepper>
 
@@ -589,7 +596,7 @@
                 <mat-form-field style="width: 100%">
                   <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" [(ngModel)]="defaults.station_id">
                   <mat-autocomplete #autoStation="matAutocomplete" [displayWith]="displayFnStation">
-                    <mat-option *ngFor="let option of filteredStations | async" [value]="option">
+                    <mat-option *ngFor="let option of filteredStations | async" [value]="option"  (onSelectionChange)="setStation(option)">
                       {{option.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -782,7 +789,7 @@
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
-              Guardar
+              Siguiente
             </button>
           </div>
         </mat-step>
@@ -991,7 +998,12 @@
               </mat-card>
             </div>
           </div>
-
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button color="primary" mat-raised-button (click)="save()">
+              Guardar
+            </button>
+          </div>
         </mat-step>
 
       </mat-horizontal-stepper>

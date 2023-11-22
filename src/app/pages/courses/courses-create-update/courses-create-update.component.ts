@@ -29,7 +29,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   @ViewChild('dateTable') dateTable: MatTable<any>;
   @ViewChild('reductionTable') reductionTable: MatTable<any>;
   @ViewChild('privateDatesTable') privateDatesTable: MatTable<any>;
-  @ViewChild('table-private-reduction') privateReductionTable: MatTable<any>;
+  @ViewChild('privateReductionTable') privateReductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
 
   userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
@@ -124,7 +124,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
     translations: null,
     price_range: this.dataSourceFlexiblePrices,
     discounts: null,
-    settings: null,
+    settings: {
+      weekDays: {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false
+      }
+    },
     sport_id: null,
     school_id: null,
     station_id: null,
@@ -132,6 +142,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
     duration: null,
     hour_min: null,
     hour_max: null,
+    min_age: null,
+    max_age: null,
     course_dates: []
   };
 
@@ -348,7 +360,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
 
     if (this.defaults) {
-      this.mode = 'update';
+      this.mode = 'create';
     } else {
       this.defaults = {};
 
@@ -389,6 +401,108 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   create() {
+    if (this.courseType === 'collectif' && this.defaults.isFlexible) {
+      const data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start_res: this.defaults.date_start_res,
+        date_end_res: this.defaults.date_end_res,
+        confirm_attendance: null,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        discounts: this.dataSourceReductions.data,
+        sport_id: this.defaults.sport_id,
+        school_id: null, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+
+    } else if (this.courseType === 'collectif' && !this.defaults.isFlexible) {
+      const data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start_res: this.defaults.date_start_res,
+        date_end_res: this.defaults.date_end_res,
+        confirm_attendance: null,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        sport_id: this.defaults.sport_id,
+        school_id: null, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+    } else if (this.courseType === 'privee' && this.defaults.isFlexible) {
+      const data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',
+        date_start: this.defaults.date_start,
+        date_end: this.defaults.date_end,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        discounts: this.dataSourceReductionsPrivate.data,
+        price_range: this.dataSourceFlexiblePrices,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        min_age: this.defaults.min_age,
+        max_age: this.defaults.max_age,
+        course_dates: this.defaults.course_dates
+
+      };
+      console.log(data);
+    } else if (this.courseType === 'privee' && !this.defaults.isFlexible) {
+      const data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',
+        date_start: this.defaults.date_start,
+        date_end: this.defaults.date_end,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        price_range: this.dataSourceFlexiblePrices,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        min_age: this.defaults.min_age,
+        max_age: this.defaults.max_age
+      };
+      console.log(data);
+    }
 
   }
 
@@ -505,7 +619,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceReductions.data.push({date: moment(result.date).format('DD-MM-YYYY'), percentage: result.percentage});
+        this.dataSourceReductions.data.push({date: result.dateIndex, percentage: result.percentage});
         this.reductionTable?.renderRows();
       }
     });
@@ -519,7 +633,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceReductionsPrivate.data.push({date: moment(result.date).format('DD-MM-YYYY'), percentage: result.percentage});
+        this.dataSourceReductionsPrivate.data.push({date: result.dateIndex, percentage: result.percentage});
         this.privateReductionTable?.renderRows();
       }
     });
@@ -619,7 +733,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
       translations: null,
       price_range: this.dataSourceFlexiblePrices,
       discounts: null,
-      settings: null,
+      settings: {
+        weekDays: {
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false,
+          friday: false,
+          saturday: false,
+          sunday: false
+        }
+      },
       sport_id: this.defaults.sport_id,
       school_id: null,
       station_id: null,
@@ -931,7 +1055,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
           group.subgroups.forEach(subGroup => {
-            subGroup.max_participants = +event.targe.value;
+            subGroup.max_participants = +event.target.value;
           });
         }
       });
@@ -943,4 +1067,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.selectedDate = item.date; // Asumiendo que 'item' tiene una propiedad 'date'
   }
 
+  setStation(station: any) {
+    this.defaults.station_id = station.id;
+  }
+
+  addWeekDay(event: any, day: string) {
+    if (day === 'all') {
+      this.defaults.settings.weekDays.monday = event.source.checked;
+      this.defaults.settings.weekDays.tuesday = event.source.checked;
+      this.defaults.settings.weekDays.wednesday = event.source.checked;
+      this.defaults.settings.weekDays.thursday = event.source.checked;
+      this.defaults.settings.weekDays.friday = event.source.checked;
+      this.defaults.settings.weekDays.saturday = event.source.checked;
+      this.defaults.settings.weekDays.sunday = event.source.checked;
+    } else {
+      this.defaults.settings.weekDays[day] = event.source.checked;
+    }
+  }
 }

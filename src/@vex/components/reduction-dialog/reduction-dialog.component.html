@@ -4,7 +4,7 @@
   <mat-form-field style="width: 100%;">
     <mat-label>Fecha</mat-label>
     <mat-select [(ngModel)]="selectedDateIndex">
-        <mat-option *ngFor="let i of generatedNumbers" [value]="i">
+        <mat-option *ngFor="let i of generatedNumbers; let idx = index" [value]="idx">
             Date {{ i + 1 }}
         </mat-option>
     </mat-select>
@@ -21,5 +21,5 @@
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancelar</button>
   <!-- Enviando la fecha y el porcentaje al cerrar el diálogo -->
-  <button mat-button [mat-dialog-close]="{dateIndex: selectedDateIndex, percentage: percentage}" [disabled]="selectedDateIndex === null || (percentage > 100 || percentage < 0)">Aceptar</button>
+  <button mat-button [mat-dialog-close]="{dateIndex: selectedDateIndex+1, percentage: percentage}" [disabled]="selectedDateIndex === null || (percentage > 100 || percentage < 0)">Aceptar</button>
 </mat-dialog-actions>
