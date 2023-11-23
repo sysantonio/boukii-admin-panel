@@ -10,6 +10,8 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
+import { ApiCrudService } from 'src/service/crud.service';
+import { SwiperOptions } from 'swiper';
 
 @Component({
   selector: 'vex-bookings-create-update',
@@ -76,22 +78,60 @@ export class BookingsCreateUpdateComponent implements OnInit {
   courseType: any = null;;
 
   form: UntypedFormGroup;
-  defaults: any = null;
+  defaults: any = {
+    price_total: null,
+    has_cancellation_insurance: null,
+    price_cancellation_insurance: null,
+    currency: null,
+    paid_total: null,
+    paid: null,
+    payrexx_reference: null,
+    payrexx_transaction: null,
+    attendance: null,
+    payrexx_refund: null,
+    notes: null,
+    school_id: null,
+    client_main_id: null,
+    payment_method_id: null,
+    paxes: null,
+    color: null,
+  };
+
+  defaultsBookingUser: any = {
+    school_id: null,
+    booking_id: null,
+    client_id: null,
+    course_subgroup_id: null,
+    course_id: null,
+    course_date_id: null,
+    degree_id: null,
+    course_group_id: null,
+    monitor_id: null,
+    hour_start: null,
+    hour_end: null,
+    price: null,
+    currency: null,
+    date: null,
+    attended: null,
+    color: null,
+  };
 
   options: string[] = ['One', 'Two', 'Three'];
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
   sportTypeSelected: number = -1;
 
-  mockClientsData = CLIENTS;
+  clients = [];
   mockSubClientsData = SUB_CLIENTS;
-  mockSportType = MOCK_SPORT_TYPES;
-  mockSportData = MOCK_SPORT_DATA;
-  mockLevelData = LEVELS;
+  sportData = [];
+  sportDataList = [];
+  sportTypeData = [];
+  levels = [];
+  utilizers = [];
   mockCourses = MOCK_COURSES;
   mockMonitors = MOCK_MONITORS;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog) {
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.selectedDate = this.minDate; // Puede ser cualquier fecha que quieras tener seleccionada por defecto
@@ -102,6 +142,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.form = this.fb.group({
       sportType: [null], // Posiblemente establezcas un valor predeterminado aquí
       sportForm: [null],
+      sport: [null],
       observations: [null],
       observations_school: [null],
       fromDate: [null]
@@ -110,7 +151,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.filteredOptions = this.clientsForm.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.full_name),
-      map(full_name => full_name ? this._filter(full_name) : this.mockClientsData.slice())
+      map(full_name => full_name ? this._filter(full_name) : this.clients.slice())
     );
 
     this.clientsForm.valueChanges.subscribe((selectedClient: any) => {
@@ -125,13 +166,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.filteredLevel = this.levelForm.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.annotation),
-      map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+      map(annotation => annotation ? this._filterLevel(annotation) : this.levels.slice())
     );
 
     this.filteredSports = this.sportForm.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.name),
-      map(name => name ? this._filterSport(name) : this.mockSportData.slice())
+      map(name => name ? this._filterSport(name) : this.sportData.slice())
     );
 
     this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
@@ -153,17 +194,22 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.mode = 'create';
     }
 
-    this.loading = false;
+    this.getSportsType();
+    this.getSports();
+    this.getClients();
+    this.getDegrees();
   }
 
   filterSportsByType() {
     this.sportTypeSelected = this.form.get('sportType').value;
     let selectedSportType = this.form.get('sportType').value;
-    this.filteredSports = of(this.mockSportData.filter(sport => sport.sport_type === selectedSportType));
+    this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === selectedSportType));
+    this.sportDataList = this.sportData.filter(sport => sport.sport_type === selectedSportType);
   }
 
-  setCourseType(type: string) {
+  setCourseType(type: string, id: number) {
     this.courseType = type;
+    this.form.get("courseType").patchValue(id);
   }
 
   selectItem(item: any) {
@@ -201,7 +247,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   // pasar a utils
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockClientsData.filter(client => client.full_name.toLowerCase().includes(filterValue));
+    return this.clients.filter(client => (client.first_name.toLowerCase().includes(filterValue) || client.last_name.toLowerCase().includes(filterValue)));
   }
 
   private _filterMonitor(name: string): any[] {
@@ -211,12 +257,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   private _filterLevel(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockLevelData.filter(level => level.annotation.toLowerCase().includes(filterValue));
+    return this.levels.filter(level => level.annotation.toLowerCase().includes(filterValue));
   }
 
   private _filterSport(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockSportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
+    return this.sportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
   }
 
   private _filterTime(value: string): string[] {
@@ -225,7 +271,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   displayFn(client: any): string {
-    return client && client.full_name ? client.full_name : '';
+    return client && (client.first_name && client.last_name) ? client.first_name + ' ' + client.last_name : client.first_name;
   }
 
   displayFnMoniteurs(monitor: any): string {
@@ -280,4 +326,60 @@ export class BookingsCreateUpdateComponent implements OnInit {
   showDetailFn(event: boolean) {
     this.showDetail = event;
   }
+
+  getClients() {
+    this.crudService.list('/clients', 1, 1000)
+      .subscribe((data: any) => {
+        this.clients = data.data;
+        this.loading = false;
+
+      })
+  }
+
+  getSportsType() {
+    this.crudService.list('/sport-types', 1, 1000)
+      .subscribe((data) => {
+        this.sportTypeData = data.data.reverse();
+      });
+  }
+
+  getSports() {
+    this.crudService.list('/sports', 1, 1000)
+      .subscribe((data) => {
+        this.sportData = data.data.reverse();
+      });
+  }
+
+  selectSport(sport: any) {
+    this.defaults.sport_id = sport.id;
+    this.form.get("sport").patchValue(sport.id);
+
+  }
+
+  getDegrees() {
+    this.crudService.list('/degrees', 1, 1000)
+      .subscribe((data) => {
+        this.levels = data.data;
+      })
+  }
+
+  getUtilzers(id: number) {
+    this.crudService.get('/admin/clients/' + id +'/utilizers')
+      .subscribe((data: any) => {
+        this.utilizers = data.data;
+      })
+  }
+
+  calculateAge(birthDateString) {
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+}
 }

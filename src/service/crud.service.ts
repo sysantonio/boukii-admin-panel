@@ -24,12 +24,12 @@ export class ApiCrudService extends ApiService {
   }
 
   get(url: string) {
-    return this.http.get<ApiResponse>(this.baseUrl + url + '/all',
+    return this.http.get<ApiResponse>(this.baseUrl + url,
       { headers: this.getHeaders()});
   }
 
   getAll(url: string) {
-    return this.http.get<ApiResponse>(this.baseUrl + url,
+    return this.http.get<ApiResponse>(this.baseUrl + url + '/all',
       { headers: this.getHeaders()});
   }
 

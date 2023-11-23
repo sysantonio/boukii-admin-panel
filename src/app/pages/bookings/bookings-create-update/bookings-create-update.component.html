@@ -16,8 +16,8 @@
             <mat-label>Client</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" />
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let client of filteredOptions | async" [value]="client">
-                {{client.full_name}}
+              <mat-option *ngFor="let client of filteredOptions | async" [value]="client" (onSelectionChange)="getUtilzers(client.id)">
+                {{client.first_name}} {{client.last_name}}
               </mat-option>
             </mat-autocomplete>
             <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
@@ -28,41 +28,16 @@
           </div>
        </div>
 
-       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-          <mat-card class="card-users" (click)="toggleBorder()" [ngClass]="{'active-border': borderActive}">
+       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="utilizers.length > 0">
+
+          <mat-card class="card-users" (click)="toggleBorder()" [ngClass]="{'active-border': borderActive}" *ngFor="let item of utilizers">
             <mat-card-header>
               <div mat-card-avatar class="card-avatar"></div>
 
             </mat-card-header>
             <mat-card-content>
-              <mat-card-title>Mirko Maternini</mat-card-title>
-              <mat-card-subtitle>FR · 43 años · Switzerland</mat-card-subtitle>
-            </mat-card-content>
-            <mat-card-actions>
-              <!-- Botones de acción, si son necesarios -->
-            </mat-card-actions>
-          </mat-card>
-          <mat-card class="card-users" (click)="toggleBorder()" >
-            <mat-card-header>
-              <div mat-card-avatar class="card-avatar"></div>
-
-            </mat-card-header>
-            <mat-card-content>
-              <mat-card-title>Mirko Maternini</mat-card-title>
-              <mat-card-subtitle>FR · 43 años · Switzerland</mat-card-subtitle>
-            </mat-card-content>
-            <mat-card-actions>
-              <!-- Botones de acción, si son necesarios -->
-            </mat-card-actions>
-          </mat-card>
-          <mat-card class="card-users" (click)="toggleBorder()">
-            <mat-card-header>
-              <div mat-card-avatar class="card-avatar"></div>
-
-            </mat-card-header>
-            <mat-card-content>
-              <mat-card-title>Mirko Maternini</mat-card-title>
-              <mat-card-subtitle>FR · 43 años · Switzerland</mat-card-subtitle>
+              <mat-card-title>{{ item.first_name }} {{ item.last_name }}</mat-card-title>
+              <mat-card-subtitle>{{ item.country }} · {{calculateAge(item.birth_date) }} ans · {{ item.province }}</mat-card-subtitle>
             </mat-card-content>
             <mat-card-actions>
               <!-- Botones de acción, si son necesarios -->
@@ -90,33 +65,16 @@
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
           <div class="flex-auto">
             <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
-              <mat-radio-button *ngFor="let sport of mockSportType" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
+              <mat-radio-button *ngFor="let sport of sportTypeData" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="flex-auto" *ngIf="sportTypeSelected > -1">
-            <div style="float:left">
-              <span style="width: 100%;float: left;">
-                <img style="background: #E6E6E6; float:left;border-radius: 20%;" src="https://school.boukii.com/assets/apps/sports/Ski.png">
+            <div style="float:left; width: 20%" *ngFor="let item of sportDataList">
+              <span style="width: 100%;margin: 0 0 0 10%">
+                <img style="background: #E6E6E6;margin: 0 auto; border-radius: 25%;border: #808080 solid 1px; cursor:pointer"
+                [src]="item.id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
               </span>
-              <p style="text-align: center;">ski</p>
-            </div>
-            <div style="float:left;margin:0 0 0 10%">
-              <span style="width: 100%;float: left;">
-                <img style="background: #E6E6E6; float:left;border-radius: 20%;" src="https://school.boukii.com/assets/apps/sports/Snowboard.png">
-              </span>
-              <p style="text-align: center;">Snowboard</p>
-            </div>
-            <div style="float:left;margin:0 0 0 10%">
-              <span style="width: 100%;float: left;">
-                <img style="background: #E6E6E6; float:left;border-radius: 20%;" src="https://school.boukii.com/assets/apps/sports/Ski_randonée.png">
-              </span>
-              <p style="text-align: center;">Ski randonée</p>
-            </div>
-            <div style="float:left;margin:0 0 0 10%">
-              <span style="width: 100%;float: left;">
-                <img style="background: #E6E6E6; float:left;border-radius: 20%;" src="https://school.boukii.com/assets/apps/sports/Raquettés.png">
-              </span>
-              <p style="text-align: center;">Raquettés</p>
+              <p style="text-align: center;">{{ item.name }}</p>
             </div>
           </div>
         </div>
@@ -125,14 +83,14 @@
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
           <div class="flex-auto" style="width:20%">
-            <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif')">
+            <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="setCourseType('collectif', 1)">
               <mat-card-content>
                 <p>Cours Collectif</p>
               </mat-card-content>
             </mat-card>
           </div>
           <div class="flex-auto" style="width:20%">
-            <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee')">
+            <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="setCourseType('privee', 2)">
               <mat-card-content>
                 <p>Cours Privés</p>
               </mat-card-content>
@@ -250,70 +208,6 @@
 
           <div class="calendar-column" *ngIf="courseType === 'privee'">.
 
-            <ng-container>
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                <div class="flex-auto">
-                  <mat-checkbox color="accent" [checked]="false">Fecha única</mat-checkbox>
-                </div>
-                <div class="flex-auto">
-                  <mat-checkbox color="accent" [checked]="true">Varias fechas</mat-checkbox>
-                </div>
-                <div class="flex-auto">
-                  <mat-checkbox color="accent" [checked]="true">Mismo profesor</mat-checkbox>
-                </div>
-              </div>
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>Fecha</mat-label>
-                  <mat-select [formControl]="dateControl">
-                    <mat-option *ngFor="let date of dates" [value]="date">{{ date }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Hora</mat-label>
-                  <mat-select [formControl]="timeControl">
-                    <mat-option *ngFor="let time of times" [value]="time">{{ time }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                </div>
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Duración</mat-label>
-                  <mat-select [formControl]="durationControl">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">{{ duration }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Personas</mat-label>
-                  <mat-select [formControl]="personsControl">
-                    <mat-option *ngFor="let person of persons" [value]="person">{{ person }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                </div>
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Chercher Moniteur</mat-label>
-                  <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="monitorsForm" [matAutocomplete]="autoMoniteur" />
-                  <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
-                    <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor">
-                      {{monitor.full_name}}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-                </mat-form-field>
-              </div>
-              <mat-divider class="text-border"></mat-divider>
-            </ng-container>
             <ng-container>
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 

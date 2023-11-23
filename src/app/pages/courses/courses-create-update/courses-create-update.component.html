@@ -11,7 +11,20 @@
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto" style="width: 100%;">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Nouvelle course</h2>
+        <div style="float: left;width: 50%;">
+          <h2 class="title m-0">Nouvelle course</h2>
+        </div>
+        <div style="float: left;width: 50%;">
+          <div style="float:right">
+            Online <mat-slide-toggle [(ngModel)]="defaults.online"></mat-slide-toggle>
+          </div>
+          <div style="float:right">
+            Options <mat-slide-toggle [(ngModel)]="defaults.options"></mat-slide-toggle>
+          </div>
+          <div style="float:right">
+            Status <mat-slide-toggle [(ngModel)]="defaults.active"></mat-slide-toggle>
+          </div>
+        </div>
       </div>
       <mat-horizontal-stepper #stepper="matVerticalStepper" [linear]="false">
         <ng-template matStepperIcon="edit">
@@ -195,20 +208,20 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
-                <label for="dateFromPrivate">DEPUIS</label>
+                <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
                 </mat-form-field>
               </div>
               <div class="flex-auto">
 
-                <label for="dateToPrivate">JUSQU'À</label>
+                <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [min]="courseInfoPriveFormGroup.value.fromDate" [(ngModel)]="defaults.date_end"
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [min]="courseInfoPriveFormGroup.value.fromDate" [(ngModel)]="defaults.date_end_res"
                   [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerTo [startAt]="courseInfoPriveFormGroup.value.fromDate"></mat-datepicker>
@@ -240,7 +253,7 @@
               </div>
 
             </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="this.defaults.is_flexible">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
               <div class="flex-auto">
 
                 <label for="durationPrivate" style="font-size: 20px;">Quand peut-on suivre le cours?</label>
@@ -255,7 +268,7 @@
               </div>
             </div>
 
-            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee' && this.courseInfoPriveFormGroup.value.periodeMultiple && this.defaults.is_flexible">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee' && this.courseInfoPriveFormGroup.value.periodeMultiple">
               <div style="width: 100%">
 
                 <table #privateDatesTable id="private-date-table" mat-table [dataSource]="dataSourceDatePrivate" matSort style="border: 1px solid #e6e6e6">
@@ -296,7 +309,7 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple && this.defaults.is_flexible">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple">
 
               <div class="flex-auto">
 
@@ -309,7 +322,7 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="this.defaults.is_flexible">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <div class="flex-auto" style="padding-left: 5%" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple">
 
@@ -362,7 +375,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="this.defaults.is_flexible">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
                 <label for="fromHour">HEURE DEBUT</label>

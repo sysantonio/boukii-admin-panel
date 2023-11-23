@@ -181,7 +181,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   sportDataList = [];
   sportTypeData = [];
   levels = [];
-  mockMonitors = MOCK_MONITORS;
+  monitors = [];
 
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
@@ -275,6 +275,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       participants: [null, Validators.required],
       fromDate: [null, Validators.required],
       toDate: [null, Validators.required],
+      from: [null, Validators.required],
+      to: [null, Validators.required],
       image: [null],
       periodeUnique: new FormControl(false),
       periodeMultiple: new FormControl(false)
@@ -336,7 +338,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
       startWith(''),
       map((value: any) => typeof value === 'string' ? value : value?.full_name),
-      map(full_name => full_name ? this._filterMonitor(full_name) : this.mockMonitors.slice())
+      map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
     );
 
     this.myControl.valueChanges.subscribe(value => {
@@ -371,6 +373,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.getSports();
     this.getStations();
     this.getDegrees();
+    this.getMonitors();
   }
 
   get periodeUnique() {
@@ -401,6 +404,22 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   create() {
+
+    let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
+
+    let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
+    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
+
+    let courseDates = [];
+
+    this.defaults.course_dates.forEach(dates => {
+      dates.forEach(courses => {
+        if (courses.subgroups.length > 0) {
+          courseDates.push(dates);
+        }
+      });
+    });
+
     if (this.courseType === 'collectif' && this.defaults.isFlexible) {
       const data = {
         course_type: this.defaults.course_type,
@@ -410,6 +429,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
+        date_start: lowestDate,
+        date_end: highestDate,
         date_start_res: this.defaults.date_start_res,
         date_end_res: this.defaults.date_end_res,
         confirm_attendance: null,
@@ -422,7 +443,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
+        course_dates: courseDates
       }
       console.log(data);
 
@@ -435,6 +456,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
+        date_start: lowestDate,
+        date_end: highestDate,
         date_start_res: this.defaults.date_start_res,
         date_end_res: this.defaults.date_end_res,
         confirm_attendance: null,
@@ -446,7 +469,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
+        course_dates: courseDates
       }
       console.log(data);
     } else if (this.courseType === 'privee' && this.defaults.isFlexible) {
@@ -458,8 +481,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',
-        date_start: this.defaults.date_start,
-        date_end: this.defaults.date_end,
+        date_start: lowestDate,
+        date_end: highestDate,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -474,7 +497,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         min_age: this.defaults.min_age,
         max_age: this.defaults.max_age,
         course_dates: this.defaults.course_dates
-
       };
       console.log(data);
     } else if (this.courseType === 'privee' && !this.defaults.isFlexible) {
@@ -486,8 +508,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',
-        date_start: this.defaults.date_start,
-        date_end: this.defaults.date_end,
+        date_start: lowestDate,
+        date_end: highestDate,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -499,7 +521,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
         min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age
+        max_age: this.defaults.max_age,
+        course_dates: this.defaults.course_dates
+
       };
       console.log(data);
     }
@@ -579,7 +603,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   private _filterMonitor(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockMonitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
+    return this.monitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
   }
 
   generateDurations() {
@@ -819,7 +843,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   getMonitors() {
     this.crudService.list('/monitors', 1, 1000)
       .subscribe((data) => {
-        this.stations = data.data;
+        this.monitors = data.data;
         this.loading = false;
       });
   }
@@ -892,12 +916,22 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }, [0, 0]);
 
       this.daysDatesLevels.push(moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''));
-      this.defaults.course_dates.push({
-        date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-        hour_start: element.hour,
-        hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
-        groups: this.generateGroups()
-      })
+      if (this.courseType === 'privee') {
+
+        this.defaults.course_dates.push({
+          date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+          hour_start: element.hour,
+          hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
+        })
+      } else {
+
+        this.defaults.course_dates.push({
+          date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+          hour_start: element.hour,
+          hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
+          groups: this.generateGroups()
+        })
+      }
     });
 
   }
