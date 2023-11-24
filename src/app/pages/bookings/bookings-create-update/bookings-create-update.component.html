@@ -14,7 +14,7 @@
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
           <mat-form-field class="client-search-container">
             <mat-label>Client</mat-label>
-            <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" />
+            <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let client of filteredOptions | async" [value]="client" (onSelectionChange)="getUtilzers(client.id)">
                 {{client.first_name}} {{client.last_name}}
@@ -30,7 +30,7 @@
 
        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="utilizers.length > 0">
 
-          <mat-card class="card-users" (click)="toggleBorder()" [ngClass]="{'active-border': borderActive}" *ngFor="let item of utilizers">
+          <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i}" >
             <mat-card-header>
               <div mat-card-avatar class="card-avatar"></div>
 
@@ -44,7 +44,7 @@
             </mat-card-actions>
           </mat-card>
 
-          <mat-card class="card-users" (click)="toggleBorder()">
+          <mat-card class="card-users">
             <mat-card-header>
               <button mat-fab color="accent" style="margin: 0 auto;position: relative;top: 20px;right: 35%;">
                 <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
@@ -109,9 +109,10 @@
 
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
         <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee'">
-          <input matInput [matDatepicker]="pickerFrom" placeholder="Select a date" formControlName="fromDate">
-          <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-          <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+
+          <input matInput [(ngModel)]="monthAndYear" [matDatepicker]="picker" (dateChange)="emitDateChange($event)"formControlName="fromDate" [min]="minDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startView]="'year'" (monthSelected)="monthChanged($event, picker)"></mat-datepicker>
         </mat-form-field>
 
         <div class="columns-container" *ngIf="courseType !== null">
@@ -206,7 +207,7 @@
 
           </div>
 
-          <div class="calendar-column" *ngIf="courseType === 'privee'">.
+          <div class="calendar-column" *ngIf="courseType === 'privee'">
 
             <ng-container>
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -884,7 +885,7 @@
 </div>
 
 
-<mat-card style="padding: 0 1%;width: 35%;position: absolute; top:7%;left:65%;" *ngIf="bookingComplete" >
+<mat-card style="padding: 0 1%;width: 35%;position: absolute; top:7%;left:65%;" *ngIf="!bookingComplete" >
   <mat-card-header style="display:block">
     <div style="width: 100%;float: left;">
       <mat-icon svgIcon="mat:close"></mat-icon>
@@ -976,8 +977,13 @@
           </div>
 
         </div>
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <mat-slide-toggle></mat-slide-toggle> Op. Rem (10%)
+        <div style="float: left; width: 200%;">
+          <div style="float: left; width: 50%;">
+            <mat-slide-toggle></mat-slide-toggle> Op. Rem (10%)
+          </div>
+          <div style="float: left; width: 50%;">
+            <mat-slide-toggle></mat-slide-toggle> Boukii Care (3 CHF)
+          </div>
         </div>
       </div>
       <div style="float: left; width: 50%;">

@@ -88,12 +88,6 @@ export class SidenavComponent implements OnInit {
   }
 
   async getUser() {
-    const dataGet = JSON.parse(localStorage.getItem('sotanoUser'));
-    const db = getFirestore();
-    const usersRef = collection(db, 'users');
-    const snapshot = await getDocs(usersRef);
-    const users = snapshot.docs.map(doc => doc.data());
-    const data = users.filter(doc => doc.email === dataGet.email);
-    this.user = data[0];
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));;
   }
 }

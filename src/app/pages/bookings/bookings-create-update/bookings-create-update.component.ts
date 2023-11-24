@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, Input } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Observable, map, of, startWith } from 'rxjs';
+import { Observable, forkJoin, map, of, startWith } from 'rxjs';
 import { MOCK_SPORT_DATA, MOCK_SPORT_TYPES } from 'src/app/static-data/sports-data';
 import { CLIENTS, SUB_CLIENTS } from 'src/app/static-data/clients-data';
 import { LEVELS } from 'src/app/static-data/level-data';
@@ -11,17 +11,59 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
 import { ApiCrudService } from 'src/service/crud.service';
-import { SwiperOptions } from 'swiper';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DateAdapter } from 'angular-calendar';
+import { Platform } from '@angular/cdk/platform';
+import { MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
+import * as moment from 'moment';
+export class MonthpickerDateAdapter extends NativeDateAdapter {
+  constructor(matDateLocale: string, platform: Platform) {
+    super(matDateLocale, platform);
+  }
+
+  override parse(value: string): Date | null {
+    const monthAndYearRegex = /(10|11|12|0\d|\d)\/[\d]{4}/;
+    if (value?.match(monthAndYearRegex)) {
+      const parts = value.split('/');
+      const month = Number(parts[0]);
+      const year = Number(parts[1]);
+      if (month > 0 && month <= 12) {
+        return new Date(year, month - 1);
+      }
+    }
+    return null;
+  }
+
+  override format(date: Date, displayFormat: any): string {
+    const month = date.getMonth() + 1;
+    const monthAsString = ('0' + month).slice(-2);
+    const year = date.getFullYear();
+    return monthAsString + '/' + year;
+  }
+}
 
 @Component({
   selector: 'vex-bookings-create-update',
   templateUrl: './bookings-create-update.component.html',
   styleUrls: ['./bookings-create-update.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MonthpickerDateAdapter,
+      deps: [MAT_DATE_LOCALE, Platform],
+    },
+  ],
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class BookingsCreateUpdateComponent implements OnInit {
 
-  borderActive: boolean = false;
+  @Input()
+  public monthAndYear: Date | null = null;
+
+  @Output()
+  public monthAndYearChange = new EventEmitter<Date | null>();
+
+  borderActive: number = -1;
   showDetail: boolean = true;
 
   createComponent = BookingsCreateUpdateModalComponent;
@@ -55,6 +97,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   minDate: Date;
   selectedDate: Date;
   selectedItem: any = null;
+
 
   times: string[] = this.generateTimes();
   filteredTimes: Observable<string[]>;
@@ -194,10 +237,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.mode = 'create';
     }
 
-    this.getSportsType();
-    this.getSports();
-    this.getClients();
-    this.getDegrees();
+    forkJoin([this.getSportsType(), this.getSports(),this.getDegrees(),this.getClients()])
+      .subscribe((data: any) => {
+        this.sportTypeData = data[0].data.reverse();
+        this.sportData = data[1].data.reverse();
+        this.levels = data[2].data;
+        this.clients = data[3].data;
+        this.loading = false;
+      })
+
+
   }
 
   filterSportsByType() {
@@ -319,8 +368,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
   }
 
-  toggleBorder() {
-    this.borderActive = !this.borderActive;
+  toggleBorder(index: number, utilizer: any) {
+    this.borderActive = index;
+    this.defaultsBookingUser.client_id = utilizer.id;
   }
 
   showDetailFn(event: boolean) {
@@ -328,26 +378,26 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    this.crudService.list('/clients', 1, 1000)
+    return this.crudService.list('/clients', 1, 1000);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
 
-      })
+      })*/
   }
 
   getSportsType() {
-    this.crudService.list('/sport-types', 1, 1000)
+    return this.crudService.list('/sport-types', 1, 1000);/*
       .subscribe((data) => {
         this.sportTypeData = data.data.reverse();
-      });
+      });*/
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000)
+   return this.crudService.list('/sports', 1, 1000)/*
       .subscribe((data) => {
         this.sportData = data.data.reverse();
-      });
+      });*/
   }
 
   selectSport(sport: any) {
@@ -357,13 +407,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getDegrees() {
-    this.crudService.list('/degrees', 1, 1000)
+   return this.crudService.list('/degrees', 1, 1000);/*
       .subscribe((data) => {
         this.levels = data.data;
-      })
+      })*/
   }
 
   getUtilzers(id: number) {
+    this.defaultsBookingUser.client_id = id;
     this.crudService.get('/admin/clients/' + id +'/utilizers')
       .subscribe((data: any) => {
         this.utilizers = data.data;
@@ -381,5 +432,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
 
     return age;
-}
+  }
+
+  public emitDateChange(event: MatDatepickerInputEvent<Date | null, unknown>): void {
+    this.monthAndYearChange.emit(event.value);
+  }
+
+  public monthChanged(value: any, widget: any): void {
+    this.monthAndYear = moment(this.minDate).isAfter(moment(value)) ? this.minDate : value;
+    widget.close();
+  }
 }

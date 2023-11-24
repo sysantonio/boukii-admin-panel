@@ -1,15 +1,16 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, QueryList, ViewChild } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal/salary-create-update-modal.component';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_BLOCK } from 'src/app/static-data/blockage-data';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 @Component({
   selector: 'vex-settings',
@@ -18,7 +19,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
   animations: [stagger20ms]
 })
 export class SettingsComponent implements OnInit {
-
+  @ViewChild(MatDatepicker) pickers: QueryList<MatDatepicker<any>>;
   @ViewChild('table-level') dateTable: MatTable<any>;
   @ViewChild('table-extras-sports') dateTableSport: MatTable<any>;
   @ViewChild('table-extras-forfaits') dateTableForfait: MatTable<any>;
@@ -39,6 +40,7 @@ export class SettingsComponent implements OnInit {
   mockCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
 
+  holidays = [];
   people = 6; // Aquí puedes cambiar el número de personas
   intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
 
@@ -104,7 +106,8 @@ export class SettingsComponent implements OnInit {
     this.seasonForm = this.fb.group({
       fromDate: [''],
       toDate: [''],
-      holidays: [''],
+      startHour: [''],
+      endHour: [''],
       street: [''],
       number: [''],
       postalCode: [''],
@@ -123,6 +126,10 @@ export class SettingsComponent implements OnInit {
       this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
       this.filteredProvinces = this._filterProvinces(country.id);
     });
+  }
+
+  addHoliday() {
+    this.holidays.push(new Date()); // Agrega una nueva fecha al array
   }
 
   generateHours() {
@@ -181,4 +188,7 @@ export class SettingsComponent implements OnInit {
 
   editGoal(data: any, id: number) {}
 
+  isEven(index: number): boolean {
+    return index % 2 === 0;
+  }
 }

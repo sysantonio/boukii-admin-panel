@@ -18,7 +18,14 @@
               <p style="padding: 1%; color:#808080">Gracias a las múltiples opciones configurables y otros servicios, tu escuela podrá aportar a sus clientes un gran valor añadido.</p>
               <div style="width: 100%; float: left;padding: 1%">
                 <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
-                  <p style="font-weight: bold; color:#808080">Datos generales</p>
+                  <div style="float:left; width:30%">
+
+                    <p style="font-weight: bold; color:#808080">Datos generales</p>
+                  </div>
+                  <div style="float:left; width:70%">
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;border-radius: 25px;color: #fff;">Save season</button>
+                  </div>
+
                 </div>
                 <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
@@ -48,7 +55,7 @@
                     <div class="flex-auto">
                       <label for="hour">Hora de inicio de cursos</label>
                       <mat-form-field style="width: 100%;">
-                        <input id="hour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourFrom" [(ngModel)]="selectedFromHour">
+                        <input id="hour" type="text" placeholder="Hora " matInput [matAutocomplete]="matHourFrom" formControlName="startHour" [(ngModel)]="selectedFromHour">
                         <mat-autocomplete #matHourFrom="matAutocomplete">
                           <mat-option *ngFor="let hour of hours" [value]="hour">
                             {{hour}}
@@ -60,7 +67,7 @@
                     <div class="flex-auto">
                       <label for="hour">Hora de fin de crusos</label>
                       <mat-form-field style="width: 100%;">
-                        <input id="hour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" [(ngModel)]="selectedToHour">
+                        <input id="hour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" formControlName="endHour" [(ngModel)]="selectedToHour">
                         <mat-autocomplete #matHourTo="matAutocomplete">
                           <mat-option *ngFor="let hour of hours" [value]="hour">
                             {{hour}}
@@ -70,18 +77,28 @@
                     </div>
                   </div>
 
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
-
-                    <div class="flex-auto">
-                      <label for="holidays">Dias festivos</label>
-                      <mat-form-field style="width: 100%">
-
-                        <input matInput id="holidays" [matDatepicker]="pickerHoliday" formControlName="holidays" [max]="today">
-                        <mat-datepicker-toggle matSuffix [for]="pickerHoliday"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerHoliday [startAt]="today"></mat-datepicker>
-                      </mat-form-field>
+                  <div class="sm:flex-row gap-2 sm:gap-6">
+                    <div *ngFor="let holiday of holidays; let i = index" style="width: 49%; float:left;" [ngClass]="{'margin-right': isEven(i)}">
+                      <div style="width: 100%; float:left;">
+                        <label for="holiday-{{i}}">Día festivo</label>
+                        <mat-form-field style="width: 100%">
+                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker [startAt]="today"></mat-datepicker>
+                        </mat-form-field>
+                      </div>
                     </div>
-                    <!-- añadir boton + para poder meter mas dias festivos-->
+                  </div>
+                  <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                    <div style="width: 5%; float:left;">
+
+                      <button class="add-date" mat-fab (click)="addHoliday()">
+                        <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                      </button>
+                    </div>
+                    <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                      <p>Añadir día festivo</p>
+                    </div>
                   </div>
                 </div>
               </div>

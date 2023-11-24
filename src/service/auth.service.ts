@@ -42,6 +42,7 @@ export class AuthService extends ApiService {
 
           localStorage.setItem('boukiiUser', JSON.stringify(data.data.user));
           localStorage.setItem('boukiiUserToken', JSON.stringify(data.data.token));
+          this.user = data.data.user;
           this.router.navigate(['/home']);
         })
     } catch (error) {
