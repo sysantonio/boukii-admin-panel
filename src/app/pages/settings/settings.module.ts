@@ -33,6 +33,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 @NgModule({
   declarations: [SettingsComponent],
   imports: [
@@ -69,7 +70,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatRadioModule
   ]
 })
 export class SettingsModule {

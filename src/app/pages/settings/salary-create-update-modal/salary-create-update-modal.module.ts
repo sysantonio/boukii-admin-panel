@@ -19,6 +19,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal.c
     MatDatepickerModule,
     MatListModule,
     NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule
+    NgxMatTimepickerModule,
+    MatSlideToggleModule
   ],
   declarations: [SalaryCreateUpdateModalComponent],
   exports: [SalaryCreateUpdateModalComponent]

@@ -138,6 +138,17 @@
           </ng-container>
         </ng-container>
 
+        <!-- Status Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'status'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <div *ngIf="row[column.property]" style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 5%;"></div>
+              <div *ngIf="!row[column.property]" style="background-color: #E6E6E6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 5%;"></div>
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Level Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'level'" [matColumnDef]="column.property">

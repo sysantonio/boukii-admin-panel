@@ -15,6 +15,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { Router } from '@angular/router';
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { UntypedFormControl } from '@angular/forms';
+import { ApiCrudService } from 'src/service/crud.service';
 
 
 @UntilDestroy()
@@ -78,7 +79,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private dialog: MatDialog, private router: Router) {
+  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService) {
   }
 
   get visibleColumns() {
@@ -90,29 +91,18 @@ export class AioTableComponent implements OnInit, AfterViewInit {
    * We are simulating this request here.
    */
   async getData() {
-    const db = getFirestore();
-    const col = collection(db, this.entity);
-    const snapshot = await getDocs(col);
-    const list = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    return list;
+    this.crudService.list(this.entity, 1, 10, 'desc', 'id')
+      .subscribe((response: any) => {
+
+      this.data = response.data;
+      this.dataSource.data = response.data;
+      })
   }
 
   ngOnInit() {
-    this.getData().then(response => {
-      this.subject$.next(response);
-    });
 
     this.dataSource = new MatTableDataSource();
-
-    this.data$.pipe(
-      filter<any[]>(Boolean)
-    ).subscribe(response => {
-      this.data = response;
-      this.dataSource.data = response;
-    });
+    this.getData();
 
     this.searchCtrl.valueChanges.pipe(
       untilDestroyed(this)
@@ -144,13 +134,35 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
+        this.getData();
 
       }
     });
   }
 
   update(row: any) {
-    this.router.navigate(['/' + this.route + '/update/' + row.id]);
+    if (!this.createOnModal) {
+      this.router.navigate(['/' + this.route + '/update/' + row.id]);
+
+    } else {
+      this.updateModal(row);
+    }
+  }
+
+  updateModal(row: any) {
+    const dialogRef = this.dialog.open(this.createComponent, {
+      width: this.widthModal,
+      height: this.heigthModal,
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: row
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        this.getData();
+      }
+    });
   }
 
   showDetailFn(row: any) {

@@ -6,12 +6,17 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_BLOCK } from 'src/app/static-data/blockage-data';
 import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatDatepicker } from '@angular/material/datepicker';
-
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import * as moment from 'moment';
+import { ApiCrudService } from 'src/service/crud.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { defaultConfig } from 'src/@vex/config/configs';
+import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
+import { ConfigService } from 'src/@vex/config/config.service';
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
@@ -27,6 +32,10 @@ export class SettingsComponent implements OnInit {
   @ViewChild('table-extras-food') dateTableFood: MatTable<any>;
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
 
+  loading: boolean = true;
+
+  filteredHours: string[];
+
   seasonForm: UntypedFormGroup;
   myControlCountries = new FormControl();
   myControlProvinces = new FormControl();
@@ -34,24 +43,18 @@ export class SettingsComponent implements OnInit {
   filteredCountries: Observable<any[]>;
   filteredProvinces: Observable<any[]>;
 
-  mockSportData = MOCK_SPORT_DATA;
+  school: any = [];
+  blockages = [];
   mockLevelData = LEVELS;
-  mockBlockageData = MOCK_BLOCK;
   mockCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
 
   holidays = [];
+  holidaysSelected = [];
   people = 6; // Aquí puedes cambiar el número de personas
   intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
 
-  dataSource = this.intervalos.map(intervalo => {
-    const fila: any = { intervalo: this.formatIntervalo(intervalo) };
-    for (let i = 1; i <= this.people; i++) {
-      fila[`persona ${i}`] = '';
-    }
-    return fila;
-  });
-
+  dataSource: any;
   displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSourceLevels = new MatTableDataSource([]);
   displayedLevelsColumns: string[] = ['id', 'age', 'annotation', 'name', 'status', 'color', 'medal', 'edit'];
@@ -65,10 +68,33 @@ export class SettingsComponent implements OnInit {
 
   today = new Date();
 
+  selectedFrom = null;
+  selectedTo = null;
   selectedFromHour: any;
   selectedToHour: any;
   hours: string[] = [];
+  sports: any = [];
+  schoolSports: any = [];
+  sportsList: any = [];
+  season: any;
 
+  defaultsSchoolData = {
+    contact_phone: null,
+    contact_address: null,
+    contact_address_number: null,
+    contact_cp: null,
+    contact_city: null,
+    contact_province: null,
+  }
+
+  defaultsCommonExtras = {
+    forfait: [],
+    transport: [],
+    food: [],
+
+  };
+
+  theme = 'light';
   @HostListener('wheel', ['$event'])
   onScroll(event: WheelEvent) {
     this.ngZone.runOutsideAngular(() => {
@@ -86,46 +112,96 @@ export class SettingsComponent implements OnInit {
   }
 
   createComponent = SalaryCreateUpdateModalComponent;
-  entity = 'settings';
+
+  entitySalary = '/school-salary-levels';
+  dataSourceSalary = new MatTableDataSource();
   columns: TableColumn<any>[] = [
     { label: '#', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nom', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Paiment', property: 'pay', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Status', property: 'status', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Status', property: 'active', type: 'status', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
 
   ];
 
-  constructor(private ngZone: NgZone, private fb: UntypedFormBuilder) {}
+  authorized = true;
+
+  authorizedBookingComm = true;
+
+  constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar, private configService: ConfigService) {
+    this.filteredHours = this.hours;
+  }
 
 
   ngOnInit() {
     this.dataSourceLevels.data = this.mockLevelData;
     this.generateHours();
 
-    this.seasonForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
-      startHour: [''],
-      endHour: [''],
-      street: [''],
-      number: [''],
-      postalCode: [''],
-      phone: [''],
-      country: [''],
-      province: [''],
-    });
+    this.crudService.get('/schools/1')
+      .subscribe((data) => {
 
-    this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
-    );
+        this.school = data.data;
 
-    this.myControlCountries.valueChanges.subscribe(country => {
-      this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-      this.filteredProvinces = this._filterProvinces(country.id);
-    });
+        forkJoin([this.getSchoolSeason(),this.getSports(),this.getBlockages(), this.getSchoolSports()])
+          .subscribe((data: any) => {
+            this.season = data[0].data.filter((s) => s.is_active)[0];
+            this.sports = data[1].data;
+            this.blockages = data[2].data;
+            this.schoolSports = data[3].data;
+
+            this.selectedFrom = moment(this.season?.start_date).toDate();
+            this.selectedTo = moment(this.season?.end_date).toDate();
+
+            this.seasonForm = this.fb.group({
+              fromDate: [moment(this.season?.start_date).toDate()],
+              toDate: [moment(this.season?.end_date).toDate()],
+              startHour: [this.season?.hour_start],
+              endHour: [this.season?.hour_end],
+              contact_phone: [this.school.contact_phone],
+              contact_address: [this.school.contact_address],
+              contact_address_number: [this.school.contact_address_number],
+              contact_cp: [this.school.contact_cp],
+              contact_city: [this.school.contact_city],
+              contact_province: [this.school.contact_province]
+
+            });
+
+            this.defaultsSchoolData.contact_phone = this.school.contact_phone;
+            this.defaultsSchoolData.contact_address = this.school.contact_address;
+            this.defaultsSchoolData.contact_address_number = this.school.contact_address_number;
+            this.defaultsSchoolData.contact_cp = this.school.contact_cp;
+            this.defaultsSchoolData.contact_city = this.school.contact_city;
+            this.defaultsSchoolData.contact_province = this.school.contact_province;
+
+            this.seasonForm.get('startHour').valueChanges.subscribe(selectedHour => {
+              this.filterHours(selectedHour);
+            });
+
+            this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.name),
+              map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+            );
+
+            this.myControlCountries.valueChanges.subscribe(country => {
+              this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+              this.filteredProvinces = this._filterProvinces(country.id);
+            });
+
+            const settings = JSON.parse(this.school.settings);
+            this.dataSource = settings &&  settings.price_ranges && settings.price_ranges !== null ? settings.price_ranges :
+            this.intervalos.map(intervalo => {
+              const fila: any = { intervalo: this.formatIntervalo(intervalo) };
+              for (let i = 1; i <= this.people; i++) {
+                fila[`persona ${i}`] = '';
+              }
+              return fila;
+            });
+
+            ;
+            this.loading = false;
+          });
+      });
   }
 
   addHoliday() {
@@ -190,5 +266,157 @@ export class SettingsComponent implements OnInit {
 
   isEven(index: number): boolean {
     return index % 2 === 0;
+  }
+
+  filterHours(selectedHour: string) {
+    const selectedIndex = this.hours.indexOf(selectedHour);
+    this.filteredHours = selectedIndex >= 0 ? this.hours.slice(selectedIndex) : this.hours;
+  }
+
+  onDateSelect(event: MatDatepickerInputEvent<Date>) {
+    const selectedDate = event.value;
+    this.holidaysSelected.push(selectedDate);
+  }
+  getSchoolSeason() {
+    return this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id=1');
+  }
+
+  saveSeason() {
+    const holidays = [];
+
+    this.holidaysSelected.forEach(element => {
+      console.log(moment(element).format('YYYY-MM-DD'));
+      holidays.push(moment(element).format('YYYY-MM-DD'));
+    });
+
+    const data = {
+      name: "Temporada 1",
+      start_date: moment(this.selectedFrom,).format('YYYY-MM-DD'),
+      end_date: moment(this.selectedTo,).format('YYYY-MM-DD'),
+      is_active: true,
+      school_id: 1,
+      hour_start: this.selectedFromHour,
+      hour_end: this.selectedToHour,
+      holidays: holidays
+    }
+
+    this.crudService.create('/seasons', data)
+      .subscribe((res) => {
+        console.log(res);
+        this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
+      });
+  }
+
+  saveContactData() {
+
+    const data = {
+      contact_phone: this.defaultsSchoolData.contact_phone,
+      contact_address: this.defaultsSchoolData.contact_address + ', ' + this.defaultsSchoolData.contact_address_number,
+      contact_cp: this.defaultsSchoolData.contact_cp,
+      contact_city: this.defaultsSchoolData.contact_city,
+      contact_province: this.defaultsSchoolData.contact_province,
+    }
+
+    this.crudService.update('/schools', 1, data)
+      .subscribe((res) => {
+        console.log(res);
+        this.snackbar.open('Datos guardados con éxito', 'Close', {duration: 3000});
+      });
+  }
+
+  saveSchoolSports() {
+
+    this.crudService.update('/schools', {sports_ids: this.sportsList}, 1+'/sports')
+      .subscribe((res) => {
+        console.log(res);
+        this.snackbar.open('Deportes guardados con éxito', 'Close', {duration: 3000});
+      });
+  }
+
+  savePrices() {
+
+    this.crudService.create('/school-sports', {settings: this.dataSource})
+      .subscribe((res) => {
+        console.log(res);
+        this.snackbar.open('Precios guardados con éxito', 'Close', {duration: 3000});
+      });
+  }
+
+  getSports() {
+    return this.crudService.list('/sports', 1, 1000);
+  }
+
+  getSchoolSports() {
+    return this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.school.id);
+  }
+
+  setSport(id: number) {
+    let index = this.sportsList.indexOf(id);
+
+    if (this.sportsList.length === 0) {
+      this.sportsList.push(id);
+    } else if(this.sportsList.length > 0 && index === -1) {
+      this.sportsList.push(id);
+    } else if(this.sportsList.length > 0 && index !== -1) {
+      this.sportsList.splice(index, 1);
+    }
+  }
+
+  getBlockages() {
+    return this.crudService.list('/school-colors', 1, 1000);
+  }
+
+  saveBlockages() {
+    this.blockages.forEach(element => {
+      element.school_id = this.school.id;
+      this.crudService.update('/school-colors', element, element.id)
+        .subscribe(() => {
+
+        })
+    });
+
+    this.snackbar.open('Los bloqueos se han actualizado correctamente', 'OK', {duration: 3000})
+  }
+
+
+  onAuthorizedChange(event: any) {
+    this.authorized = event;
+  }
+
+
+  onAuthorizedBookingChange(event: any) {
+    this.authorizedBookingComm = event;
+  }
+
+  saveMonitorsAuth() {
+    const data = {
+      prices_range: this.dataSource,
+      monitor_app_client_messages_permission: this.authorized,
+      monitor_app_client_bookings_permission: this.authorizedBookingComm
+    }
+
+    this.crudService.update('/schools', data, this.school.id)
+      .subscribe(() => {
+        this.snackbar.open('Autorizaciones guardadas correctamente', 'OK', {duration: 3000})
+      })
+  }
+
+  setTheme() {
+
+    if (this.theme === 'dark'){
+
+      this.configService.updateConfig({
+        style: {
+          colorScheme: ColorSchemeName.dark
+        }
+      });
+    } else {
+
+      this.configService.updateConfig({
+        style: {
+          colorScheme: ColorSchemeName.light
+        }
+      });
+    }
   }
 }

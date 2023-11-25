@@ -7,7 +7,7 @@
     </div>
   </vex-page-layout-header>
 
-  <vex-page-layout-content class="container" style="max-width: none !important;">
+  <vex-page-layout-content class="container" style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
       <mat-tab-group>
         <mat-tab label="Temporada" [formGroup]="seasonForm">
@@ -23,7 +23,7 @@
                     <p style="font-weight: bold; color:#808080">Datos generales</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;border-radius: 25px;color: #fff;">Save season</button>
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;border-radius: 25px;color: #fff;" (click)="saveSeason()">Save season</button>
                   </div>
 
                 </div>
@@ -34,9 +34,9 @@
                       <label for="dateFrom">Inicio de temporada</label>
                       <mat-form-field style="width: 100%">
 
-                        <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [max]="today">
+                        <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="selectedFrom">
                         <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+                        <mat-datepicker #pickerFrom [startAt]="selectedFrom"></mat-datepicker>
                       </mat-form-field>
                     </div>
                     <div class="flex-auto">
@@ -44,9 +44,9 @@
 
                       <mat-form-field style="width: 100%">
 
-                        <input matInput id="dateFrom" [matDatepicker]="pickerTo" formControlName="toDate" [max]="today">
+                        <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="toDate" [disabled]="selectedFrom === null" [min]="selectedFrom" [(ngModel)]="selectedTo">
                         <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+                        <mat-datepicker #pickerTo [startAt]="selectedTo"></mat-datepicker>
                       </mat-form-field>
                     </div>
                   </div>
@@ -55,9 +55,9 @@
                     <div class="flex-auto">
                       <label for="hour">Hora de inicio de cursos</label>
                       <mat-form-field style="width: 100%;">
-                        <input id="hour" type="text" placeholder="Hora " matInput [matAutocomplete]="matHourFrom" formControlName="startHour" [(ngModel)]="selectedFromHour">
+                        <input id="hour" type="text" placeholder="Hora " matInput [matAutocomplete]="matHourFrom" formControlName="startHour">
                         <mat-autocomplete #matHourFrom="matAutocomplete">
-                          <mat-option *ngFor="let hour of hours" [value]="hour">
+                          <mat-option *ngFor="let hour of hours" [value]="hour" (onSelectionChange)="selectedFromHour = hour">
                             {{hour}}
                           </mat-option>
                         </mat-autocomplete>
@@ -65,11 +65,11 @@
                     </div>
 
                     <div class="flex-auto">
-                      <label for="hour">Hora de fin de crusos</label>
+                      <label for="endHour">Hora de fin de cursos</label>
                       <mat-form-field style="width: 100%;">
-                        <input id="hour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" formControlName="endHour" [(ngModel)]="selectedToHour">
+                        <input id="endHour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" formControlName="endHour">
                         <mat-autocomplete #matHourTo="matAutocomplete">
-                          <mat-option *ngFor="let hour of hours" [value]="hour">
+                          <mat-option *ngFor="let hour of filteredHours" [value]="hour" (onSelectionChange)="selectedToHour = hour">
                             {{hour}}
                           </mat-option>
                         </mat-autocomplete>
@@ -82,7 +82,7 @@
                       <div style="width: 100%; float:left;">
                         <label for="holiday-{{i}}">Día festivo</label>
                         <mat-form-field style="width: 100%">
-                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}">
+                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)">
                           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                           <mat-datepicker #picker [startAt]="today"></mat-datepicker>
                         </mat-form-field>
@@ -105,19 +105,25 @@
 
               <div style="width: 100%; float: left;padding: 1%">
                 <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
-                  <p style="font-weight: bold; color:#808080">Datos (Para emails)</p>
+                  <div style="float:left; width:30%">
+
+                    <p style="font-weight: bold; color:#808080">Datos (Para emails)</p>
+                  </div>
+                  <div style="float:left; width:70%">
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;border-radius: 25px;color: #fff;" (click)="saveContactData()">Save data</button>
+                  </div>
                 </div>
                 <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field class="flex-auto">
                       <mat-label>Calle</mat-label>
 
-                      <input formControlName="street" matInput required type="text">
+                      <input formControlName="contact_phone" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_address">
                     </mat-form-field>
 
                     <mat-form-field class="flex-auto">
                       <mat-label>Nº</mat-label>
-                      <input formControlName="number" matInput required type="text">
+                      <input formControlName="contact_address" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_address_number">
 
                     </mat-form-field>
                   </div>
@@ -125,21 +131,21 @@
                     <mat-form-field class="flex-auto">
                       <mat-label>CP</mat-label>
 
-                      <input formControlName="postalCode" matInput required type="text">
+                      <input formControlName="contact_address_number" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_cp">
                     </mat-form-field>
 
                     <mat-form-field class="flex-auto">
                       <mat-label>Teléfono</mat-label>
-                      <input formControlName="phone" matInput required type="tel">
+                      <input formControlName="contact_cp" matInput required type="tel" [(ngModel)]="defaultsSchoolData.contact_phone">
 
                     </mat-form-field>
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field class="vex-flex-form-field flex-auto">
                       <mat-label>Pays</mat-label>
-                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
+                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="contact_city" >
                       <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
+                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaultsSchoolData.contact_city = country.id">
                           {{country.name}}
                         </mat-option>
                       </mat-autocomplete>
@@ -147,9 +153,9 @@
 
                     <mat-form-field class="vex-flex-form-field flex-auto">
                       <mat-label>Canton</mat-label>
-                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
+                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="contact_province" >
                       <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
-                        <mat-option *ngFor="let province of filteredProvinces | async" [value]="province">
+                        <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaultsSchoolData.contact_province = province.id">
                           {{province.name}}
                         </mat-option>
                       </mat-autocomplete>
@@ -171,17 +177,17 @@
                       Selecciona los deportes de tu escuela.<br>
                       No es necesario que los selecciones todos ahora, podrás hacerlo mas adelante según las necesidades
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;">Guardar Cambios</button>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveSchoolSports()">Guardar Cambios</button>
 
                   </div>
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
                     <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">Invierno</p>
-                    <ng-container *ngFor="let item of mockSportData">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;"*ngIf="item.sport_type === 1">
+                    <ng-container *ngFor="let item of sports">
+                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
 
                         <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" *ngIf="item.sport_type === 1">
                           <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="item.icon"/>
+                            <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
                         </div>
 
@@ -194,12 +200,12 @@
 
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
                     <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">Verano</p>
-                    <ng-container *ngFor="let item of mockSportData">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;" *ngIf="item.sport_type === 2">
+                    <ng-container *ngFor="let item of sports">
+                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
 
                         <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" *ngIf="item.sport_type === 2">
                           <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="item.icon"/>
+                            <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
                         </div>
 
@@ -213,12 +219,12 @@
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
 
                     <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">All sessions</p>
-                    <ng-container *ngFor="let item of mockSportData">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;">
+                    <ng-container *ngFor="let item of sports">
+                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" (click)="setSport(item.id)">
 
                         <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080">
                           <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="item.icon"/>
+                            <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
                         </div>
 
@@ -238,7 +244,7 @@
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Niveles</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Configura los noveles como mejor se adapten a tu escuela.<br>
+                      Configura los niveles como mejor se adapten a tu escuela.<br>
                       Los colores son fijos, no se pueden modificar.<br>
                       Recuerda que los hemos clasificado de menor a mayor, siendo el verde el nivel más bajo.
                     </p>
@@ -247,14 +253,14 @@
                   </div>
 
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <ng-container *ngFor="let item of mockSportData; let i = index">
+                    <ng-container *ngFor="let item of sports.reverse(); let i = index">
                       <div
                       style="float: left; width: 5%;margin-left: 6%"
                       *ngIf="item.sport_type === 1">
                       <!-- Contenido del div -->
                         <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" *ngIf="item.sport_type === 1">
                           <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="item.icon"/>
+                            <img style="float: left; width: 100%;" [src]="item.icon_selected"/>
                           </div>
                         </div>
 
@@ -331,6 +337,14 @@
         </mat-tab>
         <mat-tab label="Cursos">
           <ng-template matStepLabel>Prices</ng-template>
+          <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin:2%;">
+            <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Tabla de precios</h1>
+            <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+              Configura los precios como mejor se adapten a tu escuela.<br>
+            </p>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="savePrices()">Guardar Cambios</button>
+
+          </div>
           <div class="p-6">
 
             <mat-form-field class="flex-auto">
@@ -363,6 +377,50 @@
             </div>
           </div>
         </mat-tab>
+        <mat-tab label="Página de Reservas">
+          <vex-page-layout>
+            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Deportes activos</h1>
+                <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  Gracias a las múltiples opciones configurables y a otros servicios, tu escuela podrá aportar a<br>
+                  sus clientes un gran valor añadido.
+                </p>
+                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="setTheme()">Guardar Cambios</button>
+
+              </div>
+
+              <div style="float: left; width: 100%;margin: 0 0 2% 0;">
+                <div style="width:100%; float:left;">
+
+                  <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
+                    <div style="width: 100%; float: left; ">
+                      <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
+                        <div class="flex-auto">
+                          <mat-radio-group [(ngModel)]="theme">
+                            <mat-radio-button class="radio" [value]="'light'">
+                              Claro
+                            </mat-radio-button>
+                            <mat-radio-button class="radio" [value]="'dark'">
+                              Oscuro
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="float:left; width:100%">
+                      <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                        Este porcentaje se aplica al importe total de la reserva y no es reembolsable en ningún caso.<br>
+                        Es opcional para el cliente.<br>
+                        La activación lo hace visible a la finalización del proceso de reserva junto con los importes a pagar.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </vex-page-layout-content>
+          </vex-page-layout>
+        </mat-tab>
         <mat-tab label="Profesores">
 
           <mat-tab-group>
@@ -379,28 +437,45 @@
 
                   </div>
 
-                    <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
+                    <vex-aio-table [columns]="columns" [entity]="entitySalary" [title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
             <mat-tab label="Bloqueos pagados">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Bloqueos</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       Esta funcionalidad permite configurar los bloqueaos de los empleados / profesores de tu escuela.<br>
                       Puedes crear tantos bloqueaos como necesites. Luego, deberás asignarlos a cada profesor.<br>
                     </p>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveBlockages()">Guardar Cambios</button>
 
                   </div>
 
                   <div class="p-6">
-                    <mat-form-field class="flex-auto" *ngFor="let item of mockBlockageData" style="width: 30%; margin: 0 2% 0 0">
+                    <mat-form-field class="flex-auto" *ngFor="let item of blockages" style="width: 30%; margin: 0 2% 0 0">
                       <span matPrefix class="square-prefix" [ngStyle]="{'background-color': item.color}"></span>
                       <input matInput placeholder="Enter text" [value]="item.name" [(ngModel)]="item.name">
                     </mat-form-field>
                   </div>
+
+                  <!--
+                  <div class="p-6">
+                    <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                      <div style="width: 5%; float:left;">
+
+                        <button class="add-date" mat-fab (click)="addBlockage()">
+                          <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                        </button>
+                      </div>
+                      <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                        <p>Añadir bloqueo</p>
+                      </div>
+                    </div>
+                  </div>-->
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
@@ -408,12 +483,20 @@
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Niveles</h1>
+                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                      Configura las autorizaciones para los monitores de la escuela.
+                    </p>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveMonitorsAuth()">Guardar Cambios</button>
+
+                  </div>
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Mensajes a clientes desde la app</h1>
                     <div style="width:100%; float:left;">
                       <p style="width:100%; float:left;">Por defecto</p>
                       <div>
-                        <mat-checkbox [checked]="true">Autorizado</mat-checkbox>
-                        <mat-checkbox>No autorizado</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="authorized" (change)="onAuthorizedChange(true)">Autorizado</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="!authorized" (change)="onAuthorizedChange(false)">No autorizado</mat-checkbox>
                       </div>
                     </div>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
@@ -428,8 +511,8 @@
                     <div style="width:100%; float:left;">
                       <p style="width:100%; float:left;">Por defecto</p>
                       <div>
-                        <mat-checkbox [checked]="true">Autorizado</mat-checkbox>
-                        <mat-checkbox>No autorizado</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="authorizedBookingComm" (change)="onAuthorizedBookingChange(true)">Autorizado</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="!authorizedBookingComm" (change)="onAuthorizedBookingChange(false)">No autorizado</mat-checkbox>
                       </div>
                     </div>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
@@ -452,11 +535,8 @@
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Porcentaje que retiene la escuela</p>
                   <mat-form-field class="flex-auto">
-                    <mat-select>
-                      <mat-option value="10">
-                        10%
-                      </mat-option>
-                    </mat-select>
+                    <input matInput placeholder="Percentaje" type="number" [value]="this.school.cancellation_insurance_percent" [(ngModel)]="this.school.cancellation_insurance_percent">
+
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
@@ -469,7 +549,7 @@
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> Boukii Care <span style="color: #e6e6e6">(Seguro adicional)</span></h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Boukii Care es un seguro que ponemos a vuestra disposición para cubrir posibles.<br>
+                  Boukii Care es un seguro que ponemos a vuestra disposición para cubrir posibles<br>
                   eventualidades del cliente, desligando a la escuela de cualquier trámite burocrático.<br>
                   El importe será deducido de la factura final emitida desde la plataforma Boukii Pay.<br><br>
                   Puedes consultar las condiciones de utilización aqui: <a href="" style="text-decoration:none; color: #f53d7c;">Enlace</a>
@@ -506,15 +586,11 @@
               </div>
 
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> TVA</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Porcentaje del impuesto</p>
                   <mat-form-field class="flex-auto">
-                    <mat-select>
-                      <mat-option value="10">
-                        10%
-                      </mat-option>
-                    </mat-select>
+                    <input matInput placeholder="TVA" type="number" [value]="this.school.bookings_comission_cash" [(ngModel)]="this.school.bookings_comission_cash">
+
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
@@ -529,7 +605,7 @@
         <mat-tab label="Extras">
           <mat-tab-group>
 
-            <mat-tab label="Alquiler">
+            <mat-tab label="Alquiler" *ngIf="false">
 
 
               <vex-page-layout>
@@ -720,7 +796,7 @@
                   </div>
 
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Trnasporte</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Transporte</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
                       Podrás crear un máximo de 2 variables para sección.<br>

@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-salary-create-update-modal',
@@ -13,15 +15,24 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
   form: UntypedFormGroup;
   mode: 'create' | 'update' = 'create';
 
-  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private dialogRef: MatDialogRef<any>, private fb: UntypedFormBuilder) {
+  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private dialogRef: MatDialogRef<any>, private fb: UntypedFormBuilder,
+    private crudService: ApiCrudService, private snackbar: MatSnackBar) {
 
   }
 
   ngOnInit(): void {
 
+    if(this.defaults !== null && this.defaults.id) {
+      this.mode = 'update';
+    } else {
+
+      this.mode = 'create';
+    }
+
     this.form = this.fb.group({
       name: ['', Validators.required],
-      payment: ['', Validators.required]
+      pay: ['', Validators.required],
+      active: [false, Validators.required]
     })
 
     this.loading = false;
@@ -36,20 +47,23 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
   }
 
   create() {
-    const booking = this.form.value;
-
-    if (!booking.imageSrc) {
-      booking.imageSrc = 'assets/img/avatars/1.jpg';
-    }
-
-    this.dialogRef.close(booking);
+    const data = this.form.value;
+    data.school_id = 1;
+    this.crudService.create('/school-salary-levels', data)
+      .subscribe((data) => {
+        this.snackbar.open('Salario creado correctamente', 'OK', {duration: 3000})
+        this.dialogRef.close(data);
+      })
   }
 
   update() {
-    const booking = this.form.value;
-    booking.id = this.defaults.id;
-
-    this.dialogRef.close(booking);
+    const data = this.form.value;
+    data.school_id = 1;
+    this.crudService.update('/school-salary-levels', data, this.defaults.id)
+      .subscribe((data) => {
+        this.snackbar.open('Salario modificado correctamente', 'OK', {duration: 3000})
+        this.dialogRef.close(data);
+      })
   }
 
   isCreateMode() {

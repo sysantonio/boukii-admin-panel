@@ -4,7 +4,7 @@ import { VexConfig } from './vex-config.interface';
 import { ColorSchemeName } from './colorSchemeName';
 import { colorVariables } from '../components/config-panel/color-variables';
 
-const defaultConfig: VexConfig = {
+export const defaultConfig: VexConfig = {
   id: VexConfigName.apollo,
   name: 'Apollo',
   style: {

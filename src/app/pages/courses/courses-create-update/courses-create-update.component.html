@@ -382,7 +382,7 @@
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="fromHour" formControlName="fromHour" placeholder="HEURE DEBUT" matInput [matAutocomplete]="autoHourFrom" [(ngModel)]="defaults.hour_min">
                   <mat-autocomplete #autoHourFrom="matAutocomplete">
-                    <mat-option *ngFor="let hour of hours" [value]="hour">
+                    <mat-option *ngFor="let hour of hours" [value]="hour" (onSelectionChange)="setDebut(hour)">
                       {{hour}}
                     </mat-option>
                   </mat-autocomplete>
@@ -394,7 +394,7 @@
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="toHour" formControlName="maxDuration" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo" [(ngModel)]="defaults.hour_max">
                   <mat-autocomplete #autoHourTo="matAutocomplete">
-                    <mat-option *ngFor="let hour of filteredToHours" [value]="hour">
+                    <mat-option *ngFor="let hour of filteredToHours" [value]="hour" (onSelectionChange)="setHourEnd(hour)">
                       {{hour}}
                     </mat-option>
                   </mat-autocomplete>

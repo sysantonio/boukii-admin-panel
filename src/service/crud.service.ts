@@ -18,8 +18,8 @@ export class ApiCrudService extends ApiService {
 
   constructor(http: HttpClient) {
     super(http);
-    const parseJson = localStorage.getItem('user');
-    const user = parseJson !== null ? JSON.parse(localStorage.getItem('user') || '') : null;
+    const parseJson = localStorage.getItem('boukiiUser');
+    const user = parseJson !== null ? JSON.parse(localStorage.getItem('boukiiUser') || '') : null;
     this.user = user;
   }
 

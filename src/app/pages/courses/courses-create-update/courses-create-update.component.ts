@@ -412,13 +412,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     let courseDates = [];
 
-    this.defaults.course_dates.forEach(dates => {
-      dates.forEach(courses => {
-        if (courses.subgroups.length > 0) {
-          courseDates.push(dates);
-        }
+    if (this.courseType === 'collectif') {
+      this.defaults.course_dates.forEach(dates => {
+        dates.forEach(courses => {
+          if (courses.subgroups.length > 0) {
+            courseDates.push(dates);
+          }
+        });
       });
-    });
+    } else {
+      courseDates = this.defaults.course_dates;
+    }
+
 
     if (this.courseType === 'collectif' && this.defaults.isFlexible) {
       const data = {
@@ -486,6 +491,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
+        confirm_attendance: null,
         translations: null,
         discounts: this.dataSourceReductionsPrivate.data,
         price_range: this.dataSourceFlexiblePrices,
@@ -513,6 +519,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
+        confirm_attendance: null,
         translations: null,
         price_range: this.dataSourceFlexiblePrices,
         sport_id: this.defaults.sport_id,
@@ -668,8 +675,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       width: '300px',
       data: {
         iterations: this.dataSource.data.length,
-        dateFrom: this.courseInfoPriveFormGroup.value.fromDate,
-        toDate: this.courseInfoPriveFormGroup.value.toDate,
+        dateFrom: this.today
       }
     });
 
@@ -1118,4 +1124,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.defaults.settings.weekDays[day] = event.source.checked;
     }
   }
+
+  setDebut(hour: any) {
+    this.defaults.course_dates.forEach(element => {
+      element.hour_start = hour;
+    });
+  }
+
+  setHourEnd(hour: any) {
+    this.defaults.course_dates.forEach(element => {
+      element.hour_end = hour;
+    });
+  }
+
 }

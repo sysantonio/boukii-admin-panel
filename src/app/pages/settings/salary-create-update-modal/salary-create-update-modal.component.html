@@ -17,20 +17,25 @@
     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
       <mat-form-field class="flex-auto">
         <mat-label>Nom</mat-label>
-        <input formControlName="name" matInput required type="text">
+        <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.name">
 
       </mat-form-field>
 
       <mat-form-field class="flex-auto">
-        <mat-label>Prenom</mat-label>
-        <input formControlName="payment" matInput required type="number">
+        <mat-label>Price per hour</mat-label>
+        <input formControlName="pay" matInput required type="number" [(ngModel)]="defaults.pay">
       </mat-form-field>
+
+      <div class="flex-auto">
+        <mat-label>Active</mat-label>
+        <mat-slide-toggle [checked]="defaults.active" formControlName="active" [(ngModel)]="defaults.active"></mat-slide-toggle>
+      </div>
    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close type="button">Cancel</button>
-    <button *ngIf="isCreateMode()" color="primary" mat-flat-button type="submit">Confirmer</button>
-    <button *ngIf="isUpdateMode()" color="primary" mat-flat-button type="submit">Update</button>
+    <button *ngIf="isCreateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">Confirmer</button>
+    <button *ngIf="isUpdateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">Update</button>
   </mat-dialog-actions>
 </form>
