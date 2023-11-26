@@ -253,18 +253,17 @@
                   </div>
 
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <ng-container *ngFor="let item of sports.reverse(); let i = index">
+                    <ng-container *ngFor="let item of schoolSports; let i = index">
                       <div
-                      style="float: left; width: 5%;margin-left: 6%"
-                      *ngIf="item.sport_type === 1">
+                      style="float: left; width: 5%;margin-left: 6%">
                       <!-- Contenido del div -->
-                        <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" *ngIf="item.sport_type === 1">
-                          <div style="float: left; width: 100%;">
+                        <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080">
+                          <div style="float: left; width: 100%;cursor:pointer" (click)="dataSourceLevels = item.degrees">
                             <img style="float: left; width: 100%;" [src]="item.icon_selected"/>
                           </div>
                         </div>
 
-                        <div style="float: left; width: 100%; text-wrap: nowrap;" *ngIf="item.sport_type === 1">
+                        <div style="float: left; width: 100%; text-wrap: nowrap;">
                           <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
                         </div>
                       </div>
@@ -274,11 +273,6 @@
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
                     <!-- añadir mat table de niveles-->
                     <table #reductionTable id="table-level" mat-table [dataSource]="dataSourceLevels" matSort style="border: 1px solid #e6e6e6">
-
-                      <ng-container matColumnDef="id">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-                      </ng-container>
 
                       <ng-container matColumnDef="age">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
@@ -308,13 +302,6 @@
                           <div style="width: 50%;float: left;height: 35px;border-radius: 5px;" [style.background-color]="element.color">
 
                           </div>
-                        </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="medal">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Medalla </th>
-                        <td mat-cell *matCellDef="let element">
-                          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"></div>
                         </td>
                       </ng-container>
 
@@ -735,39 +722,39 @@
 
                   </div>
 
-                  <table #forfaitTable id="table-extras-forfait" mat-table [dataSource]="dataSourceForfait" matSort style="border: 1px solid #e6e6e6">
+                  <table #forfaitTable id="table-extras-forfaits" mat-table [dataSource]="dataSourceForfait" matSort style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                      <td mat-cell *matCellDef="let element"> 1 </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="product">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
-                      <td mat-cell *matCellDef="let element"> Ski </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                      <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                      <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/dia </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
                       <td mat-cell *matCellDef="let element">
-                        0%
+                        {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
                       <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                        <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
 
                       </td>
                     </ng-container>
@@ -775,14 +762,14 @@
                     <ng-container matColumnDef="edit">
                       <th mat-header-cell *matHeaderCellDef>  </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                      <mat-icon svgIcon="mat:edit" (click)="createExtra('Forfait', true, idx, element)"></mat-icon>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="delete">
                       <th mat-header-cell *matHeaderCellDef>  </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                        <mat-icon svgIcon="mat:delete" (click)="deleteExtra(idx, 'Forfait')"></mat-icon>
                       </td>
                     </ng-container>
 
@@ -790,7 +777,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
                   <div class="flex-auto" style="margin: 1% 0 0 0">
-                    <button class="add-date" mat-fab >
+                    <button class="add-date" mat-fab (click)="createExtra('Forfait', false, null, null)" [disabled]="dataSourceForfait.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
@@ -808,35 +795,35 @@
 
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                      <td mat-cell *matCellDef="let element"> 1 </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="product">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
-                      <td mat-cell *matCellDef="let element"> Ski </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                      <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                      <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/dia </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
                       <td mat-cell *matCellDef="let element">
-                        0%
+                        {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
                       <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                        <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
 
                       </td>
                     </ng-container>
@@ -844,14 +831,14 @@
                     <ng-container matColumnDef="edit">
                       <th mat-header-cell *matHeaderCellDef>  </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                        <mat-icon svgIcon="mat:edit" (click)="createExtra('Transport', true, idx, element)"></mat-icon>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="delete">
                       <th mat-header-cell *matHeaderCellDef>  </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                        <mat-icon svgIcon="mat:delete" (click)="deleteExtra(idx, 'Transport')"></mat-icon>
                       </td>
                     </ng-container>
 
@@ -859,7 +846,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
                   <div class="flex-auto" style="margin: 1% 0 0 0">
-                    <button class="add-date" mat-fab >
+                    <button class="add-date" mat-fab (click)="createExtra('Transport', false, null, null)" [disabled]="dataSourceTransport.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
@@ -877,35 +864,35 @@
 
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                      <td mat-cell *matCellDef="let element"> 1 </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="product">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
-                      <td mat-cell *matCellDef="let element"> Ski </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                      <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                      <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/dia </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
                       <td mat-cell *matCellDef="let element">
-                        0%
+                        {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
                       <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                        <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
 
                       </td>
                     </ng-container>
@@ -913,22 +900,23 @@
                     <ng-container matColumnDef="edit">
                       <th mat-header-cell *matHeaderCellDef>  </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                        <mat-icon svgIcon="mat:edit" (click)="createExtra('Food', true, idx, element)"></mat-icon>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="delete">
                       <th mat-header-cell *matHeaderCellDef>  </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                        <mat-icon svgIcon="mat:delete" (click)="deleteExtra(idx, 'Food')"></mat-icon>
                       </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
+
                   <div class="flex-auto" style="margin: 1% 0 0 0">
-                    <button class="add-date" mat-fab >
+                    <button class="add-date" mat-fab (click)="createExtra('Food', false, null, null)" [disabled]="dataSourceFood.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>

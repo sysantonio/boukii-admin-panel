@@ -1,11 +1,9 @@
 import { Component, ElementRef, HostListener, NgZone, OnInit, QueryList, ViewChild } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal/salary-create-update-modal.component';
-import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
-import { MOCK_BLOCK } from 'src/app/static-data/blockage-data';
-import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
@@ -14,9 +12,11 @@ import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepi
 import * as moment from 'moment';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { defaultConfig } from 'src/@vex/config/configs';
 import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
 import { ConfigService } from 'src/@vex/config/config.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
+import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
@@ -27,9 +27,9 @@ export class SettingsComponent implements OnInit {
   @ViewChild(MatDatepicker) pickers: QueryList<MatDatepicker<any>>;
   @ViewChild('table-level') dateTable: MatTable<any>;
   @ViewChild('table-extras-sports') dateTableSport: MatTable<any>;
-  @ViewChild('table-extras-forfaits') dateTableForfait: MatTable<any>;
-  @ViewChild('table-extras-transport') dateTableTransport: MatTable<any>;
-  @ViewChild('table-extras-food') dateTableFood: MatTable<any>;
+  @ViewChild('forfaitTable') dateTableForfait: MatTable<any>;
+  @ViewChild('transportTable') dateTableTransport: MatTable<any>;
+  @ViewChild('foodTable') dateTableFood: MatTable<any>;
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
 
   loading: boolean = true;
@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
   dataSource: any;
   displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSourceLevels = new MatTableDataSource([]);
-  displayedLevelsColumns: string[] = ['id', 'age', 'annotation', 'name', 'status', 'color', 'medal', 'edit'];
+  displayedLevelsColumns: string[] = ['age', 'annotation', 'name', 'status', 'color', 'edit'];
 
   dataSourceSport = new MatTableDataSource([]);
   dataSourceForfait = new MatTableDataSource([]);
@@ -74,8 +74,8 @@ export class SettingsComponent implements OnInit {
   selectedToHour: any;
   hours: string[] = [];
   sports: any = [];
-  schoolSports: any = [];
   sportsList: any = [];
+  schoolSports: any = [];
   season: any;
 
   defaultsSchoolData = {
@@ -128,13 +128,14 @@ export class SettingsComponent implements OnInit {
 
   authorizedBookingComm = true;
 
-  constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar, private configService: ConfigService) {
+  constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
+    private configService: ConfigService, private dialog: MatDialog) {
     this.filteredHours = this.hours;
   }
 
 
   ngOnInit() {
-    this.dataSourceLevels.data = this.mockLevelData;
+
     this.generateHours();
 
     this.crudService.get('/schools/1')
@@ -148,6 +149,17 @@ export class SettingsComponent implements OnInit {
             this.sports = data[1].data;
             this.blockages = data[2].data;
             this.schoolSports = data[3].data;
+            data[3].data.forEach((element, idx) => {
+              this.sportsList.push(element.sport_id);
+
+              const sportData = this.sports.find((s) => s.id === element.sport_id);
+              this.schoolSports[idx].name = sportData.name;
+              this.schoolSports[idx].icon_selected = sportData.icon_selected;
+              this.schoolSports[idx].icon_unselected = sportData.icon_unselected;
+              this.schoolSports[idx].sport_type = sportData.sport_type;
+            });
+
+            this.getSchoolSportDegrees();
 
             this.selectedFrom = moment(this.season?.start_date).toDate();
             this.selectedTo = moment(this.season?.end_date).toDate();
@@ -198,7 +210,15 @@ export class SettingsComponent implements OnInit {
               return fila;
             });
 
-            ;
+            this.dataSourceForfait.data = settings?.extras.forfait;
+            this.dataSourceFood.data = settings?.extras.food;
+            this.dataSourceTransport.data = settings?.extras.transport;
+
+            setTimeout(() => {
+              this.dataSourceLevels.data = this.schoolSports[0].degrees;
+
+            }, 500);
+
             this.loading = false;
           });
       });
@@ -262,7 +282,44 @@ export class SettingsComponent implements OnInit {
     );
   }
 
-  editGoal(data: any, id: number) {}
+  editGoal(data: any, id: number) {
+    const dialogRef = this.dialog.open(LevelGoalsModalComponent, {
+      width: '90vw',
+      height: '90vh',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        if(data.deletedGoals.length > 1) {
+          data.deletedGoal.forEach(element => {
+            this.crudService.delete('/degrees-school-sport-goals', element.id)
+              .subscribe((res) => {
+                console.log(res)
+              })
+          });
+        }
+        if (data.mode === 'create') {
+          data.goals.forEach(element => {
+            this.crudService.create('/degrees-school-sport-goals', element)
+              .subscribe((data) => {
+                this.snackbar.open('Objetivos creados correctamente', 'OK', {duration: 3000});
+              })
+          });
+        } else {
+          data.goals.forEach(element => {
+            this.crudService.update('/degrees-school-sport-goals', element, element.id)
+              .subscribe((data) => {
+                this.snackbar.open('Objetivos modificados correctamente', 'OK', {duration: 3000});
+              })
+          });
+        }
+
+      }
+    });
+  }
 
   isEven(index: number): boolean {
     return index % 2 === 0;
@@ -326,10 +383,27 @@ export class SettingsComponent implements OnInit {
 
   saveSchoolSports() {
 
-    this.crudService.update('/schools', {sports_ids: this.sportsList}, 1+'/sports')
+    this.crudService.update('/schools', {sport_ids: this.sportsList}, this.school.id +'/sports')
       .subscribe((res) => {
         console.log(res);
-        this.snackbar.open('Deportes guardados con éxito', 'Close', {duration: 3000});
+        res.data.sports.forEach(sport => {
+          this.dataSourceLevels.data.forEach((degree, idx) => {
+            degree.sport_id = sport.id;
+            degree.school_id = this.school.id;
+            degree.degree_order = idx;
+            degree.level = 'test';
+            degree.progress = 0;
+
+
+            this.crudService.create('/degrees', degree)
+              .subscribe((data) => {
+                console.log(data)
+              });
+          });
+
+        });
+
+        this.snackbar.open('Deportes modificados correctamente', 'OK', {duration: 300});
       });
   }
 
@@ -349,6 +423,16 @@ export class SettingsComponent implements OnInit {
   getSchoolSports() {
     return this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.school.id);
   }
+
+  getSchoolSportDegrees() {
+    this.sportsList.forEach((element, idx) => {
+      this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.school.id + '&sport_id='+element)
+        .subscribe((data) => {
+          this.schoolSports[idx].degrees = data.data.reverse();
+        });
+    });
+  }
+
 
   setSport(id: number) {
     let index = this.sportsList.indexOf(id);
@@ -392,10 +476,12 @@ export class SettingsComponent implements OnInit {
     const data = {
       prices_range: this.dataSource,
       monitor_app_client_messages_permission: this.authorized,
-      monitor_app_client_bookings_permission: this.authorizedBookingComm
+      monitor_app_client_bookings_permission: this.authorizedBookingComm,
+      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      degrees: this.dataSourceLevels.data
     }
 
-    this.crudService.update('/schools', data, this.school.id)
+    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
         this.snackbar.open('Autorizaciones guardadas correctamente', 'OK', {duration: 3000})
       })
@@ -419,4 +505,133 @@ export class SettingsComponent implements OnInit {
       });
     }
   }
+
+  createExtra(product: string, isEdit: boolean, idx: number, extra: any) {
+
+    const dialogRef = this.dialog.open(ExtraCreateUpdateModalComponent, {
+      width: '90vw',
+      height: '90vh',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: isEdit ? extra : {
+        product: product,
+        name: '',
+        price: '',
+        tva: '',
+        status: false
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        if (data.product === 'Forfait') {
+
+          this.addForfait(data, isEdit, idx);
+        } else if (data.product === 'Food') {
+          this.addFood(data, isEdit, idx);
+        } else if (data.product === 'Transport') {
+          this.addTransport(data, isEdit, idx);
+        }
+
+        this.saveExtra();
+      }
+    });
+  }
+
+  addForfait(data: any, isEdit: any, idx: number) {
+
+
+    if (isEdit) {
+      this.dataSourceForfait.data[idx] = data;
+    } else {
+
+      this.dataSourceForfait.data.push({
+        id: 'FOR-' + this.generateRandomNumber(),
+        product: 'Forfait',
+        name: data.name ,
+        price: data.price ,
+        tva: data.tva ,
+        status: data.status
+      });
+    }
+    this.dateTableForfait.renderRows();
+
+  }
+
+  addFood(data: any, isEdit: any, idx: number) {
+
+
+    if (isEdit) {
+      this.dataSourceFood.data[idx] = data;
+    } else {
+
+      this.dataSourceFood.data.push({
+        id: 'FOR-' + this.generateRandomNumber(),
+        product: 'Forfait',
+        name: data.name ,
+        price: data.price ,
+        tva: data.tva ,
+        status: data.status
+      });
+    }
+    this.dateTableFood.renderRows();
+
+  }
+
+  addTransport(data: any, isEdit: any, idx: number) {
+
+
+    if (isEdit) {
+      this.dataSourceTransport.data[idx] = data;
+    } else {
+
+      this.dataSourceTransport.data.push({
+        id: 'FOR-' + this.generateRandomNumber(),
+        product: 'Forfait',
+        name: data.name ,
+        price: data.price ,
+        tva: data.tva ,
+        status: data.status
+      });
+    }
+    this.dateTableTransport.renderRows();
+
+  }
+
+  deleteExtra(index: number, type: string) {
+    if (type === 'Forfait') {
+
+      this.dataSourceForfait.data.splice(index, 1);
+      this.dateTableForfait.renderRows();
+    } else if (type=== 'Food') {
+      this.dataSourceFood.data.splice(index, 1);
+      this.dateTableFood.renderRows();
+    } else if (type === 'Transport') {
+      this.dataSourceTransport.data.splice(index, 1);
+      this.dateTableTransport.renderRows();
+    }
+
+    this.saveExtra();
+  }
+
+  saveExtra() {
+    const data = {
+      prices_range: this.dataSource,
+      monitor_app_client_messages_permission: this.authorized,
+      monitor_app_client_bookings_permission: this.authorizedBookingComm,
+      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      degrees: this.dataSourceLevels.data
+    }
+
+    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
+      .subscribe(() => {
+        this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000})
+      })
+  }
+
+  generateRandomNumber() {
+    const min = 10000; // límite inferior para un número de 5 cifras
+    const max = 99999; // límite superior para un número de 5 cifras
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 }

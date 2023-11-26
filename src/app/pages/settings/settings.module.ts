@@ -34,6 +34,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { ExtraCreateUpdateModalModule } from './extra-create-update-modal/extra-create-update-modal.module';
+import { LevelGoalsModalModule } from './level-goals-modal/level-goals-modal.module';
 @NgModule({
   declarations: [SettingsComponent],
   imports: [
@@ -59,6 +61,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatDialogModule,
     ComponentsModule,
     SalaryCreateUpdateModalModule,
+    ExtraCreateUpdateModalModule,
+    LevelGoalsModalModule,
     WidgetClientsSportsNoSwiperModule,
     WidgetSportsLevelModule,
     LevelSportUpdateModalModule,
