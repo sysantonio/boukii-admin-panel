@@ -11,7 +11,7 @@ import { LEVELS } from 'src/app/static-data/level-data';
 export class ClientsComponent {
 
   createComponent = ClientsCreateUpdateModule;
-  entity = 'clients'; showDetail: boolean = false;
+  entity = '/clients'; showDetail: boolean = false;
 
   detailData: any;
   imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
@@ -26,8 +26,8 @@ export class ClientsComponent {
 
   columns: TableColumn<any>[] = [
     { label: 'Tipo', property: 'type', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Edad', property: 'age', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Nombre', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Edad', property: 'birth_date', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Usuarios', property: 'users', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Sports', property: 'sport', type: 'text', visible: true, cssClasses: ['font-medium'] },

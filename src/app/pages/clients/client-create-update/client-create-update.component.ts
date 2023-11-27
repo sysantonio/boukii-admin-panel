@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { _MatTableDataSource } from '@angular/material/table';
-import { Observable, map, startWith } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
@@ -9,6 +11,7 @@ import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-client-create-update',
@@ -20,7 +23,7 @@ import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 export class ClientCreateUpdateComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'date'];
-
+  maxSelection = 6;
   imagePreviewUrl: string | ArrayBuffer;
   formInfoAccount: UntypedFormGroup;
   formPersonalInfo: UntypedFormGroup;
@@ -38,7 +41,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   sportsControl = new FormControl();
   selectedSports: any[] = [];
   filteredSports: Observable<any[]>;
-  allSports: any[] = MOCK_SPORT_DATA;
+  schoolSports: any[] = [];
   sportsData = new _MatTableDataSource([]);
 
   languagesControl = new FormControl([]);
@@ -46,7 +49,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   filteredLanguages: Observable<any[]>;
   selectedLanguages = [];
 
-  optionsStation: string[] = ['Les Pacots', 'Andorra'];
+  stations = [];
 
   today: Date;
   minDate: Date;
@@ -56,13 +59,60 @@ export class ClientCreateUpdateComponent implements OnInit {
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData = LEVELS;
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+  defaults = {
+    email: null,
+    first_name: null,
+    last_name: null,
+    birth_date: null,
+    phone: null,
+    telephone: null,
+    address: null,
+    cp: null,
+    city: null,
+    province: null,
+    country: null,
+    image: null,
+    language1_id:null,
+    language2_id:null,
+    language3_id:null,
+    language4_id:null,
+    language5_id:null,
+    language6_id:null,
+    user_id: null,
+    station_id: null
+  }
+
+  defaultsObservations = {
+    general: null,
+    notes: null,
+    historical: null,
+    client_id: null,
+    school_id: null
+  }
+
+  defaultsUser = {
+    username: null,
+    email: null,
+    password: null,
+    image: null,
+    type: 'client',
+    active: null,
+  }
+
+  loading: boolean = true;
+  user: any;
+  mode: 'create' | 'update' = 'create';
+
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router, private snackbar: MatSnackBar) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
   }
 
   ngOnInit(): void {
+
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
     this.formInfoAccount = this.fb.group({
       image: [''],
       name: ['', Validators.required],
@@ -98,8 +148,8 @@ export class ClientCreateUpdateComponent implements OnInit {
         map(value => this._filterStations(value))
       );
 
-      this.myControlStations.valueChanges.subscribe(value => {
-        this.formInfoAccount.get('station').setValue(value);
+    this.myControlStations.valueChanges.subscribe(value => {
+      this.formInfoAccount.get('station').setValue(value);
     });
 
     this.filteredCountries = this.myControlCountries.valueChanges.pipe(
@@ -115,7 +165,7 @@ export class ClientCreateUpdateComponent implements OnInit {
 
     this.filteredSports = this.sportsControl.valueChanges.pipe(
       startWith(''),
-      map((sport: string | null) => sport ? this._filterSports(sport) : this.allSports.slice())
+      map((sport: string | null) => sport ? this._filterSports(sport) : this.schoolSports.slice())
     );
 
     this.filteredLevel = this.levelForm.valueChanges.pipe(
@@ -128,6 +178,15 @@ export class ClientCreateUpdateComponent implements OnInit {
       startWith(''),
       map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
     );
+
+
+    this.getSchoolSportDegrees();
+    this.getStations();
+    this.getLanguages();
+
+    setTimeout(() => {
+      this.getSports();
+    }, 500);
   }
 
   onFileChanged(event: Event) {
@@ -159,7 +218,7 @@ export class ClientCreateUpdateComponent implements OnInit {
 
   private _filterStations(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.optionsStation.filter(option => option.toLowerCase().includes(filterValue));
+    return this.stations.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
   /**Countries */
@@ -184,7 +243,7 @@ export class ClientCreateUpdateComponent implements OnInit {
 
   private _filterSports(value: any): any[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
-    return this.allSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.schoolSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private _filterLevel(name: string): any[] {
@@ -206,7 +265,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   displayFnLevel(level: any): string {
-    return level && level.name ? level.name : '';
+    return level && level.name && level.annotation ? level.name + ' - ' + level.annotation : level.name;
   }
 
   updateSelectedSports(selected: any[]) {
@@ -222,7 +281,7 @@ export class ClientCreateUpdateComponent implements OnInit {
     if (index >= 0) {
       this.selectedSports.splice(index, 1);
     } else {
-      this.selectedSports.push({ sportName: sport.name, sportId: sport.id, level: null });
+      this.selectedSports.push(sport);
     }
 
     // Crear una nueva referencia para el array
@@ -242,16 +301,127 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   toggleSelectionLanguages(language: any): void {
-    const index = this.selectedLanguages.findIndex(l => l.code === language.code);
-    if (index >= 0) {
-      this.selectedLanguages.splice(index, 1);
+    if (this.selectedSports.length < this.maxSelection) {
+
+      const index = this.selectedLanguages.findIndex(l => l.code === language.code);
+      if (index >= 0) {
+        this.selectedLanguages.splice(index, 1);
+      } else {
+        this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
+      }
     } else {
-      this.selectedLanguages.push({ name: language.name, code: language.code });
+      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
     }
-    console.log(this.selectedLanguages);
   }
 
   getSelectedLanguageNames(): string {
     return this.selectedLanguages.map(language => language.name).join(', ');
+  }
+
+  getStations() {
+    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+      .subscribe((station) => {
+        station.data.forEach(element => {
+          this.crudService.get('/stations/'+element.id)
+            .subscribe((data) => {
+              this.stations.push(data.data);
+              this.loading = false;
+
+            })
+        });
+      })
+  }
+
+  getSchoolSportDegrees() {
+    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((sport) => {
+        this.schoolSports = sport.data;
+        sport.data.forEach((element, idx) => {
+          this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          .subscribe((data) => {
+            this.schoolSports[idx].degrees = data.data.reverse();
+          });
+        });
+      })
+  }
+
+  getSports() {
+    this.crudService.list('/sports', 1, 1000)
+      .subscribe((data) => {
+        data.data.forEach(element => {
+          this.schoolSports.forEach(sport => {
+            if(element.id === sport.sport_id) {
+              sport.name = element.name;
+            }
+          });
+        });
+      })
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data;
+      })
+  }
+
+  save() {
+
+    if (this.mode === 'create') {
+      this.create();
+    } else if (this.mode === 'update') {
+      this.update();
+    }
+  }
+
+  create() {
+    console.log(this.defaults);
+    console.log(this.defaultsUser);
+    this.defaultsUser.email = this.defaults.email;
+    this.defaultsUser.image = this.imagePreviewUrl;
+    this.defaults.image = this.imagePreviewUrl;
+    this.setLanguages();
+
+    this.crudService.create('/users', this.defaultsUser)
+      .subscribe((user) => {
+        this.defaults.user_id = user.data.id;
+
+        this.crudService.create('/clients', this.defaults)
+          .subscribe((client) => {
+            this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+
+            this.crudService.create('/client-school', {client_id: client.data.id, school_id: this.user.schools[0].id})
+              .subscribe((clientSchool) => {
+                const rqs = [];
+                this.sportsData.data.forEach(element => {
+                  rqs.push(this.crudService.create('/client-sport', {client_id: client.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id}))
+                });
+
+                forkJoin([rqs])
+                  .subscribe((multipleSport) => {
+                    this.router.navigate(['/clients']);
+
+                  })
+              })
+          })
+      })
+  }
+
+  update() {}
+
+  setLanguages() {
+    if (this.selectedLanguages.length === 1) {
+      this.defaults.language1_id = this.selectedLanguages[0];
+    } else if (this.selectedLanguages.length === 2) {
+      this.defaults.language2_id = this.defaults.language1_id = this.selectedLanguages[1];
+    } else if (this.selectedLanguages.length === 3) {
+      this.defaults.language3_id = this.defaults.language1_id = this.selectedLanguages[2];
+    } else if (this.selectedLanguages.length === 4) {
+      this.defaults.language4_id = this.defaults.language1_id = this.selectedLanguages[3];
+    } else if (this.selectedLanguages.length === 5) {
+      this.defaults.language5_id = this.defaults.language1_id = this.selectedLanguages[4];
+    } else if (this.selectedLanguages.length === 6) {
+      this.defaults.language6_id = this.defaults.language1_id = this.selectedLanguages[5];
+    }
   }
 }

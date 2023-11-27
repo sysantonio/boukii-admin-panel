@@ -11,6 +11,7 @@
   [@stagger]="true"
   class="p-gutter container"
   style="max-width: none"
+  *ngIf="!loading"
 >
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
@@ -48,26 +49,26 @@
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom</mat-label>
-                  <input formControlName="name" matInput required type="text">
+                  <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
 
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Prenom</mat-label>
-                  <input formControlName="surname" matInput required type="text">
+                  <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                 </mat-form-field>
              </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
                   <mat-label>Email</mat-label>
-                  <input formControlName="email" matInput required type="mail">
+                  <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
 
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom d'utilisateur</mat-label>
-                  <input formControlName="username" matInput required type="text">
+                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
                 </mat-form-field>
               </div>
 
@@ -75,7 +76,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Password</mat-label>
-                <input formControlName="password" matInput required type="text">
+                <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
 
               </mat-form-field>
 
@@ -85,8 +86,8 @@
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
                 <mat-autocomplete #autoStation="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredStations | async" [value]="option">
-                    {{option}}
+                  <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.station_id = option.id">
+                    {{option.name}}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -106,7 +107,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
               <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
               </mat-form-field>
@@ -117,12 +118,12 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Teléphone</mat-label>
 
-                <input formControlName="phone" matInput required type="tel">
+                <input formControlName="phone" matInput required type="tel"  [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Portable</mat-label>
-                <input formControlName="mobile" matInput required type="tel">
+                <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
 
               </mat-form-field>
             </div>
@@ -131,12 +132,12 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Addresse</mat-label>
 
-                <input formControlName="address" matInput required type="text">
+                <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Code Postal</mat-label>
-                <input formControlName="postalCode" matInput required type="text">
+                <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
 
               </mat-form-field>
             </div>
@@ -148,7 +149,7 @@
                 <mat-label>Pays</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
+                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
                     {{country.name}}
                   </mat-option>
                 </mat-autocomplete>
@@ -158,7 +159,7 @@
                 <mat-label>Canton</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
-                  <mat-option *ngFor="let province of filteredProvinces | async" [value]="province">
+                  <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
                     {{province.name}}
                   </mat-option>
                 </mat-autocomplete>
@@ -223,19 +224,19 @@
                    <mat-cell *matCellDef="let element">
                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                        <mat-label>Name</mat-label>
-                       <input matInput [value]="element.sportName" type="text" [readonly]="true">
+                       <input matInput [value]="element.name" type="text" [readonly]="true">
                      </mat-form-field>
                    </mat-cell>
                  </ng-container>
 
                  <ng-container matColumnDef="date">
-                   <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
+                   <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
                    <mat-cell *matCellDef="let element">
                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                       <mat-label>Niveaux</mat-label>
                       <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
                       <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                        <mat-option *ngFor="let level of filteredLevel | async" [value]="level.id">
+                        <mat-option *ngFor="let level of element.degrees" [value]="level">
                           {{level.annotation}} - {{level.name}}
                         </mat-option>
                       </mat-autocomplete>
@@ -259,27 +260,27 @@
              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Généralites</mat-label>
-                <textarea formControlName="summary" matInput></textarea>
+                <textarea formControlName="summary" matInput [(ngModel)]="defaultsObservations.general"></textarea>
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Notes de l'école</mat-label>
-                <textarea formControlName="notes" matInput></textarea>
+                <textarea formControlName="notes" matInput [(ngModel)]="defaultsObservations.notes"></textarea>
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Hisotrique</mat-label>
-                <textarea formControlName="hitorical" matInput></textarea>
+                <textarea formControlName="hitorical" matInput [(ngModel)]="defaultsObservations.historical"></textarea>
               </mat-form-field>
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
                 Save
               </button>
             </div>

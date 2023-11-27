@@ -11,6 +11,7 @@
   [@stagger]="true"
   class="p-gutter container"
   style="max-width: none"
+  *ngIf="!loading"
 >
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
@@ -85,8 +86,8 @@
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
                 <mat-autocomplete #autoStation="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredStations | async" [value]="option" (onSelectionChange)="this.defaults.station = option.id">
-                    {{option}}
+                  <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.station_id = option.id">
+                    {{option.name}}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
@@ -300,29 +301,29 @@
                  <!-- Otros contenedores según tu descripción -->
 
                  <ng-container matColumnDef="name">
-                   <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                   <mat-cell *matCellDef="let element">
-                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                       <mat-label>Name</mat-label>
-                       <input matInput [value]="element.sportName"type="text" [readonly]="true">
-                     </mat-form-field>
-                   </mat-cell>
-                 </ng-container>
+                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-label>Name</mat-label>
+                      <input matInput [value]="element.name" type="text" [readonly]="true">
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
 
-                 <ng-container matColumnDef="date">
-                   <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
-                   <mat-cell *matCellDef="let element">
-                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Niveaux</mat-label>
-                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
-                      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                        <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
-                          {{level.annotation}} - {{level.name}}
-                        </mat-option>
-                      </mat-autocomplete>
-                     </mat-form-field>
-                   </mat-cell>
-                 </ng-container>
+                <ng-container matColumnDef="date">
+                  <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                     <mat-label>Niveaux</mat-label>
+                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
+                     <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                       <mat-option *ngFor="let level of element.degrees" [value]="level">
+                         {{level.annotation}} - {{level.name}}
+                       </mat-option>
+                     </mat-autocomplete>
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
 
                  <!-- Ícono para eliminar
                  <ng-container matColumnDef="delete">
