@@ -69,21 +69,4 @@ export class AuthService extends ApiService {
   isLoggedIn() {
     return this.user !== null;
   }
-
-  async getUserByEmail(email: string) {
-    const db = getFirestore();
-    const usersRef = collection(db, 'usuarios');
-    const q = query(usersRef, where('email', '==', email));
-    const querySnapshot = await getDocs(q);
-
-    let user;
-
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      user = doc.data();
-    });
-
-    return user;
-  }
 }

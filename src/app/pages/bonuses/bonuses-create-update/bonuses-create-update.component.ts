@@ -4,6 +4,9 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { Observable, map, of, startWith } from 'rxjs';
 import { CLIENTS } from 'src/app/static-data/clients-data';
+import { ApiCrudService } from 'src/service/crud.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'vex-bonuses-create-update',
@@ -14,33 +17,50 @@ import { CLIENTS } from 'src/app/static-data/clients-data';
 export class BonusesCreateUpdateComponent implements OnInit {
 
   mode: 'create' | 'update' = 'create';
-  defaults: any = null;
+  defaults: any = {
+    code: null,
+    quantity: null,
+    remaining_balance: null,
+    payed: false,
+    client_id: null,
+    school_id: null,
+  };
 
+  user: any;
 
   loading: boolean = true;
   form: UntypedFormGroup;
   clientsForm = new FormControl('');
   filteredOptions: Observable<any[]>;
 
-  mockClientsData = CLIENTS;
+  clients = [];
+  id: any = null;
 
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
+
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.form = this.fb.group({
       quantity:[null, Validators.required],
       budget:[null],
-      pay:[false, Validators.required]
+      payed:[false, Validators.required]
     });
   }
 
   ngOnInit() {
-    this.filteredOptions = this.clientsForm.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.full_name),
-      map(full_name => full_name ? this._filter(full_name) : this.mockClientsData.slice())
-    );
+    this.id = this.activatedRoute.snapshot.params.id;
+
+    if (this.id === null) {
+      this.mode = 'create';
+    } else {
+      this.mode = 'update';
+      this.getVoucher();
+    }
+
+    this.getClients();
   }
 
   save() {
+
     if (this.mode === 'create') {
       this.create();
     } else if (this.mode === 'update') {
@@ -49,20 +69,82 @@ export class BonusesCreateUpdateComponent implements OnInit {
   }
 
   create() {
+
+    const data = {
+      code: "VOU-"+this.generateRandomNumber(),
+      quantity: this.defaults.quantity,
+      remaining_balance: this.defaults.quantity,
+      payed: this.defaults.payed,
+      client_id: this.defaults.client_id.id,
+      school_id: this.user.schools[0].id
+    };
+
+    this.crudService.create('/vouchers', data)
+      .subscribe((res) => {
+        this.snackbar.open('Bono creado correctamente', 'OK', {duration: 3000});
+        this.router.navigate(['/bonuses'])
+      })
   }
 
   update() {
+
+    const data = {
+      code: "VOU-"+this.generateRandomNumber(),
+      quantity: this.defaults.quantity,
+      remaining_balance: this.defaults.quantity,
+      payed: this.defaults.payed,
+      client_id: this.defaults.client_id.id,
+      school_id: this.user.schools[0].id
+    };
+
+    this.crudService.update('/vouchers', data, this.id)
+      .subscribe((res) => {
+
+        this.snackbar.open('Bono modificado correctamente', 'OK', {duration: 3000});
+        this.router.navigate(['/bonuses'])
+      })
 
   }
 
   // pasar a utils
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockClientsData.filter(client => client.full_name.toLowerCase().includes(filterValue));
+    return this.clients.filter(client => (client.first_name.toLowerCase().includes(filterValue) || client.last_name.toLowerCase().includes(filterValue)));
   }
 
 
   displayFn(client: any): string {
-    return client && client.full_name ? client.full_name : '';
+    return client && client.first_name && client.last_name ? client.first_name + ' ' + client.last_name : client.first_name;
+  }
+
+  getClients() {
+    this.crudService.list('/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((data: any) => {
+        this.clients = data.data;
+        this.filteredOptions = this.clientsForm.valueChanges.pipe(
+          startWith(''),
+          map((value: any) => typeof value === 'string' ? value : value?.name),
+          map(full_name => full_name ? this._filter(full_name) : this.clients.slice())
+        );
+
+        if (this.mode === 'update') {
+          this.defaults.client_id = this.clients.find((c) => this.defaults.client_id === c.id);
+        }
+        this.loading = false;
+      })
+  }
+
+  getVoucher() {
+    this.crudService.get('/vouchers/'+this.id)
+      .subscribe((data: any) => {
+        this.defaults = data.data;
+        this.loading = false;
+      })
+  }
+
+  generateRandomNumber() {
+    const min = 10000; // límite inferior para un número de 5 cifras
+    const max = 99999; // límite superior para un número de 5 cifras
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }

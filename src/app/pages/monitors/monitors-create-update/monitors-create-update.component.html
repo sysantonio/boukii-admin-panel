@@ -48,26 +48,26 @@
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom</mat-label>
-                  <input formControlName="name" matInput required type="text">
+                  <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
 
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Prenom</mat-label>
-                  <input formControlName="surname" matInput required type="text">
+                  <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                 </mat-form-field>
              </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
                   <mat-label>Email</mat-label>
-                  <input formControlName="email" matInput required type="mail">
+                  <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
 
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom d'utilisateur</mat-label>
-                  <input formControlName="username" matInput required type="text">
+                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
                 </mat-form-field>
               </div>
 
@@ -75,7 +75,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Password</mat-label>
-                <input formControlName="password" matInput required type="text">
+                <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
 
               </mat-form-field>
 
@@ -85,7 +85,7 @@
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
                 <mat-autocomplete #autoStation="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredStations | async" [value]="option">
+                  <mat-option *ngFor="let option of filteredStations | async" [value]="option" (onSelectionChange)="this.defaults.station = option.id">
                     {{option}}
                   </mat-option>
                 </mat-autocomplete>
@@ -106,7 +106,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
               <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
               </mat-form-field>
@@ -117,12 +117,12 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Teléphone</mat-label>
 
-                <input formControlName="phone" matInput required type="tel">
+                <input formControlName="phone" matInput required type="tel" [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Portable</mat-label>
-                <input formControlName="mobile" matInput required type="tel">
+                <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
 
               </mat-form-field>
             </div>
@@ -131,12 +131,12 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Addresse</mat-label>
 
-                <input formControlName="address" matInput required type="text">
+                <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Code Postal</mat-label>
-                <input formControlName="postalCode" matInput required type="text">
+                <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
 
               </mat-form-field>
             </div>
@@ -148,7 +148,7 @@
                 <mat-label>Pays</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
+                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
                     {{country.name}}
                   </mat-option>
                 </mat-autocomplete>
@@ -158,7 +158,7 @@
                 <mat-label>Canton</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
-                  <mat-option *ngFor="let province of filteredProvinces | async" [value]="province">
+                  <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
                     {{province.name}}
                   </mat-option>
                 </mat-autocomplete>
@@ -196,20 +196,20 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
               <mat-form-field class="flex-auto">
                 <mat-label>Nº AVS</mat-label>
-                <input formControlName="avs" matInput required type="text">
+                <input formControlName="avs" matInput required type="text" [(ngModel)]="defaults.avs">
 
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Permis de travail</mat-label>
-                <input formControlName="workId" matInput required type="text">
+                <input formControlName="workId" matInput required type="text" [(ngModel)]="defaults.work_license">
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>IBAN</mat-label>
-                <input formControlName="iban" matInput required type="text">
+                <input formControlName="iban" matInput required type="text" [(ngModel)]="defaults.bank_details">
 
               </mat-form-field>
             </div>
@@ -227,7 +227,7 @@
 
               <mat-form-field class="flex-auto">
                 <mat-label>Children</mat-label>
-                <input formControlName="children" matInput required type="number" (input)="updateChildren($event)">
+                <input formControlName="children" matInput required type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
 
               </mat-form-field>
             </div>
@@ -316,7 +316,7 @@
                       <mat-label>Niveaux</mat-label>
                       <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
                       <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                        <mat-option *ngFor="let level of filteredLevel | async" [value]="level.id">
+                        <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
                           {{level.annotation}} - {{level.name}}
                         </mat-option>
                       </mat-autocomplete>
@@ -355,7 +355,7 @@
                 <mat-label>Estado Civil</mat-label>
                 <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus">
                 <mat-autocomplete #autoCivilStatus="matAutocomplete">
-                  <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus">
+                  <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus" (onSelectionChange)="defaults.civil_status = civilStatus">
                     {{ civilStatus }}
                   </mat-option>
                 </mat-autocomplete>
@@ -365,34 +365,35 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Conjoint travaille?</mat-label>
                 <mat-select formControlName="spouse">
-                  <mat-option value="Yes">Yes</mat-option>
-                  <mat-option value="No">No</mat-option>
-                </mat-select>              </mat-form-field>
+                  <mat-option value="Yes" (onSelectionChange)="defaults.partner_works = true">Yes</mat-option>
+                  <mat-option value="No" (onSelectionChange)="defaults.partner_works = false">No</mat-option>
+                </mat-select>
+              </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Demande d'allocation familiales?</mat-label>
                 <mat-select formControlName="workMobility">
-                  <mat-option value="Yes">Yes</mat-option>
-                  <mat-option value="No">No</mat-option>
+                  <mat-option value="Yes" (onSelectionChange)="defaults.family_allowance = true">Yes</mat-option>
+                  <mat-option value="No" (onSelectionChange)="defaults.family_allowance = false">No</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
               <mat-form-field class="flex-auto">
                 <mat-label>Permis travail du conjoint</mat-label>
-                <input formControlName="spouseWorkId" matInput required type="text">
+                <input formControlName="spouseWorkId" matInput required type="text" [(ngModel)]="defaults.partner_work_license">
 
               </mat-form-field>
               <mat-form-field class="flex-auto">
                 <mat-label>Pourcentage du conjoint (%)</mat-label>
-                <input formControlName="spousePercentage" matInput required type="text">
+                <input formControlName="spousePercentage" matInput required type="text" [(ngModel)]="defaults.partner_percentaje">
 
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
                 Save
               </button>
             </div>

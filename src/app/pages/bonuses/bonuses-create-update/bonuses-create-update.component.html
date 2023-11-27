@@ -11,6 +11,7 @@
   [@stagger]="true"
   class="p-gutter container"
   style="max-width: none"
+  *ngIf="!loading"
 >
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
@@ -28,13 +29,14 @@
             matInput
             [formControl]="clientsForm"
             [matAutocomplete]="auto"
+            [(ngModel)]="defaults.client_id"
           />
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option
               *ngFor="let client of filteredOptions | async"
               [value]="client"
             >
-              {{client.full_name}}
+              {{client.first_name}} {{client.last_name}}
             </mat-option>
           </mat-autocomplete>
           <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
@@ -42,25 +44,28 @@
 
         <mat-form-field class="flex-auto" *ngIf="mode === 'create'">
           <mat-label>MONTANT</mat-label>
-          <input formControlName="quantity" matInput required>
+          <input formControlName="quantity" [(ngModel)]="defaults.quantity" matInput required>
         </mat-form-field>
 
-        <div class="flex flex-col sm:flex-row" *ngIf="mode === 'update'">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="mode === 'update'">
 
           <mat-form-field class="flex-auto">
             <mat-label>MONTANT</mat-label>
-            <input formControlName="quantity" matInput required>
+            <input formControlName="quantity" [(ngModel)]="defaults.quantity" matInput required>
           </mat-form-field>
 
           <mat-form-field class="flex-auto">
             <mat-label>Solde restant?</mat-label>
-            <input formControlName="budget" matInput [value]="defaults.budget" readonly="true">
+            <input formControlName="budget" matInput [value]="defaults.remaining_balance" [(ngModel)]="defaults.remaining_balance" readonly="true">
           </mat-form-field>
         </div>
 
         <div class="flex-auto">
           <mat-label>Payé?</mat-label><br>
-          <mat-slide-toggle formControlName="pay"></mat-slide-toggle>
+          <mat-slide-toggle
+            color="accent"
+            formControlName="payed" [(ngModel)]="defaults.payed">
+          </mat-slide-toggle>
         </div>
         <div class="flex items-center justify-end gap-2">
           <button mat-button type="button">Cancelar</button>
@@ -70,6 +75,7 @@
             mat-raised-button
             type="button"
             (click)="save()"
+            [disabled]="form.invalid"
           >
             Guardar
           </button>

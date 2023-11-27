@@ -185,7 +185,8 @@
                     <ng-container *ngFor="let item of sports">
                       <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
 
-                        <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" *ngIf="item.sport_type === 1">
+                        <div style="float: left; width: 100%; border-radius: 10px;"
+                        [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
                           <div style="float: left; width: 100%;">
                             <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
@@ -203,7 +204,8 @@
                     <ng-container *ngFor="let item of sports">
                       <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
 
-                        <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" *ngIf="item.sport_type === 2">
+                        <div style="float: left; width: 100%;  border-radius: 10px;" *ngIf="item.sport_type === 2"
+                        [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                           <div style="float: left; width: 100%;">
                             <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
@@ -222,7 +224,7 @@
                     <ng-container *ngFor="let item of sports">
                       <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" (click)="setSport(item.id)">
 
-                        <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080">
+                        <div style="float: left; width: 100%; border-radius: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                           <div style="float: left; width: 100%;">
                             <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
@@ -248,7 +250,7 @@
                       Los colores son fijos, no se pueden modificar.<br>
                       Recuerda que los hemos clasificado de menor a mayor, siendo el verde el nivel más bajo.
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;">Guardar Cambios</button>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="updateSportDegrees()">Guardar Cambios</button>
 
                   </div>
 
@@ -256,8 +258,8 @@
                     <ng-container *ngFor="let item of schoolSports; let i = index">
                       <div
                       style="float: left; width: 5%;margin-left: 6%">
-                      <!-- Contenido del div -->
-                        <div style="float: left; width: 100%; background: #e6e6e6; border-radius: 10px;border: solid 1px #808080">
+                      <!-- Contenido del div (aplicar estilos selected)-->
+                        <div style="float: left; width: 100%; background: #e91e63; border-radius: 10px;">
                           <div style="float: left; width: 100%;cursor:pointer" (click)="dataSourceLevels = item.degrees">
                             <img style="float: left; width: 100%;" [src]="item.icon_selected"/>
                           </div>
@@ -274,25 +276,47 @@
                     <!-- añadir mat table de niveles-->
                     <table #reductionTable id="table-level" mat-table [dataSource]="dataSourceLevels" matSort style="border: 1px solid #e6e6e6">
 
-                      <ng-container matColumnDef="age">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
-                        <td mat-cell *matCellDef="let element"> No existe el campo </td>
+                      <ng-container matColumnDef="ageMin">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad Desde</th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="flex-auto">
+                            <input matInput placeholder="Acronym" type="number" [value]="element.age_min" [(ngModel)]="element.age_min">
+                          </mat-form-field>
+                        </td>                      </ng-container>
+
+                      <ng-container matColumnDef="ageMax">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad Hasta</th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="flex-auto">
+                            <input matInput placeholder="Acronym" type="number" [value]="element.age_max" [(ngModel)]="element.age_max">
+                          </mat-form-field>
+                        </td>
                       </ng-container>
 
                       <ng-container matColumnDef="annotation">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Acrónimo </th>
-                        <td mat-cell *matCellDef="let element"> {{element.annotation}} </td>
+                        <td mat-cell *matCellDef="let element">
+
+                          <mat-form-field class="flex-auto">
+                            <input matInput placeholder="Acronym" type="text" [value]="element.annotation" [(ngModel)]="element.annotation">
+                          </mat-form-field>
+
+                        </td>
                       </ng-container>
 
                       <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="flex-auto">
+                            <input matInput placeholder="Name" type="text" [value]="element.name" [(ngModel)]="element.name">
+                          </mat-form-field>
+                        </td>
                       </ng-container>
 
                       <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                          <mat-slide-toggle [checked]="element.active" [(ngModel)]="element.active"></mat-slide-toggle>
                         </td>
                       </ng-container>
 
@@ -368,7 +392,7 @@
           <vex-page-layout>
             <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Deportes activos</h1>
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Página de reservas</h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   Gracias a las múltiples opciones configurables y a otros servicios, tu escuela podrá aportar a<br>
                   sus clientes un gran valor añadido.

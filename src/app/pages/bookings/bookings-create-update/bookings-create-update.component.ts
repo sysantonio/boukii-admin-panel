@@ -378,7 +378,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/clients', 1, 1000);/*
+    return this.crudService.list('/clients', 1, 1000, 'desc', 'id', '&school_id='+1);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;

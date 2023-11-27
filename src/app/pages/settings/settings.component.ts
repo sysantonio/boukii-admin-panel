@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
   dataSource: any;
   displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSourceLevels = new MatTableDataSource([]);
-  displayedLevelsColumns: string[] = ['age', 'annotation', 'name', 'status', 'color', 'edit'];
+  displayedLevelsColumns: string[] = ['ageMin','ageMax', 'annotation', 'name', 'status', 'color', 'edit'];
 
   dataSourceSport = new MatTableDataSource([]);
   dataSourceForfait = new MatTableDataSource([]);
@@ -629,9 +629,20 @@ export class SettingsComponent implements OnInit {
       })
   }
 
+  updateSportDegrees() {
+    this.dataSourceLevels.data.forEach(element => {
+      this.crudService.update('/degrees', element, element.id)
+        .subscribe((degree) => {
+          console.log(degree);
+        })
+    });
+
+    this.snackbar.open('Niveles actualizados correctamente', 'OK', {duration: 3000});
+  }
+
   generateRandomNumber() {
     const min = 10000; // límite inferior para un número de 5 cifras
     const max = 99999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  }
 }

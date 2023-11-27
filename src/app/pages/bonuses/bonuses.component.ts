@@ -10,11 +10,12 @@ import { BonusesCreateUpdateComponent } from './bonuses-create-update/bonuses-cr
 export class BonusesComponent {
 
   createComponent = BonusesCreateUpdateComponent;
-  entity = 'bookings';
+  entity = '/vouchers';
   columns: TableColumn<any>[] = [
-    { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Mail', property: 'email', type: 'text', visible: true },
-    { label: 'Rol', property: 'rol', type: 'text', visible: true },
+    { label: 'Code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Quantity', property: 'quantity', type: 'text', visible: true },
+    { label: 'Remaining', property: 'remaining_balance', type: 'text', visible: true },
+    { label: 'Payed', property: 'payed', type: 'status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 }

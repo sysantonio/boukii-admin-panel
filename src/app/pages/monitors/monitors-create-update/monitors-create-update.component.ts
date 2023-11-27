@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -10,6 +12,7 @@ import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-monitors-create-update',
@@ -20,6 +23,8 @@ import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 export class MonitorsCreateUpdateComponent implements OnInit {
 
   @ViewChild('childrenTable') table: MatTable<any>;
+  mode: 'create' | 'update' = 'create';
+
   displayedColumns: string[] = ['name', 'date'];
 
   imagePreviewUrl: string | ArrayBuffer;
@@ -64,7 +69,49 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   mockLevelData = LEVELS;
   languages = MOCK_LANGS;
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+  defaults = {
+    email: null,
+    username: null,
+    first_name: null,
+    last_name: null,
+    birth_date: null,
+    phone: null,
+    telephone: null,
+    address: null,
+    cp: null,
+    city: null,
+    province: null,
+    country: null,
+    image: null,
+    avs: null,
+    work_license: null,
+    bank_details: null,
+    children: null,
+    civil_status: null,
+    family_allowance: null,
+    partner_work_license: null,
+    partner_works: null,
+    language1_id: null,
+    language2_id: null,
+    language3_id: null,
+    language4_id: null,
+    language5_id: null,
+    language6_id: null,
+    partner_percentaje: null,
+    user_id: null,
+    station: null
+  }
+
+  defaultsUser = {
+    username: null,
+    email: null,
+    password: null,
+    image: null,
+    type: 'monitor',
+    active: null,
+  }
+
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDateChild = new Date(this.today);
@@ -176,6 +223,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
       reader.onload = () => {
         this.imagePreviewUrl = reader.result;
+        this.defaults.image = reader.result;
       };
 
       reader.readAsDataURL(file);
@@ -337,4 +385,36 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   getSelectedLanguageNames(): string {
     return this.selectedLanguages.map(language => language.name).join(', ');
   }
+
+  getStationSchoolen
+
+  save() {
+
+    if (this.mode === 'create') {
+      this.create();
+    } else if (this.mode === 'update') {
+      this.update();
+    }
+  }
+
+  create() {
+    console.log(this.defaults);
+    console.log(this.defaultsUser);
+    this.defaultsUser.email = this.defaults.email;
+    this.defaultsUser.image = this.imagePreviewUrl;
+    this.defaults.image = this.imagePreviewUrl;
+
+    this.crudService.create('/users', this.defaultsUser)
+      .subscribe((user) => {
+        this.defaults.user_id = user.data.id;
+
+        this.crudService.create('/monitors', this.defaults)
+          .subscribe((monitor) => {
+            this.snackbar.open('Monitor creado correctamente', 'OK', {duration: 3000});
+            this.router.navigate(['/monitors']);
+          })
+      })
+  }
+
+  update() {}
 }
