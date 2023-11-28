@@ -1,14 +1,20 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-admin-create-update',
   templateUrl: './admin-create-update.component.html',
-  styleUrls: ['./admin-create-update.component.scss']
+  styleUrls: ['./admin-create-update.component.scss'],
+  animations: [stagger20ms, fadeInUp400ms]
 })
 export class AdminCreateUpdateComponent implements OnInit {
 
@@ -24,11 +30,11 @@ export class AdminCreateUpdateComponent implements OnInit {
   filteredProvinces: Observable<any[]>;
 
   languagesControl = new FormControl([]);
-  languages = MOCK_LANGS;
+  languages = [];
   filteredLanguages: Observable<any[]>;
   selectedLanguages = [];
 
-  optionsStation: string[] = ['Les Pacots', 'Andorra'];
+  loading = true;
 
   today: Date;
   minDate: Date;
@@ -36,13 +42,50 @@ export class AdminCreateUpdateComponent implements OnInit {
   mockCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+  maxSelection = 6;
+
+  defaults = {
+    email: null,
+    first_name: null,
+    last_name: null,
+    birth_date: null,
+    phone: null,
+    telephone: null,
+    address: null,
+    cp: null,
+    city: null,
+    province: null,
+    country: null,
+    language1_id:null,
+    language2_id:null,
+    language3_id:null,
+    language4_id:null,
+    language5_id:null,
+    language6_id:null,
+    user_id: null
+  }
+
+  defaultsUser = {
+    username: null,
+    email: null,
+    password: null,
+    type: 'admin',
+    active: false,
+  }
+
+  user: any;
+  mode: 'create' | 'update' = 'create';
+
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private snackbar: MatSnackBar, private router: Router, private crudService: ApiCrudService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
   }
 
   ngOnInit(): void {
+
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
     this.formInfoAccount = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
@@ -79,6 +122,8 @@ export class AdminCreateUpdateComponent implements OnInit {
       startWith(''),
       map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
     );
+
+    this.getLanguages();
   }
 
   passwordValidator(formControl: FormControl) {
@@ -93,11 +138,6 @@ export class AdminCreateUpdateComponent implements OnInit {
     } else {
       return { passwordStrength: true };
     }
-  }
-
-  private _filterStations(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.optionsStation.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   /**Countries */
@@ -138,17 +178,84 @@ export class AdminCreateUpdateComponent implements OnInit {
   }
 
   toggleSelectionLanguages(language: any): void {
-    const index = this.selectedLanguages.findIndex(l => l.code === language.code);
-    if (index >= 0) {
-      this.selectedLanguages.splice(index, 1);
+    if (this.selectedLanguages.length < this.maxSelection) {
+
+      const index = this.selectedLanguages.findIndex(l => l.code === language.code);
+      if (index >= 0) {
+        this.selectedLanguages.splice(index, 1);
+      } else {
+        this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
+      }
     } else {
-      this.selectedLanguages.push({ name: language.name, code: language.code });
+      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
     }
-    console.log(this.selectedLanguages);
   }
 
   getSelectedLanguageNames(): string {
     return this.selectedLanguages.map(language => language.name).join(', ');
   }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+        this.loading = false;
+
+      })
+  }
+
+
+
+  save() {
+
+    if (this.mode === 'create') {
+      this.create();
+    } else if (this.mode === 'update') {
+      this.update();
+    }
+  }
+
+  create() {
+    console.log(this.defaults);
+    console.log(this.defaultsUser);
+    this.defaultsUser.email = this.defaults.email;
+    this.setLanguages();
+
+    this.crudService.create('/users', this.defaultsUser)
+      .subscribe((user) => {
+        this.defaults.user_id = user.data.id;
+
+        this.crudService.create('/clients', this.defaults)
+          .subscribe((client) => {
+            this.snackbar.open('Administrador creado correctamente', 'OK', {duration: 3000});
+            this.router.navigate(['/admins']);
+          })
+      })
+  }
+
+  update() {}
+
+  setLanguages() {
+    if (this.selectedLanguages.length >= 1) {
+
+      this.defaults.language1_id = this.selectedLanguages[0];
+    } else if (this.selectedLanguages.length >= 2) {
+
+      this.defaults.language2_id = this.selectedLanguages[1];
+    } else if (this.selectedLanguages.length >= 3) {
+
+      this.defaults.language3_id = this.selectedLanguages[2];
+    } else if (this.selectedLanguages.length >= 4) {
+
+      this.defaults.language4_id = this.selectedLanguages[3];
+    } else if (this.selectedLanguages.length >= 5) {
+
+      this.defaults.language5_id = this.selectedLanguages[4];
+    } else if (this.selectedLanguages.length === 6) {
+
+      this.defaults.language6_id = this.selectedLanguages[5];
+    }
+  }
+
 }
 

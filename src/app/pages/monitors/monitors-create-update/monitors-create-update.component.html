@@ -16,7 +16,14 @@
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Nouvelle moniteur</h2>
+        <div style="float: left;width: 50%;">
+          <h2 class="title m-0">Nouvelle moniteur</h2>
+        </div>
+        <div style="float: left;width: 50%;">
+          <div style="float:right">
+            Active <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
+          </div>
+        </div>
       </div>
       <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
 

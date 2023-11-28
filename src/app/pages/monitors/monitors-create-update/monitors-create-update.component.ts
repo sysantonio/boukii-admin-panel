@@ -389,7 +389,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   toggleSelectionLanguages(language: any): void {
-    if (this.selectedSports.length < this.maxSelection) {
+    if (this.selectedLanguages.length < this.maxSelection) {
 
       const index = this.selectedLanguages.findIndex(l => l.code === language.code);
       if (index >= 0) {
@@ -499,17 +499,23 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   setLanguages() {
-    if (this.selectedLanguages.length === 1) {
+    if (this.selectedLanguages.length >= 1) {
+
       this.defaults.language1_id = this.selectedLanguages[0];
-    } else if (this.selectedLanguages.length === 2) {
+    } else if (this.selectedLanguages.length >= 2) {
+
       this.defaults.language2_id = this.selectedLanguages[1];
-    } else if (this.selectedLanguages.length === 3) {
-      this.defaults.language3_id =this.selectedLanguages[2];
-    } else if (this.selectedLanguages.length === 4) {
+    } else if (this.selectedLanguages.length >= 3) {
+
+      this.defaults.language3_id = this.selectedLanguages[2];
+    } else if (this.selectedLanguages.length >= 4) {
+
       this.defaults.language4_id = this.selectedLanguages[3];
-    } else if (this.selectedLanguages.length === 5) {
+    } else if (this.selectedLanguages.length >= 5) {
+
       this.defaults.language5_id = this.selectedLanguages[4];
     } else if (this.selectedLanguages.length === 6) {
+
       this.defaults.language6_id = this.selectedLanguages[5];
     }
   }

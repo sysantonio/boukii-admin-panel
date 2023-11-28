@@ -30,7 +30,7 @@ export class MonitorsComponent {
   }
 
   createComponent = MonitorsCreateUpdateComponent;
-  entity = 'monitors';
+  entity = '/monitors';
   columns: TableColumn<any>[] = [
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Age', property: 'age', type: 'text', visible: true },
