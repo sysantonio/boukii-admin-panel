@@ -279,8 +279,8 @@
                   </mat-cell>
                 </ng-container> -->
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-header-row *matHeaderRowDef="displayedColumnsChildren"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsChildren;"></mat-row>
               </mat-table>
             </div>
 
@@ -414,17 +414,17 @@
 
               <mat-form-field class="flex-auto">
                 <mat-label>Conjoint travaille?</mat-label>
-                <mat-select formControlName="spouse">
-                  <mat-option value="Yes" (onSelectionChange)="defaults.partner_works = true">Yes</mat-option>
-                  <mat-option value="No" (onSelectionChange)="defaults.partner_works = false">No</mat-option>
+                <mat-select formControlName="spouse" (selectionChange)="setValueSpouse($event)">
+                  <mat-option value="y">Yes</mat-option>
+                  <mat-option value="n">No</mat-option>
                 </mat-select>
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Demande d'allocation familiales?</mat-label>
-                <mat-select formControlName="workMobility">
-                  <mat-option value="Yes" (onSelectionChange)="defaults.family_allowance = true">Yes</mat-option>
-                  <mat-option value="No" (onSelectionChange)="defaults.family_allowance = false">No</mat-option>
+                <mat-select formControlName="workMobility" (selectionChange)="setValueLocation($event)">
+                  <mat-option value="y" >Yes</mat-option>
+                  <mat-option value="n" >No</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -432,12 +432,12 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
               <mat-form-field class="flex-auto">
                 <mat-label>Permis travail du conjoint</mat-label>
-                <input formControlName="spouseWorkId" matInput required type="text" [(ngModel)]="defaults.partner_work_license">
+                <input formControlName="spouseWorkId" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
 
               </mat-form-field>
               <mat-form-field class="flex-auto">
                 <mat-label>Pourcentage du conjoint (%)</mat-label>
-                <input formControlName="spousePercentage" matInput required type="text" [(ngModel)]="defaults.partner_percentaje">
+                <input formControlName="spousePercentage" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
 
               </mat-form-field>
             </div>

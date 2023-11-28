@@ -26,6 +26,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   mode: 'create' | 'update' = 'create';
 
   displayedColumns: string[] = ['name', 'level', 'salary', 'auth'];
+  displayedColumnsChildren: string[] = ['name', 'date'];
 
   imagePreviewUrl: string | ArrayBuffer;
   formInfoAccount: UntypedFormGroup;
@@ -91,9 +92,9 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     bank_details: null,
     children: null,
     civil_status: null,
-    family_allowance: null,
+    family_allowance: false,
     partner_work_license: null,
-    partner_works: null,
+    partner_works: false,
     language1_id: null,
     language2_id: null,
     language3_id: null,
@@ -431,7 +432,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   getLanguages() {
     this.crudService.list('/languages', 1, 1000)
       .subscribe((data) => {
-        this.languages = data.data;
+        this.languages = data.data.reverse();
       })
   }
 
@@ -563,5 +564,18 @@ export class MonitorsCreateUpdateComponent implements OnInit {
       } else {
         this.authorisedLevels.push(level.id);
       }
+  }
+
+  setValueSpouse(value: any) {
+
+      this.defaults.partner_works = value.value === 'y';
+      this.cdr.detectChanges();
+  }
+
+  setValueLocation(value: any) {
+
+      this.defaults.family_allowance = value.value === 'y';
+      this.cdr.detectChanges();
+
   }
 }
