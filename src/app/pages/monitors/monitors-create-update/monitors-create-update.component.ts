@@ -25,7 +25,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   @ViewChild('childrenTable') table: MatTable<any>;
   mode: 'create' | 'update' = 'create';
 
-  displayedColumns: string[] = ['name', 'date'];
+  displayedColumns: string[] = ['name', 'level', 'salary', 'auth'];
 
   imagePreviewUrl: string | ArrayBuffer;
   formInfoAccount: UntypedFormGroup;
@@ -38,6 +38,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   myControlProvinces = new FormControl();
   myControlCivilStatus = new FormControl();
   levelForm = new FormControl();
+  salaryForm = new FormControl();
   languagesControl = new FormControl([]);
 
   filteredStations: Observable<any[]>;
@@ -46,6 +47,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   filteredProvinces: Observable<any[]>;
   filteredCivilStatus: Observable<string[]>;
   filteredLevel: Observable<any[]>;
+  filteredSalary: Observable<any[]>;
   filteredLanguages: Observable<any[]>;
 
   sportsControl = new FormControl();
@@ -67,6 +69,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData = LEVELS;
   languages = [];
+  salaryData = [];
+  authorisedLevels = [];
 
   defaults = {
     email: null,
@@ -218,6 +222,13 @@ export class MonitorsCreateUpdateComponent implements OnInit {
       map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
     );
 
+
+    this.filteredSalary = this.salaryForm.valueChanges.pipe(
+      startWith(''),
+      map((value: any) => typeof value === 'string' ? value : value?.annotation),
+      map(annotation => annotation ? this._filterSalary(annotation) : this.salaryData.slice())
+    );
+
     this.filteredLanguages = this.languagesControl.valueChanges.pipe(
       startWith(''),
       map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
@@ -226,6 +237,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     this.getSchoolSportDegrees();
     this.getStations();
     this.getLanguages();
+    this.getSalarySchoolData();
 
     setTimeout(() => {
       this.getSports();
@@ -300,6 +312,11 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     return this.mockLevelData.filter(level => level.annotation.toLowerCase().includes(filterValue));
   }
 
+  private _filterSalary(name: string): any[] {
+    const filterValue = name.toLowerCase();
+    return this.salaryData.filter(level => level.annotation.toLowerCase().includes(filterValue));
+  }
+
   private _filterLanguages(value: any): any[] {
     const filterValue = value.toLowerCase();
     return this.languages.filter(language => language?.name.toLowerCase().includes(filterValue));
@@ -315,6 +332,10 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   displayFnLevel(level: any): string {
     return level && level.name ? level.name : '';
+  }
+
+  displayFnSalary(salary: any): string {
+    return salary && salary.name ? salary.name : '';
   }
 
   removeChild(course: any) {
@@ -365,7 +386,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   toggleSelection(sport: any): void {
-    const index = this.selectedSports.findIndex(s => s.sportId === sport.id);
+    const index = this.selectedSports.findIndex(s => s.sport_id === sport.id);
     if (index >= 0) {
       this.selectedSports.splice(index, 1);
     } else {
@@ -431,8 +452,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
     if (this.mode === 'create') {
       this.create();
-    } else if (this.mode === 'update') {
-      this.update();
     }
   }
 
@@ -455,12 +474,19 @@ export class MonitorsCreateUpdateComponent implements OnInit {
             this.crudService.create('/monitors-school', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
               .subscribe((monitorSchool) => {
                 const rqs = [];
+                const rqsDegreeAuth = [];
                 this.sportsData.data.forEach(element => {
-                  rqs.push(this.crudService.create('/monitors-sports-degrees', {monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id}))
+                  rqs.push(this.crudService.create('/monitors-sports-degrees', {monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id}));
+                  this.authorisedLevels.forEach(auLevel => {
+
+                    rqsDegreeAuth.push(this.crudService.create('/monitors-sport-authorized-degrees', {monitor_sport_id: monitor.data.id, sport_id: element.sport_id, degree_id: auLevel}))
+                  });
                 });
 
-                forkJoin([rqs])
+                forkJoin([rqs, rqsDegreeAuth])
                   .subscribe((multipleSport) => {
+
+
                     this.router.navigate(['/monitors']);
 
                   })
@@ -468,8 +494,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
           })
       })
   }
-
-  update() {}
 
   getStations() {
     this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
@@ -518,5 +542,26 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
       this.defaults.language6_id = this.selectedLanguages[5];
     }
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
+
+  getSalarySchoolData() {
+    this.crudService.list('/school-salary-levels', 1, 1000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        this.salaryData = data.data;
+      })
+  }
+
+  authoriseLevel(level) {
+
+      const index = this.authorisedLevels.findIndex(l => l === level.id);
+      if (index >= 0) {
+        this.authorisedLevels.splice(index, 1);
+      } else {
+        this.authorisedLevels.push(level.id);
+      }
   }
 }

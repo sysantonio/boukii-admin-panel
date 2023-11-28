@@ -135,7 +135,18 @@ export class SettingsComponent implements OnInit {
 
 
   ngOnInit() {
+    /*this.mockLevelData.forEach(element => {
+      this.crudService.create('/degrees', element)
 
+      .subscribe(() => console.log('ok'))
+    });*/
+    /*this.crudService.list('/degrees', 1, 10000)
+      .subscribe((data) => {
+        data.data.forEach(element => {
+          this.crudService.delete('/degrees', element.id)
+          .subscribe(() => console.log('ok'))
+        });
+      })*/
     this.generateHours();
 
     this.crudService.get('/schools/1')
@@ -387,23 +398,30 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         res.data.sports.forEach(sport => {
-          this.dataSourceLevels.data.forEach((degree, idx) => {
-            degree.sport_id = sport.id;
-            degree.school_id = this.school.id;
-            degree.degree_order = idx;
-            degree.level = 'test';
-            degree.progress = 0;
+          const hasDegrees = this.schoolSports.filter((s) => s.sport_id === sport.id).length > 0;
+
+          if (!hasDegrees) {
+            this.mockLevelData.forEach((degree, idx) => {
+              degree.sport_id = sport.id;
+              degree.school_id = this.school.id;
+              degree.degree_order = idx;
+              degree.level = 'test';
+              degree.progress = 0;
 
 
-            this.crudService.create('/degrees', degree)
-              .subscribe((data) => {
-                console.log(data)
-              });
-          });
+              this.crudService.create('/degrees', degree)
+                .subscribe((data) => {
+                  console.log(data)
+                });
+            });
+
+            setTimeout(() => {
+              this.getSchoolSportDegrees();
+            }, 1000);
+          }
 
         });
-
-        this.snackbar.open('Deportes modificados correctamente', 'OK', {duration: 300});
+        this.snackbar.open('Deportes modificados correctamente', 'OK', {duration: 3000});
       });
   }
 

@@ -147,4 +147,8 @@ export class BonusesCreateUpdateComponent implements OnInit {
     const max = 99999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
 }

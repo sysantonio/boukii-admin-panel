@@ -100,6 +100,8 @@
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
                 Next
@@ -189,6 +191,8 @@
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
                 Next
@@ -300,13 +304,13 @@
             </div>
 
 
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <!-- Añadir niños con modal -->
+
                <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
 
                  <!-- Otros contenedores según tu descripción -->
-
                  <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
                   <mat-cell *matCellDef="let element">
@@ -317,7 +321,7 @@
                   </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="date">
+                <ng-container matColumnDef="level">
                   <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
@@ -332,6 +336,40 @@
                   </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="salary">
+                  <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                     <mat-label>Salary</mat-label>
+                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
+                     <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
+                       <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
+                         {{salary.name}}
+                       </mat-option>
+                     </mat-autocomplete>
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="auth">
+                  <mat-header-cell *matHeaderCellDef> Authorised Levels </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <div style="width: 100%; float:left">
+                      <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
+                      [ngStyle]="{
+                        'background': authorisedLevels.indexOf(item.id) !== -1 ? item.color : '#fff'
+                      }"
+                        (click)="authoriseLevel(item)">
+                        <p style="color: #000;text-align: center"
+                        [ngStyle]="{
+                          'color': authorisedLevels.indexOf(item.id) !== -1 ? '#fff': '#000'
+                        }"
+                        >{{ item.annotation }}</p>
+                      </div>
+                     </div>
+                  </mat-cell>
+                </ng-container>
+
                  <!-- Ícono para eliminar
                  <ng-container matColumnDef="delete">
                    <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
@@ -343,9 +381,13 @@
                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                </mat-table>
+
+
              </div>
 
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
                 Next
@@ -400,6 +442,8 @@
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
                 Save

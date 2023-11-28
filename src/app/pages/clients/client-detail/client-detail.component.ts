@@ -244,7 +244,7 @@ export class ClientDetailComponent {
   }
 
   toggleSelection(sport: any): void {
-    const index = this.selectedSports.findIndex(s => s.sportId === sport.id);
+    const index = this.selectedSports.findIndex(s => s.sport_id === sport.id);
     if (index >= 0) {
       this.selectedSports.splice(index, 1);
     } else {

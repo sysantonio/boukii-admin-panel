@@ -100,6 +100,8 @@
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
                 Next
@@ -189,6 +191,8 @@
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
                 Next
@@ -286,6 +290,8 @@
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
+
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
                 Save

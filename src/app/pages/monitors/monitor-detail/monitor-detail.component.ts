@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { _MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
@@ -11,6 +13,7 @@ import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-monitor-detail',
@@ -75,12 +78,62 @@ export class MonitorDetailComponent {
   mockWorkCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData = LEVELS;
-  languages = MOCK_LANGS;
+  languages = [];
+
+  defaults = {
+    email: null,
+    username: null,
+    first_name: null,
+    last_name: null,
+    birth_date: null,
+    phone: null,
+    telephone: null,
+    address: null,
+    cp: null,
+    city: null,
+    province: null,
+    country: null,
+    image: null,
+    avs: null,
+    work_license: null,
+    bank_details: null,
+    children: null,
+    civil_status: null,
+    family_allowance: null,
+    partner_work_license: null,
+    partner_works: null,
+    language1_id: null,
+    language2_id: null,
+    language3_id: null,
+    language4_id: null,
+    language5_id: null,
+    language6_id: null,
+    partner_percentaje: null,
+    user_id: null,
+    station_id: null
+  }
+
+  defaultsUser = {
+    username: null,
+    email: null,
+    password: null,
+    image: null,
+    type: 'monitor',
+    active: false,
+  }
+
+  id: any;
+  maxSelection = 6;
+
+  loading: boolean = true;
+  user: any;
+  schoolSports: any[] = [];
+  stations: any[] = [];
 
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -92,95 +145,117 @@ export class MonitorDetailComponent {
   }
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.id = this.activatedRoute.snapshot.params.id;
 
-    this.formInfoAccount = this.fb.group({
-      image: [''],
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      station: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+    this.crudService.get('/monitors/'+this.id)
+      .subscribe((data) => {
+        this.defaults = data.data;
+        this.crudService.get('/users/'+data.data.user_id)
+          .subscribe((user)=> {
+            this.defaultsUser = user.data;
 
-      fromDate: [''],
-      phone: ['', Validators.required],
-      mobile: ['', Validators.required],
-      address: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      country: this.myControlCountries,
-      province: this.myControlProvinces,
+            this.getSchoolSportDegrees();
+            this.getStations();
+            this.getLanguages();
 
-      avs: [],
-      workId: [],
-      iban: [],
-      countryWork: this.myControlWorkCountries,
-      children: [],
-    });
 
-    this.formWorkInfo = this.fb.group({
+            this.formInfoAccount = this.fb.group({
+              image: [''],
+              name: ['', Validators.required],
+              surname: ['', Validators.required],
+              email: ['', [Validators.required, Validators.email]],
+              username: ['', Validators.required],
+              station: ['', Validators.required],
+              password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
-      childName: [],
-      childAge: [],
-      sports: [],
-      sportName: []
-    });
+              fromDate: [''],
+              phone: ['', Validators.required],
+              mobile: ['', Validators.required],
+              address: ['', Validators.required],
+              postalCode: ['', Validators.required],
+              country: this.myControlCountries,
+              province: this.myControlProvinces,
 
-    this.formCivilStatusInfo = this.fb.group({
+              avs: [],
+              workId: [],
+              iban: [],
+              countryWork: this.myControlWorkCountries,
+              children: [],
+            });
 
-      civilStatus: [],
-      spouse: ['No'],
-      workMobility: ['No'],
-      spouseWorkId: [],
-      spousePercentage: []
-    });
+            this.formWorkInfo = this.fb.group({
 
-    this.filteredStations = this.myControlStations.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterStations(value))
-      );
+              childName: [],
+              childAge: [],
+              sports: [],
+              sportName: []
+            });
 
-      this.myControlStations.valueChanges.subscribe(value => {
-        this.formInfoAccount.get('station').setValue(value);
-    });
+            this.formCivilStatusInfo = this.fb.group({
 
-    this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
-    );
+              civilStatus: [],
+              spouse: ['No'],
+              workMobility: ['No'],
+              spouseWorkId: [],
+              spousePercentage: []
+            });
 
-    this.myControlCountries.valueChanges.subscribe(country => {
-      this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-      this.filteredProvinces = this._filterProvinces(country.id);
-    });
+            this.filteredStations = this.myControlStations.valueChanges
+              .pipe(
+                startWith(''),
+                map(value => this._filterStations(value))
+              );
 
-    this.filteredWorkCountries = this.myControlWorkCountries.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filterCountries(name) : this.mockWorkCountriesData.slice())
-    );
+              this.myControlStations.valueChanges.subscribe(value => {
+                this.formInfoAccount.get('station').setValue(value);
+            });
 
-    this.filteredCivilStatus = this.myControlCivilStatus.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterCivilStatus(value))
-    );
+            this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.name),
+              map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+            );
 
-    this.filteredSports = this.sportsControl.valueChanges.pipe(
-      startWith(''),
-      map((sport: string | null) => sport ? this._filterSports(sport) : this.allSports.slice())
-    );
+            this.myControlCountries.valueChanges.subscribe(country => {
+              this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+              this.filteredProvinces = this._filterProvinces(country.id);
+            });
 
-    this.filteredLevel = this.levelForm.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.annotation),
-      map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
-    );
+            this.filteredWorkCountries = this.myControlWorkCountries.valueChanges.pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.name),
+              map(name => name ? this._filterCountries(name) : this.mockWorkCountriesData.slice())
+            );
 
-    this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-      startWith(''),
-      map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-    );
+            this.filteredCivilStatus = this.myControlCivilStatus.valueChanges.pipe(
+              startWith(''),
+              map(value => this._filterCivilStatus(value))
+            );
+
+            this.filteredSports = this.sportsControl.valueChanges.pipe(
+              startWith(''),
+              map((sport: string | null) => sport ? this._filterSports(sport) : this.allSports.slice())
+            );
+
+            this.filteredLevel = this.levelForm.valueChanges.pipe(
+              startWith(''),
+              map((value: any) => typeof value === 'string' ? value : value?.annotation),
+              map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+            );
+
+            this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+              startWith(''),
+              map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+            );
+
+            setTimeout(() => {
+              this.getSports();
+            }, 500);
+          })
+      })
+
+
   }
 
   addFriend(friend: any) {
@@ -318,12 +393,89 @@ export class MonitorDetailComponent {
   }
 
   toggleSelectionLanguages(language: any): void {
-    const index = this.selectedLanguages.findIndex(l => l.code === language.code);
-    if (index >= 0) {
-      this.selectedLanguages.splice(index, 1);
+    if (this.selectedLanguages.length < this.maxSelection) {
+
+      const index = this.selectedLanguages.findIndex(l => l.code === language.code);
+      if (index >= 0) {
+        this.selectedLanguages.splice(index, 1);
+      } else {
+        this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
+      }
     } else {
-      this.selectedLanguages.push({ name: language.name, code: language.code });
+      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
     }
-    console.log(this.selectedLanguages);
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data;
+      })
+  }
+
+  getSports() {
+    this.crudService.list('/sports', 1, 1000)
+      .subscribe((data) => {
+        data.data.forEach(element => {
+          this.schoolSports.forEach(sport => {
+            if(element.id === sport.sport_id) {
+              sport.name = element.name;
+            }
+          });
+        });
+      })
+  }
+
+  getStations() {
+    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+      .subscribe((station) => {
+        station.data.forEach(element => {
+          this.crudService.get('/stations/'+element.id)
+            .subscribe((data) => {
+              this.stations.push(data.data);
+              this.loading = false;
+
+            })
+        });
+      })
+  }
+
+  getSchoolSportDegrees() {
+    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((sport) => {
+        this.schoolSports = sport.data;
+        sport.data.forEach((element, idx) => {
+          this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          .subscribe((data) => {
+            this.schoolSports[idx].degrees = data.data.reverse();
+          });
+        });
+      })
+  }
+
+  setLanguages() {
+    if (this.selectedLanguages.length >= 1) {
+
+      this.defaults.language1_id = this.selectedLanguages[0];
+    } else if (this.selectedLanguages.length >= 2) {
+
+      this.defaults.language2_id = this.selectedLanguages[1];
+    } else if (this.selectedLanguages.length >= 3) {
+
+      this.defaults.language3_id = this.selectedLanguages[2];
+    } else if (this.selectedLanguages.length >= 4) {
+
+      this.defaults.language4_id = this.selectedLanguages[3];
+    } else if (this.selectedLanguages.length >= 5) {
+
+      this.defaults.language5_id = this.selectedLanguages[4];
+    } else if (this.selectedLanguages.length === 6) {
+
+      this.defaults.language6_id = this.selectedLanguages[5];
+    }
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 }
