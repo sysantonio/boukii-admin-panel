@@ -93,7 +93,7 @@
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
                 <mat-autocomplete #autoStation="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.station_id = option.id">
+                  <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.active_station = option.id">
                     {{option.name}}
                   </mat-option>
                 </mat-autocomplete>

@@ -238,24 +238,23 @@ export class AdminCreateUpdateComponent implements OnInit {
   setLanguages() {
     if (this.selectedLanguages.length >= 1) {
 
-      this.defaults.language1_id = this.selectedLanguages[0];
+      this.defaults.language1_id = this.selectedLanguages[0].id;
     } else if (this.selectedLanguages.length >= 2) {
 
-      this.defaults.language2_id = this.selectedLanguages[1];
+      this.defaults.language2_id = this.selectedLanguages[1].id;
     } else if (this.selectedLanguages.length >= 3) {
 
-      this.defaults.language3_id = this.selectedLanguages[2];
+      this.defaults.language3_id = this.selectedLanguages[2].id;
     } else if (this.selectedLanguages.length >= 4) {
 
-      this.defaults.language4_id = this.selectedLanguages[3];
+      this.defaults.language4_id = this.selectedLanguages[3].id;
     } else if (this.selectedLanguages.length >= 5) {
 
-      this.defaults.language5_id = this.selectedLanguages[4];
+      this.defaults.language5_id = this.selectedLanguages[4].id;
     } else if (this.selectedLanguages.length === 6) {
 
-      this.defaults.language6_id = this.selectedLanguages[5];
+      this.defaults.language6_id = this.selectedLanguages[5].id;
     }
   }
-
 }
 

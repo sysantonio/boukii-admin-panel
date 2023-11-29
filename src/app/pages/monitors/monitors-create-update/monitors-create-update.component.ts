@@ -74,6 +74,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   authorisedLevels = [];
 
   defaults = {
+    active_school: null,
     email: null,
     username: null,
     first_name: null,
@@ -103,7 +104,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     language6_id: null,
     partner_percentaje: null,
     user_id: null,
-    station_id: null
+    active_station: null,
+    work_country: null
   }
 
   defaultsUser = {
@@ -387,7 +389,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   toggleSelection(sport: any): void {
-    const index = this.selectedSports.findIndex(s => s.sport_id === sport.id);
+    const index = this.selectedSports.findIndex(s => s.sport_id === sport.sport_id);
     if (index >= 0) {
       this.selectedSports.splice(index, 1);
     } else {
@@ -462,6 +464,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     this.defaultsUser.email = this.defaults.email;
     this.defaultsUser.image = this.imagePreviewUrl;
     this.defaults.image = this.imagePreviewUrl;
+    this.defaults.active_school = this.user.schools[0].id;
     this.setLanguages();
 
     this.crudService.create('/users', this.defaultsUser)
@@ -472,25 +475,24 @@ export class MonitorsCreateUpdateComponent implements OnInit {
           .subscribe((monitor) => {
             this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
 
-            this.crudService.create('/monitors-school', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
+            this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
               .subscribe((monitorSchool) => {
-                const rqs = [];
-                const rqsDegreeAuth = [];
                 this.sportsData.data.forEach(element => {
-                  rqs.push(this.crudService.create('/monitors-sports-degrees', {monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id}));
-                  this.authorisedLevels.forEach(auLevel => {
+                  this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
+                    .subscribe((e) => {
+                      this.authorisedLevels.forEach(auLevel => {
 
-                    rqsDegreeAuth.push(this.crudService.create('/monitors-sport-authorized-degrees', {monitor_sport_id: monitor.data.id, sport_id: element.sport_id, degree_id: auLevel}))
-                  });
+                        this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel})
+                          .subscribe((d) => {
+                            console.log(d)
+                          })
+                      });
+                    })
                 });
+                setTimeout(() => {
+                  this.router.navigate(['/monitors']);
 
-                forkJoin([rqs, rqsDegreeAuth])
-                  .subscribe((multipleSport) => {
-
-
-                    this.router.navigate(['/monitors']);
-
-                  })
+                }, 3000);
               })
           })
       })
@@ -526,22 +528,22 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   setLanguages() {
     if (this.selectedLanguages.length >= 1) {
 
-      this.defaults.language1_id = this.selectedLanguages[0];
+      this.defaults.language1_id = this.selectedLanguages[0].id;
     } else if (this.selectedLanguages.length >= 2) {
 
-      this.defaults.language2_id = this.selectedLanguages[1];
+      this.defaults.language2_id = this.selectedLanguages[1].id;
     } else if (this.selectedLanguages.length >= 3) {
 
-      this.defaults.language3_id = this.selectedLanguages[2];
+      this.defaults.language3_id = this.selectedLanguages[2].id;
     } else if (this.selectedLanguages.length >= 4) {
 
-      this.defaults.language4_id = this.selectedLanguages[3];
+      this.defaults.language4_id = this.selectedLanguages[3].id;
     } else if (this.selectedLanguages.length >= 5) {
 
-      this.defaults.language5_id = this.selectedLanguages[4];
+      this.defaults.language5_id = this.selectedLanguages[4].id;
     } else if (this.selectedLanguages.length === 6) {
 
-      this.defaults.language6_id = this.selectedLanguages[5];
+      this.defaults.language6_id = this.selectedLanguages[5].id;
     }
   }
 

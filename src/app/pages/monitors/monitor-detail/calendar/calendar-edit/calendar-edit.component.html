@@ -1,0 +1,192 @@
+<h3 matDialogTitle>
+  {{ event.title }}
+</h3>
+
+<mat-dialog-content>
+  <form [formGroup]="form" *ngIf="!loading">
+    <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChanged($event);">
+      <mat-tab label="Disponible">
+
+        <div class="flex flex-col">
+
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input
+              [(ngModel)]="defaults.start_date"
+              [matDatepicker]="startDatepickerAvailable"
+              formControlName="startAvailable"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="startDatepickerAvailable"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #startDatepickerAvailable></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Inicio</mat-label>
+            <mat-select (selectionChange)="onStartTimeChange()">
+              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Fin</mat-label>
+            <mat-select [disabled]="defaults.start_time === null">
+              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      <mat-tab label="Non Dispoible">
+
+        <div class="flex flex-col">
+
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input
+              [(ngModel)]="defaults.start_date"
+
+              [matDatepicker]="startDatepickerNonAvailable"
+              formControlName="startNonAvailable"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="startDatepickerNonAvailable"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #startDatepickerNonAvailable></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Inicio</mat-label>
+            <mat-select (selectionChange)="onStartTimeChange()">
+              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Fin</mat-label>
+            <mat-select [disabled]="defaults.start_time === null">
+              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [(ngModel)]="defaults.description">
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      <mat-tab label="Blocage Payant">
+
+        <div class="flex flex-col">
+
+          <mat-form-field>
+            <mat-label>Selecciona un bloqueo</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color" [style.background]="blockage.color">
+                <span style="color: #fff">{{ blockage.name }}</span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input
+              [(ngModel)]="defaults.start_date"
+
+              [matDatepicker]="startDatepickerPayedBlock"
+              formControlName="startPayedBlock"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="startDatepickerPayedBlock"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #startDatepickerPayedBlock></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Inicio</mat-label>
+            <mat-select (selectionChange)="onStartTimeChange()">
+              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Fin</mat-label>
+            <mat-select [disabled]="defaults.start_time === null">
+              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [(ngModel)]="defaults.description">
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Station</mat-label>
+
+            <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+
+            <mat-autocomplete #autoStation="matAutocomplete">
+              <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.station_id = option.id">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      <mat-tab label="Blocage Non Paye">
+
+        <div class="flex flex-col">
+
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input
+              [(ngModel)]="defaults.start_date"
+
+              [matDatepicker]="startDatepickerNonPayedBlock"
+              formControlName="startNonPayedBlock"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="startDatepickerNonPayedBlock"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #startDatepickerNonPayedBlock></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Inicio</mat-label>
+            <mat-select (selectionChange)="onStartTimeChange()">
+              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hora Fin</mat-label>
+            <mat-select [disabled]="defaults.start_time === null">
+              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [(ngModel)]="defaults.description">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Station</mat-label>
+
+            <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+
+            <mat-autocomplete #autoStation="matAutocomplete">
+              <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.station_id = option.id">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex justify-end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button (click)="save()" class="save" color="primary" mat-raised-button>
+    Save
+  </button>
+</mat-dialog-actions>

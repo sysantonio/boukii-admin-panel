@@ -27,6 +27,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MonitorDetailComponent } from './monitor-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CalendarMonitorModule } from './calendar/calendar.module';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     NgFor,
     NgIf,
     MatTabsModule,
-    MatTableModule
+    MatTableModule,
+    CalendarMonitorModule
   ],
   declarations: [MonitorDetailComponent],
   exports: [MonitorDetailComponent]

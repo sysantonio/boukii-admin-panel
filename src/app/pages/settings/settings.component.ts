@@ -123,10 +123,9 @@ export class SettingsComponent implements OnInit {
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
 
   ];
-
   authorized = true;
-
   authorizedBookingComm = true;
+  selectedSport = -1;
 
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
     private configService: ConfigService, private dialog: MatDialog) {
@@ -447,6 +446,7 @@ export class SettingsComponent implements OnInit {
       this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.school.id + '&sport_id='+element)
         .subscribe((data) => {
           this.schoolSports[idx].degrees = data.data.reverse();
+          this.selectedSport = this.schoolSports[0].id;
         });
     });
   }
@@ -554,6 +554,10 @@ export class SettingsComponent implements OnInit {
         this.saveExtra();
       }
     });
+  }
+
+  selectSport(id: number ) {
+    this.selectedSport = id;
   }
 
   addForfait(data: any, isEdit: any, idx: number) {
