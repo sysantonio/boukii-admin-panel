@@ -105,7 +105,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     partner_percentaje: null,
     user_id: null,
     active_station: null,
-    work_country: null
+    world_country: null
   }
 
   defaultsUser = {
@@ -482,10 +482,13 @@ export class MonitorsCreateUpdateComponent implements OnInit {
                     .subscribe((e) => {
                       this.authorisedLevels.forEach(auLevel => {
 
-                        this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel})
+                        if(e.data.sport_id === auLevel.sport_id) {
+
+                          this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel.id})
                           .subscribe((d) => {
                             console.log(d)
                           })
+                        }
                       });
                     })
                 });
@@ -529,19 +532,19 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     if (this.selectedLanguages.length >= 1) {
 
       this.defaults.language1_id = this.selectedLanguages[0].id;
-    } else if (this.selectedLanguages.length >= 2) {
+    } if (this.selectedLanguages.length >= 2) {
 
       this.defaults.language2_id = this.selectedLanguages[1].id;
-    } else if (this.selectedLanguages.length >= 3) {
+    } if (this.selectedLanguages.length >= 3) {
 
       this.defaults.language3_id = this.selectedLanguages[2].id;
-    } else if (this.selectedLanguages.length >= 4) {
+    } if (this.selectedLanguages.length >= 4) {
 
       this.defaults.language4_id = this.selectedLanguages[3].id;
-    } else if (this.selectedLanguages.length >= 5) {
+    } if (this.selectedLanguages.length >= 5) {
 
       this.defaults.language5_id = this.selectedLanguages[4].id;
-    } else if (this.selectedLanguages.length === 6) {
+    } if (this.selectedLanguages.length === 6) {
 
       this.defaults.language6_id = this.selectedLanguages[5].id;
     }
@@ -560,12 +563,16 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   authoriseLevel(level) {
 
-      const index = this.authorisedLevels.findIndex(l => l === level.id);
-      if (index >= 0) {
+      const index = this.authorisedLevels.find(l => l.id === level.id && l.sport_id === level.sport_id);
+      if (index) {
         this.authorisedLevels.splice(index, 1);
       } else {
-        this.authorisedLevels.push(level.id);
+        this.authorisedLevels.push(level);
       }
+  }
+
+  isAuthorized(level: any) {
+    return this.authorisedLevels.find(l => l.id === level.id && l.sport_id === level.sport_id);
   }
 
   setValueSpouse(value: any) {

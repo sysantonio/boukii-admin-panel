@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -40,21 +40,11 @@ export class CalendarEditComponent implements OnInit {
   selectedBlockage: any = null;
   myControlStations = new FormControl();
   filteredStations: Observable<any[]>;
-
+  blockageSelected = null;
+  selectedIndex = 0;
   times: string[] = this.generateTimes();
   type = 0;
-  form = this.fb.group({
-    startAvailable: null,
-    endAvailable: null,
-    startNonAvailable: null,
-    endNonAvailable: null,
-    startPayedBlock: null,
-    endPayedBlock: null,
-    startNonPayedBlock: null,
-    endNonPayedBlock: null,
-    description: null,
-    station: null
-  });
+  form: UntypedFormGroup;
 
   defaults = {
     start_date: null,
@@ -76,15 +66,26 @@ export class CalendarEditComponent implements OnInit {
   loading = true;
   constructor(
     private dialogRef: MatDialogRef<CalendarEditComponent>,
-    @Inject(MAT_DIALOG_DATA) public event: CalendarEvent<any>,
+    @Inject(MAT_DIALOG_DATA) public event: any,
     private fb: UntypedFormBuilder, private crudService: ApiCrudService
   ) {}
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));;
 
-    this.form.patchValue(this.event);
-
+    this.form = this.fb.group({
+      startAvailable: null,
+      endAvailable: null,
+      startNonAvailable: null,
+      endNonAvailable: null,
+      startPayedBlock: null,
+      endPayedBlock: null,
+      startNonPayedBlock: null,
+      endNonPayedBlock: null,
+      description: null,
+      station: null,
+      blockage: null
+    });
 
     this.getStations();
     this.getBlockages();
@@ -148,6 +149,21 @@ export class CalendarEditComponent implements OnInit {
     this.crudService.list('/school-colors', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.blockages = data.data;
+
+        if(this.event && this.event.start) {
+          this.defaults.start_date = this.event.start;
+          this.defaults.end_date = this.event.end;
+          this.defaults.start_time = this.event.start_time.substring(0, this.event.start_time.length-3);;
+          this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
+          this.defaults.color = this.event.color;
+          this.defaults.full_day = this.event.allDay;
+          this.defaults.user_nwd_subtype_id = this.event.user_nwd_subtype_id;
+          this.selectedIndex = this.event.user_nwd_subtype_id;
+          this.type = this.event.user_nwd_subtype_id;
+
+          this.blockageSelected = this.blockages.find((b) => b.color === this.event.color);
+          this.onStartTimeChange();
+        }
         this.loading = false;
       })
   }
@@ -169,18 +185,33 @@ export class CalendarEditComponent implements OnInit {
 
     this.form.reset();
     this.type = event.index;
-    this.defaults = {
-      start_date: null,
-      end_date: null,
-      start_time: null,
-      end_time: null,
-      monitor_id: null,
-      school_id: null,
-      station_id: null,
-      full_day: false,
-      description: null,
-      color: null,
-      user_nwd_subtype_id: this.type,
-    };
+
+    if(this.event && this.event.start) {
+      this.defaults.start_date = this.event.start;
+      this.defaults.end_date = this.event.end;
+      this.defaults.start_time = this.event.start_time.substring(0, this.event.start_time.length-3);;
+      this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
+      this.defaults.color = this.event.color;
+      this.defaults.full_day = this.event.allDay;
+      this.defaults.user_nwd_subtype_id = this.event.user_nwd_subtype_id;
+      this.blockageSelected = this.blockages.find((b) => b.color === this.event.color);
+
+      this.onStartTimeChange();
+    } else {
+      this.defaults = {
+        start_date: null,
+        end_date: null,
+        start_time: null,
+        end_time: null,
+        monitor_id: null,
+        school_id: null,
+        station_id: null,
+        full_day: false,
+        description: null,
+        color: null,
+        user_nwd_subtype_id: this.type,
+      };
+    }
+
   }
 }

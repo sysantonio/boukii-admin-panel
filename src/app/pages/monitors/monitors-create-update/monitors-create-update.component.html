@@ -231,7 +231,7 @@
                 <mat-label>Pays</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
                 <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country">
+                  <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country" (onSelectionChange)="defaults.world_country = country.id">
                     {{country.name}}
                   </mat-option>
                 </mat-autocomplete>
@@ -357,12 +357,12 @@
                     <div style="width: 100%; float:left">
                       <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
                       [ngStyle]="{
-                        'background': authorisedLevels.indexOf(item.id) !== -1 ? item.color : '#fff'
+                        'background': isAuthorized(item) ? item.color : '#fff'
                       }"
                         (click)="authoriseLevel(item)">
                         <p style="color: #000;text-align: center"
                         [ngStyle]="{
-                          'color': authorisedLevels.indexOf(item.id) !== -1 ? '#fff': '#000'
+                          'color': isAuthorized(item) ? '#fff': '#000'
                         }"
                         >{{ item.annotation }}</p>
                       </div>

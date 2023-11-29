@@ -1,4 +1,4 @@
-<div class="container py-6">
+<div class="container py-6" style="max-width: none;">
   <div class="card overflow-hidden">
     <div class="h-64 relative overflow-hidden">
       <img
@@ -9,14 +9,14 @@
 
       <img
         class="avatar h-24 w-24 absolute top-6 ltr:left-4 rtl:right-4 sm:hidden"
-        src="../../../../assets/img/demo/1.jpg" />
+        [src]="defaults.image" />
     </div>
 
     <div class="z-10 relative -mt-16 px-6 flex items-center" style="margin-top: -6rem !important;position: relative;bottom: 80px;" >
       <img
         @scaleIn
         class="avatar h-24 w-24 flex-none align-start hidden sm:block border-2 border-white"
-        src="../../../../assets/img/demo/1.jpg" />
+        [src]="defaults.image" />
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
         <div class="h-16 items-end">
@@ -38,7 +38,7 @@
 <div class="mt-6 flex flex-col md:flex-row md:items-start" *ngIf="!loading">
   <mat-tab-group style="width: 100%">
     <mat-tab label="Profile">
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false">
 
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -196,7 +196,7 @@
                     </div>
                     <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
                   </mat-select-trigger>
-                  <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages(language)">
+                  <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages($event, language)">
                     {{language.name}}
                   </mat-option>
                 </mat-select>
@@ -318,12 +318,18 @@
 
 
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="">
 
 
                <mat-table #sportsCurrentTable [dataSource]="sportsCurrentData">
                 <caption style="width: 100px"> Current sports</caption>
                  <!-- Otros contenedores según tu descripción -->
+                 <ng-container matColumnDef="delete">
+                  <mat-header-cell *matHeaderCellDef class="delete-column">Eliminar</mat-header-cell>
+                  <mat-cell *matCellDef="let element; let i = index" class="delete-column">
+                    <mat-icon svgIcon="mat:delete" (click)="removeSport(i, element)"></mat-icon>
+                  </mat-cell>
+                </ng-container>
                  <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
                   <mat-cell *matCellDef="let element">
@@ -341,7 +347,7 @@
                      <mat-label>Niveaux</mat-label>
                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element.level.name" [(ngModel)]="element.level"/>
                      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                       <mat-option *ngFor="let level of element.degrees" [value]="level"  (onSelectionChange)="element.level = level">
+                       <mat-option *ngFor="let level of element.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
                          {{level.annotation}} - {{level.name}}
                        </mat-option>
                      </mat-autocomplete>
@@ -356,7 +362,7 @@
                      <mat-label>Salary</mat-label>
                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [value]="getSalary(element.salary_level)?.name" [matAutocomplete]="autoSalary"/>
                      <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
-                       <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
+                       <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id" (onSelectionChange)="updateSalary(element, salary)">
                          {{salary.name}}
                        </mat-option>
                      </mat-autocomplete>
@@ -370,12 +376,12 @@
                     <div style="width: 100%; float:left">
                       <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
                       [ngStyle]="{
-                        'background': checkMonitorAuth(element, item.id)  ? item.color : '#fff'
+                        'background': checkMonitorAuth(element, item) ? item.color : '#fff'
                       }"
-                        (click)="authoriseLevel(item)">
+                        (click)="authoriseCurrentLevel(item, element)">
                         <p style="color: #000;text-align: center"
                         [ngStyle]="{
-                          'color': checkMonitorAuth(element, item.id) ? '#fff': '#000'
+                          'color': checkMonitorAuth(element, item) ? '#fff': '#000'
                         }"
                         >{{ item.annotation }}</p>
                       </div>
@@ -383,23 +389,12 @@
                   </mat-cell>
                 </ng-container>
 
-
-                 <ng-container matColumnDef="delete">
-                   <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
-                   <mat-cell *matCellDef="let element; let i = index">
-                     <mat-icon svgIcon="mat:delete" (click)="removeSport(i)"></mat-icon>
-                   </mat-cell>
-                 </ng-container>
-
-                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                 <mat-header-row *matHeaderRowDef="displayedCurrentColumns"></mat-header-row>
+                 <mat-row *matRowDef="let row; columns: displayedCurrentColumns;"></mat-row>
                </mat-table>
-
-
              </div>
 
              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
 
               <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
                 <caption style="width: 100px"> New sports</caption>
@@ -446,24 +441,23 @@
                </ng-container>
 
                <ng-container matColumnDef="auth">
-                 <mat-header-cell *matHeaderCellDef> Authorised Levels </mat-header-cell>
-                 <mat-cell *matCellDef="let element">
-                   <div style="width: 100%; float:left">
-                     <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
-                     [ngStyle]="{
-                       'background': authorisedLevels.indexOf(item.id) !== -1 ? item.color : '#fff'
-                     }"
-                       (click)="authoriseLevel(item)">
-                       <p style="color: #000;text-align: center"
-                       [ngStyle]="{
-                         'color': authorisedLevels.indexOf(item.id) !== -1 ? '#fff': '#000'
-                       }"
-                       >{{ item.annotation }}</p>
-                     </div>
+                <mat-header-cell *matHeaderCellDef> Authorised Levels </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <div style="width: 100%; float:left">
+                    <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
+                    [ngStyle]="{
+                      'background': isAuthorized(item) ? item.color : '#fff'
+                    }"
+                      (click)="authoriseLevel(item)">
+                      <p style="color: #000;text-align: center"
+                      [ngStyle]="{
+                        'color': isAuthorized(item) ? '#fff': '#000'
+                      }"
+                      >{{ item.annotation }}</p>
                     </div>
-                 </mat-cell>
-               </ng-container>
-
+                   </div>
+                </mat-cell>
+              </ng-container>
                 <!-- Ícono para eliminar
                 <ng-container matColumnDef="delete">
                   <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
@@ -496,7 +490,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
               <mat-form-field class="flex-auto">
                 <mat-label>Estado Civil</mat-label>
-                <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus">
+                <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus" [value]="defaults.civil_status" >
                 <mat-autocomplete #autoCivilStatus="matAutocomplete">
                   <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus" (onSelectionChange)="defaults.civil_status = civilStatus">
                     {{ civilStatus }}

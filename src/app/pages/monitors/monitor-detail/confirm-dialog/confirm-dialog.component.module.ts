@@ -1,4 +1,4 @@
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,17 +18,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import {MatStepperModule} from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatChipsModule } from '@angular/material/chips';
-import { MonitorDetailComponent } from './monitor-detail.component';
-import { MatTabsModule } from '@angular/material/tabs';
-import { CalendarMonitorModule } from './calendar/calendar.module';
-import { ConfirmModalModule } from './confirm-dialog/confirm-dialog.component.module';
+import { ConfirmModalComponent } from './confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -53,23 +44,10 @@ import { ConfirmModalModule } from './confirm-dialog/confirm-dialog.component.mo
     MatListModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    MatStepperModule,
-    MatSlideToggleModule,
-    BreadcrumbsModule,
-    SecondaryToolbarModule,
-    MatDialogModule,
-    MatTableModule,
-    MatSortModule,
-    MatChipsModule,
-    NgFor,
-    NgIf,
-    MatTabsModule,
-    MatTableModule,
-    CalendarMonitorModule,
-    ConfirmModalModule
+    MatSlideToggleModule
   ],
-  declarations: [MonitorDetailComponent],
-  exports: [MonitorDetailComponent]
+  declarations: [ConfirmModalComponent],
+  exports: [ConfirmModalComponent]
 })
-export class MonitorDetailModule {
+export class ConfirmModalModule {
 }

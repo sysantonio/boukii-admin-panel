@@ -8,13 +8,12 @@ import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
-import { friendSuggestions } from 'src/app/static-data/friend-suggestions';
-import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
-import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { ApiCrudService } from 'src/service/crud.service';
-
+import * as moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from './confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
@@ -24,8 +23,6 @@ import { ApiCrudService } from 'src/service/crud.service';
 export class MonitorDetailComponent {
   @ViewChild('sportsCurrentTable') currentSportsTable: MatTable<any>;
 
-
-  suggestions = friendSuggestions;
   showInfo = true;
   showPersonalInfo = true;
   showWorkInfo = true;
@@ -76,13 +73,15 @@ export class MonitorDetailComponent {
   selectedLanguages = [];
   monitorSportsDegree = [];
   salaryData = [];
+  authorizedLevels = [];
 
   today: Date;
   minDate: Date;
   minDateChild: Date;
   childrenData = new _MatTableDataSource([]);
 
-  displayedColumns: string[] = ['name', 'level', 'salary', 'auth', 'delete'];
+  displayedCurrentColumns: string[] = [ 'delete', 'name', 'level', 'salary', 'auth'];
+  displayedColumns: string[] = [ 'name', 'level', 'salary', 'auth'];
   displayedColumnsChildren: string[] = ['name', 'date'];
   mockCivilStatus: string[] = ['Single', 'Mariée', 'Veuf', 'Divorcé'];
   mockCountriesData = MOCK_COUNTRIES;
@@ -146,7 +145,8 @@ export class MonitorDetailComponent {
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
+    private activatedRoute: ActivatedRoute, private dialog: MatDialog) {
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -208,9 +208,9 @@ export class MonitorDetailComponent {
 
             this.formCivilStatusInfo = this.fb.group({
 
-              civilStatus: [],
-              spouse: ['No'],
-              workMobility: ['No'],
+              civilStatus: [this.defaults.civil_status],
+              spouse: [this.defaults.partner_works ? 'y' : 'n'],
+              workMobility: [this.defaults.family_allowance ? 'y' : 'n'],
               spouseWorkId: [],
               spousePercentage: []
             });
@@ -269,10 +269,11 @@ export class MonitorDetailComponent {
               this.getMonitorSportsDegree();
               this.getSports();
 
-              this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station).name);
+              this.myControlCivilStatus.setValue(this.mockCivilStatus.find((cv) => cv === this.defaults.civil_status));
+              this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
               this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaults.country));
               this.myControlProvinces.setValue(this.mockProvincesData.find((c) => c.id === +this.defaults.province));
-              this.myControlWorkCountries.setValue(this.mockProvincesData.find((c) => c.id === +this.defaults.world_country));
+              this.myControlWorkCountries.setValue(this.mockWorkCountriesData.find((c) => c.id === +this.defaults.world_country));
               this.languagesControl.setValue(this.languages.filter((l) => l.id === (this.defaults?.language1_id ||
                 this.defaults?.language2_id || this.defaults?.language3_id || this.defaults?.language4_id
                 || this.defaults?.language5_id || this.defaults?.language6_id)));
@@ -288,17 +289,6 @@ export class MonitorDetailComponent {
 
   }
 
-  addFriend(friend: any) {
-    friend.added = true;
-  }
-
-  removeFriend(friend: any) {
-    friend.added = false;
-  }
-
-  trackByName(index: number, friend: any) {
-    return friend.name;
-  }
 
   showInfoEvent(event: boolean) {
     this.showInfo = event;
@@ -431,17 +421,20 @@ export class MonitorDetailComponent {
     return this.selectedLanguages.map(language => language.name).join(', ');
   }
 
-  toggleSelectionLanguages(language: any): void {
-    if (this.selectedLanguages.length < this.maxSelection) {
+  toggleSelectionLanguages(event: any, language: any): void {
+    if (event.isUserInput) {
 
-      const index = this.selectedLanguages.findIndex(l => l.code === language.code);
-      if (index >= 0) {
-        this.selectedLanguages.splice(index, 1);
+      if (this.selectedLanguages.length < this.maxSelection) {
+
+        const index = this.selectedLanguages.findIndex(l => l.id === language.id);
+        if (index >= 0) {
+          this.selectedLanguages.splice(index, 1);
+        } else {
+          this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
+        }
       } else {
-        this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
+        this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
       }
-    } else {
-      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
     }
   }
 
@@ -449,6 +442,7 @@ export class MonitorDetailComponent {
     this.crudService.list('/languages', 1, 1000)
       .subscribe((data) => {
         this.languages = data.data;
+        this.setInitLanguages();
       })
   }
 
@@ -508,7 +502,9 @@ export class MonitorDetailComponent {
               }
             });
           });
-          if (monitorDegree.data.filter((m) => m.sport_id === element.sport_id).length > 0) {
+          const mDegree = monitorDegree.data.filter((m) => m.sport_id === element.sport_id);
+          if (mDegree.length > 0) {
+            element.monitor_sports_degree_id = mDegree[0].id;
             selectedSports.push(element);
           }
         });
@@ -526,7 +522,7 @@ export class MonitorDetailComponent {
         this.sportsControl.setValue(selectedSports);
         this.monitorSportsDegree = monitorDegree.data;
 
-
+        console.log(this.sportsCurrentData.data);
         const availableSports = [];
         this.schoolSports.forEach(element => {
           if(!this.sportsCurrentData.data.find((s) => s.id === element.id)) {
@@ -538,16 +534,19 @@ export class MonitorDetailComponent {
           map((sport: string | null) => sport ? this._filterSports(sport) : availableSports.slice())
         );
 
-        monitorDegree.data.forEach(element => {
+        monitorDegree.data.forEach(mDG => {
 
-          this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, null, null, '&monitor_sport_id=' + element.id)
+          this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, null, null, '&monitor_sport_id=' + mDG.id)
             .subscribe((data) => {
 
               selectedSports.forEach(element => {
-                if (element.sport_id === data.data[0].monitor_sport_id) {
-                  element.authorisedLevels = data.data;
+                element.degrees.forEach(dg => {
+                  if (dg.id === data.data[0].degree_id) {
+                    element.authorisedLevels = data.data;
 
-                }
+                  }
+                });
+
               });
               console.log(data);
           })
@@ -563,23 +562,33 @@ export class MonitorDetailComponent {
   setLanguages() {
     if (this.selectedLanguages.length >= 1) {
 
-      this.defaults.language1_id = this.selectedLanguages[0];
-    } else if (this.selectedLanguages.length >= 2) {
+      this.defaults.language1_id = this.selectedLanguages[0].id;
+    } if (this.selectedLanguages.length >= 2) {
 
-      this.defaults.language2_id = this.selectedLanguages[1];
-    } else if (this.selectedLanguages.length >= 3) {
+      this.defaults.language2_id = this.selectedLanguages[1].id;
+    } if (this.selectedLanguages.length >= 3) {
 
-      this.defaults.language3_id = this.selectedLanguages[2];
-    } else if (this.selectedLanguages.length >= 4) {
+      this.defaults.language3_id = this.selectedLanguages[2].id;
+    } if (this.selectedLanguages.length >= 4) {
 
-      this.defaults.language4_id = this.selectedLanguages[3];
-    } else if (this.selectedLanguages.length >= 5) {
+      this.defaults.language4_id = this.selectedLanguages[3].id;
+    } if (this.selectedLanguages.length >= 5) {
 
-      this.defaults.language5_id = this.selectedLanguages[4];
-    } else if (this.selectedLanguages.length === 6) {
+      this.defaults.language5_id = this.selectedLanguages[4].id;
+    } if (this.selectedLanguages.length === 6) {
 
-      this.defaults.language6_id = this.selectedLanguages[5];
+      this.defaults.language6_id = this.selectedLanguages[5].id;
     }
+  }
+
+  setInitLanguages() {
+
+    this.languages.forEach(element => {
+      if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
+        || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
+          this.selectedLanguages.push(element);
+        }
+    });
   }
 
   goTo(route: string) {
@@ -654,11 +663,35 @@ export class MonitorDetailComponent {
 
   authoriseLevel(level) {
 
-    const index = this.authorisedLevels.findIndex(l => l === level.id);
-    if (index >= 0) {
+    const index = this.authorisedLevels.findIndex(l => l.id === level.id && l.sport_id === level.sport_id);
+    if (index !== -1) {
       this.authorisedLevels.splice(index, 1);
     } else {
-      this.authorisedLevels.push(level.id);
+      this.authorisedLevels.push(level);
+    }
+  }
+
+  isAuthorized(level: any) {
+    return this.authorisedLevels.find(l => l.id === level.id && l.sport_id === level.sport_id);
+  }
+
+  authoriseCurrentLevel(level, element) {
+
+    const index = element.authorisedLevels.findIndex(l => l.degree_id === level.id);
+    const authLevel = element.authorisedLevels.find(l => l.degree_id === level.id);
+    if (index !== -1) {
+      this.crudService.delete('/monitor-sport-authorized-degrees', authLevel.id)
+        .subscribe(() => {
+          element.authorisedLevels.splice(index, 1);
+          this.snackbar.open('Monitor authorization deleted', 'OK', {duration: 3000});
+        });
+    } else {
+      this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: element.authorisedLevels[0].monitor_sport_id, degree_id: level.id})
+        .subscribe((data) => {
+          element.authorisedLevels.push(data.data);
+          this.snackbar.open('Monitor authorization created', 'OK', {duration: 3000});
+
+        });
     }
   }
 
@@ -687,7 +720,7 @@ export class MonitorDetailComponent {
 
     if (item.authorisedLevels){
       item.authorisedLevels.forEach(element => {
-        if(element.degree_id === id && !ret) {
+        if((element.degree_id || element.id) === id.id && !ret) {
           ret = true;
         }
       });
@@ -707,10 +740,25 @@ export class MonitorDetailComponent {
     return ret;
   }
 
-  removeSport(idx: number) {
-    this.deletedItems.push(this.sportsCurrentData.data[idx]);
-    this.sportsCurrentData.data.splice(idx, 1);
-    this.currentSportsTable.renderRows();
+  removeSport(idx: number, element: any) {
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.delete('/monitor-sports-degrees', element.monitor_sports_degree_id)
+          .subscribe(() => {
+            this.deletedItems.push(this.sportsCurrentData.data[idx]);
+            this.sportsCurrentData.data.splice(idx, 1);
+            this.currentSportsTable.renderRows();
+          })
+      }
+    });
 
   }
 
@@ -721,6 +769,7 @@ export class MonitorDetailComponent {
     this.defaultsUser.email = this.defaults.email;
     this.defaultsUser.image = this.imagePreviewUrl;
     this.defaults.image = this.imagePreviewUrl;
+    this.defaults.birth_date = moment(this.defaults.birth_date, 'YYYY-MM-DD').format('YYYY-MM-DD');
     this.setLanguages();
 
     this.crudService.update('/users', this.defaultsUser, this.defaults.user_id)
@@ -733,25 +782,44 @@ export class MonitorDetailComponent {
 
             // revisar a partir de aqui
             this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
-              .subscribe((monitorSchool) => {
-                this.sportsData.data.forEach(element => {
-                  this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
-                    .subscribe((e) => {
-                      this.authorisedLevels.forEach(auLevel => {
+            .subscribe((monitorSchool) => {
+              this.sportsData.data.forEach(element => {
+                this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
+                  .subscribe((e) => {
+                    this.authorisedLevels.forEach(auLevel => {
 
-                        this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel})
-                          .subscribe((d) => {
-                            console.log(d)
-                          })
-                      });
-                    })
-                });
-                setTimeout(() => {
-                  this.router.navigate(['/monitors']);
+                      if(e.data.sport_id === auLevel.sport_id) {
 
-                }, 3000);
-              })
+                        this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel.id})
+                        .subscribe((d) => {
+                          console.log(d)
+                        })
+                      }
+                    });
+                  })
+              });
+              setTimeout(() => {
+                this.router.navigate(['/monitors']);
+
+              }, 3000);
+            })
           })
+      })
+  }
+
+  updateLevel(monitorDegree, level) {
+    this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
+       degree_id: level.id, salary_level: monitorDegree.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+      .subscribe((data) => {
+        this.snackbar.open('Level updated', 'OK', {duration: 3000});
+      })
+  }
+
+  updateSalary(monitorDegree, salary) {
+    this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
+       degree_id: monitorDegree.level.id, salary_level: salary.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+      .subscribe((data) => {
+        this.snackbar.open('Salary updated', 'OK', {duration: 3000});
       })
   }
 }

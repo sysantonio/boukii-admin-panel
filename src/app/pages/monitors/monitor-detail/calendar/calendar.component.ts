@@ -45,7 +45,7 @@ export class CalendarComponent implements OnInit {
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        this.handleUpdateEvent('Edited', event);
       }
     },
     {
@@ -99,7 +99,9 @@ export class CalendarComponent implements OnInit {
               beforeStart: true,
               afterEnd: true
             },
-            draggable: true
+            draggable: true,
+            description: element.description,
+            user_nwd_subtype_id: element.user_nwd_subtype_id
           }
           this.events.push(event);
         });
@@ -151,6 +153,48 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+
+
+  handleUpdateEvent(action: string, event: CalendarEvent): void {
+    const dialogRef = this.dialog.open(CalendarEditComponent, {
+      data: event
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        result.monitor_id = this.id;
+
+        const isOverlap = this.eventService.isOverlap(this.events, result);
+        if (isOverlap.length === 0) {
+          if (result.user_nwd_subtype_id !== 0) {
+
+            this.crudService.update('/monitor-nwds', result, event.id)
+            .subscribe((data) => {
+
+              this.getData();
+              this.snackbar.open('Event created', 'OK', {duration: 3000});
+            })
+          }
+        } else {
+
+          const updateEdit = this.events[isOverlap[0].overlapedId].id;
+          this.crudService.update('/monitor-nwds', isOverlap[0].dates[0], updateEdit)
+            .subscribe((data) => {
+              isOverlap[0].dates[1].start_time = data.data.end_time;
+              this.crudService.create('/monitor-nwds', isOverlap[0].dates[1])
+              .subscribe((data) => {
+
+                this.getData();
+                this.snackbar.open('Event updated', 'OK', {duration: 3000});
+              })
+            })
+          // hacer el update y el create
+          this.snackbar.open('Existe un solapamiento', 'OK', {duration: 3000});
+        }
+
+      }
+    });
+  }
 
 
   handleDbClickEvent(action: string, event: any): void {

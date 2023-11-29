@@ -4,7 +4,7 @@
 
 <mat-dialog-content>
   <form [formGroup]="form" *ngIf="!loading">
-    <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChanged($event);">
+    <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChanged($event);" [selectedIndex]="selectedIndex">
       <mat-tab label="Disponible">
 
         <div class="flex flex-col">
@@ -13,6 +13,7 @@
             <mat-label>Start Date</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
+              [value]="defaults.start_date"
               [matDatepicker]="startDatepickerAvailable"
               formControlName="startAvailable"
               matInput />
@@ -24,15 +25,15 @@
 
           <mat-form-field>
             <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()">
+            <mat-select [value]="defaults.start_time" (selectionChange)="onStartTimeChange()">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Hora Fin</mat-label>
-            <mat-select [disabled]="defaults.start_time === null">
-              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+            <mat-select [value]="defaults.end_time" [disabled]="defaults.start_time === null">
+              <mat-option *ngFor="let time of filteredTimes" [value]="time"  (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -57,20 +58,20 @@
 
           <mat-form-field>
             <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()">
+            <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Hora Fin</mat-label>
-            <mat-select [disabled]="defaults.start_time === null">
+            <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
               <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
-            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [(ngModel)]="defaults.description">
+            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [value]="defaults.description" [(ngModel)]="defaults.description">
           </mat-form-field>
         </div>
       </mat-tab>
@@ -80,8 +81,9 @@
 
           <mat-form-field>
             <mat-label>Selecciona un bloqueo</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color" [style.background]="blockage.color">
+            <mat-select formControlName="blockage" [(ngModel)]="blockageSelected" [value]="blockageSelected">
+              <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color" [style.background]="blockage.color"
+              >
                 <span style="color: #fff">{{ blockage.name }}</span>
               </mat-option>
             </mat-select>
@@ -103,20 +105,20 @@
 
           <mat-form-field>
             <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()">
+            <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Hora Fin</mat-label>
-            <mat-select [disabled]="defaults.start_time === null">
+            <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
               <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
-            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [(ngModel)]="defaults.description">
+            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [value]="defaults.description" [(ngModel)]="defaults.description">
           </mat-form-field>
 
           <mat-form-field>
@@ -152,20 +154,20 @@
 
           <mat-form-field>
             <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()">
+            <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Hora Fin</mat-label>
-            <mat-select [disabled]="defaults.start_time === null">
+            <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
               <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
-            <input type="text" id="description" formControlName="description" placeholder="La description" matInput [(ngModel)]="defaults.description">
+            <input type="text" id="description" formControlName="description" placeholder="La description" [value]="defaults.description" matInput [(ngModel)]="defaults.description">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Station</mat-label>
