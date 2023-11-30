@@ -18,17 +18,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
-import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { MatStepperModule } from '@angular/material/stepper';
-import {MatChipsModule} from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { ClientDetailComponent } from './client-detail.component';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { LevelUserComponent } from './level-user/level-user.component';
+import { AddClientUserModalComponent } from './add-client-user.component';
 
 @NgModule({
   imports: [
@@ -53,19 +44,10 @@ import { LevelUserComponent } from './level-user/level-user.component';
     MatListModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    MatStepperModule,
-    MatSlideToggleModule,
-    BreadcrumbsModule,
-    SecondaryToolbarModule,
-    MatDialogModule,
-    MatTableModule,
-    MatSortModule,
-    MatChipsModule,
-    MatTabsModule,
-    MatProgressBarModule
+    MatSlideToggleModule
   ],
-  declarations: [ClientDetailComponent, LevelUserComponent],
-  exports: [ClientDetailComponent]
+  declarations: [AddClientUserModalComponent],
+  exports: [AddClientUserModalComponent]
 })
-export class ClientDetailModule {
+export class AddClientUserModalModule {
 }

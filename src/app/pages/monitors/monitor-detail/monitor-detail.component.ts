@@ -475,7 +475,7 @@ export class MonitorDetailComponent {
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
             this.schoolSports[idx].degrees = data.data.reverse();
           });

@@ -407,7 +407,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getDegrees() {
-   return this.crudService.list('/degrees', 1, 1000);/*
+   return this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order');/*
       .subscribe((data) => {
         this.levels = data.data;
       })*/

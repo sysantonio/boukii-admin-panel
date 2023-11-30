@@ -43,20 +43,31 @@
 
     <div @stagger class="px-6 py-4 flex flex-col gap-4">
       <div
-        *ngFor="let friend of suggestions;"
+        *ngFor="let user of clientUsers;"
         class="flex items-center">
         <img
           @scaleIn
-          [src]="friend.imageSrc"
+          [src]="user.image === null || user.image === '' ? '../../../../assets/img/avatar.png': user.image"
           alt="Profile Picture"
           class="avatar ltr:mr-3 rtl:ml-3 flex-none" />
         <div @fadeInRight class="flex-auto">
-          <h4 class="body-2 m-0 leading-snug">{{ friend.name }}</h4>
+          <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ user.first_name }} {{ user.last_name }}</h4>
+          <span class="body-2 m-0 leading-snug"  style="width: 10%; float:left" (click)="deleteUserClient(user.utilizer_id)"><mat-icon svgIcon="mat:delete"></mat-icon></span>
         </div>
       </div>
+
+      <div style="cursor:pointer"
+        class="flex items-center">
+        <mat-icon svgIcon="mat:add"></mat-icon>
+        <div @fadeInRight class="flex-auto" (click)="addUtilisateur()">
+          <h4 class="body-2 m-0 leading-snug">Add utilisateur</h4>
+        </div>
+      </div>
+
+
     </div>
   </div>
-  <mat-tab-group style="width: 100%">
+  <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Profile">
       <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false">
 
@@ -73,8 +84,8 @@
             <ng-template matStepLabel>Info de compte</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div *ngIf="imagePreviewUrl" class="image-container">
-                <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290">
+              <div *ngIf="defaults.image" class="image-container">
+                <img [src]="defaults.image" alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;">
               </div>
 
               <div class="input-container">
@@ -387,31 +398,19 @@
       <div class="card" style="margin: 3% 0 0 0;">
         <div class="px-6 py-4 border-b">
           <h2 class="title m-0">Evolution Sportive
-            <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
-            <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
-            <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showInfoEditEvent(false)"></mat-icon>
-            <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showInfoEditEvent(true)"></mat-icon>
           </h2>
         </div>
 
         <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo" style="border-bottom: 1px solid #ededed; padding:5%">
           <div class="py-3 flex items-center">
             <div style="float: left; width:100%;">
-              <div style="float: left; width:25%;">
-                <img [src]="'https://school.boukii.com/assets/apps/sports/Ski.png'" style="background: #E6E6E6;float: left;border-radius: 20%;border:1px solid #808080">
-                <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;">Ski</p>
-              </div>
-              <div style="float: left; width:25%;">
-                <img [src]="'https://school.boukii.com/assets/apps/sports/Snowboard.png'" style="background: #E6E6E6;float: left;border-radius: 20%;border:1px solid #808080">
-                <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;">Snowboard</p>
-              </div>
-              <div style="float: left; width:25%;">
-                <img [src]="'https://school.boukii.com/assets/apps/sports/Ski_randonée.png'" style="background: #E6E6E6;float: left;border-radius: 20%;border:1px solid #808080">
-                <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;">Ski randonée</p>
-              </div>
-              <div style="float: left; width:25%;">
-                <img [src]="'https://school.boukii.com/assets/apps/sports/Raquettés.png'" style="background: #E6E6E6;float: left;border-radius: 20%;border:1px solid #808080">
-                <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;">Raquettés</p>
+              <div style="float: left; width:25%;" *ngFor="let item of clientSport" (click)="selectSportEvo(item)">
+                <img [src]="selectedSport.sport_id === item.sport_id ? item.icon_selected : item.icon_unselected" style="float: left;border-radius: 20%;border:1px solid; cursor:pointer;"
+                [ngStyle]="{
+                  'background': selectedSport.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
+                  'border': selectedSport.sport_id === item.sport_id ? '#fff' : '##808080'
+                }">
+                <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;"> {{item.name}}</p>
               </div>
             </div>
           </div>
@@ -422,15 +421,15 @@
             <div style="float: left; width:100%;">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:20%;">
-                  <img [src]="'https://school.boukii.com/assets/apps/sports/Ski.png'" style="background: #314EC5;float: left;border-radius: 20%;border:1px solid #314EC5">
+                  <img [src]="selectedSport.icon_selected" [style.background]="selectedSport.level.color" [style.border]="selectedSport.level.color" style="float: left;border-radius: 20%;border:1px solid">
                 </div>
                 <div style="float: left; width:80%;">
                   <p style="float: left; width:100%;font-size: 12px;">PB - 50%</p>
-                  <h1 style="float: left; width:100%;font-size: 20px;">PRINCE / Princess Bleu</h1>
+                  <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport.level.annotation}} / {{selectedSport.level.name}}</h1>
                 </div>
 
                 <div style="float: left; width:100%;margin: 2% 0 0 0;">
-                  <mat-progress-bar mode="determinate" [value]="40"></mat-progress-bar>
+                  <mat-progress-bar mode="determinate" [value]="40" [color]="selectedSport.level.color"></mat-progress-bar>
 
                 </div>
 
@@ -517,14 +516,21 @@
               </div>
 
 
-              <div style="float: left; width:100%;margin-top: 5%">
+
+              <div style="float: left; width:100%;margin-top: 5%" *ngIf="false">
                 <h1 style="float: left; width:100%;font-size: 20px;">Histórico</h1>
 
               </div>
 
             </div>
 
+          </div>
+          <div class="py-3 flex items-center">
 
+            <div style="float: left; width:100%;">
+              <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport.level.id" [size]="200" [userImage]="this.defaults.image"></app-level-user>
+
+            </div>
           </div>
         </div>
       </div>
@@ -533,7 +539,7 @@
     <mat-tab label="Cours">
 
     </mat-tab>
-    <mat-tab label="Statistiques">
+    <mat-tab label="Statistiques" *ngIf="false">
 
     </mat-tab>
   </mat-tab-group>

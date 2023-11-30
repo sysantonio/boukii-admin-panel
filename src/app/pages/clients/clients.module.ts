@@ -24,6 +24,7 @@ import { ClientDetailModule } from './client-detail/client-detail.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AddClientUserModalModule } from './add-client-user/add-client-user.module';
 
 @NgModule({
   declarations: [ClientsComponent],
@@ -50,7 +51,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     ClientDetailModule,
     MatDividerModule,
     MatCardModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    AddClientUserModalModule
   ]
 })
 export class ClientsModule {

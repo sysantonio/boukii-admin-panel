@@ -8,7 +8,6 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
-import { friendSuggestions } from 'src/app/static-data/friend-suggestions';
 import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
@@ -17,6 +16,7 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { AddClientUserModalComponent } from '../add-client-user/add-client-user.component';
 
 
 @Component({
@@ -30,7 +30,6 @@ export class ClientDetailComponent {
 
   @ViewChild('sportsCurrentTable') currentSportsTable: MatTable<any>;
 
-  suggestions = friendSuggestions;
   showInfo = true;
   showPersonalInfo = true;
   showAddressInfo: boolean = true;
@@ -71,15 +70,17 @@ displayedColumns: string[] = ['name', 'date'];
   filteredLanguages: Observable<any[]>;
   selectedLanguages = [];
   deletedItems = [];
+  clientUsers = [];
 
   today: Date;
   minDate: Date;
   loading = true;
+  coloring = true;
 
   mockCivilStatus: string[] = ['Single', 'Mariée', 'Veuf', 'Divorcé'];
   mockCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
-  mockLevelData = LEVELS;
+  mockLevelData: any = LEVELS;
 
   defaults = {
     email: null,
@@ -129,6 +130,8 @@ displayedColumns: string[] = ['name', 'date'];
   user: any;
   id: any;
 
+  allLevels: any = [];
+  selectedSport: any;
   clientSport = [];
   clientSchool = [];
 
@@ -157,6 +160,7 @@ displayedColumns: string[] = ['name', 'date'];
     this.getClientSchool();
     this.getClientSport();
     this.getClientObservations();
+    this.getClientUtilisateurs();
 
     this.crudService.get('/clients/'+this.id)
       .subscribe((data) => {
@@ -239,7 +243,7 @@ displayedColumns: string[] = ['name', 'date'];
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
             this.schoolSports[idx].degrees = data.data.reverse();
           });
@@ -316,6 +320,7 @@ displayedColumns: string[] = ['name', 'date'];
     this.crudService.list('/client-sports', 1, 1000, null, null, '&client_id='+this.id)
       .subscribe((data) => {
         this.clientSport = data.data;
+        this.selectedSport = this.clientSport[0];
         this.getSports();
         this.getDegrees();
       })
@@ -464,37 +469,22 @@ displayedColumns: string[] = ['name', 'date'];
     return this.selectedLanguages.map(language => language.name).join(', ');
   }
 
-  showInfoEvent(event: boolean) {
-    this.showInfo = event;
-  }
+  getClientUtilisateurs() {
+    this.crudService.list('/admin/clients/' + this.id +'/utilizers', 1, 1000, 'asc', 'name', '&client_id='+this.id)
+      .subscribe((data) => {
+        this.clientUsers = data.data;
+        this.crudService.list('/clients-utilizers', 1, 1000, 'asc', 'name', '&main_id='+this.id)
+        .subscribe((data) => {
+          data.data.forEach(element => {
+            this.clientUsers.forEach(cl => {
+              if (element.client_id === cl.id) {
+                cl.utilizer_id = element.id;
+              }
+            });
+          });
+        })
 
-  showPersonalInfoEvent(event: boolean) {
-    this.showPersonalInfo = event;
-  }
-
-
-  showInfoEditEvent(event: boolean) {
-    this.editInfo = event;
-  }
-
-  showPersonalInfoEditEvent(event: boolean) {
-    this.editPersonalInfo = event;
-  }
-
-  showAddressInfoEvent(event: boolean) {
-    this.showAddressInfo = event;
-  }
-
-  showAddressInfoEditEvent(event: boolean) {
-    this.editAddressInfo = event;
-  }
-
-  showSportInfoEvent(event: boolean) {
-    this.showSportInfo = event;
-  }
-
-  showSportInfoEditEvent(event: boolean) {
-    this.editSportInfo = event;
+      })
   }
 
   goTo(route: string) {
@@ -552,7 +542,27 @@ displayedColumns: string[] = ['name', 'date'];
           })
       }
     });
+  }
 
+  deleteUserClient(id: number) {
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+    });
+
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.delete('/clients-utilizers', id)
+          .subscribe(() => {
+            this.getClientUtilisateurs();
+            this.snackbar.open('User removed', 'OK', {duration: 3000});
+          })
+      }
+    });
   }
 
   updateLevel(clientSport, level) {
@@ -561,7 +571,6 @@ displayedColumns: string[] = ['name', 'date'];
         this.snackbar.open('Level updated', 'OK', {duration: 3000});
       })
   }
-
 
   save() {
     this.setLanguages();
@@ -595,5 +604,71 @@ displayedColumns: string[] = ['name', 'date'];
               }, 2000);
           })
       })
+  }
+
+  onTabChange(event: any) {
+    if(event.index === 1) {
+      this.selectedSport = this.clientSport[0]
+      this.selectSportEvo(this.selectedSport);
+    }
+  }
+
+  selectSportEvo(sport: any) {
+    this.coloring = true;
+    this.allLevels = [];
+    this.selectedSport = sport;
+
+    this.schoolSports.forEach(element => {
+      if (this.selectedSport.sport_id === element.sport_id) {
+        this.selectedSport.degrees = element.degrees;
+      }
+    });
+
+    this.selectedSport.degrees.forEach(element => {
+      element.inactive_color = this.lightenColor(element.color, 30);
+      this.allLevels.push(element);
+    });
+
+    this.allLevels.sort((a, b) => a.degree_order - b.degree_order);
+    this.coloring = false;
+  }
+
+  lightenColor(hexColor:any, percent:any) {
+
+    let r:any = parseInt(hexColor.substring(1, 3), 16);
+    let g:any = parseInt(hexColor.substring(3, 5), 16);
+    let b:any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + (255 - r) * percent / 100);
+    g = Math.round(g + (255 - g) * percent / 100);
+    b = Math.round(b + (255 - b) * percent / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, '0');
+    g = g.toString(16).padStart(2, '0');
+    b = b.toString(16).padStart(2, '0');
+
+    return '#' + r + g + b;
+  }
+
+  addUtilisateur() {
+
+    const dialogRef = this.dialog.open(AddClientUserModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {id: this.user.schools[0].id}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.id})
+          .subscribe((res) => {
+            this.getClientUtilisateurs();
+          })
+      }
+    });
+
   }
 }

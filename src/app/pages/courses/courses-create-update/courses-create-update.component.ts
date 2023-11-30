@@ -855,7 +855,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getDegrees() {
-    this.crudService.list('/degrees', 1, 1000)
+    this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order')
       .subscribe((data) => {
         this.levels = data.data;
         this.levels.reverse().forEach(level => {
