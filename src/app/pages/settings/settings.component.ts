@@ -55,7 +55,7 @@ export class SettingsComponent implements OnInit {
   intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
 
   dataSource: any;
-  displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
+  displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
   dataSourceLevels = new MatTableDataSource([]);
   displayedLevelsColumns: string[] = ['ageMin','ageMax', 'annotation', 'name', 'status', 'color', 'edit'];
 
@@ -211,11 +211,13 @@ export class SettingsComponent implements OnInit {
             });
 
             const settings = JSON.parse(this.school.settings);
-            this.dataSource = settings &&  settings.price_ranges && settings.price_ranges !== null ? settings.price_ranges :
+            this.people = settings &&  settings.prices_range.people ? settings.prices_range.people : this.people;
+            this.displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
+            this.dataSource = settings &&  settings.prices_range.prices && settings.prices_range.prices !== null ? settings.prices_range.prices :
             this.intervalos.map(intervalo => {
               const fila: any = { intervalo: this.formatIntervalo(intervalo) };
               for (let i = 1; i <= this.people; i++) {
-                fila[`persona ${i}`] = '';
+                fila[`${i}`] = '';
               }
               return fila;
             });
@@ -259,7 +261,7 @@ export class SettingsComponent implements OnInit {
     // Por ejemplo, podrías actualizar las columnas mostradas:
     this.displayedColumns = ['intervalo']; // Inicializa con la columna de intervalo
     for (let i = 1; i <= this.people; i++) {
-      this.displayedColumns.push(i + ' Persona'); // Añade columnas para cada persona
+      this.displayedColumns.push(`${i}`); // Añade columnas para cada persona
     }
 
     // También podrías necesitar actualizar los datos mostrados en la tabla
@@ -426,11 +428,18 @@ export class SettingsComponent implements OnInit {
 
   savePrices() {
 
-    this.crudService.create('/school-sports', {settings: this.dataSource})
-      .subscribe((res) => {
-        console.log(res);
-        this.snackbar.open('Precios guardados con éxito', 'Close', {duration: 3000});
-      });
+    const data = {
+      prices_range: {people: this.people, prices: this.dataSource},
+      monitor_app_client_messages_permission: this.authorized,
+      monitor_app_client_bookings_permission: this.authorizedBookingComm,
+      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      degrees: this.dataSourceLevels.data
+    }
+
+    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
+      .subscribe(() => {
+        this.snackbar.open('Precios guardadas correctamente', 'OK', {duration: 3000})
+      })
   }
 
   getSports() {
@@ -492,7 +501,7 @@ export class SettingsComponent implements OnInit {
 
   saveMonitorsAuth() {
     const data = {
-      prices_range: this.dataSource,
+      prices_range: {people: this.people, prices: this.dataSource},
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
       extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
@@ -638,7 +647,7 @@ export class SettingsComponent implements OnInit {
 
   saveExtra() {
     const data = {
-      prices_range: this.dataSource,
+      prices_range: {people: this.people, prices: this.dataSource},
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
       extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},

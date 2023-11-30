@@ -88,6 +88,6 @@ export class SidenavComponent implements OnInit {
   }
 
   async getUser() {
-    this.user = JSON.parse(localStorage.getItem('boukiiUser'));;
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
   }
 }

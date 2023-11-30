@@ -237,15 +237,18 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   transformDates(dates: any) {
     let ret = "";
-    dates.forEach((element, idx) => {
-      if (idx < 2) {
-        ret = ret + '<b>' + element + '</b>' + '<br>';
-      } else if (idx === 2){
-        ret = ret + element + '-';
-      } else {
-        ret = ret + element;
-      }
-    });
+    if (dates) {
+
+      dates.forEach((element, idx) => {
+        if (idx < 2) {
+          ret = ret + '<b>' + element + '</b>' + '<br>';
+        } else if (idx === 2){
+          ret = ret + element + '-';
+        } else {
+          ret = ret + element;
+        }
+      });
+    }
 
     return ret;
   }

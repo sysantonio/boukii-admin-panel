@@ -37,7 +37,7 @@ export class AuthService extends ApiService {
   async login(email: string, password: string) {
     try {
 
-      this.crudService.create('/admin/login', {email: email, password: password})
+      this.crudService.login('/admin/login', {email: email, password: password})
         .subscribe((data: any) => {
 
           localStorage.setItem('boukiiUser', JSON.stringify(data.data.user));

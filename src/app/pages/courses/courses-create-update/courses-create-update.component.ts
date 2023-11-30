@@ -14,6 +14,7 @@ import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/r
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -107,7 +108,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   defaults: any = {
     course_type: null,
-    is_flexible: null,
+    is_flexible: false,
     name: null,
     short_description: null,
     description: null,
@@ -117,9 +118,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
     date_end: null,
     date_start_res: null,
     date_end_res: null,
-    confirm_attendance: null,
-    active: null,
-    online: null,
+    confirm_attendance: false,
+    active: true,
+    online: true,
     image: this.imagePreviewUrl,
     translations: null,
     price_range: this.dataSourceFlexiblePrices,
@@ -195,8 +196,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
   filteredMaxDurations = [];
   courseType: any = null;
   courseComplete: boolean = false;
+  user: any;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService) {
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
     this.generateDurations();
 
     this.startDayControl.valueChanges.subscribe(startDay => {
@@ -239,7 +243,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.courseTypeFormGroup = this.fb.group({
 
-      sportType: [null, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
+      sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
       sport: [null, Validators.required],
       courseType: [null, Validators.required],
       separatedDates: [false]
@@ -262,11 +266,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.courseInfoPriveFormGroup = this.fb.group({
 
-      course_name: [null, Validators.required],
-      price: [null, Validators.required],
-      station: [null, Validators.required],
-      summary: [null, Validators.required],
-      description: [null, Validators.required],
       duration: [null, Validators.required],
       minDuration: [null, Validators.required],
       maxDuration: [null, Validators.required],
@@ -368,12 +367,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     }
 
-
     this.getSportsType();
     this.getSports();
     this.getStations();
-    this.getDegrees();
     this.getMonitors();
+    setTimeout(() => {
+      this.filterSportsByType();
+
+    }, 500);
   }
 
   get periodeUnique() {
@@ -405,6 +406,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   create() {
 
+    let data: any = [];
+
     let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
 
     let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
@@ -412,9 +415,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     let courseDates = [];
 
+    this.defaults.date_start = this.defaults.date_start_res;
+    this.defaults.date_end = this.defaults.date_end_res;
+
     if (this.courseType === 'collectif') {
       this.defaults.course_dates.forEach(dates => {
-        dates.forEach(courses => {
+        dates.groups.forEach(courses => {
           if (courses.subgroups.length > 0) {
             courseDates.push(dates);
           }
@@ -426,7 +432,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
 
     if (this.courseType === 'collectif' && this.defaults.isFlexible) {
-      const data = {
+      data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
         name: this.defaults.name,
@@ -438,7 +444,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         date_end: highestDate,
         date_start_res: this.defaults.date_start_res,
         date_end_res: this.defaults.date_end_res,
-        confirm_attendance: null,
+        confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -453,7 +459,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       console.log(data);
 
     } else if (this.courseType === 'collectif' && !this.defaults.isFlexible) {
-      const data = {
+      data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
         name: this.defaults.name,
@@ -465,7 +471,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         date_end: highestDate,
         date_start_res: this.defaults.date_start_res,
         date_end_res: this.defaults.date_end_res,
-        confirm_attendance: null,
+        confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -478,7 +484,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
       console.log(data);
     } else if (this.courseType === 'privee' && this.defaults.isFlexible) {
-      const data = {
+      data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
         name: this.defaults.name,
@@ -491,7 +497,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
-        confirm_attendance: null,
+        confirm_attendance: false,
         translations: null,
         discounts: this.dataSourceReductionsPrivate.data,
         price_range: this.dataSourceFlexiblePrices,
@@ -506,7 +512,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
       console.log(data);
     } else if (this.courseType === 'privee' && !this.defaults.isFlexible) {
-      const data = {
+      data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
         name: this.defaults.name,
@@ -519,9 +525,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
-        confirm_attendance: null,
+        confirm_attendance: false,
         translations: null,
-        price_range: this.dataSourceFlexiblePrices,
+        price_range: null,
         sport_id: this.defaults.sport_id,
         school_id: this.defaults.school_id,
         station_id: this.defaults.station_id.id,
@@ -529,13 +535,28 @@ export class CoursesCreateUpdateComponent implements OnInit {
         duration: this.defaults.duration,
         min_age: this.defaults.min_age,
         max_age: this.defaults.max_age,
-        course_dates: this.defaults.course_dates
+        course_dates: this.defaults.course_dates,
+        settings: null
 
       };
-      console.log(data);
     }
 
+
+
+    data.school_id = this.user.schools[0].id;
+
+    this.crudService.create('/courses', data)
+      .subscribe((res) => {
+        console.log(res);
+        this.goTo('/courses');
+      })
+
   }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
+
 
   filterSportsByType() {
     this.sportTypeSelected = this.courseTypeFormGroup.get('sportType').value;
@@ -600,7 +621,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   displayFnMoniteurs(monitor: any): string {
-    return monitor && monitor.full_name ? monitor.full_name : '';
+    return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
   }
 
   private _filterSport(name: string): any[] {
@@ -737,16 +758,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   selectSport(sport: any) {
-    this.defaults.sport_id = sport.id;
-    this.courseTypeFormGroup.get("sport").patchValue(sport.id);
-
+    this.defaults.sport_id = sport.sport_id;
+    this.courseTypeFormGroup.get("sport").patchValue(sport.sport_id);
+    this.getDegrees();
   }
 
   setCourseType(type: string, id: number) {
 
     this.defaults = {
       course_type: null,
-      is_flexible: null,
+      is_flexible: this.defaults.is_flexible,
       name: null,
       short_description: null,
       description: null,
@@ -756,7 +777,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       date_end: null,
       date_start_res: null,
       date_end_res: null,
-      confirm_attendance: null,
+      confirm_attendance: false,
       active: null,
       online: null,
       image: this.imagePreviewUrl,
@@ -826,24 +847,39 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.crudService.list('/sport-types', 1, 1000)
       .subscribe((data) => {
         this.sportTypeData = data.data;
-        this.loading = false;
       });
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000)
-      .subscribe((data) => {
-        this.sportData = data.data;
-        this.loading = false;
-      });
+    this.crudService.list('/school-sports', 1, 1000, 'asc', 'name', '&school_id='+this.user.schools[0].id)
+      .subscribe((sport) => {
+        this.sportData = sport.data;
+        this.sportData.forEach(element => {
+          this.crudService.get('/sports/'+element.sport_id)
+            .subscribe((data) => {
+              element.name = data.data.name;
+              element.icon_selected = data.data.icon_selected;
+              element.icon_unselected = data.data.icon_unselected;
+              element.sport_type = data.data.sport_type;
+              this.loading = false;
+            });
+        });
+
+      })
+
   }
 
   getStations() {
-    this.crudService.list('/stations', 1, 1000)
-      .subscribe((data) => {
-        this.stations = data.data;
-        this.loading = false;
-      });
+    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+      .subscribe((station) => {
+        station.data.forEach(element => {
+          this.crudService.get('/stations/'+element.id)
+            .subscribe((data) => {
+              this.stations.push(data.data);
+
+            })
+        });
+      })
   }
 
   getMonitors() {
@@ -855,7 +891,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getDegrees() {
-    this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order')
+    this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
       .subscribe((data) => {
         this.levels = data.data;
         this.levels.reverse().forEach(level => {
@@ -891,7 +927,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           daysOfWeekAdded.add(dayOfWeek);
         }
 
-        this.daysDatesLevels.push(currentDate.locale('en').format('LLL').replace(' 0:00', ''));
+        this.daysDatesLevels.push({date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '')});
         this.defaults.course_dates.push({
           date: currentDate.format('YYYY-MM-DD'),
           hour_start: null,
@@ -921,7 +957,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         return acc;
       }, [0, 0]);
 
-      this.daysDatesLevels.push(moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''));
+      this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
       if (this.courseType === 'privee') {
 
         this.defaults.course_dates.push({
@@ -983,8 +1019,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   activeGroup(event: any, index: number, level: any) {
 
-    this.selectedItem = 0;
-    this.selectedDate = this.defaults.course_dates[0].date;
+    this.selectedItem = this.daysDatesLevels[0].dateString;
+    this.selectedDate = this.defaults.course_dates[0]?.date;
     level.active = event.source.checked;
     if(event.source.checked) {
       this.defaults.course_dates.forEach(element => {
@@ -1090,6 +1126,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   setSubGroupPax(event: any, level: any, index: number) {
+    level.max_participants = +event.target.value;
 
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
@@ -1103,7 +1140,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   selectItem(item: any) {
-    this.selectedItem = item;
+    this.selectedItem = item.dateString;
     this.selectedDate = item.date; // Asumiendo que 'item' tiene una propiedad 'date'
   }
 

@@ -16,7 +16,7 @@
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
-            Online <mat-slide-toggle [(ngModel)]="defaults.online"></mat-slide-toggle>
+            Online <mat-slide-toggle [(ngModel)]="defaults.online" color="primary"></mat-slide-toggle>
           </div>
           <div style="float:right">
             Options <mat-slide-toggle [(ngModel)]="defaults.options"></mat-slide-toggle>
@@ -50,8 +50,12 @@
               <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 4%; width:100%; float:left">
                 <div style="float:left; width: 20%" *ngFor="let item of sportDataList.reverse()">
                   <span style="width: 100%;margin: 0 auto">
-                    <img style="background: #E6E6E6;margin: 0 auto; border-radius: 20%;border: #808080 solid 1px; cursor:pointer"
-                    [src]="item.id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
+                    <img style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer"
+                    [ngStyle]="{
+                      'background': defaults.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
+                      'border': defaults.sport_id === item.sport_id ? '#fff' : '#808080'
+                    }"
+                    [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
                   </span>
                   <p style="text-align: center;">{{ item.name }}</p>
                 </div>
@@ -113,7 +117,14 @@
                 </mat-form-field>
               </div>
 
-              <div class="flex-auto" style="width: 15%">
+              <div class="flex-auto" style="width: 15%" *ngIf="defaults.is_flexible">
+                <label for="courseName">Prix (CHF)</label>
+                <mat-form-field style="width: 100%">
+                  <input id="courseName" formControlName="price" matInput required type="text" [value]="'FLEXIBLE'" [disabled]="true">
+                </mat-form-field>
+              </div>
+
+              <div class="flex-auto" style="width: 15%" *ngIf="!defaults.is_flexible">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
                   <input id="courseName" formControlName="price" matInput required type="text" [(ngModel)]="defaults.price">
@@ -231,7 +242,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto">
+              <div class="flex-auto" *ngIf="defaults.is_flexible">
 
                 <label for="durationPrivate">DURÉ</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
@@ -242,7 +253,15 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                </div>
+              </div>
+              <div class="flex-auto" *ngIf="!defaults.is_flexible">
+
+                <label for="durationPrivate">DURÉ</label>
+                <mat-form-field class="flex-auto" style="width: 100%">
+                  <input id="durationPrivate" formControlName="duration" matInput required type="text" placeholder="Pas de durée définie" [readonly]="true">
+
+                </mat-form-field>
+              </div>
               <div class="flex-auto">
 
                 <label for="participants">PARTICIPANTS MÁX.</label>
@@ -253,7 +272,7 @@
               </div>
 
             </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.is_flexible">
               <div class="flex-auto">
 
                 <label for="durationPrivate" style="font-size: 20px;">Quand peut-on suivre le cours?</label>
@@ -268,7 +287,7 @@
               </div>
             </div>
 
-            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee' && this.courseInfoPriveFormGroup.value.periodeMultiple">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="courseType === 'privee' && this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
               <div style="width: 100%">
 
                 <table #privateDatesTable id="private-date-table" mat-table [dataSource]="dataSourceDatePrivate" matSort style="border: 1px solid #e6e6e6">
@@ -322,7 +341,7 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"  *ngIf="defaults.is_flexible">
 
               <div class="flex-auto" style="padding-left: 5%" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple">
 
@@ -375,7 +394,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.is_flexible">
               <div class="flex-auto">
 
                 <label for="fromHour">HEURE DEBUT</label>
@@ -447,12 +466,15 @@
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext *ngIf="defaults.is_flexible">
               Siguiente
+            </button>
+            <button color="primary" mat-raised-button matStepperNext (click)="save()" *ngIf="!defaults.is_flexible">
+              Save
             </button>
           </div>
         </mat-step>
-        <mat-step>
+        <mat-step *ngIf="courseType === 'privee' && this.defaults.is_flexible">
 
           <ng-template matStepLabel>Prices</ng-template>
           <div class="p-6">
@@ -507,9 +529,21 @@
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Nouvelle course</h2>
+        <div style="float: left;width: 50%;">
+          <h2 class="title m-0">Nouvelle course</h2>
+        </div>
+        <div style="float: left;width: 50%;">
+          <div style="float:right">
+            Online <mat-slide-toggle [(ngModel)]="defaults.online"></mat-slide-toggle>
+          </div>
+          <div style="float:right">
+            Options <mat-slide-toggle [(ngModel)]="defaults.options"></mat-slide-toggle>
+          </div>
+          <div style="float:right">
+            Status <mat-slide-toggle [(ngModel)]="defaults.active"></mat-slide-toggle>
+          </div>
+        </div>
       </div>
-
       <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="false" [hidden]="courseType !== 'collectif'" (selectionChange)="loadData($event)">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -519,7 +553,7 @@
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
 
-        <mat-step [stepControl]="courseTypeFormGroup" [completed]="false" [editable]="true">
+        <mat-step [stepControl]="courseTypeFormGroup" >
           <ng-template matStepLabel>Info de cours</ng-template>
 
           <div [formGroup]="courseTypeFormGroup">
@@ -535,8 +569,12 @@
               <div class="flex-auto" *ngIf="sportTypeSelected > -1" style="margin:1% 0 0 4%; width:100%; float:left">
                 <div style="float:left; width: 20%" *ngFor="let item of sportDataList.reverse()">
                   <span style="width: 100%;margin: 0 auto">
-                    <img style="background: #E6E6E6;margin: 0 auto; border-radius: 20%;border: #808080 solid 1px; cursor:pointer"
-                    [src]="item.id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
+                    <img style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer"
+                    [ngStyle]="{
+                      'background': defaults.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
+                      'border': defaults.sport_id === item.sport_id ? '#fff' : '#808080'
+                    }"
+                    [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
                   </span>
                   <p style="text-align: center;">{{ item.name }}</p>
                 </div>
@@ -915,7 +953,7 @@
                         </div>
                         <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="level.active">
                           <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Alumnos <strong>0/{{defaults?.course_dates[0]?.groups[0]?.subgroups.max_participants || '0' }}</strong>
+                            Alumnos <strong>0/{{level.max_participants}}</strong>
                           </div>
                           <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
                             <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, level, i)"/>
@@ -932,11 +970,11 @@
                                   <li style="float: left; width: 20%;font-size: 18px">
                                     <span [style.color]="colorKey"><strong>{{level.annotation}}</strong> - {{level.name}} - {{ i + 1 }}</span>
                                   </li>
-                                  <li *ngFor="let item of daysDatesLevels"
-                                      (click)="selectItem(item)"
-                                      [style.color]="selectedItem === item ? '#FF3085' : ''"
+                                  <li *ngFor="let dayLevel of daysDatesLevels; let i = index;"
+                                      (click)="selectItem(dayLevel)"
+                                      [style.color]="selectedItem === dayLevel.dateString ? '#FF3085' : ''"
                                       style="float: left; width: 13%; text-align: center; cursor: pointer;">
-                                    {{ item }}
+                                    {{ dayLevel.dateString }}
                                   </li>
 
                                 </ul>
@@ -948,10 +986,10 @@
                                   <li style="float: left; width: 20%;">
                                     <mat-form-field class="flex-auto">
                                       <mat-label>Moniteur</mat-label>
-                                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="monitorsForm" [matAutocomplete]="autoMoniteur"/>
+                                      <input type="text" placeholder="Pick one" matInput [matAutocomplete]="autoMoniteur"/>
                                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
                                         <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="setSubGroupMonitor(monitor, level, i)">
-                                          {{monitor.full_name}}
+                                          {{monitor.first_name}} {{monitor.last_name}}
                                         </mat-option>
                                       </mat-autocomplete>
                                       <mat-icon matPrefix svgIcon="mat:person"></mat-icon>

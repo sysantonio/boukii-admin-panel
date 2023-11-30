@@ -32,7 +32,9 @@
 
           <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i}" >
             <mat-card-header>
-              <div mat-card-avatar class="card-avatar"></div>
+              <div mat-card-avatar class="card-avatar">
+                <img [src]="item.image"/>
+              </div>
 
             </mat-card-header>
             <mat-card-content>
