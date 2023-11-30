@@ -96,7 +96,7 @@ export class ClientCreateUpdateComponent implements OnInit {
     password: null,
     image: null,
     type: 'client',
-    active: null,
+    active: false,
   }
 
   loading: boolean = true;
@@ -119,7 +119,6 @@ export class ClientCreateUpdateComponent implements OnInit {
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       username: ['', Validators.required],
-      station: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
     });
@@ -140,16 +139,6 @@ export class ClientCreateUpdateComponent implements OnInit {
       summary: [''],
       notes: [''],
       hitorical: ['']
-    });
-
-    this.filteredStations = this.myControlStations.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterStations(value))
-      );
-
-    this.myControlStations.valueChanges.subscribe(value => {
-      this.formInfoAccount.get('station').setValue(value);
     });
 
     this.filteredCountries = this.myControlCountries.valueChanges.pipe(
@@ -265,7 +254,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   displayFnLevel(level: any): string {
-    return level && level.name && level.annotation ? level.name + ' - ' + level.annotation : level.name;
+    return level && level?.name && level?.annotation ? level?.name + ' - ' + level?.annotation : level?.name;
   }
 
   updateSelectedSports(selected: any[]) {
@@ -390,18 +379,26 @@ export class ClientCreateUpdateComponent implements OnInit {
           .subscribe((client) => {
             this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
 
-            this.crudService.create('/client-school', {client_id: client.data.id, school_id: this.user.schools[0].id})
+            this.defaultsObservations.client_id = client.data.id;
+            this.defaultsObservations.school_id = this.user.schools[0].id;
+            this.crudService.create('/client-observations', this.defaultsObservations)
+              .subscribe((obs) => {
+                console.log('client observation created');
+              })
+            this.crudService.create('/clients-schools', {client_id: client.data.id, school_id: this.user.schools[0].id})
               .subscribe((clientSchool) => {
-                const rqs = [];
                 this.sportsData.data.forEach(element => {
-                  rqs.push(this.crudService.create('/client-sport', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id}))
+
+                  this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+                    .subscribe(() => {
+                      console.log('client sport created');
+                    })
                 });
 
-                forkJoin([rqs])
-                  .subscribe((multipleSport) => {
-                    this.router.navigate(['/clients']);
+                setTimeout(() => {
+                  this.router.navigate(['/clients']);
 
-                  })
+                }, 3000);
               })
           })
       })
@@ -413,23 +410,24 @@ export class ClientCreateUpdateComponent implements OnInit {
     if (this.selectedLanguages.length >= 1) {
 
       this.defaults.language1_id = this.selectedLanguages[0].id;
-    } else if (this.selectedLanguages.length >= 2) {
+    } if (this.selectedLanguages.length >= 2) {
 
       this.defaults.language2_id = this.selectedLanguages[1].id;
-    } else if (this.selectedLanguages.length >= 3) {
+    } if (this.selectedLanguages.length >= 3) {
 
       this.defaults.language3_id = this.selectedLanguages[2].id;
-    } else if (this.selectedLanguages.length >= 4) {
+    } if (this.selectedLanguages.length >= 4) {
 
       this.defaults.language4_id = this.selectedLanguages[3].id;
-    } else if (this.selectedLanguages.length >= 5) {
+    } if (this.selectedLanguages.length >= 5) {
 
       this.defaults.language5_id = this.selectedLanguages[4].id;
-    } else if (this.selectedLanguages.length === 6) {
+    } if (this.selectedLanguages.length === 6) {
 
       this.defaults.language6_id = this.selectedLanguages[5].id;
     }
   }
+
 
   goTo(route: string) {
     this.router.navigate([route]);

@@ -439,7 +439,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000)
+    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {

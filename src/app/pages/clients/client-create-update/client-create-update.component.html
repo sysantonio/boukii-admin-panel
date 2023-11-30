@@ -86,18 +86,6 @@
                 <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
 
               </mat-form-field>
-
-              <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Station</mat-label>
-
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                <mat-autocomplete #autoStation="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.station_id = option.id">
-                    {{option.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
               <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>

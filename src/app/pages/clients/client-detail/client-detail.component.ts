@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { _MatTableDataSource } from '@angular/material/table';
+import { MatTable, _MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -12,6 +13,10 @@ import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
+import { ApiCrudService } from 'src/service/crud.service';
+import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -23,6 +28,8 @@ import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 })
 export class ClientDetailComponent {
 
+  @ViewChild('sportsCurrentTable') currentSportsTable: MatTable<any>;
+
   suggestions = friendSuggestions;
   showInfo = true;
   showPersonalInfo = true;
@@ -33,7 +40,8 @@ export class ClientDetailComponent {
   editAddressInfo: boolean = false;
   editSportInfo: boolean = false;
 
-  displayedColumns: string[] = ['name', 'date'];
+displayedCurrentColumns: string[] = ['name', 'level', 'delete'];
+displayedColumns: string[] = ['name', 'date'];
 
   imagePreviewUrl: string | ArrayBuffer;
   formInfoAccount: UntypedFormGroup;
@@ -48,32 +56,84 @@ export class ClientDetailComponent {
   filteredCountries: Observable<any[]>;
   filteredProvinces: Observable<any[]>;
   filteredLevel: Observable<any[]>;
+  filteredSports: Observable<any[]>;
 
   sportsControl = new FormControl();
+  selectedNewSports: any[] = [];
   selectedSports: any[] = [];
-  filteredSports: Observable<any[]>;
-  allSports: any[] = MOCK_SPORT_DATA;
   sportsData = new _MatTableDataSource([]);
+  sportsCurrentData = new _MatTableDataSource([]);
+  stations = [];
 
   languagesControl = new FormControl([]);
-  languages = MOCK_LANGS;
+  languages = [];
+  schoolSports = [];
   filteredLanguages: Observable<any[]>;
   selectedLanguages = [];
-
-  optionsStation: string[] = ['Les Pacots', 'Andorra'];
+  deletedItems = [];
 
   today: Date;
   minDate: Date;
+  loading = true;
 
   mockCivilStatus: string[] = ['Single', 'Mariée', 'Veuf', 'Divorcé'];
   mockCountriesData = MOCK_COUNTRIES;
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData = LEVELS;
 
+  defaults = {
+    email: null,
+    first_name: null,
+    last_name: null,
+    birth_date: null,
+    phone: null,
+    telephone: null,
+    address: null,
+    cp: null,
+    city: null,
+    province: null,
+    country: null,
+    image: null,
+    language1_id:null,
+    language2_id:null,
+    language3_id:null,
+    language4_id:null,
+    language5_id:null,
+    language6_id:null,
+    user_id: null,
+    station_id: null,
+    active_station: null
+  }
+
+  defaultsObservations = {
+    id: null,
+    general: null,
+    notes: null,
+    historical: null,
+    client_id: null,
+    school_id: null
+  }
+
+  defaultsUser = {
+    id: null,
+    username: null,
+    email: null,
+    password: null,
+    image: null,
+    type: 'client',
+    active: false,
+  }
+
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+  user: any;
+  id: any;
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+  clientSport = [];
+  clientSchool = [];
+
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
+     private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -89,71 +149,176 @@ export class ClientDetailComponent {
   }
 
   ngOnInit(): void {
-    this.formInfoAccount = this.fb.group({
-      image: [''],
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      station: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.id = this.activatedRoute.snapshot.params.id;
+    this.getSchoolSportDegrees();
+    this.getLanguages();
+    this.getStations();
+    this.getClientSchool();
+    this.getClientSport();
+    this.getClientObservations();
 
+    this.crudService.get('/clients/'+this.id)
+      .subscribe((data) => {
+        this.defaults = data.data;
+
+        this.crudService.get('/users/'+data.data.user_id)
+          .subscribe((user)=> {
+            this.defaultsUser = user.data;
+
+            this.formInfoAccount = this.fb.group({
+              image: [''],
+              name: ['', Validators.required],
+              surname: ['', Validators.required],
+              email: ['', [Validators.required, Validators.email]],
+              username: ['', Validators.required],
+              password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+
+            });
+
+            this.formPersonalInfo = this.fb.group({
+              fromDate: [''],
+              phone: ['', Validators.required],
+              mobile: ['', Validators.required],
+              address: ['', Validators.required],
+              postalCode: ['', Validators.required],
+              country: this.myControlCountries,
+              province: this.myControlProvinces
+
+            });
+
+            this.formSportInfo = this.fb.group({
+              sportName: [''],
+              summary: [''],
+              notes: [''],
+              hitorical: ['']
+            });
+
+            this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.name),
+              map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+            );
+
+            this.myControlCountries.valueChanges.subscribe(country => {
+              this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+              this.filteredProvinces = this._filterProvinces(country.id);
+            });
+
+            this.filteredLevel = this.levelForm.valueChanges.pipe(
+              startWith(''),
+              map((value: any) => typeof value === 'string' ? value : value?.annotation),
+              map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+            );
+
+            this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+              startWith(''),
+              map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+            );
+
+            setTimeout(() => {
+
+              this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
+              this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaults.country));
+              this.myControlProvinces.setValue(this.mockProvincesData.find((c) => c.id === +this.defaults.province));
+              this.languagesControl.setValue(this.languages.filter((l) => l.id === (this.defaults?.language1_id ||
+              this.defaults?.language2_id || this.defaults?.language3_id || this.defaults?.language4_id
+              || this.defaults?.language5_id || this.defaults?.language6_id)));
+
+              this.loading = false;
+
+            }, 500);
+
+          })
+    })
+  }
+
+
+  getSchoolSportDegrees() {
+    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((sport) => {
+        this.schoolSports = sport.data;
+        sport.data.forEach((element, idx) => {
+          this.crudService.list('/degrees', 1, 1000, 'asc', 'name', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          .subscribe((data) => {
+            this.schoolSports[idx].degrees = data.data.reverse();
+          });
+        });
+      })
+  }
+
+
+  getSports() {
+    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        data.data.forEach(element => {
+          this.schoolSports.forEach(sport => {
+            if(element.id === sport.sport_id) {
+              sport.name = element.name;
+              sport.icon_selected = element.icon_selected;
+              sport.icon_unselected = element.icon_unselected;
+            }
+          });
+        });
+
+        this.schoolSports.forEach(element => {
+
+          this.clientSport.forEach(sport => {
+            if(element.sport_id === sport.sport_id) {
+              sport.name = element.name;
+              sport.icon_selected = element.icon_selected;
+              sport.icon_unselected = element.icon_unselected;
+              sport.degrees = element.degrees;
+            }
+          });
+        });
+
+          this.sportsCurrentData.data = this.clientSport;
+
+          const availableSports = [];
+          this.schoolSports.forEach(element => {
+            if(!this.sportsCurrentData.data.find((s) => s.sport_id === element.sport_id)) {
+              availableSports.push(element);
+            }
+          });
+          this.filteredSports = this.sportsControl.valueChanges.pipe(
+            startWith(''),
+            map((sport: string | null) => sport ? this._filterSports(sport) : availableSports.slice())
+          );
+      })
+  }
+
+  getDegrees() {
+    this.clientSport.forEach(element => {
+      this.crudService.get('/degrees/'+element.degree_id)
+        .subscribe((data) => {
+          element.level = data.data;
+        })
     });
+  }
 
-    this.formPersonalInfo = this.fb.group({
-      fromDate: [''],
-      phone: ['', Validators.required],
-      mobile: ['', Validators.required],
-      address: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      country: this.myControlCountries,
-      province: this.myControlProvinces
+  getClientObservations() {
+    this.crudService.list('/client-observations', 1, 1000, null, null, '&client_id='+this.id)
+      .subscribe((data) => {
+        this.defaultsObservations = data.data[0];
+      })
+  }
 
-    });
+  getClientSchool() {
+    this.crudService.list('/clients-schools', 1, 1000, null, null, '&client_id='+this.id)
+    .subscribe((data) => {
+      this.clientSchool = data.data;
 
-    this.formSportInfo = this.fb.group({
-      sportName: [''],
-      summary: [''],
-      notes: [''],
-      hitorical: ['']
-    });
+    })
+  }
 
-    this.filteredStations = this.myControlStations.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterStations(value))
-      );
-
-      this.myControlStations.valueChanges.subscribe(value => {
-        this.formInfoAccount.get('station').setValue(value);
-    });
-
-    this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
-    );
-
-    this.myControlCountries.valueChanges.subscribe(country => {
-      this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-      this.filteredProvinces = this._filterProvinces(country.id);
-    });
-
-    this.filteredSports = this.sportsControl.valueChanges.pipe(
-      startWith(''),
-      map((sport: string | null) => sport ? this._filterSports(sport) : this.allSports.slice())
-    );
-
-    this.filteredLevel = this.levelForm.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.annotation),
-      map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
-    );
-
-    this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-      startWith(''),
-      map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-    );
+  getClientSport() {
+    this.crudService.list('/client-sports', 1, 1000, null, null, '&client_id='+this.id)
+      .subscribe((data) => {
+        this.clientSport = data.data;
+        this.getSports();
+        this.getDegrees();
+      })
   }
 
   onFileChanged(event: Event) {
@@ -183,9 +348,26 @@ export class ClientDetailComponent {
     }
   }
 
-  private _filterStations(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.optionsStation.filter(option => option.toLowerCase().includes(filterValue));
+  getStations() {
+    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+      .subscribe((station) => {
+        station.data.forEach(element => {
+          this.crudService.get('/stations/'+element.id)
+            .subscribe((data) => {
+              this.stations.push(data.data);
+
+            })
+        });
+      })
+  }
+
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data;
+        this.setInitLanguages();
+      })
   }
 
   /**Countries */
@@ -207,12 +389,6 @@ export class ClientDetailComponent {
     const filterValue = name.toLowerCase();
     return this.mockProvincesData.filter(province => province.id_country === countryId && province.name.toLowerCase().includes(filterValue));
   }
-
-  private _filterSports(value: any): any[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
-    return this.allSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
   private _filterLevel(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.mockLevelData.filter(level => level.annotation.toLowerCase().includes(filterValue));
@@ -221,6 +397,11 @@ export class ClientDetailComponent {
   private _filterLanguages(value: any): any[] {
     const filterValue = value.toLowerCase();
     return this.languages.filter(language => language?.name.toLowerCase().includes(filterValue));
+  }
+
+  private _filterSports(value: any): any[] {
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
+    return this.schoolSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   displayFnCountry(country: any): string {
@@ -232,7 +413,7 @@ export class ClientDetailComponent {
   }
 
   displayFnLevel(level: any): string {
-    return level && level.name ? level.name : '';
+    return level && level?.name && level?.annotation ? level?.name + ' - ' + level?.annotation : level?.name;
   }
 
   updateSelectedSports(selected: any[]) {
@@ -243,24 +424,26 @@ export class ClientDetailComponent {
     }));
   }
 
-  toggleSelection(sport: any): void {
-    const index = this.selectedSports.findIndex(s => s.sport_id === sport.id);
-    if (index >= 0) {
-      this.selectedSports.splice(index, 1);
-    } else {
-      this.selectedSports.push({ sportName: sport.name, sportId: sport.id, level: null });
+  toggleSelection(event: any, sport: any): void {
+
+    if (event.isUserInput) {
+
+      const index = this.selectedNewSports.findIndex(s => s.sport_id === sport.sport_id);
+      if (index >= 0) {
+        this.selectedNewSports.splice(index, 1);
+      } else {
+        this.selectedNewSports.push(sport);
+      }
+
+      // Crear una nueva referencia para el array
+      this.selectedNewSports = [...this.selectedNewSports];
+
+      // Actualizar los datos de la tabla
+      this.sportsData.data = this.selectedNewSports;
+
+      // Detectar cambios manualmente para asegurarse de que Angular reconozca los cambios
+      this.cdr.detectChanges();
     }
-
-    // Crear una nueva referencia para el array
-    this.selectedSports = [...this.selectedSports];
-
-    // Actualizar los datos de la tabla
-    this.sportsData.data = this.selectedSports;
-
-    // Detectar cambios manualmente para asegurarse de que Angular reconozca los cambios
-    this.cdr.detectChanges();
-
-    console.log(this.selectedSports);
   }
 
   getSelectedSportsNames(): string {
@@ -314,16 +497,103 @@ export class ClientDetailComponent {
     this.editSportInfo = event;
   }
 
-
-  addFriend(friend: any) {
-    friend.added = true;
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 
-  removeFriend(friend: any) {
-    friend.added = false;
+  setLanguages() {
+    if (this.selectedLanguages.length >= 1) {
+
+      this.defaults.language1_id = this.selectedLanguages[0].id;
+    } if (this.selectedLanguages.length >= 2) {
+
+      this.defaults.language2_id = this.selectedLanguages[1].id;
+    } if (this.selectedLanguages.length >= 3) {
+
+      this.defaults.language3_id = this.selectedLanguages[2].id;
+    } if (this.selectedLanguages.length >= 4) {
+
+      this.defaults.language4_id = this.selectedLanguages[3].id;
+    } if (this.selectedLanguages.length >= 5) {
+
+      this.defaults.language5_id = this.selectedLanguages[4].id;
+    } if (this.selectedLanguages.length === 6) {
+
+      this.defaults.language6_id = this.selectedLanguages[5].id;
+    }
   }
 
-  trackByName(index: number, friend: any) {
-    return friend.name;
+  setInitLanguages() {
+
+    this.languages.forEach(element => {
+      if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
+        || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
+          this.selectedLanguages.push(element);
+        }
+    });
+  }
+
+  removeSport(idx: number, element: any) {
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.delete('/client-sports', element.id)
+          .subscribe(() => {
+            this.deletedItems.push(this.sportsCurrentData.data[idx]);
+            this.sportsCurrentData.data.splice(idx, 1);
+            this.currentSportsTable.renderRows();
+          })
+      }
+    });
+
+  }
+
+  updateLevel(clientSport, level) {
+    this.crudService.update('/client-sports', {client_id: clientSport.data.id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
+      .subscribe((data) => {
+        this.snackbar.open('Level updated', 'OK', {duration: 3000});
+      })
+  }
+
+
+  save() {
+    this.setLanguages();
+
+    this.crudService.update('/users', this.defaultsUser, this.defaultsUser.id)
+      .subscribe((user) => {
+        this.defaults.user_id = user.data.id;
+
+        this.crudService.update('/clients', this.defaults, this.id)
+          .subscribe((client) => {
+            this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+
+            this.defaultsObservations.client_id = client.data.id;
+            this.defaultsObservations.school_id = this.user.schools[0].id;
+            this.crudService.update('/client-observations', this.defaultsObservations, this.defaultsObservations.id)
+              .subscribe((obs) => {
+                console.log('client observation created');
+              })
+
+              this.sportsData.data.forEach(element => {
+
+                this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+                  .subscribe(() => {
+                    console.log('client sport created');
+                  })
+              });
+
+              setTimeout(() => {
+                this.router.navigate(['/clients']);
+
+              }, 2000);
+          })
+      })
   }
 }

@@ -278,8 +278,6 @@ export class MonitorDetailComponent {
                 this.defaults?.language2_id || this.defaults?.language3_id || this.defaults?.language4_id
                 || this.defaults?.language5_id || this.defaults?.language6_id)));
 
-
-
               this.loading = false;
 
             }, 500);
@@ -447,7 +445,7 @@ export class MonitorDetailComponent {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000)
+    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -781,8 +779,6 @@ export class MonitorDetailComponent {
             this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
 
             // revisar a partir de aqui
-            this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
-            .subscribe((monitorSchool) => {
               this.sportsData.data.forEach(element => {
                 this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
                   .subscribe((e) => {
@@ -802,7 +798,6 @@ export class MonitorDetailComponent {
                 this.router.navigate(['/monitors']);
 
               }, 3000);
-            })
           })
       })
   }
