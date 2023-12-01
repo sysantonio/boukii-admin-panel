@@ -1,20 +1,18 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable, map, of, startWith } from 'rxjs';
-import { MOCK_SPORT_DATA, MOCK_SPORT_TYPES } from 'src/app/static-data/sports-data';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { DateTimeDialogComponent } from 'src/@vex/components/date-time-dialog/date-time-dialog.component';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
-import { LEVELS } from 'src/app/static-data/level-data';
 import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/reduction-dialog.component';
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
-import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -165,7 +163,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     recommended_age: null,
     teachers_min: null,
     teachers_max: null,
-    teacher_min_degree: null,
     observations: null,
     auto: null
   }
@@ -254,8 +251,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.crudService.get('/admin/courses/'+this.id)
         .subscribe((course) => {
           this.defaults = course.data;
-
-
+          this.getSeparatedDates(this.defaults.course_dates, true);
+          this.getDegrees();
           this.courseTypeFormGroup = this.fb.group({
 
             sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
@@ -720,6 +717,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       reader.onload = () => {
         this.imagePreviewUrl = reader.result;
+        this.defaults.image = reader.result;
       };
 
       reader.readAsDataURL(file);
@@ -926,8 +924,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       date_start_res: null,
       date_end_res: null,
       confirm_attendance: false,
-      active: null,
-      online: null,
+      active: true,
+      online: true,
       image: this.imagePreviewUrl,
       translations: null,
       price_range: this.dataSourceFlexiblePrices,
@@ -1034,7 +1032,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.crudService.list('/monitors', 1, 1000)
       .subscribe((data) => {
         this.monitors = data.data;
-        this.loading = false;
       });
   }
 
@@ -1049,11 +1046,50 @@ export class CoursesCreateUpdateComponent implements OnInit {
             this.groupedByColor[level.color] = [];
           }
           level.active = false;
+
+          if (this.mode === 'update') {
+
+            this.defaults.course_dates.forEach(cs => {
+              cs.groups.forEach(group => {
+                if (group.degree_id === level.id) {
+                  level.active = true;
+                  level.old = true;
+                }
+              });
+            });
+            this.selectedItem = this.daysDatesLevels[0].dateString;
+          }
           this.groupedByColor[level.color].push(level);
         });
 
         this.colorKeys = Object.keys(this.groupedByColor);
       })
+  }
+
+  calculateAgeMin(level: any) {
+    let ret = 0;
+    this.defaults.course_dates.forEach(courseDate => {
+      courseDate.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          ret = group.age_min;
+        }
+      });
+    });
+
+    return ret;
+  }
+
+  calculateAgeMax(level: any) {
+    let ret = 0;
+    this.defaults.course_dates.forEach(courseDate => {
+      courseDate.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          ret = group.age_max;
+        }
+      });
+    });
+
+    return ret;
   }
 
   getDatesBetween(startDate, endDate, process) {
@@ -1088,41 +1124,51 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   }
 
-  getSeparatedDates(dates: any) {
+  getSeparatedDates(dates: any, onLoad: boolean = false) {
 
     this.daysDates = [];
     this.daysDatesLevels = [];
-    this.defaults.course_dates = [];
+
+    if (this.mode === 'create') {
+
+      this.defaults.course_dates = [];
+    }
 
     dates.forEach(element => {
-      const hour = element.hour;
-      const duration = element.duration;
-      const [hours, minutes] = duration.split(' ').reduce((acc, part) => {
-        if (part.includes('h')) {
-          acc[0] = parseInt(part, 10);
-        } else if (part.includes('min')) {
-          acc[1] = parseInt(part, 10);
+
+      if (!onLoad) {
+        const hour = element.hour;
+        const duration = element.duration;
+        const [hours, minutes] = duration.split(' ').reduce((acc, part) => {
+          if (part.includes('h')) {
+            acc[0] = parseInt(part, 10);
+          } else if (part.includes('min')) {
+            acc[1] = parseInt(part, 10);
+          }
+          return acc;
+        }, [0, 0]);
+
+        this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
+        if (this.courseType === 'privee') {
+
+          this.defaults.course_dates.push({
+            date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+            hour_start: element.hour,
+            hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
+          })
+        } else {
+
+          this.defaults.course_dates.push({
+            date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+            hour_start: element.hour,
+            hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
+            groups: []
+          })
         }
-        return acc;
-      }, [0, 0]);
-
-      this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
-      if (this.courseType === 'privee') {
-
-        this.defaults.course_dates.push({
-          date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-          hour_start: element.hour,
-          hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
-        })
       } else {
-
-        this.defaults.course_dates.push({
-          date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-          hour_start: element.hour,
-          hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
-          groups: []
-        })
+        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', '')});
       }
+
     });
 
   }
@@ -1138,7 +1184,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   loadData(event: any) {
-    if (event.selectedIndex === 3 && this.courseType === 'collectif') {
+    if (event.selectedIndex === 3 && this.defaults.course_type === 1) {
 
       this.getSeparatedDates(this.dataSource.data);
     }
@@ -1157,7 +1203,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
           recommended_age: null,
           teachers_min: null,
           teachers_max: null,
-          teacher_min_degree: null,
           observations: null,
           auto: null,
           subgroups: []
@@ -1198,8 +1243,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
       // eliminar el curso o desactivarlo
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
-          group.active = event.source.checked;
-          group.subgroups = [];
+          if (group.degree_id === level.id) {
+            group.active = event.source.checked;
+            group.subgroups = [];
+
+          }
         });
       });
     }
@@ -1237,7 +1285,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.teacher_min_degree = event.value.id;
+          group.teachers_min = event.value.id;
         }
 
       });
@@ -1250,7 +1298,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            group.min_age = event.value;
+            group.age_min = event.value;
           }
 
         });
@@ -1263,7 +1311,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            group.max_age = event.value;
+            group.age_max = event.value;
           }
 
         });
@@ -1271,16 +1319,65 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
-  setSubGroupMonitor(event: any, monitor: any, daySelectedIndex, groupIndex, subGroupSelectedIndex) {
+  getMonitorValue(level: any, subGroupIndex: number, daySelectedIndex: number) {
 
+    let ret = null;
+    if(!level.old) {
+      this.defaults.course_dates.forEach(courseDate => {
+
+          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+            courseDate.groups.forEach(group => {
+              if (group.degree_id === level.id) {
+                  ret = group.subgroups[subGroupIndex]?.monitor;
+              }
+            });
+          }
+        });
+
+        } else {
+          this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
+            if (group.degree_id === level.id) {
+              ret = group.subgroups[subGroupIndex]?.monitor.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor.last_name;
+            }
+
+          });
+        }
+
+
+      return ret;
+    }
+
+  setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
+
+    let monitorSet = false;
     if (event.isUserInput) {
 
-      this.defaults.course_dates[daySelectedIndex].groups[groupIndex].subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-      this.defaults.course_dates[daySelectedIndex].groups[groupIndex].subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+      if (!level.old) {
+        this.defaults.course_dates.forEach(courseDate => {
+          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+            courseDate.groups.forEach(group => {
+              if(group.degree_id === level.id && !monitorSet) {
+
+                group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                group.subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+                monitorSet = true;
+              }
+            });
+          }
+        });
+      } else {
+        this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
+          if (group.degree_id === level.id) {
+            group.subgroups[subGroupSelectedIndex].monitor = monitor;
+          }
+
+        });
+      }
+
     }
   }
 
-  setSubGroupPax(event: any, level: any, index: number) {
+  setSubGroupPax(event: any, level: any) {
     level.max_participants = +event.target.value;
 
     this.defaults.course_dates.forEach(element => {
@@ -1292,6 +1389,24 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
       });
     });
+  }
+
+  calculateSubGroupPaxes(level: any) {
+    let ret = 0;
+
+    this.defaults.course_dates.forEach(element => {
+      element.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          group.subgroups.forEach(subgroup => {
+
+            ret = ret + subgroup.max_participants;
+          });
+        }
+
+      });
+    });
+
+    return ret;
   }
 
   selectItem(item: any, index: any, subGroupIndex: any) {
