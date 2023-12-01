@@ -885,7 +885,7 @@
                   <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
                   <div style="float: left; width: 100%;margin-top: 5%;">
                     <ul>
-                      <li *ngFor="let item of defaults.course_dates; let i = index"> {{ daysDatesLevels[i] }} <i style="text-align: right;float:right">{{ item.hour_start}} - {{ item.hour_end }}</i></li>
+                      <li *ngFor="let item of defaults.course_dates; let i = index"> {{ daysDatesLevels[i].dayString }} <i style="text-align: right;float:right">{{ item.hour_start}} - {{ item.hour_end }}</i></li>
                     </ul>
                   </div>
                   <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -898,9 +898,9 @@
 
                   <div style="width: 100%;float:left;">
                     <ng-container *ngFor="let colorKey of colorKeys">
-                      <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]; let i = index">
+                      <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]; let groupIndex = index">
                         <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
-                          <mat-slide-toggle (change)="activeGroup($event, i, level)"></mat-slide-toggle>
+                          <mat-slide-toggle (change)="activeGroup($event, level)"></mat-slide-toggle>
                         </div>
                         <div style="float: left;width: 16%;">
                           <div style="width:100%;text-align: center;border-radius: 0;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
@@ -919,7 +919,7 @@
                             Grupos 2g
                           </div>
                           <div style="width: 100%; margin-top: 10%;height: 60px">
-                            <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(level)">Añadir grupo</button>
+                            <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(level)">Añadir subgrupo</button>
                           </div>
                         </div>
 
@@ -956,23 +956,23 @@
                             Alumnos <strong>0/{{level.max_participants}}</strong>
                           </div>
                           <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, level, i)"/>
+                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, level, groupIndex)"/>
 
                           </mat-form-field>
                         </div>
 
                         <ng-container *ngIf="level.active">
 
-                          <div style="width:100%;float:left;overflow: scroll;" *ngFor="let item of readSubGroups(level.id); let i = index">
+                          <div style="width:100%;float:left;overflow: scroll;" *ngFor="let subGroup of readSubGroups(level.id); let subGroupIndex = index">
                             <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
                               <div>
                                 <ul style="display: flex">
                                   <li style="float: left; width: 20%;font-size: 18px">
-                                    <span [style.color]="colorKey"><strong>{{level.annotation}}</strong> - {{level.name}} - {{ i + 1 }}</span>
+                                    <span [style.color]="colorKey"><strong>{{level.annotation}}</strong> - {{level.name}} - {{ subGroupIndex + 1 }}</span>
                                   </li>
-                                  <li *ngFor="let dayLevel of daysDatesLevels; let i = index;"
-                                      (click)="selectItem(dayLevel)"
-                                      [style.color]="selectedItem === dayLevel.dateString ? '#FF3085' : ''"
+                                  <li *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;"
+                                      (click)="selectItem(dayLevel, dayIndex, subGroupIndex)"
+                                      [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
                                       style="float: left; width: 13%; text-align: center; cursor: pointer;">
                                     {{ dayLevel.dateString }}
                                   </li>
@@ -980,15 +980,17 @@
                                 </ul>
                               </div>
                             </div>
-                            <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
+                            <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
                               <div>
                                 <ul>
-                                  <li style="float: left; width: 20%;">
+                                  <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
                                     <mat-form-field class="flex-auto">
                                       <mat-label>Moniteur</mat-label>
-                                      <input type="text" placeholder="Pick one" matInput [matAutocomplete]="autoMoniteur"/>
-                                      <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
-                                        <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="setSubGroupMonitor(monitor, level, i)">
+                                      <input type="text" placeholder="Pick one" matInput [matAutocomplete]="autoMoniteur"
+                                      [value]="defaults.course_dates[daySelectedIndex]?.groups[groupIndex]?.subgroups[subGroupIndex]?.monitor"/>
+                                      <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
+                                        <mat-option *ngFor="let monitor of filteredMonitors | async"
+                                          (onSelectionChange)="setSubGroupMonitor($event, monitor, daySelectedIndex, groupIndex, subGroupSelectedIndex)">
                                           {{monitor.first_name}} {{monitor.last_name}}
                                         </mat-option>
                                       </mat-autocomplete>

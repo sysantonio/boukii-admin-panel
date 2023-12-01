@@ -14,7 +14,7 @@ import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/r
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
@@ -103,6 +103,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   today = new Date();
   from: any = null;
   to: any = null;
+  daySelectedIndex: any = 0;
+  subGroupSelectedIndex: any = 0;
   selectedDate: string;
   selectedItem: any;
 
@@ -197,9 +199,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
   courseType: any = null;
   courseComplete: boolean = false;
   user: any;
+  id: any = null;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router) {
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.id = this.activatedRoute.snapshot.params.id;
 
     this.generateDurations();
 
@@ -240,141 +244,279 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.courseTypeFormGroup = this.fb.group({
-
-      sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
-      sport: [null, Validators.required],
-      courseType: [null, Validators.required],
-      separatedDates: [false]
-    })
-
-    this.courseInfoFormGroup = this.fb.group({
-
-      course_name: [null, Validators.required],
-      price: [null, Validators.required],
-      station: [null, Validators.required],
-      summary: [null, Validators.required],
-      description: [null, Validators.required],
-      duration: [null],
-      participants: [null],
-      ageFrom: [null, Validators.required],
-      ageTo: [null, Validators.required],
-      image: [null],
-    })
-
-
-    this.courseInfoPriveFormGroup = this.fb.group({
-
-      duration: [null, Validators.required],
-      minDuration: [null, Validators.required],
-      maxDuration: [null, Validators.required],
-      fromHour: [null, Validators.required],
-      toHour: [null, Validators.required],
-      participants: [null, Validators.required],
-      fromDate: [null, Validators.required],
-      toDate: [null, Validators.required],
-      from: [null, Validators.required],
-      to: [null, Validators.required],
-      image: [null],
-      periodeUnique: new FormControl(false),
-      periodeMultiple: new FormControl(false)
-    })
-
-    this.courseLevelFormGroup = this.fb.group({});
-
-    this.courseInfoCollecDateSplitFormGroup = this.fb.group({
-      course_name: [null, Validators.required],
-      price: [null, Validators.required],
-      station: [null, Validators.required],
-      summary: [null, Validators.required],
-      description: [null, Validators.required],
-      duration: [null, Validators.required],
-      participants: [null, Validators.required],
-      image: [null],
-    });
-
-    this.courseInfoPriveSeparatedFormGroup = this.fb.group({
-      course_name: [null, Validators.required],
-      price: ['Flexible', Validators.required],
-      station: [null, Validators.required],
-      summary: [null, Validators.required],
-      description: [null, Validators.required],
-      duration: [null, Validators.required],
-      participants: [null, Validators.required],
-      image: [null],
-    });
-
-    this.courseConfigForm = this.fb.group({
-
-      fromDate: [null],
-      toDate: [null],
-      from: [null],
-      to: [null],
-      duration: [null],
-      participants: [null],
-    });
-
-    this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-
-      this.filteredStations = this.myControlStations.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this._filterStations(name) : this.stations.slice())
-      );
-
-    this.filteredSports = this.myControlSport.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.name),
-      map(name => name ? this._filterSport(name) : this.sportData.slice())
-    );
-
-    this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
-      startWith(''),
-      map((value: any) => typeof value === 'string' ? value : value?.full_name),
-      map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
-    );
-
-    this.myControl.valueChanges.subscribe(value => {
-      this.courseTypeFormGroup.get('courseType').setValue(value);
-    });
-
-    this.myControlSport.valueChanges.subscribe(value => {
-        this.courseTypeFormGroup.get('sport').setValue(value);
-    });
-
-    this.myControlStations.valueChanges.subscribe(value => {
-        this.courseInfoFormGroup.get('station').setValue(value);
-    });
-
-    this.courseInfoPriveFormGroup.get('minDuration').valueChanges.subscribe(selectedDuration => {
-      this.updateMaxDurationOptions(selectedDuration);
-    });
-
-    this.courseInfoPriveFormGroup.get('fromHour').valueChanges.subscribe(selectedStartHour => {
-      this.updateToHourOptions(selectedStartHour);
-    });
-
-    if (this.defaults) {
+    if (!this.id) {
       this.mode = 'create';
     } else {
-      this.defaults = {};
-
+      this.mode = 'update';
     }
 
-    this.getSportsType();
-    this.getSports();
-    this.getStations();
-    this.getMonitors();
-    setTimeout(() => {
-      this.filterSportsByType();
+    if (this.mode === 'update') {
+      this.crudService.get('/admin/courses/'+this.id)
+        .subscribe((course) => {
+          this.defaults = course.data;
 
-    }, 500);
+
+          this.courseTypeFormGroup = this.fb.group({
+
+            sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
+            sport: [null, Validators.required],
+            courseType: [null, Validators.required],
+            separatedDates: [false]
+          })
+
+          this.courseInfoFormGroup = this.fb.group({
+
+            course_name: [null, Validators.required],
+            price: [null, Validators.required],
+            station: [null, Validators.required],
+            summary: [null, Validators.required],
+            description: [null, Validators.required],
+            duration: [null],
+            participants: [null],
+            ageFrom: [null, Validators.required],
+            ageTo: [null, Validators.required],
+            image: [null],
+          })
+
+
+          this.courseInfoPriveFormGroup = this.fb.group({
+
+            duration: [null, Validators.required],
+            minDuration: [null, Validators.required],
+            maxDuration: [null, Validators.required],
+            fromHour: [null, Validators.required],
+            toHour: [null, Validators.required],
+            participants: [null, Validators.required],
+            fromDate: [null, Validators.required],
+            toDate: [null, Validators.required],
+            from: [null, Validators.required],
+            to: [null, Validators.required],
+            image: [null],
+            periodeUnique: new FormControl(false),
+            periodeMultiple: new FormControl(false)
+          })
+
+          this.courseLevelFormGroup = this.fb.group({});
+
+          this.courseInfoCollecDateSplitFormGroup = this.fb.group({
+            course_name: [null, Validators.required],
+            price: [null, Validators.required],
+            station: [null, Validators.required],
+            summary: [null, Validators.required],
+            description: [null, Validators.required],
+            duration: [null, Validators.required],
+            participants: [null, Validators.required],
+            image: [null],
+          });
+
+          this.courseInfoPriveSeparatedFormGroup = this.fb.group({
+            course_name: [null, Validators.required],
+            price: ['Flexible', Validators.required],
+            station: [null, Validators.required],
+            summary: [null, Validators.required],
+            description: [null, Validators.required],
+            duration: [null, Validators.required],
+            participants: [null, Validators.required],
+            image: [null],
+          });
+
+          this.courseConfigForm = this.fb.group({
+
+            fromDate: [null],
+            toDate: [null],
+            from: [null],
+            to: [null],
+            duration: [null],
+            participants: [null],
+          });
+
+          this.filteredOptions = this.myControl.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => this._filter(value))
+            );
+
+            this.filteredStations = this.myControlStations.valueChanges
+            .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.name),
+              map(name => name ? this._filterStations(name) : this.stations.slice())
+            );
+
+          this.filteredSports = this.myControlSport.valueChanges.pipe(
+            startWith(''),
+            map((value: any) => typeof value === 'string' ? value : value?.name),
+            map(name => name ? this._filterSport(name) : this.sportData.slice())
+          );
+
+          this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+            startWith(''),
+            map((value: any) => typeof value === 'string' ? value : value?.full_name),
+            map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+          );
+
+          this.myControl.valueChanges.subscribe(value => {
+            this.courseTypeFormGroup.get('courseType').setValue(value);
+          });
+
+          this.myControlSport.valueChanges.subscribe(value => {
+              this.courseTypeFormGroup.get('sport').setValue(value);
+          });
+
+          this.myControlStations.valueChanges.subscribe(value => {
+              this.courseInfoFormGroup.get('station').setValue(value);
+          });
+
+          this.courseInfoPriveFormGroup.get('minDuration').valueChanges.subscribe(selectedDuration => {
+            this.updateMaxDurationOptions(selectedDuration);
+          });
+
+          this.courseInfoPriveFormGroup.get('fromHour').valueChanges.subscribe(selectedStartHour => {
+            this.updateToHourOptions(selectedStartHour);
+          });
+
+
+
+          this.getSportsType();
+          this.getSports();
+          this.getStations();
+          this.getMonitors();
+          setTimeout(() => {
+            this.filterSportsByType();
+
+          }, 500);
+        })
+    } else {
+      this.courseTypeFormGroup = this.fb.group({
+
+        sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
+        sport: [null, Validators.required],
+        courseType: [null, Validators.required],
+        separatedDates: [false]
+      })
+
+      this.courseInfoFormGroup = this.fb.group({
+
+        course_name: [null, Validators.required],
+        price: [null, Validators.required],
+        station: [null, Validators.required],
+        summary: [null, Validators.required],
+        description: [null, Validators.required],
+        duration: [null],
+        participants: [null],
+        ageFrom: [null, Validators.required],
+        ageTo: [null, Validators.required],
+        image: [null],
+      })
+
+
+      this.courseInfoPriveFormGroup = this.fb.group({
+
+        duration: [null, Validators.required],
+        minDuration: [null, Validators.required],
+        maxDuration: [null, Validators.required],
+        fromHour: [null, Validators.required],
+        toHour: [null, Validators.required],
+        participants: [null, Validators.required],
+        fromDate: [null, Validators.required],
+        toDate: [null, Validators.required],
+        from: [null, Validators.required],
+        to: [null, Validators.required],
+        image: [null],
+        periodeUnique: new FormControl(false),
+        periodeMultiple: new FormControl(false)
+      })
+
+      this.courseLevelFormGroup = this.fb.group({});
+
+      this.courseInfoCollecDateSplitFormGroup = this.fb.group({
+        course_name: [null, Validators.required],
+        price: [null, Validators.required],
+        station: [null, Validators.required],
+        summary: [null, Validators.required],
+        description: [null, Validators.required],
+        duration: [null, Validators.required],
+        participants: [null, Validators.required],
+        image: [null],
+      });
+
+      this.courseInfoPriveSeparatedFormGroup = this.fb.group({
+        course_name: [null, Validators.required],
+        price: ['Flexible', Validators.required],
+        station: [null, Validators.required],
+        summary: [null, Validators.required],
+        description: [null, Validators.required],
+        duration: [null, Validators.required],
+        participants: [null, Validators.required],
+        image: [null],
+      });
+
+      this.courseConfigForm = this.fb.group({
+
+        fromDate: [null],
+        toDate: [null],
+        from: [null],
+        to: [null],
+        duration: [null],
+        participants: [null],
+      });
+
+      this.filteredOptions = this.myControl.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
+
+        this.filteredStations = this.myControlStations.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value.name),
+          map(name => name ? this._filterStations(name) : this.stations.slice())
+        );
+
+      this.filteredSports = this.myControlSport.valueChanges.pipe(
+        startWith(''),
+        map((value: any) => typeof value === 'string' ? value : value?.name),
+        map(name => name ? this._filterSport(name) : this.sportData.slice())
+      );
+
+      this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+        startWith(''),
+        map((value: any) => typeof value === 'string' ? value : value?.full_name),
+        map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+      );
+
+      this.myControl.valueChanges.subscribe(value => {
+        this.courseTypeFormGroup.get('courseType').setValue(value);
+      });
+
+      this.myControlSport.valueChanges.subscribe(value => {
+          this.courseTypeFormGroup.get('sport').setValue(value);
+      });
+
+      this.myControlStations.valueChanges.subscribe(value => {
+          this.courseInfoFormGroup.get('station').setValue(value);
+      });
+
+      this.courseInfoPriveFormGroup.get('minDuration').valueChanges.subscribe(selectedDuration => {
+        this.updateMaxDurationOptions(selectedDuration);
+      });
+
+      this.courseInfoPriveFormGroup.get('fromHour').valueChanges.subscribe(selectedStartHour => {
+        this.updateToHourOptions(selectedStartHour);
+      });
+
+
+
+      this.getSportsType();
+      this.getSports();
+      this.getStations();
+      this.getMonitors();
+      setTimeout(() => {
+        this.filterSportsByType();
+
+      }, 500);
+    }
   }
 
   get periodeUnique() {
@@ -420,11 +562,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     if (this.courseType === 'collectif') {
       this.defaults.course_dates.forEach(dates => {
-        dates.groups.forEach(courses => {
-          if (courses.subgroups.length > 0) {
-            courseDates.push(dates);
+        const group = [];
+        dates.groups.forEach(dateGroup => {
+          if (dateGroup.subgroups.length > 0) {
+            group.push(dateGroup);
           }
         });
+        dates.groups = group;
       });
     } else {
       courseDates = this.defaults.course_dates;
@@ -454,7 +598,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
-        course_dates: courseDates
+        course_dates: this.defaults.course_dates
       }
       console.log(data);
 
@@ -480,7 +624,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
-        course_dates: courseDates
+        course_dates: this.defaults.course_dates
       }
       console.log(data);
     } else if (this.courseType === 'privee' && this.defaults.isFlexible) {
@@ -494,6 +638,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         currency: 'CHF',
         date_start: lowestDate,
         date_end: highestDate,
+        date_start_res: lowestDate,
+        date_end_res: highestDate,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -520,6 +666,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',
+        date_start_res: lowestDate,
+        date_end_res: highestDate,
         date_start: lowestDate,
         date_end: highestDate,
         active: this.defaults.active,
@@ -545,7 +693,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     data.school_id = this.user.schools[0].id;
 
-    this.crudService.create('/courses', data)
+    this.crudService.create('/admin/courses', data)
       .subscribe((res) => {
         console.log(res);
         this.goTo('/courses');
@@ -803,7 +951,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       hour_min: null,
       hour_max: null,
       course_dates: [],
-      groups: this.generateGroups()
+      groups: []
     };
 
     this.courseType = type;
@@ -891,6 +1039,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getDegrees() {
+    this.groupedByColor = {};
+    this.colorKeys= [];
     this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
       .subscribe((data) => {
         this.levels = data.data;
@@ -903,7 +1053,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         });
 
         this.colorKeys = Object.keys(this.groupedByColor);
-        this.generateGroups();
       })
   }
 
@@ -971,7 +1120,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
           hour_start: element.hour,
           hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
-          groups: this.generateGroups()
+          groups: []
         })
       }
     });
@@ -995,34 +1144,43 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
-  generateGroups() {
-    const ret = [];
+  generateGroups(level: any) {
+    let ret = {};
     this.levels.forEach(element => {
-      ret.push({
-        course_id: null,
-        course_date_id: null,
-        degree_id: element.id,
-        age_min: null,
-        age_max: null,
-        recommended_age: null,
-        teachers_min: null,
-        teachers_max: null,
-        teacher_min_degree: null,
-        observations: null,
-        auto: null,
-        subgroups: []
-      })
+      if (element.id === level.id){
+        ret = {
+          course_id: null,
+          course_date_id: null,
+          degree_id: element.id,
+          age_min: null,
+          age_max: null,
+          recommended_age: null,
+          teachers_min: null,
+          teachers_max: null,
+          teacher_min_degree: null,
+          observations: null,
+          auto: null,
+          subgroups: []
+        }
+      }
+
     });
 
     return ret;
   }
 
-  activeGroup(event: any, index: number, level: any) {
+  activeGroup(event: any, level: any) {
 
     this.selectedItem = this.daysDatesLevels[0].dateString;
     this.selectedDate = this.defaults.course_dates[0]?.date;
     level.active = event.source.checked;
+
+
     if(event.source.checked) {
+      this.defaults.course_dates.forEach(element => {
+        element.groups.push(this.generateGroups(level));
+      });
+
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
           if (group.degree_id === level.id) {
@@ -1113,16 +1271,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
-  setSubGroupMonitor(monitor: any, level: any, index: number) {
+  setSubGroupMonitor(event: any, monitor: any, daySelectedIndex, groupIndex, subGroupSelectedIndex) {
 
-    this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
-        if (level.id === group.degree_id && element.date === this.selectedDate) {
-          group.subgroups[index].monitor_id = monitor.id;
-        }
+    if (event.isUserInput) {
 
-      });
-    });
+      this.defaults.course_dates[daySelectedIndex].groups[groupIndex].subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+      this.defaults.course_dates[daySelectedIndex].groups[groupIndex].subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+    }
   }
 
   setSubGroupPax(event: any, level: any, index: number) {
@@ -1139,9 +1294,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
   }
 
-  selectItem(item: any) {
+  selectItem(item: any, index: any, subGroupIndex: any) {
+    this.subGroupSelectedIndex = null;
     this.selectedItem = item.dateString;
-    this.selectedDate = item.date; // Asumiendo que 'item' tiene una propiedad 'date'
+    this.selectedDate = item.date;
+    this.daySelectedIndex = index;
+    this.subGroupSelectedIndex = subGroupIndex;
   }
 
   setStation(station: any) {

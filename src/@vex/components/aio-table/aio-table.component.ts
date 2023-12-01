@@ -53,6 +53,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @Input()
   entity: string;
   @Input()
+  updatePage: string = 'update';
+  @Input()
   title: string;
   @Input()
   route: string;
@@ -142,7 +144,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   update(row: any) {
     if (!this.createOnModal) {
-      this.router.navigate(['/' + this.route + '/update/' + row.id]);
+      this.router.navigate(['/' + this.route + '/' +this.updatePage + '/' +row.id]);
 
     } else {
       this.updateModal(row);

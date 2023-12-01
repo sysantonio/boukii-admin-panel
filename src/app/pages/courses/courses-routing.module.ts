@@ -23,6 +23,13 @@ const routes: VexRoutes = [
   },
   {
     path: 'update/:id',
+    component: CoursesCreateUpdateComponent,
+    data: {
+      toolbarShadowEnabled: true
+    }
+  },
+  {
+    path: 'detail/:id',
     component: CourseDetailComponent,
     data: {
       toolbarShadowEnabled: true

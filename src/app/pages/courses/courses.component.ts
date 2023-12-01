@@ -22,7 +22,7 @@ export class CoursesComponent {
   createComponent = CoursesCreateUpdateComponent;
   entity = '/courses';
   columns: TableColumn<any>[] = [
-    { label: 'Type', property: 'type', type: 'image', visible: true },
+    { label: 'Type', property: 'course_type', type: 'image', visible: true },
     { label: 'Course', property: 'name', type: 'text', visible: true},
     { label: 'Sport', property: 'sport', type: 'text', visible: true },
     { label: 'FX-FI', property: 'max_participants', type: 'text', visible: true },
@@ -31,7 +31,7 @@ export class CoursesComponent {
     { label: 'Price', property: 'price', type: 'price', visible: true },
     { label: 'Enregistrée', property: 'register', type: 'register_date', visible: true },
     { label: 'Reservas', property: 'bookings', type: 'bookings', visible: true },
-    { label: 'Status', property: 'status', type: 'light', visible: true },
+    { label: 'Status', property: 'active', type: 'light', visible: true },
     { label: 'Options', property: 'options', type: 'light', visible: true },
     { label: 'Online', property: 'online', type: 'light', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }

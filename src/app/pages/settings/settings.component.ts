@@ -147,7 +147,11 @@ export class SettingsComponent implements OnInit {
         });
       })*/
     this.generateHours();
+    this.getData();
 
+  }
+
+  getData() {
     this.crudService.get('/schools/1')
       .subscribe((data) => {
 
@@ -306,29 +310,34 @@ export class SettingsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         if(data.deletedGoals.length > 1) {
-          data.deletedGoal.forEach(element => {
+          data.deletedGoals.forEach(element => {
             this.crudService.delete('/degrees-school-sport-goals', element.id)
               .subscribe((res) => {
-                console.log(res)
-              })
-          });
-        }
-        if (data.mode === 'create') {
-          data.goals.forEach(element => {
-            this.crudService.create('/degrees-school-sport-goals', element)
-              .subscribe((data) => {
-                this.snackbar.open('Objetivos creados correctamente', 'OK', {duration: 3000});
-              })
-          });
-        } else {
-          data.goals.forEach(element => {
-            this.crudService.update('/degrees-school-sport-goals', element, element.id)
-              .subscribe((data) => {
                 this.snackbar.open('Objetivos modificados correctamente', 'OK', {duration: 3000});
               })
           });
         }
+        data.goals.forEach(element => {
+          if(element.id) {
 
+          this.crudService.update('/degrees-school-sport-goals', element, element.id)
+          .subscribe((data) => {
+            this.snackbar.open('Objetivos modificados correctamente', 'OK', {duration: 3000});
+          })
+          } else {
+            this.crudService.create('/degrees-school-sport-goals', element)
+            .subscribe((data) => {
+              this.snackbar.open('Objetivos creados correctamente', 'OK', {duration: 3000});
+            })
+          }
+
+
+        });
+
+
+        setTimeout(() => {
+          this.getData();
+        }, 500);
       }
     });
   }
