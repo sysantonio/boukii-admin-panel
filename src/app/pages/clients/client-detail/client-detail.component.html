@@ -34,25 +34,44 @@
   </div>
 
 
-<div class="mt-6 flex flex-col md:flex-row md:items-start" *ngIf="!loading">
+<div class="mt-6 flex flex-col md:flex-row md:items-start">
   <div style="margin-left:0; margin-right: 1.5rem"
     class="card max-w-unset md:max-w-xs w-full flex-none md:ltr:ml-6 md:rtl:mr-6 mt-6 md:mt-0">
     <div class="px-6 py-4 border-b">
       <h2 class="title m-0">Utilisateurs</h2>
     </div>
 
-    <div @stagger class="px-6 py-4 flex flex-col gap-4">
+    <div @stagger class="px-6 py-4 flex flex-col gap-4" style="cursor:pointer;">
       <div
-        *ngFor="let user of clientUsers;"
-        class="flex items-center">
+        class="flex items-center" (click)="changeClientData(mainId)">
         <img
           @scaleIn
-          [src]="user.image === null || user.image === '' ? '../../../../assets/img/avatar.png': user.image"
+          [src]="mainClient?.image === null || mainClient?.image === '' ? '../../../../assets/img/avatar.png': mainClient?.image"
+          [ngStyle]="{
+            'border': mainId && +mainId === defaults?.id ? '#FF3085 1px solid' : 'none'
+          }"
           alt="Profile Picture"
           class="avatar ltr:mr-3 rtl:ml-3 flex-none" />
+
         <div @fadeInRight class="flex-auto">
-          <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ user.first_name }} {{ user.last_name }}</h4>
-          <span class="body-2 m-0 leading-snug"  style="width: 10%; float:left" (click)="deleteUserClient(user.utilizer_id)"><mat-icon svgIcon="mat:delete"></mat-icon></span>
+          <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ mainClient?.first_name }} {{ mainClient?.last_name }}</h4>
+        </div>
+      </div>
+      <div
+        *ngFor="let user of clientUsers;"
+        class="flex items-center" style="cursor:pointer;" (click)="changeClientData(user.id)">
+        <img
+          @scaleIn
+          [src]="user?.image === null || user?.image === '' ? '../../../../assets/img/avatar.png': user?.image"
+          alt="Profile Picture"
+          class="avatar ltr:mr-3 rtl:ml-3 flex-none"
+          [ngStyle]="{
+            'border': +id === defaults.id && this.id !== mainId ? '#FF3085 1px solid' : 'none'
+          }"
+          />
+        <div @fadeInRight class="flex-auto">
+          <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ user?.first_name }} {{ user?.last_name }}</h4>
+          <span class="body-2 m-0 leading-snug"  style="width: 10%; float:left" (click)="deleteUserClient(user?.utilizer_id)"><mat-icon svgIcon="mat:delete"></mat-icon></span>
         </div>
       </div>
 
@@ -67,7 +86,7 @@
 
     </div>
   </div>
-  <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChange($event)">
+  <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChange($event)" *ngIf="!loading">
     <mat-tab label="Profile">
       <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false">
 
@@ -405,10 +424,10 @@
           <div class="py-3 flex items-center">
             <div style="float: left; width:100%;">
               <div style="float: left; width:25%;" *ngFor="let item of clientSport" (click)="selectSportEvo(item)">
-                <img [src]="selectedSport.sport_id === item.sport_id ? item.icon_selected : item.icon_unselected" style="float: left;border-radius: 20%;border:1px solid; cursor:pointer;"
+                <img [src]="selectedSport?.sport_id === item.sport_id ? item.icon_selected : item.icon_unselected" style="float: left;border-radius: 20%;border:1px solid; cursor:pointer;"
                 [ngStyle]="{
-                  'background': selectedSport.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
-                  'border': selectedSport.sport_id === item.sport_id ? '#fff' : '#808080'
+                  'background': selectedSport?.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
+                  'border': selectedSport?.sport_id === item.sport_id ? '#fff' : '#808080'
                 }">
                 <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;"> {{item.name}}</p>
               </div>
@@ -421,15 +440,15 @@
             <div style="float: left; width:100%;">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:20%;">
-                  <img [src]="selectedSport.icon_selected" [style.background]="selectedSport.level.color" [style.border]="selectedSport.level.color" style="float: left;border-radius: 20%;border:1px solid">
+                  <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
                 </div>
                 <div style="float: left; width:80%;">
                   <p style="float: left; width:100%;font-size: 12px;">PB - 50%</p>
-                  <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport.level.annotation}} / {{selectedSport.level.name}}</h1>
+                  <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}</h1>
                 </div>
 
                 <div style="float: left; width:100%;margin: 2% 0 0 0;">
-                  <mat-progress-bar mode="determinate" [value]="40" [color]="selectedSport.level.color"></mat-progress-bar>
+                  <mat-progress-bar mode="determinate" [value]="40" [color]="selectedSport?.level?.color"></mat-progress-bar>
 
                 </div>
 
@@ -528,7 +547,7 @@
           <div class="py-3 flex items-center">
 
             <div style="float: left; width:100%;">
-              <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport.level.id" [size]="200" [userImage]="this.defaults.image"></app-level-user>
+              <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="this.defaults.image"></app-level-user>
 
             </div>
           </div>

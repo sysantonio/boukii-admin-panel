@@ -82,7 +82,9 @@ displayedColumns: string[] = ['name', 'date'];
   mockProvincesData = MOCK_PROVINCES;
   mockLevelData: any = LEVELS;
 
+  mainClient: any;
   defaults = {
+    id: null,
     email: null,
     first_name: null,
     last_name: null,
@@ -134,6 +136,7 @@ displayedColumns: string[] = ['name', 'date'];
   selectedSport: any;
   clientSport = [];
   clientSchool = [];
+  mainId: any;
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
      private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog) {
@@ -154,20 +157,42 @@ displayedColumns: string[] = ['name', 'date'];
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
+    this.mainId = this.activatedRoute.snapshot.params.id;
+
+    this.getData();
+
+  }
+
+  changeClientData(id: any) {
+    this.loading = true;
+    this.id = id;
+    this.getData(id, true);
+  }
+
+  getData(id = null, onChangeUser = false) {
+    const getId = id === null ? this.mainId : id;
+
     this.getSchoolSportDegrees();
     this.getLanguages();
     this.getStations();
     this.getClientSchool();
     this.getClientSport();
     this.getClientObservations();
-    this.getClientUtilisateurs();
 
-    this.crudService.get('/clients/'+this.id)
+    if (!onChangeUser) {
+      this.getClientUtilisateurs();
+    }
+
+    this.crudService.get('/clients/'+ getId)
       .subscribe((data) => {
         this.defaults = data.data;
-
+        if (!onChangeUser) {
+          this.mainClient = data.data;
+        }
         this.crudService.get('/users/'+data.data.user_id)
           .subscribe((user)=> {
+
+
             this.defaultsUser = user.data;
 
             this.formInfoAccount = this.fb.group({
@@ -198,28 +223,31 @@ displayedColumns: string[] = ['name', 'date'];
               hitorical: ['']
             });
 
-            this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-              startWith(''),
-              map(value => typeof value === 'string' ? value : value.name),
-              map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
-            );
+            if(!onChangeUser) {
 
-            this.myControlCountries.valueChanges.subscribe(country => {
-              this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-              this.filteredProvinces = this._filterProvinces(country.id);
-            });
+              this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+              );
 
-            this.filteredLevel = this.levelForm.valueChanges.pipe(
-              startWith(''),
-              map((value: any) => typeof value === 'string' ? value : value?.annotation),
-              map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
-            );
+              this.myControlCountries.valueChanges.subscribe(country => {
+                this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+                this.filteredProvinces = this._filterProvinces(country?.id);
+              });
 
-            this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-              startWith(''),
-              map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-            );
+              this.filteredLevel = this.levelForm.valueChanges.pipe(
+                startWith(''),
+                map((value: any) => typeof value === 'string' ? value : value?.annotation),
+                map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+              );
 
+              this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+                startWith(''),
+                map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+              );
+
+            }
             setTimeout(() => {
 
               this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
@@ -236,7 +264,6 @@ displayedColumns: string[] = ['name', 'date'];
           })
     })
   }
-
 
   getSchoolSportDegrees() {
     this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
@@ -304,7 +331,10 @@ displayedColumns: string[] = ['name', 'date'];
   getClientObservations() {
     this.crudService.list('/client-observations', 1, 1000, null, null, '&client_id='+this.id)
       .subscribe((data) => {
-        this.defaultsObservations = data.data[0];
+        if(data.data.length > 0) {
+
+          this.defaultsObservations = data.data[0];
+        }
       })
   }
 
@@ -405,7 +435,7 @@ displayedColumns: string[] = ['name', 'date'];
   }
 
   private _filterSports(value: any): any[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name?.toLowerCase();
     return this.schoolSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
