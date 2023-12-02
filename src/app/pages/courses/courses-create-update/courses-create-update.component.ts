@@ -572,7 +572,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
 
 
-    if (this.courseType === 'collectif' && this.defaults.isFlexible) {
+    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -599,7 +599,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
       console.log(data);
 
-    } else if (this.courseType === 'collectif' && !this.defaults.isFlexible) {
+    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -624,7 +624,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         course_dates: this.defaults.course_dates
       }
       console.log(data);
-    } else if (this.courseType === 'privee' && this.defaults.isFlexible) {
+    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -654,7 +654,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         course_dates: this.defaults.course_dates
       };
       console.log(data);
-    } else if (this.courseType === 'privee' && !this.defaults.isFlexible) {
+    } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -1040,7 +1040,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.colorKeys= [];
     this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
       .subscribe((data) => {
-        this.levels = data.data;
+        data.data.forEach(element => {
+          if(element.active) {
+            this.levels.push(element);
+          }
+        });
         this.levels.reverse().forEach(level => {
           if (!this.groupedByColor[level.color]) {
             this.groupedByColor[level.color] = [];
@@ -1241,15 +1245,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
       });
     } else {
       // eliminar el curso o desactivarlo
-      this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
+
+      this.defaults.course_dates.forEach((element) => {
+        element.groups.forEach((group, idx) => {
           if (group.degree_id === level.id) {
-            group.active = event.source.checked;
-            group.subgroups = [];
+            element.groups.splice(idx, 1);
 
           }
         });
       });
+
+
     }
 
   }
@@ -1298,7 +1304,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            group.age_min = event.value;
+            group.age_min = +event.target.value;
           }
 
         });
@@ -1311,7 +1317,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            group.age_max = event.value;
+            group.age_max = +event.target.value;
           }
 
         });
@@ -1343,6 +1349,37 @@ export class CoursesCreateUpdateComponent implements OnInit {
           });
         }
 
+
+      return ret;
+    }
+
+    calculateMonitorLevel(level: any) {
+      let ret = 0;
+      this.defaults.course_dates.forEach(courseDate => {
+        courseDate.groups.forEach(group => {
+          if (level.id === group.degree_id) {
+            ret = level;
+          }
+        });
+      });
+
+      return ret;
+    }
+
+    calculateSubGroupPaxes(level: any) {
+      let ret = 0;
+
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (level.id === group.degree_id) {
+            group.subgroups.forEach(subgroup => {
+
+              ret = ret + subgroup.max_participants;
+            });
+          }
+
+        });
+      });
 
       return ret;
     }
@@ -1389,24 +1426,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
       });
     });
-  }
-
-  calculateSubGroupPaxes(level: any) {
-    let ret = 0;
-
-    this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          group.subgroups.forEach(subgroup => {
-
-            ret = ret + subgroup.max_participants;
-          });
-        }
-
-      });
-    });
-
-    return ret;
   }
 
   selectItem(item: any, index: any, subGroupIndex: any) {
