@@ -96,8 +96,11 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Password</mat-label>
-                <input formControlName="password" matInput required type="password" [(ngModel)]="defaultsUser.password">
-
+                <input formControlName="password" matInput required [type]="inputType" [(ngModel)]="defaultsUser.password">
+                <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Ver contraseña" type="button">
+                  <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
+                  <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+                </button>
               </mat-form-field>
 
               <mat-form-field class="vex-flex-form-field flex-auto">

@@ -145,6 +145,9 @@ export class MonitorDetailComponent {
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
+  inputType = 'password';
+  visible = false;
+
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
     private activatedRoute: ActivatedRoute, private dialog: MatDialog) {
     this.mockLevelData.forEach(level => {
@@ -817,5 +820,17 @@ export class MonitorDetailComponent {
       .subscribe((data) => {
         this.snackbar.open('Salary updated', 'OK', {duration: 3000});
       })
+  }
+
+  toggleVisibility() {
+    if (this.visible) {
+      this.inputType = 'password';
+      this.visible = false;
+      this.cdr.markForCheck();
+    } else {
+      this.inputType = 'text';
+      this.visible = true;
+      this.cdr.markForCheck();
+    }
   }
 }
