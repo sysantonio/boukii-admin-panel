@@ -386,7 +386,7 @@ export class CourseDetailComponent implements OnInit {
         } else {
           this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
             if (group.degree_id === level.id) {
-              ret = group.subgroups[subGroupIndex]?.monitor.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor.last_name;
+              ret = group.subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor?.last_name;
             }
 
           });

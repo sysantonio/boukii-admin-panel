@@ -167,6 +167,7 @@ export class MonitorDetailComponent {
         this.crudService.get('/users/'+data.data.user_id)
           .subscribe((user)=> {
             this.defaultsUser = user.data;
+            this.defaultsUser.password = null;
 
             this.getSchoolSportDegrees();
             this.getStations();

@@ -554,9 +554,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     let courseDates = [];
 
-    this.defaults.date_start = this.defaults.date_start_res;
-    this.defaults.date_end = this.defaults.date_end_res;
-
     if (this.courseType === 'collectif') {
       this.defaults.course_dates.forEach(dates => {
         const group = [];
@@ -686,8 +683,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
     }
 
-
-
+    this.defaults.date_start = this.defaults.date_start_res;
+    this.defaults.date_end = this.defaults.date_end_res;
     data.school_id = this.user.schools[0].id;
 
     this.crudService.create('/admin/courses', data)
@@ -1287,11 +1284,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     return ret;
   }
 
-  setLevelTeacher(event: any, level: any) {
+  setLevelTeacher(level: any) {
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.teachers_min = event.value.id;
+          group.teachers_min = level.id;
         }
 
       });
@@ -1299,7 +1296,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   setMinAge(event: any, level: any) {
-    if (+event.target.value > 3) {
+    if (+event.target.value >= 3) {
 
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
@@ -1343,7 +1340,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         } else {
           this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
             if (group.degree_id === level.id) {
-              ret = group.subgroups[subGroupIndex]?.monitor.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor.last_name;
+              ret = group.subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor?.last_name;
             }
 
           });
