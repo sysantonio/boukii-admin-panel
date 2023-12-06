@@ -4,8 +4,8 @@
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
 </vex-secondary-toolbar>
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;" *ngIf="!loading" [hidden]="bookingComplete">
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 65%">
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;" *ngIf="!loading && !bookingComplete">
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 65%;float:left">
     <div @fadeInUp class="card flex-auto" style="width: 65%">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle réservation</h2>
@@ -16,7 +16,7 @@
             <mat-label>Client</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let client of filteredOptions | async" [value]="client" (onSelectionChange)="getUtilzers(client.id)">
+              <mat-option *ngFor="let client of filteredOptions | async" [value]="client" (onSelectionChange)="getUtilzers(client)">
                 {{client.first_name}} {{client.last_name}}
               </mat-option>
             </mat-autocomplete>
@@ -28,12 +28,28 @@
           </div>
        </div>
 
-       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="utilizers.length > 0">
+       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-          <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i}" >
+        <mat-card class="card-users" (click)="mainIdSelected = !mainIdSelected; detailClient = defaults.client_main_id" [ngClass]="{'active-border': mainIdSelected}">
+          <mat-card-header>
+            <div mat-card-avatar class="card-avatar">
+              <img [src]="defaults?.client_main_id?.image !== null ? defaults?.client_main_id?.image : userAvatar" style="border-radius: 100%;"/>
+            </div>
+
+          </mat-card-header>
+          <mat-card-content>
+            <mat-card-title>{{ defaults?.client_main_id?.first_name }} {{ defaults?.client_main_id?.last_name }}</mat-card-title>
+            <mat-card-subtitle>{{ defaults?.client_main_id?.country }} · {{calculateAge(defaults?.client_main_id?.birth_date) }} ans · {{ defaults?.client_main_id?.province }}</mat-card-subtitle>
+          </mat-card-content>
+          <mat-card-actions>
+            <!-- Botones de acción, si son necesarios -->
+          </mat-card-actions>
+        </mat-card>
+
+          <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}" >
             <mat-card-header>
               <div mat-card-avatar class="card-avatar">
-                <img [src]="item.image"/>
+                <img [src]="item.image !== null ? item.image : userAvatar" style="border-radius: 100%;"/>
               </div>
 
             </mat-card-header>
@@ -70,11 +86,15 @@
               <mat-radio-button *ngFor="let sport of sportTypeData" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
             </mat-radio-group>
           </div>
-          <div class="flex-auto" *ngIf="sportTypeSelected > -1">
+          <div class="flex-auto" *ngIf="sportTypeSelected !== -1">
             <div style="float:left; width: 20%" *ngFor="let item of sportDataList">
-              <span style="width: 100%;margin: 0 0 0 10%">
-                <img style="background: #E6E6E6;margin: 0 auto; border-radius: 25%;border: #808080 solid 1px; cursor:pointer"
-                [src]="item.id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
+              <span style="width: 100%;margin: 0 auto">
+                <img style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer"
+                [ngStyle]="{
+                  'background': defaults.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
+                  'border': defaults.sport_id === item.sport_id ? '#fff' : '#808080'
+                }"
+                [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
               </span>
               <p style="text-align: center;">{{ item.name }}</p>
             </div>
@@ -98,10 +118,10 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <mat-form-field class="flex-auto" style="width: 48%">
-            <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" />
+          <mat-form-field class="flex-auto" style="width: 48%" *ngIf="courseType === 'collectif'">
+            <input type="text" placeholder="Choose level" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-              <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
+              <mat-option *ngFor="let level of filteredLevel | async" [value]="level" (onSelectionChange)="getCourses(level, monthAndYear)">
                 {{level.annotation}} - {{level.name}}
               </mat-option>
             </mat-autocomplete>
@@ -112,9 +132,9 @@
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
         <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee'">
 
-          <input matInput [(ngModel)]="monthAndYear" [matDatepicker]="picker" (dateChange)="emitDateChange($event)"formControlName="fromDate" [min]="minDate">
+          <input matInput [(ngModel)]="monthAndYear" [matDatepicker]="picker" [min]="minDate" (dateChange)="emitDateChange($event)"formControlName="fromDate" >
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker [startView]="'year'" (monthSelected)="monthChanged($event, picker)"></mat-datepicker>
+          <mat-datepicker #picker [startView]="'year'" (monthSelected)="monthChanged($event, picker)" [startAt]="monthAndYear || minDate"></mat-datepicker>
         </mat-form-field>
 
         <div class="columns-container" *ngIf="courseType !== null">
@@ -122,9 +142,9 @@
           <div class="list-column" *ngIf="courseType === 'privee'">
             <div class="list-overflow-container">
               <mat-list class="list mat-elevation-z1">
-                <mat-list-item class="custom-list-item" *ngFor="let course of mockCourses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
+                <mat-list-item class="custom-list-item" *ngFor="let course of courses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
                   <div class="avatar-container">
-                    <img mat-list-avatar class="custom-avatar" [src]="course.icon" />
+                    <img mat-list-avatar class="custom-avatar" [src]="course.course_type === 1 ? collectifIcon : privateIcon" />
                   </div>
                   <div class="content-container">
                     <div class="title-container">
@@ -133,12 +153,9 @@
                         {{course.price}} {{ course.currency }}
                       </h3>
                     </div>
-                    <p>{{course.subtitle}}</p>
+                    <p>{{course.course_type === 1 ? 'collectif' : 'privee'}} {{course.sport.name}}</p>
                     <p>
-                      {{course.date_start_format}} - {{course.date_end_format}}
-                    </p>
-                    <p>
-                      {{course.day_start_res}} - {{course.day_end_res}}
+                      {{course.date_start | date: 'dd-MM-YYYY'}} - {{course.date_end | date: 'dd-MM-YYYY'}}
                     </p>
                     <p>
                       {{course.duration}}
@@ -149,54 +166,163 @@
             </div>
           </div>
 
-          <div class="list-column" *ngIf="courseType === 'collectif'">
+          <div class="calendar-column" *ngIf="courseType === 'privee' && selectedItem !== null">
+
+            <ng-container>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+                <div class="flex-auto">
+                  <mat-checkbox color="accent" [(ngModel)]="periodUnique" formControlName="periodUnique" (change)="periodMultiple = false; periodUnique =true; resetCourseDates()">Fecha única</mat-checkbox>
+                </div>
+                <div class="flex-auto" >
+                  <mat-checkbox color="accent" [(ngModel)]="periodMultiple" formControlName="periodMultiple" (change)="periodMultiple = true; periodUnique =false">Varias fechas</mat-checkbox>
+                </div>
+                <div class="flex-auto">
+                  <mat-checkbox color="accent" [(ngModel)]="sameMonitor" formControlName="sameMonitor">Mismo profesor</mat-checkbox>
+                </div>
+              </div>
+
+              <ng-container *ngFor="let courseDate of courseDates; let i = index">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Fecha</mat-label>
+                    <mat-select >
+                      <mat-option *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index"
+                      [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)"
+                      (onSelectionChange)="courseDate.hour_start = selectedCourseDateItem.date">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Hora</mat-label>
+                    <mat-select >
+                      <mat-option *ngFor="let time of times" [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
+                        (onSelectionChange)="courseDate.hour_start = time">{{ time }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="selectedItem.is_flexible">
+
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Duración</mat-label>
+                    <mat-select >
+                      <mat-option *ngFor="let duration of durations" [value]="duration">{{ duration }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Personas</mat-label>
+                    <mat-select >
+                      <mat-option *ngFor="let person of persons" [value]="person">{{ person }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Chercher Moniteur</mat-label>
+                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" />
+                    <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
+                      <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="courseDate.monitor_id = monitor.id">
+                        {{monitor.first_name}} {{monitor.last_name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <mat-divider class="text-border"></mat-divider>
+              </ng-container>
+            </ng-container>
+            <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;" *ngIf="periodMultiple">
+              <div style="width: 15%; float:left;" (click)="addCourseDate()">
+
+                <button class="add-date" mat-fab>
+                  <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                </button>
+              </div>
+              <div style="width: 80%; float:left;margin: 3% 0 0 0;">
+                <p> Ajouter date</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-column" *ngIf="courseType === 'collectif' && defaultsBookingUser.degree_id !== null">
             <div class="list-overflow-container">
               <mat-list class="list mat-elevation-z1">
-                <mat-list-item class="custom-list-item" *ngFor="let course of mockCourses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
-                  <div class="avatar-container">
-                    <img mat-list-avatar class="custom-avatar" [src]="course.icon" />
-                  </div>
-                  <div class="content-container">
-                    <div class="title-container">
-                      <h3 class="title" style="width: 70%;float: left;">{{ course.name | uppercase}}</h3>
-                      <h3 class="price">
-                        {{course.price}} {{ course.currency }}
-                      </h3>
-                    </div>
-                    <p>{{course.subtitle}}</p>
-                    <div style="float: left; width: 100%;margin-top: 5%;">
-                      <ul>
-                        <li>07-01-2024 09:00 <i>09h30 - 11h00</i></li>
-                        <li>14-01-2024 09:00 <i>09h30 - 11h00</i></li>
-                        <li>21-01-2024 09:00 <i>09h30 - 11h00</i></li>
-                        <li>28-01-2024 09:00 <i>09h30 - 11h00</i></li>
-                        <li>04-02-2024 09:00 <i>09h30 - 11h00</i></li>
-                      </ul>
-                    </div>
-                    <div style="float: left; width: 100%;margin-top: 5%;">
-                      <div style="float: left;width: 95%;margin: 0 10px 0 0;">
-                        <div style="background: #2D9BF0;width: 60%;text-align: center;padding: 5%;color: #fff">
-                          RB-ROI / REINE BLEU
-                        </div>
-                        <div >
-                          Sous-groupe 1
-                        </div>
+                <ng-container *ngFor="let course of courses">
+
+                    <mat-list-item class="custom-list-item" (click)="selectItem(course)" [ngClass]="{'selected-item': course?.id === selectedItem?.id}">
+                      <div class="avatar-container">
+                        <img mat-list-avatar class="custom-avatar" [src]="course.course_type === 1 ? collectifIcon : privateIcon" />
                       </div>
-                      <div style="float: left;width: 70%;">
+                      <div class="content-container">
+                        <div class="title-container">
+                          <h3 class="title" style="width: 70%;float: left;">{{ course.name | uppercase}}</h3>
+                          <h3 class="price">
+                            {{course.price}} {{ course.currency }}
+                          </h3>
+                        </div>
+                        <p>{{course.course_type === 1 ? 'collectif' : 'privee'}} {{course.sport.name}}</p>
+                        <p>{{course.short_description}}</p>
+                        <div style="float: left; width: 100%;margin-top: 5%;">
+                          <ul>
+                            <ng-container *ngIf="course.is_flexible">
+                            <ng-container *ngFor="let item of course.course_dates">
+                              <li *ngIf="canBook(item.date)">
+                               <mat-checkbox (change)="addReservableCourseDate(item, $event)">  {{item.date | date: 'dd/MM/YYYY'}} - <i style="float: right;">{{item.hour_start}} - {{item.hour_end}}</i></mat-checkbox>
+                              </li>
+                            </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="!course.is_flexible">
 
-                        <div style="float: left; width: 20%;">
-                          <img [src]="userAvatar">
+                            <ng-container *ngFor="let item of course.course_dates">
+                              <li *ngIf="canBook(item.date)">
+                                {{ item.date | date: 'dd/MM/YYYY'}} <i style="float: right;">{{item.hour_start}} - {{item.hour_end}}</i>
+                              </li>
+                            </ng-container>
+                            </ng-container>
+                          </ul>
                         </div>
-                        <div style="float: left; width: 80%;">
-                          <p style="margin: 0 0 0 10px;">Arsène Garcia</p>
-                          <p style="font-size:8px;margin: 0 0 0 10px;"><i>FR · Switzerland · 39 ans</i></p>
-                        </div>
+
                       </div>
+                    </mat-list-item>
+                    <ng-container *ngIf="selectedItem !== null && selectedItem.id === course.id">
+                      <ng-container  *ngFor="let group of course.course_dates[0].course_groups">
+                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index"
+                          (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
+                          <div style="float: left;width: 50%;">
 
-                    </div>
-                  </div>
-                </mat-list-item>
+                            <div style="float: left; width: 20%;">
+                              <img [src]="getMonitorAvatar(subgroup.monitor_id)">
+                            </div>
+                            <div style="float: left; width: 80%;">
+                              <p style="margin: 0 0 0 10px;">{{subgroup.monitor_id !== null ? getMonitorName(subgroup.monitor_id) : 'No monitor asigned'}}</p>
+                              <p style="font-size:8px;margin: 0 0 0 10px;" *ngIf="subgroup.monitor_id !== null"><i>FR · Switzerland · 39 ans</i></p>
+                            </div>
+                          </div>
+                          <div style="float: left;width: 50%;">
+                            <div style="width: 100%;text-align: center;padding: 5%;color: #fff;float: right;"
+                              [ngStyle]="
+                                {
+                                  'background': getLevelColor(subgroup.degree_id)
 
+                                }
+                              ">
+                              {{getLevelName(subgroup.degree_id)}}
+                            </div>
+                            <div style="text-align: right;width: 100%;">
+                              {{getLevelName(subgroup.degree_id)}} {{subGroupIndex + 1}}
+                            </div>
+                          </div>
+                        </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
 
               </mat-list>
             </div>
@@ -204,89 +330,193 @@
 
 
           <!-- Columna del calendario -->
-          <div class="calendar-column" *ngIf="courseType === 'collectif'">
-            <mat-calendar class="smaller-calendar" [startAt]="minDate" [minDate]="minDate" [(selected)]="selectedDate"></mat-calendar>
+          <div class="calendar-column" *ngIf="!loadingCalendar && courseTypeId === 1">
+            <mat-calendar class="smaller-calendar" [startAt]="minDate" [minDate]="minDate" [(selected)]="selectedDate" [dateClass]="dateClass()" [headerComponent]="customHeader"
+              (monthSelected)="getCourses(null, null)">
 
-          </div>
-
-          <div class="calendar-column" *ngIf="courseType === 'privee'">
-
-            <ng-container>
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                <div class="flex-auto">
-                  <mat-checkbox color="accent" [checked]="false">Fecha única</mat-checkbox>
-                </div>
-                <div class="flex-auto">
-                  <mat-checkbox color="accent" [checked]="true">Varias fechas</mat-checkbox>
-                </div>
-                <div class="flex-auto">
-                  <mat-checkbox color="accent" [checked]="true">Mismo profesor</mat-checkbox>
-                </div>
-              </div>
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>Fecha</mat-label>
-                  <mat-select [formControl]="dateControl">
-                    <mat-option *ngFor="let date of dates" [value]="date">{{ date }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Hora</mat-label>
-                  <mat-select [formControl]="timeControl">
-                    <mat-option *ngFor="let time of times" [value]="time">{{ time }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                </div>
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Duración</mat-label>
-                  <mat-select [formControl]="durationControl">
-                    <mat-option *ngFor="let duration of durations" [value]="duration">{{ duration }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Personas</mat-label>
-                  <mat-select [formControl]="personsControl">
-                    <mat-option *ngFor="let person of persons" [value]="person">{{ person }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                </div>
-
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Chercher Moniteur</mat-label>
-                  <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="monitorsForm" [matAutocomplete]="autoMoniteur" />
-                  <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
-                    <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor">
-                      {{monitor.full_name}}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-                </mat-form-field>
-              </div>
-              <mat-divider class="text-border"></mat-divider>
-            </ng-container>
+            </mat-calendar>
           </div>
         </div>
         <div class="flex items-center justify-end gap-2">
-          <button mat-button type="button">Cancelar</button>
-          <!-- Added (click) event here -->
-          <button color="primary" mat-raised-button type="button" (click)="save()"> Guardar </button>
+          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 1" [disabled]="(courseTypeId === 1 && selectedItem === null || selectedSubGroupItem === null)" (click)="confirmBooking()"> Confirmar </button>
+          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 2" [disabled]="(courseTypeId === 2 && selectedItem === null) " (click)="confirmBooking()"> Confirmar </button>
         </div>
       </div>
     </div>
   </div>
+
+  <ng-container *ngFor="let item of bookingsToCreate; let bookI = index">
+
+  <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}">
+    <mat-card-header style="display:block">
+      <div style="width: 100%;float: left;">
+        <mat-icon svgIcon="mat:close"></mat-icon>
+        <mat-icon svgIcon="mat:expand_more" *ngIf="showDetail !== bookI" style="float:right" (click)="showDetailFn(bookI)"></mat-icon>
+        <mat-icon svgIcon="mat:expand_less" *ngIf="showDetail === bookI" style="float:right" (click)="showDetailFn(null)"></mat-icon>
+
+      </div>
+      <div style="width: 100%;float:left;">
+        <mat-card-title style="float: left;width: 90%;">Reservation #{{bookI + 1 }}</mat-card-title>
+      </div>
+      <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
+        <div style="width: 100%;">
+          <p style="float: left;width: 80%;text-align: left;"><b>Enregistrée</b></p>
+          <p style="float: left;width: 20%;text-align: right;"><b>Etat</b></p>
+        </div>
+        <div style="width: 100%;">
+          <p style="float: left;width: 60%;text-align: left;"><b>{{ minDate | date: 'dd/MM/YYYY'}}</b> {{ minDate | date: 'HH:mm'}}</p>
+          <p style="float: left;width: 40%;text-align: right;color:#FAC710">{{'non payé' | uppercase }}</p>
+        </div>
+      </div>
+      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;" *ngIf="showDetail === bookI"></mat-divider>
+    </mat-card-header>
+      <mat-card-content *ngIf="showDetail === bookI">
+        <div style="float: left; width: 100%;">
+          <div style="float: left; width: 100%;">
+            <p style="font-size: 20px;">Client</p>
+          </div>
+          <div style="float: left;width: 100%;">
+            <div style="float: left; width: 20%; margin-top: 5%">
+              <img [src]="getClientAvatar(item.courseDates[0].client_id)" width="100" height="100" style="border-radius: 100%">
+            </div>
+            <div style="float: left; width: 75%;margin:6% 0 0 2%">
+              <p>FR · Switzerland · 43 ans</p>
+              <p><strong>{{ getClientName(item.courseDates[0].client_id)}}</strong></p>
+              <div>
+                <mat-icon svgIcon="mat:chat"></mat-icon>
+                <mat-icon svgIcon="mat:mail_outline"></mat-icon>
+                <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+        <div style="float: left; width: 100%;" *ngFor="let courseDate of item.courseDates; let courseDateIndex = index" [ngStyle]="{'margin-top': courseDateIndex > 0 ? '5%' : '0'}">
+          <div style="float: left; width: 50%;">
+            <div style="float: left; width: 100%;">
+              <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+
+              <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
+                <strong>{{ getCourse(courseDate.course_id)?.name}}</strong>
+              </p>
+              <p style="float: left; width: 100%;">
+                {{getCourse(courseDate.course_id)?.course_type === 1 ? 'Collectif' : 'Privee'}} {{getCourse(courseDate.course_id)?.sport.name}} {{getCourse(courseDate.course_id)?.price}} {{getCourse(courseDate.course_id)?.currency}}
+              </p>
+            </div>
+
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <ul>
+                <ng-container *ngIf="getCourse(courseDate.course_id)?.is_flexible">
+                  <li *ngFor="let courseDateDate of item.courseDates">
+                    {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{ courseDateDate.hour_end }}h</i>
+                  </li>
+                </ng-container>
+                <ng-container *ngIf="!getCourse(courseDate.course_id)?.is_flexible">
+                  <li>
+                    {{ getCourse(courseDate.course_id)?.date_start | date: 'dd/MM/YYYY'}}<i style="float: right;">{{getCourse(courseDate.course_id)?.hour_min}} - {{getCourse(courseDate.course_id)?.hour_max}}</i>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <div style="float: left; width: 20%;">
+                <img [src]="getMonitorAvatar(courseDate.monitor_id)">
+              </div>
+              <div style="float: left; width: 80%;">
+                <p>{{getMonitorName(courseDate.monitor_id) || 'no monitor asigned'}}</p>
+                <p style="font-size:8px"><i>FR · Switzerland · 39 ans</i></p>
+              </div>
+
+            </div>
+            <div style="float: left; width: 100%;">
+              <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;" [ngStyle]="{'background': getLevelColor(courseDate.degree_id)}">
+                {{getLevelName(courseDate.degree_id)}}
+              </div>
+
+            </div>
+            <div style="float: left; width: 200%;" *ngIf="false">
+              <div style="float: left; width: 50%;">
+                <mat-slide-toggle></mat-slide-toggle> Op. Rem (10%)
+              </div>
+              <div style="float: left; width: 50%;">
+                <mat-slide-toggle></mat-slide-toggle> Boukii Care (3 CHF)
+              </div>
+            </div>
+          </div>
+          <div style="float: left; width: 50%;" *ngIf="false">
+            <div style="float: left; width: 100%;">
+              <mat-slide-toggle></mat-slide-toggle> Alquiler material
+
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <mat-slide-toggle></mat-slide-toggle> Fortrait Ski
+
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <mat-slide-toggle></mat-slide-toggle> Comida
+
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <mat-slide-toggle></mat-slide-toggle> Transporte
+
+            </div>
+          </div>
+
+        </div>
+        <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+          <div style="float: left; width: 50%;">
+            <p>198.00 CHF</p>
+          </div>
+          <div style="float: left; width: 25%;">
+            <p>151.00 CHF</p>
+          </div>
+          <div style="float: left; width: 25%;">
+            <p><strong>439.00 CHF</strong></p>
+          </div>
+        </div>
+        <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF">
+
+          <div style="text-align: left;width: 50%;float:left">
+            <ul>
+              <li>{{'sous total' | uppercase}}</li>
+              <li>{{'remise' | uppercase}}</li>
+              <li>{{'Option Rembousement (10%)'}}</li>
+              <li>{{'Boukii Care'}}</li>
+              <li>{{'Bon'}}</li>
+              <li>{{'TVA'}}</li>
+              <li><strong>{{'Montant total' | uppercase}}</strong></li>
+            </ul>
+          </div>
+          <div style="text-align: right;width: 50%;float:left">
+            <ul>
+              <li>400 CHF</li>
+              <li>-50 CHF</li>
+              <li>18 CHF</li>
+              <li>3 CHF</li>
+              <li>-72 CHF</li>
+              <li>- CHF</li>
+              <li><strong>370 CHF</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="float: left;margin: 5% 0 0 0;width: 50%;">
+          <button color="primary" mat-raised-button type="button" style="border-radius: 0;" [disabled]="bookingsToCreate.length === 0" (click)="addAnotherCourse()"> + Añadir otro cruso </button>
+
+        </div>
+
+        <div style="float: right;margin: 5% 0 0 0;width: 50%;">
+          <button color="primary" mat-raised-button type="button" style="border-radius: 0;float:right" (click)="save()" [disabled]="bookingsToCreate.length === 0"> Finalizar reserva </button>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+
 </div>
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" [hidden]="!bookingComplete">
+
+
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete">
   <div class="flex flex-col sm:flex-row gap-4">
     <div class="column-container">
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
@@ -294,9 +524,14 @@
         <!-- Nuevo contenedor para las cards -->
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0">Information de la réserve</h2>
+            <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
+            <div class="flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="bookingComplete = false">Atras</button>
+
+              <!-- Added (click) event here -->
+            </div>
           </div>
-          <mat-card class="reservation-detail-card">
+          <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate">
             <div>
               <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'payment effectué' | uppercase }}</p>
@@ -307,8 +542,8 @@
               <button mat-icon-button color="warn" class="delete-icon">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
-              <div mat-card-avatar [style.background-image]="'url(' + userAvatar + ')'"></div>
-              <mat-card-subtitle>Maternini Mirko</mat-card-subtitle>
+              <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
+              <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>FR · Switzerland · 43 ans</mat-card-subtitle>
             </mat-card-header>
 
@@ -318,58 +553,54 @@
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + imagePath + ')'" style="border-radius: 5px"></div>
               <mat-card-title class="mat-mdc-card-title">
-                <div style="float: left;width: 70%;font-size: 14px;"> Título de la Reserva </div>
-                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> 168 CHF </div>
+                <div style="float: left;width: 70%;font-size: 14px;"> {{getCourse(item.courseDates[0].course_id)?.name}} </div>
+                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{getCourse(item.courseDates[0].course_id)?.price}} {{getCourse(item.courseDates[0].course_id)?.currency}} </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0">collectife Ski</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0">{{getCourse(item.courseDates[0].course_id)?.course_type === 1 ? 'collectif' : 'privee'}} {{getCourse(item.courseDates[0].course_id)?.sport.name}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
-                <li *ngFor="let date of reservedDates">
-                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
+                <li *ngFor="let date of item.courseDates">
+                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }}
                 </li>
               </ul>
-              <div style="float: left;width: 100%;">
+              <div style="float: left;width: 100%;" *ngIf="item.client_main_id !== item.courseDates[0].client_id">
                 <div class="user-info">
-                  <img [src]="userAvatar" alt="Avatar de usuario" class="user-avatar" />
-                  <span>{{ userName }}</span>
+                  <img [src]="getClientAvatar(item.courseDates[0].client_id)" alt="Avatar de usuario" class="user-avatar" />
+                  <span>{{ getClientName(item.courseDates[0].client_id) }}</span>
                 </div>
-                <div class="flex-auto" style="float: left;width: 15%;">
-                  <mat-icon style="height: 60px;width: 36px;" svgIcon="mat:location_on"></mat-icon>
-                </div>
-                <mat-form-field class="flex-auto" style="float: left;width: 85%;">
-                  <mat-select>
-                    <mat-option value="Dirección predeterminada">Dirección predeterminada</mat-option>
-                  </mat-select>
-                </mat-form-field>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
 
               <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Opciones</p>
 
               <div style="width: 100%; float:left">
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
-                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
+                      <strong>Forfait</strong>
                     </div>
+
                     <div>
-                      <p>+ 168 CHF</p>
+                      <p> +{{selectedForfait && selectedForfait !== null ? selectedForfait.price :0}} CHF</p>
                     </div>
                   </div>
 
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
-                      <li><mat-checkbox color="accent" [checked]="false">Casque</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Gants</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Skis</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Botes</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Batons</mat-checkbox></li>
+                      <mat-radio-group [(ngModel)]="selectedForfait">
+                        <li *ngFor="let forfait of settings.extras.forfait">
+                            <mat-radio-button class="radio" [value]="forfait">
+                              <span>{{forfait.id}}</span>
+                            </mat-radio-button>
+                        </li>
+                    </mat-radio-group>
+
                     </ul>
                   </div>
                 </div>
 
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
                       <mat-slide-toggle>Alquiler material</mat-slide-toggle>
@@ -390,7 +621,7 @@
                   </div>
                 </div>
 
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
                       <mat-slide-toggle>Comida</mat-slide-toggle>
@@ -402,7 +633,7 @@
 
                 </div>
 
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;">
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
                       <mat-slide-toggle>Transporte</mat-slide-toggle>
@@ -413,10 +644,10 @@
                   </div>
                 </div>
               </div>
-              <div style="width: 100%;float:left; margin-top: 10px">
+              <div style="width: 100%;float:left; margin-top: 10px" *ngIf="selectedForfait !== null">
                 <div>
-                  <p style="width: 78%;float: left;">Total Opciones</p>
-                  <p style="color: #EA0C60;">151 CHF</p>
+                  <p style="width: 60%;float: left;">Total Opciones</p>
+                  <p style="color: #EA0C60;">{{selectedForfait && selectedForfait !== null ? selectedForfait.price :0}} CHF</p>
                 </div>
               </div>
 
@@ -425,8 +656,8 @@
               <div style="width: 100%;float:left;">
 
                 <div>
-                  <p style="width: 78%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">352 CHF</p>
+                  <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
+                  <p style="color: #EA0C60;">{{getCourse(item.courseDates[0].course_id)?.price}} {{getCourse(item.courseDates[0].course_id)?.currency}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -437,7 +668,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques client</mat-label>
-                    <input formControlName="observations" matInput required type="text">
+                    <input formControlName="observations" matInput required type="text" (blur)="setClientsNotes($event)">
 
                   </mat-form-field>
 
@@ -447,7 +678,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques ecole</mat-label>
-                    <input formControlName="observations_school" matInput required type="text">
+                    <input formControlName="observations_school" matInput required type="text" (blur)="setSchoolNotes($event)">
 
                   </mat-form-field>
 
@@ -456,349 +687,14 @@
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
               <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-                <p style="font-size: 12px;"><strong>Enregistrée</strong>: 31/10/2023 14:40 / Mirko Maternini</p>
-                <p style="font-size: 12px;"><strong>Desde donde:</strong>: Admin</p>
-                <p style="font-size: 12px;"><strong>Por</strong>: Mirko Maternini</p>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-
-          <mat-card class="reservation-detail-card">
-            <div>
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
-              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'payment effectué' | uppercase }}</p>
-            </div>
-
-            <mat-card-header>
-
-              <button mat-icon-button color="warn" class="delete-icon">
-                <mat-icon svgIcon="mat:delete"></mat-icon>
-              </button>
-              <div mat-card-avatar [style.background-image]="'url(' + userAvatar + ')'"></div>
-              <mat-card-subtitle>Maternini Mirko</mat-card-subtitle>
-              <mat-card-subtitle>FR · Switzerland · 43 ans</mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-divider class="text-border"></mat-divider>
-            <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Course</p>
-
-            <mat-card-header>
-              <div mat-card-avatar [style.background-image]="'url(' + imagePath + ')'" style="border-radius: 5px"></div>
-              <mat-card-title class="mat-mdc-card-title">
-                <div style="float: left;width: 70%;font-size: 14px;"> Título de la Reserva </div>
-                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> 168 CHF </div>
-            </mat-card-title>
-              <mat-card-subtitle style="margin: 0">collectife Ski</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <ul style="font-size: 12px;padding: 0 0 0 18%;">
-                <li *ngFor="let date of reservedDates">
-                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
-                </li>
-              </ul>
-              <div style="float: left;width: 100%;">
-                <div class="user-info">
-                  <img [src]="userAvatar" alt="Avatar de usuario" class="user-avatar" />
-                  <span>{{ userName }}</span>
-                </div>
-                <div class="flex-auto" style="float: left;width: 15%;">
-                  <mat-icon style="height: 60px;width: 36px;" svgIcon="mat:location_on"></mat-icon>
-                </div>
-                <mat-form-field class="flex-auto" style="float: left;width: 85%;">
-                  <mat-select>
-                    <mat-option value="Dirección predeterminada">Dirección predeterminada</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Opciones</p>
-
-              <div style="width: 100%; float:left">
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <ul>
-                      <li><mat-checkbox color="accent" [checked]="false">Casque</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Gants</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Skis</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Botes</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Batons</mat-checkbox></li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-
-
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div class="flex-auto">
-                      <mat-checkbox color="accent" [checked]="false">Media Jornada</mat-checkbox>
-                    </div>
-                    <div class="flex-auto">
-                      <mat-checkbox color="accent" [checked]="false">Jornada completa</mat-checkbox>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Comida</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Transporte</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div style="width: 100%;float:left; margin-top: 10px">
-                <div>
-                  <p style="width: 78%;float: left;">Total Opciones</p>
-                  <p style="color: #EA0C60;">151 CHF</p>
-                </div>
-              </div>
-
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-
-              <div style="width: 100%;float:left;">
-
-                <div>
-                  <p style="width: 78%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">352 CHF</p>
-                </div>
-              </div>
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-
-              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                  <mat-form-field class="flex-auto">
-                    <mat-label>Remarques client</mat-label>
-                    <input formControlName="observations" matInput required type="text">
-
-                  </mat-form-field>
-
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                  <mat-form-field class="flex-auto">
-                    <mat-label>Remarques ecole</mat-label>
-                    <input formControlName="observations_school" matInput required type="text">
-
-                  </mat-form-field>
-
-                </div>
-
-              </div>
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-                <p style="font-size: 12px;"><strong>Enregistrée</strong>: 31/10/2023 14:40 / Mirko Maternini</p>
-                <p style="font-size: 12px;"><strong>Desde donde:</strong>: Admin</p>
-                <p style="font-size: 12px;"><strong>Por</strong>: Mirko Maternini</p>
-              </div>
-            </mat-card-content>
-          </mat-card>
-
-
-          <mat-card class="reservation-detail-card">
-            <div>
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
-              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'payment effectué' | uppercase }}</p>
-            </div>
-
-            <mat-card-header>
-
-              <button mat-icon-button color="warn" class="delete-icon">
-                <mat-icon svgIcon="mat:delete"></mat-icon>
-              </button>
-              <div mat-card-avatar [style.background-image]="'url(' + userAvatar + ')'"></div>
-              <mat-card-subtitle>Maternini Mirko</mat-card-subtitle>
-              <mat-card-subtitle>FR · Switzerland · 43 ans</mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-divider class="text-border"></mat-divider>
-            <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Course</p>
-
-            <mat-card-header>
-              <div mat-card-avatar [style.background-image]="'url(' + imagePath + ')'" style="border-radius: 5px"></div>
-              <mat-card-title class="mat-mdc-card-title">
-                <div style="float: left;width: 70%;font-size: 14px;"> Título de la Reserva </div>
-                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> 168 CHF </div>
-            </mat-card-title>
-              <mat-card-subtitle style="margin: 0">collectife Ski</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <ul style="font-size: 12px;padding: 0 0 0 18%;">
-                <li *ngFor="let date of reservedDates">
-                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date | date:'fullDate' }}
-                </li>
-              </ul>
-              <div style="float: left;width: 100%;">
-                <div class="user-info">
-                  <img [src]="userAvatar" alt="Avatar de usuario" class="user-avatar" />
-                  <span>{{ userName }}</span>
-                </div>
-                <div class="flex-auto" style="float: left;width: 15%;">
-                  <mat-icon style="height: 60px;width: 36px;" svgIcon="mat:location_on"></mat-icon>
-                </div>
-                <mat-form-field class="flex-auto" style="float: left;width: 85%;">
-                  <mat-select>
-                    <mat-option value="Dirección predeterminada">Dirección predeterminada</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Opciones</p>
-
-              <div style="width: 100%; float:left">
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <ul>
-                      <li><mat-checkbox color="accent" [checked]="false">Casque</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Gants</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Skis</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Botes</mat-checkbox></li>
-                      <li><mat-checkbox color="accent" [checked]="true">Batons</mat-checkbox></li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-
-
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div class="flex-auto">
-                      <mat-checkbox color="accent" [checked]="false">Media Jornada</mat-checkbox>
-                    </div>
-                    <div class="flex-auto">
-                      <mat-checkbox color="accent" [checked]="false">Jornada completa</mat-checkbox>
-                    </div>
-                  </div>
-                </div>
-
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Comida</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
-                      <mat-slide-toggle>Transporte</mat-slide-toggle>
-                    </div>
-                    <div>
-                      <p>+ 168 CHF</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div style="width: 100%;float:left; margin-top: 10px">
-                <div>
-                  <p style="width: 78%;float: left;">Total Opciones</p>
-                  <p style="color: #EA0C60;">151 CHF</p>
-                </div>
-              </div>
-
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-
-              <div style="width: 100%;float:left;">
-
-                <div>
-                  <p style="width: 78%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">352 CHF</p>
-                </div>
-              </div>
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-
-              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                  <mat-form-field class="flex-auto">
-                    <mat-label>Remarques client</mat-label>
-                    <input formControlName="observations" matInput required type="text">
-
-                  </mat-form-field>
-
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-                  <mat-form-field class="flex-auto">
-                    <mat-label>Remarques ecole</mat-label>
-                    <input formControlName="observations_school" matInput required type="text">
-
-                  </mat-form-field>
-
-                </div>
-
-              </div>
-              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
-              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-                <p style="font-size: 12px;"><strong>Enregistrée</strong>: 31/10/2023 14:40 / Mirko Maternini</p>
+                <p style="font-size: 12px;"><strong>Enregistrée</strong>:{{ minDate | date: 'dd/MM/YYYY'}} {{ minDate | date: 'HH:mm'}} / Mirko Maternini</p>
                 <p style="font-size: 12px;"><strong>Desde donde:</strong>: Admin</p>
                 <p style="font-size: 12px;"><strong>Por</strong>: Mirko Maternini</p>
               </div>
             </mat-card-content>
           </mat-card>
         </div>
+
       </div>
 
 
@@ -834,7 +730,7 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Option Remboursement (10%)</p>
-              <mat-slide-toggle color="primary" [checked]="false" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">Résumé</h3>
@@ -854,30 +750,30 @@
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0'" [class.selected]="selectedButton==='1'">Direct</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0'" [class.selected]="selectedButton==='2'">Online</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0'" [class.selected]="selectedButton==='3'">Confirmer sans paiment</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">Online</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">Confirmer sans paiment</button>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1'" [class.selected]="selectedSubButton==='1'">Cash</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'" [class.selected]="selectedSubButton==='2'">Autre</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">Cash</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 3" [class.selected]="selectedSubButton==='2'">Autre</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
               <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
-              <mat-slide-toggle color="primary" [checked]="false" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
-              <button mat-raised-button color="accent" class="square-button">Confirmer Reservation</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="create()">Confirmer Reservation</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='2'">
-              <button style="width:100%" mat-raised-button color="primary" class="square-button">Confirm by email</button>
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirm by email</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='3'">
-              <button style="width:100%" mat-raised-button color="primary" class="square-button">Confirmer reservation</button>
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirmer reservation</button>
             </div>
           </mat-card>
         </div>
@@ -887,161 +783,3 @@
 </div>
 
 
-<mat-card style="padding: 0 1%;width: 35%;position: absolute; top:7%;left:65%;" *ngIf="!bookingComplete" >
-  <mat-card-header style="display:block">
-    <div style="width: 100%;float: left;">
-      <mat-icon svgIcon="mat:close"></mat-icon>
-      <mat-icon svgIcon="mat:expand_more" *ngIf="!showDetail" style="float:right" (click)="showDetailFn(true)"></mat-icon>
-      <mat-icon svgIcon="mat:expand_less" *ngIf="showDetail" style="float:right" (click)="showDetailFn(false)"></mat-icon>
-
-    </div>
-    <div style="width: 100%;float:left;">
-      <mat-card-title style="float: left;width: 90%;">Reservation #4172</mat-card-title>
-    </div>
-    <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail">
-      <div style="width: 100%;">
-        <p style="float: left;width: 80%;text-align: left;"><b>Enregistrée</b></p>
-        <p style="float: left;width: 20%;text-align: right;"><b>Etat</b></p>
-      </div>
-      <div style="width: 100%;">
-        <p style="float: left;width: 60%;text-align: left;"><b>01/11/2023</b> 13:02</p>
-        <p style="float: left;width: 40%;text-align: right;color:#5ade47">{{'paiement effectué' | uppercase }}</p>
-      </div>
-    </div>
-    <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;" *ngIf="showDetail"></mat-divider>
-  </mat-card-header>
-  <mat-card-content *ngIf="showDetail">
-    <div style="float: left; width: 100%;">
-      <div style="float: left; width: 100%;">
-        <p style="font-size: 20px;">Client</p>
-      </div>
-      <div style="float: left;width: 100%;">
-        <div style="float: left; width: 20%; margin-top: 5%">
-          <img [src]="userAvatar" width="100" height="100">
-        </div>
-        <div style="float: left; width: 75%;margin:6% 0 0 2%">
-          <p>FR · Switzerland · 43 ans</p>
-          <p><strong>Maternini Mirko (+3)</strong></p>
-          <div>
-            <mat-icon svgIcon="mat:chat"></mat-icon>
-            <mat-icon svgIcon="mat:mail_outline"></mat-icon>
-            <mat-icon svgIcon="mat:contact_phone"></mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
-    <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-    <div style="float: left; width: 100%;">
-      <div style="float: left; width: 15%;">
-        <img [src]="userAvatar" width="50" height="50">
-      </div>
-      <div style="float: left; width: 65%;">
-        <p>FR · Switzerland · 43 ans</p>
-          <p>Maternini Mirko (+3)</p>
-      </div>
-      <div style="float: left; width: 20%;">
-        <p style="text-align: right;color:#dbd616">{{'Anulée' }}</p>
-      </div>
-    </div>
-    <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-    <div style="float: left; width: 100%;">
-      <div style="float: left; width: 50%;">
-        <div style="float: left; width: 100%;">
-          <p style="float: left; width: 100%; font-size: 18px">
-            <strong>Classes de ski/ Diamanches Lève-tôt / dès 5 ans</strong>
-          </p>
-          <p style="float: left; width: 100%;">
-            Collectif Ski 180.00 CHF
-          </p>
-        </div>
-        <div style="float: left; width: 100%;">
-          <div style="float: left; width: 75%;background:#2D9BF0;color:#fff; padding:5%;margin-top: 5%;">
-            RB-ROI / REINE BLEU
-          </div>
-
-        </div>
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <ul>
-            <li>07-01-2024 09:00 <i>09h30 - 11h00</i></li>
-            <li>14-01-2024 09:00 <i>09h30 - 11h00</i></li>
-            <li>21-01-2024 09:00 <i>09h30 - 11h00</i></li>
-            <li>28-01-2024 09:00 <i>09h30 - 11h00</i></li>
-            <li>04-02-2024 09:00 <i>09h30 - 11h00</i></li>
-          </ul>
-        </div>
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <div style="float: left; width: 20%;">
-            <img [src]="userAvatar">
-          </div>
-          <div style="float: left; width: 80%;">
-            <p>Arsène Garcia</p>
-            <p style="font-size:8px"><i>FR · Switzerland · 39 ans</i></p>
-          </div>
-
-        </div>
-        <div style="float: left; width: 200%;">
-          <div style="float: left; width: 50%;">
-            <mat-slide-toggle></mat-slide-toggle> Op. Rem (10%)
-          </div>
-          <div style="float: left; width: 50%;">
-            <mat-slide-toggle></mat-slide-toggle> Boukii Care (3 CHF)
-          </div>
-        </div>
-      </div>
-      <div style="float: left; width: 50%;">
-        <div style="float: left; width: 100%;">
-          <mat-slide-toggle></mat-slide-toggle> Alquiler material
-
-        </div>
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <mat-slide-toggle></mat-slide-toggle> Fortrait Ski
-
-        </div>
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <mat-slide-toggle></mat-slide-toggle> Comida
-
-        </div>
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <mat-slide-toggle></mat-slide-toggle> Transporte
-
-        </div>
-      </div>
-      <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
-        <div style="float: left; width: 50%;">
-          <p>198.00 CHF</p>
-        </div>
-        <div style="float: left; width: 25%;">
-          <p>151.00 CHF</p>
-        </div>
-        <div style="float: left; width: 25%;">
-          <p><strong>439.00 CHF</strong></p>
-        </div>
-      </div>
-      <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF">
-
-        <div style="text-align: left;width: 50%;float:left">
-          <ul>
-            <li>{{'sous total' | uppercase}}</li>
-            <li>{{'remise' | uppercase}}</li>
-            <li>{{'Option Rembousement (10%)'}}</li>
-            <li>{{'Boukii Care'}}</li>
-            <li>{{'Bon'}}</li>
-            <li>{{'TVA'}}</li>
-            <li><strong>{{'Montant total' | uppercase}}</strong></li>
-          </ul>
-        </div>
-        <div style="text-align: right;width: 50%;float:left">
-          <ul>
-            <li>400 CHF</li>
-            <li>-50 CHF</li>
-            <li>18 CHF</li>
-            <li>3 CHF</li>
-            <li>-72 CHF</li>
-            <li>- CHF</li>
-            <li><strong>370 CHF</strong></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </mat-card-content>
-</mat-card>

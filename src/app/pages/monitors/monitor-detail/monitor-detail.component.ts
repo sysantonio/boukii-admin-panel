@@ -170,7 +170,6 @@ export class MonitorDetailComponent {
         this.crudService.get('/users/'+data.data.user_id)
           .subscribe((user)=> {
             this.defaultsUser = user.data;
-            this.defaultsUser.password = null;
 
             this.getSchoolSportDegrees();
             this.getStations();
@@ -780,7 +779,7 @@ export class MonitorDetailComponent {
 
         this.crudService.update('/monitors', this.defaults, this.id)
           .subscribe((monitor) => {
-            this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+            this.snackbar.open('Monitor modificado correctamente', 'OK', {duration: 3000});
 
             // revisar a partir de aqui
               this.sportsData.data.forEach(element => {

@@ -32,13 +32,13 @@ export class MonitorsComponent {
   createComponent = MonitorsCreateUpdateComponent;
   entity = '/monitors';
   columns: TableColumn<any>[] = [
-    { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Age', property: 'age', type: 'text', visible: true },
     { label: 'Email', property: 'email', type: 'text', visible: true },
     { label: 'Phone', property: 'phone', type: 'text', visible: true },
     { label: 'Sports', property: 'sport', type: 'text', visible: true },
     { label: 'Level', property: 'niveaux', type: 'level', visible: true },
-    { label: 'Register', property: 'register', type: 'register_date', visible: true },
+    { label: 'Register', property: 'created_at', type: 'text', visible: true },
     { label: "Status", property: 'status', type: 'light', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];

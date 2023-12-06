@@ -97,7 +97,7 @@
 .price {
   width: 20%;
   text-align: right;
-  float: left;
+  float: right;
 }
 
 mat-list {
@@ -301,6 +301,11 @@ mat-card-subtitle {
   padding-top: 15px;
 }
 
+::ng-deep .with-course .mat-calendar-body-cell-content {
+  background-color: #FAC710 !important;
+  border: 1px solid #FAC710 !important;
+}
+
 .icon-wrapper {
   text-align: center;
 }
@@ -311,6 +316,22 @@ img[mat-card-image] {
   /* Asegúrate de que la imagen se ajusta correctamente */
   height: auto;
   display: block;
+}
+
+.add-date {
+  box-shadow: none;background: #fff;border: 1px solid #e6e6e6;
+}
+
+.icon-date {
+  color: #e6e6e6; font-size: 10px;width: 50px;height: 50px;
+}
+
+.add-date:hover   {
+  box-shadow: none;background: #e6e6e6;border: 1px solid #e6e6e6;
+
+}
+.add-date:hover .icon-date  {
+  color: #fff;
 }
 
 /* Puedes agregar más estilos para personalizar la tarjeta a tu gusto */
@@ -354,3 +375,5 @@ img[mat-card-image] {
     width: 23%;
   }
 }
+
+

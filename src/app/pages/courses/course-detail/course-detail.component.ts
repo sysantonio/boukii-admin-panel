@@ -182,7 +182,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   displayFnMoniteurs(monitor: any): string {
-    return monitor && monitor.full_name ? monitor.full_name : '';
+    return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
   }
 
   private _filterMonitor(name: string): any[] {

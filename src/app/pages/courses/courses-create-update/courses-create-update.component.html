@@ -127,7 +127,7 @@
               <div class="flex-auto" style="width: 15%" *ngIf="!defaults.is_flexible">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="price" matInput required type="text" [(ngModel)]="defaults.price">
+                  <input id="courseName" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
                 </mat-form-field>
               </div>
 
@@ -639,7 +639,7 @@
               <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="price" matInput required type="text" [(ngModel)]="defaults.price">
+                  <input id="courseName" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
                 </mat-form-field>
               </div>
 

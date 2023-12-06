@@ -587,7 +587,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         online: this.defaults.online,
         image: this.imagePreviewUrl,
         translations: null,
-        discounts: this.dataSourceReductions.data,
+        discounts: JSON.stringify(this.dataSourceReductions.data),
         sport_id: this.defaults.sport_id,
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
@@ -639,7 +639,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         image: this.imagePreviewUrl,
         confirm_attendance: false,
         translations: null,
-        discounts: this.dataSourceReductionsPrivate.data,
+        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
         price_range: this.dataSourceFlexiblePrices,
         sport_id: this.defaults.sport_id,
         school_id: this.defaults.school_id,
