@@ -286,8 +286,8 @@ mat-card-avatar {
 .card-avatar {
   background-size: cover;
   border-radius: 50%;
-  width: 90px;
-  height: 90px;
+  width: 110px;
+  height: 100px;
   margin: 0 0 0 20%;
 }
 
@@ -304,6 +304,11 @@ mat-card-subtitle {
 ::ng-deep .with-course .mat-calendar-body-cell-content {
   background-color: #FAC710 !important;
   border: 1px solid #FAC710 !important;
+}
+
+::ng-deep .with-course-private .mat-calendar-body-cell-content {
+  background-color: #2FCA45 !important;
+  border: 1px solid #2FCA45 !important;
 }
 
 .icon-wrapper {

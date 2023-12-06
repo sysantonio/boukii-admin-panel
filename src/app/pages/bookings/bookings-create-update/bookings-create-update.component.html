@@ -4,8 +4,9 @@
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
 </vex-secondary-toolbar>
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;" *ngIf="!loading && !bookingComplete">
-  <div class="flex flex-col sm:flex-row gap-4" style="width: 65%;float:left">
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;">
+  <mat-spinner *ngIf="loading" style="margin:0 auto"></mat-spinner>
+  <div class="flex flex-col sm:flex-row gap-4" style="width: 65%;float:left" *ngIf="!loading && !bookingComplete">
     <div @fadeInUp class="card flex-auto" style="width: 65%">
       <div class="px-6 py-4 border-b flex items-center">
         <h2 class="title m-0">Nouvelle réservation</h2>
@@ -49,7 +50,7 @@
           <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}" >
             <mat-card-header>
               <div mat-card-avatar class="card-avatar">
-                <img [src]="item.image !== null ? item.image : userAvatar" style="border-radius: 100%;"/>
+                <img [src]="item.image !== null ? item.image : userAvatar" style="border-radius: 100%;height: 100%;"/>
               </div>
 
             </mat-card-header>
@@ -118,7 +119,7 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <mat-form-field class="flex-auto" style="width: 48%" *ngIf="courseType === 'collectif'">
+          <mat-form-field class="flex-auto" style="width: 48%">
             <input type="text" placeholder="Choose level" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
               <mat-option *ngFor="let level of filteredLevel | async" [value]="level" (onSelectionChange)="getCourses(level, monthAndYear)">
@@ -130,15 +131,15 @@
         </div>
 
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-        <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee'">
+        <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
 
-          <input matInput [(ngModel)]="monthAndYear" [matDatepicker]="picker" [min]="minDate" (dateChange)="emitDateChange($event)"formControlName="fromDate" >
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker [startView]="'year'" (monthSelected)="monthChanged($event, picker)" [startAt]="monthAndYear || minDate"></mat-datepicker>
+          <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate" (dateChange)="emitDateChange($event)">
+          <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
+          <mat-datepicker #pickerDateFrom [startAt]="selectedDatePrivate" (monthSelected)="monthChanged($event, pickerDateFrom)" [dateClass]="privateDateClass()" (nextClicked)="monthChanged($event, pickerDateFrom)"></mat-datepicker>
         </mat-form-field>
 
         <div class="columns-container" *ngIf="courseType !== null">
-          <!-- Columna de la lista -->
+          <!-- Columna de la lista privados -->
           <div class="list-column" *ngIf="courseType === 'privee'">
             <div class="list-overflow-container">
               <mat-list class="list mat-elevation-z1">
@@ -166,6 +167,8 @@
             </div>
           </div>
 
+          <!-- Campos privados -->
+
           <div class="calendar-column" *ngIf="courseType === 'privee' && selectedItem !== null">
 
             <ng-container>
@@ -187,9 +190,12 @@
                   <mat-form-field class="flex-auto">
                     <mat-label>Fecha</mat-label>
                     <mat-select >
-                      <mat-option *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index"
-                      [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)"
-                      (onSelectionChange)="courseDate.hour_start = selectedCourseDateItem.date">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
+                      <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index">
+                        <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
+                        [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)"
+                        (onSelectionChange)="courseDate.hour_start = selectedCourseDateItem.date">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
+                      </ng-container>
+
                     </mat-select>
                   </mat-form-field>
 
@@ -209,14 +215,14 @@
                   <mat-form-field class="flex-auto">
                     <mat-label>Duración</mat-label>
                     <mat-select >
-                      <mat-option *ngFor="let duration of durations" [value]="duration">{{ duration }}</mat-option>
+                      <mat-option *ngFor="let duration of durations" [value]="duration" (onSelectionChange)="courseDate.duration = duration">{{ duration }}</mat-option>
                     </mat-select>
                   </mat-form-field>
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Personas</mat-label>
                     <mat-select >
-                      <mat-option *ngFor="let person of persons" [value]="person">{{ person }}</mat-option>
+                      <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person" >{{ person }}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -251,6 +257,7 @@
             </div>
           </div>
 
+          <!-- Listado de los cursos colectivos -->
           <div class="list-column" *ngIf="courseType === 'collectif' && defaultsBookingUser.degree_id !== null">
             <div class="list-overflow-container">
               <mat-list class="list mat-elevation-z1">
@@ -292,8 +299,12 @@
                       </div>
                     </mat-list-item>
                     <ng-container *ngIf="selectedItem !== null && selectedItem.id === course.id">
-                      <ng-container  *ngFor="let group of course.course_dates[0].course_groups">
-                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index"
+
+                      <ng-container *ngFor="let group of getBookableCourses(course.course_dates)">
+                      <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
+
+
+                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;"  *ngIf="getLevelOrder(subgroup.degree_id) >= levelForm.value.degree_order"
                           (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
                           <div style="float: left;width: 50%;">
 
@@ -320,10 +331,10 @@
                             </div>
                           </div>
                         </div>
+                    </ng-container>
+                  </ng-container>
                   </ng-container>
                 </ng-container>
-              </ng-container>
-
               </mat-list>
             </div>
           </div>
@@ -339,7 +350,7 @@
         </div>
         <div class="flex items-center justify-end gap-2">
           <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 1" [disabled]="(courseTypeId === 1 && selectedItem === null || selectedSubGroupItem === null)" (click)="confirmBooking()"> Confirmar </button>
-          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 2" [disabled]="(courseTypeId === 2 && selectedItem === null) " (click)="confirmBooking()"> Confirmar </button>
+          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 2" [disabled]="(courseTypeId === 2 && selectedItem === null)" (click)="confirmBooking()"> Confirmar </button>
         </div>
       </div>
     </div>
@@ -347,7 +358,7 @@
 
   <ng-container *ngFor="let item of bookingsToCreate; let bookI = index">
 
-  <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}">
+  <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}" *ngIf="!loading && !bookingComplete">
     <mat-card-header style="display:block">
       <div style="width: 100%;float: left;">
         <mat-icon svgIcon="mat:close"></mat-icon>

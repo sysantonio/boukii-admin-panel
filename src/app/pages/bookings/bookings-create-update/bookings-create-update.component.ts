@@ -14,6 +14,7 @@ import { DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/materi
 import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CalendarService } from 'src/service/calendar.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'custom-header',
@@ -63,30 +64,20 @@ export class CustomHeader {
   }
 }
 
-export class MonthpickerDateAdapter extends NativeDateAdapter {
-
-  constructor(matDateLocale: string, platform: Platform) {
-    super(matDateLocale, platform);
-  }
-
-  override parse(value: string): Date | null {
-    const monthAndYearRegex = /(10|11|12|0\d|\d)\/[\d]{4}/;
-    if (value?.match(monthAndYearRegex)) {
-      const parts = value.split('/');
-      const month = Number(parts[0]);
-      const year = Number(parts[1]);
-      if (month > 0 && month <= 12) {
-        return new Date(year, month - 1);
-      }
+export class CustomDateAdapter extends NativeDateAdapter {
+  format(date: Date, displayFormat: Object): string {
+    if (displayFormat === 'input') {
+      let day = date.getDate();
+      let month = date.getMonth() + 1;
+      let year = date.getFullYear();
+      return `${this._to2digit(day)}/${this._to2digit(month)}/${year}`;
+    } else {
+      return date.toDateString();
     }
-    return null;
   }
 
-  override format(date: Date, displayFormat: any): string {
-    const month = date.getMonth() + 1;
-    const monthAsString = ('0' + month).slice(-2);
-    const year = date.getFullYear();
-    return monthAsString + '/' + year;
+  private _to2digit(n: number) {
+    return ('00' + n).slice(-2);
   }
 }
 
@@ -94,13 +85,6 @@ export class MonthpickerDateAdapter extends NativeDateAdapter {
   selector: 'vex-bookings-create-update',
   templateUrl: './bookings-create-update.component.html',
   styleUrls: ['./bookings-create-update.component.scss'],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MonthpickerDateAdapter,
-      deps: [MAT_DATE_LOCALE, Platform],
-    },
-  ],
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class BookingsCreateUpdateComponent implements OnInit {
@@ -118,6 +102,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   showDetail: any = [];
 
   createComponent = BookingsCreateUpdateModalComponent;
+  selectedDatePrivate = new Date();
 
   imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   title = 'Título de la Reserva';
@@ -237,6 +222,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   levels = [];
   utilizers = [];
   courses = [];
+  coursesMonth = [];
   monitors = [];
   season = [];
   school = [];
@@ -247,7 +233,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   detailClient: any;
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService) {
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -262,6 +248,19 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getData() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
+    this.form = this.fb.group({
+      sportType: [1], // Posiblemente establezcas un valor predeterminado aquí
+      sportForm: [null],
+      courseType: ['collectif'],
+      sport: [null],
+      observations: [null],
+      observations_school: [null],
+      fromDate: [null],
+      periodUnique: [false],
+      periodMultiple: [false],
+      sameMonitor: [false]
+    });
+
     this.getSports();
     this.getMonitors();
     this.getSeason();
@@ -273,18 +272,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.clients = data[1].data;
         this.detailClient = this.clients[0];
 
-        this.form = this.fb.group({
-          sportType: [1], // Posiblemente establezcas un valor predeterminado aquí
-          sportForm: [null],
-          courseType: ['collectif'],
-          sport: [null],
-          observations: [null],
-          observations_school: [null],
-          fromDate: [null],
-          periodUnique: [false],
-          periodMultiple: [false],
-          sameMonitor: [false]
-        });
+
         this.filterSportsByType();
 
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
@@ -462,6 +450,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   confirmBooking() {
+
+    if (this.courseTypeId === 2) {
+      this.checkAllFields();
+
+      this.snackbar.open('Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
+      return;
+    }
+
     let data: any = {};
       data.price_total = +this.selectedItem.price;
       data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
@@ -794,7 +790,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getDegrees(sportId: number, onLoad:boolean = false) {
    this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
       .subscribe((data) => {
-        this.levels = data.data.reverse();
+        this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
 
 
         this.filteredLevel = this.levelForm.valueChanges.pipe(
@@ -838,21 +834,27 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.getDegrees(this.defaults.sport_id, false);
   }
 
-  getCourses(level: any, date: any) {
+  getCourses(level: any, date: any, fromPrivate = false) {
 
     this.loadingCalendar = true;
     this.dateClass();
     let today, minDate,maxDate;
 
-    if (date === null) {
-      today = moment();
-      minDate = moment().startOf('month').isBefore(today) ? today : moment().startOf('month');
-      maxDate = moment().endOf('month');
+    if (!fromPrivate) {
+      if (date === null) {
+        today = moment();
+        minDate = moment().startOf('month').isBefore(today) ? today : moment().startOf('month');
+        maxDate = moment().endOf('month');
+      } else {
+        today = moment();
+        minDate = moment(date).startOf('month').isBefore(today) ? today : moment(date).startOf('month');
+        maxDate = moment(date).endOf('month');
+      }
     } else {
-      today = moment();
-      minDate = moment(date).startOf('month').isBefore(today) ? today : moment(date).startOf('month');
-      maxDate = moment(date).endOf('month');
+      minDate = moment(date);
+      maxDate = moment(date);
     }
+
 
 
     const rq = {
@@ -871,6 +873,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         this.defaultsBookingUser.degree_id = level.id;
         this.courses = data.data;
+        if (!fromPrivate) {
+
+          this.coursesMonth = data.data;
+        }
         this.loading = false;
         this.loadingCalendar = false;
       })
@@ -889,15 +895,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return age;
   }
 
-  public emitDateChange(event: MatDatepickerInputEvent<Date | null, unknown>): void {
-    this.monthAndYearChange.emit(event.value);
-  }
-
-  public monthChanged(value: any, widget: any): void {
-    this.monthAndYear = moment(this.minDate).isAfter(moment(value)) ? this.minDate : value;
-    this.getCourses(this.levelForm.value.id, this.monthAndYear);
-
-    widget.close();
+  emitDateChange(event: MatDatepickerInputEvent<Date | null, unknown>): void {
+    this.getCourses(this.levelForm.value, event.value, true);
   }
 
   getMonitors() {
@@ -954,6 +953,20 @@ export class BookingsCreateUpdateComponent implements OnInit {
     };
   }
 
+  privateDateClass() {
+
+    return (date: Date): MatCalendarCellCssClasses => {
+      const dates = this.comparePrivateCourseDates();
+      const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
+            return 'with-course-private';
+          } else {
+            return;
+          }
+
+    };
+  }
+
   canBook(date: any) {
     return moment(date, 'YYYY-MM-DD').isSameOrAfter(moment(this.minDate));
   }
@@ -961,6 +974,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getLevelColor(id: any) {
     if (id !== null) {
       return this.levels.find((l) => l.id === id).color;
+
+    }
+  }
+
+  getLevelOrder(id: any) {
+    if (id !== null) {
+      return this.levels.find((l) => l.id === id).degree_order;
 
     }
   }
@@ -1023,9 +1043,21 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
 
   }
+
   compareCourseDates() {
     let ret = [];
     this.courses.forEach(course => {
+      course.course_dates.forEach(courseDate => {
+        ret.push(moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD'));
+      });
+    });
+
+    return ret;
+  }
+
+  comparePrivateCourseDates() {
+    let ret = [];
+    this.coursesMonth.forEach(course => {
       course.course_dates.forEach(courseDate => {
         ret.push(moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD'));
       });
@@ -1045,5 +1077,29 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   setSchoolNotes(event: any) {
     this.defaults.school_notes = event.target.value;
+  }
+
+  public monthChanged(value: any, widget: any): void {
+    this.monthAndYear = moment(this.minDate).isAfter(moment(value)) ? this.minDate : value;
+    this.getCourses(this.levelForm.value.id, this.monthAndYear);
+
+    widget.close();
+  }
+
+  checkAllFields() {
+    let ret = false;
+
+    for (let i = 0; i<this.courseDates.length; i++){
+      if((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].monitor_id === null) {
+        ret = true;
+        break;
+      }
+    }
+
+    return ret;
+  }
+
+  getBookableCourses(dates: any) {
+    return dates.find((d) => this.canBook(d.date)).course_groups;
   }
 }
