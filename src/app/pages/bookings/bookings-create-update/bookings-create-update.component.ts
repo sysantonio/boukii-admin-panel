@@ -1035,8 +1035,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   handleMonthChange(firstDayOfMonth: Date) {
-    console.log('Nuevo mes:', firstDayOfMonth);
-    // Lógica adicional aquí
+    this.monthAndYear = moment(this.minDate).isAfter(moment(firstDayOfMonth)) ? this.minDate : firstDayOfMonth;
+    this.getCourses(this.levelForm.value, this.monthAndYear);
   }
 
   setClientsNotes(event: any) {

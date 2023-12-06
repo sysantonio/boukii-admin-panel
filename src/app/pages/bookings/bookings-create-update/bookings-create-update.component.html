@@ -553,10 +553,10 @@
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + imagePath + ')'" style="border-radius: 5px"></div>
               <mat-card-title class="mat-mdc-card-title">
-                <div style="float: left;width: 70%;font-size: 14px;"> {{getCourse(item.courseDates[0].course_id)?.name}} </div>
-                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{getCourse(item.courseDates[0].course_id)?.price}} {{getCourse(item.courseDates[0].course_id)?.currency}} </div>
+                <div style="float: left;width: 70%;font-size: 14px;"> {{item.courseDates[0].course?.name}} </div>
+                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{item.courseDates[0].course?.price}} {{item.courseDates[0].course?.currency}} </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0">{{getCourse(item.courseDates[0].course_id)?.course_type === 1 ? 'collectif' : 'privee'}} {{getCourse(item.courseDates[0].course_id)?.sport.name}}</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0">{{item.courseDates[0].course?.course_type === 1 ? 'collectif' : 'privee'}} {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
@@ -657,7 +657,7 @@
 
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">{{getCourse(item.courseDates[0].course_id)?.price}} {{getCourse(item.courseDates[0].course_id)?.currency}}</p>
+                  <p style="color: #EA0C60;">{{item.courseDates[0].course?.price}} {{item.courseDates[0].course?.currency}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
