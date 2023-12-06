@@ -356,7 +356,7 @@
 
       </div>
       <div style="width: 100%;float:left;">
-        <mat-card-title style="float: left;width: 90%;">Reservation #{{bookI + 1 }}</mat-card-title>
+        <mat-card-title style="float: left;width: 90%;">Course #{{bookI + 1 }}</mat-card-title>
       </div>
       <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
         <div style="width: 100%;">
@@ -397,23 +397,23 @@
               <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
 
               <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
-                <strong>{{ getCourse(courseDate.course_id)?.name}}</strong>
+                <strong>{{ courseDate.course?.name}}</strong>
               </p>
               <p style="float: left; width: 100%;">
-                {{getCourse(courseDate.course_id)?.course_type === 1 ? 'Collectif' : 'Privee'}} {{getCourse(courseDate.course_id)?.sport.name}} {{getCourse(courseDate.course_id)?.price}} {{getCourse(courseDate.course_id)?.currency}}
+                {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{courseDate.course?.price}} {{courseDate.course?.currency}}
               </p>
             </div>
 
             <div style="float: left; width: 100%;margin-top: 5%;">
               <ul>
-                <ng-container *ngIf="getCourse(courseDate.course_id)?.is_flexible">
+                <ng-container *ngIf="courseDate.course?.is_flexible">
                   <li *ngFor="let courseDateDate of item.courseDates">
                     {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{ courseDateDate.hour_end }}h</i>
                   </li>
                 </ng-container>
-                <ng-container *ngIf="!getCourse(courseDate.course_id)?.is_flexible">
+                <ng-container *ngIf="!courseDate.course?.is_flexible">
                   <li>
-                    {{ getCourse(courseDate.course_id)?.date_start | date: 'dd/MM/YYYY'}}<i style="float: right;">{{getCourse(courseDate.course_id)?.hour_min}} - {{getCourse(courseDate.course_id)?.hour_max}}</i>
+                    {{ courseDate.course?.date_start | date: 'dd/MM/YYYY'}}<i style="float: right;">{{courseDate.course?.hour_start}} - {{courseDate.course?.hour_start}}h</i>
                   </li>
                 </ng-container>
               </ul>
@@ -428,7 +428,7 @@
               </div>
 
             </div>
-            <div style="float: left; width: 100%;">
+            <div style="float: left; width: 100%;" *ngIf="courseDate.course?.course_type === 1">
               <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;" [ngStyle]="{'background': getLevelColor(courseDate.degree_id)}">
                 {{getLevelName(courseDate.degree_id)}}
               </div>

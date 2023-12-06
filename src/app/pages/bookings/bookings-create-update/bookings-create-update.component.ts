@@ -492,6 +492,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 hour_end: item.hour_end,
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
+                course: this.selectedItem,
                 date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }
@@ -511,6 +512,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 hour_end: item.hour_end,
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
+                course: this.selectedItem,
                 date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }
@@ -529,6 +531,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               price: +item.price,
               currency: item.currency,
               paxes: item.paxes,
+              course: this.selectedItem,
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
           });
         });
@@ -545,6 +548,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             hour_end: null, //calcular en base a la duracion del curso
             price: +item.price,
             currency: item.currency,
+            course: this.selectedItem,
             date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
           });
         });
