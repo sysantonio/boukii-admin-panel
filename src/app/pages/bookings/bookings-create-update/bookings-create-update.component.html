@@ -574,7 +574,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
               <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getNacionality(getMonitorCountry(item.courseDates[0].client_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0].client_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].client_id)) }} ans
+                {{ getNacionality(defaults.client_main_id.country) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} ans
               </mat-card-subtitle>
             </mat-card-header>
 
@@ -599,6 +599,7 @@
                 <div class="user-info">
                   <img [src]="item.courseDates[0].monitor_id !== null ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar" alt="Avatar de usuario" class="user-avatar" />
                   <span>{{ item.courseDates[0].monitor_id !== null ? getMonitorName(item.courseDates[0].monitor_id) : 'No monitor asigned'}}</span>
+                  {{ getNacionality(getMonitorCountry(item.courseDates[0].client_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0].client_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].client_id)) }} ans
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -741,7 +742,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(defaults.client_main_id.id) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(defaults.client_main_id.id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getNacionality(defaults?.client_main_id?.country) }} · {{ getCountry(defaults?.client_main_id?.country) }} · {{calculateAge(defaults?.client_main_id?.country.birth_date) }} ans
+                {{ getNacionality(defaults.client_main_id.country) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} ans
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
