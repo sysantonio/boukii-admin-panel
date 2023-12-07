@@ -172,10 +172,10 @@ mat-card-avatar {
 }
 
 .user-avatar {
-  width: 25;  /* Puedes ajustar según tus necesidades */
-  height: 25;
+  width: 50px;  /* Puedes ajustar según tus necesidades */
+  height: 50px;
   border-radius: 50%;  /* Hace que la imagen sea redonda */
-  object-fit: cover;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
+  object-fit: contain;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
 }
 
 .centered-chip-list {

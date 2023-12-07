@@ -17,15 +17,15 @@
 
     <div style="width:100%">
       <mat-radio-group>
-        <mat-radio-button class="radio" *ngFor="let b of bonuses" [value]="b" (change)="bonus = b">
-          {{ b.code }} - Remaining Balance: {{ b.remaining_balance }}
+        <mat-radio-button [disabled]="isInUse(b.id)" class="radio" *ngFor="let b of bonuses" [value]="b" (change)="bonus = b">
+          {{ b.code }} - Remaining Balance: {{ b.remaining_balance }} {{defaults.currency}} <span style="color:#8fd14f">{{ isInUse(b.id) ? 'Applied' : ''}}</span>
         </mat-radio-button>
       </mat-radio-group>
     </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button color="primary" mat-flat-button [mat-dialog-close]="{bonus: bonus}">Confirmer</button>
+    <button color="primary" mat-flat-button (click)="closeModal()">Confirmer</button>
     <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
   </mat-dialog-actions>
 </form>

@@ -24,7 +24,7 @@
       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0;">
         <mat-form-field class="flex-auto" appearance="fill">
           <mat-label>Deportes</mat-label>
-          <mat-select [formControl]="sportsControl" multiple>
+          <mat-select [formControl]="sportsControl" multiple [disabled]="defaults && defaults.sport_id !== null">
 
             <mat-select-trigger>
               <div *ngIf="sportsControl.value?.length > 0; else placeholder">

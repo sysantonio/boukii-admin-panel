@@ -604,7 +604,10 @@
                   Estas limitaciones afectan únicamente a las reservas realizadas por el cliente desde.<br>
                   la página de reservas y la app. La escuela tiene libre control desde el panel de admin.<br>
                 </p>
+                <mat-form-field class="flex-auto">
+                  <input matInput placeholder="Percentaje" type="number" [value]="this.school.cancellation_insurance_percent" [(ngModel)]="this.school.bookings_comission_boukii_pay">
 
+                </mat-form-field>
               </div>
 
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
