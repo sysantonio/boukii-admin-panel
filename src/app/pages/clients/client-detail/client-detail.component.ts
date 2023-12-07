@@ -739,7 +739,7 @@ displayedColumns: string[] = ['name', 'date'];
 
           this.crudService.create('/users', user)
           .subscribe((user) => {
-            this.defaults.user_id = user.data.id;
+            client.user_id = user.data.id;
 
             this.crudService.create('/clients', client)
               .subscribe((clientCreated) => {
