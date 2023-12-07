@@ -343,7 +343,7 @@ export class MonitorDetailComponent {
 
   private _filter(name: string, countryId: number): any[] {
     const filterValue = name.toLowerCase();
-    return this.mockProvincesData.filter(province => province.id_country === countryId && province.name.toLowerCase().includes(filterValue));
+    return this.mockProvincesData.filter(province => province.country_id === countryId && province.name.toLowerCase().includes(filterValue));
   }
 
   private _filterCivilStatus(value: string): string[] {
@@ -374,7 +374,7 @@ export class MonitorDetailComponent {
     return this.myControlProvinces.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filter(name, countryId) : this.mockProvincesData.filter(p => p.id_country === countryId).slice())
+      map(name => name ? this._filter(name, countryId) : this.mockProvincesData.filter(p => p.country_id === countryId).slice())
     );
   }
 

@@ -1441,7 +1441,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   getNacionality(id: any) {
     const country = this.countries.find((c) => c.id === id);
-    return country ? country.iso : 'NDF';
+    return country ? country.code : 'NDF';
   }
 
   getCountry(id: any) {
