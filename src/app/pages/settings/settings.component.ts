@@ -17,6 +17,7 @@ import { ConfigService } from 'src/@vex/config/config.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
+import { SchoolService } from 'src/service/school.service';
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
@@ -127,13 +128,21 @@ export class SettingsComponent implements OnInit {
   authorizedBookingComm = true;
   selectedSport = -1;
 
+  hasCancellationInsurance = false;
+  hasBoukiiCare = false;
+  hasTVA = false;
+
+  user: any;
+
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private configService: ConfigService, private dialog: MatDialog) {
+    private configService: ConfigService, private dialog: MatDialog, private schoolService: SchoolService) {
     this.filteredHours = this.hours;
   }
 
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
     /*this.mockLevelData.forEach(element => {
       this.crudService.create('/degrees', element)
 
@@ -152,10 +161,14 @@ export class SettingsComponent implements OnInit {
   }
 
   getData() {
-    this.crudService.get('/schools/1')
+    this.crudService.get('/schools/'+this.user.schools[0].id)
       .subscribe((data) => {
 
         this.school = data.data;
+
+        this.hasCancellationInsurance = parseFloat(this.school.cancellation_insurance_percent) !== 0;
+        this.hasBoukiiCare = parseInt(this.school.bookings_comission_boukii_pay) !== 0;
+        this.hasTVA = parseFloat(this.school.bookings_comission_cash) !== 0;
 
         forkJoin([this.getSchoolSeason(),this.getSports(),this.getBlockages(), this.getSchoolSports()])
           .subscribe((data: any) => {
@@ -382,6 +395,7 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
+        this.schoolService.refreshSchoolData();
       });
   }
 
@@ -399,6 +413,7 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open('Datos guardados con éxito', 'Close', {duration: 3000});
+        this.schoolService.refreshSchoolData();
       });
   }
 
@@ -422,6 +437,7 @@ export class SettingsComponent implements OnInit {
               this.crudService.create('/degrees', degree)
                 .subscribe((data) => {
                   console.log(data)
+                  this.schoolService.refreshSchoolData();
                 });
             });
 
@@ -447,7 +463,8 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
-        this.snackbar.open('Precios guardadas correctamente', 'OK', {duration: 3000})
+        this.snackbar.open('Precios guardadas correctamente', 'OK', {duration: 3000});
+        this.schoolService.refreshSchoolData();
       })
   }
 
@@ -519,7 +536,8 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
-        this.snackbar.open('Autorizaciones guardadas correctamente', 'OK', {duration: 3000})
+        this.snackbar.open('Autorizaciones guardadas correctamente', 'OK', {duration: 3000});
+        this.schoolService.refreshSchoolData();
       })
   }
 
@@ -666,6 +684,23 @@ export class SettingsComponent implements OnInit {
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
         this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000})
+      })
+  }
+
+  saveTaxes() {
+
+    const data = {
+      cancellation_insurance_percent: this.hasCancellationInsurance ? (this.school.cancellation_insurance_percent / 100) : 0,
+      bookings_comission_boukii_pay: this.hasBoukiiCare ? this.school.bookings_comission_boukii_pay : 0,
+      bookings_comission_cash: this.hasTVA ? (this.school.bookings_comission_cash / 100) : 0,
+      name: this.school.name,
+      description: this.school.description
+    }
+
+    this.crudService.update('/schools', data, this.school.id)
+      .subscribe(() => {
+        this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000});
+        this.schoolService.refreshSchoolData();
       })
   }
 

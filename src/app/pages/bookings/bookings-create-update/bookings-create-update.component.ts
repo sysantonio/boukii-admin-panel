@@ -24,6 +24,7 @@ import { ClientCreateUpdateModalComponent } from '../../clients/client-create-up
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { AddClientSportModalComponent } from '../add-client-sport/add-client-sport.component';
 import { Router } from '@angular/router';
+import { SchoolService } from 'src/service/school.service';
 
 @Component({
   selector: 'custom-header',
@@ -250,11 +251,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
   totalPrice: any = 0;
   countries = MOCK_COUNTRIES;
   snackBarRef: any = null;
+  schoolSettings: any = [];
+
+  tva = 0;
+  cancellationInsurance = 0;
+  boukiiCarePrice = 0;
 
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -263,6 +269,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
               }
 
   ngOnInit() {
+    this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        this.schoolSettings = data.data;
+        this.tva = parseFloat(this.schoolSettings.cancellation_insurance_percent);
+        this.cancellationInsurance = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
+        this.boukiiCarePrice = parseFloat(this.schoolSettings.bookings_comission_cash);
+      })
     this.getData();
   }
 
@@ -1572,11 +1585,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   calculateRem(event: any) {
     if(event.source.checked) {
-      this.opRem = this.getBasePrice() * 0.10;
+      this.opRem = this.getBasePrice() * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
-      this.defaults.price_cancellation_insurance = this.getBasePrice() * 0.10;
+      this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
       this.calculateFinalPrice();
-      return this.getBasePrice() * 0.10;
+      return this.getBasePrice() *this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
@@ -1588,11 +1601,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   calculateBoukiiCare(event: any) {
     if(event.source.checked) {
-      this.boukiiCare = this.getBasePrice() * 0.10;
+      this.boukiiCare = this.getBasePrice() * this.boukiiCarePrice;
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
-      this.defaults.price_boukii_care = this.getBasePrice() * 0.10;
-      return this.getBasePrice() * 0.10;
+      this.defaults.price_boukii_care = this.getBasePrice() * this.boukiiCarePrice;
+      return this.getBasePrice() * this.boukiiCarePrice;
     } else {
       this.boukiiCare = 0;
       this.calculateFinalPrice();
@@ -1605,7 +1618,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   setReemToItem(event: any, item: any) {
     if(event.source.checked) {
       item.has_cancellation_insurance = event.source.checked;
-      item.price_cancellation_insurance = item.price_total * 0.10;
+      item.price_cancellation_insurance = item.price_total * this.cancellationInsurance;
     } else {
       item.has_cancellation_insurance = event.source.checked;
       item.price_cancellation_insurance = 0;
@@ -1792,16 +1805,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
 
     if(this.defaults.has_cancellation_insurance) {
-      price = price + (this.getBasePrice() * 0.10);
+      price = price + (this.getBasePrice() * this.cancellationInsurance);
     }
 
     if(this.defaults.has_boukii_care) {
       // coger valores de reglajes
-      price = price + (this.getBasePrice() * 0.10);
+      price = price + (this.getBasePrice() * this.boukiiCarePrice);
     }
 
     // añadir desde reglajes el tva
-    this.finalPrice = price + (price *0.21);
+    this.finalPrice = price + (price * this.tva);
     this.finalPriceNoTaxes = price;
   }
 
