@@ -273,8 +273,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
       .subscribe((data) => {
         this.schoolSettings = data.data;
         this.tva = parseFloat(this.schoolSettings.cancellation_insurance_percent);
-        this.cancellationInsurance = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
-        this.boukiiCarePrice = parseFloat(this.schoolSettings.bookings_comission_cash);
+        this.cancellationInsurance = parseFloat(this.schoolSettings.bookings_comission_cash);
+        this.boukiiCarePrice = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
       })
     this.getData();
   }
