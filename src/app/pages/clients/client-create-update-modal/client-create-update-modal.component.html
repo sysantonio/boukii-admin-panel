@@ -1,0 +1,296 @@
+<form *ngIf="!loading">
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Nouvelle réservation</h2>
+
+    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+      <mat-icon svgIcon="mat:more_vert"></mat-icon>
+    </button>-->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="text-border"></mat-divider>
+
+    <div @fadeInUp class="card flex-auto">
+      <div class="px-6 py-4 border-b flex items-center">
+        <div style="float: left;width: 50%;">
+          <h2 class="title m-0">Nouvelle client</h2>
+        </div>
+        <div style="float: left;width: 50%;">
+          <div style="float:right">
+            Active <mat-slide-toggle [(ngModel)]="defaultsUser.active" [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+
+        <ng-template matStepperIcon="edit">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+        <ng-template matStepperIcon="done">
+          <mat-icon svgIcon="mat:done_all"></mat-icon>
+        </ng-template>
+
+        <mat-step [stepControl]="formInfoAccount">
+          <form [formGroup]="formInfoAccount">
+            <ng-template matStepLabel>Info de compte</ng-template>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <div *ngIf="imagePreviewUrl" class="image-container">
+                <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290"  style="width: 400px;height: 290px;object-fit: contain;">
+              </div>
+
+              <div class="input-container">
+
+                <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
+                <label for="file" class="btn-1">upload file</label>
+                <p>Maximum 2mb</p>
+                <p>Formats supportés: PNG, JPG</p>
+              </div>
+            </div>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Nom</mat-label>
+                  <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
+
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>Prenom</mat-label>
+                  <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
+                </mat-form-field>
+            </div>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
+
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>Nom d'utilisateur</mat-label>
+                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                </mat-form-field>
+              </div>
+
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Password</mat-label>
+                <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
+
+              </mat-form-field>
+            </div>
+            <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
+
+              <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
+              <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="formPersonalInfo">
+          <form [formGroup]="formPersonalInfo">
+            <ng-template matStepLabel>Données Personnelles</ng-template>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+
+              <mat-form-field class="flex-auto">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
+                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+              </mat-form-field>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Teléphone</mat-label>
+
+                <input formControlName="phone" matInput required type="tel"  [(ngModel)]="defaults.telephone">
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto">
+                <mat-label>Portable</mat-label>
+                <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
+
+              </mat-form-field>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Addresse</mat-label>
+
+                <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto">
+                <mat-label>Code Postal</mat-label>
+                <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
+
+              </mat-form-field>
+            </div>
+
+
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="vex-flex-form-field flex-auto">
+                <mat-label>Pays</mat-label>
+                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
+                <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
+                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
+                    {{country.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field class="vex-flex-form-field flex-auto">
+                <mat-label>Canton</mat-label>
+                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
+                <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
+                  <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
+                    {{province.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto" appearance="fill">
+                <mat-label>Idiomas</mat-label>
+                <mat-select [formControl]="languagesControl" multiple>
+                  <mat-select-trigger>
+                    <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
+                      {{ getSelectedLanguageNames() }}
+                    </div>
+                    <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages(language)">
+                    {{language.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
+
+              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="formSportInfo">
+          <form [formGroup]="formSportInfo">
+            <ng-template matStepLabel>Sports</ng-template>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0;">
+              <mat-form-field class="flex-auto" appearance="fill">
+                <mat-label>Deportes</mat-label>
+                <mat-select [formControl]="sportsControl" multiple>
+
+                  <mat-select-trigger>
+                    <div *ngIf="sportsControl.value?.length > 0; else placeholder">
+                      {{ getSelectedSportsNames() }}
+                    </div>
+                    <ng-template #placeholder>Selecciona los deportes</ng-template>
+                  </mat-select-trigger>
+
+                  <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection(sport)">
+                    {{sport.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+              <!-- Añadir niños con modal -->
+              <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
+
+                <!-- Otros contenedores según tu descripción -->
+
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-label>Name</mat-label>
+                      <input matInput [value]="element.name" type="text" [readonly]="true">
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-label>Niveaux</mat-label>
+                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
+                      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                        <mat-option *ngFor="let level of element.degrees" [value]="level">
+                          {{level.annotation}} - {{level.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Ícono para eliminar
+                <ng-container matColumnDef="delete">
+                  <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
+                  </mat-cell>
+                </ng-container> -->
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Généralites</mat-label>
+                <textarea formControlName="summary" matInput [(ngModel)]="defaultsObservations.general"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Notes de l'école</mat-label>
+                <textarea formControlName="notes" matInput [(ngModel)]="defaultsObservations.notes"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Hisotrique</mat-label>
+                <textarea formControlName="hitorical" matInput [(ngModel)]="defaultsObservations.historical"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
+
+              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
+                Save
+              </button>
+            </div>
+          </form>
+
+        </mat-step>
+      </mat-vertical-stepper>
+    </div>
+  <mat-dialog-content class="flex flex-col">
+
+
+  </mat-dialog-content>
+</form>

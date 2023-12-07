@@ -25,7 +25,7 @@
           </mat-form-field>
 
           <div class="flex-auto">
-            <button color="primary" mat-raised-button type="button" class="client-button"> Nuevo cliente </button>
+            <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()"> Nuevo cliente </button>
           </div>
        </div>
 
@@ -40,7 +40,7 @@
           </mat-card-header>
           <mat-card-content>
             <mat-card-title>{{ defaults?.client_main_id?.first_name }} {{ defaults?.client_main_id?.last_name }}</mat-card-title>
-            <mat-card-subtitle>{{ defaults?.client_main_id?.country }} · {{calculateAge(defaults?.client_main_id?.birth_date) }} ans · {{ defaults?.client_main_id?.province }}</mat-card-subtitle>
+            <mat-card-subtitle>{{ getNacionality(defaults?.client_main_id?.country) }} · {{calculateAge(defaults?.client_main_id?.birth_date) }} ans · {{ getCountry(defaults?.client_main_id?.country) }}</mat-card-subtitle>
           </mat-card-content>
           <mat-card-actions>
             <!-- Botones de acción, si son necesarios -->
@@ -56,7 +56,7 @@
             </mat-card-header>
             <mat-card-content>
               <mat-card-title>{{ item.first_name }} {{ item.last_name }}</mat-card-title>
-              <mat-card-subtitle>{{ item.country }} · {{calculateAge(item.birth_date) }} ans · {{ item.province }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ getNacionality(item.country) }} · {{calculateAge(item.birth_date) }} ans · {{ getCountry(item.country) }}</mat-card-subtitle>
             </mat-card-content>
             <mat-card-actions>
               <!-- Botones de acción, si son necesarios -->

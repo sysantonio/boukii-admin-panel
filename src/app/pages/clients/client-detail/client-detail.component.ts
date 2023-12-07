@@ -174,16 +174,6 @@ displayedColumns: string[] = ['name', 'date'];
   getData(id = null, onChangeUser = false) {
     const getId = id === null ? this.mainId : id;
 
-    this.getSchoolSportDegrees();
-    this.getLanguages();
-    this.getStations();
-    this.getClientSchool();
-    this.getClientSport();
-    this.getClientObservations();
-
-    if (!onChangeUser) {
-      this.getClientUtilisateurs();
-    }
 
     this.crudService.get('/clients/'+ getId)
       .subscribe((data) => {
@@ -195,6 +185,16 @@ displayedColumns: string[] = ['name', 'date'];
           .subscribe((user)=> {
 
 
+            this.getSchoolSportDegrees();
+            this.getLanguages();
+            this.getStations();
+            this.getClientSchool();
+            this.getClientSport();
+            this.getClientObservations();
+
+            if (!onChangeUser) {
+              this.getClientUtilisateurs();
+    }
             this.defaultsUser = user.data;
 
             this.formInfoAccount = this.fb.group({

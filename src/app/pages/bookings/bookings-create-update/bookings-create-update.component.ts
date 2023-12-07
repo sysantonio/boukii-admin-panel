@@ -20,6 +20,8 @@ import { AddDiscountBonusModalComponent } from './add-discount-bonus/add-discoun
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { AddClientUserModalComponent } from '../../clients/add-client-user/add-client-user.component';
 import { PasswordService } from 'src/service/password.service';
+import { ClientCreateUpdateModalComponent } from '../../clients/client-create-update-modal/client-create-update-modal.component';
+import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 
 @Component({
   selector: 'custom-header',
@@ -243,6 +245,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   finalPrice: any = null;
   bonus: any = null;
   totalPrice: any = 0;
+  countries = MOCK_COUNTRIES;
 
   private subscription: Subscription;
 
@@ -1314,10 +1317,24 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  addClient() {
+
+    const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
+      width: '1000px',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {id: this.user.schools[0].id}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        this.clientsForm.patchValue(data.client);
+      }
+    })
+  }
+
 
   addUtilisateur() {
 
-    this.crudService.delete('/users', 37).subscribe(() => {console.log('ok')})
     const dialogRef = this.dialog.open(AddClientUserModalComponent, {
       width: '600px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
@@ -1420,5 +1437,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       dataToModify.language6_id = langs[5].id;
     }
+  }
+
+  getNacionality(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.iso : 'NDF';
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.name : 'NDF';
   }
 }
