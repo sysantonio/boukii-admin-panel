@@ -1838,7 +1838,7 @@ export const MOCK_COUNTRIES = [
   {
       "id": 205,
       "code": "ES",
-      "name": "Spain",
+      "name": "España",
       "phonecode": 34,
       "continent_name": "Europe",
       "created_at": null,

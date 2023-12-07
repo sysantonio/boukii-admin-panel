@@ -176,6 +176,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
     setTimeout(() => {
       this.getSports();
+      this.loading = false;
     }, 500);
 
   }
@@ -233,7 +234,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   }
 
   private _filterSports(value: any): any[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name?.toLowerCase();
     return this.schoolSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
@@ -244,7 +245,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
   private _filterLanguages(value: any): any[] {
     const filterValue = value.toLowerCase();
-    return this.languages.filter(language => language?.name.toLowerCase().includes(filterValue));
+    return this.languages.filter(language => language?.name?.toLowerCase().includes(filterValue));
   }
 
   displayFnCountry(country: any): string {
@@ -338,7 +339,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   getLanguages() {
     this.crudService.list('/languages', 1, 1000)
       .subscribe((data) => {
-        this.languages = data.data;
+        this.languages = data.data.reverse();
       })
   }
 
@@ -386,7 +387,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
                 setTimeout(() => {
                   this.dialogRef.close({data: client});
 
-                }, 3000);
+                }, 1000);
               })
           })
       })

@@ -321,7 +321,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
             this.selectSport(this.sportDataList[0]);
             this.getUtilzers(this.clients[0], true);
-            this.getDegrees(this.defaults.sport_id, true);
+            this.getDegrees(this.defaults.sport_id);
 
             setTimeout(() => {
               this.clientsForm.patchValue(this.clients[0]);
@@ -355,15 +355,22 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.form.get("courseType").patchValue(id);
 
     const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+    let hasSport = false;
     client.sports.forEach(sport => {
 
       if (sport.id === this.defaults.sport_id) {
         const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
         this.levelForm.patchValue(level);
         this.defaultsBookingUser.degree_id = level.id;
+        hasSport = true;
         this.getCourses(level, this.monthAndYear);
       }
     });
+
+    if (!hasSport) {
+      this.courses = [];
+      this.snackbar.open('El usuario no tiene este deporte asociado', 'OK', {duration:3000});
+    }
   }
 
   selectItem(item: any) {
@@ -755,6 +762,21 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
   }
 
+  selectMainUser(user: any) {
+    this.defaultsBookingUser.client_id = user.id;
+    this.detailClient = this.clients.find((c) => c.id === user.id);
+
+    this.detailClient.sports.forEach(sport => {
+
+      if (sport.id === this.defaults.sport_id) {
+        const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+        this.levelForm.patchValue(level);
+        this.defaultsBookingUser.degree_id = level.id;
+        this.getCourses(level, this.monthAndYear);
+      }
+    });
+  }
+
   toggleBorder(index: number, utilizer: any) {
     this.mainIdSelected = false;
     this.borderActive = index;
@@ -816,51 +838,59 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.getDegrees(sport.sport_id);
   }
 
-  getDegrees(sportId: number, onLoad:boolean = false) {
+  getDegrees(sportId: number) {
    this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
-
 
         this.filteredLevel = this.levelForm.valueChanges.pipe(
           startWith(''),
           map((value: any) => typeof value === 'string' ? value : value?.annotation),
           map(annotation => annotation ? this._filterLevel(annotation) : this.levels.slice())
         );
+        let hasSport = false;
+        const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+        client.sports.forEach(sport => {
+          if (sport.id === this.defaults.sport_id) {
+            const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+            this.levelForm.patchValue(level);
+            this.defaultsBookingUser.degree_id = level.id;
+            hasSport = true;
+            this.getCourses(level, this.monthAndYear);
+          }
+        });
 
-        if (onLoad) {
-          this.clients[0].sports.forEach(sport => {
-            if (sport.id === this.defaults.sport_id) {
-              const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
-              this.levelForm.patchValue(level);
-              this.defaultsBookingUser.degree_id = level.id;
-              this.getCourses(level, this.monthAndYear);
-            }
-          });
+        if (!hasSport) {
+          this.courses = [];
+          this.snackbar.open('El usuario no tiene este deporte asociado', 'OK', {duration:3000});
         }
       })
   }
 
   getUtilzers(client: any, onLoad = false) {
+    this.utilizers = [];
     this.defaultsBookingUser.client_id = client.id;
+
     this.crudService.get('/admin/clients/' + client.id +'/utilizers')
       .subscribe((data: any) => {
         this.utilizers = data.data;
       });
 
       if (!onLoad) {
-        client.sports.forEach(sport => {
 
+        let hasSport = false;
+        client.sports.forEach(sport => {
           if (sport.id === this.defaults.sport_id) {
             const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
             this.levelForm.patchValue(level);
             this.defaultsBookingUser.degree_id = level.id;
             this.getCourses(level, this.monthAndYear);
+            hasSport = true;
           }
         });
       }
 
-      this.getDegrees(this.defaults.sport_id, false);
+      this.getDegrees(this.defaults.sport_id);
   }
 
   getCourses(level: any, date: any, fromPrivate = false) {
@@ -1327,7 +1357,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.clientsForm.patchValue(data.client);
+
+        this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+1)
+          .subscribe((cl: any) => {
+            const newClient = cl.data.find((c) => c.id = data.data.id);
+            this.clientsForm.patchValue(newClient);
+            this.defaults.client_main_id = newClient;
+            this.getUtilzers(data.data.id, true);
+
+          })
+
       }
     })
   }
