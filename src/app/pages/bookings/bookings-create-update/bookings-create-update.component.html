@@ -17,8 +17,8 @@
             <mat-label>Client</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let client of filteredOptions | async" [value]="client" (onSelectionChange)="getUtilzers(client)">
-                {{client.first_name}} {{client.last_name}}
+              <mat-option *ngFor="let filteredClient of filteredOptions | async" [value]="filteredClient" (onSelectionChange)="getUtilzers(filteredClient)">
+                {{filteredClient.first_name}} {{filteredClient.last_name}}
               </mat-option>
             </mat-autocomplete>
             <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
@@ -29,9 +29,9 @@
           </div>
        </div>
 
-       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!loadingUtilizers">
 
-        <mat-card class="card-users" (click)="mainIdSelected = !mainIdSelected; detailClient = defaults.client_main_id" (click)="selectMainUser(defaults.client_main_id)" [ngClass]="{'active-border': mainIdSelected}">
+        <mat-card class="card-users" (click)="mainIdSelected = !mainIdSelected;" (click)="selectMainUser(defaults.client_main_id)" [ngClass]="{'active-border': mainIdSelected}">
           <mat-card-header>
             <div mat-card-avatar class="card-avatar">
               <img [src]="defaults?.client_main_id?.image !== null ? defaults?.client_main_id?.image : userAvatar" style="border-radius: 100%;width: 100%;height: 100%;"/>
@@ -307,7 +307,7 @@
                       <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
 
 
-                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngIf="getLevelOrder(subgroup.degree_id) <= levelForm.value.degree_order"
+                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngIf="getLevelOrder(subgroup.degree_id) === levelForm.value.degree_order && subgroup.degree_id === levelForm.value.id"
                           (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
                           <div style="float: left;width: 50%;">
 
@@ -370,7 +370,7 @@
 
       </div>
       <div style="width: 100%;float:left;">
-        <mat-card-title style="float: left;width: 90%;">Course #{{bookI + 1 }}</mat-card-title>
+        <mat-card-title style="float: left;width: 90%;">Actividad #{{bookI + 1 }}</mat-card-title>
       </div>
       <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
         <div style="width: 100%;">

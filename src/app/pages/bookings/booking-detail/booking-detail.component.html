@@ -1,4 +1,4 @@
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete">
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="!loading">
   <div class="flex flex-col sm:flex-row gap-4">
     <div class="column-container">
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
@@ -7,11 +7,6 @@
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
-            <div class="flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="bookingComplete = false">Atras</button>
-
-              <!-- Added (click) event here -->
-            </div>
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>

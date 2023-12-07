@@ -31,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AddReductionModalModule } from './add-reduction/add-reduction.module';
 import { AddDiscountBonusModalModule } from './add-discount-bonus/add-discount-bonus.module';
 import { ClientsCreateUpdateModalModule } from '../../clients/client-create-update-modal/client-create-update-modal.module';
+import { AddClientSportModalModule } from '../add-client-sport/add-client-sport.module';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -78,7 +79,8 @@ export const MY_DATE_FORMATS = {
     MatProgressSpinnerModule,
     AddReductionModalModule,
     AddDiscountBonusModalModule,
-    ClientsCreateUpdateModalModule
+    ClientsCreateUpdateModalModule,
+    AddClientSportModalModule
   ],
   declarations: [BookingsCreateUpdateComponent],
   exports: [BookingsCreateUpdateComponent],

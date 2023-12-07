@@ -18,11 +18,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
 import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'vex-booking-detail',
   templateUrl: './booking-detail.component.html',
-  styleUrls: ['./booking-detail.component.scss']
+  styleUrls: ['./booking-detail.component.scss'],
+  animations: [stagger20ms, fadeInUp400ms]
 })
 export class BookingDetailComponent implements OnInit {
 
@@ -167,6 +169,7 @@ export class BookingDetailComponent implements OnInit {
   school = [];
   settings: any = [];
   user: any;
+  id: any;
   selectedForfait = null;
   mainIdSelected = true;
   detailClient: any;
@@ -174,10 +177,10 @@ export class BookingDetailComponent implements OnInit {
   finalPrice: any = null;
   bonus: any = null;
   totalPrice: any = 0;
-
+  booking: any;
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar) {
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -191,21 +194,21 @@ export class BookingDetailComponent implements OnInit {
 
   getData() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.id = this.activatedRoute.snapshot.params.id;
 
-    this.form = this.fb.group({
-      sportType: [1], // Posiblemente establezcas un valor predeterminado aquí
-      sportForm: [null],
-      courseType: ['collectif'],
-      sport: [null],
-      observations: [null],
-      observations_school: [null],
-      fromDate: [null],
-      periodUnique: [false],
-      periodMultiple: [false],
-      sameMonitor: [false]
-    });
+    this.crudService.get('/bookings/'+this.id)
+      .subscribe((data) => {
+        this.booking = data.data;
 
-    this.getSports();
+        this.crudService.list('/booking-users', 1, 1000, null, null, '&booking_id='+this.id)
+          .subscribe((bookingUser) => {
+            console.log(bookingUser);
+            this.loading = false;
+          })
+
+      })
+
+    /*this.getSports();
     this.getMonitors();
     this.getSeason();
     this.getSchool();
@@ -256,7 +259,7 @@ export class BookingDetailComponent implements OnInit {
 
             }, 500);
           }, 500);
-      })
+      })*/
   }
 
   generateArray(paxes: number) {

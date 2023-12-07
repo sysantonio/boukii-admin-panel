@@ -22,6 +22,7 @@ import { AddClientUserModalComponent } from '../../clients/add-client-user/add-c
 import { PasswordService } from 'src/service/password.service';
 import { ClientCreateUpdateModalComponent } from '../../clients/client-create-update-modal/client-create-update-modal.component';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
+import { AddClientSportModalComponent } from '../add-client-sport/add-client-sport.component';
 
 @Component({
   selector: 'custom-header',
@@ -220,8 +221,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
+  loadingUtilizers: boolean = true;
   loadingCalendar: boolean = true;
   sportTypeSelected: number = 1;
+  selectedSport: any = null;
 
   bookings = [];
   bookingsToCreate = [];
@@ -240,12 +243,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
   user: any;
   selectedForfait = null;
   mainIdSelected = true;
-  detailClient: any;
   reduction: any = null;
   finalPrice: any = null;
   bonus: any = null;
   totalPrice: any = 0;
   countries = MOCK_COUNTRIES;
+  snackBarRef: any = null;
 
   private subscription: Subscription;
 
@@ -286,7 +289,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
       .subscribe((data: any) => {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
-        this.detailClient = this.clients[0];
 
 
         this.filterSportsByType();
@@ -368,8 +370,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
 
     if (!hasSport) {
-      this.courses = [];
-      this.snackbar.open('El usuario no tiene este deporte asociado', 'OK', {duration:3000});
+      this.snackbar.open('El usuario no tiene este deporte asociado. Si se crea una reserva con este deporte, se le asignará automáticamente el nivel seleccionado', 'OK', {duration:3000});
     }
   }
 
@@ -392,7 +393,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.courseDates.push({
         school_id: this.user.schools[0].id,
         booking_id: null,
-        client_id: this.detailClient.id,
+        client_id: this.defaultsBookingUser.client_id,
         course_subgroup_id: null,
         course_id: item.id,
         hour_start: null,
@@ -416,7 +417,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.courseDates.push({
       school_id: this.user.schools[0].id,
       booking_id: null,
-      client_id: this.detailClient.id,
+      client_id: this.defaultsBookingUser.client_id,
       course_subgroup_id: null,
       course_id: this.selectedItem.id,
       hour_start: null,
@@ -469,7 +470,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.periodMultiple = false;
     this.periodUnique = true;
     this.sameMonitor = false;
-    this.getData();
   }
 
   confirmBooking() {
@@ -576,6 +576,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       this.bookingsToCreate.push(data);
       this.showDetail = this.bookingsToCreate.length - 1;
+      this.clientsForm.disable();
   }
 
   save() {
@@ -593,7 +594,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.bookingsToCreate.forEach(element => {
       element.courseDates.forEach(cs => {
         courseDates.push(cs);
-
       });
 
       let paxes = 0;
@@ -613,6 +613,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         payment_method_id: element.payment_method_id
       }
     });
+
 
       this.crudService.create('/bookings', data)
       .subscribe((booking) => {
@@ -764,9 +765,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   selectMainUser(user: any) {
     this.defaultsBookingUser.client_id = user.id;
-    this.detailClient = this.clients.find((c) => c.id === user.id);
+    const client = this.clients.find((c) => c.id === user.id);
 
-    this.detailClient.sports.forEach(sport => {
+    client.sports.forEach(sport => {
 
       if (sport.id === this.defaults.sport_id) {
         const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
@@ -781,9 +782,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.mainIdSelected = false;
     this.borderActive = index;
     this.defaultsBookingUser.client_id = utilizer.id;
-    this.detailClient = this.clients.find((c) => c.id === utilizer.id);
+    const client = this.clients.find((c) => c.id === utilizer.id);
 
-    this.detailClient.sports.forEach(sport => {
+    client.sports.forEach(sport => {
 
       if (sport.id === this.defaults.sport_id) {
         const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
@@ -799,7 +800,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+1);/*
+    return this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -833,8 +834,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   selectSport(sport: any) {
+    if(this.snackBarRef!==null) {
+
+      this.snackBarRef.dismiss();
+    }
     this.defaults.sport_id = sport.sport_id;
     this.form.get("sport").patchValue(sport.sport_id);
+    this.selectedSport = sport;
     this.getDegrees(sport.sport_id);
   }
 
@@ -860,37 +866,80 @@ export class BookingsCreateUpdateComponent implements OnInit {
           }
         });
 
-        if (!hasSport) {
+        if (!hasSport && client.sports.length === 0) {
+          this.addSportToUser();
+        } else if(!hasSport && client.sports.length > 0) {
           this.courses = [];
-          this.snackbar.open('El usuario no tiene este deporte asociado', 'OK', {duration:3000});
+          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef.onAction().subscribe(() => {
+            this.addSportToUser(this.selectedSport.sport_id);
+          });
         }
       })
   }
 
+
+  addSportToUser(sportId = null) {
+
+    const dialogRef = this.dialog.open(AddClientSportModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {sport_id: sportId, title: 'Assign sport'}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        data.data.forEach(element => {
+
+          this.crudService.create('/client-sports', {client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+            .subscribe(() => {
+              console.log('client sport created');
+              this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+                .subscribe((cl) => {
+                  this.clients = cl.data;
+                  const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+                  client.sports.forEach(sport => {
+                    if (sport.id === this.defaults.sport_id) {
+                      const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+                      this.levelForm.patchValue(level);
+                      this.defaultsBookingUser.degree_id = level.id;
+                      this.getCourses(level, this.monthAndYear);
+                    }
+                  });
+                })
+            })
+        });
+      }
+    });
+  }
   getUtilzers(client: any, onLoad = false) {
+    this.loadingUtilizers = true;
     this.utilizers = [];
+    this.mainIdSelected = true;
+    this.borderActive = -1;
     this.defaultsBookingUser.client_id = client.id;
 
     this.crudService.get('/admin/clients/' + client.id +'/utilizers')
       .subscribe((data: any) => {
         this.utilizers = data.data;
+        if (!onLoad) {
+          client.sports.forEach(sport => {
+            if (sport.id === this.defaults.sport_id) {
+              const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+              this.levelForm.patchValue(level);
+              this.defaultsBookingUser.degree_id = level.id;
+              this.clientsForm.patchValue(client);
+              this.getCourses(level, this.monthAndYear);
+            }
+          });
+        }
+
+        this.getDegrees(this.defaults.sport_id);
+        this.loadingUtilizers = false
       });
 
-      if (!onLoad) {
 
-        let hasSport = false;
-        client.sports.forEach(sport => {
-          if (sport.id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
-            this.levelForm.patchValue(level);
-            this.defaultsBookingUser.degree_id = level.id;
-            this.getCourses(level, this.monthAndYear);
-            hasSport = true;
-          }
-        });
-      }
-
-      this.getDegrees(this.defaults.sport_id);
   }
 
   getCourses(level: any, date: any, fromPrivate = false) {
@@ -923,7 +972,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
       degree_id: level.id,
-      get_lower_degrees: true
+      get_lower_degrees: false
     };
 
     this.crudService.post('/availability', rq)
@@ -1246,6 +1295,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       if (data) {
 
         this.bookingsToCreate.splice(index, 1);
+
+        if(this.bookingsToCreate.length === 0) {
+          this.clientsForm.enable();
+        }
       }
     });
   }
@@ -1420,7 +1473,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
             user_id: null,
             station_id: this.defaults.client_main_id.station_id
           }
-          const sportData = this.defaults.client_main_id.sports;
 
           this.setLanguages(data.data.languages, client);
 
@@ -1434,20 +1486,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
                 this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
                   .subscribe((clientSchool) => {
-                    sportData.forEach(sport => {
 
-                      this.crudService.create('/client-sports', {client_id: clientCreated.data.id, sport_id: sport.id, degree_id: sport.pivot.degree_id, school_id: this.user.schools[0].id})
-                        .subscribe(() => {
-                          console.log('client sport created');
-                        })
-                    });
+                    setTimeout(() => {
+                      this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
+                      .subscribe((res) => {
+                        this.getUtilzers(this.defaults.client_main_id, true);
+                      })}, 1000);
                   });
 
-                  setTimeout(() => {
-                    this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
-                    .subscribe((res) => {
-                      this.getUtilzers(this.defaults.client_main_id, true);
-                    })}, 1000);
               })
           })
         }
