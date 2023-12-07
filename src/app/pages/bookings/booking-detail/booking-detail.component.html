@@ -1,0 +1,302 @@
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete">
+  <div class="flex flex-col sm:flex-row gap-4">
+    <div class="column-container">
+      <!-- Aquí añade tu otro contenedor o lo que necesites -->
+      <div class="card-container">
+        <!-- Nuevo contenedor para las cards -->
+        <div @fadeInUp class="card flex-auto" style="padding: 1px;">
+          <div class="px-6 py-4 border-b flex items-center">
+            <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
+            <div class="flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="bookingComplete = false">Atras</button>
+
+              <!-- Added (click) event here -->
+            </div>
+          </div>
+          <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
+            <div>
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
+              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'non payé' | uppercase }}</p>
+            </div>
+
+            <mat-card-header>
+
+              <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI)">
+                <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+              <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
+              <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
+              <mat-card-subtitle>FR · Switzerland · 43 ans</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-divider class="text-border"></mat-divider>
+            <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Course</p>
+
+            <mat-card-header>
+              <div mat-card-avatar [style.background-image]="'url(' + imagePath + ')'" style="border-radius: 5px"></div>
+              <mat-card-title class="mat-mdc-card-title">
+                <div style="float: left;width: 70%;font-size: 14px;"> {{item.courseDates[0].course?.name}} </div>
+                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{item.courseDates[0].course?.price}} {{item.courseDates[0].course?.currency}} </div>
+            </mat-card-title>
+              <mat-card-subtitle style="margin: 0">{{item.courseDates[0].course?.course_type === 1 ? 'collectif' : 'privee'}} {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <ul style="font-size: 12px;padding: 0 0 0 18%;">
+                <li *ngFor="let date of item.courseDates">
+                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }}
+                </li>
+              </ul>
+              <div style="float: left;width: 100%;" *ngIf="item.client_main_id !== item.courseDates[0].client_id">
+                <div class="user-info">
+                  <img [src]="getClientAvatar(item.courseDates[0].client_id)" alt="Avatar de usuario" class="user-avatar" />
+                  <span>{{ getClientName(item.courseDates[0].client_id) }}</span>
+                </div>
+              </div>
+              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
+
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Opciones</p>
+
+              <div style="width: 100%; float:left">
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <strong>Forfait</strong>
+                    </div>
+
+                    <div>
+                      <p> +{{selectedForfait && selectedForfait !== null ? selectedForfait.price :0}} CHF</p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <ul>
+                      <li *ngFor="let forfait of settings.extras.forfait">
+                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait)" [checked]="selectedForfait?.id === forfait.id">
+                            <span>{{forfait.id}}</span>
+                          </mat-checkbox>
+                      </li>
+
+                    </ul>
+                  </div>
+                </div>
+
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div class="flex-auto">
+                      <mat-checkbox color="accent" [checked]="false">Media Jornada</mat-checkbox>
+                    </div>
+                    <div class="flex-auto">
+                      <mat-checkbox color="accent" [checked]="false">Jornada completa</mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Comida</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;" *ngIf="false">
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Transporte</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="width: 100%;float:left; margin-top: 10px">
+                <div>
+                  <p style="width: 60%;float: left;">Total Opciones</p>
+                  <p style="color: #EA0C60;">{{selectedForfait && selectedForfait !== null ? selectedForfait.price : 0}} CHF</p>
+                </div>
+              </div>
+
+              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
+
+              <div style="width: 100%;float:left;">
+
+                <div>
+                  <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
+                  <p style="color: #EA0C60;">{{item.price_total + (selectedForfait && selectedForfait !== null ? selectedForfait.price : 0)}}{{item.currency}}</p>
+                </div>
+              </div>
+              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
+
+              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Remarques client</mat-label>
+                    <input matInput required type="text" (blur)="setClientsNotes($event)">
+
+                  </mat-form-field>
+
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Remarques ecole</mat-label>
+                    <input  matInput required type="text" (blur)="setSchoolNotes($event)">
+
+                  </mat-form-field>
+
+                </div>
+
+              </div>
+              <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
+              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
+                <p style="font-size: 12px;"><strong>Enregistrée</strong>:{{ minDate | date: 'dd/MM/YYYY'}} {{ minDate | date: 'HH:mm'}} / Mirko Maternini</p>
+                <p style="font-size: 12px;"><strong>Desde donde:</strong>: Admin</p>
+                <p style="font-size: 12px;"><strong>Por</strong>: Mirko Maternini</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="column-container">
+      <div class="card-container">
+        <div @fadeInUp class="card flex-auto" style="padding: 1%">
+          <div class="px-6 py-4 border-b flex items-center">
+            <h2 class="title m-0">Information del moniteur</h2>
+          </div>
+          <mat-card style="width: 100%;padding:1%">
+            <mat-card-header>
+              <div mat-card-avatar [style.background-image]="'url(' + userAvatar + ')'"></div>
+              <mat-card-title>{{ titleMoniteur }}</mat-card-title>
+              <mat-card-subtitle>
+                <button mat-icon-button color="primary">
+                  <mat-icon svgIcon="mat:chat"></mat-icon>
+                </button>
+                <button mat-icon-button color="accent">
+                  <mat-icon svgIcon="mat:phone"></mat-icon>
+                </button>
+                <button mat-icon-button color="warn">
+                  <mat-icon svgIcon="mat:mail"></mat-icon>
+                </button>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <button mat-raised-button color="accent" (click)="addReduction()">Appliquer une réduction</button>
+            <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <button mat-raised-button color="accent" (click)="addBonus()">Utiliziser un bon d'achat</button>
+            <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <div style="float: left;width: 100%;">
+              <p style="float: left;">Option Remboursement (10%)</p>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" (change)="calculateRem($event)" style="float: right;"></mat-slide-toggle>
+            </div>
+            <div style="float: left;width: 100%;">
+              <p style="float: left;">Boukii Care</p>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care" (change)="($event)" style="float: right;"></mat-slide-toggle>
+            </div>
+            <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <h3 style="font-size: 1.5rem!important;">Résumé</h3>
+            <div class="opaque-box">
+              <span style="width: 100%; float:left">
+                <p style="float:left">SOUS-TOTAL</p>
+                <p style="float:right">{{getBasePrice()}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="reduction !== null">
+                <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="reduction = null"></mat-icon>
+                <p style="float:left">Reduction</p>
+                <p style="float:right">-{{calculateReduction()}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="bonus !== null">
+                <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="bonus = null"></mat-icon>
+                <p style="float:left">Bonus</p>
+                <p style="float:right">-{{calculateBonusDiscount()}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="selectedForfait && selectedForfait !== null">
+                <p style="float:left">Forfait</p>
+                <p style="float:right">{{selectedForfait.price}}{{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="defaults.has_cancellation_insurance">
+                <p style="float:left">Option Remboursement</p>
+                <p style="float:right">{{getBasePrice()*0.10}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="defaults.has_boukii_care">
+                <p style="float:left">Boukii Care</p>
+                <p style="float:right">{{getBasePrice()*0.10}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left">
+                <p style="float:left">TVA</p>
+                <p style="float:right">{{ (finalPrice
+                  - (this.reduction !== null ? this.calculateReduction() : 0) - (this.bonus !== null ? calculateBonusDiscount() : 0)
+                  + (opRem + boukiiCare + this.selectedForfait ? selectedForfait.price : 0)) * 0.21 }} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left">
+                <p style="float:left">MONTANT TOTAL</p>
+                <p style="float:right">{{ (finalPrice
+                  - (this.reduction !== null ? this.calculateReduction() : 0) - (this.bonus !== null ? calculateBonusDiscount() : 0)
+                  + (opRem + boukiiCare + this.selectedForfait ? selectedForfait.price : 0) + (finalPrice*0.21)) }}
+                 {{bookingsToCreate[0].currency}}</p>
+              </span>
+            </div>
+
+            <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <div class="square-buttons-container">
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">Online</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">Confirmer sans paiment</button>
+            </div>
+            <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <div class="square-buttons-container" *ngIf="selectedButton==='1'">
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">Cash</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 3" [class.selected]="selectedSubButton==='2'">Autre</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
+            </div>
+            <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
+              <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" style="float: right;"></mat-slide-toggle>
+            </div>
+            <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+            <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
+              <button mat-raised-button color="accent" class="square-button" (click)="create()">Confirmer Reservation</button>
+            </div>
+            <div class="square-buttons-container" *ngIf="selectedButton==='2'">
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirm by email</button>
+            </div>
+            <div class="square-buttons-container" *ngIf="selectedButton==='3'">
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirmer reservation</button>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

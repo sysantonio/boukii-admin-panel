@@ -159,6 +159,9 @@
                       {{course.date_start | date: 'dd-MM-YYYY'}} - {{course.date_end | date: 'dd-MM-YYYY'}}
                     </p>
                     <p>
+                      {{getAvailableWeekDays(course.settings)}}
+                    </p>
+                    <p>
                       {{course.duration}}
                     </p>
                   </div>
@@ -304,7 +307,7 @@
                       <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
 
 
-                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;"  *ngIf="getLevelOrder(subgroup.degree_id) >= levelForm.value.degree_order"
+                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngIf="getLevelOrder(subgroup.degree_id) <= levelForm.value.degree_order"
                           (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
                           <div style="float: left;width: 50%;">
 
@@ -361,7 +364,7 @@
   <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}" *ngIf="!loading && !bookingComplete">
     <mat-card-header style="display:block">
       <div style="width: 100%;float: left;">
-        <mat-icon svgIcon="mat:close"></mat-icon>
+        <mat-icon svgIcon="mat:close" (click)="deleteBooking(bookI)" style="color:red; cursor:pointer"></mat-icon>
         <mat-icon svgIcon="mat:expand_more" *ngIf="showDetail !== bookI" style="float:right" (click)="showDetailFn(bookI)"></mat-icon>
         <mat-icon svgIcon="mat:expand_less" *ngIf="showDetail === bookI" style="float:right" (click)="showDetailFn(null)"></mat-icon>
 
@@ -405,7 +408,8 @@
         <div style="float: left; width: 100%;" *ngFor="let courseDate of item.courseDates; let courseDateIndex = index" [ngStyle]="{'margin-top': courseDateIndex > 0 ? '5%' : '0'}">
           <div style="float: left; width: 50%;">
             <div style="float: left; width: 100%;">
-              <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+              <div *ngIf="courseDate.course.course_type === 2" style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+              <div *ngIf="courseDate.course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
 
               <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
                 <strong>{{ courseDate.course?.name}}</strong>
@@ -419,12 +423,13 @@
               <ul>
                 <ng-container *ngIf="courseDate.course?.is_flexible">
                   <li *ngFor="let courseDateDate of item.courseDates">
-                    {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{ courseDateDate.hour_end }}h</i>
+                    {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDate?.course?.course_type === 1 ? courseDate?.hour_end : calculateHourEnd(courseDate?.hour_start, courseDate?.course?.duration)}}</i>
                   </li>
                 </ng-container>
                 <ng-container *ngIf="!courseDate.course?.is_flexible">
                   <li>
-                    {{ courseDate.course?.date_start | date: 'dd/MM/YYYY'}}<i style="float: right;">{{courseDate.course?.hour_start}} - {{courseDate.course?.hour_start}}h</i>
+                    {{ courseDate?.date | date: 'dd/MM/YYYY'}}<i style="float: right;">
+                      {{courseDate?.hour_start}} - {{courseDate?.course?.course_type === 1 ? courseDate?.hour_end : calculateHourEnd(courseDate?.hour_start, courseDate?.course?.duration)}}h</i>
                   </li>
                 </ng-container>
               </ul>
@@ -435,7 +440,7 @@
               </div>
               <div style="float: left; width: 80%;">
                 <p>{{getMonitorName(courseDate.monitor_id) || 'no monitor asigned'}}</p>
-                <p style="font-size:8px"><i>FR · Switzerland · 39 ans</i></p>
+                <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>FR · Switzerland · 39 ans</i></p>
               </div>
 
             </div>
@@ -445,15 +450,16 @@
               </div>
 
             </div>
-            <div style="float: left; width: 200%;" *ngIf="false">
-              <div style="float: left; width: 50%;">
-                <mat-slide-toggle></mat-slide-toggle> Op. Rem (10%)
-              </div>
-              <div style="float: left; width: 50%;">
-                <mat-slide-toggle></mat-slide-toggle> Boukii Care (3 CHF)
-              </div>
+
+          </div><!--
+          <div style="float: left; width: 100%;margin: 5% 0 0 0;">
+            <div style="float: left; width: 50%;">
+              <mat-slide-toggle [(ngModel)]="item.has_cancellation_insurance" (change)="setReemToItem($event, item)"></mat-slide-toggle> Op. Rem (10%)
             </div>
-          </div>
+            <div style="float: left; width: 50%;">
+              <mat-slide-toggle [(ngModel)]="item.has_boukii_care" (change)="setBoukiiCareToItem($event, item)"></mat-slide-toggle> Boukii Care
+            </div>
+          </div>-->
           <div style="float: left; width: 50%;" *ngIf="false">
             <div style="float: left; width: 100%;">
               <mat-slide-toggle></mat-slide-toggle> Alquiler material
@@ -475,38 +481,38 @@
 
         </div>
         <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+
+          <!--<div style="float: left; width: 25%;">
+            <p><strong>{{item.price_cancellation_insurance}}{{item.currency}}</strong></p>
+          </div>
+          <div style="float: left; width: 25%;">
+            <p>{{item.price_boukii_care}}{{item.currency}}</p>
+          </div>-->
           <div style="float: left; width: 50%;">
-            <p>198.00 CHF</p>
+            <p>Course Price</p>
           </div>
-          <div style="float: left; width: 25%;">
-            <p>151.00 CHF</p>
-          </div>
-          <div style="float: left; width: 25%;">
-            <p><strong>439.00 CHF</strong></p>
+          <div style="float: right; width: 50%;">
+            <p><strong>{{item.price_total}}{{item.currency}}</strong></p>
           </div>
         </div>
-        <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF">
+        <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF" *ngIf="false">
 
           <div style="text-align: left;width: 50%;float:left">
             <ul>
               <li>{{'sous total' | uppercase}}</li>
-              <li>{{'remise' | uppercase}}</li>
-              <li>{{'Option Rembousement (10%)'}}</li>
-              <li>{{'Boukii Care'}}</li>
-              <li>{{'Bon'}}</li>
+              <!--<li>{{'Option Rembousement (10%)'}}</li>
+              <li>{{'Boukii Care'}}</li>-->
               <li>{{'TVA'}}</li>
               <li><strong>{{'Montant total' | uppercase}}</strong></li>
             </ul>
           </div>
           <div style="text-align: right;width: 50%;float:left">
             <ul>
-              <li>400 CHF</li>
-              <li>-50 CHF</li>
-              <li>18 CHF</li>
-              <li>3 CHF</li>
-              <li>-72 CHF</li>
-              <li>- CHF</li>
-              <li><strong>370 CHF</strong></li>
+              <li>{{item.price_total}}{{item.currency}}</li>
+             <!-- <li>{{item.price_cancellation_insurance}}{{item.currency}}</li>
+              <li>{{item.price_boukii_care}}{{item.currency}}</li>-->
+              <li>{{item.price_total* (0.21)}} {{item.currency}}</li>
+              <li><strong>{{item.price_total + (item.price_total* (0.21)) + item.price_cancellation_insurance + item.price_boukii_care}} {{item.currency}}</strong></li>
             </ul>
           </div>
         </div>
@@ -526,7 +532,6 @@
 
 </div>
 
-
 <div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete">
   <div class="flex flex-col sm:flex-row gap-4">
     <div class="column-container">
@@ -542,15 +547,15 @@
               <!-- Added (click) event here -->
             </div>
           </div>
-          <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate">
+          <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
               <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
-              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'payment effectué' | uppercase }}</p>
+              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'non payé' | uppercase }}</p>
             </div>
 
             <mat-card-header>
 
-              <button mat-icon-button color="warn" class="delete-icon">
+              <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI)">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
@@ -599,13 +604,11 @@
 
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
-                      <mat-radio-group [(ngModel)]="selectedForfait">
-                        <li *ngFor="let forfait of settings.extras.forfait">
-                            <mat-radio-button class="radio" [value]="forfait">
-                              <span>{{forfait.id}}</span>
-                            </mat-radio-button>
-                        </li>
-                    </mat-radio-group>
+                      <li *ngFor="let forfait of settings.extras.forfait">
+                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait)" [checked]="selectedForfait?.id === forfait.id">
+                            <span>{{forfait.id}}</span>
+                          </mat-checkbox>
+                      </li>
 
                     </ul>
                   </div>
@@ -655,10 +658,10 @@
                   </div>
                 </div>
               </div>
-              <div style="width: 100%;float:left; margin-top: 10px" *ngIf="selectedForfait !== null">
+              <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
                   <p style="width: 60%;float: left;">Total Opciones</p>
-                  <p style="color: #EA0C60;">{{selectedForfait && selectedForfait !== null ? selectedForfait.price :0}} CHF</p>
+                  <p style="color: #EA0C60;">{{selectedForfait && selectedForfait !== null ? selectedForfait.price : 0}} CHF</p>
                 </div>
               </div>
 
@@ -668,7 +671,7 @@
 
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">{{item.courseDates[0].course?.price}} {{item.courseDates[0].course?.currency}}</p>
+                  <p style="color: #EA0C60;">{{item.price_total + (selectedForfait && selectedForfait !== null ? selectedForfait.price : 0)}}{{item.currency}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -679,7 +682,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques client</mat-label>
-                    <input formControlName="observations" matInput required type="text" (blur)="setClientsNotes($event)">
+                    <input matInput required type="text" (blur)="setClientsNotes($event)">
 
                   </mat-form-field>
 
@@ -689,7 +692,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques ecole</mat-label>
-                    <input formControlName="observations_school" matInput required type="text" (blur)="setSchoolNotes($event)">
+                    <input  matInput required type="text" (blur)="setSchoolNotes($event)">
 
                   </mat-form-field>
 
@@ -735,30 +738,69 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent">Appliquer une réduction</button>
+            <button mat-raised-button color="accent" (click)="addReduction()">Appliquer une réduction</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent">Utiliziser un bon d'achat</button>
+            <button mat-raised-button color="accent" (click)="addBonus()">Utiliziser un bon d'achat</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Option Remboursement (10%)</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" (change)="calculateRem($event)" style="float: right;"></mat-slide-toggle>
+            </div>
+            <div style="float: left;width: 100%;">
+              <p style="float: left;">Boukii Care</p>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care" (change)="($event)" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">Résumé</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
                 <p style="float:left">SOUS-TOTAL</p>
-                <p style="float:right">400 CHF</p>
+                <p style="float:right">{{getBasePrice()}} {{bookingsToCreate[0].currency}}</p>
               </span>
+
+              <span style="width: 100%; float:left" *ngIf="reduction !== null">
+                <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="reduction = null"></mat-icon>
+                <p style="float:left">Reduction</p>
+                <p style="float:right">-{{calculateReduction()}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="bonus !== null">
+                <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="bonus = null"></mat-icon>
+                <p style="float:left">Bonus</p>
+                <p style="float:right">-{{calculateBonusDiscount()}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="selectedForfait && selectedForfait !== null">
+                <p style="float:left">Forfait</p>
+                <p style="float:right">{{selectedForfait.price}}{{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="defaults.has_cancellation_insurance">
+                <p style="float:left">Option Remboursement</p>
+                <p style="float:right">{{getBasePrice()*0.10}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="defaults.has_boukii_care">
+                <p style="float:left">Boukii Care</p>
+                <p style="float:right">{{getBasePrice()*0.10}} {{bookingsToCreate[0].currency}}</p>
+              </span>
+
               <span style="width: 100%; float:left">
-                <p style="float:left">REMISE</p>
-                <p style="float:right">-50 CHF</p>
+                <p style="float:left">TVA</p>
+                <p style="float:right">{{ (finalPrice
+                  - (this.reduction !== null ? this.calculateReduction() : 0) - (this.bonus !== null ? calculateBonusDiscount() : 0)
+                  + (opRem + boukiiCare + this.selectedForfait ? selectedForfait.price : 0)) * 0.21 }} {{bookingsToCreate[0].currency}}</p>
               </span>
+
               <span style="width: 100%; float:left">
                 <p style="float:left">MONTANT TOTAL</p>
-                <p style="float:right">350 CHF</p>
+                <p style="float:right">{{ (finalPrice
+                  - (this.reduction !== null ? this.calculateReduction() : 0) - (this.bonus !== null ? calculateBonusDiscount() : 0)
+                  + (opRem + boukiiCare + this.selectedForfait ? selectedForfait.price : 0) + (finalPrice*0.21)) }}
+                 {{bookingsToCreate[0].currency}}</p>
               </span>
             </div>
+
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>

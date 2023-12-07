@@ -15,86 +15,19 @@ import * as moment from 'moment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CalendarService } from 'src/service/calendar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AddReductionModalComponent } from './add-reduction/add-reduction.component';
-import { AddDiscountBonusModalComponent } from './add-discount-bonus/add-discount-bonus.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
+import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
 
 @Component({
-  selector: 'custom-header',
-  template: `
-    <div class="custom-header">
-      <button mat-icon-button (click)="previousClicked()">
-        <span class="material-icons">chevron_left</span>
-      </button>
-      <button mat-icon-button (click)="nextClicked()">
-        <span class="material-icons">chevron_right</span>
-      </button>
-    </div>
-  `,
-  styles: [`
-    .custom-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  `]
+  selector: 'vex-booking-detail',
+  templateUrl: './booking-detail.component.html',
+  styleUrls: ['./booking-detail.component.scss']
 })
-export class CustomHeader {
-  constructor(
-    private calendar: MatCalendar<any>,
-    private dateAdapter: DateAdapter<any>,
-    private calendarService: CalendarService
-  ) {}
-
-  getFirstDayOfMonth(date: any): Date {
-    return this.dateAdapter.createDate(
-      this.dateAdapter.getYear(date),
-      this.dateAdapter.getMonth(date),
-      1
-    );
-  }
-
-  previousClicked() {
-    const newDate = this.dateAdapter.addCalendarMonths(this.calendar.activeDate, -1);
-    this.calendar.activeDate = newDate;
-    this.calendarService.notifyMonthChanged(this.getFirstDayOfMonth(newDate));
-  }
-
-  nextClicked() {
-    const newDate = this.dateAdapter.addCalendarMonths(this.calendar.activeDate, 1);
-    this.calendar.activeDate = newDate;
-    this.calendarService.notifyMonthChanged(this.getFirstDayOfMonth(newDate));
-  }
-}
-
-export class CustomDateAdapter extends NativeDateAdapter {
-  format(date: Date, displayFormat: Object): string {
-    if (displayFormat === 'input') {
-      let day = date.getDate();
-      let month = date.getMonth() + 1;
-      let year = date.getFullYear();
-      return `${this._to2digit(day)}/${this._to2digit(month)}/${year}`;
-    } else {
-      return date.toDateString();
-    }
-  }
-
-  private _to2digit(n: number) {
-    return ('00' + n).slice(-2);
-  }
-}
-
-@Component({
-  selector: 'vex-bookings-create-update',
-  templateUrl: './bookings-create-update.component.html',
-  styleUrls: ['./bookings-create-update.component.scss'],
-  animations: [fadeInUp400ms, stagger20ms]
-})
-export class BookingsCreateUpdateComponent implements OnInit {
+export class BookingDetailComponent implements OnInit {
 
   privateIcon = 'https://school.boukii.com/assets/icons/prive_ski2x.png';
   collectifIcon = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
-  customHeader = CustomHeader;
   @Input()
   public monthAndYear = new Date();
 

@@ -49,7 +49,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params.id;
 
-    if (this.id === null) {
+    if (!this.id || this.id === null) {
       this.mode = 'create';
     } else {
       this.mode = 'update';

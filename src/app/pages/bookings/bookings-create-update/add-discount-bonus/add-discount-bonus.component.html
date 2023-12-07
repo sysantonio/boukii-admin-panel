@@ -1,0 +1,31 @@
+<form >
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Aplicar reducción</h2>
+
+    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+      <mat-icon svgIcon="mat:more_vert"></mat-icon>
+    </button>-->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="text-border"></mat-divider>
+
+  <mat-dialog-content class="flex flex-col">
+
+    <div style="width:100%">
+      <mat-radio-group>
+        <mat-radio-button class="radio" *ngFor="let b of bonuses" [value]="b" (change)="bonus = b">
+          {{ b.code }} - Remaining Balance: {{ b.remaining_balance }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button color="primary" mat-flat-button [mat-dialog-close]="{bonus: bonus}">Confirmer</button>
+    <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+  </mat-dialog-actions>
+</form>

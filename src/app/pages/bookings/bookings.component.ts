@@ -13,7 +13,7 @@ export class BookingsComponent {
   imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
 
   createComponent = BookingsCreateUpdateComponent;
-  entity = 'bookings';
+  entity = '/bookings';
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Type', property: 'type', type: 'image', visible: true },

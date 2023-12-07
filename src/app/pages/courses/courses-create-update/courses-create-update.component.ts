@@ -648,7 +648,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         duration: this.defaults.duration,
         min_age: this.defaults.min_age,
         max_age: this.defaults.max_age,
-        course_dates: this.defaults.course_dates
+        course_dates: this.defaults.course_dates,
+        settings: JSON.stringify(this.defaults.settings)
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
@@ -677,8 +678,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         duration: this.defaults.duration,
         min_age: this.defaults.min_age,
         max_age: this.defaults.max_age,
-        course_dates: this.defaults.course_dates,
-        settings: null
+        course_dates: this.defaults.course_dates
 
       };
     }

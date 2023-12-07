@@ -9,7 +9,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { BookingsCreateUpdateComponent, CustomDateAdapter } from './bookings-create-update.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-clients-group/widget-clients-group.module';
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
@@ -28,8 +27,10 @@ import { BookingsCreateUpdateModalModule } from '../bookings-create-update-modal
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DateAdapter } from 'angular-calendar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AddReductionModalModule } from './add-reduction/add-reduction.module';
-import { AddDiscountBonusModalModule } from './add-discount-bonus/add-discount-bonus.module';
+import { AddReductionModalModule } from '../bookings-create-update/add-reduction/add-reduction.module';
+import { AddDiscountBonusModalModule } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.module';
+import { BookingDetailComponent } from './booking-detail.component';
+import { CustomDateAdapter } from '../bookings-create-update/bookings-create-update.component';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -78,11 +79,11 @@ export const MY_DATE_FORMATS = {
     AddReductionModalModule,
     AddDiscountBonusModalModule
   ],
-  declarations: [BookingsCreateUpdateComponent],
-  exports: [BookingsCreateUpdateComponent],
+  declarations: [BookingDetailComponent],
+  exports: [BookingDetailComponent],
   providers: [
     { provide: DateAdapter, useClass: CustomDateAdapter }
   ],
 })
-export class BookingsCreateUpdateModule {
+export class BookingDetailModule {
 }
