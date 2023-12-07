@@ -18,6 +18,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddReductionModalComponent } from './add-reduction/add-reduction.component';
 import { AddDiscountBonusModalComponent } from './add-discount-bonus/add-discount-bonus.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { AddClientUserModalComponent } from '../../clients/add-client-user/add-client-user.component';
+import { PasswordService } from 'src/service/password.service';
 
 @Component({
   selector: 'custom-header',
@@ -244,7 +246,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar) {
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar, private passwordGen: PasswordService) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -1309,6 +1311,114 @@ export class BookingsCreateUpdateComponent implements OnInit {
       item.has_boukii_care = event.source.checked;
       item.price_boukii_care = 0;
 
+    }
+  }
+
+
+  addUtilisateur() {
+
+    this.crudService.delete('/users', 37).subscribe(() => {console.log('ok')})
+    const dialogRef = this.dialog.open(AddClientUserModalComponent, {
+      width: '600px',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {id: this.user.schools[0].id}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        if(data.action === 'add') {
+          this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.defaults.client_main_id.id})
+          .subscribe((res) => {
+            this.getUtilzers(this.defaults.client_main_id, true);
+          })
+        } else {
+          const user = {
+            username: data.data.name,
+            email: this.defaults.client_main_id.email,
+            password: this.passwordGen.generateRandomPassword(12),
+            image: null,
+            type: 'client',
+            active: true,
+          }
+
+          const client = {
+            email: this.defaults.client_main_id.email,
+            first_name: data.data.name,
+            last_name: data.data.surname,
+            birth_date: moment(data.data.fromDate).format('YYYY-MM-DD'),
+            phone: this.defaults.client_main_id.phone,
+            telephone: this.defaults.client_main_id.telephone,
+            address: this.defaults.client_main_id.address,
+            cp: this.defaults.client_main_id.cp,
+            city: this.defaults.client_main_id.city,
+            province: this.defaults.client_main_id.province,
+            country: this.defaults.client_main_id.country,
+            image: null,
+            language1_id:null,
+            language2_id:null,
+            language3_id:null,
+            language4_id:null,
+            language5_id:null,
+            language6_id:null,
+            user_id: null,
+            station_id: this.defaults.client_main_id.station_id
+          }
+          const sportData = this.defaults.client_main_id.sports;
+
+          this.setLanguages(data.data.languages, client);
+
+          this.crudService.create('/users', user)
+          .subscribe((user) => {
+            this.defaults.user_id = user.data.id;
+
+            this.crudService.create('/clients', client)
+              .subscribe((clientCreated) => {
+                this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+
+                this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
+                  .subscribe((clientSchool) => {
+                    sportData.forEach(sport => {
+
+                      this.crudService.create('/client-sports', {client_id: clientCreated.data.id, sport_id: sport.id, degree_id: sport.pivot.degree_id, school_id: this.user.schools[0].id})
+                        .subscribe(() => {
+                          console.log('client sport created');
+                        })
+                    });
+                  });
+
+                  setTimeout(() => {
+                    this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
+                    .subscribe((res) => {
+                      this.getUtilzers(this.defaults.client_main_id, true);
+                    })}, 1000);
+              })
+          })
+        }
+      }
+    });
+
+  }
+
+  setLanguages(langs: any, dataToModify: any) {
+    if (langs.length >= 1) {
+
+      dataToModify.language1_id = langs[0].id;
+    } if (langs.length >= 2) {
+
+      dataToModify.language2_id = langs[1].id;
+    } if (langs.length >= 3) {
+
+      dataToModify.language3_id = langs[2].id;
+    } if (langs.length >= 4) {
+
+      dataToModify.language4_id = langs[3].id;
+    } if (langs.length >= 5) {
+
+      dataToModify.language5_id = langs[4].id;
+    } if (langs.length === 6) {
+
+      dataToModify.language6_id = langs[5].id;
     }
   }
 }

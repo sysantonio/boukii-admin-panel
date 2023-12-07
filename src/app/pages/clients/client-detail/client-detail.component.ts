@@ -17,6 +17,8 @@ import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dia
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AddClientUserModalComponent } from '../add-client-user/add-client-user.component';
+import moment from 'moment';
+import { PasswordService } from 'src/service/password.service';
 
 
 @Component({
@@ -139,7 +141,7 @@ displayedColumns: string[] = ['name', 'date'];
   mainId: any;
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-     private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog) {
+     private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -684,8 +686,9 @@ displayedColumns: string[] = ['name', 'date'];
 
   addUtilisateur() {
 
+    this.crudService.delete('/users', 37).subscribe(() => {console.log('ok')})
     const dialogRef = this.dialog.open(AddClientUserModalComponent, {
-      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      width: '600px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
       data: {id: this.user.schools[0].id}
     });
@@ -693,12 +696,98 @@ displayedColumns: string[] = ['name', 'date'];
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.id})
+        if(data.action === 'add') {
+          this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.id})
           .subscribe((res) => {
             this.getClientUtilisateurs();
           })
+        } else {
+          const user = {
+            username: data.data.name,
+            email: this.defaults.email,
+            password: this.passwordGen.generateRandomPassword(12),
+            image: null,
+            type: 'client',
+            active: true,
+          }
+
+          const client = {
+            email: this.defaults.email,
+            first_name: data.data.name,
+            last_name: data.data.surname,
+            birth_date: moment(data.data.fromDate).format('YYYY-MM-DD'),
+            phone: this.defaults.phone,
+            telephone: this.defaults.telephone,
+            address: this.defaults.address,
+            cp: this.defaults.cp,
+            city: this.defaults.city,
+            province: this.defaults.province,
+            country: this.defaults.country,
+            image: null,
+            language1_id:null,
+            language2_id:null,
+            language3_id:null,
+            language4_id:null,
+            language5_id:null,
+            language6_id:null,
+            user_id: null,
+            station_id: this.defaults.station_id
+          }
+          const sportData = this.sportsCurrentData.data;
+
+          this.setLanguagesUtilizateur(data.data.languages, client);
+
+          this.crudService.create('/users', user)
+          .subscribe((user) => {
+            this.defaults.user_id = user.data.id;
+
+            this.crudService.create('/clients', client)
+              .subscribe((clientCreated) => {
+                this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+
+                this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
+                  .subscribe((clientSchool) => {
+                    sportData.forEach(sport => {
+
+                      this.crudService.create('/client-sports', {client_id: clientCreated.data.id, sport_id: sport.id, degree_id: sport.pivot.degree_id, school_id: this.user.schools[0].id})
+                        .subscribe(() => {
+                          console.log('client sport created');
+                        })
+                    });
+                  });
+
+                  setTimeout(() => {
+                    this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
+                    .subscribe((res) => {
+                      this.getClientUtilisateurs();
+                    })}, 1000);
+              })
+          })
+        }
       }
     });
 
+  }
+
+  setLanguagesUtilizateur(langs: any, dataToModify: any) {
+    if (langs.length >= 1) {
+
+      dataToModify.language1_id = langs[0].id;
+    } if (langs.length >= 2) {
+
+      dataToModify.language2_id = langs[1].id;
+    } if (langs.length >= 3) {
+
+      dataToModify.language3_id = langs[2].id;
+    } if (langs.length >= 4) {
+
+      dataToModify.language4_id = langs[3].id;
+    } if (langs.length >= 5) {
+
+      dataToModify.language5_id = langs[4].id;
+    } if (langs.length === 6) {
+
+      dataToModify.language6_id = langs[5].id;
+    }
   }
 }

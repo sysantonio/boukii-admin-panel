@@ -69,4 +69,5 @@ export class AuthService extends ApiService {
   isLoggedIn() {
     return this.user !== null;
   }
+
 }
