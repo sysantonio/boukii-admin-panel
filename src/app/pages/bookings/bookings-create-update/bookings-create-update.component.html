@@ -135,7 +135,8 @@
           <mat-spinner *ngIf="loadingCalendar"></mat-spinner>
           <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
 
-            <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate" (dateChange)="emitDateChange($event)">
+            <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate"
+              (dateChange)="emitDateChange($event)" (dateInput)="emitDateChange($event, true)">
             <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
             <mat-datepicker #pickerDateFrom [startAt]="selectedDatePrivate" [calendarHeaderComponent]="customHeader" (monthSelected)="monthChanged($event, pickerDateFrom)" [dateClass]="privateDateClass()"
               ></mat-datepicker>
@@ -154,8 +155,11 @@
                   <div class="content-container">
                     <div class="title-container">
                       <h3 class="title" style="width: 70%;float: left;">{{ course.name | uppercase}}</h3>
-                      <h3 class="price">
+                      <h3 class="price" *ngIf="!course.is_flexible">
                         {{course.price}} {{ course.currency }}
+                      </h3>
+                      <h3 class="price" *ngIf="course.is_flexible">
+                        FLEXIBLE
                       </h3>
                     </div>
                     <p>{{course.course_type === 1 ? 'collectif' : 'privee'}} {{course.sport.name}}</p>
@@ -208,9 +212,10 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Hora</mat-label>
-                    <mat-select >
-                      <mat-option *ngFor="let time of times" [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
-                        (onSelectionChange)="courseDate.hour_start = time">{{ time }}</mat-option>
+                    <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration)">
+                      <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration)"
+                      [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
+                        (onSelectionChange)="courseDate.hour_start = time;">{{ time }}</mat-option>
                     </mat-select>
                   </mat-form-field>
 
@@ -218,18 +223,19 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="selectedItem.is_flexible">
 
-
                   <mat-form-field class="flex-auto">
                     <mat-label>Duración</mat-label>
-                    <mat-select >
+                    <mat-select (selectionChange)="calculateAvailablePaxes($event.value)" [disabled]="!courseDate.hour_start">
+                      <ng-container >
                       <mat-option *ngFor="let duration of durations" [value]="duration" (onSelectionChange)="courseDate.duration = duration">{{ duration }}</mat-option>
+                      </ng-container>
                     </mat-select>
                   </mat-form-field>
 
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
                     <mat-label>Personas</mat-label>
-                    <mat-select >
-                      <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person" >{{ person }}</mat-option>
+                    <mat-select [disabled]="!courseDate.duration">
+                      <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person">{{ person }}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>

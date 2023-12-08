@@ -82,8 +82,8 @@
                       <div style="width: 100%; float:left;">
                         <label for="holiday-{{i}}">Día festivo</label>
                         <mat-form-field style="width: 100%">
-                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)">
-                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)"  [value]="holiday">
+                          <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
                           <mat-datepicker #picker [startAt]="today"></mat-datepicker>
                         </mat-form-field>
                       </div>

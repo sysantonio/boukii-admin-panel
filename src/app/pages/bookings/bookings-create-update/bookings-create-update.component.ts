@@ -120,7 +120,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   usersCount = 5;
   duration = '3 horas';
   dates = ['03/11/2023', '04/11/2023', '05/11/2023']; // Ejemplo de fechas
-  durations = ['1h 30', '2h 00', '2h 30']; // Ejemplo de duraciones
+  durations = null; // Ejemplo de duraciones
   persons = []; // Ejemplo de número de personas
 
   reservedDates = [
@@ -225,6 +225,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   loading: boolean = true;
   loadingUtilizers: boolean = true;
   loadingCalendar: boolean = true;
+  loadingDurations: boolean = true;
   sportTypeSelected: number = 1;
   selectedSport: any = null;
 
@@ -260,7 +261,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService, private cdr: ChangeDetectorRef) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -281,7 +282,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getData() {
-    this.generateCourseDurations('08:00:00', '20:00:00', '1h 0m');
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.form = this.fb.group({
@@ -433,6 +433,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.generateArray(item.max_participants);
       this.courseDates = [];
 
+
       this.selectedItem = item;
       this.courseDates.push({
         school_id: this.user.schools[0].id,
@@ -447,6 +448,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         date: null,
         attended: false
       });
+      if (item.is_flexible) {
+        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration);
+      }
     }
 
 
@@ -494,7 +498,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     const hour = moment(time, 'HH:mm')
 
-    return !hour.isBetween(start, end);
+    return hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
   }
 
   resetCourseDates() {
@@ -531,7 +535,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
 
     let data: any = {};
-      data.price_total = +this.selectedItem.price;
+      data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +this.selectedItem.price;
       data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
       data.price_cancellation_insurance = 0;
       data.has_boukii_care = this.defaults.has_boukii_care;
@@ -616,6 +620,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
       } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
         this.courseDates.forEach(item => {
+          data.price_total = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
             data.courseDates.push({
               school_id: this.user.schools[0].id,
               booking_id: null,
@@ -1187,9 +1192,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return age;
   }
 
-  emitDateChange(event: any): void {
+  emitDateChange(event: any, fromPrivate = false): void {
+    this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(event.value)) ? this.minDate : event.value;
-    this.getCourses(this.levelForm.value.id, this.monthAndYear);
+    this.getCourses(this.levelForm.value.id, this.monthAndYear, fromPrivate);
   }
 
   getMonitors() {
@@ -1390,6 +1396,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   handleMonthChange(firstDayOfMonth: Date) {
+    this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(firstDayOfMonth)) ? this.minDate : firstDayOfMonth;
     this.getCourses(this.levelForm.value, this.monthAndYear);
   }
@@ -1403,6 +1410,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   public monthChanged(value: any, widget: any): void {
+    this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(value)) ? this.minDate : value;
     this.getCourses(this.levelForm.value.id, this.monthAndYear);
 
@@ -1825,7 +1833,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
-  generateCourseDurations(startTime: string, endTime: string, interval: string): string[] {
+  generateCourseHours(startTime: string, endTime: string, interval: string): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const intervalParts = interval.split(' ');
@@ -1836,7 +1844,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     intervalParts.forEach(part => {
       if (part.includes('h')) {
         intervalHours = parseInt(part, 10);
-      } else if (part.includes('m')) {
+      } else if (part.includes('min')) {
         intervalMinutes = parseInt(part, 10);
       }
     });
@@ -1845,14 +1853,109 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let currentMinutes = startMinutes;
     const result = [];
 
-    while (currentHours < endHours || (currentHours === endHours && currentMinutes < endMinutes)) {
-      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}:00`);
+    while (currentHours <= endHours || (currentHours === endHours && currentMinutes <= endMinutes)) {
+      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
       currentMinutes += intervalMinutes;
       currentHours += intervalHours + Math.floor(currentMinutes / 60);
       currentMinutes %= 60;
     }
 
-    console.log(result);
     return result;
+  }
+
+  generateCourseDurations(startTime: any, endTime: any, interval: any) {
+
+    const timeToMinutes = (time: string) => {
+      const [hours, minutes] = time.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
+
+    const formatMinutes = (totalMinutes: number) => {
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`.trim();
+    };
+
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+
+    // Expresión regular para capturar horas y/o minutos
+    const intervalMatch = interval.match(/(\d+)(h|min)/g);
+    let intervalTotalMinutes = 0;
+
+    if (intervalMatch) {
+      intervalMatch.forEach(part => {
+        if (part.includes('h')) {
+          intervalTotalMinutes += parseInt(part, 10) * 60;
+        } else if (part.includes('min')) {
+          intervalTotalMinutes += parseInt(part, 10);
+        }
+      });
+    } else {
+      // Si el intervalo no coincide con el formato esperado, manejar el error o asignar un valor por defecto
+      console.error("Interval format is not correct.");
+      return [];
+    }
+
+    const durations = [];
+    for (let minutes = startMinutes + intervalTotalMinutes; minutes <= endMinutes; minutes += intervalTotalMinutes) {
+      durations.push(formatMinutes(minutes - startMinutes));
+    }
+
+    const tableDurations = [];
+    const tablePaxes = [];
+
+    durations.forEach(element => {
+      const priceRange = this.selectedItem.price_range.find((p) => p.intervalo === element);
+      if (priceRange && priceRange.intervalo === element ) {
+
+        if (this.extractValues(priceRange)[0]) {
+          tableDurations.push(this.extractValues(priceRange)[0].interval);
+
+
+
+          this.extractValues(priceRange).forEach(element => {
+            const pax = element.key;
+
+            if (pax && tablePaxes.length === 0 || pax && tablePaxes.length > 0 && !tablePaxes.find((p) => p === pax)) {
+              tablePaxes.push(element.key);
+            }
+          });
+        }
+
+      }
+    });
+
+    this.durations = tableDurations;
+    this.persons = tablePaxes;
+  }
+
+  calculateAvailablePaxes(event: any) {
+    const paxes = [];
+
+    const data = this.selectedItem.price_range.find(p => p.intervalo === event);
+
+    this.extractValues(data).forEach(element => {
+      const pax = element.key;
+
+      if (pax && paxes.length === 0 || pax && paxes.length > 0 && !paxes.find((p) => p === pax)) {
+        paxes.push(element.key);
+      }
+    });
+
+    this.persons = paxes;
+
+  }
+
+  extractValues(data: any): { key: string, value: string, interval: string }[] {
+    let results = [];
+
+    for (const key in data) {
+        if (data.hasOwnProperty(key) && data[key] != null && key !== "intervalo") {
+            results.push({ key: key, value: data[key], interval: data["intervalo"] });
+        }
+    }
+
+    return results;
   }
 }

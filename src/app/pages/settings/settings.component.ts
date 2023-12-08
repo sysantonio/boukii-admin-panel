@@ -77,7 +77,7 @@ export class SettingsComponent implements OnInit {
   sports: any = [];
   sportsList: any = [];
   schoolSports: any = [];
-  season: any;
+  season: any = null;
 
   defaultsSchoolData = {
     contact_phone: null,
@@ -186,6 +186,10 @@ export class SettingsComponent implements OnInit {
               this.schoolSports[idx].sport_type = sportData.sport_type;
             });
 
+            if (this.season) {
+
+              this.holidays = JSON.parse(this.season.vacation_days);
+            }
             this.getSchoolSportDegrees();
 
             this.selectedFrom = moment(this.season?.start_date).toDate();
@@ -373,6 +377,7 @@ export class SettingsComponent implements OnInit {
   }
 
   saveSeason() {
+
     const holidays = [];
 
     this.holidaysSelected.forEach(element => {
@@ -388,15 +393,25 @@ export class SettingsComponent implements OnInit {
       school_id: 1,
       hour_start: this.selectedFromHour,
       hour_end: this.selectedToHour,
-      holidays: holidays
+      vacation_days: JSON.stringify(holidays)
     }
 
-    this.crudService.create('/seasons', data)
+    if (this.season && this.season !== null) {
+      this.crudService.update('/seasons', data, this.season.id)
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
         this.schoolService.refreshSchoolData();
       });
+    } else {
+      this.crudService.create('/seasons', data)
+      .subscribe((res) => {
+        console.log(res);
+        this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
+        this.schoolService.refreshSchoolData();
+      });
+    }
+
   }
 
   saveContactData() {
