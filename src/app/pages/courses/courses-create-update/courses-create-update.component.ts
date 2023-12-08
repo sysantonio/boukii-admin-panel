@@ -12,6 +12,7 @@ import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/r
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SchoolService } from 'src/service/school.service';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -59,18 +60,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
   displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
-  displayedColumnsFlexiblePrices: string[] =['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSource = new MatTableDataSource([]);
   dataSourceReductions = new MatTableDataSource([]);
   dataSourceDatePrivate = new MatTableDataSource([]);
   dataSourceReductionsPrivate = new MatTableDataSource([]);
-  dataSourceFlexiblePrices = this.intervalos.map(intervalo => {
-    const fila: any = { intervalo: this.formatIntervalo(intervalo) };
-    for (let i = 1; i <= this.people; i++) {
-      fila[`persona ${i}`] = '';
-    }
-    return fila;
-  });
+
+  dataSourceFlexiblePrices: any;
+  displayedColumnsFlexiblePrices: string[] = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
 
   myControl = new FormControl();
   myControlSport = new FormControl();
@@ -123,7 +119,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     online: true,
     image: this.imagePreviewUrl,
     translations: null,
-    price_range: this.dataSourceFlexiblePrices,
+    price_range: null,
     discounts: null,
     settings: {
       weekDays: {
@@ -198,7 +194,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
   user: any;
   id: any = null;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute) {
+  schoolData: any = [];
+  schoolPriceRanges: any = [];
+
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
+      private schoolService: SchoolService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -241,6 +241,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        this.schoolData = data.data;
+        this.schoolPriceRanges = JSON.parse(data.data.settings).prices_range;
+        this.people = this.schoolPriceRanges.people ? this.schoolPriceRanges.people : 6;
+        this.displayedColumnsFlexiblePrices = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
+        this.dataSourceFlexiblePrices = this.schoolPriceRanges && this.schoolPriceRanges.prices && this.schoolPriceRanges.prices !== null ? this.schoolPriceRanges.prices :
+        this.intervalos.map(intervalo => {
+          const fila: any = { intervalo: this.formatIntervalo(intervalo) };
+          for (let i = 1; i <= this.people; i++) {
+            fila[`${i}`] = '';
+          }
+          return fila;
+        });
+      })
+
     if (!this.id) {
       this.mode = 'create';
     } else {
@@ -264,7 +281,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseInfoFormGroup = this.fb.group({
 
             course_name: [null, Validators.required],
-            price: [null, Validators.required],
+            price: [null],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
@@ -628,7 +645,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         name: this.defaults.name,
         short_description: this.defaults.short_description,
         description: this.defaults.description,
-        price: this.defaults.price,
+        price: 0,
         currency: 'CHF',
         date_start: lowestDate,
         date_end: highestDate,
@@ -971,9 +988,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
     // Lógica para actualizar la tabla basándote en el valor de this.people
 
     // Por ejemplo, podrías actualizar las columnas mostradas:
-    this.displayedColumns = ['intervalo']; // Inicializa con la columna de intervalo
+    this.displayedColumnsFlexiblePrices = ['intervalo']; // Inicializa con la columna de intervalo
     for (let i = 1; i <= this.people; i++) {
-      this.displayedColumns.push(i + ' Persona'); // Añade columnas para cada persona
+      this.displayedColumnsFlexiblePrices.push(`${i}`); // Añade columnas para cada persona
     }
 
     // También podrías necesitar actualizar los datos mostrados en la tabla

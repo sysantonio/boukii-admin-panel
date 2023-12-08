@@ -265,6 +265,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
                   this.handleMonthChange(firstDayOfMonth);
+                  this.selectedDatePrivate = firstDayOfMonth;
                 });
               }
 
@@ -280,6 +281,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getData() {
+    this.generateCourseDurations('08:00:00', '20:00:00', '1h 0m');
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.form = this.fb.group({
@@ -1125,6 +1127,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     this.loadingCalendar = true;
     this.dateClass();
+    this.privateDateClass();
     let today, minDate,maxDate;
 
     if (!fromPrivate) {
@@ -1141,8 +1144,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
       minDate = moment(date);
       maxDate = moment(date);
     }
-
-
 
     const rq = {
       start_date: minDate.format('YYYY-MM-DD'),
@@ -1186,8 +1187,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return age;
   }
 
-  emitDateChange(event: MatDatepickerInputEvent<Date | null, unknown>): void {
-    this.getCourses(this.levelForm.value, event.value, true);
+  emitDateChange(event: any): void {
+    this.monthAndYear = moment(this.minDate).isAfter(moment(event.value)) ? this.minDate : event.value;
+    this.getCourses(this.levelForm.value.id, this.monthAndYear);
   }
 
   getMonitors() {
@@ -1821,5 +1823,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
   deleteBonus(index: number) {
     this.bonus.splice(index, 1);
     this.calculateFinalPrice();
+  }
+
+  generateCourseDurations(startTime: string, endTime: string, interval: string): string[] {
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+    const intervalParts = interval.split(' ');
+
+    let intervalHours = 0;
+    let intervalMinutes = 0;
+
+    intervalParts.forEach(part => {
+      if (part.includes('h')) {
+        intervalHours = parseInt(part, 10);
+      } else if (part.includes('m')) {
+        intervalMinutes = parseInt(part, 10);
+      }
+    });
+
+    let currentHours = startHours;
+    let currentMinutes = startMinutes;
+    const result = [];
+
+    while (currentHours < endHours || (currentHours === endHours && currentMinutes < endMinutes)) {
+      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}:00`);
+      currentMinutes += intervalMinutes;
+      currentHours += intervalHours + Math.floor(currentMinutes / 60);
+      currentMinutes %= 60;
+    }
+
+    console.log(result);
+    return result;
   }
 }
