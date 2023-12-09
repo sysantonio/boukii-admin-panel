@@ -120,7 +120,7 @@
             </mat-card>
           </div>
           <mat-form-field class="flex-auto" style="width: 48%">
-            <input type="text" placeholder="Choose level" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" />
+            <input type="text" placeholder="Choose level" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel"  />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
               <mat-option *ngFor="let level of filteredLevel | async" [value]="level" (onSelectionChange)="getCourses(level, monthAndYear)">
                 {{level.annotation}} - {{level.name}}
@@ -593,10 +593,13 @@
             <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Course</p>
 
             <mat-card-header>
-              <div mat-card-avatar [style.background-image]="'url(' + imagePath + ')'" style="border-radius: 5px"></div>
+              <div mat-card-avatar [style.background-image]="'url(' + (item.courseDates[0].course?.course_type === 1 ? collectifIcon : privateIcon) + ')'" style="border-radius: 5px"></div>
               <mat-card-title class="mat-mdc-card-title">
                 <div style="float: left;width: 70%;font-size: 14px;"> {{item.courseDates[0].course?.name}} </div>
-                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{item.courseDates[0].course?.price}} {{item.courseDates[0].course?.currency}} </div>
+                <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{
+                item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : item.courseDates[0].course?.price
+                }}
+                {{item.courseDates[0].course?.currency}} </div>
             </mat-card-title>
               <mat-card-subtitle style="margin: 0">{{item.courseDates[0].course?.course_type === 1 ? 'collectif' : 'privee'}} {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle>
             </mat-card-header>
@@ -746,7 +749,7 @@
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0">Information del moniteur</h2>
+            <h2 class="title m-0">Information del cliente</h2>
           </div>
           <mat-card style="width: 100%;padding:1%">
             <mat-card-header>

@@ -114,7 +114,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
   createComponent = BookingsCreateUpdateModalComponent;
   selectedDatePrivate = new Date();
 
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   title = 'Título de la Reserva';
   titleMoniteur = 'Nombre monitor';
   usersCount = 5;
@@ -622,7 +621,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
         this.courseDates.forEach(item => {
           const price = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
-          data.price_total = price;
+          data.price_total = data.price_total + price;
             data.courseDates.push({
               school_id: this.user.schools[0].id,
               booking_id: null,
