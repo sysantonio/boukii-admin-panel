@@ -200,8 +200,8 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
                   <mat-form-field class="flex-auto">
                     <mat-label>Fecha</mat-label>
-                    <mat-select >
-                      <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index">
+                    <mat-select>
+                      <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index" >
                         <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
                         [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)"
                         (onSelectionChange)="courseDate.hour_start = selectedCourseDateItem.date">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
@@ -240,7 +240,7 @@
                   </mat-form-field>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="(sameMonitor && i === 0) || !sameMonitor">
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Chercher Moniteur</mat-label>
@@ -370,6 +370,7 @@
     </div>
   </div>
 
+  <!-- Ventanas actividades -->
   <ng-container *ngFor="let item of bookingsToCreate; let bookI = index">
 
   <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}" *ngIf="!loading && !bookingComplete">
@@ -428,7 +429,7 @@
             </div>
 
           </div>
-          <div style="float: left; width: 50%;margin-top: 10%;">
+          <div style="float: left; width: 100%;margin-top: 10%;">
             <div style="float: left; width: 100%;">
               <div *ngIf="courseDate.course.course_type === 2" style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
               <div *ngIf="courseDate.course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
@@ -437,7 +438,7 @@
                 <strong>{{ courseDate.course?.name}}</strong>
               </p>
               <p style="float: left; width: 100%;">
-                {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{courseDate.course?.price}} {{courseDate.course?.currency}}
+                {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{!courseDate.course?.is_flexible ? courseDate.course?.price : courseDate.price}} {{courseDate.course?.currency}}
               </p>
             </div>
 
@@ -457,7 +458,7 @@
               </ul>
             </div>
             <div style="float: left; width: 100%;margin-top: 5%;">
-              <div style="float: left; width: 30%;">
+              <div style="float: left; width: 15%;">
                 <img [src]="courseDate.monitor_id !== null ? getMonitorAvatar(courseDate.monitor_id) : userAvatar" style="width: 50px;height: 50px;object-fit: contain;border-radius:50%">
               </div>
               <div style="float: left; width: 70%;">

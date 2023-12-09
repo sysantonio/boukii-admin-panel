@@ -387,6 +387,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   setCourseType(type: string, id: number) {
+    this.monthAndYear = new Date();
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -524,7 +525,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open('Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
+      this.snackbar.open(this.sameMonitor ? 'Complete los campos de monitor, fecha y hora de la reserva del curso' : 'Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
       return;
     }
 
@@ -620,17 +621,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
       } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
         this.courseDates.forEach(item => {
-          data.price_total = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
+          const price = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
+          data.price_total = price;
             data.courseDates.push({
               school_id: this.user.schools[0].id,
               booking_id: null,
               client_id: item.client_id,
               course_id: item.id,
               course_date_id: item.course_date_id,
-              monitor_id: item.monitor_id,
+              monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
               hour_start: item.hour_start,
               hour_end: null, //calcular en base a la duracion del curso
-              price: +item.price,
+              price: price,
               currency: item.currency,
               paxes: item.paxes,
               course: this.selectedItem,
@@ -645,7 +647,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             client_id: item.client_id,
             course_id: item.course_id,
             course_date_id: item.course_date_id,
-            monitor_id: item.monitor_id,
+            monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
             hour_start: item.hour_start,
             hour_end: null, //calcular en base a la duracion del curso
             price: +item.price,
@@ -1422,6 +1424,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     for (let i = 0; i<this.courseDates.length; i++){
       if((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].hour_start === null) {
+        if (this.sameMonitor && this.courseDates[0].monitor_id === null) {
+          ret = true;
+          break;
+        }
         ret = true;
         break;
       }
