@@ -733,7 +733,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       let rqs = [];
 
         courseDates.forEach(item => {
-          if (this.getCourse(item.course_id).course_type === 1) {
+          if (this.getCourse(item.course_id || item.course.id).course_type === 1) {
 
             if (this.canBook(item.date)) {
               rqs.push({
@@ -755,7 +755,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             }
           }
 
-          if (this.getCourse(item.course_id).course_type === 2) {
+          if (this.getCourse(item.course_id || item.course.id).course_type === 2) {
             rqs.push({
               school_id: item.school_id,
               booking_id: booking.data.id,
