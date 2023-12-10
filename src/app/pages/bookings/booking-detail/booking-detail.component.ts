@@ -1187,13 +1187,18 @@ export class BookingDetailComponent implements OnInit {
       width: '600px',
       data: {
         client_id: this.bookingsToCreate[0].client_main_id,
-        school_id: this.bookingsToCreate[0].school_id
+        school_id: this.bookingsToCreate[0].school_id,
+        currentPrice: this.finalPriceNoTaxes,
+        appliedBonus: this.bonus,
+        currency:  this.bookingsToCreate[0].currency
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.bonus = result;
+        this.calculateFinalPrice();
+        this.bonus.push(result);
+        this.calculateFinalPrice();
       }
     });
   }
@@ -1201,11 +1206,16 @@ export class BookingDetailComponent implements OnInit {
   addReduction() {
     const dialogRef = this.dialog.open(AddReductionModalComponent, {
       width: '300px',
+      data: {
+        currentPrice: this.finalPriceNoTaxes
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.calculateFinalPrice();
         this.reduction = result;
+        this.calculateFinalPrice();
       }
     });
   }
