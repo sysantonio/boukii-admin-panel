@@ -19,6 +19,8 @@ import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dia
 import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
 import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
 import { ActivatedRoute } from '@angular/router';
+import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
+import { SchoolService } from 'src/service/school.service';
 
 @Component({
   selector: 'vex-booking-detail',
@@ -42,7 +44,6 @@ export class BookingDetailComponent implements OnInit {
   createComponent = BookingsCreateUpdateModalComponent;
   selectedDatePrivate = new Date();
 
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   title = 'Título de la Reserva';
   titleMoniteur = 'Nombre monitor';
   usersCount = 5;
@@ -81,7 +82,6 @@ export class BookingDetailComponent implements OnInit {
   periodUnique = true;
   periodMultiple = false;
   sameMonitor = false;
-
 
   times: string[] = this.generateTimes();
   filteredTimes: Observable<string[]>;
@@ -163,6 +163,8 @@ export class BookingDetailComponent implements OnInit {
   levels = [];
   utilizers = [];
   courses = [];
+  bookingExtras = [];
+  courseExtra = [];
   coursesMonth = [];
   monitors = [];
   season = [];
@@ -170,17 +172,27 @@ export class BookingDetailComponent implements OnInit {
   settings: any = [];
   user: any;
   id: any;
-  selectedForfait = null;
+  selectedForfait = [];
   mainIdSelected = true;
   detailClient: any;
   reduction: any = null;
   finalPrice: any = null;
-  bonus: any = null;
+  finalPriceNoTaxes: any = null;
+  bonus: any = [];
   totalPrice: any = 0;
   booking: any;
+  bookingUsers: any;
+  countries = MOCK_COUNTRIES;
+  schoolSettings: any = [];
+
+  tva = 0;
+  cancellationInsurance = 0;
+  boukiiCarePrice = 0;
+
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute) {
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
+    private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute, private schoolService: SchoolService) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -189,78 +201,106 @@ export class BookingDetailComponent implements OnInit {
               }
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
+    this.getMonitors();
+    this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        this.schoolSettings = data.data;
+        this.tva = parseFloat(this.schoolSettings.cancellation_insurance_percent);
+        this.cancellationInsurance = parseFloat(this.schoolSettings.bookings_comission_cash);
+        this.boukiiCarePrice = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
+      })
     this.getData();
   }
+
 
   getData() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
-    this.crudService.get('/bookings/'+this.id)
-      .subscribe((data) => {
-        this.booking = data.data;
 
-        this.crudService.list('/booking-users', 1, 1000, null, null, '&booking_id='+this.id)
-          .subscribe((bookingUser) => {
-            console.log(bookingUser);
-            this.loading = false;
-          })
+    this.crudService.get('/schools/'+this.user.schools[0].id)
+    .subscribe((school) => {
+      this.school = school.data;
+      this.settings = JSON.parse(school.data.settings);
 
-      })
-
-    /*this.getSports();
-    this.getMonitors();
-    this.getSeason();
-    this.getSchool();
-
-    forkJoin([this.getSportsType(), this.getClients()])
+      forkJoin([this.getSportsType(), this.getClients()])
       .subscribe((data: any) => {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
         this.detailClient = this.clients[0];
 
+        this.crudService.get('/bookings/'+this.id)
+      .subscribe((data) => {
+        this.booking = data.data;
 
-        this.filterSportsByType();
+        this.crudService.list('/booking-users', 1, 1000, null, null, '&booking_id='+this.id)
+          .subscribe((bookingUser) => {
+            this.bookingUsers = bookingUser.data;
 
-        this.filteredOptions = this.clientsForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filter(full_name) : this.clients.slice())
-        );
+            const groupedByCourseId = bookingUser.data.reduce((accumulator, currentValue) => {
+              // Obtiene el course_id del objeto actual
+              const key = currentValue.course_id;
 
-        this.filteredSports = this.sportForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.name),
-          map(name => name ? this._filterSport(name) : this.sportData.slice())
-        );
+              // Si el acumulador ya no tiene este course_id como clave, inicialízalo
+              if (!accumulator[key]) {
+                accumulator[key] = [];
+              }
 
-        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
-        );
+              // Agrega el objeto actual al array correspondiente para este course_id
+              accumulator[key].push(currentValue);
 
-        this.filteredTimes = this.timeControl.valueChanges
-          .pipe(
-            startWith(''),
-            map(value => this._filterTime(value))
-          );
+              return accumulator;
+            }, {});
 
-          setTimeout(() => {
+            for (const courseId in groupedByCourseId) {
+              if (groupedByCourseId.hasOwnProperty(courseId)) {
+                const data = {price_total: 0, courseDates: []}
+                groupedByCourseId[courseId].forEach(element => {
+                  data.price_total = data.price_total + parseInt(element.price);
+                  data.courseDates.push(element);
+                });
+                this.bookingsToCreate.push(data);
 
-            this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
-            this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
-            this.selectSport(this.sportDataList[0]);
-            this.getUtilzers(this.clients[0], true);
-            this.getDegrees(this.defaults.sport_id, true);
+                this.crudService.get('/courses/' + courseId)
+                  .subscribe((course) => {
+                    this.courses.push(course.data);
+                  })
+              }
+            }
 
+
+            this.bookingUsers.forEach((bu ,idx) => {
+              this.crudService.list('/booking-user-extras', 1, 1000, null, null, '&booking_user_id='+bu.id)
+                .subscribe((bue) =>{
+                  if (bue.data.length > 0) {
+                    this.bookingExtras.push(bue.data[0]);
+                    bue.data.forEach(element => {
+                      this.crudService.get('/course-extras/'+element.course_extra_id)
+                      .subscribe((ce) => {
+                        if (ce.data) {
+                          ce.data.course_date_id = bu.course_date_id;
+                          ce.data.booking_user_id = bu.id;
+                          this.courseExtra.push(ce.data);
+                        }
+                      })
+                    });
+                  }
+                })
+            });
+
+            this.calculateFinalPrice();
             setTimeout(() => {
-              this.clientsForm.patchValue(this.clients[0]);
+              this.loading = false;
+            }, 0);
+          })
+        });
+      });
 
-            }, 500);
-          }, 500);
-      })*/
+    });
   }
+
 
   generateArray(paxes: number) {
     this.persons = [];
@@ -511,7 +551,7 @@ export class BookingDetailComponent implements OnInit {
 
   create() {
 
-    let data: any = {};
+    /*let data: any = {};
     const courseDates = [];
 
     this.bookingsToCreate.forEach(element => {
@@ -592,7 +632,7 @@ export class BookingDetailComponent implements OnInit {
             });
 
           });
-      })
+      })*/
 
   }
 
@@ -610,31 +650,9 @@ export class BookingDetailComponent implements OnInit {
     return this.mode === 'update';
   }
 
-
-  // pasar a utils
-  private _filter(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.clients.filter(client => (client.first_name.toLowerCase().includes(filterValue) || client.last_name.toLowerCase().includes(filterValue)));
-  }
-
-  private _filterMonitor(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.monitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
-  }
-
   private _filterLevel(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.levels.filter(level => level.annotation.toLowerCase().includes(filterValue));
-  }
-
-  private _filterSport(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.sportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
-  }
-
-  private _filterTime(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.times.filter(time => time.toLowerCase().includes(filterValue));
   }
 
   displayFn(client: any): string {
@@ -985,7 +1003,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getClientName(id: number) {
-    if (id !== null) {
+    if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
 
@@ -993,10 +1011,19 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
+  getClient(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return client;
+    }
+  }
+
 
   getCourse(id: number) {
 
-    if (id !== null) {
+    if (id && id !== null) {
       const course = this.courses.find((m) => m.id === id);
 
       return course;
@@ -1134,7 +1161,7 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
-  deleteBooking(index: number) {
+  deleteBooking(index: number, data: any) {
 
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -1146,7 +1173,11 @@ export class BookingDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.bookingsToCreate.splice(index, 1);
+        this.crudService.delete('/booking-users', data.id)
+          .subscribe(() => {
+            this.bookingsToCreate.splice(index, 1);
+            this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+          })
       }
     });
   }
@@ -1245,6 +1276,106 @@ export class BookingDetailComponent implements OnInit {
       item.has_boukii_care = event.source.checked;
       item.price_boukii_care = 0;
 
+    }
+  }
+
+  getNacionality(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.code : 'NDF';
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.name : 'NDF';
+  }
+
+  calculateFinalPrice() {
+    let price = this.getBasePrice();
+
+    //forfait primero
+
+    this.courseExtra.forEach(element => {
+
+        price = price + (+element.price);
+    });
+
+    if (this.reduction !== null) {
+      if (this.reduction.type === 1) {
+        price = price - ((price * this.reduction.discount) / 100);
+      } else {
+        price = price - (this.reduction.discount > price ? price : this.reduction.discount);
+      }
+    }
+
+    if (this.bonus !== null && price > 0) {
+      this.bonus.forEach(element => {
+        if (price > 0) {
+
+          if (element.bonus.remaining_balance > price) {
+            price = price - price;
+          } else {
+            price = price - element.bonus.remaining_balance;
+          }
+        }
+      });
+    }
+
+    if(this.booking.has_cancellation_insurance) {
+      price = price + (this.getBasePrice() * this.cancellationInsurance);
+    }
+
+    if(this.booking.has_boukii_care) {
+      // coger valores de reglajes
+      price = price + (this.getBasePrice() * this.boukiiCarePrice);
+    }
+
+    // añadir desde reglajes el tva
+    this.finalPrice = price + (price * this.tva);
+    this.finalPriceNoTaxes = price;
+  }
+
+  getMonitorCountry(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return +monitor?.country;
+    }
+  }
+
+  getMonitorProvince(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return +monitor?.province;
+    }
+  }
+
+  getMonitorBirth(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor?.birth_date;
+    }
+  }
+
+  getCourseExtraForfait(forfait: any, data: any) {
+    const courseExtra = this.courseExtra.find((c) => c.course_id === data.course_id && c.course_date_id === data.course_date_id && forfait.id === c.name);
+    if (courseExtra) {
+      data.forfait = courseExtra;
+      return true;
+    }
+  }
+
+  getCourseExtraForfaitPrice(data: any) {
+    const courseExtra = this.courseExtra.find((c) => c.course_id === data.course_id && c.course_date_id === data.course_date_id);
+    if (courseExtra) {
+      data.forfait = courseExtra;
+      return courseExtra.price;
+    } else {
+      return 0;
     }
   }
 }

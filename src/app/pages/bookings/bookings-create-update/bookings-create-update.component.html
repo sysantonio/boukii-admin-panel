@@ -356,8 +356,8 @@
 
           <!-- Columna del calendario -->
           <div class="calendar-column" *ngIf="!loadingCalendar && courseTypeId === 1">
-            <mat-calendar class="smaller-calendar" [startAt]="minDate" [minDate]="minDate" [(selected)]="selectedDate" [dateClass]="dateClass()" [headerComponent]="customHeader"
-              (monthSelected)="getCourses(null, null)" (selectedChange)="handleDateChange($event)">
+            <mat-calendar class="smaller-calendar" [startAt]="selectedDate" [minDate]="minDate" [(selected)]="selectedDate" [dateClass]="dateClass()" [headerComponent]="customHeader"
+              (monthSelected)="getCourses(null, null)" (selectedChange)="handleDateChange($event)" >
 
             </mat-calendar>
           </div>
@@ -611,9 +611,9 @@
               </ul>
               <div style="float: left;width: 100%;">
                 <div class="user-info">
-                  <img [src]="item.courseDates[0].monitor_id !== null ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar" alt="Avatar de usuario" class="user-avatar" />
-                  <span>{{ item.courseDates[0].monitor_id !== null ? getMonitorName(item.courseDates[0].monitor_id) : 'No monitor asigned'}}</span>
-                  {{ getNacionality(getMonitorCountry(item.courseDates[0].client_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0].client_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].client_id)) }} ans
+                  <img style="float: left;width: 15%;height: 60px;" [src]="item?.courseDates[0]?.monitor_id !== null ? getMonitorAvatar(item?.courseDates[0]?.monitor_id) : userAvatar" alt="Avatar de usuario" class="user-avatar" />
+                  <span style="float: left;width: 80%;margin: 3% 0 0 0;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
+                  <span>{{ getNacionality(getMonitorCountry(item?.courseDates[0]?.client_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.client_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.client_id)) }} ans</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -745,6 +745,7 @@
     </div>
 
 
+    <!-- Ventana de pagos -->
     <div class="column-container">
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
@@ -816,17 +817,17 @@
 
               <span style="width: 100%; float:left" *ngIf="defaults.has_cancellation_insurance">
                 <p style="float:left">Option Remboursement</p>
-                <p style="float:right">{{(getBasePrice()*0.10).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{(getBasePrice()*this.cancellationInsurance).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="defaults.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{(getBasePrice()*0.10).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{(getBasePrice()*this.boukiiCarePrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
-              <span style="width: 100%; float:left">
+              <span style="width: 100%; float:left" *ngIf="this.tva">
                 <p style="float:left">TVA</p>
-                <p style="float:right">{{ (finalPrice * 0.21).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{ (finalPrice * this.tva).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left">

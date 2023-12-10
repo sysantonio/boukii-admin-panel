@@ -266,6 +266,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
                   this.handleMonthChange(firstDayOfMonth);
                   this.selectedDatePrivate = firstDayOfMonth;
+                  this.selectedDate = firstDayOfMonth;
                 });
               }
 
@@ -556,6 +557,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             let monitorId = null;
             let degreeId = null;
             let subgroupId = null;
+            let courseDateId = null;
             let monitorFind = false;
             item.course_groups.forEach(groups => {
               if (!monitorFind) {
@@ -563,6 +565,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                   degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
                   subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
+                  courseDateId = groups.course_date_id;
                   monitorFind = true;
                 }
               }
@@ -571,8 +574,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 school_id: this.user.schools[0].id,
                 booking_id: null,
                 client_id: this.courseDates[0].client_id,
-                course_id: this.selectedItem.id,
-                course_date_id: item.course_groups[0].course_date_id,
+                course_id: item.course_id,
+                course_date_id: courseDateId,
                 degree_id: degreeId,
                 monitor_id: monitorId,
                 subgroup_id: subgroupId,
@@ -590,12 +593,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
           if (this.canBook(item.date)) {
               let monitorId = null;
               let degreeId = null;
+              let courseDateId = null;
               let monitorFind = false;
               item.course_groups.forEach(groups => {
                 if (!monitorFind) {
                   if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                     monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                     degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
+                    courseDateId = groups.course_date_id;
                     monitorFind = true;
                   }
                 }
@@ -605,8 +610,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 school_id: this.user.schools[0].id,
                 booking_id: null,
                 client_id: this.courseDates[0].client_id,
-                course_id: this.selectedItem.id,
-                course_date_id: item.course_date_id,
+                course_id: item.course_id,
+                course_date_id: courseDateId,
                 degree_id: degreeId,
                 monitor_id: monitorId,
                 hour_start: item.hour_start,
@@ -626,7 +631,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               school_id: this.user.schools[0].id,
               booking_id: null,
               client_id: item.client_id,
-              course_id: item.id,
+              course_id: item.course_id,
               course_date_id: item.course_date_id,
               monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
               hour_start: item.hour_start,
@@ -659,6 +664,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       this.bookingsToCreate.push(data);
       this.showDetail = this.bookingsToCreate.length - 1;
+
+      this.selectedItem = null;
+      this.selectedCourseDateItem = null;
+      this.selectedSubGroupItem = null;
+      this.selectedSubGroupItemIndex = null;
+      this.reservableCourseDate = [];
       this.clientsForm.disable();
   }
 
@@ -733,7 +744,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       let rqs = [];
 
         courseDates.forEach(item => {
-          if (this.getCourse(item.course_id || item.course.id).course_type === 1) {
+          if (item.course.course_type === 1) {
 
             if (this.canBook(item.date)) {
               rqs.push({
@@ -755,12 +766,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
             }
           }
 
-          if (this.getCourse(item.course_id || item.course.id).course_type === 2) {
+          if (item.course.course_type === 2) {
             rqs.push({
               school_id: item.school_id,
               booking_id: booking.data.id,
               client_id: item.client_id,
-              course_id: item.id,
+              course_id: item.course_id,
               course_date_id: item.course_date_id,
               monitor_id: item.monitor_id,
               hour_start: item.hour_start,
@@ -771,41 +782,41 @@ export class BookingsCreateUpdateComponent implements OnInit {
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }
-
-          rqs.forEach((rq, idx) => {
-            const bExtra = bookingExtras.find((b)=> b.idx === idx);
-
-            this.crudService.create('/booking-users', rq)
-            .subscribe((bookingUser) => {
-              if (bExtra) {
-                const bookingUserExtra = {
-                  booking_user_id: bookingUser.data.id,
-                  course_extra_id: null,
-                }
-                const courseExtra = {
-                  course_id: rq.course_id,
-                  name: bExtra.forfait.id,
-                  description: bExtra.forfait.name,
-                  price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
-                }
-                this.crudService.create('/course-extras', courseExtra)
-                  .subscribe((responseCourseExtra) => {
-
-                    bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                    this.crudService.create('/booking-user-extras', bookingUserExtra)
-                    .subscribe((bookExtra) => {
-                      console.log("b.extra created", bookExtra, idx);
-                    })
-                  })
-              }
-
-              setTimeout(() => {
-                this.goTo('/bookings');
-              }, 1000);
-            });
-          });
-
         });
+
+        rqs.forEach((rq, idx) => {
+          const bExtra = bookingExtras.find((b)=> b.idx === idx);
+
+          this.crudService.create('/booking-users', rq)
+          .subscribe((bookingUser) => {
+            if (bExtra) {
+              const bookingUserExtra = {
+                booking_user_id: bookingUser.data.id,
+                course_extra_id: null,
+              }
+              const courseExtra = {
+                course_id: rq.course_id,
+                name: bExtra.forfait.id,
+                description: bExtra.forfait.name,
+                price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
+              }
+              this.crudService.create('/course-extras', courseExtra)
+                .subscribe((responseCourseExtra) => {
+
+                  bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                  this.crudService.create('/booking-user-extras', bookingUserExtra)
+                  .subscribe((bookExtra) => {
+                    console.log("b.extra created", bookExtra, idx);
+                  })
+                })
+            }
+
+            setTimeout(() => {
+              this.goTo('/bookings');
+            }, 1000);
+          });
+        });
+
       })
 
   }
@@ -818,7 +829,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           quantity: element.bonus.quantity,
           remaining_balance: element.bonus.quantity - element.bonus.reducePrice,
           payed: element.bonus.quantity - element.bonus.reducePrice === 0,
-          client_id: element.bonus.client_id.id,
+          client_id: element.bonus.client_id,
           school_id: this.user.schools[0].id
         };
         this.crudService.update('/vouchers', data, element.id)
@@ -1351,7 +1362,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClientName(id: number) {
-    if (id !== null) {
+    if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
 
@@ -1362,7 +1373,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   getCourse(id: number) {
 
-    if (id !== null) {
+    if (id && id !== null) {
       const course = this.courses.find((m) => m.id === id);
 
       return course;
@@ -1393,6 +1404,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   handleDateChange(event: any) {
+    this.selectedDate = event;
     this.getCourses(this.levelForm.value, event, true);
   }
 
@@ -1446,7 +1458,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
     } else {
-      const minutes = duration.split(' ')[1].replace('min', '');
+      const minutes = duration.split(' ')[0].replace('min', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }
