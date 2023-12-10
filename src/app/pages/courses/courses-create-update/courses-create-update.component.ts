@@ -560,14 +560,20 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
+
+  sortEventsByDate() {
+    return this.defaults.course_dates.sort((a, b) => {
+      // Convertir las fechas a objetos Date para compararlas
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      return dateA.getTime() - dateB.getTime();
+    });
+  }
+
   create() {
 
     let data: any = [];
-
-    let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
-
-    let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
-    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
 
     let courseDates = [];
 
@@ -595,10 +601,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: this.defaults.date_start_res,
-        date_end_res: this.defaults.date_end_res,
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -622,10 +628,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: this.defaults.date_start_res,
-        date_end_res: this.defaults.date_end_res,
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -647,10 +653,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: 0,
         currency: 'CHF',
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: lowestDate,
-        date_end_res: highestDate,
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -670,6 +676,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
+      let dates = this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -678,10 +685,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',
-        date_start_res: lowestDate,
-        date_end_res: highestDate,
-        date_start: lowestDate,
-        date_end: highestDate,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: this.defaults.date_start_res,
+        date_end: this.defaults.date_end_res,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -700,6 +707,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
     }
 
+    // Revisar caso por caso
     this.defaults.date_start = this.defaults.date_start_res;
     this.defaults.date_end = this.defaults.date_end_res;
     data.school_id = this.user.schools[0].id;
@@ -1110,7 +1118,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     return ret;
   }
 
-  getDatesBetween(startDate, endDate, process) {
+  getDatesBetween(startDate, endDate, process, hourStart = null, hourEnd = null) {
 
     if (process) {
       this.daysDatesLevels = [];
@@ -1133,8 +1141,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.daysDatesLevels.push({date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '')});
         this.defaults.course_dates.push({
           date: currentDate.format('YYYY-MM-DD'),
-          hour_start: null,
-          hour_end: null,
+          hour_start: hourStart,
+          hour_end: hourEnd,
         })
         currentDate = currentDate.add(1, 'days');
       }

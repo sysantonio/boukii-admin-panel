@@ -49,7 +49,7 @@
                 </div>
                 <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
                   <span style="float: left;width: 100%;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
-                  <span style="float: left;width: 100%;">{{ getNacionality(getMonitorCountry(item?.courseDates[0]?.client_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.client_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.client_id)) }} ans</span>
+                  <span style="float: left;width: 100%;">{{ getNacionality(getMonitorCountry(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} ans</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -257,7 +257,7 @@
 
               <span style="width: 100%; float:left" *ngIf="booking.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{(getBasePrice()*this.boukiiCarePrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                <p style="float:right">{{(getBasePrice() + (this.boukiiCarePrice * getBookingPaxes() * getBookingDates())).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">

@@ -523,6 +523,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   confirmBooking() {
 
+    let paxes = 0;
+
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
       this.snackbar.open(this.sameMonitor ? 'Complete los campos de monitor, fecha y hora de la reserva del curso' : 'Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
@@ -535,8 +537,26 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return;
     }
 
+    if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
+        this.courseDates.forEach(item => {
+          paxes = paxes + parseInt(item.paxes);
+        })
+      } else {
+        paxes = 1;
+    }
+
+    let price = this.selectedItem.price;
+    if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
+      const discounts = JSON.parse(this.selectedItem.discounts);
+      discounts.forEach(element => {
+        if (element.date === this.reservableCourseDate.length) {
+          price = price - (this.selectedItem.price * (element.percentage / 100));
+        }
+      });
+    }
+
     let data: any = {};
-      data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +this.selectedItem.price;
+      data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
       data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
       data.price_cancellation_insurance = 0;
       data.has_boukii_care = this.defaults.has_boukii_care;
@@ -548,7 +568,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       data.client_main_id = this.defaults.client_main_id.id;
       data.notes = this.defaults.notes;
       data.notes_school = this.defaults.notes_school;
-      data.paxes = null;
+      data.paxes = paxes;
       data.courseDates = [];
 
       if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
@@ -740,7 +760,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.crudService.create('/bookings', data)
     .subscribe((booking) => {
       console.log('booking, created', booking);
-      this.processBonus();
+      this.processBonus(booking.data.id);
       let rqs = [];
 
         courseDates.forEach(item => {
@@ -821,7 +841,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   }
 
-  processBonus() {
+  processBonus(bookingId: any) {
     if (this.bonus.length > 0) {
       this.bonus.forEach(element => {
         const data = {
@@ -832,9 +852,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
           client_id: element.bonus.client_id,
           school_id: this.user.schools[0].id
         };
-        this.crudService.update('/vouchers', data, element.id)
+        this.crudService.update('/vouchers', data, element.bonus.id)
           .subscribe((result) => {
-            console.log(result);
+
+            this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: bookingId,amount: data.payed})
+              .subscribe((vresult) => {
+                console.log(vresult);
+
+              })
           })
       });
     }
@@ -1254,7 +1279,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
       const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
+          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'YYYY-MM-DD').startOf('day').isSameOrBefore(moment(date, 'YYYY-MM-DD').startOf('day'))) {
             return 'with-course';
           } else {
             return;
@@ -1268,7 +1293,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
       const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
+          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).startOf('day').isSameOrBefore(moment(date).startOf('day'))) {
             return 'with-course-private';
           } else {
             return;
@@ -1278,7 +1303,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   canBook(date: any) {
-    return moment(date, 'YYYY-MM-DD').isSameOrAfter(moment(this.minDate));
+    const incomingDate = moment(date, 'YYYY-MM-DD').startOf('day');
+    const minDate = moment(this.minDate, 'YYYY-MM-DD').startOf('day');
+    return incomingDate.isSameOrAfter(minDate);
   }
 
   getLevelColor(id: any) {
@@ -1448,7 +1475,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getBookableCourses(dates: any) {
-    return dates.find((d) => this.canBook(d.date)).course_groups;
+    return dates.find((d) => this.canBook(d.date))?.course_groups;
   }
 
   calculateHourEnd(hour: any, duration: any) {
@@ -1628,11 +1655,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   calculateBoukiiCare(event: any) {
     if(event.source.checked) {
-      this.boukiiCare = this.getBasePrice() * this.boukiiCarePrice;
+      this.boukiiCare = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
-      this.defaults.price_boukii_care = this.getBasePrice() * this.boukiiCarePrice;
-      return this.getBasePrice() * this.boukiiCarePrice;
+      this.defaults.price_boukii_care = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      return this.getBasePrice() + this.boukiiCarePrice;
     } else {
       this.boukiiCare = 0;
       this.calculateFinalPrice();
@@ -1806,7 +1833,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.bookingsToCreate.forEach(element => {
       if (element.forfait) {
 
-        price = price + element.forfait.price + (element.forfait.price * (element.forfait.tva / 100));
+        price = price + ((element.forfait.price * element.courseDates.length) * element.paxes) + (element.forfait.price * (element.forfait.tva / 100));
       }
     });
 
@@ -1837,7 +1864,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if(this.defaults.has_boukii_care) {
       // coger valores de reglajes
-      price = price + (this.getBasePrice() * this.boukiiCarePrice);
+      price = price + this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
 
     // añadir desde reglajes el tva
@@ -1975,4 +2002,23 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     return results;
   }
+
+  getBookingPaxes(){
+    let ret = 0;
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.paxes;
+    });
+
+    return ret;
+  }
+
+  getBookingDates(){
+    let ret = 0;
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.courseDates.length;
+    });
+
+    return ret;
+  }
+
 }

@@ -609,11 +609,14 @@
                   <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }}
                 </li>
               </ul>
-              <div style="float: left;width: 100%;">
-                <div class="user-info">
-                  <img style="float: left;width: 15%;height: 60px;" [src]="item?.courseDates[0]?.monitor_id !== null ? getMonitorAvatar(item?.courseDates[0]?.monitor_id) : userAvatar" alt="Avatar de usuario" class="user-avatar" />
-                  <span style="float: left;width: 80%;margin: 3% 0 0 0;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
-                  <span>{{ getNacionality(getMonitorCountry(item?.courseDates[0]?.client_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.client_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.client_id)) }} ans</span>
+              <div style="float: left;width: 100%;margin: 2% 0 2% 0;">
+                <div style="float: left;width: 15%;">
+                  <img style="float: left;width: 100%;height: 60px;" [src]="item?.courseDates[0]?.monitor_id !== null ? getMonitorAvatar(item?.courseDates[0]?.monitor_id) : userAvatar" alt="Avatar de usuario" class="user-avatar" />
+
+                </div>
+                <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
+                  <span style="float: left;width: 100%;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
+                  <span style="float: left;width: 100%;">{{ getNacionality(getMonitorCountry(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} ans</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -628,7 +631,7 @@
                     </div>
 
                     <div>
-                      <p> +{{item.forfait ? item.forfait.price + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                      <p> +{{item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
                     </div>
                   </div>
 
@@ -691,7 +694,7 @@
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
                   <p style="width: 60%;float: left;">Total Opciones</p>
-                  <p style="color: #EA0C60;">{{item.forfait ? item.forfait.price + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                  <p style="color: #EA0C60;">{{item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
                 </div>
               </div>
 
@@ -701,7 +704,7 @@
 
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">{{item.price_total + (item.forfait ? item.forfait.price + ((item.forfait.price * item.forfait.tva) / 100) : 0)}}{{item.currency}}</p>
+                  <p style="color: #EA0C60;">{{item.price_total + (item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0)}}{{item.currency}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -822,7 +825,7 @@
 
               <span style="width: 100%; float:left" *ngIf="defaults.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{(getBasePrice()*this.boukiiCarePrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{(getBasePrice() + (this.boukiiCarePrice * getBookingPaxes() * getBookingDates())).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">

@@ -1336,7 +1336,7 @@ export class BookingDetailComponent implements OnInit {
 
     if(this.booking.has_boukii_care) {
       // coger valores de reglajes
-      price = price + (this.getBasePrice() * this.boukiiCarePrice);
+      price = price + this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
 
     // añadir desde reglajes el tva
@@ -1387,5 +1387,23 @@ export class BookingDetailComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  getBookingPaxes(){
+    let ret = 0;
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.paxes;
+    });
+
+    return ret;
+  }
+
+  getBookingDates(){
+    let ret = 0;
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.courseDates.length;
+    });
+
+    return ret;
   }
 }
