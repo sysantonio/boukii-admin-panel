@@ -1354,6 +1354,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     if (this.defaults.course_type  === 2 ) {
       this.checkStep3PrivateNoFlex();
+      this.setDebut(this.defaults.hour_min);
+      this.setHourEnd(this.defaults.hour_max);
     }
 
     let data: any = [];
