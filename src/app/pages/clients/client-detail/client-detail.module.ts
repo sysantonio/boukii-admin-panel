@@ -28,7 +28,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { ClientDetailComponent } from './client-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { LevelUserComponent } from './level-user/level-user.component';
+import { ComponentsCustomModule } from '../../../components/components-custom.module';
 
 @NgModule({
   imports: [
@@ -62,9 +62,10 @@ import { LevelUserComponent } from './level-user/level-user.component';
     MatSortModule,
     MatChipsModule,
     MatTabsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ComponentsCustomModule
   ],
-  declarations: [ClientDetailComponent, LevelUserComponent],
+  declarations: [ClientDetailComponent],
   exports: [ClientDetailComponent]
 })
 export class ClientDetailModule {

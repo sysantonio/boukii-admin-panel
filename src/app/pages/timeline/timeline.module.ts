@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '../../../@vex/layout/layout.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
@@ -16,13 +17,20 @@ import { WidgetLargeChartModule } from 'src/@vex/components/widgets/widget-large
 import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widget-table.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { TimelineComponent } from './timeline.component';
 import { TimelineRoutingModule } from './timeline-routing.module';
+import { ComponentsCustomModule } from '../../components/components-custom.module';
 
 @NgModule({
   declarations: [TimelineComponent],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     LayoutModule,
     PageLayoutModule,
     BreadcrumbsModule,
@@ -39,7 +47,12 @@ import { TimelineRoutingModule } from './timeline-routing.module';
     WidgetLargeChartModule,
     WidgetTableModule,
     MatDialogModule,
-    ComponentsModule
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ComponentsModule,
+    ComponentsCustomModule
   ]
 })
 export class TimelineModule {
