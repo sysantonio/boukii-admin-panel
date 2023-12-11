@@ -1544,7 +1544,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let ret = 0;
 
     this.bookingsToCreate.forEach(element => {
-      ret = ret + element.price_total;
+      ret = ret + (element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 1 ? element.price_total * element.courseDates.length : element.price_total);
     });
 
     return ret;

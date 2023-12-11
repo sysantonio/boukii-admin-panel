@@ -220,6 +220,16 @@
                               </form>
                             </div>
                             <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
+                              <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                                Duracion<br>
+                                {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
+                              </div>
+                              <mat-form-field style="width: 100%; margin-top: 10%;margin-right: 10%">
+                                <input type="text" placeholder="Duración" aria-label="Number" matInput
+                                  [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
+                              </mat-form-field>
+                            </div>
+                            <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                               <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
                                 Alumnos <strong>0/{{defaults.max_participants}}</strong>
                               </div>

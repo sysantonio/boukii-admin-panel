@@ -556,6 +556,26 @@ export class CourseDetailComponent implements OnInit {
     return ret;
   }
 
+  calculateFormattedDuration(hourStart: string, hourEnd: string): string {
+    // Parsea las horas de inicio y fin
+    let start = moment(hourStart, "HH:mm");
+    let end = moment(hourEnd, "HH:mm");
+
+    // Calcula la duración
+    let duration = moment.duration(end.diff(start));
+
+    // Formatea la duración
+    let formattedDuration = "";
+    if (duration.hours() > 0) {
+      formattedDuration += duration.hours() + "h ";
+    }
+    if (duration.minutes() > 0) {
+      formattedDuration += duration.minutes() + "m";
+    }
+
+    return formattedDuration.trim();
+  }
+
   getClients() {
     this.crudService.list('/admin/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {

@@ -816,12 +816,12 @@
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button color="primary" mat-raised-button (click)="checkStep2ColectiveNoFlex(stepper)">
-              Siguiente
+              {{mode === 'create' ? 'Siguiente' : 'Guardar'}}
             </button>
           </div>
         </mat-step>
 
-        <mat-step [stepControl]="courseConfigForm" *ngIf="defaults.course_type === 1">
+        <mat-step [stepControl]="courseConfigForm" *ngIf="defaults.course_type === 1 && mode==='create'">
           <ng-template matStepLabel>Configuration</ng-template>
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
@@ -829,7 +829,8 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
-                <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
+                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE</label>
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
@@ -843,7 +844,8 @@
               </div>
               <div class="flex-auto">
 
-                <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
+                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À</label>
+                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [min]="courseConfigForm.value.fromDate" [max]="maxDate" [(ngModel)]="defaults.date_end_res"
@@ -971,7 +973,7 @@
           </div>
         </mat-step>
 
-        <mat-step >
+        <mat-step *ngIf="mode === 'create'">
           <ng-template matStepLabel>Selección de niveles y grupos</ng-template>
 
           <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;" *ngIf="defaults.course_type === 1">
@@ -1132,7 +1134,7 @@
                                   <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
                                     <label for="monitor">Monitor</label>
                                     <mat-form-field class="flex-auto">
-                                      <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex) || null"/>
+                                      <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
                                         <mat-option *ngFor="let monitor of filteredMonitors | async"
                                           (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">

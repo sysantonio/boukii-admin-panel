@@ -1444,8 +1444,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: null,
-        date_end: null,
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
@@ -1471,8 +1471,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: null,
-        date_end: null,
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
@@ -1574,23 +1574,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
 
     let data: any = [];
-
-    let courseDates = [];
-
-    if (this.courseType === 'collectif') {
-      this.defaults.course_dates.forEach(dates => {
-        const group = [];
-        dates.groups.forEach(dateGroup => {
-          if (dateGroup.subgroups.length > 0) {
-            group.push(dateGroup);
-          }
-        });
-        dates.groups = group;
-      });
-    } else {
-      courseDates = this.defaults.course_dates;
-    }
-
 
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       data = {
@@ -1838,32 +1821,37 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
 
   checkStep2ColectiveNoFlex(stepper: MatStepper) {
-    if(this.defaults.name === null) {
-      this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
-      return;
+    if (this.mode === 'create') {
+      if(this.defaults.name === null) {
+        this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
+        return;
+      }
+
+      if(this.defaults.price === null) {
+        this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
+        return;
+      }
+
+      if(this.myControlStations.value === null) {
+        this.snackbar.open('El campo estacion es obligatorio', 'OK', {duration: 3000})
+        return;
+      }
+
+      if(this.defaults.short_description === null) {
+        this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
+        return;
+      }
+
+      if(this.defaults.description === null) {
+        this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
+        return;
+      }
+
+      stepper.next();
+    } else {
+      this.update();
     }
 
-    if(this.defaults.price === null) {
-      this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.myControlStations.value === null) {
-      this.snackbar.open('El campo estacion es obligatorio', 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.short_description === null) {
-      this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.description === null) {
-      this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
-      return;
-    }
-
-    stepper.next();
   }
 
   checkStep3ColectiveNoFlex(stepper: MatStepper) {
