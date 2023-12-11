@@ -70,7 +70,7 @@
                     <p>Cours Collectif</p>
                   </mat-card-content>
                 </mat-card>
-                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;"[disabled]="defaults.course_type === null ||defaults.course_type === 1" (click)="setFlexibility($event)">
+                <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;"[disabled]="defaults.course_type === null || defaults.course_type === 1" (click)="setFlexibility($event)">
                   Dates flexibles
 
                 </mat-checkbox>
@@ -111,21 +111,28 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <div class="flex-auto" style="width: 40%">
-                <label for="courseName">Nom de cours</label>
+                <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
+                  <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
+                    El nombre del curso es obligatorio
+                  </mat-error>
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 15%">
-                <label for="courseName">Prix (CHF)</label>
+                <label for="courseName">Prix (CHF) <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price" [disabled]="defaults.is_flexible" placeholder="FLEXIBLE" >
+                  <input id="courseName" formControlName="price" matInput [required]="!defaults.is_flexible" [type]="defaults.is_flexible ? 'text' : 'number'" [(ngModel)]="defaults.price" [readonly]="defaults.is_flexible"
+                  [value]="defaults.is_flexible ? 'FLEXIBLE' : null">
+                  <mat-error *ngIf="courseInfoFormGroup.controls.price.errors?.['required'] && !defaults.is_flexible">
+                    El precio del curso es obligatorio
+                  </mat-error>
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 30%">
-                <label for="station">Station</label>
+                <label for="station">Station <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" [(ngModel)]="defaults.station_id">
                   <mat-autocomplete #autoStation="matAutocomplete" [displayWith]="displayFnStation">
@@ -133,20 +140,24 @@
                       {{option.name}}
                     </mat-option>
                   </mat-autocomplete>
+
                 </mat-form-field>
+                <mat-error *ngIf="myControlStations.touched && myControlStations.value === null">
+                  Seleccione una estación
+                </mat-error>
               </div>
 
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <div class="flex-auto" style="width: 60%;">
-                <label style="width: 100%; font-size: 16px;">IMAGE</label>
+                <label style="width: 100%; font-size: 16px;">Image</label>
 
                 <div style="float:left; width: 100%">
                   <div class="image-container" style="float: left;width: 50%;">
 
-                    <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'"
-                      alt="Image Preview" width="400" height="290" style=" height: 150px;width: 400px;height: 290px;object-fit: contain;">
+                    <img [src]="defaults.image"
+                      alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
                   </div>
 
                   <div class="input-container">
@@ -165,16 +176,22 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <div class="flex-auto" style="width: 40%">
-                <label for="ageFrom">Edad Mínima</label>
+                <label for="ageFrom">Edad Mínima <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="ageFrom" type="number" placeholder="Edad Minima" formControlName="ageFrom" aria-label="Number" matInput [(ngModel)]="defaults.min_age"/>
+                  <mat-error *ngIf="courseInfoFormGroup.controls.ageFrom.errors?.['required']">
+                    Establezca una edad mínima
+                  </mat-error>
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 40%">
-                <label for="ageTo">Edad Máxima</label>
+                <label for="ageTo">Edad Máxima <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="ageTo" type="number" placeholder="Edad Máxima" formControlName="ageTo" aria-label="Number" matInput [(ngModel)]="defaults.max_age"/>
+                  <mat-error *ngIf="courseInfoFormGroup.controls.ageTo.errors?.['required']">
+                    Establezca una edad máxima
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -182,24 +199,28 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
               <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">RESUME</label>
+                <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
-
+                <mat-error *ngIf="courseInfoFormGroup.controls.summary.errors?.['required']">
+                  Escriba un resumen
+                </mat-error>
               </div>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">
 
               <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">DESCRIPTION</label>
+                <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
-
+                <mat-error *ngIf="courseInfoFormGroup.controls.description.errors?.['required']">
+                  Escriba una descripcion
+                </mat-error>
               </div>
             </div>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+            <button color="primary" (click)="checkStep2PrivateNoFlex(stepper)" mat-raised-button>
               Siguiente
             </button>
           </div>
@@ -208,21 +229,32 @@
         <mat-step [stepControl]="courseInfoPriveFormGroup" [completed]="false" [editable]="true">
           <ng-template matStepLabel>Info de cours</ng-template>
 
-          <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoPriveFormGroup">
+          <mat-spinner *ngIf="loadingTable" style="margin: 0 auto;">
+          </mat-spinner>
+          <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoPriveFormGroup" *ngIf="!loadingTable">
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto">
+              <div class="flex-auto" style="width: 50%;">
 
                 <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE</label>
                 <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start_res">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+                  <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromDate.errors?.['required']">
+                    <span *ngIf="defaults.is_flexible">
+                      Fecha desde reservable obligatoria
+                    </span>
+                    <span *ngIf="!defaults.is_flexible">
+                      Fecha desde es obligatoria
+                    </span>
+                  </mat-error>
                 </mat-form-field>
               </div>
-              <div class="flex-auto">
+              <div class="flex-auto" style="width: 50%;">
 
                 <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À</label>
                 <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À</label>
@@ -232,13 +264,22 @@
                   [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerTo [startAt]="courseInfoPriveFormGroup.value.fromDate"></mat-datepicker>
+
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.toDate.errors?.['required']">
+                    <span *ngIf="defaults.is_flexible">
+                      Fecha hasta reservable obligatoria
+                    </span>
+                    <span *ngIf="!defaults.is_flexible">
+                      Fecha hasta es obligatoria
+                    </span>
+                  </mat-error>
                 </mat-form-field>
               </div>
 
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="flex-auto">
+              <div class="flex-auto" style="width: 50%;">
 
                 <label for="durationPrivate">DURÉ</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
@@ -250,12 +291,15 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
-              <div class="flex-auto">
+              <div class="flex-auto" style="width: 50%;">
 
                 <label for="participants">PARTICIPANTS MÁX.</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <mat-label>PARTICIPANTS MÁX.</mat-label>
                   <input id="participants" formControlName="participants" matInput required type="number" [(ngModel)]="defaults.max_participants">
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.participants.errors?.['required']">
+                    Añade el limite de participantes del curso
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -271,6 +315,10 @@
                       {{hour}}
                     </mat-option>
                   </mat-autocomplete>
+
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromHour.errors?.['required']">
+                    La hora de inicio es obligatoria
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="flex-auto">
@@ -283,6 +331,9 @@
                       {{hour}}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.maxDuration.errors?.['required']">
+                    La hora de fin es obligatoria
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -299,6 +350,41 @@
 
                 <mat-checkbox (change)="onCheckboxChange('multiple')" [checked]="periodeMultiple" formControlName="periodeMultiple">Plusieurs Periodes</mat-checkbox>
               </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
+              <div class="flex-auto" style="width:50%">
+
+                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE</label>
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start">
+                  <mat-datepicker-toggle matSuffix [for]="pickerFromUnique"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFromUnique [startAt]="minDate"></mat-datepicker>
+
+                  <mat-error *ngIf="courseInfoPriveFormGroup?.controls?.fromDateUnique?.errors?.['required']">
+                    Fecha desde es obligatoria
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto" style="width:50%">
+
+                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À</label>
+                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À</label>
+                <mat-form-field style="width: 100%">
+
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerToUnique" formControlName="toDateUnique" [min]="courseInfoPriveFormGroup?.value?.fromDateUnique" [(ngModel)]="defaults.date_end"
+                  [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
+                  <mat-datepicker-toggle matSuffix [for]="pickerToUnique"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerToUnique [startAt]="courseInfoPriveFormGroup?.value?.fromDateUnique"></mat-datepicker>
+
+                  <mat-error *ngIf="courseInfoPriveFormGroup?.controls?.toDateUnique?.errors?.['required']">
+                    Fecha hasta es obligatoria
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
             </div>
 
             <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="defaults.course_type === 2 && this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
@@ -342,38 +428,38 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0" >
 
               <div class="flex-auto">
 
                 <label for="all-days">Jours</label>
                 <div style="width: 100%">
 
-                  <mat-checkbox id="all-days" [checked]="false" [disabled]="daysDates.length === 0" (change)="addWeekDay($event, 'all')">Touts selectionner</mat-checkbox>
+                  <mat-checkbox id="all-days" [checked]="false" (change)="addWeekDay($event, 'all')">Touts selectionner</mat-checkbox>
                 </div>
               </div>
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"  *ngIf="defaults.is_flexible">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
 
-              <div class="flex-auto" style="padding-left: 5%" *ngIf="this.courseInfoPriveFormGroup.value.periodeMultiple">
+              <div class="flex-auto" style="padding-left: 5%">
 
                 <div style="width: 100%">
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.monday" [disabled]="!daysDates.includes('monday')" (change)="addWeekDay($event, 'monday')">Lundi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.tuesday" [disabled]="!daysDates.includes('tuesday')" (change)="addWeekDay($event, 'tuesday')">Mardi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.monday" (change)="addWeekDay($event, 'monday')">Lundi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.tuesday" (change)="addWeekDay($event, 'tuesday')">Mardi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.wednesday" [disabled]="!daysDates.includes('wednesday')" (change)="addWeekDay($event, 'wednesday')">Mercedi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.thursday" [disabled]="!daysDates.includes('thursday')" (change)="addWeekDay($event, 'thursday')">Jeudi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.wednesday" (change)="addWeekDay($event, 'wednesday')">Mercedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.thursday" (change)="addWeekDay($event, 'thursday')">Jeudi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.friday" [disabled]="!daysDates.includes('friday')" (change)="addWeekDay($event, 'friday')">Vendredi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.saturday" [disabled]="!daysDates.includes('saturday')" (change)="addWeekDay($event, 'saturday')">Samedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.friday" (change)="addWeekDay($event, 'friday')">Vendredi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.saturday" (change)="addWeekDay($event, 'saturday')">Samedi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.sunday" [disabled]="!daysDates.includes('sunday')" (change)="addWeekDay($event, 'sunday')">Diamanche</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults.settings.weekDays.sunday" (change)="addWeekDay($event, 'sunday')">Diamanche</mat-checkbox></li>
 
                   </ul>
                 </div>
@@ -436,7 +522,7 @@
             </div>
 
 
-            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="defaults.course_type === 2 && this.defaults.is_flexible">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="defaults.course_type === 2 && this.defaults.is_flexible && this.courseInfoPriveFormGroup.value.periodeMultiple">
               <div class="flex-auto" style="width: 100%">
                 <label for="table-reduction">RÉDUCTIONS SELON LE NOMBRE DE DATES RÉSERVÉES</label>
 
@@ -480,7 +566,7 @@
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext *ngIf="defaults.is_flexible">
+            <button color="primary" mat-raised-button *ngIf="defaults.is_flexible" (click)="checkStep3PrivateFlex(stepper)">
               Siguiente
             </button>
             <button color="primary" mat-raised-button matStepperNext (click)="save()" *ngIf="!defaults.is_flexible">
@@ -494,7 +580,7 @@
           <div class="p-6">
 
             <mat-form-field class="flex-auto">
-              <input matInput placeholder="Enter people number" type="number" [value]="people" [(ngModel)]="people" (ngModelChange)="updateTable()">
+              <input matInput placeholder="Enter people number" type="number" [value]="people" [(ngModel)]="people" (ngModelChange)="updateTable(people, false)">
             </mat-form-field>
 
             <div class="table-container" >
@@ -728,9 +814,9 @@
                 <label for="dateFromPrivate">DATE RÉSERVABLE À PARTIR DE</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="today" [(ngModel)]="defaults.date_start_res">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerDateFrom [startAt]="today"></mat-datepicker>
+                  <mat-datepicker #pickerDateFrom [startAt]="minDate"></mat-datepicker>
                 </mat-form-field>
               </div>
               <div class="flex-auto">

@@ -13,6 +13,8 @@ import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-d
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
+import { MatStepper } from '@angular/material/stepper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -70,7 +72,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   myControl = new FormControl();
   myControlSport = new FormControl();
-  myControlStations = new FormControl();
+  myControlStations = new FormControl(Validators.required);
   monitorsForm = new FormControl();
 
   options: any[] = [{id: 1, name:'Cours collectif'}, {id:2, name: 'Cours privés'}];
@@ -92,9 +94,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   // Nuevos
   courseConfigForm: UntypedFormGroup;
 
-  imagePreviewUrl: string | ArrayBuffer = null;
+  imagePreviewUrl: string | ArrayBuffer = '../../../../assets/img/no-image.jpg';
 
-  today = new Date();
+  minDate = new Date();
+  maxDate = new Date();
   from: any = null;
   to: any = null;
   daySelectedIndex: any = 0;
@@ -186,6 +189,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
+  loadingTable: boolean = false;
 
   durations = [];
   filteredMaxDurations = [];
@@ -196,9 +200,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   schoolData: any = [];
   schoolPriceRanges: any = [];
+  season: any = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-      private schoolService: SchoolService) {
+      private schoolService: SchoolService, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -242,9 +247,27 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
 
+    this.getSportsType();
+    this.getSports();
+    this.getStations();
+    this.getMonitors();
+
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.schoolData = data.data;
+        this.crudService.list('/seasons', 1, 1000, null, null, '&school_id='+data.data.id + '&is_active=1')
+          .subscribe((season) => {
+            this.season = season.data[0];
+             // Extrae las horas de inicio y fin
+            const hourStart = this.season.hour_start.substr(0, 5); // '08:00'
+            const hourEnd = this.season.hour_end.substr(0, 5); // '17:00'
+
+            // Filtra el array de horas
+            this.hours = this.hours.filter(hour => hour >= hourStart && hour <= hourEnd);
+
+            this.minDate = moment(this.season.start_date, 'YYYY-MM-DD').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'YYYY-MM-DD').toDate() : this.minDate;
+            this.maxDate = moment(this.season.end_date).toDate();
+          });
         this.schoolPriceRanges = JSON.parse(data.data.settings).prices_range;
         this.people = this.schoolPriceRanges.people ? this.schoolPriceRanges.people : 6;
         this.displayedColumnsFlexiblePrices = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
@@ -287,8 +310,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
             description: [null, Validators.required],
             duration: [null],
             participants: [null],
-            ageFrom: [null, Validators.required],
-            ageTo: [null, Validators.required],
+            ageFrom: [null, [Validators.required]],
+            ageTo: [null, [Validators.required]],
             image: [null],
           })
 
@@ -303,6 +326,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
             participants: [null, Validators.required],
             fromDate: [null, Validators.required],
             toDate: [null, Validators.required],
+            fromDateUnique: [null, Validators.required],
+            toDateUnique: [null, Validators.required],
             from: [null, Validators.required],
             to: [null, Validators.required],
             image: [null],
@@ -391,13 +416,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
 
 
-          this.getSportsType();
-          this.getSports();
-          this.getStations();
-          this.getMonitors();
           setTimeout(() => {
             this.filterSportsByType();
-
+            this.loading = false;
           }, 500);
         })
     } else {
@@ -418,8 +439,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: [null, Validators.required],
         duration: [null],
         participants: [null],
-        ageFrom: [null, Validators.required],
-        ageTo: [null, Validators.required],
+        ageFrom: [null, [Validators.required]],
+        ageTo: [null, [Validators.required]],
         image: [null],
       })
 
@@ -437,8 +458,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         from: [null, Validators.required],
         to: [null, Validators.required],
         image: [null],
-        periodeUnique: new FormControl(false),
-        periodeMultiple: new FormControl(false)
+        fromDateUnique: [null, Validators.required],
+        toDateUnique: [null, Validators.required],
+        periodeUnique: [true],
+        periodeMultiple: [false]
       })
 
       this.courseLevelFormGroup = this.fb.group({});
@@ -520,15 +543,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.updateToHourOptions(selectedStartHour);
       });
 
-
-
-      this.getSportsType();
-      this.getSports();
-      this.getStations();
-      this.getMonitors();
       setTimeout(() => {
         this.filterSportsByType();
-
+        this.loading = false;
       }, 500);
     }
   }
@@ -569,155 +586,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       return dateA.getTime() - dateB.getTime();
     });
-  }
-
-  create() {
-
-    let data: any = [];
-
-    let courseDates = [];
-
-    if (this.courseType === 'collectif') {
-      this.defaults.course_dates.forEach(dates => {
-        const group = [];
-        dates.groups.forEach(dateGroup => {
-          if (dateGroup.subgroups.length > 0) {
-            group.push(dateGroup);
-          }
-        });
-        dates.groups = group;
-      });
-    } else {
-      courseDates = this.defaults.course_dates;
-    }
-
-
-    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
-        date_start: null,
-        date_end: null,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        confirm_attendance: false,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        image: this.imagePreviewUrl,
-        translations: null,
-        discounts: JSON.stringify(this.dataSourceReductions.data),
-        sport_id: this.defaults.sport_id,
-        school_id: null, //sacar del global
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
-      }
-      console.log(data);
-
-    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
-        date_start: null,
-        date_end: null,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        confirm_attendance: false,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        image: this.imagePreviewUrl,
-        translations: null,
-        sport_id: this.defaults.sport_id,
-        school_id: null, //sacar del global
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
-      }
-      console.log(data);
-    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: 0,
-        currency: 'CHF',
-        date_start: null,
-        date_end: null,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        active: this.defaults.active,
-        online: this.defaults.online,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: null,
-        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
-        price_range: this.dataSourceFlexiblePrices,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age,
-        course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings)
-      };
-      console.log(data);
-    } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
-      let dates = this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: this.defaults.price,
-        currency: 'CHF',
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start: this.defaults.date_start_res,
-        date_end: this.defaults.date_end_res,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: null,
-        price_range: null,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age,
-        course_dates: this.defaults.course_dates
-
-      };
-    }
-
-    // Revisar caso por caso
-    this.defaults.date_start = this.defaults.date_start_res;
-    this.defaults.date_end = this.defaults.date_end_res;
-    data.school_id = this.user.schools[0].id;
-
-    this.crudService.create('/admin/courses', data)
-      .subscribe((res) => {
-        console.log(res);
-        this.goTo('/courses');
-      })
-
   }
 
   goTo(route: string) {
@@ -864,7 +732,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       width: '300px',
       data: {
         iterations: this.dataSource.data.length,
-        dateFrom: this.today
+        dateFrom: this.minDate
       }
     });
 
@@ -983,6 +851,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.courseInfoPriveSeparatedFormGroup.reset();
     this.courseInfoCollecDateSplitFormGroup.reset();
     this.courseLevelFormGroup.reset();
+    this.courseInfoPriveFormGroup.get("periodeUnique").patchValue(true);
   }
 
   setFlexibility(event: any) {
@@ -992,17 +861,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   }
 
-  updateTable() {
-    // Lógica para actualizar la tabla basándote en el valor de this.people
-
-    // Por ejemplo, podrías actualizar las columnas mostradas:
+  updateTable(event: any, fromInput = false) {
+    if (fromInput) {
+      this.people = parseInt(event);
+    }
     this.displayedColumnsFlexiblePrices = ['intervalo']; // Inicializa con la columna de intervalo
     for (let i = 1; i <= this.people; i++) {
       this.displayedColumnsFlexiblePrices.push(`${i}`); // Añade columnas para cada persona
     }
-
-    // También podrías necesitar actualizar los datos mostrados en la tabla
-    // ...
   }
 
   formatIntervalo(minutos: number): string {
@@ -1029,7 +895,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
               element.icon_selected = data.data.icon_selected;
               element.icon_unselected = data.data.icon_unselected;
               element.sport_type = data.data.sport_type;
-              this.loading = false;
+
             });
         });
 
@@ -1488,4 +1354,270 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
   }
 
+  create() {
+
+    if (this.defaults.course_type  === 2 ) {
+      this.checkStep3PrivateNoFlex();
+    }
+
+    let data: any = [];
+
+    let courseDates = [];
+
+    if (this.courseType === 'collectif') {
+      this.defaults.course_dates.forEach(dates => {
+        const group = [];
+        dates.groups.forEach(dateGroup => {
+          if (dateGroup.subgroups.length > 0) {
+            group.push(dateGroup);
+          }
+        });
+        dates.groups = group;
+      });
+    } else {
+      courseDates = this.defaults.course_dates;
+    }
+
+
+    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        discounts: JSON.stringify(this.dataSourceReductions.data),
+        sport_id: this.defaults.sport_id,
+        school_id: null, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+
+    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        sport_id: this.defaults.sport_id,
+        school_id: null, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: 0,
+        currency: 'CHF',
+        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        confirm_attendance: false,
+        translations: null,
+        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
+        price_range: this.dataSourceFlexiblePrices,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        min_age: this.defaults.min_age,
+        max_age: this.defaults.max_age,
+        course_dates: this.defaults.course_dates,
+        settings: JSON.stringify(this.defaults.settings)
+      };
+      console.log(data);
+    } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
+      this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        confirm_attendance: false,
+        translations: null,
+        price_range: null,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        min_age: this.defaults.min_age,
+        max_age: this.defaults.max_age,
+        course_dates: this.defaults.course_dates
+
+      };
+    }
+    data.school_id = this.user.schools[0].id;
+
+    this.crudService.create('/admin/courses', data)
+      .subscribe((res) => {
+        console.log(res);
+        this.goTo('/courses');
+      })
+
+  }
+
+  checkStep2PrivateNoFlex(stepper: MatStepper) {
+    if(this.defaults.name === null) {
+      this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.price === null) {
+      this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.myControlStations.value === null) {
+      this.snackbar.open('El campo estacion es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.min_age === null) {
+      this.snackbar.open('El campo edad minima es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.max_age === null) {
+      this.snackbar.open('El campo edad maxima es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.short_description === null) {
+      this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.description === null) {
+      this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    stepper.next();
+
+  }
+
+  checkStep3PrivateNoFlex() {
+    if (this.defaults.date_start_res === null) {
+      this.snackbar.open('El campo fecha desde es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.date_end_res === null) {
+      this.snackbar.open('El campo fecha hassta es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.duration === null) {
+      this.snackbar.open('El campo duracion es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.max_participants === null) {
+      this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.hour_min === null) {
+      this.snackbar.open('El campo hora de inicio es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.hour_max === null) {
+      this.snackbar.open('El campo hora de fin es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+  }
+
+  checkStep3PrivateFlex(stepper: MatStepper) {
+    if (this.defaults.date_start_res === null) {
+      this.snackbar.open('El campo fecha reservable desde es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.date_end_res === null) {
+      this.snackbar.open('El campo fecha reservable hasta es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+    if (this.defaults.date_start === null) {
+      this.snackbar.open('El campo fecha desde es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.date_end === null) {
+      this.snackbar.open('El campo fecha hasta es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.duration === null) {
+      this.snackbar.open('El campo duracion es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.max_participants === null) {
+      this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.hour_min === null) {
+      this.snackbar.open('El campo hora de inicio es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.hour_max === null) {
+      this.snackbar.open('El campo hora de fin es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+
+    this.updateTable(this.defaults.max_participants, true);
+    stepper.next();
+  }
 }

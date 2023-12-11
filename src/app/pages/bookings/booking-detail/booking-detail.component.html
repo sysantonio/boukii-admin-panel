@@ -59,12 +59,12 @@
               <div style="width: 100%; float:left">
                 <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <div style="width: 65%;">
+                    <div style="width: 50%;">
                       <strong>Forfait</strong>
                     </div>
 
-                    <div>
-                      <p> +{{item.forfait ? item.forfait.price + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                    <div style="float: right;">
+                      <p> +{{getCourseExtraForfaitPrice(item.courseDates[0])}} CHF</p>
                     </div>
                   </div>
 
@@ -137,7 +137,7 @@
 
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">{{item.price_total + (item.forfait ? item.forfait.price + ((item.forfait.price * item.forfait.tva) / 100) : 0)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                  <p style="color: #EA0C60;">{{item.price_total + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>

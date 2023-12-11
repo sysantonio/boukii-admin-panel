@@ -30,6 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatSortModule,
     MatChipsModule,
     MatCheckboxModule,
-    AngularEditorModule
+    AngularEditorModule,
+    MatProgressSpinnerModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

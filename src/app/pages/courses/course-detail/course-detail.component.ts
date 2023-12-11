@@ -556,7 +556,6 @@ export class CourseDetailComponent implements OnInit {
     return ret;
   }
 
-
   getClients() {
     this.crudService.list('/admin/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
