@@ -14,7 +14,7 @@ export class AddDiscountBonusModalComponent implements OnInit {
 
   bonuses: any;
   bonus: any;
-  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private dialogRef: MatDialogRef<any>) {
 
   }
 
@@ -24,5 +24,25 @@ export class AddDiscountBonusModalComponent implements OnInit {
       .subscribe((data) => {
         this.bonuses = data.data;
       })
+  }
+
+  closeModal() {
+
+    this.bonus.reducePrice = this.bonus.remaining_balance > this.defaults.currentPrice ? this.defaults.currentPrice : this.bonus.remaining_balance;
+
+    this.dialogRef.close({
+      bonus: this.bonus
+    })
+  }
+
+  isInUse(id: number) {
+    let inUse = false;
+    this.defaults.appliedBonus.forEach(element => {
+      if (element.bonus.id === id) {
+        inUse = true;
+      }
+    });
+
+    return inUse;
   }
 }

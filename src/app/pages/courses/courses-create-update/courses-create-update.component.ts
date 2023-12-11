@@ -12,6 +12,7 @@ import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/r
 import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SchoolService } from 'src/service/school.service';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -59,18 +60,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
   displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
-  displayedColumnsFlexiblePrices: string[] =['intervalo', ...Array.from({ length: this.people }, (_, i) => `persona ${i + 1}`)];
   dataSource = new MatTableDataSource([]);
   dataSourceReductions = new MatTableDataSource([]);
   dataSourceDatePrivate = new MatTableDataSource([]);
   dataSourceReductionsPrivate = new MatTableDataSource([]);
-  dataSourceFlexiblePrices = this.intervalos.map(intervalo => {
-    const fila: any = { intervalo: this.formatIntervalo(intervalo) };
-    for (let i = 1; i <= this.people; i++) {
-      fila[`persona ${i}`] = '';
-    }
-    return fila;
-  });
+
+  dataSourceFlexiblePrices: any;
+  displayedColumnsFlexiblePrices: string[] = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
 
   myControl = new FormControl();
   myControlSport = new FormControl();
@@ -123,7 +119,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     online: true,
     image: this.imagePreviewUrl,
     translations: null,
-    price_range: this.dataSourceFlexiblePrices,
+    price_range: null,
     discounts: null,
     settings: {
       weekDays: {
@@ -198,7 +194,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
   user: any;
   id: any = null;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute) {
+  schoolData: any = [];
+  schoolPriceRanges: any = [];
+
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
+      private schoolService: SchoolService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -241,6 +241,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        this.schoolData = data.data;
+        this.schoolPriceRanges = JSON.parse(data.data.settings).prices_range;
+        this.people = this.schoolPriceRanges.people ? this.schoolPriceRanges.people : 6;
+        this.displayedColumnsFlexiblePrices = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
+        this.dataSourceFlexiblePrices = this.schoolPriceRanges && this.schoolPriceRanges.prices && this.schoolPriceRanges.prices !== null ? this.schoolPriceRanges.prices :
+        this.intervalos.map(intervalo => {
+          const fila: any = { intervalo: this.formatIntervalo(intervalo) };
+          for (let i = 1; i <= this.people; i++) {
+            fila[`${i}`] = '';
+          }
+          return fila;
+        });
+      })
+
     if (!this.id) {
       this.mode = 'create';
     } else {
@@ -264,7 +281,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseInfoFormGroup = this.fb.group({
 
             course_name: [null, Validators.required],
-            price: [null, Validators.required],
+            price: [null],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
@@ -543,14 +560,20 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
+
+  sortEventsByDate() {
+    return this.defaults.course_dates.sort((a, b) => {
+      // Convertir las fechas a objetos Date para compararlas
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      return dateA.getTime() - dateB.getTime();
+    });
+  }
+
   create() {
 
     let data: any = [];
-
-    let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
-
-    let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
-    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
 
     let courseDates = [];
 
@@ -578,10 +601,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: this.defaults.date_start_res,
-        date_end_res: this.defaults.date_end_res,
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -605,10 +628,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: this.defaults.date_start_res,
-        date_end_res: this.defaults.date_end_res,
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -628,12 +651,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
         name: this.defaults.name,
         short_description: this.defaults.short_description,
         description: this.defaults.description,
-        price: this.defaults.price,
+        price: 0,
         currency: 'CHF',
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: lowestDate,
-        date_end_res: highestDate,
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -653,6 +676,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
+      let dates = this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -661,10 +685,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',
-        date_start_res: lowestDate,
-        date_end_res: highestDate,
-        date_start: lowestDate,
-        date_end: highestDate,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: this.defaults.date_start_res,
+        date_end: this.defaults.date_end_res,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -683,6 +707,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
     }
 
+    // Revisar caso por caso
     this.defaults.date_start = this.defaults.date_start_res;
     this.defaults.date_end = this.defaults.date_end_res;
     data.school_id = this.user.schools[0].id;
@@ -971,9 +996,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
     // Lógica para actualizar la tabla basándote en el valor de this.people
 
     // Por ejemplo, podrías actualizar las columnas mostradas:
-    this.displayedColumns = ['intervalo']; // Inicializa con la columna de intervalo
+    this.displayedColumnsFlexiblePrices = ['intervalo']; // Inicializa con la columna de intervalo
     for (let i = 1; i <= this.people; i++) {
-      this.displayedColumns.push(i + ' Persona'); // Añade columnas para cada persona
+      this.displayedColumnsFlexiblePrices.push(`${i}`); // Añade columnas para cada persona
     }
 
     // También podrías necesitar actualizar los datos mostrados en la tabla
@@ -1093,7 +1118,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     return ret;
   }
 
-  getDatesBetween(startDate, endDate, process) {
+  getDatesBetween(startDate, endDate, process, hourStart = null, hourEnd = null) {
 
     if (process) {
       this.daysDatesLevels = [];
@@ -1116,8 +1141,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.daysDatesLevels.push({date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '')});
         this.defaults.course_dates.push({
           date: currentDate.format('YYYY-MM-DD'),
-          hour_start: null,
-          hour_end: null,
+          hour_start: hourStart,
+          hour_end: hourEnd,
         })
         currentDate = currentDate.add(1, 'days');
       }

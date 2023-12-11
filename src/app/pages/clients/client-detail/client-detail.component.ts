@@ -733,7 +733,6 @@ displayedColumns: string[] = ['name', 'date'];
             user_id: null,
             station_id: this.defaults.station_id
           }
-          const sportData = this.sportsCurrentData.data;
 
           this.setLanguagesUtilizateur(data.data.languages, client);
 
@@ -747,20 +746,13 @@ displayedColumns: string[] = ['name', 'date'];
 
                 this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
                   .subscribe((clientSchool) => {
-                    sportData.forEach(sport => {
 
-                      this.crudService.create('/client-sports', {client_id: clientCreated.data.id, sport_id: sport.id, degree_id: sport.pivot.degree_id, school_id: this.user.schools[0].id})
-                        .subscribe(() => {
-                          console.log('client sport created');
-                        })
-                    });
+                    setTimeout(() => {
+                      this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
+                      .subscribe((res) => {
+                        this.getClientUtilisateurs();
+                      })}, 1000);
                   });
-
-                  setTimeout(() => {
-                    this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
-                    .subscribe((res) => {
-                      this.getClientUtilisateurs();
-                    })}, 1000);
               })
           })
         }

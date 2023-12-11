@@ -24,6 +24,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { CoursesDetailModule } from './course-detail/course-detail.module';
+import { CourseUserTransferComponent } from './course-user-transfer/course-user-transfer.component';
+import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -50,7 +52,8 @@ import { CoursesDetailModule } from './course-detail/course-detail.module';
     ComponentsModule,
     MatSlideToggleModule,
     MatDividerModule,
-    MatCardModule
+    MatCardModule,
+    CourseUserTransferModalModule
   ]
 })
 export class CoursesModule {

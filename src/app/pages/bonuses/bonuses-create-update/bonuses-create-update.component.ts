@@ -89,7 +89,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
   update() {
 
     const data = {
-      code: "VOU-"+this.generateRandomNumber(),
+      code: this.defaults.code,
       quantity: this.defaults.quantity,
       remaining_balance: this.defaults.quantity,
       payed: this.defaults.payed,

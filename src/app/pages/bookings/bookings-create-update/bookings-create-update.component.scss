@@ -43,18 +43,14 @@
 }
 
 .calendar-column {
-  flex: 0 0 50%; /* No crecerá, no se reducirá y se establece en un ancho base de 30% */
-  padding: 0 5% 0 5%; /* Agregar un pequeño espacio entre las columnas */
-  height: 100%; /* Establece una altura del 100% */
-
+  padding: 0 5% 0 5%;
+  height: 100%;
+  width: 50%;
 }
 
 .list-column {
-  flex: 2;
-  flex: 0 0 50%; /* No crecerá, no se reducirá y se establece en un ancho base de 30% */
-  display: flex;
-  flex-direction: column;
   height: 550px;
+  width: 50%;
 }
 
 .list-overflow-container {
@@ -117,6 +113,7 @@ mat-list {
   position: relative;
   margin: 1%;
   float: left;
+  height: 900px;
 }
 
 .delete-icon {
@@ -172,10 +169,10 @@ mat-card-avatar {
 }
 
 .user-avatar {
-  width: 25;  /* Puedes ajustar según tus necesidades */
-  height: 25;
+  width: 50px;  /* Puedes ajustar según tus necesidades */
+  height: 50px;
   border-radius: 50%;  /* Hace que la imagen sea redonda */
-  object-fit: cover;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
+  object-fit: contain;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
 }
 
 .centered-chip-list {

@@ -82,8 +82,8 @@
                       <div style="width: 100%; float:left;">
                         <label for="holiday-{{i}}">Día festivo</label>
                         <mat-form-field style="width: 100%">
-                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)">
-                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)"  [value]="holiday">
+                          <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
                           <mat-datepicker #picker [startAt]="today"></mat-datepicker>
                         </mat-form-field>
                       </div>
@@ -545,11 +545,20 @@
           <vex-page-layout>
             <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> Opción Reembolso</h1>
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Reservas</h1>
+                <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  Configura los diferentes suplementos para tus reservas.
+                </p>
+                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveTaxes()">Guardar Cambios</button>
+
+              </div>
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
+                  <mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle> Opción Reembolso</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Porcentaje que retiene la escuela</p>
                   <mat-form-field class="flex-auto">
-                    <input matInput placeholder="Percentaje" type="number" [value]="this.school.cancellation_insurance_percent" [(ngModel)]="this.school.cancellation_insurance_percent">
+                    <input matInput placeholder="Percentaje" type="number" [value]="this.school.cancellation_insurance_percent * 100" (blur)="updateInsuranceValue($event)">
 
                   </mat-form-field>
                 </div>
@@ -561,14 +570,21 @@
 
               </div>
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;"><mat-slide-toggle></mat-slide-toggle> Boukii Care <span style="color: #e6e6e6">(Seguro adicional)</span></h1>
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
+                  <mat-slide-toggle [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care <span style="color: #e6e6e6">(Seguro adicional)</span></h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   Boukii Care es un seguro que ponemos a vuestra disposición para cubrir posibles<br>
                   eventualidades del cliente, desligando a la escuela de cualquier trámite burocrático.<br>
                   El importe será deducido de la factura final emitida desde la plataforma Boukii Pay.<br><br>
                   Puedes consultar las condiciones de utilización aqui: <a href="" style="text-decoration:none; color: #f53d7c;">Enlace</a>
                 </p>
+                <div style="width:100%; float:left;">
+                  <p style="width:100%; float:left;color:#808080;">Precio fijo del seguro</p>
+                  <mat-form-field class="flex-auto">
+                    <input matInput placeholder="Percentaje" type="number" [value]="this.school.bookings_comission_boukii_pay"  (blur)="updateBoukiiCareValue($event)">
 
+                  </mat-form-field>
+                </div>
               </div>
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Anulaciones</h1>
@@ -596,14 +612,15 @@
                   Estas limitaciones afectan únicamente a las reservas realizadas por el cliente desde.<br>
                   la página de reservas y la app. La escuela tiene libre control desde el panel de admin.<br>
                 </p>
-
               </div>
 
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
+                  <mat-slide-toggle [(ngModel)]="hasTVA"></mat-slide-toggle>TVA</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Porcentaje del impuesto</p>
                   <mat-form-field class="flex-auto">
-                    <input matInput placeholder="TVA" type="number" [value]="this.school.bookings_comission_cash" [(ngModel)]="this.school.bookings_comission_cash">
+                    <input matInput placeholder="TVA" type="number" [value]="this.school.bookings_comission_cash * 100" (blur)="updateTVAValue($event)">
 
                   </mat-form-field>
                 </div>

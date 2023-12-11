@@ -22,6 +22,9 @@ import { AddClientUserModalComponent } from '../../clients/add-client-user/add-c
 import { PasswordService } from 'src/service/password.service';
 import { ClientCreateUpdateModalComponent } from '../../clients/client-create-update-modal/client-create-update-modal.component';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
+import { AddClientSportModalComponent } from '../add-client-sport/add-client-sport.component';
+import { Router } from '@angular/router';
+import { SchoolService } from 'src/service/school.service';
 
 @Component({
   selector: 'custom-header',
@@ -111,13 +114,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
   createComponent = BookingsCreateUpdateModalComponent;
   selectedDatePrivate = new Date();
 
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   title = 'Título de la Reserva';
   titleMoniteur = 'Nombre monitor';
   usersCount = 5;
   duration = '3 horas';
   dates = ['03/11/2023', '04/11/2023', '05/11/2023']; // Ejemplo de fechas
-  durations = ['1h 30', '2h 00', '2h 30']; // Ejemplo de duraciones
+  durations = null; // Ejemplo de duraciones
   persons = []; // Ejemplo de número de personas
 
   reservedDates = [
@@ -220,8 +222,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
+  loadingUtilizers: boolean = true;
   loadingCalendar: boolean = true;
+  loadingDurations: boolean = true;
   sportTypeSelected: number = 1;
+  selectedSport: any = null;
 
   bookings = [];
   bookingsToCreate = [];
@@ -238,26 +243,41 @@ export class BookingsCreateUpdateComponent implements OnInit {
   school = [];
   settings: any = [];
   user: any;
-  selectedForfait = null;
   mainIdSelected = true;
-  detailClient: any;
   reduction: any = null;
   finalPrice: any = null;
-  bonus: any = null;
+  finalPriceNoTaxes: any = null;
+  bonus: any = [];
   totalPrice: any = 0;
   countries = MOCK_COUNTRIES;
+  snackBarRef: any = null;
+  schoolSettings: any = [];
+
+  tva = 0;
+  cancellationInsurance = 0;
+  boukiiCarePrice = 0;
 
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private snackbar: MatSnackBar, private passwordGen: PasswordService) {
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService, private cdr: ChangeDetectorRef) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
                   this.handleMonthChange(firstDayOfMonth);
+                  this.selectedDatePrivate = firstDayOfMonth;
+                  this.selectedDate = firstDayOfMonth;
                 });
               }
 
   ngOnInit() {
+    this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        this.schoolSettings = data.data;
+        this.tva = parseFloat(this.schoolSettings.cancellation_insurance_percent);
+        this.cancellationInsurance = parseFloat(this.schoolSettings.bookings_comission_cash);
+        this.boukiiCarePrice = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
+      })
     this.getData();
   }
 
@@ -286,10 +306,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
       .subscribe((data: any) => {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
-        this.detailClient = this.clients[0];
 
 
-        this.filterSportsByType();
+        this.filterSportsByType(true);
 
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
           startWith(''),
@@ -321,7 +340,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
             this.selectSport(this.sportDataList[0]);
             this.getUtilzers(this.clients[0], true);
-            this.getDegrees(this.defaults.sport_id);
+            //this.getDegrees(this.defaults.sport_id);
 
             setTimeout(() => {
               this.clientsForm.patchValue(this.clients[0]);
@@ -342,14 +361,37 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.subscription.unsubscribe();
   }
 
-  filterSportsByType() {
+  filterSportsByType(onload = false) {
+    if(this.snackBarRef!==null) {
+
+      this.snackBarRef.dismiss();
+    }
     this.sportTypeSelected = this.form.get('sportType').value;
     let selectedSportType = this.form.get('sportType').value;
     this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === selectedSportType));
     this.sportDataList = this.sportData.filter(sport => sport.sport_type === selectedSportType);
+
+    if (!onload) {
+      const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+      client.sports.forEach(sport => {
+
+        if (sport.id === this.defaults.sport_id) {
+          const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+          this.levelForm.patchValue(level);
+          this.defaultsBookingUser.degree_id = level.id;
+          this.getCourses(level, this.monthAndYear);
+        }
+      });
+    }
+
   }
 
   setCourseType(type: string, id: number) {
+    this.monthAndYear = new Date();
+    if(this.snackBarRef!==null) {
+
+      this.snackBarRef.dismiss();
+    }
     this.courseType = type;
     this.courseTypeId = id;
     this.form.get("courseType").patchValue(id);
@@ -368,12 +410,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
 
     if (!hasSport) {
-      this.courses = [];
-      this.snackbar.open('El usuario no tiene este deporte asociado', 'OK', {duration:3000});
+      this.snackbar.open('El usuario no tiene este deporte asociado. Si se crea una reserva con este deporte, se le asignará automáticamente el nivel seleccionado', 'OK', {duration:3000});
     }
   }
 
   selectItem(item: any) {
+
+    if(this.snackBarRef!==null) {
+
+      this.snackBarRef.dismiss();
+    }
 
     if (item.course_type === 1) {
       if (this.selectedItem !== null && this.selectedItem?.id !== item.id) {
@@ -388,11 +434,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.generateArray(item.max_participants);
       this.courseDates = [];
 
+
       this.selectedItem = item;
       this.courseDates.push({
         school_id: this.user.schools[0].id,
         booking_id: null,
-        client_id: this.detailClient.id,
+        client_id: this.defaultsBookingUser.client_id,
         course_subgroup_id: null,
         course_id: item.id,
         hour_start: null,
@@ -402,6 +449,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         date: null,
         attended: false
       });
+      if (item.is_flexible) {
+        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration);
+      }
     }
 
 
@@ -416,7 +466,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.courseDates.push({
       school_id: this.user.schools[0].id,
       booking_id: null,
-      client_id: this.detailClient.id,
+      client_id: this.defaultsBookingUser.client_id,
       course_subgroup_id: null,
       course_id: this.selectedItem.id,
       hour_start: null,
@@ -449,7 +499,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     const hour = moment(time, 'HH:mm')
 
-    return !hour.isBetween(start, end);
+    return hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
   }
 
   resetCourseDates() {
@@ -469,19 +519,44 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.periodMultiple = false;
     this.periodUnique = true;
     this.sameMonitor = false;
-    this.getData();
   }
 
   confirmBooking() {
 
+    let paxes = 0;
+
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open('Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
+      this.snackbar.open(this.sameMonitor ? 'Complete los campos de monitor, fecha y hora de la reserva del curso' : 'Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
       return;
     }
 
+    if (this.courseTypeId === 1 && this.selectedItem.is_flexible && this.reservableCourseDate.length === 0) {
+
+      this.snackbar.open('Selecciona alguna de las fechas del curso flexible seleccionado', 'OK', {duration:3000});
+      return;
+    }
+
+    if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
+        this.courseDates.forEach(item => {
+          paxes = paxes + parseInt(item.paxes);
+        })
+      } else {
+        paxes = 1;
+    }
+
+    let price = this.selectedItem.price;
+    if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
+      const discounts = JSON.parse(this.selectedItem.discounts);
+      discounts.forEach(element => {
+        if (element.date === this.reservableCourseDate.length) {
+          price = price - (this.selectedItem.price * (element.percentage / 100));
+        }
+      });
+    }
+
     let data: any = {};
-      data.price_total = +this.selectedItem.price;
+      data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
       data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
       data.price_cancellation_insurance = 0;
       data.has_boukii_care = this.defaults.has_boukii_care;
@@ -493,21 +568,40 @@ export class BookingsCreateUpdateComponent implements OnInit {
       data.client_main_id = this.defaults.client_main_id.id;
       data.notes = this.defaults.notes;
       data.notes_school = this.defaults.notes_school;
-      data.paxes = null;
+      data.paxes = paxes;
       data.courseDates = [];
 
       if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
         this.selectedItem.course_dates.forEach(item => {
           if (this.canBook(item.date)) {
+            let monitorId = null;
+            let degreeId = null;
+            let subgroupId = null;
+            let groupId = null;
+            let courseDateId = null;
+            let monitorFind = false;
+            item.course_groups.forEach(groups => {
+              if (!monitorFind) {
+                if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                  monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
+                  degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
+                  subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
+                  courseDateId = groups.course_date_id;
+                  groupId = groups.id;
+                  monitorFind = true;
+                }
+              }
+            })
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
                 booking_id: null,
                 client_id: this.courseDates[0].client_id,
-                course_id: this.selectedItem.id,
-                course_date_id: item.course_groups[0].course_date_id,
-                degree_id: item.course_groups[0].course_subgroups[this.selectedSubGroupItemIndex].degree_id,
-                monitor_id: item.course_groups[0].course_subgroups[this.selectedSubGroupItemIndex].monitor_id,
-                subgroup_id: item.course_groups[0].course_subgroups[this.selectedSubGroupItemIndex].id,
+                course_id: item.course_id,
+                course_date_id: courseDateId,
+                degree_id: degreeId,
+                monitor_id: monitorId,
+                subgroup_id: subgroupId,
+                group_id: groupId,
                 hour_start: item.hour_start,
                 hour_end: item.hour_end,
                 price: +this.selectedItem.price,
@@ -520,14 +614,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
       } else if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
         this.reservableCourseDate.forEach(item => {
           if (this.canBook(item.date)) {
+              let monitorId = null;
+              let degreeId = null;
+              let courseDateId = null;
+              let subgroupId = null;
+              let groupId = null;
+
+              let monitorFind = false;
+              item.course_groups.forEach(groups => {
+                if (!monitorFind) {
+                  if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                    monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
+                    degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
+                    subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
+                    courseDateId = groups.course_date_id;
+                    groupId = groups.id;
+                    monitorFind = true;
+                  }
+                }
+
+              });
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
                 booking_id: null,
                 client_id: this.courseDates[0].client_id,
-                course_id: this.selectedItem.id,
-                course_date_id: item.course_date_id,
-                degree_id: item.course_groups[0].course_subgroups[this.selectedSubGroupItemIndex].degree_id,
-                monitor_id: item.course_groups[0].course_subgroups[this.selectedSubGroupItemIndex].monitor_id,
+                course_id: item.course_id,
+                course_date_id: courseDateId,
+                degree_id: degreeId,
+                monitor_id: monitorId,
+                group_id: groupId,
+                subgroup_id: subgroupId,
                 hour_start: item.hour_start,
                 hour_end: item.hour_end,
                 price: +this.selectedItem.price,
@@ -539,16 +655,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
       } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
         this.courseDates.forEach(item => {
+          const price = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
+          data.price_total = data.price_total + price;
             data.courseDates.push({
               school_id: this.user.schools[0].id,
               booking_id: null,
               client_id: item.client_id,
-              course_id: item.id,
+              course_id: item.course_id,
               course_date_id: item.course_date_id,
-              monitor_id: item.monitor_id,
+              monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
               hour_start: item.hour_start,
               hour_end: null, //calcular en base a la duracion del curso
-              price: +item.price,
+              price: price,
               currency: item.currency,
               paxes: item.paxes,
               course: this.selectedItem,
@@ -563,7 +681,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             client_id: item.client_id,
             course_id: item.course_id,
             course_date_id: item.course_date_id,
-            monitor_id: item.monitor_id,
+            monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
             hour_start: item.hour_start,
             hour_end: null, //calcular en base a la duracion del curso
             price: +item.price,
@@ -576,12 +694,19 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       this.bookingsToCreate.push(data);
       this.showDetail = this.bookingsToCreate.length - 1;
+
+      this.selectedItem = null;
+      this.selectedCourseDateItem = null;
+      this.selectedSubGroupItem = null;
+      this.selectedSubGroupItemIndex = null;
+      this.reservableCourseDate = [];
+      this.clientsForm.disable();
   }
 
   save() {
     this.bookingComplete = true;
-
-    this.finalPrice = this.getBasePrice();
+    this.addAnotherCourse();
+    this.calculateFinalPrice();
     //this.create();
   }
 
@@ -589,17 +714,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     let data: any = {};
     const courseDates = [];
+    const bookingExtras = [];
 
-    this.bookingsToCreate.forEach(element => {
+    this.bookingsToCreate.forEach((element, idx) => {
       element.courseDates.forEach(cs => {
         courseDates.push(cs);
-
       });
 
       let paxes = 0;
       paxes = paxes + element.paxes;
       data = {
-        price_total: element.price_total,
+        price_total: this.finalPrice,
         has_cancellation_insurance: this.defaults.has_cancellation_insurance,
         price_cancellation_insurance: this.defaults.has_cancellation_insurance ? element.price_total * 0.10 : 0,
         currency: element.currency,
@@ -612,64 +737,147 @@ export class BookingsCreateUpdateComponent implements OnInit {
         paxes: paxes,
         payment_method_id: element.payment_method_id
       }
+
+      if (element.forfait) {
+
+        bookingExtras.push({forfait: element.forfait, idx: idx});
+      }
     });
 
-      this.crudService.create('/bookings', data)
-      .subscribe((booking) => {
-        console.log('booking, created', booking);
+    const clientsWithoutSelectedSport = [];
+    this.bookingsToCreate.forEach(element => {
+      const client = this.clients.find((c) => c.id === element.courseDates[0].client_id);
+      const bookSport = client.sports.find((c) => c.id === element.courseDates[0].course.sport_id);
+      if (!bookSport || bookSport === null) {
 
-        let rqs = [];
+        clientsWithoutSelectedSport.push({
+          client_id: client.id,
+          sport_id: element.courseDates[0].course.sport_id,
+          degree_id: element.courseDates[0].degree_id,
+          school_id: this.user.schools[0].id
+        })
+      }
+    });
 
-          courseDates.forEach(item => {
-            if (this.getCourse(item.course_id).course_type === 1) {
+    clientsWithoutSelectedSport.forEach(element => {
+      this.crudService.create('/client-sports', element)
+        .subscribe(() => {
+          console.log('Client sport created');
+        })
+    });
 
-              if (this.canBook(item.date)) {
-                rqs.push({
-                  school_id: item.school_id,
-                  booking_id: booking.data.id,
-                  client_id: item.client_id,
-                  course_id: item.course_id,
-                  course_subgroup_id: item.subgroup_id,
-                  course_date_id: item.course_date_id,
-                  degree_id: item.degree_id,
-                  monitor_id: item.monitor_id,
-                  hour_start: item.hour_start,
-                  hour_end: item.hour_end,
-                  price: item.price,
-                  currency: item.currency,
-                  date: item.date,
-                  attended: false
-                });
-              }
-            }
 
-            if (this.getCourse(item.course_id).course_type === 2) {
+    this.crudService.create('/bookings', data)
+    .subscribe((booking) => {
+      console.log('booking, created', booking);
+      this.processBonus(booking.data.id);
+      let rqs = [];
+
+        courseDates.forEach(item => {
+          if (item.course.course_type === 1) {
+
+            if (this.canBook(item.date)) {
               rqs.push({
                 school_id: item.school_id,
                 booking_id: booking.data.id,
                 client_id: item.client_id,
-                course_id: item.id,
+                course_id: item.course_id,
+                course_subgroup_id: item.subgroup_id,
+                course_group_id: item.group_id,
                 course_date_id: item.course_date_id,
+                degree_id: item.degree_id,
                 monitor_id: item.monitor_id,
                 hour_start: item.hour_start,
-                hour_end: null, //calcular en base a la duracion del curso
+                hour_end: item.hour_end,
                 price: item.price,
                 currency: item.currency,
-                paxes: item.paxes,
-                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                date: item.date,
+                attended: false
               });
             }
+          }
 
-            rqs.forEach(rq => {
-              this.crudService.create('/booking-users', rq)
-              .subscribe((bookingUser) => {
-                console.log('bookingUser, created', bookingUser);
-              });
+          if (item.course.course_type === 2) {
+            rqs.push({
+              school_id: item.school_id,
+              booking_id: booking.data.id,
+              client_id: item.client_id,
+              course_id: item.course_id,
+              course_date_id: item.course_date_id,
+              monitor_id: item.monitor_id,
+              hour_start: item.hour_start,
+              hour_end: null, //calcular en base a la duracion del curso
+              price: item.price,
+              currency: item.currency,
+              paxes: item.paxes,
+              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
+          }
+        });
 
+        rqs.forEach((rq, idx) => {
+          const bExtra = bookingExtras.find((b)=> b.idx === idx);
+
+          this.crudService.create('/booking-users', rq)
+          .subscribe((bookingUser) => {
+            if (bExtra) {
+              const bookingUserExtra = {
+                booking_user_id: bookingUser.data.id,
+                course_extra_id: null,
+              }
+              const courseExtra = {
+                course_id: rq.course_id,
+                name: bExtra.forfait.id,
+                description: bExtra.forfait.name,
+                price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
+              }
+              this.crudService.create('/course-extras', courseExtra)
+                .subscribe((responseCourseExtra) => {
+
+                  bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                  this.crudService.create('/booking-user-extras', bookingUserExtra)
+                  .subscribe((bookExtra) => {
+                    console.log("b.extra created", bookExtra, idx);
+                  })
+                })
+            }
+
+            setTimeout(() => {
+              this.goTo('/bookings');
+            }, 1000);
           });
+        });
+
       })
 
+  }
+
+  processBonus(bookingId: any) {
+    if (this.bonus.length > 0) {
+      this.bonus.forEach(element => {
+        const data = {
+          code: element.bonus.code,
+          quantity: element.bonus.quantity,
+          remaining_balance: element.bonus.quantity - element.bonus.reducePrice,
+          payed: element.bonus.quantity - element.bonus.reducePrice === 0,
+          client_id: element.bonus.client_id,
+          school_id: this.user.schools[0].id
+        };
+        this.crudService.update('/vouchers', data, element.bonus.id)
+          .subscribe((result) => {
+
+            this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: bookingId,amount: data.payed})
+              .subscribe((vresult) => {
+                console.log(vresult);
+
+              })
+          })
+      });
+    }
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 
   update() {
@@ -764,9 +972,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   selectMainUser(user: any) {
     this.defaultsBookingUser.client_id = user.id;
-    this.detailClient = this.clients.find((c) => c.id === user.id);
+    const client = this.clients.find((c) => c.id === user.id);
 
-    this.detailClient.sports.forEach(sport => {
+    client.sports.forEach(sport => {
 
       if (sport.id === this.defaults.sport_id) {
         const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
@@ -781,17 +989,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.mainIdSelected = false;
     this.borderActive = index;
     this.defaultsBookingUser.client_id = utilizer.id;
-    this.detailClient = this.clients.find((c) => c.id === utilizer.id);
+    const client = this.clients.find((c) => c.id === utilizer.id);
 
-    this.detailClient.sports.forEach(sport => {
 
-      if (sport.id === this.defaults.sport_id) {
-        const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
-        this.levelForm.patchValue(level);
-        this.defaultsBookingUser.degree_id = level.id;
-        this.getCourses(level, this.monthAndYear);
+    if (client.sports.length > 0) {
+      let hasSport = false;
+      client.sports.forEach(sport => {
+
+        if (sport.id === this.defaults.sport_id) {
+          const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+          this.levelForm.patchValue(level);
+          this.defaultsBookingUser.degree_id = level.id;
+          hasSport = true;
+          this.getCourses(level, this.monthAndYear);
+        }
+      });
+
+      if (!hasSport) {
+        this.courses = [];
+          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef.onAction().subscribe(() => {
+            this.addSportToUser(this.selectedSport.sport_id);
+          });
       }
-    });
+    } else {
+      this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+      this.snackBarRef.onAction().subscribe(() => {
+        this.addSportToUser(this.selectedSport.sport_id);
+      });
+    }
+
   }
 
   showDetailFn(id: number) {
@@ -799,7 +1026,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+1);/*
+    return this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -833,8 +1060,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   selectSport(sport: any) {
+    if(this.snackBarRef!==null) {
+
+      this.snackBarRef.dismiss();
+    }
     this.defaults.sport_id = sport.sport_id;
     this.form.get("sport").patchValue(sport.sport_id);
+    this.selectedSport = sport;
     this.getDegrees(sport.sport_id);
   }
 
@@ -860,43 +1092,95 @@ export class BookingsCreateUpdateComponent implements OnInit {
           }
         });
 
-        if (!hasSport) {
+        if (!hasSport && client.sports.length === 0) {
+          this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef.onAction().subscribe(() => {
+            this.addSportToUser(this.selectedSport.sport_id);
+          });
+        } else if(!hasSport && client.sports.length > 0) {
           this.courses = [];
-          this.snackbar.open('El usuario no tiene este deporte asociado', 'OK', {duration:3000});
+          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef.onAction().subscribe(() => {
+            this.addSportToUser(this.selectedSport.sport_id);
+          });
         }
       })
   }
 
+
+  addSportToUser(sportId = null) {
+
+    const dialogRef = this.dialog.open(AddClientSportModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {sport_id: sportId, title: 'Assign sport'}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        data.data.forEach(element => {
+
+          this.crudService.create('/client-sports', {client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+            .subscribe(() => {
+              console.log('client sport created');
+              this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+                .subscribe((cl) => {
+                  this.clients = cl.data;
+                  const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+                  client.sports.forEach(sport => {
+                    if (sport.id === this.defaults.sport_id) {
+                      const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+                      this.levelForm.patchValue(level);
+                      this.defaultsBookingUser.degree_id = level.id;
+                      this.getCourses(level, this.monthAndYear);
+                    }
+                  });
+                })
+            })
+        });
+      }
+    });
+  }
   getUtilzers(client: any, onLoad = false) {
+    if(this.snackBarRef!==null) {
+
+      this.snackBarRef.dismiss();
+    }
+
+    this.loadingUtilizers = true;
     this.utilizers = [];
+    this.mainIdSelected = true;
+    this.borderActive = -1;
     this.defaultsBookingUser.client_id = client.id;
 
     this.crudService.get('/admin/clients/' + client.id +'/utilizers')
       .subscribe((data: any) => {
         this.utilizers = data.data;
+        if (!onLoad) {
+          client.sports.forEach(sport => {
+            if (sport.id === this.defaults.sport_id) {
+              const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+              this.levelForm.patchValue(level);
+              this.defaultsBookingUser.degree_id = level.id;
+              this.clientsForm.patchValue(client);
+              this.getCourses(level, this.monthAndYear);
+            }
+          });
+        }
+
+        //this.getDegrees(this.defaults.sport_id);
+        this.loadingUtilizers = false
       });
 
-      if (!onLoad) {
 
-        let hasSport = false;
-        client.sports.forEach(sport => {
-          if (sport.id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
-            this.levelForm.patchValue(level);
-            this.defaultsBookingUser.degree_id = level.id;
-            this.getCourses(level, this.monthAndYear);
-            hasSport = true;
-          }
-        });
-      }
-
-      this.getDegrees(this.defaults.sport_id);
   }
 
   getCourses(level: any, date: any, fromPrivate = false) {
 
     this.loadingCalendar = true;
     this.dateClass();
+    this.privateDateClass();
     let today, minDate,maxDate;
 
     if (!fromPrivate) {
@@ -914,8 +1198,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
       maxDate = moment(date);
     }
 
-
-
     const rq = {
       start_date: minDate.format('YYYY-MM-DD'),
       end_date: maxDate.format('YYYY-MM-DD'),
@@ -923,7 +1205,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
       degree_id: level.id,
-      get_lower_degrees: true
+      get_lower_degrees: false
     };
 
     this.crudService.post('/availability', rq)
@@ -935,6 +1217,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
         if (!fromPrivate) {
 
           this.coursesMonth = data.data;
+        }
+
+        if (data.data.length === 0) {
+          this.snackbar.open('No hay cursos disponibles con estos filtros', 'OK', {duration: 1500});
         }
         this.loading = false;
         this.loadingCalendar = false;
@@ -954,8 +1240,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return age;
   }
 
-  emitDateChange(event: MatDatepickerInputEvent<Date | null, unknown>): void {
-    this.getCourses(this.levelForm.value, event.value, true);
+  emitDateChange(event: any, fromPrivate = false): void {
+    this.selectedItem = null;
+    this.monthAndYear = moment(this.minDate).isAfter(moment(event.value)) ? this.minDate : event.value;
+    this.getCourses(this.levelForm.value.id, this.monthAndYear, fromPrivate);
   }
 
   getMonitors() {
@@ -994,7 +1282,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
       .subscribe((school) => {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
-        this.selectedForfait = this.settings.extras.forfait.length > 0 ? this.settings.extras.forfait.length[0] : null;
       })
   }
 
@@ -1003,7 +1290,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
       const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
+          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'YYYY-MM-DD').startOf('day').isSameOrBefore(moment(date, 'YYYY-MM-DD').startOf('day'))) {
             return 'with-course';
           } else {
             return;
@@ -1017,7 +1304,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
       const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
+          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).startOf('day').isSameOrBefore(moment(date).startOf('day'))) {
             return 'with-course-private';
           } else {
             return;
@@ -1027,7 +1314,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   canBook(date: any) {
-    return moment(date, 'YYYY-MM-DD').isSameOrAfter(moment(this.minDate));
+    const incomingDate = moment(date, 'YYYY-MM-DD').startOf('day');
+    const minDate = moment(this.minDate, 'YYYY-MM-DD').startOf('day');
+    return incomingDate.isSameOrAfter(minDate);
   }
 
   getLevelColor(id: any) {
@@ -1072,6 +1361,33 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  getMonitorCountry(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return +monitor?.country;
+    }
+  }
+
+  getMonitorProvince(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return +monitor?.province;
+    }
+  }
+
+  getMonitorBirth(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor?.birth_date;
+    }
+  }
+
   getClientAvatar(id: number) {
 
     if (id === null) {
@@ -1084,7 +1400,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClientName(id: number) {
-    if (id !== null) {
+    if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
 
@@ -1095,7 +1411,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   getCourse(id: number) {
 
-    if (id !== null) {
+    if (id && id !== null) {
       const course = this.courses.find((m) => m.id === id);
 
       return course;
@@ -1125,7 +1441,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return ret;
   }
 
+  handleDateChange(event: any) {
+    this.selectedDate = event;
+    this.getCourses(this.levelForm.value, event, true);
+  }
+
   handleMonthChange(firstDayOfMonth: Date) {
+    this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(firstDayOfMonth)) ? this.minDate : firstDayOfMonth;
     this.getCourses(this.levelForm.value, this.monthAndYear);
   }
@@ -1139,6 +1461,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   public monthChanged(value: any, widget: any): void {
+    this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(value)) ? this.minDate : value;
     this.getCourses(this.levelForm.value.id, this.monthAndYear);
 
@@ -1150,6 +1473,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     for (let i = 0; i<this.courseDates.length; i++){
       if((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].hour_start === null) {
+        if (this.sameMonitor && this.courseDates[0].monitor_id === null) {
+          ret = true;
+          break;
+        }
         ret = true;
         break;
       }
@@ -1159,7 +1486,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getBookableCourses(dates: any) {
-    return dates.find((d) => this.canBook(d.date)).course_groups;
+    return dates.find((d) => this.canBook(d.date))?.course_groups;
   }
 
   calculateHourEnd(hour: any, duration: any) {
@@ -1169,7 +1496,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
     } else {
-      const minutes = duration.split(' ')[1].replace('min', '');
+      const minutes = duration.split(' ')[0].replace('min', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }
@@ -1223,13 +1550,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return ret;
   }
 
-  setForfait(event:any, forfait: any) {
+  setForfait(event:any, forfait: any, booking: any, bookingIndex: number) {
 
     if (event.source.checked) {
-
-      this.selectedForfait = forfait;
+      booking.forfait = forfait;
+      this.calculateFinalPrice();
     } else {
-      this.selectedForfait = null;
+      booking.forfait = null;
+      this.calculateFinalPrice();
     }
   }
 
@@ -1246,6 +1574,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
       if (data) {
 
         this.bookingsToCreate.splice(index, 1);
+
+        if(this.bookingsToCreate.length === 0) {
+          this.clientsForm.enable();
+          this.bookingComplete = false;
+        }
       }
     });
   }
@@ -1255,13 +1588,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
       width: '600px',
       data: {
         client_id: this.bookingsToCreate[0].client_main_id,
-        school_id: this.bookingsToCreate[0].school_id
+        school_id: this.bookingsToCreate[0].school_id,
+        currentPrice: this.finalPriceNoTaxes,
+        appliedBonus: this.bonus,
+        currency:  this.bookingsToCreate[0].currency
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.bonus = result;
+        this.calculateFinalPrice();
+        this.bonus.push(result);
+        this.calculateFinalPrice();
       }
     });
   }
@@ -1269,56 +1607,73 @@ export class BookingsCreateUpdateComponent implements OnInit {
   addReduction() {
     const dialogRef = this.dialog.open(AddReductionModalComponent, {
       width: '300px',
+      data: {
+        currentPrice: this.finalPriceNoTaxes
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.calculateFinalPrice();
         this.reduction = result;
+        this.calculateFinalPrice();
       }
     });
   }
 
   calculateReduction() {
+
     if (this.reduction.type === 1) {
-      return (this.getBasePrice() * this.reduction.discount) / 100;
+      return (this.finalPrice * this.reduction.discount) / 100;
     } else {
-      return this.reduction.discount > this.getBasePrice() ? this.getBasePrice() : this.reduction.discount;
+      return this.reduction.discount > this.finalPrice ? this.finalPrice: this.reduction.discount;
     }
   }
 
   calculateBonusDiscount() {
-    if (this.bonus.bonus.remaining_balance > this.getBasePrice()) {
-      return this.getBasePrice();
-    } else {
-      return this.bonus.bonus.remaining_balance;
-    }
+    let ret = 0;
+    this.bonus.forEach(element => {
+
+      if (ret < this.finalPrice) {
+
+        if (element.bonus.remaining_balance > this.finalPrice) {
+          ret = this.finalPrice;
+        } else {
+          ret = element.bonus.remaining_balance;
+        }
+      }
+    });
+
+    return ret;
   }
 
 
   calculateRem(event: any) {
     if(event.source.checked) {
-      this.opRem = this.getBasePrice() * 0.10;
+      this.opRem = this.getBasePrice() * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
-      this.defaults.price_cancellation_insurance = this.getBasePrice() * 0.10;
-      return this.getBasePrice() * 0.10;
+      this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
+      this.calculateFinalPrice();
+      return this.getBasePrice() *this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
       this.defaults.price_cancellation_insurance = 0;
+      this.calculateFinalPrice();
       return 0;
     }
   }
 
   calculateBoukiiCare(event: any) {
     if(event.source.checked) {
-      this.boukiiCare = this.getBasePrice() * 0.10;
-
+      this.boukiiCare = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
-      this.defaults.price_boukii_care = this.getBasePrice() * 0.10;
-      return this.getBasePrice() * 0.10;
+      this.defaults.price_boukii_care = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      return this.getBasePrice() + this.boukiiCarePrice;
     } else {
       this.boukiiCare = 0;
-
+      this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
       this.defaults.price_boukii_care = 0;
       return 0;
@@ -1328,7 +1683,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   setReemToItem(event: any, item: any) {
     if(event.source.checked) {
       item.has_cancellation_insurance = event.source.checked;
-      item.price_cancellation_insurance = item.price_total * 0.10;
+      item.price_cancellation_insurance = item.price_total * this.cancellationInsurance;
     } else {
       item.has_cancellation_insurance = event.source.checked;
       item.price_cancellation_insurance = 0;
@@ -1420,7 +1775,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
             user_id: null,
             station_id: this.defaults.client_main_id.station_id
           }
-          const sportData = this.defaults.client_main_id.sports;
 
           this.setLanguages(data.data.languages, client);
 
@@ -1434,20 +1788,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
                 this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
                   .subscribe((clientSchool) => {
-                    sportData.forEach(sport => {
 
-                      this.crudService.create('/client-sports', {client_id: clientCreated.data.id, sport_id: sport.id, degree_id: sport.pivot.degree_id, school_id: this.user.schools[0].id})
-                        .subscribe(() => {
-                          console.log('client sport created');
-                        })
-                    });
+                    setTimeout(() => {
+                      this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
+                      .subscribe((res) => {
+                        this.getUtilzers(this.defaults.client_main_id, true);
+                      })}, 1000);
                   });
 
-                  setTimeout(() => {
-                    this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
-                    .subscribe((res) => {
-                      this.getUtilzers(this.defaults.client_main_id, true);
-                    })}, 1000);
               })
           })
         }
@@ -1486,5 +1834,205 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id === id);
     return country ? country.name : 'NDF';
+  }
+
+  calculateFinalPrice() {
+    let price = this.getBasePrice();
+
+    //forfait primero
+
+    this.bookingsToCreate.forEach(element => {
+      if (element.forfait) {
+
+        price = price + ((element.forfait.price * element.courseDates.length) * element.paxes) + (element.forfait.price * (element.forfait.tva / 100));
+      }
+    });
+
+    if (this.reduction !== null) {
+      if (this.reduction.type === 1) {
+        price = price - ((price * this.reduction.discount) / 100);
+      } else {
+        price = price - (this.reduction.discount > price ? price : this.reduction.discount);
+      }
+    }
+
+    if (this.bonus !== null && price > 0) {
+      this.bonus.forEach(element => {
+        if (price > 0) {
+
+          if (element.bonus.remaining_balance > price) {
+            price = price - price;
+          } else {
+            price = price - element.bonus.remaining_balance;
+          }
+        }
+      });
+    }
+
+    if(this.defaults.has_cancellation_insurance) {
+      price = price + (this.getBasePrice() * this.cancellationInsurance);
+    }
+
+    if(this.defaults.has_boukii_care) {
+      // coger valores de reglajes
+      price = price + this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+    }
+
+    // añadir desde reglajes el tva
+    this.finalPrice = price + (price * this.tva);
+    this.finalPriceNoTaxes = price;
+  }
+
+  deleteBonus(index: number) {
+    this.bonus.splice(index, 1);
+    this.calculateFinalPrice();
+  }
+
+  generateCourseHours(startTime: string, endTime: string, interval: string): string[] {
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+    const intervalParts = interval.split(' ');
+
+    let intervalHours = 0;
+    let intervalMinutes = 0;
+
+    intervalParts.forEach(part => {
+      if (part.includes('h')) {
+        intervalHours = parseInt(part, 10);
+      } else if (part.includes('min')) {
+        intervalMinutes = parseInt(part, 10);
+      }
+    });
+
+    let currentHours = startHours;
+    let currentMinutes = startMinutes;
+    const result = [];
+
+    while (currentHours <= endHours || (currentHours === endHours && currentMinutes <= endMinutes)) {
+      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+      currentMinutes += intervalMinutes;
+      currentHours += intervalHours + Math.floor(currentMinutes / 60);
+      currentMinutes %= 60;
+    }
+
+    return result;
+  }
+
+  generateCourseDurations(startTime: any, endTime: any, interval: any) {
+
+    const timeToMinutes = (time: string) => {
+      const [hours, minutes] = time.split(':').map(Number);
+      return hours * 60 + minutes;
+    };
+
+    const formatMinutes = (totalMinutes: number) => {
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`.trim();
+    };
+
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+
+    // Expresión regular para capturar horas y/o minutos
+    const intervalMatch = interval.match(/(\d+)(h|min)/g);
+    let intervalTotalMinutes = 0;
+
+    if (intervalMatch) {
+      intervalMatch.forEach(part => {
+        if (part.includes('h')) {
+          intervalTotalMinutes += parseInt(part, 10) * 60;
+        } else if (part.includes('min')) {
+          intervalTotalMinutes += parseInt(part, 10);
+        }
+      });
+    } else {
+      // Si el intervalo no coincide con el formato esperado, manejar el error o asignar un valor por defecto
+      console.error("Interval format is not correct.");
+      return [];
+    }
+
+    const durations = [];
+    for (let minutes = startMinutes + intervalTotalMinutes; minutes <= endMinutes; minutes += intervalTotalMinutes) {
+      durations.push(formatMinutes(minutes - startMinutes));
+    }
+
+    const tableDurations = [];
+    const tablePaxes = [];
+
+    durations.forEach(element => {
+      const priceRange = this.selectedItem.price_range.find((p) => p.intervalo === element);
+      if (priceRange && priceRange.intervalo === element ) {
+
+        if (this.extractValues(priceRange)[0]) {
+          tableDurations.push(this.extractValues(priceRange)[0].interval);
+
+
+
+          this.extractValues(priceRange).forEach(element => {
+            const pax = element.key;
+
+            if (pax && tablePaxes.length === 0 || pax && tablePaxes.length > 0 && !tablePaxes.find((p) => p === pax)) {
+              tablePaxes.push(element.key);
+            }
+          });
+        }
+
+      }
+    });
+
+    this.durations = tableDurations;
+    this.persons = tablePaxes;
+  }
+
+  calculateAvailablePaxes(event: any) {
+    const paxes = [];
+
+    const data = this.selectedItem.price_range.find(p => p.intervalo === event);
+
+    this.extractValues(data).forEach(element => {
+      const pax = element.key;
+
+      if (pax && paxes.length === 0 || pax && paxes.length > 0 && !paxes.find((p) => p === pax)) {
+        paxes.push(element.key);
+      }
+    });
+
+    this.persons = paxes;
+
+  }
+
+  extractValues(data: any): { key: string, value: string, interval: string }[] {
+    let results = [];
+
+    for (const key in data) {
+        if (data.hasOwnProperty(key) && data[key] != null && key !== "intervalo") {
+            results.push({ key: key, value: data[key], interval: data["intervalo"] });
+        }
+    }
+
+    return results;
+  }
+
+  getBookingPaxes(){
+    let ret = 0;
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.paxes;
+    });
+
+    return ret;
+  }
+
+  getBookingDates(){
+    let ret = 0;
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.courseDates.length;
+    });
+
+    return ret;
+  }
+
+  itemExist(item: any) {
+    return this.reservableCourseDate.find((r) => r.id === item.id);
   }
 }

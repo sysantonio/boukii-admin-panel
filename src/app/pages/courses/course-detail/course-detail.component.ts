@@ -8,6 +8,9 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
+import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 
 @Component({
   selector: 'vex-course-detail',
@@ -111,15 +114,19 @@ export class CourseDetailComponent implements OnInit {
 
   //NIVELES
   daySelectedIndex: any = 0;
+  subGroupSelectedItemDate: any;
   subGroupSelectedIndex: any = 0;
   selectedDate: string;
   selectedItem: any;
   daysDates = [];
   daysDatesLevels = [];
   levels = [];
+  courseUsers = [];
+  clients = [];
+  countries = MOCK_COUNTRIES;
   rangeForm: UntypedFormGroup;
 
-  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -155,11 +162,19 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit() {
 
+    this.getClients();
+
     this.crudService.get('/admin/courses/'+this.id)
       .subscribe((data) => {
         this.defaults = data.data;
         this.getSeparatedDates(this.defaults.course_dates, true);
-        this.loading = false;
+
+        this.crudService.list('/booking-users', 1, 1000, null, null, '&course_id='+this.defaults.id)
+            .subscribe((result) => {
+              this.courseUsers = result.data;
+              this.loading = false;
+
+            })
 
       })
 
@@ -185,11 +200,6 @@ export class CourseDetailComponent implements OnInit {
     return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
   }
 
-  private _filterMonitor(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.mockMonitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
-  }
-
   parseDateToDay(date:any, inFormat: string, format: string) {
     return moment(date, inFormat).format(format);
   }
@@ -198,6 +208,21 @@ export class CourseDetailComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  openUserTransfer(group, subgroup, subgroupNumber) {
+    const dialogRef = this.dialog.open(CourseUserTransferComponent, {
+      width: '800px',
+      height: '800px',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: {group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor, id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+      }
+    });
+  }
 
 
   //NIVELES
@@ -230,6 +255,7 @@ export class CourseDetailComponent implements OnInit {
             });
           });
           this.selectedItem = this.daysDatesLevels[0].dateString;
+          this.subGroupSelectedItemDate = moment(this.daysDatesLevels[0].date);
           this.groupedByColor[level.color].push(level);
         });
 
@@ -471,12 +497,13 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
-  selectItem(item: any, index: any, subGroupIndex: any) {
+  selectItem(item: any, index: any, subGroupIndex: any, subgroup) {
     this.subGroupSelectedIndex = null;
     this.selectedItem = item.dateString;
     this.selectedDate = item.date;
     this.daySelectedIndex = index;
     this.subGroupSelectedIndex = subGroupIndex;
+    this.subGroupSelectedItemDate = moment(item.date);
   }
 
   calculateAgeMin(level: any) {
@@ -503,6 +530,68 @@ export class CourseDetailComponent implements OnInit {
     });
 
     return ret;
+  }
+
+  isInDay(date: any, courseUserId: any) {
+
+    let ret = false;
+    const course = this.defaults.course_dates.find((c) => moment(c.date).format('YYYY-MM-DD') === date);
+    const courseUsers = this.courseUsers.filter((c) => c.client_id === courseUserId);
+    if (course) {
+      courseUsers.forEach(courseUser => {
+        course.groups.forEach(group => {
+          group.subgroups.forEach(element => {
+            const exist = courseUser.course_date_id === element.course_date_id && courseUser.course_group_id === element.course_group_id && courseUser.course_subgroup_id === element.id
+
+            if (exist) {
+              ret = true;
+            }
+          });
+        });
+      });
+
+
+    }
+
+    return ret;
+  }
+
+
+  getClients() {
+    this.crudService.list('/admin/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((data: any) => {
+        this.clients = data.data;
+
+      })
+  }
+
+  getClient(id: any) {
+    if (id && id !== null) {
+      return this.clients.find((c) => c.id === id);
+    }
+  }
+
+  calculateAge(birthDateString) {
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.name : 'NDF';
+  }
+
+  getNacionality(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.code : 'NDF';
   }
 
   getSeparatedDates(dates: any, onLoad: boolean = false) {
