@@ -705,18 +705,34 @@ export class SettingsComponent implements OnInit {
   saveTaxes() {
 
     const data = {
-      cancellation_insurance_percent: this.hasCancellationInsurance ? (this.school.cancellation_insurance_percent / 100) : 0,
+      cancellation_insurance_percent: this.hasCancellationInsurance ? this.school.cancellation_insurance_percent : 0,
       bookings_comission_boukii_pay: this.hasBoukiiCare ? this.school.bookings_comission_boukii_pay : 0,
-      bookings_comission_cash: this.hasTVA ? (this.school.bookings_comission_cash / 100) : 0,
+      bookings_comission_cash: this.hasTVA ? this.school.bookings_comission_cash : 0,
       name: this.school.name,
       description: this.school.description
     }
+
 
     this.crudService.update('/schools', data, this.school.id)
       .subscribe(() => {
         this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
       })
+  }
+
+  updateTVAValue(event: any) {
+
+    this.school.bookings_comission_cash = parseInt(event.target.value) / 100;
+  }
+
+  updateBoukiiCareValue(event: any) {
+
+    this.school.bookings_comission_boukii_pay = parseInt(event.target.value);
+  }
+
+  updateInsuranceValue(event: any) {
+
+    this.school.cancellation_insurance_percent = parseInt(event.target.value) / 100;
   }
 
   updateSportDegrees() {

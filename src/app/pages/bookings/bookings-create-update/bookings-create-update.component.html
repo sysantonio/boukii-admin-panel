@@ -825,7 +825,7 @@
 
               <span style="width: 100%; float:left" *ngIf="defaults.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{(getBasePrice() + (this.boukiiCarePrice * getBookingPaxes() * getBookingDates())).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{(this.boukiiCarePrice * getBookingPaxes() * getBookingDates()).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
