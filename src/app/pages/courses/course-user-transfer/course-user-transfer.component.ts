@@ -61,7 +61,15 @@ export class CourseUserTransferComponent implements OnInit {
                   const exists = this.currentStudents.some(student => student.client_id === element.client_id);
 
                   if (!exists) {
-                    this.currentStudents.push(element);
+                    const course = this.course.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD'));
+                    if (course) {
+                      const group = course.groups.find((g) => g.course_date_id === element.course_date_id);
+
+                      if (group) {
+
+                        this.currentStudents.push(element);
+                      }
+                    }
                   }
                 });
               }
@@ -133,6 +141,7 @@ export class CourseUserTransferComponent implements OnInit {
         client_id: element.client_id,
         currency: element.currency,
         price: element.price,
+        monitor_id: element.monitor_id,
         school_id: this.user.schools[0].id
       }
       this.crudService.update('/booking-users', data, element.id)

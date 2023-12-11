@@ -2032,4 +2032,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return ret;
   }
 
+  itemExist(item: any) {
+    return this.reservableCourseDate.find((r) => r.id === item.id);
+  }
 }

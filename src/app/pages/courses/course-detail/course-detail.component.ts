@@ -10,6 +10,7 @@ import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 
 @Component({
   selector: 'vex-course-detail',
@@ -120,6 +121,9 @@ export class CourseDetailComponent implements OnInit {
   daysDates = [];
   daysDatesLevels = [];
   levels = [];
+  courseUsers = [];
+  clients = [];
+  countries = MOCK_COUNTRIES;
   rangeForm: UntypedFormGroup;
 
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog) {
@@ -158,11 +162,19 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit() {
 
+    this.getClients();
+
     this.crudService.get('/admin/courses/'+this.id)
       .subscribe((data) => {
         this.defaults = data.data;
         this.getSeparatedDates(this.defaults.course_dates, true);
-        this.loading = false;
+
+        this.crudService.list('/booking-users', 1, 1000, null, null, '&course_id='+this.defaults.id)
+            .subscribe((result) => {
+              this.courseUsers = result.data;
+              this.loading = false;
+
+            })
 
       })
 
@@ -518,6 +530,68 @@ export class CourseDetailComponent implements OnInit {
     });
 
     return ret;
+  }
+
+  isInDay(date: any, courseUserId: any) {
+
+    let ret = false;
+    const course = this.defaults.course_dates.find((c) => moment(c.date).format('YYYY-MM-DD') === date);
+    const courseUsers = this.courseUsers.filter((c) => c.client_id === courseUserId);
+    if (course) {
+      courseUsers.forEach(courseUser => {
+        course.groups.forEach(group => {
+          group.subgroups.forEach(element => {
+            const exist = courseUser.course_date_id === element.course_date_id && courseUser.course_group_id === element.course_group_id && courseUser.course_subgroup_id === element.id
+
+            if (exist) {
+              ret = true;
+            }
+          });
+        });
+      });
+
+
+    }
+
+    return ret;
+  }
+
+
+  getClients() {
+    this.crudService.list('/admin/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((data: any) => {
+        this.clients = data.data;
+
+      })
+  }
+
+  getClient(id: any) {
+    if (id && id !== null) {
+      return this.clients.find((c) => c.id === id);
+    }
+  }
+
+  calculateAge(birthDateString) {
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.name : 'NDF';
+  }
+
+  getNacionality(id: any) {
+    const country = this.countries.find((c) => c.id === id);
+    return country ? country.code : 'NDF';
   }
 
   getSeparatedDates(dates: any, onLoad: boolean = false) {
