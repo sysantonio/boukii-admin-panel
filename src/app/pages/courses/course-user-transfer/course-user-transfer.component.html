@@ -1,0 +1,74 @@
+<form>
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Transer student</h2>
+
+    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+      <mat-icon svgIcon="mat:more_vert"></mat-icon>
+    </button>-->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="text-border"></mat-divider>
+
+
+  <mat-dialog-content class="container" *ngIf="!loading">
+    <div class="column left-column">
+      <h3>Seleccion de alumnos</h3>
+      <div class="subgroup-title">
+        <p [style.color]="defaults.group.color"><strong>{{defaults.group.league}}</strong> {{defaults.group.annotation}} {{defaults.group.name}} - {{defaults.subgroupNumber}}</p>
+      </div>
+      <div class="students-list">
+        <mat-checkbox>Seleccionar todos</mat-checkbox>
+        <div *ngFor="let item of currentStudents; let i = index" style="float: left;width: 100%;">
+          <mat-checkbox style="float: left;width: 15%;" (change)="addToStudentChangeList($event, item, i)"> </mat-checkbox>
+          <div style="float: left;width: 15%">
+            <img [src]="getClient(item.client_id).image"/>
+          </div>
+          <div style="float: left;width: 70%">
+            <p>{{getClient(item.client_id).first_name}} {{getClient(item.client_id).last_name}}</p>
+            <p>{{getNacionality(getClient(item.client_id).country)}} {{calculateAge(getClient(item.client_id).birth_date)}} ans</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column right-column">
+      <div class="example-action-buttons">
+        <button mat-button (click)="accordion.openAll()">Expand All</button>
+        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+      </div>
+      <mat-accordion class="example-headers-align" multi>
+        <ng-container *ngFor="let colorKey of this.defaults.colorKeys">
+
+          <mat-expansion-panel *ngFor="let groupLevel of this.defaults.groupedByColor[colorKey]; let groupIndex = index" style="margin-bottom: 3%;">
+            <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
+              <mat-panel-description style="color: #fff">
+                {{ groupLevel.league }} - {{groupLevel.annotation}} {{groupLevel.name}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <!-- aqui el listado -->
+            <div class="list-group">
+              <ng-container *ngFor="let item of courseSubGroups; let itemIndex = index">
+                <div class="list-item" *ngIf="item.degree_id === groupLevel.id">
+                  <p [style.color]="colorKey"><strong>{{ groupLevel.league }} {{itemIndex+1}}</strong></p>
+                  <p>Arsene Garcia FR · ALL</p>
+                  <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)">
+                    <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
+                  </mat-checkbox>
+                </div>
+              </ng-container>
+            </div>
+            <div class="confirm-button">
+              <button mat-raised-button color="accent" style="border-radius: 0" (click)="transferStudent()">Confirmar</button>
+            </div>
+
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-accordion>
+    </div>
+  </mat-dialog-content>
+</form>

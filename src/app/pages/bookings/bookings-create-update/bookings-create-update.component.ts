@@ -577,6 +577,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             let monitorId = null;
             let degreeId = null;
             let subgroupId = null;
+            let groupId = null;
             let courseDateId = null;
             let monitorFind = false;
             item.course_groups.forEach(groups => {
@@ -586,6 +587,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
                   subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
                   courseDateId = groups.course_date_id;
+                  groupId = groups.id;
                   monitorFind = true;
                 }
               }
@@ -599,6 +601,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 degree_id: degreeId,
                 monitor_id: monitorId,
                 subgroup_id: subgroupId,
+                group_id: groupId,
                 hour_start: item.hour_start,
                 hour_end: item.hour_end,
                 price: +this.selectedItem.price,
@@ -614,13 +617,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
               let monitorId = null;
               let degreeId = null;
               let courseDateId = null;
+              let subgroupId = null;
+              let groupId = null;
+
               let monitorFind = false;
               item.course_groups.forEach(groups => {
                 if (!monitorFind) {
                   if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                     monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                     degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
+                    subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
                     courseDateId = groups.course_date_id;
+                    groupId = groups.id;
                     monitorFind = true;
                   }
                 }
@@ -634,6 +642,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 course_date_id: courseDateId,
                 degree_id: degreeId,
                 monitor_id: monitorId,
+                group_id: groupId,
+                subgroup_id: subgroupId,
                 hour_start: item.hour_start,
                 hour_end: item.hour_end,
                 price: +this.selectedItem.price,
@@ -773,6 +783,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 client_id: item.client_id,
                 course_id: item.course_id,
                 course_subgroup_id: item.subgroup_id,
+                course_group_id: item.group_id,
                 course_date_id: item.course_date_id,
                 degree_id: item.degree_id,
                 monitor_id: item.monitor_id,

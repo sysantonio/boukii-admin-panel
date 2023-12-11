@@ -8,6 +8,8 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
+import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'vex-course-detail',
@@ -111,6 +113,7 @@ export class CourseDetailComponent implements OnInit {
 
   //NIVELES
   daySelectedIndex: any = 0;
+  subGroupSelectedItemDate: any;
   subGroupSelectedIndex: any = 0;
   selectedDate: string;
   selectedItem: any;
@@ -119,7 +122,7 @@ export class CourseDetailComponent implements OnInit {
   levels = [];
   rangeForm: UntypedFormGroup;
 
-  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -185,11 +188,6 @@ export class CourseDetailComponent implements OnInit {
     return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
   }
 
-  private _filterMonitor(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.mockMonitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
-  }
-
   parseDateToDay(date:any, inFormat: string, format: string) {
     return moment(date, inFormat).format(format);
   }
@@ -198,6 +196,21 @@ export class CourseDetailComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  openUserTransfer(group, subgroup, subgroupNumber) {
+    const dialogRef = this.dialog.open(CourseUserTransferComponent, {
+      width: '800px',
+      height: '800px',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: {group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor, id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+      }
+    });
+  }
 
 
   //NIVELES
@@ -230,6 +243,7 @@ export class CourseDetailComponent implements OnInit {
             });
           });
           this.selectedItem = this.daysDatesLevels[0].dateString;
+          this.subGroupSelectedItemDate = moment(this.daysDatesLevels[0].date);
           this.groupedByColor[level.color].push(level);
         });
 
@@ -471,12 +485,13 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
-  selectItem(item: any, index: any, subGroupIndex: any) {
+  selectItem(item: any, index: any, subGroupIndex: any, subgroup) {
     this.subGroupSelectedIndex = null;
     this.selectedItem = item.dateString;
     this.selectedDate = item.date;
     this.daySelectedIndex = index;
     this.subGroupSelectedIndex = subGroupIndex;
+    this.subGroupSelectedItemDate = moment(item.date);
   }
 
   calculateAgeMin(level: any) {
