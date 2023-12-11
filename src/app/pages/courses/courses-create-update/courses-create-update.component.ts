@@ -486,12 +486,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       this.courseConfigForm = this.fb.group({
 
-        fromDate: [null],
-        toDate: [null],
+        fromDate: [null, Validators.required],
+        toDate: [null, Validators.required],
         from: [null],
         to: [null],
         duration: [null],
-        participants: [null],
+        participants: [null, Validators.required],
       });
 
       this.filteredOptions = this.myControl.valueChanges
@@ -778,6 +778,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
   removePrivateReduction(redcution: any, index: any) {
     this.dataSourceReductionsPrivate.data.splice(index, 1);
     this.privateReductionTable.renderRows();
+
+    // Aquí también puedes deseleccionar el chip correspondiente
+  }
+
+  removeteDate(index: any) {
+    this.dataSource.data.splice(index, 1);
+    this.dateTable.renderRows();
 
     // Aquí también puedes deseleccionar el chip correspondiente
   }
@@ -1151,7 +1158,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           group.subgroups.push({
             degree_id: level.id,
             monitor_id: null,
-            max_participants:null
+            max_participants: group.subgroups && group.subgroups.length > 0 ? group.subgroups[0].max_participants : null
           })
         }
 
@@ -1207,6 +1214,27 @@ export class CoursesCreateUpdateComponent implements OnInit {
         });
       });
     }
+  }
+
+
+  calculateFormattedDuration(hourStart: string, hourEnd: string): string {
+    // Parsea las horas de inicio y fin
+    let start = moment(hourStart, "HH:mm");
+    let end = moment(hourEnd, "HH:mm");
+
+    // Calcula la duración
+    let duration = moment.duration(end.diff(start));
+
+    // Formatea la duración
+    let formattedDuration = "";
+    if (duration.hours() > 0) {
+      formattedDuration += duration.hours() + "h ";
+    }
+    if (duration.minutes() > 0) {
+      formattedDuration += duration.minutes() + "m";
+    }
+
+    return formattedDuration.trim();
   }
 
   getMonitorValue(level: any, subGroupIndex: number, daySelectedIndex: number) {
@@ -1299,13 +1327,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   setSubGroupPax(event: any, level: any) {
-    level.max_participants = +event.target.value;
+
+    if (+event.target.value > this.defaults.max_participants) {
+      this.snackbar.open('La capacidad del grupo no puede ser superior al limete de participantes del curso', 'OK', {duration: 3000});
+    }
+
+    level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
 
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
           group.subgroups.forEach(subGroup => {
-            subGroup.max_participants = +event.target.value;
+            subGroup.max_participants =level.max_participants;
           });
         }
       });
@@ -1666,6 +1699,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
       return;
     }
+
+    stepper.next();
   }
 
 }

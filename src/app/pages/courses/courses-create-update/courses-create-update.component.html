@@ -406,7 +406,6 @@
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let idx = index">
                       <mat-icon svgIcon="mat:delete" (click)="removePrivateDate(idx)"></mat-icon>
-                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
                     </td>
                   </ng-container>
 
@@ -542,7 +541,6 @@
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let idx = index">
                       <mat-icon svgIcon="mat:delete" (click)="removePrivateReduction(element, idx)"></mat-icon>
-                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
                     </td>
                   </ng-container>
 
@@ -900,8 +898,7 @@
                   <ng-container matColumnDef="delete">
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element">
-                      <mat-icon svgIcon="mat:delete" (click)="removeCourse(element)"></mat-icon>
-                      <mat-icon svgIcon="mat:edit" (click)="removeCourse(element)"></mat-icon>
+                      <mat-icon svgIcon="mat:delete" (click)="removeteDate(element)"></mat-icon>
                     </td>
                   </ng-container>
 
@@ -943,7 +940,6 @@
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let idx = index">
                       <mat-icon svgIcon="mat:delete" (click)="removeReduction(element, idx)"></mat-icon>
-                      <!--<mat-icon svgIcon="mat:edit" (click)="removeReduction(element, idx)"></mat-icon>-->
                     </td>
                   </ng-container>
 
@@ -969,7 +965,7 @@
 
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button (click)="checkStep3ColectiveNoFlex(stepper)">
+            <button color="primary" mat-raised-button (click)="checkStep3ColectiveNoFlex(stepper)">
               Siguiente
             </button>
           </div>
@@ -996,8 +992,8 @@
                       <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
                     </div>
                     <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>01/11/2023</b> 13:02</p>
-                      <p style="float: left;width: 50%;text-align: right;"><b>05/11/2023</b> 13:02</p>
+                      <p style="float: left;width: 50%;text-align: left;"><b>{{defaults.date_start_res |date: 'dd/MM/YYYY'}}</b> </p>
+                      <p style="float: left;width: 50%;text-align: right;"><b>{{defaults.date_end_res |date: 'dd/MM/YYYY'}}</b> </p>
                     </div>
                   </div>
                   <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -1008,8 +1004,8 @@
                       <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
                     </div>
                     <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>180</b> CHF</p>
-                      <p style="float: left;width: 50%;text-align: right;"><b>6</b></p>
+                      <p style="float: left;width: 50%;text-align: left;"><b>{{defaults.price}}</b> CHF</p>
+                      <p style="float: left;width: 50%;text-align: right;"><b>{{defaults.max_participants}}</b></p>
                     </div>
                   </div>
                   <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -1052,7 +1048,7 @@
                         </div>
                         <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                           <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Grupos 2g
+                            Grupos {{defaults.course_dates[0].groups[groupIndex].subgroups.length}}g
                           </div>
                           <div style="width: 100%; margin-top: 10%;height: 60px">
                             <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
@@ -1064,8 +1060,8 @@
                             Edad
                           </div>
                           <form [formGroup]="rangeForm" novalidate>
-                            <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                              <input type="number" placeholder="Edad Minima" aria-label="Number" matInput (blur)="setMinAge($event, groupLevel)"
+                            <mat-form-field style="width: 45%; margin-top: 10%;margin-right: 10%">
+                              <input type="number" placeholder="Min." aria-label="Number" matInput [min]="0" (blur)="setMinAge($event, groupLevel)" [value]="groupLevel.age_min"
                               [value]="calculateAgeMin(groupLevel)"/>
                               <mat-error *ngIf="minAge.errors?.['min']">
                                 La edad mínima debe ser al menos 3.
@@ -1074,8 +1070,8 @@
                                 Este campo es obligatorio.
                               </mat-error>
                             </mat-form-field>
-                            <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                              <input type="number" placeholder="Edad Máxima" aria-label="Number" matInput (blur)="setMaxAge($event, groupLevel)"
+                            <mat-form-field style="width: 45%; margin-top: 10%">
+                              <input type="number" placeholder="Max" aria-label="Number" matInput [min]="0" (blur)="setMaxAge($event, groupLevel)" [value]="groupLevel.age_max"
                               [value]="calculateAgeMax(groupLevel)"/>
                               <mat-error *ngIf="maxAge.errors?.['ageRange']">
                                 La edad máxima debe ser mayor que la edad mínima y menor o igual a 80.
@@ -1090,12 +1086,24 @@
                           </form>
                         </div>
                         <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
+                          <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
+                            Duracion<br>
+                            {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
+                          </div>
+                          <mat-form-field style="width: 100%; margin-top: 10%;margin-right: 10%">
+                            <input type="text" placeholder="Duración" aria-label="Number" matInput
+                              [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
+                          </mat-form-field>
+                        </div>
+                        <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                           <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
                             Alumnos <strong>0/{{defaults.max_participants}}</strong>
                           </div>
                           <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" [value]="calculateSubGroupPaxes(groupLevel)"/>
-
+                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" />
+                            <mat-error *ngIf="groupLevel.max_participants > this.defaults.max_participants">
+                              La capacidad del grupo no puede superar la capacidad del curso
+                            </mat-error>
                           </mat-form-field>
                         </div>
 
@@ -1122,13 +1130,13 @@
                               <div>
                                 <ul>
                                   <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
+                                    <label for="monitor">Monitor</label>
                                     <mat-form-field class="flex-auto">
-                                      <mat-label>Moniteur</mat-label>
-                                      <input type="text" placeholder="Pick one" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
+                                      <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex) || null"/>
                                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
                                         <mat-option *ngFor="let monitor of filteredMonitors | async"
                                           (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
-                                          {{monitor.first_name}} {{monitor.last_name}}
+                                          {{monitor?.first_name}} {{monitor?.last_name}}
                                         </mat-option>
                                       </mat-autocomplete>
                                       <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
