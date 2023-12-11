@@ -156,7 +156,7 @@
                 <div style="float:left; width: 100%">
                   <div class="image-container" style="float: left;width: 50%;">
 
-                    <img [src]="defaults.image"
+                    <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'"
                       alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
                   </div>
 
@@ -179,7 +179,7 @@
                 <label for="ageFrom">Edad Mínima <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="ageFrom" type="number" placeholder="Edad Minima" formControlName="ageFrom" aria-label="Number" matInput [(ngModel)]="defaults.min_age"/>
-                  <mat-error *ngIf="courseInfoFormGroup.controls.ageFrom.errors?.['required']">
+                  <mat-error *ngIf="courseInfoFormGroup?.controls?.ageFrom?.errors?.['required']">
                     Establezca una edad mínima
                   </mat-error>
                 </mat-form-field>
@@ -189,7 +189,7 @@
                 <label for="ageTo">Edad Máxima <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="ageTo" type="number" placeholder="Edad Máxima" formControlName="ageTo" aria-label="Number" matInput [(ngModel)]="defaults.max_age"/>
-                  <mat-error *ngIf="courseInfoFormGroup.controls.ageTo.errors?.['required']">
+                  <mat-error *ngIf="courseInfoFormGroup?.controls?.ageTo?.errors?.['required']">
                     Establezca una edad máxima
                   </mat-error>
                 </mat-form-field>
@@ -201,7 +201,7 @@
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
-                <mat-error *ngIf="courseInfoFormGroup.controls.summary.errors?.['required']">
+                <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                   Escriba un resumen
                 </mat-error>
               </div>
@@ -212,7 +212,7 @@
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
-                <mat-error *ngIf="courseInfoFormGroup.controls.description.errors?.['required']">
+                <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                   Escriba una descripcion
                 </mat-error>
               </div>
@@ -240,7 +240,7 @@
                 <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="mode==='update' ? null : minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
 
@@ -434,7 +434,7 @@
                 <label for="all-days">Jours</label>
                 <div style="width: 100%">
 
-                  <mat-checkbox id="all-days" [checked]="false" (change)="addWeekDay($event, 'all')">Touts selectionner</mat-checkbox>
+                  <mat-checkbox id="all-days" [checked]="areAllTrue(defaults?.settings?.weekDays)" (change)="addWeekDay($event, 'all')">Touts selectionner</mat-checkbox>
                 </div>
               </div>
 
@@ -446,19 +446,19 @@
 
                 <div style="width: 100%">
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.monday" (change)="addWeekDay($event, 'monday')">Lundi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.tuesday" (change)="addWeekDay($event, 'tuesday')">Mardi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.monday" (change)="addWeekDay($event, 'monday')">Lundi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.tuesday" (change)="addWeekDay($event, 'tuesday')">Mardi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.wednesday" (change)="addWeekDay($event, 'wednesday')">Mercedi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.thursday" (change)="addWeekDay($event, 'thursday')">Jeudi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.wednesday" (change)="addWeekDay($event, 'wednesday')">Mercedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.thursday" (change)="addWeekDay($event, 'thursday')">Jeudi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.friday" (change)="addWeekDay($event, 'friday')">Vendredi</mat-checkbox></li>
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.saturday" (change)="addWeekDay($event, 'saturday')">Samedi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.friday" (change)="addWeekDay($event, 'friday')">Vendredi</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.saturday" (change)="addWeekDay($event, 'saturday')">Samedi</mat-checkbox></li>
                   </ul>
                   <ul style="float: left;width: 25%;">
-                    <li><mat-checkbox [checked]="defaults.settings.weekDays.sunday" (change)="addWeekDay($event, 'sunday')">Diamanche</mat-checkbox></li>
+                    <li><mat-checkbox [checked]="defaults?.settings?.weekDays.sunday" (change)="addWeekDay($event, 'sunday')">Diamanche</mat-checkbox></li>
 
                   </ul>
                 </div>
@@ -466,7 +466,7 @@
 
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 5%;" *ngIf="this.defaults.is_flexible">
+            <!--<div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 5%;" *ngIf="this.defaults.is_flexible">
               <div class="flex-auto">
 
                 <label for="minDuration">DURÉE MINIMALE</label>
@@ -491,7 +491,7 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </div>
-            </div>
+            </div>-->
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.is_flexible">
               <div class="flex-auto">
@@ -510,7 +510,7 @@
 
                 <label for="maxDuration">HEURE DE FIN</label>
                 <mat-form-field class="flex-auto" style="width: 100%">
-                  <input type="text" id="toHour" formControlName="maxDuration" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo" [(ngModel)]="defaults.hour_max">
+                  <input type="text" id="maxDuration" formControlName="toHour" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo" [(ngModel)]="defaults.hour_max">
                   <mat-autocomplete #autoHourTo="matAutocomplete">
                     <mat-option *ngFor="let hour of filteredToHours" [value]="hour">
                       {{hour}}

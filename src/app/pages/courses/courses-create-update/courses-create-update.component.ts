@@ -94,7 +94,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   // Nuevos
   courseConfigForm: UntypedFormGroup;
 
-  imagePreviewUrl: string | ArrayBuffer = '../../../../assets/img/no-image.jpg';
+  imagePreviewUrl: string | ArrayBuffer = null;
 
   minDate = new Date();
   maxDate = new Date();
@@ -247,6 +247,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
 
+    if (!this.id) {
+      this.mode = 'create';
+    } else {
+      this.mode = 'update';
+    }
+
     this.getSportsType();
     this.getSports();
     this.getStations();
@@ -281,16 +287,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
         });
       })
 
-    if (!this.id) {
-      this.mode = 'create';
-    } else {
-      this.mode = 'update';
-    }
-
     if (this.mode === 'update') {
       this.crudService.get('/admin/courses/'+this.id)
         .subscribe((course) => {
           this.defaults = course.data;
+          this.defaults.hour_min = this.defaults.course_dates[0].hour_start.replace(': 00', '');
+          this.defaults.hour_max = this.defaults.course_dates[0].hour_end.replace(': 00', '');
+          this.people = this.defaults.max_participants;
+          this.defaults.settings = JSON.parse(course.data.settings);
+          this.dataSourceFlexiblePrices = this.defaults.price_range;
+          this.updateTable(null);
           this.getSeparatedDates(this.defaults.course_dates, true);
           this.getDegrees();
           this.courseTypeFormGroup = this.fb.group({
@@ -304,28 +310,30 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseInfoFormGroup = this.fb.group({
 
             course_name: [null, Validators.required],
-            price: [null, Validators.required],
+            price: [null],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
             image: [null],
+            ageFrom: [null],
+            ageTo: [null],
           })
 
 
           this.courseInfoPriveFormGroup = this.fb.group({
 
             duration: [null, Validators.required],
-            minDuration: [null, Validators.required],
-            maxDuration: [null, Validators.required],
-            fromHour: [null, Validators.required],
-            toHour: [null, Validators.required],
-            participants: [null, Validators.required],
-            fromDate: [null, Validators.required],
-            toDate: [null, Validators.required],
-            fromDateUnique: [null, Validators.required],
-            toDateUnique: [null, Validators.required],
-            from: [null, Validators.required],
-            to: [null, Validators.required],
+            minDuration: [null],
+            maxDuration: [null],
+            fromHour: [this.defaults.course_dates[0].hour_start.replace(': 00', ''), Validators.required],
+            toHour: [this.defaults.course_dates[0].hour_end.replace(': 00', '') , Validators.required],
+            participants: [this.defaults.max_participants, Validators.required],
+            fromDate: [null],
+            toDate: [null],
+            fromDateUnique: [null],
+            toDateUnique: [null],
+            from: [null ],
+            to: [null],
             image: [null],
             periodeUnique: new FormControl(false),
             periodeMultiple: new FormControl(false)
@@ -335,7 +343,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseInfoCollecDateSplitFormGroup = this.fb.group({
             course_name: [null, Validators.required],
-            price: [null, Validators.required],
+            price: [null],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
@@ -346,7 +354,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseInfoPriveSeparatedFormGroup = this.fb.group({
             course_name: [null, Validators.required],
-            price: ['Flexible', Validators.required],
+            price: ['Flexible'],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
@@ -414,6 +422,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           setTimeout(() => {
             this.filterSportsByType();
+            this.defaults.station_id = this.stations.filter((s) => s.id === this.defaults.station_id)[0];
             this.loading = false;
           }, 500);
         })
@@ -429,7 +438,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.courseInfoFormGroup = this.fb.group({
 
         course_name: [null, Validators.required],
-        price: [null, Validators.required],
+        price: [null],
         station: [null, Validators.required],
         summary: [null, Validators.required],
         description: [null, Validators.required],
@@ -444,15 +453,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.courseInfoPriveFormGroup = this.fb.group({
 
         duration: [null, Validators.required],
-        minDuration: [null, Validators.required],
-        maxDuration: [null, Validators.required],
+        minDuration: [null],
+        maxDuration: [null],
         fromHour: [null, Validators.required],
         toHour: [null, Validators.required],
         participants: [null, Validators.required],
         fromDate: [null, Validators.required],
         toDate: [null, Validators.required],
-        from: [null, Validators.required],
-        to: [null, Validators.required],
+        from: [null],
+        to: [null],
         image: [null],
         fromDateUnique: [null, Validators.required],
         toDateUnique: [null, Validators.required],
@@ -464,7 +473,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       this.courseInfoCollecDateSplitFormGroup = this.fb.group({
         course_name: [null, Validators.required],
-        price: [null, Validators.required],
+        price: [null],
         station: [null, Validators.required],
         summary: [null, Validators.required],
         description: [null, Validators.required],
@@ -475,7 +484,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       this.courseInfoPriveSeparatedFormGroup = this.fb.group({
         course_name: [null, Validators.required],
-        price: ['Flexible', Validators.required],
+        price: ['Flexible'],
         station: [null, Validators.required],
         summary: [null, Validators.required],
         description: [null, Validators.required],
@@ -554,6 +563,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
     return this.courseInfoPriveFormGroup.get('periodeMultiple').value;
   }
 
+  areAllTrue(obj) {
+    return Object.values(obj).every(value => value === true);
+  }
+
   onCheckboxChange(type: string) {
     if (type === 'unique') {
       this.courseInfoPriveFormGroup.patchValue({ periodeMultiple: false });
@@ -608,9 +621,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       reader.readAsDataURL(file);
     }
-  }
-
-  update() {
   }
 
   isCreateMode() {
@@ -1008,12 +1018,27 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
 
         this.daysDatesLevels.push({date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '')});
-        this.defaults.course_dates.push({
-          date: currentDate.format('YYYY-MM-DD'),
-          hour_start: hourStart,
-          hour_end: hourEnd,
-        })
-        currentDate = currentDate.add(1, 'days');
+
+        if (this.mode === 'update') {
+          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
+          if (!existDate) {
+            this.defaults.course_dates.push({
+              date: currentDate.format('YYYY-MM-DD'),
+              hour_start: hourStart,
+              hour_end: hourEnd,
+            })
+          }
+          currentDate = currentDate.add(1, 'days');
+
+        } else {
+          this.defaults.course_dates.push({
+            date: currentDate.format('YYYY-MM-DD'),
+            hour_start: hourStart,
+            hour_end: hourEnd,
+          })
+          currentDate = currentDate.add(1, 'days');
+        }
+
       }
     }
 
@@ -1463,6 +1488,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
       console.log(data);
     } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
+
+      if (this.periodeUnique) {
+
+        this.getDatesBetween(this.defaults.date_start, this.defaults.date_end, true, this.defaults.hour_min, this.defaults.hour_max);
+      }
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -1520,8 +1550,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         duration: this.defaults.duration,
         min_age: this.defaults.min_age,
         max_age: this.defaults.max_age,
-        course_dates: this.defaults.course_dates
-
+        course_dates: this.defaults.course_dates,
+        hour_min: this.defaults.hour_min,
+        hour_max: this.defaults.hour_max,
+        settings: JSON.stringify(this.defaults.settings)
       };
     }
     data.school_id = this.user.schools[0].id;
@@ -1534,13 +1566,164 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   }
 
+  update() {
+    if (this.defaults.course_type  === 2 ) {
+      this.checkStep3PrivateNoFlex();
+      this.setDebut(this.defaults.hour_min);
+      this.setHourEnd(this.defaults.hour_max);
+    }
+
+    let data: any = [];
+
+    let courseDates = [];
+
+    if (this.courseType === 'collectif') {
+      this.defaults.course_dates.forEach(dates => {
+        const group = [];
+        dates.groups.forEach(dateGroup => {
+          if (dateGroup.subgroups.length > 0) {
+            group.push(dateGroup);
+          }
+        });
+        dates.groups = group;
+      });
+    } else {
+      courseDates = this.defaults.course_dates;
+    }
+
+
+    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        discounts: JSON.stringify(this.dataSourceReductions.data),
+        sport_id: this.defaults.sport_id,
+        school_id: null, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+
+    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: null,
+        date_end: null,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        translations: null,
+        sport_id: this.defaults.sport_id,
+        school_id: null, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: 0,
+        currency: 'CHF',
+        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        confirm_attendance: false,
+        translations: null,
+        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
+        price_range: this.dataSourceFlexiblePrices,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        min_age: this.defaults.min_age,
+        max_age: this.defaults.max_age,
+        course_dates: this.defaults.course_dates,
+        settings: JSON.stringify(this.defaults.settings)
+      };
+      console.log(data);
+    } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
+      this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        active: this.defaults.active,
+        online: this.defaults.online,
+        image: this.imagePreviewUrl,
+        confirm_attendance: false,
+        translations: null,
+        price_range: null,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        min_age: this.defaults.min_age,
+        max_age: this.defaults.max_age,
+        course_dates: this.defaults.course_dates,
+        hour_min: this.defaults.hour_min,
+        hour_max: this.defaults.hour_max,
+        settings: JSON.stringify(this.defaults.settings)
+      };
+    }
+    data.school_id = this.user.schools[0].id;
+
+    this.crudService.update('/admin/courses', data, this.id)
+      .subscribe((res) => {
+        console.log(res);
+        this.goTo('/courses');
+      })
+  }
+
   checkStep2PrivateNoFlex(stepper: MatStepper) {
     if(this.defaults.name === null) {
       this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
       return;
     }
 
-    if(this.defaults.price === null) {
+    if(this.defaults.price === null && !this.defaults.is_flexible) {
       this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
       return;
     }
@@ -1648,9 +1831,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       return;
     }
 
-
-    this.updateTable(this.defaults.max_participants, true);
     stepper.next();
+    this.updateTable(this.defaults.max_participants, true);
+    return true;
   }
 
 
