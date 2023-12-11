@@ -3,6 +3,8 @@ import { addDays, getDay, startOfWeek, endOfWeek, addWeeks, subWeeks, format, is
 import { ApiCrudService } from 'src/service/crud.service';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import * as moment from 'moment';
 import 'moment/locale/fr';
 moment.locale('fr');
@@ -177,7 +179,7 @@ export class TimelineComponent {
   moveTask:boolean=false;
   taskMoved:any;
 
-  constructor(private crudService: ApiCrudService,) {
+  constructor(private crudService: ApiCrudService,private dialog: MatDialog) {
     this.mockLevels.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -838,15 +840,21 @@ export class TimelineComponent {
   toggleDetailMove(task: any, event: any) {
     event.preventDefault();
     if (task.booking_id) {
-      const userConfirmed = window.confirm("Are you sure you want to move this task?");
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        maxWidth: '100vw',
+        panelClass: 'full-screen-dialog',
+        data: { message: "Are you sure you want to move this task?", title: "Confirm Move" }
+      });
   
-      if (userConfirmed) {
-        this.moveTask = true;
-        this.taskMoved = task;
-        console.log('MOVEEEE');
-      } else {
-        console.log('Move cancelled');
-      }
+      dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
+        if (userConfirmed) {
+          this.moveTask = true;
+          this.taskMoved = task;
+          console.log('MOVEEEE');
+        } else {
+          console.log('Move cancelled');
+        }
+      });
     }
   }
   
@@ -855,9 +863,16 @@ export class TimelineComponent {
       console.log('Grid row clicked');
       event.stopPropagation();
 
-      console.log('CHANGE TO '+monitor_id);
-      this.moveTask = false;
-      this.taskMoved = null;
+      if(this.taskMoved != monitor_id){
+        console.log('CHANGE TO '+monitor_id);
+        this.moveTask = false;
+        this.taskMoved = null;
+      }
+      else{
+        console.log('same monitor');
+        this.moveTask = false;
+        this.taskMoved = null;
+      }
     }
   }
 

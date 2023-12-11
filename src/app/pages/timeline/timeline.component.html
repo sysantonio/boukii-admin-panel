@@ -379,6 +379,20 @@
                 <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                 <ng-container *ngIf="taskDetail.type == 'private'">
+
+                    <div style="width: 100%;float:left;margin-bottom:12px;">
+                        <mat-card-title class="font-bold" style="float: left;width: 80%;">Reserva</mat-card-title>
+                        <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
+                    </div>
+
+                    <div style="float: left; width: 100%;">
+                        <ul>
+                            <li class="font-bold">{{getDateFormatLong(taskDetail.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(taskDetail.hour_start,taskDetail.hour_end)}}</i></li>
+                        </ul>
+                    </div>
+
+                    <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                    
                     <div style="width: 100%;float:left;margin-bottom:12px;">
                         <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
                     </div>
@@ -406,19 +420,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-
-                    <div style="width: 100%;float:left;margin-bottom:12px;">
-                        <mat-card-title class="font-bold" style="float: left;width: 80%;">Reserva</mat-card-title>
-                        <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
-                    </div>
-
-                    <div style="float: left; width: 100%;">
-                        <ul>
-                            <li class="font-bold">{{getDateFormatLong(taskDetail.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(taskDetail.hour_start,taskDetail.hour_end)}}</i></li>
-                        </ul>
                     </div>
 
                     <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
