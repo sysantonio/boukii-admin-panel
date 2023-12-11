@@ -576,6 +576,12 @@
         </mat-step>
         <mat-step *ngIf="defaults.course_type === 2 && this.defaults.is_flexible">
 
+          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
+            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
+            <button color="primary" mat-raised-button (click)="save()">
+              Guardar
+            </button>
+          </div>
           <ng-template matStepLabel>Prices</ng-template>
           <div class="p-6">
 
@@ -721,6 +727,7 @@
           </div>
         </mat-step>
 
+
         <mat-step [stepControl]="courseInfoFormGroup">
           <ng-template matStepLabel>Données générales</ng-template>
 
@@ -732,13 +739,19 @@
                 <label for="courseName">Nom de cours</label>
                 <mat-form-field style="width: 100%">
                   <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
+                  <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
+                    El nombre del curso es obligatorio
+                  </mat-error>
                 </mat-form-field>
               </div>
 
               <div class="flex-auto" style="width: 15%">
-                <label for="courseName">Prix (CHF)</label>
+                <label for="price">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
+                  <input id="price" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
+                  <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
+                    El precio del curso es obligatorio
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -752,6 +765,9 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <mat-error *ngIf="myControlStations.touched && myControlStations.value === null">
+                  Seleccione una estación
+                </mat-error>
               </div>
 
             </div>
@@ -782,7 +798,9 @@
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">RESUME</label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
-
+                <mat-error *ngIf="courseInfoFormGroup.controls.summary.errors?.['required']">
+                  Escriba un resumen
+                </mat-error>
               </div>
             </div>
 
@@ -791,13 +809,15 @@
               <div class="flex-auto" style="width: 60%">
                 <label for="summary" style="font-size: 18px">DESCRIPTION</label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
-
+                <mat-error *ngIf="courseInfoFormGroup.controls.description.errors?.['required']">
+                  Escriba una descripcion
+                </mat-error>
               </div>
             </div>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+            <button color="primary" mat-raised-button (click)="checkStep2ColectiveNoFlex(stepper)">
               Siguiente
             </button>
           </div>
@@ -817,6 +837,10 @@
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerDateFrom [startAt]="minDate"></mat-datepicker>
+
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromDate.errors?.['required']">
+                    Fecha desde reservable obligatoria
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="flex-auto">
@@ -824,10 +848,13 @@
                 <label for="dateToPrivate">DATE RÉSERVABLE JUSQU'À</label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [min]="courseConfigForm.value.fromDate" [(ngModel)]="defaults.date_end_res"
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [min]="courseConfigForm.value.fromDate" [max]="maxDate" [(ngModel)]="defaults.date_end_res"
                   [disabled]="courseConfigForm.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerDateTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerDateTo [startAt]="courseConfigForm.value.fromDate"></mat-datepicker>
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromDate.errors?.['required']">
+                    Fecha desde reservable obligatoria
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -841,6 +868,9 @@
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <mat-label>PARTICIPANTS MÁX.</mat-label>
                   <input id="participants" formControlName="participants" matInput required type="number" [(ngModel)]="defaults.max_participants">
+                  <mat-error *ngIf="courseInfoPriveFormGroup.controls.participants.errors?.['required']">
+                    Añade el limite de participantes del curso
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -939,7 +969,7 @@
 
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button matStepperNext>
+            <button [disabled]="courseInfoPriveFormGroup.invalid" color="primary" mat-raised-button (click)="checkStep3ColectiveNoFlex(stepper)">
               Siguiente
             </button>
           </div>

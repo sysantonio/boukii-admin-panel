@@ -304,14 +304,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseInfoFormGroup = this.fb.group({
 
             course_name: [null, Validators.required],
-            price: [null],
+            price: [null, Validators.required],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
-            duration: [null],
-            participants: [null],
-            ageFrom: [null, [Validators.required]],
-            ageTo: [null, [Validators.required]],
             image: [null],
           })
 
@@ -361,12 +357,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseConfigForm = this.fb.group({
 
-            fromDate: [null],
-            toDate: [null],
+            fromDate: [null, Validators.required],
+            toDate: [null, Validators.required],
             from: [null],
             to: [null],
             duration: [null],
-            participants: [null],
+            participants: [null, Validators.required],
           });
 
           this.filteredOptions = this.myControl.valueChanges
@@ -439,8 +435,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: [null, Validators.required],
         duration: [null],
         participants: [null],
-        ageFrom: [null, [Validators.required]],
-        ageTo: [null, [Validators.required]],
+        ageFrom: [null],
+        ageTo: [null],
         image: [null],
       })
 
@@ -1576,6 +1572,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   }
 
+
   checkStep3PrivateFlex(stepper: MatStepper) {
     if (this.defaults.date_start_res === null) {
       this.snackbar.open('El campo fecha reservable desde es obligatorio', 'OK', {duration: 3000});
@@ -1620,4 +1617,53 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.updateTable(this.defaults.max_participants, true);
     stepper.next();
   }
+
+
+  checkStep2ColectiveNoFlex(stepper: MatStepper) {
+    if(this.defaults.name === null) {
+      this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.price === null) {
+      this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.myControlStations.value === null) {
+      this.snackbar.open('El campo estacion es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.short_description === null) {
+      this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    if(this.defaults.description === null) {
+      this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
+      return;
+    }
+
+    stepper.next();
+  }
+
+  checkStep3ColectiveNoFlex(stepper: MatStepper) {
+
+    if (this.defaults.date_start_res === null) {
+      this.snackbar.open('El campo fecha desde es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.date_end_res === null) {
+      this.snackbar.open('El campo fecha hassta es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.defaults.max_participants === null) {
+      this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
+      return;
+    }
+  }
+
 }
