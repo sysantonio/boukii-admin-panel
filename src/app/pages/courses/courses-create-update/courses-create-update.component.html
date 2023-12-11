@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <mat-horizontal-stepper #stepper="matVerticalStepper" [linear]="false">
+      <mat-horizontal-stepper #stepper="matVerticalStepper" [linear]="true">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
@@ -650,7 +650,7 @@
           </div>
         </div>
       </div>
-      <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="false" (selectionChange)="loadData($event)">
+      <mat-horizontal-stepper #stepper="matHorizontalStepper" [linear]="true" (selectionChange)="loadData($event)">
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
         </ng-template>
