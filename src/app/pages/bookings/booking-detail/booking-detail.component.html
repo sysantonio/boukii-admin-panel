@@ -34,7 +34,9 @@
                 <div style="float: left;width: 70%;font-size: 14px;"> {{getCourse(item?.courseDates[0]?.course_id)?.name}} </div>
                 <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{item?.courseDates[0]?.course_id?.price}} {{item?.courseDates[0]?.course_id?.currency}} </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0;float: left;width: 100%;">{{getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? 'collectif' : 'privee'}} {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0;float: left;width: 100%;">
+                {{getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? 'collectif' : 'privee'}}
+                {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">

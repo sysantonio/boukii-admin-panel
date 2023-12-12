@@ -263,7 +263,7 @@ export class BookingDetailComponent implements OnInit {
                 });
                 this.bookingsToCreate.push(data);
 
-                this.crudService.get('/courses/' + courseId)
+                this.crudService.get('/admin/courses/' + courseId)
                   .subscribe((course) => {
                     this.courses.push(course.data);
                   })
