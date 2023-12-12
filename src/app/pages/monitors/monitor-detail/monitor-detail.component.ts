@@ -342,7 +342,7 @@ export class MonitorDetailComponent {
 
   showSportInfoEditEvent(event: boolean) {
     this.editSportInfo = event;
-    this.selectedTabIndex = 4;
+    this.selectedTabIndex = 3;
     this.editing = true;
   }
 
@@ -352,7 +352,7 @@ export class MonitorDetailComponent {
 
   showFamilyInfoEditEvent(event: boolean) {
     this.editFamilyInfo = event;
-    this.selectedTabIndex = 5;
+    this.selectedTabIndex = 4;
     this.editing = true;
   }
 

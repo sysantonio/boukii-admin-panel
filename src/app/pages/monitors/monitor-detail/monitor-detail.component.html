@@ -43,8 +43,7 @@
               <h2 class="title m-0">Données Personnelles
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"(click)="showInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -166,8 +165,7 @@
               <h2 class="title m-0">Deportes
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editSportInfo"  (click)="showSportInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editSportInfo"  (click)="showSportInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -178,7 +176,7 @@
                   <div
                     @scaleIn
                     class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: none !important; " [style.background-color]="item.level.color">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: contain !important; " [style.background-color]="item.level.color">
                   </div>
 
                   <div @fadeInRight *ngIf="!editSportInfo">
@@ -186,14 +184,10 @@
                     <p class="m-0 body-1">{{item.name}}
                     </p>
                   </div>
+
                 </div>
 
                 <div class="py-3 flex items-center">
-                  <div
-                    @scaleIn
-                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
-                  </div>
 
                   <div @fadeInRight *ngIf="!editSportInfo">
                     <p class="m-0 caption text-hint">Level</p>
@@ -201,7 +195,35 @@
                       <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
                     </div>
                   </div>
+
+
                 </div>
+
+                <div class="py-3 flex items-center ">
+                  <ng-container *ngFor="let degree of item.degrees">
+                    <div *ngIf="checkMonitorAuth(item, degree)" class="chip-level" [style.border]="'cursor:auto; 2px solid ' + item.color"
+                    [ngStyle]="{
+                      'background': checkMonitorAuth(item, degree) ? degree.color : '#fff'
+                    }">
+                      <p style="color: #000;text-align: center"
+                      [ngStyle]="{
+                        'color': checkMonitorAuth(item, degree) ? '#fff': '#000'
+                      }"
+                      >{{ degree.annotation }}</p>
+                  </div>
+
+                </ng-container>
+                  <div class="chip-level" style="border: 2px black solid"  (click)="item.allowAdults = !item.allowAdults" [ngStyle]="{
+                    'background': item.allowAdults ? 'black' : '#fff'
+                  }" (click)="authoriseAudlts(item)">
+                    <p style="text-align: center"
+                    [ngStyle]="{
+                      'color': item.allowAdults ? '#fff' : 'black'
+                    }"
+                    >A</p>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -211,8 +233,7 @@
               <h2 class="title m-0">Direccion
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editAddressInfo" (click)="showAddressInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editAddressInfo" (click)="showAddressInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showAddressInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -279,8 +300,7 @@
               <h2 class="title m-0">Work Info
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editPersonalInfo" (click)="showPersonalInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editPersonalInfo" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -322,8 +342,7 @@
               <h2 class="title m-0">Family Info
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showFamilyInfo" (click)="showFamilyInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showFamilyInfo" (click)="showFamilyInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editFamilyInfo" (click)="showFamilyInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editFamilyInfo" (click)="showFamilyInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showFamilyInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -605,7 +624,17 @@
 
               <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
-              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+
+              <button  color="primary" mat-raised-button matStepperNext>
+                Next
+              </button>
+            </div>
+
+            <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+
+
               <button  color="primary" mat-raised-button matStepperNext>
                 Next
               </button>
@@ -724,8 +753,6 @@
                 </mat-select>
               </mat-form-field>
             </div>
-
-
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-table class="sports-table" #sportsCurrentTable [dataSource]="sportsCurrentData">
@@ -902,7 +929,7 @@
               <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
               <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
-              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+
               <button  color="primary" mat-raised-button matStepperNext>
                 Next
               </button>
@@ -960,7 +987,7 @@
               <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
               <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
-              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+
               <button  color="primary" mat-raised-button matStepperNext (click)="save()">
                 Save
               </button>

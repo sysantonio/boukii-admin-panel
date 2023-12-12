@@ -189,8 +189,7 @@
               <h2 class="title m-0">Deportes
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editSportInfo"  (click)="showSportInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editSportInfo"  (click)="showSportInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -234,8 +233,7 @@
               <h2 class="title m-0">Direccion
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editAddressInfo" (click)="showAddressInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editAddressInfo" (click)="showAddressInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showAddressInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -302,8 +300,7 @@
               <h2 class="title m-0">Other info
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editPersonalInfo" (click)="showPersonalInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editPersonalInfo" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
