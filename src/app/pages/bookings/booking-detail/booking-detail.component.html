@@ -8,6 +8,8 @@
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " >Anular reserva totalmente</button>
+
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
@@ -26,7 +28,7 @@
             </mat-card-header>
 
             <mat-divider class="text-border"></mat-divider>
-            <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Course</p>
+            <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Actividad</p>
 
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + (getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? collectifIcon : privateIcon) + ')'" style="border-radius: 5px"></div>
@@ -188,6 +190,7 @@
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0">Information del cliente</h2>
+
           </div>
           <mat-card style="width: 100%;padding:1%">
             <mat-card-header>

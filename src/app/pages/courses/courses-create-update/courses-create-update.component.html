@@ -41,7 +41,7 @@
 
             <div  style="width:50%; float:left" >
               <div class="flex-auto">
-                <mat-label>Temporada - Sport</mat-label><br>
+                <mat-label>Temporada - Sport <span style="color:red">(*)</span></mat-label><br>
                 <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
                   <mat-radio-button *ngFor="let sport of sportTypeData.reverse()" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
                 </mat-radio-group>
@@ -236,8 +236,8 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE</label>
-                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
+                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE <span style="color:red">(*)</span></label>
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="mode==='update' ? null : minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
@@ -256,8 +256,8 @@
               </div>
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À</label>
-                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À</label>
+                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À <span style="color:red">(*)</span></label>
+                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [min]="courseInfoPriveFormGroup.value.fromDate" [(ngModel)]="defaults.date_end_res"
@@ -281,7 +281,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="durationPrivate">DURÉ</label>
+                <label for="durationPrivate">DURÉ <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimesPrivate" [(ngModel)]="defaults.duration">
                   <mat-autocomplete #autoTimesPrivate="matAutocomplete">
@@ -293,7 +293,7 @@
               </div>
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="participants">PARTICIPANTS MÁX.</label>
+                <label for="participants">PARTICIPANTS MÁX. <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <mat-label>PARTICIPANTS MÁX.</mat-label>
                   <input id="participants" formControlName="participants" matInput required type="number" [(ngModel)]="defaults.max_participants">
@@ -307,7 +307,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!defaults.is_flexible">
               <div class="flex-auto">
 
-                <label for="fromHour">HEURE DEBUT</label>
+                <label for="fromHour">HEURE DEBUT <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="fromHour" formControlName="fromHour" placeholder="HEURE DEBUT" matInput [matAutocomplete]="autoHourFrom" [(ngModel)]="defaults.hour_min">
                   <mat-autocomplete #autoHourFrom="matAutocomplete">
@@ -323,7 +323,7 @@
               </div>
               <div class="flex-auto">
 
-                <label for="maxDuration">HEURE DE FIN</label>
+                <label for="maxDuration">HEURE DE FIN <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="toHour" formControlName="maxDuration" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo" [(ngModel)]="defaults.hour_max">
                   <mat-autocomplete #autoHourTo="matAutocomplete">
@@ -355,8 +355,8 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
               <div class="flex-auto" style="width:50%">
 
-                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE</label>
-                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
+                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE <span style="color:red">(*)</span></label>
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start">
@@ -370,8 +370,8 @@
               </div>
               <div class="flex-auto" style="width:50%">
 
-                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À</label>
-                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À</label>
+                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À <span style="color:red">(*)</span></label>
+                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerToUnique" formControlName="toDateUnique" [min]="courseInfoPriveFormGroup?.value?.fromDateUnique" [(ngModel)]="defaults.date_end"
@@ -496,7 +496,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.is_flexible">
               <div class="flex-auto">
 
-                <label for="fromHour">HEURE DEBUT</label>
+                <label for="fromHour">HEURE DEBUT <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="fromHour" formControlName="fromHour" placeholder="HEURE DEBUT" matInput [matAutocomplete]="autoHourFrom" [(ngModel)]="defaults.hour_min">
                   <mat-autocomplete #autoHourFrom="matAutocomplete">
@@ -508,7 +508,7 @@
               </div>
               <div class="flex-auto">
 
-                <label for="maxDuration">HEURE DE FIN</label>
+                <label for="maxDuration">HEURE DE FIN <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="maxDuration" formControlName="toHour" placeholder="HEURE DE FIN" matInput [matAutocomplete]="autoHourTo" [(ngModel)]="defaults.hour_max">
                   <mat-autocomplete #autoHourTo="matAutocomplete">
@@ -664,7 +664,7 @@
 
             <div style="width:50%; float:left" >
               <div class="flex-auto">
-                <mat-label>Temporada - Sport</mat-label><br>
+                <mat-label>Temporada - Sport <span style="color:red">(*)</span></mat-label><br>
                 <mat-radio-group aria-label="Select an option" formControlName="sportType" (change)="filterSportsByType()">
                   <mat-radio-button *ngFor="let sport of sportTypeData.reverse()" class="mr-4" [value]="sport.id">{{sport.name}}</mat-radio-button>
                 </mat-radio-group>
@@ -734,7 +734,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <div class="flex-auto" style="width: 40%">
-                <label for="courseName">Nom de cours</label>
+                <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
                   <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
@@ -744,8 +744,8 @@
               </div>
 
               <div class="flex-auto" style="width: 15%">
-                <label for="price" *ngIf="defaults.is_flexible">Prix per date (CHF)</label>
-                <label for="price" *ngIf="!defaults.is_flexible">Prix (CHF)</label>
+                <label for="price" *ngIf="defaults.is_flexible">Prix per date (CHF) <span style="color:red">(*)</span></label>
+                <label for="price" *ngIf="!defaults.is_flexible">Prix (CHF) <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="price" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
                   <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
@@ -755,7 +755,7 @@
               </div>
 
               <div class="flex-auto" style="width: 30%">
-                <label for="station">Station</label>
+                <label for="station">Station <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input type="text" id="station" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" [(ngModel)]="defaults.station_id">
                   <mat-autocomplete #autoStation="matAutocomplete" [displayWith]="displayFnStation">
@@ -795,7 +795,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
               <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">RESUME</label>
+                <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
                 <mat-error *ngIf="courseInfoFormGroup.controls.summary.errors?.['required']">
                   Escriba un resumen
@@ -806,7 +806,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">
 
               <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">DESCRIPTION</label>
+                <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
                 <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
                 <mat-error *ngIf="courseInfoFormGroup.controls.description.errors?.['required']">
                   Escriba una descripcion
@@ -830,8 +830,8 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
-                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE</label>
-                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS</label>
+                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE <span style="color:red">(*)</span></label>
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
@@ -845,8 +845,8 @@
               </div>
               <div class="flex-auto">
 
-                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À</label>
-                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À</label>
+                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À <span style="color:red">(*)</span></label>
+                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [min]="courseConfigForm.value.fromDate" [max]="maxDate" [(ngModel)]="defaults.date_end_res"
@@ -865,9 +865,8 @@
 
               <div class="flex-auto">
 
-                <label for="participants">PARTICIPANTS MÁX.</label>
+                <label for="participants">PARTICIPANTS MÁX. <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
-                  <mat-label>PARTICIPANTS MÁX.</mat-label>
                   <input id="participants" formControlName="participants" matInput required type="number" [(ngModel)]="defaults.max_participants">
                   <mat-error *ngIf="courseInfoPriveFormGroup.controls.participants.errors?.['required']">
                     Añade el limite de participantes del curso

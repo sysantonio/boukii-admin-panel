@@ -57,12 +57,17 @@
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom</mat-label>
                   <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
-
+                  <mat-error *ngIf="formInfoAccount.controls?.name?.errors?.['required']">
+                    El nombre del monitor es obligatorio
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Prenom</mat-label>
                   <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
+                  <mat-error *ngIf="formInfoAccount.controls?.surname?.errors?.['required']">
+                    El apellido del monitor es obligatorio
+                  </mat-error>
                 </mat-form-field>
              </div>
 
@@ -70,12 +75,17 @@
                 <mat-form-field class="flex-auto">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
-
+                  <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
+                    El email del monitor es obligatorio
+                  </mat-error>
+                  <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['email']">
+                    El email no tiene un formato adecuado. Utilice example@domain.subdomain (.com, .es...)
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom d'utilisateur</mat-label>
-                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                  <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
                 </mat-form-field>
               </div>
 
@@ -84,7 +94,15 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
-
+                <mat-error *ngIf="formInfoAccount.controls?.password?.errors?.['required']">
+                  La constraseña es obligatoria
+                </mat-error>
+                <mat-error *ngIf="formInfoAccount.controls?.password?.errors?.['minlength']">
+                  La contraseña no tiene un formato correcto. Tiene que contener un de 6 caracteres
+                </mat-error>
+                <mat-error *ngIf="formInfoAccount.controls?.password?.errors?.['passwordStrength']">
+                  La contraseña no tiene un formato correcto. Tiene que contener un de 6 caracteres que contenga 1 letra minúscula, una mayúscula, un número y uno de los siguientes caracteres especiales: !@#$%^&*()_+
+                </mat-error>
               </mat-form-field>
 
               <mat-form-field class="vex-flex-form-field flex-auto">
@@ -116,9 +134,12 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
               <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required>
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+                <mat-error *ngIf="formPersonalInfo.controls?.fromDate?.errors?.['required']">
+                  La fecha de nacimiento monitor es obligatorio
+                </mat-error>
               </mat-form-field>
 
             </div>
@@ -127,13 +148,15 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Teléphone</mat-label>
 
-                <input formControlName="phone" matInput required type="tel" [(ngModel)]="defaults.telephone">
+                <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Portable</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-
+                <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
+                  El móvil monitor es obligatorio
+                </mat-error>
               </mat-form-field>
             </div>
 
@@ -141,12 +164,12 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Addresse</mat-label>
 
-                <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
+                <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Code Postal</mat-label>
-                <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
+                <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
 
               </mat-form-field>
             </div>
@@ -194,7 +217,7 @@
               <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="goToStep3(stepper)">
                 Next
               </button>
             </div>
@@ -208,20 +231,20 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
               <mat-form-field class="flex-auto">
                 <mat-label>Nº AVS</mat-label>
-                <input formControlName="avs" matInput required type="text" [(ngModel)]="defaults.avs">
+                <input formControlName="avs" matInput type="text" [(ngModel)]="defaults.avs">
 
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Permis de travail</mat-label>
-                <input formControlName="workId" matInput required type="text" [(ngModel)]="defaults.work_license">
+                <input formControlName="workId" matInput type="text" [(ngModel)]="defaults.work_license">
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>IBAN</mat-label>
-                <input formControlName="iban" matInput required type="text" [(ngModel)]="defaults.bank_details">
+                <input formControlName="iban" matInput type="text" [(ngModel)]="defaults.bank_details">
 
               </mat-form-field>
             </div>
@@ -239,7 +262,7 @@
 
               <mat-form-field class="flex-auto">
                 <mat-label>Children</mat-label>
-                <input formControlName="children" matInput required type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
+                <input formControlName="children" matInput type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
 
               </mat-form-field>
             </div>
@@ -284,6 +307,23 @@
               </mat-table>
             </div>
 
+            <div class="actions flex items-center justify-end gap-2">
+              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+
+              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+                Next
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="formSportInfo">
+          <ng-template matStepLabel>Deportes</ng-template>
+
+          <div style="margin: 3% 0 0 0;">
+
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto" appearance="fill">
                 <mat-label>Deportes</mat-label>
@@ -303,15 +343,11 @@
               </mat-form-field>
             </div>
 
-
-
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
 
-
-               <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
-
-                 <!-- Otros contenedores según tu descripción -->
-                 <ng-container matColumnDef="name">
+                <!-- Otros contenedores según tu descripción -->
+                <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
@@ -325,13 +361,13 @@
                   <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                     <mat-label>Niveaux</mat-label>
-                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
-                     <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                       <mat-option *ngFor="let level of element.degrees" [value]="level">
-                         {{level.annotation}} - {{level.name}}
-                       </mat-option>
-                     </mat-autocomplete>
+                    <mat-label>Niveaux</mat-label>
+                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
+                    <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                      <mat-option *ngFor="let level of element.degrees" [value]="level">
+                        {{level.annotation}} - {{level.name}}
+                      </mat-option>
+                    </mat-autocomplete>
                     </mat-form-field>
                   </mat-cell>
                 </ng-container>
@@ -340,13 +376,13 @@
                   <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                     <mat-label>Salary</mat-label>
-                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
-                     <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
-                       <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
-                         {{salary.name}}
-                       </mat-option>
-                     </mat-autocomplete>
+                    <mat-label>Salary</mat-label>
+                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
+                    <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
+                      <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
+                        {{salary.name}}
+                      </mat-option>
+                    </mat-autocomplete>
                     </mat-form-field>
                   </mat-cell>
                 </ng-container>
@@ -366,34 +402,33 @@
                         }"
                         >{{ item.annotation }}</p>
                       </div>
-                     </div>
+                    </div>
                   </mat-cell>
                 </ng-container>
 
-                 <!-- Ícono para eliminar
-                 <ng-container matColumnDef="delete">
-                   <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
-                   <mat-cell *matCellDef="let element">
-                     <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
-                   </mat-cell>
-                 </ng-container> -->
+                <!-- Ícono para eliminar
+                <ng-container matColumnDef="delete">
+                  <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
+                  </mat-cell>
+                </ng-container> -->
 
-                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-               </mat-table>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
 
 
-             </div>
-
-            <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
-
-              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
             </div>
-          </form>
+          </div>
+          <div class="actions flex items-center justify-end gap-2">
+            <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+
+            <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+            <button color="primary" mat-raised-button (click)="goToStep5(stepper)">
+              Next
+            </button>
+          </div>
         </mat-step>
 
         <mat-step [stepControl]="formCivilStatusInfo">
@@ -432,12 +467,12 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
               <mat-form-field class="flex-auto">
                 <mat-label>Permis travail du conjoint</mat-label>
-                <input formControlName="spouseWorkId" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
+                <input formControlName="spouseWorkId" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
 
               </mat-form-field>
               <mat-form-field class="flex-auto">
                 <mat-label>Pourcentage du conjoint (%)</mat-label>
-                <input formControlName="spousePercentage" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
+                <input formControlName="spousePercentage" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
 
               </mat-form-field>
             </div>

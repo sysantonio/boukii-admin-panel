@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStepper } from '@angular/material/stepper';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
@@ -33,6 +34,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   formPersonalInfo: UntypedFormGroup;
   formWorkInfo: UntypedFormGroup;
   formCivilStatusInfo: UntypedFormGroup;
+  formSportInfo: UntypedFormGroup;
   myControlStations = new FormControl();
   myControlCountries = new FormControl();
   myControlWorkCountries = new FormControl();
@@ -126,8 +128,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDateChild = new Date(this.today);
-    this.minDate.setFullYear(this.today.getFullYear() - 18);
-    this.minDateChild.setFullYear(this.today.getFullYear() - 3);
+    this.minDate.setFullYear(this.today.getFullYear() - 3);
+    this.minDateChild.setFullYear(this.today.getFullYear() - 0);
   }
 
   ngOnInit(): void {
@@ -139,18 +141,18 @@ export class MonitorsCreateUpdateComponent implements OnInit {
       name: ['', Validators.required],
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      station: ['', Validators.required],
+      username: [''],
+      station: [''],
       password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
     });
 
     this.formPersonalInfo = this.fb.group({
-      fromDate: [''],
-      phone: ['', Validators.required],
+      fromDate: ['', Validators.required],
+      phone: [''],
       mobile: ['', Validators.required],
-      address: ['', Validators.required],
-      postalCode: ['', Validators.required],
+      address: [''],
+      postalCode: [''],
       country: this.myControlCountries,
       province: this.myControlProvinces
 
@@ -586,5 +588,23 @@ export class MonitorsCreateUpdateComponent implements OnInit {
       this.defaults.family_allowance = value.value === 'y';
       this.cdr.detectChanges();
 
+  }
+
+  goToStep3(stepper: MatStepper) {
+    if(this.selectedLanguages.length === 0) {
+      this.snackbar.open('Debe seleccionar al menos 1 idioma', 'OK', {duration: 3000});
+      return;
+    }
+
+    stepper.next();
+  }
+
+  goToStep5(stepper: MatStepper) {
+    if(this.selectedSports.length === 0) {
+      this.snackbar.open('Debe seleccionar al menos 1 deporte', 'OK', {duration: 3000});
+      return;
+    }
+
+    stepper.next();
   }
 }
