@@ -20,7 +20,7 @@
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
         <div class="h-16 items-end">
-          <p @fadeInRight class="headline text-white" style="font-size: 12px;">FR · Switzerland · 43 ans</p>
+          <p @fadeInRight class="headline text-white" style="font-size: 12px;">{{getNacionality(defaults.country)}} · {{getCountry(defaults.country)}} · {{calculateAge(defaults.birth_date)}}</p>
 
           <h1 @fadeInRight class="headline text-white">{{ defaults.first_name}} {{ defaults.last_name }}</h1>
 
@@ -33,12 +33,404 @@
     </div>
   </div>
 
+  <div class="mt-6 flex flex-col md:flex-row md:items-start" [formGroup]="formInfoAccount" *ngIf="!loading && !editing">
+
+    <mat-tab-group style="width: 100%" [selectedIndex]="selectedTabPreviewIndex">
+      <mat-tab label="About">
+        <div class="flex-auto">
+          <div class="card">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">Données Personnelles
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showInfoEditEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo">
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Nom</p>
+                  <p class="m-0 body-1">{{defaults.first_name}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Prenom</p>
+                  <p class="m-0 body-1">{{defaults.last_name}}</p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Fecha de nacimient</p>
+                  <p class="m-0 body-1">{{defaults.birth_date | date: 'dd/MM/YYYY'}}
+                  </p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Movil</p>
+                  <p class="m-0 body-1">{{defaults.phone}}
+                  </p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Email</p>
+                  <p class="m-0 body-1">{{defaults.email}}
+                  </p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Idiomas</p>
+                  <p class="m-0 body-1">{{getSelectedLanguageNames()}}
+                  </p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Nombre de usuario</p>
+                  <p class="m-0 body-1">{{defaultsUser.username || 'No asigned'}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Password</p>
+                  <p class="m-0 body-1">*************</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">Deportes
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editSportInfo"  (click)="showSportInfoEditEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editSportInfo"  (click)="showSportInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
+
+              <div *ngFor="let item of sportsCurrentData.data">
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: none !important; " [style.background-color]="item.level.color">
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">Sport</p>
+                    <p class="m-0 body-1">{{item.name}}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">Level</p>
+                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item.level.color">
+                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">Direccion
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editAddressInfo" (click)="showAddressInfoEditEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editAddressInfo" (click)="showAddressInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showAddressInfo">
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Calle -nº</p>
+                  <p class="m-0 body-1">{{defaults.address}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">CP</p>
+                  <p class="m-0 body-1">{{defaults.cp}}</p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Ciudad</p>
+                  <p class="m-0 body-1">{{getProvince(defaults.province)}}
+                  </p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Canton</p>
+                  <p class="m-0 body-1">{{getCountry(defaults.country)}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">Work Info
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editPersonalInfo" (click)="showPersonalInfoEditEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editPersonalInfo" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showPersonalInfo">
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Work License</p>
+                  <p class="m-0 body-1"> {{defaults.work_license}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">AVS</p>
+                  <p class="m-0 body-1"> {{ defaults.avs}}</p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">Family Info
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showFamilyInfo" (click)="showFamilyInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showFamilyInfo" (click)="showFamilyInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editFamilyInfo" (click)="showFamilyInfoEditEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editFamilyInfo" (click)="showFamilyInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showFamilyInfo">
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Civil Status</p>
+                  <p class="m-0 body-1">{{defaults.civil_status || 'No asigned'}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Children</p>
+                  <p class="m-0 body-1">{{defaults.children}}</p>
+                </div>
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Conjoint works</p>
+                  <p class="m-0 body-1">{{defaults.partner_works ? 'Y' : 'N'}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Conjoint license</p>
+                  <p class="m-0 body-1">{{defaults.partner_work_license}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Conjoint Percentaje</p>
+                  <p class="m-0 body-1">{{defaults.partner_percentaje}}</p>
+                </div>
+
+              </div>
+
+              <div class="py-3 flex items-center">
+                <div
+                  @scaleIn
+                  class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                </div>
+
+                <div @fadeInRight>
+                  <p class="m-0 caption text-hint">Family Allowance</p>
+                  <p class="m-0 body-1">{{defaults.family_allowance}}</p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Cours">
+
+      </mat-tab>
+      <mat-tab label="Statistiques">
+
+      </mat-tab>
+    </mat-tab-group>
+
+  </div>
 
 
-<div class="mt-6 flex flex-col md:flex-row md:items-start" *ngIf="!loading">
+<div class="mt-6 flex flex-col md:flex-row md:items-start" *ngIf="!loading && editing">
   <mat-tab-group style="width: 100%">
     <mat-tab label="Profile">
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false">
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true"  [selectedIndex]="selectedTabIndex">
 
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -116,7 +508,9 @@
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="editing = false;">Ir a Preview</button>
+
+              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
               <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
               <button color="primary" mat-raised-button matStepperNext>
@@ -207,7 +601,9 @@
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+
+              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button  color="primary" mat-raised-button matStepperNext>
@@ -503,7 +899,8 @@
 
             </div>
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button  color="primary" mat-raised-button matStepperNext>
@@ -560,7 +957,8 @@
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button  color="primary" mat-raised-button matStepperNext (click)="save()">

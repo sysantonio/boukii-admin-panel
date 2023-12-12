@@ -29,15 +29,19 @@ export class MonitorDetailComponent {
   showCivilStatusInfo = true;
   showSportInfo = true;
   showWork = true;
+  showAddressInfo = true;
+  showFamilyInfo = true;
 
   editInfo = false;
+  editFamilyInfo = false;
   editPersonalInfo = false;
   editWorkInfo = false;
   editCivilStatusInfo = false;
   editSportInfo = false;
+  editAddressInfo = false;
   editWork = false;
 
-
+  selectedTabPreviewIndex = 0;
   imagePreviewUrl: string | ArrayBuffer;
   formInfoAccount: UntypedFormGroup;
   formPersonalInfo: UntypedFormGroup;
@@ -137,8 +141,9 @@ export class MonitorDetailComponent {
 
   id: any;
   maxSelection = 6;
-
+  selectedTabIndex = 0;
   loading: boolean = true;
+  editing: boolean = false;
   user: any;
   schoolSports: any[] = [];
   stations: any[] = [];
@@ -311,18 +316,24 @@ export class MonitorDetailComponent {
 
   showInfoEditEvent(event: boolean) {
     this.editInfo = event;
+    this.selectedTabIndex = 0;
+    this.editing = true;
   }
 
   showPersonalInfoEditEvent(event: boolean) {
     this.editPersonalInfo = event;
+    this.selectedTabIndex = 3;
+    this.editing = true;
   }
 
   showWorkInfoEditEvent(event: boolean) {
     this.editWorkInfo = event;
+    this.editing = true;
   }
 
   showCivilStatusInfoEditEvent(event: boolean) {
     this.editCivilStatusInfo = event;
+    this.editing = true;
   }
 
   showSportInfoEvent(event: boolean) {
@@ -331,14 +342,39 @@ export class MonitorDetailComponent {
 
   showSportInfoEditEvent(event: boolean) {
     this.editSportInfo = event;
+    this.selectedTabIndex = 4;
+    this.editing = true;
+  }
+
+  showFamilyInfoEvent(event: boolean) {
+    this.showFamilyInfo = event;
+  }
+
+  showFamilyInfoEditEvent(event: boolean) {
+    this.editFamilyInfo = event;
+    this.selectedTabIndex = 5;
+    this.editing = true;
   }
 
   showWorkEvent(event: boolean) {
     this.showWork = event;
+    this.editing = true;
   }
 
   showWorkEditEvent(event: boolean) {
     this.editWork = event;
+    this.editing = true;
+  }
+
+  showAddressInfoEvent(event: boolean) {
+    this.showAddressInfo = event;
+    this.editing = true;
+  }
+
+  showAddressInfoEditEvent(event: boolean) {
+    this.editAddressInfo = event;
+    this.selectedTabIndex = 2;
+    this.editing = true;
   }
 
 
@@ -455,6 +491,7 @@ export class MonitorDetailComponent {
           this.schoolSports.forEach(sport => {
             if(element.id === sport.sport_id) {
               sport.name = element.name;
+              sport.icon_selected = element.icon_selected;
             }
           });
         });
@@ -842,5 +879,38 @@ export class MonitorDetailComponent {
       this.visible = true;
       this.cdr.markForCheck();
     }
+  }
+
+  getCountry(id: any) {
+    const country = this.mockCountriesData.find((c) => c.id === +id);
+    return country ? country.name : 'NDF';
+  }
+
+  getProvince(id: any) {
+    const province = this.mockProvincesData.find((c) => c.id === +id);
+    return province ? province.name : 'NDF';
+  }
+
+  calculateAge(birthDateString) {
+    if(birthDateString && birthDateString !== null) {
+      const today = new Date();
+      const birthDate = new Date(birthDateString);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+
+      return age;
+    } else {
+      return 0;
+    }
+
+  }
+
+  getNacionality(id: any) {
+    const country = this.mockCountriesData.find((c) => c.id === +id);
+    return country ? country.code : 'NDF';
   }
 }
