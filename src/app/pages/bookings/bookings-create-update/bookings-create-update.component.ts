@@ -877,6 +877,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  convertToInt(value: any) {
+    return parseFloat(value);
+  }
+
   goTo(route: string) {
     this.router.navigate([route]);
   }

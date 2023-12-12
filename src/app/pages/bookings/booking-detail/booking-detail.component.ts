@@ -1384,14 +1384,21 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
+  convertToInt(value: any) {
+    return parseFloat(value);
+  }
+
+
   getCourseExtraForfaitPrice(data: any) {
-    const courseExtra = this.courseExtra.find((c) => c.course_id === data.course_id && c.course_date_id === data.course_date_id);
-    if (courseExtra) {
-      data.forfait = courseExtra;
-      return courseExtra.price;
-    } else {
-      return 0;
-    }
+    let ret = 0;
+    this.courseExtra.forEach(c => {
+
+      if (c.course_id === data.course_id) {
+        ret = ret + parseFloat(c.price);
+        data.forfait = c;
+      }
+    });
+    return ret;
   }
 
   getBookingPaxes(){
