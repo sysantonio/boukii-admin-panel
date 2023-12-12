@@ -653,8 +653,10 @@ export class ClientDetailComponent {
 
   onTabChange(event: any) {
     if(event.index === 1) {
-      this.selectedSport = this.clientSport[0]
+      this.selectedSport = this.clientSport[0];
       this.selectSportEvo(this.selectedSport);
+      this.selectedTabIndex = 0;
+      this.editing = false;
     }
   }
 

@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <mat-tab-group style="width: 100%">
+    <mat-tab-group style="width: 100%"  (selectedTabChange)="onTabChange($event)">
       <mat-tab label="About">
         <div class="flex-auto">
           <div class="card">
@@ -376,7 +376,7 @@
             </h2>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo" style="border-bottom: 1px solid #ededed; padding:5%">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" style="border-bottom: 1px solid #ededed; padding:5%">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:25%;" *ngFor="let item of clientSport" (click)="selectSportEvo(item)">
@@ -391,7 +391,7 @@
             </div>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo" style="border-bottom: 1px solid #ededed; padding:5%">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" style="border-bottom: 1px solid #ededed; padding:5%">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:100%;">
