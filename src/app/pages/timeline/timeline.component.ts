@@ -5,6 +5,8 @@ import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { CalendarEditComponent } from '../monitors/monitor-detail/calendar/calendar-edit/calendar-edit.component';
+import { EventService } from 'src/service/event.service';
 import * as moment from 'moment';
 import 'moment/locale/fr';
 moment.locale('fr');
@@ -179,7 +181,7 @@ export class TimelineComponent {
   moveTask:boolean=false;
   taskMoved:any;
 
-  constructor(private crudService: ApiCrudService,private dialog: MatDialog) {
+  constructor(private crudService: ApiCrudService,private dialog: MatDialog,private eventService: EventService) {
     this.mockLevels.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -491,7 +493,7 @@ export class TimelineComponent {
           date_format: moment(nwd.start_date).format('DD/MM/YYYY'),
           full_day: nwd.full_day,
           type: type,
-          color: nwd.color,
+          color: nwd.user_nwd_subtype_id === 1 ? '#999999' : nwd.color,
           name: nwd.description,
           monitor_id: nwd.monitor_id,
           monitor: monitor,
@@ -580,8 +582,8 @@ export class TimelineComponent {
   }
 
  async calculateTaskPositions(tasks:any) {
-    const pixelsPerMinute = 220 / 60;
-    const pixelsPerMinuteWeek = 400 / ((this.hoursRange.length - 1) * 60);
+    const pixelsPerMinute = 150 / 60;
+    const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
     let plannerTasks = tasks.map((task:any) => {
       //Style for days
       const startTime = this.parseTime(task.hour_start);
@@ -608,7 +610,7 @@ export class TimelineComponent {
       //Style for weeks
       const taskDate = new Date(task.date);
       const dayOfWeek = taskDate.getDay();
-      const initialLeftOffset = (dayOfWeek === 0 ? 6 : dayOfWeek - 1) * 400;
+      const initialLeftOffset = (dayOfWeek === 0 ? 6 : dayOfWeek - 1) * 300;
 
       const startTimeWeek = this.parseTime(task.hour_start);
       const rangeStartWeek = this.parseTime(this.hoursRange[0]);
@@ -859,7 +861,7 @@ export class TimelineComponent {
   }
   
   moveMonitor(monitor_id:any,event: MouseEvent): void {
-    if (this.moveTask && monitor_id) {
+    if (this.moveTask) {
       console.log('Grid row clicked');
       event.stopPropagation();
 
@@ -966,6 +968,58 @@ export class TimelineComponent {
     console.log(data);
     this.editedMonitor = null;
     this.showEditMonitor = false;
+  }
+
+
+  handleDbClickEvent(action: string, event: any): void {
+    const dialogRef = this.dialog.open(CalendarEditComponent, {
+      data: {
+        event,
+        monitor_id: 1,
+        date_param: '2023-12-12',
+        hour_start: '09:00'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+        console.log(result);
+        /*
+        //CHANGE
+        let id = 1
+        result.monitor_id = id;
+
+        const isOverlap = this.eventService.isOverlap(this.events, result);
+        if (isOverlap.length === 0) {
+          if (result.user_nwd_subtype_id !== 0) {
+
+            this.crudService.create('/monitor-nwds', result)
+            .subscribe((data) => {
+
+              this.getData();
+              this.snackbar.open('Event created');
+            })
+          }
+        } else {
+
+          const updateEdit = this.events[isOverlap[0].overlapedId].id;
+          this.crudService.update('/monitor-nwds', isOverlap[0].dates[0], updateEdit)
+            .subscribe((data) => {
+              isOverlap[0].dates[1].start_time = data.data.end_time;
+              this.crudService.create('/monitor-nwds', isOverlap[0].dates[1])
+              .subscribe((data) => {
+
+                this.getData();
+                this.snackbar.open('Event created');
+              })
+            })
+          // hacer el update y el create
+          this.snackbar.open('Existe un solapamiento', 'OK', {duration: 3000});
+        }
+*/
+      }
+    });
   }
 
 }
