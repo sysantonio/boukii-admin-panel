@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <mat-tab-group style="width: 100%"  (selectedTabChange)="onTabChange($event)">
+    <mat-tab-group style="width: 100%" [selectedIndex]="selectedTabPreviewIndex" (selectedTabChange)="onTabChange($event)">
       <mat-tab label="About">
         <div class="flex-auto">
           <div class="card">

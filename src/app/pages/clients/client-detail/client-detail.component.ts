@@ -85,6 +85,7 @@ export class ClientDetailComponent {
   editing = false;
   coloring = true;
   selectedTabIndex = 0;
+  selectedTabPreviewIndex = 0;
 
   mockCivilStatus: string[] = ['Single', 'Mariée', 'Veuf', 'Divorcé'];
   mockLevelData: any = LEVELS;
@@ -656,6 +657,7 @@ export class ClientDetailComponent {
       this.selectedSport = this.clientSport[0];
       this.selectSportEvo(this.selectedSport);
       this.selectedTabIndex = 0;
+      this.selectedTabPreviewIndex = 1;
       this.editing = false;
     }
   }
@@ -867,6 +869,7 @@ export class ClientDetailComponent {
   showInfoEditEvent(event: boolean) {
     this.editInfo = event;
     this.selectedTabIndex = 0;
+    this.selectedTabPreviewIndex = 0;
     this.editing = true;
   }
 
@@ -878,6 +881,7 @@ export class ClientDetailComponent {
   showPersonalInfoEditEvent(event: boolean) {
     this.editPersonalInfo = event;
     this.selectedTabIndex = 0;
+    this.selectedTabPreviewIndex = 0;
     this.editing = true;
   }
 
@@ -888,6 +892,7 @@ export class ClientDetailComponent {
   showAddressInfoEditEvent(event: boolean) {
     this.editAddressInfo = event;
     this.selectedTabIndex = 1;
+    this.selectedTabPreviewIndex = 0;
     this.editing = true;
   }
 
@@ -898,6 +903,7 @@ export class ClientDetailComponent {
   showSportInfoEditEvent(event: boolean) {
     this.editSportInfo = event;
     this.selectedTabIndex = 2;
+    this.selectedTabPreviewIndex = 0;
     this.editing = true;
   }
 
