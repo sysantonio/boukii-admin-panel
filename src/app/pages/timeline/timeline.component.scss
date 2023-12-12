@@ -84,10 +84,10 @@
     display: flex;
 }  
 .hour {
-    min-width: 220px;width: 220px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
+    min-width: 150px;width: 150px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
 }
 .day {
-    min-width: 400px;width: 400px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
+    min-width: 300px;width: 300px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
 }
 .grid-container {
     min-width: max-content;position:relative;
@@ -96,10 +96,10 @@
     display: flex;width: fit-content;
 }  
 .grid-cell {
-    border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 220px;width: 220px;height: 100px;position:relative;
+    border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 150px;width: 150px;height: 100px;position:relative;
 }
 .grid-cell-day {
-    border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 400px;width: 400px;height: 100px;display: flex;justify-content: space-between;position:relative;
+    border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 300px;width: 300px;height: 100px;display: flex;justify-content: space-between;position:relative;
 }
 .grid-cell-inside {
     border-left:1px solid #ddd;
