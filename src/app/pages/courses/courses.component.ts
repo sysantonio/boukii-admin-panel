@@ -20,7 +20,7 @@ export class CoursesComponent {
   mockLevels = LEVELS;
 
   createComponent = CoursesCreateUpdateComponent;
-  entity = '/admin/courses';
+  entity = '/courses';
   columns: TableColumn<any>[] = [
     { label: 'Type', property: 'course_type', type: 'image', visible: true },
     { label: 'Course', property: 'name', type: 'text', visible: true},

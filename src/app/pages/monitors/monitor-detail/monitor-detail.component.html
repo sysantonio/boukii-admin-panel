@@ -53,8 +53,8 @@
             <ng-template matStepLabel>Info de compte</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div *ngIf="imagePreviewUrl" class="image-container">
-                <img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;">
+              <div class="image-container">
+                <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;">
               </div>
 
               <div class="input-container">
