@@ -744,7 +744,8 @@
               </div>
 
               <div class="flex-auto" style="width: 15%">
-                <label for="price">Prix (CHF)</label>
+                <label for="price" *ngIf="defaults.is_flexible">Prix per date (CHF)</label>
+                <label for="price" *ngIf="!defaults.is_flexible">Prix (CHF)</label>
                 <mat-form-field style="width: 100%">
                   <input id="price" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
                   <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">

@@ -18,16 +18,13 @@
   <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left" *ngIf="showDetail">
     <mat-card style="padding: 0 3%;">
       <mat-card-header style="display:block">
-        <div style="width: 100%;float: left;">
-          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
-
-        </div>
         <div style="width: 100%;float:left;">
           <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
           <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0;"></div>
           <div style="float: left;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
-          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"></div>
-          <mat-icon style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
+          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"></div>`
+          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>
+          <mat-icon style="float: right;" svgIcon="mat:edit"></mat-icon>
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">

@@ -719,6 +719,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.bookingsToCreate.forEach((element, idx) => {
       element.courseDates.forEach(cs => {
         courseDates.push(cs);
+        if (element.forfait) {
+
+          bookingExtras.push({forfait: element.forfait, course_date_id: cs.course_date_id});
+        }
       });
 
       let paxes = 0;
@@ -738,10 +742,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         payment_method_id: element.payment_method_id
       }
 
-      if (element.forfait) {
 
-        bookingExtras.push({forfait: element.forfait, idx: idx});
-      }
     });
 
     const clientsWithoutSelectedSport = [];
@@ -816,7 +817,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
 
         rqs.forEach((rq, idx) => {
-          const bExtra = bookingExtras.find((b)=> b.idx === idx);
+          const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
 
           this.crudService.create('/booking-users', rq)
           .subscribe((bookingUser) => {

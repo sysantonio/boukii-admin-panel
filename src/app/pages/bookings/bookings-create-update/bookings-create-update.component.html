@@ -643,7 +643,7 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
                       <li *ngFor="let forfait of settings.extras.forfait">
-                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)" [checked]="item.forfait === forfait.id">
+                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)" [checked]="item?.forfait?.id === forfait.id">
                             <span>{{forfait.id}}</span>
                           </mat-checkbox>
                       </li>
@@ -823,7 +823,7 @@
               <ng-container *ngFor="let item of bookingsToCreate; let i = index">
                 <span style="width: 100%; float:left" *ngIf="item.forfait">
                   <p style="float:left">Forfait {{item.forfait.id}}</p>
-                  <p style="float:right">{{item.forfait.price + ((item.forfait.price * item.forfait.tva) / 100)}}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                  <p style="float:right">{{((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100)}}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
                 </span>
               </ng-container>
 

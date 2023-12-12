@@ -262,9 +262,11 @@
                                   <div>
                                     <ul>
                                       <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
+                                        <label for="monitor">Monitor</label>
+
                                         <mat-form-field class="flex-auto">
-                                          <mat-label>Moniteur</mat-label>
-                                          <input type="text" placeholder="Pick one" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
+
+                                          <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                           <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
                                             <mat-option *ngFor="let monitor of filteredMonitors | async"
                                               (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
