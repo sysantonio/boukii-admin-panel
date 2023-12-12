@@ -154,6 +154,7 @@ export class TimelineComponent {
   weeksInMonth: any[] = [];
 
   allMonitors:any[] =[];
+  filteredMonitors:any[] =[];
   plannerTasks:any[] =[];
   vacationDays:any[];
 
@@ -161,6 +162,7 @@ export class TimelineComponent {
   activeSchool:any=null;
   languages:any[] = [];
   sports:any[] = [];
+  sportsReceived:any[] = [];
   degrees:any[] = [];
   showGrouped:boolean=false;
   groupedTasks:any[] = [];
@@ -181,6 +183,17 @@ export class TimelineComponent {
   moveTask:boolean=false;
   taskMoved:any;
 
+  showFilter:boolean=false;
+  checkedSports = new Set();
+  filterMonitor:any=null;
+  filterFree:boolean=true;
+  filterOccupied:boolean=true;
+  filterCollective:boolean=true;
+  filterPrivate:boolean=true;
+  filterNwd:boolean=true;
+  filterBlockPayed:boolean=true;
+  filterBlockNotPayed:boolean=true;
+
   constructor(private crudService: ApiCrudService,private dialog: MatDialog,private eventService: EventService) {
     this.mockLevels.forEach(level => {
       if (!this.groupedByColor[level.color]) {
@@ -196,6 +209,7 @@ export class TimelineComponent {
     this.activeSchool = await this.getUser();
     await this.getLanguages();
     await this.getSports();
+    await this.getSchoolSports();
     await this.getDegrees();
     let vacationDaysString = "[\"2023-12-08\",\"2024-01-06\",\"2024-01-17\",\"2024-02-01\",\"2024-02-02\"]";
     this.vacationDays = JSON.parse(vacationDaysString);
@@ -229,7 +243,20 @@ export class TimelineComponent {
     try {
       const data: any = await this.crudService.get('/sports?perPage='+99999).toPromise();
       console.log(data);
-      this.sports = data.data;
+      this.sportsReceived = data.data;
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  }
+
+  async getSchoolSports(){
+    try {
+      const data: any = await this.crudService.get('/school-sports?school_id='+this.activeSchool+'&perPage='+99999).toPromise();
+      console.log(data);
+      this.sports = this.sportsReceived.filter(sport => 
+        data.data.some(newSport => newSport.sport_id === sport.id)
+      );
+      this.sports.forEach(sport => this.checkedSports.add(sport.id));
     } catch (error) {
       console.error('There was an error!', error);
     }
@@ -351,26 +378,87 @@ export class TimelineComponent {
       }
     );
   }
+
+  normalizeToArray(data) {
+    //Nwds sometimes as object sometimes as array
+    if (Array.isArray(data)) {
+      return data;
+    }
+    if (typeof data === 'object') {
+      return Object.values(data);
+    }
+    return [];
+  }
   
   processData(data:any) {
     this.allMonitors = [{
         id: null
     }];
+    if(this.filterMonitor){
+      this.filteredMonitors = [];
+    }
+    else{
+      this.filteredMonitors = [{
+        id: null
+      }];
+    }
     let allNwds = [];
     let allBookings = [];
 
     for (const key in data) {
         const item = data[key];
+        let hasAtLeastOne = true;
+
+        // Save all monitors
+        if (item.monitor) {
+          if(!this.areAllChecked()){
+            hasAtLeastOne = item.monitor.sports.length > 0 && item.monitor.sports.some(sport => this.checkedSports.has(sport.id));
+          }
+          this.allMonitors.push(item.monitor);
+        }
 
         // Process 'monitor' field
-        if (item.monitor) {
-            this.allMonitors.push(item.monitor);
+        if(this.filterMonitor){
+          if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne) {
+            this.filteredMonitors.push(item.monitor);
+          }
+        }
+        else{
+          if (item.monitor && hasAtLeastOne) {
+            this.filteredMonitors.push(item.monitor);
+          }
         }
 
         // Process 'nwds' field
-        if (item.nwds && Array.isArray(item.nwds)) {
-            allNwds.push(...item.nwds);
+        if (item.nwds) {
+          const nwdsArray = this.normalizeToArray(item.nwds);
+          if(this.filterMonitor && hasAtLeastOne){
+            for (const nwd of nwdsArray) {
+              if (nwd.monitor_id === this.filterMonitor) {
+                if ((this.filterNwd || nwd.user_nwd_subtype_id !== 1) &&
+                    (this.filterBlockPayed || nwd.user_nwd_subtype_id !== 2) &&
+                    (this.filterBlockNotPayed || nwd.user_nwd_subtype_id !== 3)) {
+                  allNwds.push(nwd);
+                }
+              } else {
+                //If one doesn't match -> break loop
+                break;
+              }
+            }
+          }
+          else {
+            if(hasAtLeastOne){
+              const filteredNwds = nwdsArray.filter(nwd => 
+                (this.filterNwd || nwd.user_nwd_subtype_id !== 1) &&
+                (this.filterBlockPayed || nwd.user_nwd_subtype_id !== 2) &&
+                (this.filterBlockNotPayed || nwd.user_nwd_subtype_id !== 3)
+              );
+              allNwds.push(...filteredNwds);
+            }
+          }
         }
+
+        let hasAtLeastOneBooking = true;
 
         // Process 'bookings' field
         /*NO NEED TO GROUP WHEN CHANGE IN CALL*/
@@ -379,8 +467,27 @@ export class TimelineComponent {
             for (const bookingKey in item.bookings) {
                 const bookingArray = item.bookings[bookingKey];
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
-                    const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
-                    allBookings.push(firstBooking);
+                  if(!this.areAllChecked()){
+                    hasAtLeastOneBooking = this.checkedSports.has(bookingArray[0].course.sport_id);
+                  }
+                  if(this.filterMonitor && hasAtLeastOne && hasAtLeastOneBooking){
+                    if(bookingArray[0].monitor_id == this.filterMonitor){
+                      if ((this.filterCollective || bookingArray[0].course.course_type !== 1) &&
+                          (this.filterPrivate || bookingArray[0].course.course_type !== 2)) {
+                        const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
+                        allBookings.push(firstBooking);
+                      }
+                    }
+                  }
+                  else{
+                    if(hasAtLeastOne && hasAtLeastOneBooking){
+                      if ((this.filterCollective || bookingArray[0].course.course_type !== 1) &&
+                          (this.filterPrivate || bookingArray[0].course.course_type !== 2)) {
+                        const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
+                        allBookings.push(firstBooking);
+                      }
+                    }
+                  }
                 }
             }
         }
@@ -428,7 +535,7 @@ export class TimelineComponent {
 
         let monitor = null;
         if(booking.monitor_id){
-          monitor = this.allMonitors.find(monitor => monitor.id === booking.monitor_id) || null;
+          monitor = this.filteredMonitors.find(monitor => monitor.id === booking.monitor_id) || null;
         }
     
         return {
@@ -483,7 +590,7 @@ export class TimelineComponent {
 
         let monitor = null;
         if(nwd.monitor_id){
-          monitor = this.allMonitors.find(monitor => monitor.id === nwd.monitor_id) || null;
+          monitor = this.filteredMonitors.find(monitor => monitor.id === nwd.monitor_id) || null;
         }
 
         return {
@@ -508,6 +615,7 @@ export class TimelineComponent {
 
     // Additional processing if needed...
     console.log(this.allMonitors);
+    console.log(this.filteredMonitors);
     console.log(allBookings);
     console.log(allNwds);
   }
@@ -598,7 +706,7 @@ export class TimelineComponent {
       const durationMinutes = endMinutes - startMinutes;
       const widthPixels = durationMinutes * pixelsPerMinute;
 
-      const monitorIndex = this.allMonitors.findIndex(m => m.id === task.monitor_id);
+      const monitorIndex = this.filteredMonitors.findIndex(m => m.id === task.monitor_id);
       const topPixels = monitorIndex * 100;
 
       const style = {
@@ -1021,5 +1129,53 @@ export class TimelineComponent {
       }
     });
   }
+
+  /* FILTER */
+  onCheckChange(sportId: number, isChecked: boolean) {
+    if (isChecked) {
+      this.checkedSports.add(sportId);
+    } else {
+      this.checkedSports.delete(sportId);
+    }
+  }
+
+  areAllChecked() {
+    return this.checkedSports.size === this.sports.length;
+  }
+
+  showResetFilters() {
+    return !(this.areAllChecked() && this.filterMonitor == null &&
+             this.filterFree && this.filterOccupied &&
+             this.filterCollective && this.filterPrivate && this.filterNwd &&
+             this.filterBlockPayed && this.filterBlockNotPayed);
+  }
+
+  applyFilters() {
+    this.showFilter=false;
+    this.loadBookings(this.currentDate);
+  }
+
+  resetFilters() {
+    this.checkedSports.clear();
+    this.sports.forEach(sport => this.checkedSports.add(sport.id));
+    this.filterMonitor=null;
+    this.filterFree=true;
+    this.filterOccupied=true;
+    this.filterCollective=true;
+    this.filterPrivate=true;
+    this.filterNwd=true;
+    this.filterBlockPayed=true;
+    this.filterBlockNotPayed=true;
+
+    this.applyFilters();
+  }
+
+  scrollToTop() {
+    const element = document.querySelector('.hours-container');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
 
 }

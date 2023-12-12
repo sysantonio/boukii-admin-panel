@@ -236,10 +236,21 @@
 .box-detail-user-blocklevel {
     color:#fff;padding:2px 4px;width:fit-content;border-radius:6px;
 }
-
 .select-row {
     position:relative;z-index:1000;
 }
 .select-row:hover {
     background-color: #aaa;cursor:pointer;
+}
+.filter-button {
+    position: relative;top: 5px;margin-left: 30px;
+}
+.filter-container {
+    width:100%;margin-bottom:24px;display:flex;gap:32px;
+}
+.filter-container-column {
+    display:flex;flex-direction:column;gap:0px;
+}
+.filter-container-column span {
+    margin-bottom:8px;
 }
