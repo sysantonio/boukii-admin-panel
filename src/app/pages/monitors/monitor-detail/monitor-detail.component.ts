@@ -43,6 +43,7 @@ export class MonitorDetailComponent {
   formPersonalInfo: UntypedFormGroup;
   formWorkInfo: UntypedFormGroup;
   formCivilStatusInfo: UntypedFormGroup;
+  formSportInfo: UntypedFormGroup;
   myControlStations = new FormControl();
   myControlCountries = new FormControl();
   myControlWorkCountries = new FormControl();
@@ -180,18 +181,18 @@ export class MonitorDetailComponent {
               name: ['', Validators.required],
               surname: ['', Validators.required],
               email: ['', [Validators.required, Validators.email]],
-              username: ['', Validators.required],
-              station: ['', Validators.required],
+              username: [''],
+              station: [''],
               password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
             });
 
             this.formPersonalInfo = this.fb.group({
-              fromDate: [''],
-              phone: ['', Validators.required],
+              fromDate: ['', Validators.required],
+              phone: [''],
               mobile: ['', Validators.required],
-              address: ['', Validators.required],
-              postalCode: ['', Validators.required],
+              address: [''],
+              postalCode: [''],
               country: this.myControlCountries,
               province: this.myControlProvinces
 
@@ -352,7 +353,7 @@ export class MonitorDetailComponent {
   }
 
   private _filterSports(value: any): any[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name?.toLowerCase();
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
     return this.schoolSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
@@ -694,6 +695,16 @@ export class MonitorDetailComponent {
 
         });
     }
+  }
+
+  authoriseAudlts(element) {
+    element.authorisedLevels.forEach(auLevel => {
+      this.crudService.update('/monitor-sport-authorized-degrees',
+      {allow_adults: element.allowAdults, monitor_id: auLevel.monitor_id, degree_id: auLevel.degree_id, monitor_sport_id: auLevel.monitor_sport_id}, auLevel.id)
+      .subscribe(() => {
+        this.snackbar.open('Monitor authorization created', 'OK', {duration: 3000});
+      })
+    });
   }
 
   setValueSpouse(value: any) {

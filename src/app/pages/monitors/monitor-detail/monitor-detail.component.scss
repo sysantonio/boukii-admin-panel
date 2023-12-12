@@ -69,3 +69,10 @@ img {
 .delete-column {
   width: 50px !important;
 }
+
+::ng-deep .sports-table mat-header-row {
+  display: block !important;
+}
+::ng-deep .sports-table mat-row {
+  display: block !important;
+}

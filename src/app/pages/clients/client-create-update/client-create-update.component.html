@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false">
 
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -53,37 +53,56 @@
               </div>
             </div>
 
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-                <mat-form-field class="flex-auto">
-                  <mat-label>Nom</mat-label>
-                  <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+              <mat-form-field class="flex-auto">
+                <mat-label>Nom</mat-label>
+                <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
+                <mat-error *ngIf="formInfoAccount.controls?.name?.errors?.['required']">
+                  El nombre del monitor es obligatorio
+                </mat-error>
+              </mat-form-field>
 
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Prenom</mat-label>
-                  <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
-                </mat-form-field>
+              <mat-form-field class="flex-auto">
+                <mat-label>Prenom</mat-label>
+                <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
+                <mat-error *ngIf="formInfoAccount.controls?.surname?.errors?.['required']">
+                  El apellido del monitor es obligatorio
+                </mat-error>
+              </mat-form-field>
              </div>
 
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
-                  <mat-label>Email</mat-label>
-                  <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-form-field class="flex-auto">
+                <mat-label>Email</mat-label>
+                <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
+                <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
+                  El email del monitor es obligatorio
+                </mat-error>
+                <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['email']">
+                  El email no tiene un formato adecuado. Utilice example@domain.subdomain (.com, .es...)
+                </mat-error>
+              </mat-form-field>
 
-                </mat-form-field>
-
-                <mat-form-field class="flex-auto">
-                  <mat-label>Nom d'utilisateur</mat-label>
-                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
-                </mat-form-field>
-              </div>
+              <mat-form-field class="flex-auto">
+                <mat-label>Nom d'utilisateur</mat-label>
+                <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
+              </mat-form-field>
+            </div>
 
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
+                <mat-error *ngIf="formInfoAccount.controls?.password?.errors?.['required']">
+                  La constraseña es obligatoria
+                </mat-error>
+                <mat-error *ngIf="formInfoAccount.controls?.password?.errors?.['minlength']">
+                  La contraseña no tiene un formato correcto. Tiene que contener un de 6 caracteres
+                </mat-error>
+                <mat-error *ngIf="formInfoAccount.controls?.password?.errors?.['passwordStrength']">
+                  La contraseña no tiene un formato correcto. Tiene que contener un de 6 caracteres que contenga 1 letra minúscula, una mayúscula, un número y uno de los siguientes caracteres especiales: !@#$%^&*()_+
+                </mat-error>
 
               </mat-form-field>
             </div>
@@ -107,6 +126,9 @@
                 <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+                <mat-error *ngIf="formPersonalInfo.controls?.fromDate?.errors?.['required']">
+                  La fecha de nacimiento monitor es obligatorio
+                </mat-error>
               </mat-form-field>
 
             </div>
@@ -115,13 +137,15 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Teléphone</mat-label>
 
-                <input formControlName="phone" matInput required type="tel"  [(ngModel)]="defaults.telephone">
+                <input formControlName="phone" matInput type="tel"  [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Portable</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-
+                <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
+                  El móvil monitor es obligatorio
+                </mat-error>
               </mat-form-field>
             </div>
 
@@ -129,12 +153,12 @@
               <mat-form-field class="flex-auto">
                 <mat-label>Addresse</mat-label>
 
-                <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
+                <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
                 <mat-label>Code Postal</mat-label>
-                <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
+                <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
 
               </mat-form-field>
             </div>
@@ -182,7 +206,7 @@
               <button mat-button type="button" (click)="goTo('/clients')">Cancelar</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="goToStep3(stepper)">
                 Next
               </button>
             </div>

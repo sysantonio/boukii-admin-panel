@@ -94,7 +94,7 @@
 
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field class="flex-auto" style="width: 50%">
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput required [type]="inputType" [(ngModel)]="defaultsUser.password">
                 <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Ver contraseña" type="button">
@@ -103,7 +103,7 @@
                 </button>
               </mat-form-field>
 
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field class="vex-flex-form-field flex-auto" style="width: 50%">
                 <mat-label>Station</mat-label>
 
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
@@ -300,6 +300,16 @@
               </mat-table>
             </div>
 
+
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="formSportInfo">
+          <ng-template matStepLabel>Deportes</ng-template>
+
+          <div style="margin: 3% 0 0 0;">
+
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto" appearance="fill">
                 <mat-label>Deportes</mat-label>
@@ -321,21 +331,19 @@
 
 
 
-            <div class="">
-
-
-               <mat-table #sportsCurrentTable [dataSource]="sportsCurrentData">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+              <mat-table class="sports-table" #sportsCurrentTable [dataSource]="sportsCurrentData">
                 <caption style="width: 100px"> Current sports</caption>
                  <!-- Otros contenedores según tu descripción -->
                  <ng-container matColumnDef="delete">
-                  <mat-header-cell *matHeaderCellDef class="delete-column">Eliminar</mat-header-cell>
-                  <mat-cell *matCellDef="let element; let i = index" class="delete-column">
+                  <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">Eliminar</mat-header-cell>
+                  <mat-cell *matCellDef="let element; let i = index" class="delete-column" style="width: 20%;float: left;">
                     <mat-icon svgIcon="mat:delete" (click)="removeSport(i, element)"></mat-icon>
                   </mat-cell>
                 </ng-container>
-                 <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                 <ng-container matColumnDef="name" >
+                  <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;"> Name </mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                       <mat-label>Name</mat-label>
                       <input matInput [value]="element.name" type="text" [readonly]="true">
@@ -344,8 +352,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="level">
-                  <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Niveaux</mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                      <mat-label>Niveaux</mat-label>
                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element.level.name" [(ngModel)]="element.level"/>
@@ -359,8 +367,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="salary">
-                  <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Salary</mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                      <mat-label>Salary</mat-label>
                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [value]="getSalary(element.salary_level)?.name" [matAutocomplete]="autoSalary"/>
@@ -374,8 +382,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="auth">
-                  <mat-header-cell *matHeaderCellDef> Authorised Levels </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef [hidden]="true" style="width: 100%;float: left;"> Authorised Levels </mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
                     <div style="width: 100%; float:left">
                       <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
                       [ngStyle]="{
@@ -388,7 +396,17 @@
                         }"
                         >{{ item.annotation }}</p>
                       </div>
+                      <div class="chip-level" style="border: 2px black solid"  (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
+                        'background': element.allowAdults ? 'black' : '#fff'
+                      }" (click)="authoriseAudlts(element)">
+                        <p style="text-align: center"
+                        [ngStyle]="{
+                          'color': element.allowAdults ? '#fff' : 'black'
+                        }"
+                        >A</p>
+                      </div>
                      </div>
+
                   </mat-cell>
                 </ng-container>
 
@@ -399,13 +417,13 @@
 
              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
+              <mat-table class="sports-table" #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
                 <caption style="width: 100px"> New sports</caption>
 
                 <!-- Otros contenedores según tu descripción -->
                 <ng-container matColumnDef="name">
-                 <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                 <mat-cell *matCellDef="let element">
+                 <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> Name </mat-header-cell>
+                 <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                      <mat-label>Name</mat-label>
                      <input matInput [value]="element.name" type="text" [readonly]="true">
@@ -414,8 +432,8 @@
                </ng-container>
 
                <ng-container matColumnDef="level">
-                 <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
-                 <mat-cell *matCellDef="let element">
+                 <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Niveaux</mat-header-cell>
+                 <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                     <mat-label>Niveaux</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
@@ -429,8 +447,8 @@
                </ng-container>
 
                <ng-container matColumnDef="salary">
-                 <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
-                 <mat-cell *matCellDef="let element">
+                 <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
+                 <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                     <mat-label>Salary</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
@@ -444,8 +462,8 @@
                </ng-container>
 
                <ng-container matColumnDef="auth">
-                <mat-header-cell *matHeaderCellDef> Authorised Levels </mat-header-cell>
-                <mat-cell *matCellDef="let element">
+                <mat-header-cell *matHeaderCellDef style="width: 100%;float: left;" [hidden]="true"> Authorised Levels </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
                   <div style="width: 100%; float:left">
                     <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
                     [ngStyle]="{
@@ -458,7 +476,16 @@
                       }"
                       >{{ item.annotation }}</p>
                     </div>
+                    <div class="chip-level" style="border: 1px black solid" (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
+                     'background': element.allowAdults ? 'black' : '#fff'
+                   }">
+                     <p style="text-align: center"
+                     [ngStyle]="{
+                       'color': element.allowAdults ? '#fff' : 'black'
+                     }"
+                     >A</p>
                    </div>
+                  </div>
                 </mat-cell>
               </ng-container>
                 <!-- Ícono para eliminar
@@ -483,7 +510,8 @@
                 Next
               </button>
             </div>
-          </form>
+
+          </div>
         </mat-step>
 
         <mat-step [stepControl]="formCivilStatusInfo">

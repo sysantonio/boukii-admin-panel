@@ -194,7 +194,7 @@ displayedColumns: string[] = ['name', 'date'];
 
             if (!onChangeUser) {
               this.getClientUtilisateurs();
-    }
+            }
             this.defaultsUser = user.data;
 
             this.formInfoAccount = this.fb.group({
@@ -202,17 +202,17 @@ displayedColumns: string[] = ['name', 'date'];
               name: ['', Validators.required],
               surname: ['', Validators.required],
               email: ['', [Validators.required, Validators.email]],
-              username: ['', Validators.required],
+              username: [''],
               password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
             });
 
             this.formPersonalInfo = this.fb.group({
               fromDate: [''],
-              phone: ['', Validators.required],
+              phone: [''],
               mobile: ['', Validators.required],
-              address: ['', Validators.required],
-              postalCode: ['', Validators.required],
+              address: [''],
+              postalCode: [''],
               country: this.myControlCountries,
               province: this.myControlProvinces
 

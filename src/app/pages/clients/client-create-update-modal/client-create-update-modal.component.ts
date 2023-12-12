@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStepper } from '@angular/material/stepper';
 import { _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
@@ -120,17 +121,17 @@ export class ClientCreateUpdateModalComponent implements OnInit {
       name: ['', Validators.required],
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
+      username: [''],
       password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
     });
 
     this.formPersonalInfo = this.fb.group({
       fromDate: [''],
-      phone: ['', Validators.required],
+      phone: [''],
       mobile: ['', Validators.required],
-      address: ['', Validators.required],
-      postalCode: ['', Validators.required],
+      address: [''],
+      postalCode: [''],
       country: this.myControlCountries,
       province: this.myControlProvinces
 
@@ -417,6 +418,14 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     }
   }
 
+  goToStep3(stepper: MatStepper) {
+    if(this.selectedLanguages.length === 0) {
+      this.snackbar.open('Debe seleccionar al menos 1 idioma', 'OK', {duration: 3000});
+      return;
+    }
+
+    stepper.next();
+  }
 
   goTo(route: string) {
     this.router.navigate([route]);

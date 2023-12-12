@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
+      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false">
 
         <ng-template matStepperIcon="edit">
           <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -173,8 +173,6 @@
 
               </mat-form-field>
             </div>
-
-
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="vex-flex-form-field flex-auto">
@@ -344,12 +342,12 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
+              <mat-table class="sports-table" #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
 
                 <!-- Otros contenedores según tu descripción -->
                 <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> Name </mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                       <mat-label>Name</mat-label>
                       <input matInput [value]="element.name" type="text" [readonly]="true">
@@ -358,8 +356,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="level">
-                  <mat-header-cell *matHeaderCellDef>Niveaux</mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Niveaux</mat-header-cell>
+                  <mat-cell *matCellDef="let element"  style="width: 30%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                     <mat-label>Niveaux</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
@@ -373,8 +371,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="salary">
-                  <mat-header-cell *matHeaderCellDef>Salary</mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
+                  <mat-cell *matCellDef="let element"  style="width: 30%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                     <mat-label>Salary</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
@@ -388,8 +386,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="auth">
-                  <mat-header-cell *matHeaderCellDef> Authorised Levels </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
+                  <mat-header-cell *matHeaderCellDef style="float: left; width: 100%;" [hidden]="true"> Authorised Levels </mat-header-cell>
+                  <mat-cell *matCellDef="let element; let authI = index" style="width: 100%;float: left;">
                     <div style="width: 100%; float:left">
                       <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
                       [ngStyle]="{
@@ -401,6 +399,16 @@
                           'color': isAuthorized(item) ? '#fff': '#000'
                         }"
                         >{{ item.annotation }}</p>
+                      </div>
+
+                      <div class="chip-level" style="border: 2px black solid" (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
+                        'background': element.allowAdults ? 'black' : '#fff'
+                      }">
+                        <p style="text-align: center"
+                        [ngStyle]="{
+                          'color': element.allowAdults ? '#fff' : 'black'
+                        }"
+                        >A</p>
                       </div>
                     </div>
                   </mat-cell>
