@@ -308,7 +308,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   private _filterSports(value: any): any[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : value?.name.toLowerCase();
+    const filterValue = typeof value === 'string' ? value?.toLowerCase() : value?.name.toLowerCase();
     return this.schoolSports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
@@ -480,7 +480,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
             this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
               .subscribe((monitorSchool) => {
                 this.sportsData.data.forEach(element => {
-                  this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
+                  this.crudService.create('/monitor-sports-degrees', {is_default: false, monitor_id: monitor.data.id, sport_id: element.sport_id,
+                    school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id, allow_adults: element.allowAdults ? element.allowAdults : false})
                     .subscribe((e) => {
                       this.authorisedLevels.forEach(auLevel => {
 
