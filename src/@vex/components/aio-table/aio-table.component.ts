@@ -70,6 +70,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   createComponent: any;
   @Input()
   showDetail: boolean = false;
+  @Input()
+  filterField: any = null;
+  @Input()
+  filterColumn: any = null;
+  @Input()
+  with: any = '';
   @Output()
   showDetailEvent = new EventEmitter<any>();
   pageSize = 10;
@@ -101,7 +107,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   // Asegúrate de que pageIndex y pageSize se pasan correctamente.
   // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-  this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id')
+  this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', '', this.with)
     .subscribe((response: any) => {
       this.data = response.data;
       this.dataSource.data = response.data;

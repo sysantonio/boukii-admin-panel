@@ -29,6 +29,9 @@ import { MonitorDetailComponent } from './monitor-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CalendarMonitorModule } from './calendar/calendar.module';
 import { ConfirmModalModule } from './confirm-dialog/confirm-dialog.component.module';
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+import { ComponentsModule } from 'src/@vex/components/components.module';
+import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
 
 @NgModule({
   imports: [
@@ -66,7 +69,10 @@ import { ConfirmModalModule } from './confirm-dialog/confirm-dialog.component.mo
     MatTabsModule,
     MatTableModule,
     CalendarMonitorModule,
-    ConfirmModalModule
+    ConfirmModalModule,
+    PageLayoutModule,
+    ComponentsModule,
+    ComponentsCustomModule
   ],
   declarations: [MonitorDetailComponent],
   exports: [MonitorDetailComponent]

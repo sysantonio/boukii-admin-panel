@@ -19,7 +19,7 @@ export class MonitorsComponent {
   detailData: any;
   sports = [];
   user: any;
-  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  imageAvatar = '../../../assets/img/avatar.png';
   skiImage = 'https://school.boukii.com/assets/apps/sports/Ski.png';
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
@@ -74,6 +74,19 @@ export class MonitorsComponent {
               this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_sport_id=' + element.id)
                 .subscribe((msad) => {
                   element.authorized = msad.data;
+                });
+
+                this.crudService.get('/sports/'+element.sport_id)
+                  .subscribe((sport) => {
+                    element.name = sport.data.name;
+                    element.icon_selected = sport.data.icon_selected;
+                    element.icon_unselected = sport.data.icon_unselected;
+                  });
+
+                  this.crudService.get('/degrees/'+element.degree_id)
+                  .subscribe((level) => {
+                    element.level = level.data;
+
                 });
             });
 

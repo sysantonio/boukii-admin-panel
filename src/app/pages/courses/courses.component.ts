@@ -22,6 +22,7 @@ export class CoursesComponent {
   createComponent = CoursesCreateUpdateComponent;
   entity = '/courses';
   columns: TableColumn<any>[] = [
+    { label: 'Id', property: 'id', type: 'text', visible: true },
     { label: 'Type', property: 'course_type', type: 'image', visible: true },
     { label: 'Course', property: 'name', type: 'text', visible: true},
     { label: 'Sport', property: 'sport', type: 'text', visible: true },

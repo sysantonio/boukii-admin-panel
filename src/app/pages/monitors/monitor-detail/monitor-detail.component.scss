@@ -76,3 +76,63 @@ img {
 ::ng-deep .sports-table mat-row {
   display: block !important;
 }
+.table-show-detail {
+  width: 65%;float:left
+}
+.box-detail-boxes {
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.box-detail-box {
+  width:calc(50% - 6px);height:110px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0px;margin-bottom:4px;
+}
+.box-background-grey {
+  background: #e6e6e6;
+}
+.box-detail-user-block {
+  display:flex;width:100%;align-items:center;gap:12px;
+}
+.box-detail-user-block-img {
+  width:60px;min-width:60px;height:60px;position:relative;border-radius:60px;
+}
+.box-detail-user-block-img img {
+  object-fit:cover;width:100%;height:100%;border-radius:100%;
+}
+.box-detail-user-block-text {
+  display:fex;width:100%;gap:4px;flex-direction:column;
+}
+.box-detail-user-block-text div {
+  font-weight:bold;font-size:16px;
+}
+.box-detail-user-block-text span {
+  font-size:12px;
+}
+.box-detail-user-blocklevel {
+  color:#fff;padding:2px 4px;width:fit-content;border-radius:6px;
+}
+.font-bold {
+  font-weight:bold;
+}
+.font-white {
+  color:#fff;
+}
+.box-detail-user-block {
+  display:flex;width:100%;align-items:center;gap:12px;
+}
+.box-detail-user-block-img {
+  width:60px;min-width:60px;height:60px;position:relative;border-radius:60px;
+}
+.box-detail-user-block-img img {
+  object-fit:cover;width:100%;height:100%;border-radius:100%;
+}
+.box-detail-user-block-text {
+  display:fex;width:100%;gap:4px;flex-direction:column;
+}
+.box-detail-user-block-text div {
+  font-weight:bold;font-size:16px;
+}
+.box-detail-user-block-text span {
+  font-size:12px;
+}
+.box-detail-user-blocklevel {
+  color:#fff;padding:2px 4px;width:fit-content;border-radius:6px;
+}

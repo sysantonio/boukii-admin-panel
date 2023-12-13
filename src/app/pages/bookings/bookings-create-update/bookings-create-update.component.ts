@@ -342,9 +342,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
             this.getUtilzers(this.clients[0], true);
             //this.getDegrees(this.defaults.sport_id);
 
+
             setTimeout(() => {
               this.clientsForm.patchValue(this.clients[0]);
-
+              this.loading = false;
             }, 500);
           }, 500);
       })
@@ -373,10 +374,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if (!onload) {
       const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
-      client.sports.forEach(sport => {
+      client.client_sports.forEach(sport => {
 
-        if (sport.id === this.defaults.sport_id) {
-          const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+        if (sport.sport_id === this.defaults.sport_id) {
+          const level = this.levels.find((l) => l.id === sport.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
           this.getCourses(level, this.monthAndYear);
@@ -398,10 +399,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
     let hasSport = false;
-    client.sports.forEach(sport => {
+    client.client_sports.forEach(sport => {
 
-      if (sport.id === this.defaults.sport_id) {
-        const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+      if (sport.sport_id === this.defaults.sport_id) {
+        const level = this.levels.find((l) => l.id === sport.degree_id);
         this.levelForm.patchValue(level);
         this.defaultsBookingUser.degree_id = level.id;
         hasSport = true;
@@ -547,7 +548,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     let price = this.selectedItem.price;
     if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
-      const discounts = JSON.parse(this.selectedItem.discounts);
+      const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
       discounts.forEach(element => {
         if (element.date === this.reservableCourseDate.length) {
           price = price - (this.selectedItem.price * (element.percentage / 100));
@@ -748,7 +749,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const clientsWithoutSelectedSport = [];
     this.bookingsToCreate.forEach(element => {
       const client = this.clients.find((c) => c.id === element.courseDates[0].client_id);
-      const bookSport = client.sports.find((c) => c.id === element.courseDates[0].course.sport_id);
+      const bookSport = client.client_sports.find((c) => c.id === element.courseDates[0].course.sport_id);
       if (!bookSport || bookSport === null) {
 
         clientsWithoutSelectedSport.push({
@@ -979,10 +980,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.defaultsBookingUser.client_id = user.id;
     const client = this.clients.find((c) => c.id === user.id);
 
-    client.sports.forEach(sport => {
+    client.client_sports.forEach(sport => {
 
-      if (sport.id === this.defaults.sport_id) {
-        const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+      if (sport.sport_id === this.defaults.sport_id) {
+        const level = this.levels.find((l) => l.id === sport.degree_id);
         this.levelForm.patchValue(level);
         this.defaultsBookingUser.degree_id = level.id;
         this.getCourses(level, this.monthAndYear);
@@ -997,12 +998,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const client = this.clients.find((c) => c.id === utilizer.id);
 
 
-    if (client.sports.length > 0) {
+    if (client.client_sports.length > 0) {
       let hasSport = false;
-      client.sports.forEach(sport => {
+      client.client_sports.forEach(sport => {
 
-        if (sport.id === this.defaults.sport_id) {
-          const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+        if (sport.sport_id === this.defaults.sport_id) {
+          const level = this.levels.find((l) => l.id === sport.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
           hasSport = true;
@@ -1047,7 +1048,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 1000, 'asc', 'sport_id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data.reverse();
         this.sportData.forEach(element => {
@@ -1087,9 +1088,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         );
         let hasSport = false;
         const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
-        client.sports.forEach(sport => {
-          if (sport.id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+        client.client_sports.forEach(sport => {
+          if (sport.sport_id === this.defaults.sport_id) {
+            const level = this.levels.find((l) => l.id === sport.degree_id);
             this.levelForm.patchValue(level);
             this.defaultsBookingUser.degree_id = level.id;
             hasSport = true;
@@ -1097,12 +1098,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
           }
         });
 
-        if (!hasSport && client.sports.length === 0) {
+        if (!hasSport && client.client_sports.length === 0) {
           this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
-        } else if(!hasSport && client.sports.length > 0) {
+        } else if(!hasSport && client.client_sports.length > 0) {
           this.courses = [];
           this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
@@ -1133,9 +1134,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 .subscribe((cl) => {
                   this.clients = cl.data;
                   const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
-                  client.sports.forEach(sport => {
-                    if (sport.id === this.defaults.sport_id) {
-                      const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+                  client.client_sports.forEach(sport => {
+                    if (sport.sport_id === this.defaults.sport_id) {
+                      const level = this.levels.find((l) => l.id === sport.degree_id);
                       this.levelForm.patchValue(level);
                       this.defaultsBookingUser.degree_id = level.id;
                       this.getCourses(level, this.monthAndYear);
@@ -1163,9 +1164,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
       .subscribe((data: any) => {
         this.utilizers = data.data;
         if (!onLoad) {
-          client.sports.forEach(sport => {
-            if (sport.id === this.defaults.sport_id) {
-              const level = this.levels.find((l) => l.id === sport.pivot.degree_id);
+          client.client_sports.forEach(sport => {
+            if (sport.sport_id === this.defaults.sport_id) {
+              const level = this.levels.find((l) => l.id === sport.degree_id);
               this.levelForm.patchValue(level);
               this.defaultsBookingUser.degree_id = level.id;
               this.clientsForm.patchValue(client);
@@ -1517,32 +1518,35 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
 
   getAvailableWeekDays(settings: any) {
-    const data = JSON.parse(settings);
-    let ret = null;
-    if (data !== null) {
-      if (data.weekDays.monday) {
-        ret = ret === null ? 'Monday' : ret + ' - ' + 'Monday';
+    if (settings !== null) {
+      const data = typeof settings === 'string' ? JSON.parse(settings) : settings;
+      let ret = null;
+      if (data !== null) {
+        if (data.weekDays.monday) {
+          ret = ret === null ? 'Monday' : ret + ' - ' + 'Monday';
+        }
+        if (data.weekDays.tuesday) {
+          ret = ret === null ? 'Tuesday' : ret + ' - ' + 'Tuesday';
+        }
+        if (data.weekDays.wednesday) {
+          ret = ret === null ? 'Wednesday' : ret + ' - ' + 'Wednesday';
+        }
+        if (data.weekDays.thursday) {
+          ret = ret === null ? 'Thursday' : ret + ' - ' + 'Thursday';
+        }
+        if (data.weekDays.friday) {
+          ret = ret === null ? 'Friday' : ret + ' - ' + 'Friday';
+        }
+        if (data.weekDays.saturday) {
+          ret = ret === null ? 'Saturday' : ret + ' - ' + 'Saturday';
+        }
+        if (data.weekDays.sunday) {
+          ret = ret === null ? 'Sunday' : ret + ' - ' + 'Sunday';
+        }
       }
-      if (data.weekDays.tuesday) {
-        ret = ret === null ? 'Tuesday' : ret + ' - ' + 'Tuesday';
-      }
-      if (data.weekDays.wednesday) {
-        ret = ret === null ? 'Wednesday' : ret + ' - ' + 'Wednesday';
-      }
-      if (data.weekDays.thursday) {
-        ret = ret === null ? 'Thursday' : ret + ' - ' + 'Thursday';
-      }
-      if (data.weekDays.friday) {
-        ret = ret === null ? 'Friday' : ret + ' - ' + 'Friday';
-      }
-      if (data.weekDays.saturday) {
-        ret = ret === null ? 'Saturday' : ret + ' - ' + 'Saturday';
-      }
-      if (data.weekDays.sunday) {
-        ret = ret === null ? 'Sunday' : ret + ' - ' + 'Sunday';
-      }
+      return ret;
     }
-    return ret;
+
   }
 
   getBasePrice() {
@@ -1718,7 +1722,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+1)
+        this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
           .subscribe((cl: any) => {
             const newClient = cl.data.find((c) => c.id = data.data.id);
             this.clientsForm.patchValue(newClient);

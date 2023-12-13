@@ -20,7 +20,7 @@ export class AddDiscountBonusModalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.crudService.list('/vouchers', 1, 1000, 'asc', 'first_name', '&school_id='+this.defaults.school_id + '&client_id='+this.defaults.client_id)
+    this.crudService.list('/vouchers', 1, 1000, 'desc', 'id', '&school_id='+this.defaults.school_id + '&client_id='+this.defaults.client_id)
       .subscribe((data) => {
         this.bonuses = data.data;
       })

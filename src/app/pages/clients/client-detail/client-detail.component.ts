@@ -516,10 +516,10 @@ export class ClientDetailComponent {
   }
 
   getClientUtilisateurs() {
-    this.crudService.list('/admin/clients/' + this.id +'/utilizers', 1, 1000, 'asc', 'name', '&client_id='+this.id)
+    this.crudService.list('/admin/clients/' + this.id +'/utilizers', 1, 1000, 'desc', 'id','&client_id='+this.id)
       .subscribe((data) => {
         this.clientUsers = data.data;
-        this.crudService.list('/clients-utilizers', 1, 1000, 'asc', 'name', '&main_id='+this.id)
+        this.crudService.list('/clients-utilizers', 1, 1000, 'desc', 'id','&main_id='+this.id)
         .subscribe((data) => {
           data.data.forEach(element => {
             this.clientUsers.forEach(cl => {

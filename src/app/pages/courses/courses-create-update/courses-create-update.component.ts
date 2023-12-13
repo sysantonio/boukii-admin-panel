@@ -294,7 +294,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.defaults.hour_min = this.defaults.course_dates[0].hour_start.replace(': 00', '');
           this.defaults.hour_max = this.defaults.course_dates[0].hour_end.replace(': 00', '');
           this.people = this.defaults.max_participants;
-          this.defaults.settings = JSON.parse(course.data.settings);
+          this.defaults.settings = typeof course.data.settings === 'string' ? JSON.parse(course.data.settings) : course.data.settings;
           this.dataSourceFlexiblePrices = this.defaults.price_range;
           this.updateTable(null);
           this.getSeparatedDates(this.defaults.course_dates, true);
@@ -898,7 +898,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 1000, 'asc', 'name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id','&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data;
         this.sportData.forEach(element => {
@@ -1517,8 +1517,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age,
+        age_min: this.defaults.min_age,
+        age_max: this.defaults.max_age,
         course_dates: this.defaults.course_dates,
         settings: JSON.stringify(this.defaults.settings)
       };
@@ -1548,8 +1548,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age,
+        age_min: this.defaults.min_age,
+        age_max: this.defaults.max_age,
         course_dates: this.defaults.course_dates,
         hour_min: this.defaults.hour_min,
         hour_max: this.defaults.hour_max,
@@ -1575,6 +1575,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     let data: any = [];
 
+    let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
+
+    let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
+    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
+
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -1584,8 +1589,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: null,
-        date_end: null,
+        date_start: lowestDate,
+        date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
@@ -1611,8 +1616,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: null,
-        date_end: null,
+        date_start: lowestDate,
+        date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
@@ -1636,8 +1641,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.description,
         price: 0,
         currency: 'CHF',
-        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start: lowestDate,
+        date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
@@ -1652,14 +1657,19 @@ export class CoursesCreateUpdateComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age,
+        age_min: this.defaults.min_age,
+        age_max: this.defaults.max_age,
         course_dates: this.defaults.course_dates,
         settings: JSON.stringify(this.defaults.settings)
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
       this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
+      let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
+
+      let lowestDateP = moment(sortedDates[0]).format('YYYY-MM-DD');
+      let highestDateP = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
+
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -1670,8 +1680,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         currency: 'CHF',
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: lowestDateP,
+        date_end: highestDateP,
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -1683,8 +1693,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        min_age: this.defaults.min_age,
-        max_age: this.defaults.max_age,
+        age_min: this.defaults.min_age,
+        age_max: this.defaults.max_age,
         course_dates: this.defaults.course_dates,
         hour_min: this.defaults.hour_min,
         hour_max: this.defaults.hour_max,
