@@ -54,8 +54,8 @@
 
             <!-- aqui el listado -->
             <div class="list-group">
-              <ng-container *ngFor="let item of courseSubGroups; let itemIndex = index">
-                <div class="list-item" *ngIf="item.degree_id === groupLevel.id">
+              <ng-container *ngFor="let item of getCourseSubgroups(groupLevel); let itemIndex = index">
+                <div class="list-item" >
                   <p [style.color]="colorKey"><strong>{{ groupLevel.league }} {{itemIndex+1}}</strong></p>
                   <p>Arsene Garcia FR · ALL</p>
                   <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"

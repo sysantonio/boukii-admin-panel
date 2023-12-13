@@ -162,4 +162,16 @@ export class CourseUserTransferComponent implements OnInit {
 
     return ret;
   }
+
+  getCourseSubgroups(level: any) {
+    let ret = [];
+
+    this.courseSubGroups.forEach(element => {
+      if (element.degree_id === level.id) {
+        ret.push(element);
+      }
+    });
+
+    return ret;
+  }
 }
