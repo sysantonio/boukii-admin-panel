@@ -370,20 +370,31 @@ export class SettingsComponent implements OnInit {
 
   onDateSelect(event: MatDatepickerInputEvent<Date>) {
     const selectedDate = event.value;
-    this.holidaysSelected.push(selectedDate);
+    this.holidaysSelected.push(moment(selectedDate).format('YYYY-MM-DD'));
   }
   getSchoolSeason() {
     return this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id=1');
   }
 
+  deleteHoliday(index: any) {
+    this.holidays.splice(index, 1);
+  }
+
   saveSeason() {
 
-    const holidays = [];
+    let holidays = [];
 
-    this.holidaysSelected.forEach(element => {
-      console.log(moment(element).format('YYYY-MM-DD'));
-      holidays.push(moment(element).format('YYYY-MM-DD'));
-    });
+    if (this.season && this.season !== null) {
+
+      holidays = this.holidays;
+    } else {
+      this.holidaysSelected.forEach(element => {
+        console.log(moment(element).format('YYYY-MM-DD'));
+        holidays.push(moment(element).format('YYYY-MM-DD'));
+      });
+    }
+
+
 
     const data = {
       name: "Temporada 1",

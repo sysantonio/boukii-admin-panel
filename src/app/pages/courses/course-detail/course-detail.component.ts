@@ -161,6 +161,8 @@ export class CourseDetailComponent implements OnInit {
     this.crudService.get('/admin/courses/'+this.id)
       .subscribe((data) => {
         this.defaults = data.data;
+        this.getStations();
+
         this.getSeparatedDates(this.defaults.course_dates, true);
 
         this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&course_id='+this.defaults.id)
@@ -174,6 +176,16 @@ export class CourseDetailComponent implements OnInit {
 
   }
 
+  getStations() {
+    this.crudService.list('/stations', 1, 1000,  'desc', 'id', '&school_id=' + this.user.schools[0].id)
+      .subscribe((st) => {
+        st.data.forEach(element => {
+          if (element.id === this.defaults.station_id) {
+            this.defaults.station = element;
+          }
+        });
+      })
+  }
 
   generateDurations() {
     let minutes = 15;

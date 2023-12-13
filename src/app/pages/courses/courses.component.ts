@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { CoursesCreateUpdateComponent } from './courses-create-update/courses-create-update.component';
 import { LEVELS } from 'src/app/static-data/level-data';
+import { ApiCrudService } from 'src/service/crud.service';
+import moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'vex-courses',
@@ -17,10 +20,9 @@ export class CoursesComponent {
 
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
-  mockLevels = LEVELS;
 
   createComponent = CoursesCreateUpdateComponent;
-  entity = '/courses';
+  entity = '/admin/courses';
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true },
     { label: 'Type', property: 'course_type', type: 'image', visible: true },
@@ -38,19 +40,155 @@ export class CoursesComponent {
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
-  constructor() {
-    this.mockLevels.forEach(level => {
-      if (!this.groupedByColor[level.color]) {
-        this.groupedByColor[level.color] = [];
-      }
-      this.groupedByColor[level.color].push(level);
-    });
-
-    this.colorKeys = Object.keys(this.groupedByColor);
+  constructor(private crudService: ApiCrudService, private router: Router) {
   }
 
   showDetailEvent(event: any) {
-    this.showDetail = event.showDetail;
-    this.detailData = event.item;
+
+    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
+      this.detailData = event.item;
+
+      this.groupedByColor = {};
+      this.colorKeys= [];
+      this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id='+ this.detailData.sport_id)
+        .subscribe((data) => {
+          this.detailData.degrees = [];
+          data.data.forEach(element => {
+            if(element.active) {
+              this.detailData.degrees.push(element);
+            }
+          });
+
+
+           this.detailData.degrees.reverse().forEach(level => {
+            if (!this.groupedByColor[level.color]) {
+              this.groupedByColor[level.color] = [];
+            }
+            level.active = false;
+
+
+            this.detailData.course_dates.forEach(cs => {
+              cs.groups.forEach(group => {
+                if (group.degree_id === level.id) {
+                  level.active = true;
+                  level.old = true;
+                }
+                level.visible = false;
+              });
+            });
+            this.groupedByColor[level.color].push(level);
+          });
+
+          this.colorKeys = Object.keys(this.groupedByColor).reverse();
+        });
+
+        this.crudService.list('/stations', 1, 1000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
+          .subscribe((st) => {
+            st.data.forEach(element => {
+              if (element.id === this.detailData.station_id) {
+                this.detailData.station = element;
+              }
+            });
+          })
+        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id='+ this.detailData.id)
+          .subscribe((bookingUser) => {
+            this.detailData.users = [];
+            this.detailData.users = bookingUser.data;
+            this.showDetail = true;
+
+          })
+    } else {
+      this.showDetail = event.showDetail;
+    }
+
+  }
+
+  calculateFormattedDuration(hourStart: string, hourEnd: string): string {
+    // Parsea las horas de inicio y fin
+    let start = moment(hourStart.replace(': 00', ''), "HH:mm");
+    let end = moment(hourEnd.replace(': 00', ''), "HH:mm");
+
+    // Calcula la duración
+    let duration = moment.duration(end.diff(start));
+
+    // Formatea la duración
+    let formattedDuration = "";
+    if (duration.hours() > 0) {
+      formattedDuration += duration.hours() + "h ";
+    }
+    if (duration.minutes() > 0) {
+      formattedDuration += duration.minutes() + "m";
+    }
+
+    return formattedDuration.trim();
+  }
+
+  getStudents(levelId: any) {
+    let ret = 0;
+
+    this.detailData.users.forEach(element => {
+      if (element.degree_id === levelId) {
+        ret = ret + 1;
+      }
+    });
+
+    return ret;
+  }
+
+  getMaxStudents(levelId: any) {
+    let ret = 0;
+
+    this.detailData.course_dates.forEach(courseDate => {
+      courseDate.groups.forEach(group => {
+        if (group.degree_id === levelId) {
+          group.subgroups.forEach(sb => {
+            ret = ret + sb.max_participants;
+          });
+        }
+      });
+
+    });
+
+    return ret;
+  }
+
+  getGroups(levelId: any) {
+    let ret = 0;
+
+    this.detailData.course_dates.forEach(courseDate => {
+      courseDate.groups.forEach(group => {
+        if (group.degree_id === levelId) {
+          ret = ret + 1;
+        }
+      });
+
+    });
+
+    return ret;
+  }
+
+  getSubGroups(levelId: any) {
+    let ret = 0;
+
+    this.detailData.course_dates.forEach(courseDate => {
+      let find = false;
+      courseDate.groups.forEach(group => {
+        if (group.degree_id === levelId && !find) {
+          ret = group.subgroups[0].max_participants;
+          find = true;
+        }
+      });
+
+    });
+
+    return ret;
+  }
+
+  parseDateToText(date: any) {
+    return moment(date).format('LLL').replace(' 0:00', '')
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 }

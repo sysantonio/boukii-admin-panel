@@ -20,9 +20,9 @@
                     <img [src]="defaults.course_type === 1 ? imagePath : imagePathPrivate" width="100" height="100">
                   </div>
                   <div style="float: left; width: 75%;">
-                    <p><strong>Classes de ski / Samedis Jeunesse / dès 5ans</strong></p>
-                    <p>Colectif Ski</p>
-                    <p>Les Pacots</p>
+                    <p><strong>{{defaults.name}}</strong></p>
+                    <p>{{defaults.course_type === 1 ? 'Collectif' : 'Privee'}}  {{defaults.sport.name}}</p>
+                    <p>{{defaults?.station?.name}}</p>
                   </div>
 
                   <div style="float: right;" style="float: right;cursor:pointer" (click)="goTo('/courses/update/'+this.id)">
@@ -67,10 +67,10 @@
                   <p style="float: left;width: 20%;text-align: right;"><b>Precio</b></p>
                 </div>
                 <div style="width: 100%;">
-                  <p style="float: left;width: 50%;text-align: left;">
-                    Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+                  <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.short_description">
+
                   </p>
-                  <p style="float: left;width: 50%;text-align: right;color:#ff3085"><b>180</b> CHF</p>
+                  <p style="float: left;width: 50%;text-align: right;color:#ff3085"><b>{{defaults.price}}</b> CHF</p>
                 </div>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
@@ -79,10 +79,9 @@
                   <p style="float: left;width: 20%;text-align: right;"><b>Edad</b></p>
                 </div>
                 <div style="width: 100%;">
-                  <p style="float: left;width: 50%;text-align: left;">
-                    Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+                  <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.description">
                   </p>
-                  <p style="float: left;width: 50%;text-align: right;">De 5 a 18 años</p>
+                  <p style="float: left;width: 50%;text-align: right;" >De {{defaults.age_min}} a {{defaults.age_max}} años</p>
                 </div>
               </div>
 

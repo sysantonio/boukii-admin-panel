@@ -23,7 +23,7 @@
                     <p style="font-weight: bold; color:#808080">Datos generales</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;border-radius: 25px;color: #fff;" (click)="saveSeason()">Save season</button>
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveSeason()">Save season</button>
                   </div>
 
                 </div>
@@ -34,7 +34,7 @@
                       <label for="dateFrom">Inicio de temporada</label>
                       <mat-form-field style="width: 100%">
 
-                        <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="selectedFrom">
+                        <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="selectedFrom" [value]="selectedFrom | date: 'dd/MM/YYYY'">
                         <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                         <mat-datepicker #pickerFrom [startAt]="selectedFrom"></mat-datepicker>
                       </mat-form-field>
@@ -44,7 +44,7 @@
 
                       <mat-form-field style="width: 100%">
 
-                        <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="toDate" [disabled]="selectedFrom === null" [min]="selectedFrom" [(ngModel)]="selectedTo">
+                        <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="toDate" [disabled]="selectedFrom === null" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo | date: 'dd/MM/YYYY'">
                         <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                         <mat-datepicker #pickerTo [startAt]="selectedTo"></mat-datepicker>
                       </mat-form-field>
@@ -79,8 +79,13 @@
 
                   <div class="sm:flex-row gap-2 sm:gap-6">
                     <div *ngFor="let holiday of holidays; let i = index" style="width: 49%; float:left;" [ngClass]="{'margin-right': isEven(i)}">
-                      <div style="width: 100%; float:left;">
+                      <div style="width: 5%;float: left;margin: 4% 0 0 0;">
+                        <mat-icon svgIcon="mat:delete" style="color:red;cursor:pointer" (click)="deleteHoliday(i)"></mat-icon>
+
+                      </div>
+                      <div style="width: 95%; float:left;">
                         <label for="holiday-{{i}}">Día festivo</label>
+
                         <mat-form-field style="width: 100%">
                           <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)"  [value]="holiday">
                           <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
@@ -110,7 +115,7 @@
                     <p style="font-weight: bold; color:#808080">Datos (Para emails)</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;border-radius: 25px;color: #fff;" (click)="saveContactData()">Save data</button>
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveContactData()">Save contact data</button>
                   </div>
                 </div>
                 <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">

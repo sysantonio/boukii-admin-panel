@@ -20,11 +20,11 @@
       <mat-card-header style="display:block">
         <div style="width: 100%;float:left;">
           <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
-          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0;"></div>
+          <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0;" [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"></div>
           <div style="float: left;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
-          <div style="float: left;background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"></div>`
+          <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>`
           <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>
-          <mat-icon style="float: right;" svgIcon="mat:edit"></mat-icon>
+          <mat-icon style="float: right;" svgIcon="mat:edit" (click)="goTo('/courses/detail/'+detailData.id)"></mat-icon>
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">
@@ -32,8 +32,8 @@
             <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
           </div>
           <div style="width: 100%;">
-            <p style="float: left;width: 50%;text-align: left;"><b>01/11/2023</b> 13:02</p>
-            <p style="float: left;width: 50%;text-align: right;"><b>05/11/2023</b> 13:02</p>
+            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.date_end | date: 'dd/MM/YYYY'}}</b> {{detailData.course_dates[0].hour_end}}h</p>
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -44,33 +44,29 @@
             <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
           </div>
           <div style="width: 100%;">
-            <p style="float: left;width: 50%;text-align: left;"><b>180</b> CHF</p>
-            <p style="float: left;width: 50%;text-align: right;"><b>6</b></p>
+            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.price}}</b> CHF</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.max_participants}}</b></p>
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
         <div style="float: left; width: 100%;margin-top: 5%;">
           <ul>
-            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
-            <li>Sábado, 13 de Enero 2024 <i style="text-align: right;float:right">09h30 - 11h00</i></li>
+            <li *ngFor="let item of detailData.course_dates; let i = index">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
           </ul>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
       </mat-card-header>
-      <mat-card-content>
+      <mat-card-content *ngIf="detailData.course_type === 1">
         <div style="float: left; width: 100%;">
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="imagePath" width="100" height="100">
+              <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p><strong>Classes de ski / Samedis Jeunesse / dès 5ans</strong></p>
-              <p>Colectif Ski</p>
-              <p>Les Pacots</p>
+              <p><strong>{{detailData.name}}</strong></p>
+              <p> {{detailData.course_type === 1 ? 'Collectif' : 'Privee'}} {{ detailData.sport.name}}</p>
+              <p>{{detailData.station.name}}</p>
             </div>
           </div>
         </div>
@@ -80,20 +76,27 @@
 
           <ng-container *ngFor="let colorKey of colorKeys">
             <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]">
-              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
-                {{level.annotation}} - {{level.name}}
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 110px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;margin: 0 auto;" />
+
+                <p style="font-size: 12px;text-align: center">{{level.league}}</p>
+                <p style="font-size: 12px;text-align: center">{{level.annotation}} - {{level.name}}</p>
               </div>
-              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;">
-                Grupos 8g - 6p
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;margin: 0 auto;" />
+                Grupos <strong style="text-align: center;">{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</strong>
               </div>
-              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;">
-                Días 5
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;margin: 0 auto;" />
+                Días <br><strong style="text-align: center;">{{detailData.course_dates.length}}</strong>
               </div>
-              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;">
-                Duración <strong>2h 30m</strong>
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;margin: 0 auto;" />
+                Duración <strong style="text-align: center;">{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</strong>
               </div>
-              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;">
-                Alumnos <strong>30/60</strong>
+              <div  style="float: left;width: 18%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+
+                Alumnos <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
               </div>
             </div>
           </ng-container>
