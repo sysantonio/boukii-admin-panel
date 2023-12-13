@@ -18,6 +18,7 @@
       <mat-card-header style="display:block">
         <div style="width: 100%;float: left;">
           <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
+          <mat-icon svgIcon="mat:edit" style="cursor: pointer;float:right" (click)="goTo('/clients/update/'+detailData.id)"></mat-icon>
 
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
@@ -25,15 +26,15 @@
       <mat-card-content>
         <div style="float: left; width: 100%;">
           <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">Moniteur</p>
+            <p style="font-size: 20px;">Client {{detailData.id}}</p>
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="imageAvatar" width="100" height="100">
+              <img [src]="detailData.image" width="100" height="100" style="border-radius: 100%;">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p>FR · Switzerland · 43 ans</p>
-              <p><strong>Maternini Mirko (+3)</strong></p>
+              <p>{{getNacionality(detailData.country)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} ans</p>
+              <p><strong>{{detailData.first_name}} {{detailData.last_name}} (+3)</strong></p>
               <div>
                 <mat-icon svgIcon="mat:chat"></mat-icon>
                 <mat-icon svgIcon="mat:mail_outline"></mat-icon>
@@ -61,46 +62,55 @@
           <div style="float: left; width: 100%; margin: 0 0 5% 0">
             <p style="font-size: 20px;">Sports</p>
           </div>
-          <div style="float: left; width: 15%;">
-            <img [src]="skiImage" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080">
-          </div>
-          <div style="float: left; width: 100%; margin: 2% 0 0 0">
-            <div *ngFor="let colorKey of colorKeys">
-              <div *ngFor="let level of groupedByColor[colorKey]" [ngStyle]="{
-                'background-color': colorKey,
-                'border-color': colorKey,
-                'width': '5%',
-                'border-radius': '3px',
-                'margin-left': '2%',
-                'height': '15px',
-                'border-style': 'solid',
-                'border-width': '1px',
-                'float': 'left'
-              }">
-
+          <ng-container *ngFor="let item of clientSport">
+            <div style="float: left; width: 50%;">
+              <img [src]="item.icon_selected" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080; margin: 0 0 0 37%">
+              <p style="text-align: center;">{{item?.name}}</p>
+              <div style="float: left; width: 90%; margin: 2% 0 0 0">
+                <div >
+                  <div [ngStyle]="{
+                    'color': '#fff' ,
+                    'background-color': item?.level?.color,
+                    'border-color': item?.level?.color,
+                    'width': '100%',
+                    'border-radius': '3px',
+                    'margin-left': '2%',
+                    'height': '35px',
+                    'border-style': 'solid',
+                    'border-width': '1px',
+                    'float': 'left'
+                  }">
+                    <p style="text-align: center;font-size: 12px;margin: 3% 0 0 0;">{{item?.level?.annotation}} {{item?.level?.name}}</p>
+                  </div>
+                </div>
               </div>
             </div>
+
+          </ng-container>
+          <div style="width:100%; margin-top:5%;float:left">
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%;" (click)="goTo('/bookings/create')">Añadir nueva reserva</button>
+
           </div>
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="float: left; width: 100%; margin: 0 0 5% 0">
             <p style="font-size: 20px;">Données</p>
           </div>
-          <div style="width: 100%;">
+          <div style="width: 100%;float:left;">
             <p style="float: left;width: 50%;text-align: left;"><b>Email</b></p>
-            <p style="float: left;width: 50%;text-align: right;">fabienne_abreu@yahoo.fr</p>
+            <p style="float: left;width: 50%;text-align: right;">{{detailData.email}}</p>
           </div>
-          <div style="width: 100%;">
+          <div style="width: 100%;float:left;">
             <p style="float: left;width: 50%;text-align: left;"><b>Teléphone</b></p>
-            <p style="float: left;width: 50%;text-align: right;">786443627</p>
+            <p style="float: left;width: 50%;text-align: right;">{{detailData.phone}}</p>
           </div>
-          <div style="width: 100%;">
+          <div style="width: 100%;float:left;">
             <p style="float: left;width: 50%;text-align: left;"><b>Date de Naissance</b></p>
-            <p style="float: left;width: 50%;text-align: right;">11/11/1981</p>
+            <p style="float: left;width: 50%;text-align: right;">{{detailData.birth_date | date: 'dd/MM/YYYYY'}}</p>
           </div>
-          <div style="width: 100%;">
-            <p style="float: left;width: 50%;text-align: left;"><b>Address</b></p>
-            <p style="float: left;width: 50%;text-align: right;">Chemin de Maillefer 67, 1052</p>
+          <div style="width: 100%;float:left;">
+            <p style="float: left;width: 30%;text-align: left;"><b>Address</b></p>
+            <p style="float: left;width: 70%;text-align: right;">{{detailData.address}}, {{detailData.cp}}</p>
           </div>
         </div>
       </mat-card-content>

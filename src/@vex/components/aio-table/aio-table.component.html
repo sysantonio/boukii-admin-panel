@@ -56,7 +56,7 @@
         </button>
       </div>
 
-      <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort>
+      <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort *ngIf="!loading">
 
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
@@ -84,6 +84,14 @@
           <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}</td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Birth Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'birth'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ calculateAge(row[column.property]) }}</td>
           </ng-container>
         </ng-container>
 
@@ -154,7 +162,7 @@
           <ng-container *ngIf="column.type === 'level'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <div class="m-0 body-1" style="padding: 5%;background: #0E3991;color: #fff;border-radius: 10px;width: 100%;text-align: center;">PB PRINCE / PRICESSE BLEU</div>
+              <div class="m-0 body-1" style="padding: 5%;background: #0E3991;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">PB PRINCE / PRICESSE BLEU</div>
             </td>
           </ng-container>
         </ng-container>
@@ -274,7 +282,7 @@
             mat-row></tr>
       </table>
 
-      <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" class="sticky left-0"></mat-paginator>
+      <mat-paginator class="sticky left-0" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRecords" (page)="onPageChange($event)"></mat-paginator>
     </div>
 
   </vex-page-layout-content>

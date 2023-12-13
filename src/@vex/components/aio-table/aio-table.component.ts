@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -73,10 +73,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @Output()
   showDetailEvent = new EventEmitter<any>();
   pageSize = 10;
+  totalRecords = 1000;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl();
+  loading = true;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -92,28 +94,38 @@ export class AioTableComponent implements OnInit, AfterViewInit {
    * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
    * We are simulating this request here.
    */
-  async getData() {
-    this.crudService.list(this.entity, 1, 10, 'desc', 'id')
+  getData(pageIndex: number, pageSize: number) {
+    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id')
       .subscribe((response: any) => {
 
       this.data = response.data;
       this.dataSource.data = response.data;
-      })
+      this.totalRecords = response.totalCount; // Asumiendo que tu API envía un campo totalCount con el total de registros.
+
+      setTimeout(() => {
+        this.paginator.length = this.totalRecords;
+      }, 0);
+      this.loading = false;
+
+    })
   }
 
-  ngOnInit() {
+  onPageChange(event: PageEvent) {
+    this.getData(event.pageIndex, event.pageSize);
+  }
 
+  ngOnInit() {}
+
+  ngAfterViewInit() {
     this.dataSource = new MatTableDataSource();
-    this.getData();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+    this.getData(0, 10);
 
     this.searchCtrl.valueChanges.pipe(
       untilDestroyed(this)
     ).subscribe(value => this.onFilterChange(value));
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   create() {
@@ -136,7 +148,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.getData();
+        this.getData(0, 10);
 
       }
     });
@@ -162,7 +174,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.getData();
+        this.getData(0, 10);
       }
     });
   }
@@ -269,5 +281,23 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     }
 
     return ret;
+  }
+
+  calculateAge(birthDateString) {
+    if(birthDateString && birthDateString !== null) {
+      const today = new Date();
+      const birthDate = new Date(birthDateString);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+
+      return age;
+    } else {
+      return 0;
+    }
+
   }
 }
