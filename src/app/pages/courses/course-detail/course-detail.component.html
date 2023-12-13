@@ -156,6 +156,7 @@
               <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
             </mat-card-header>
             <mat-card-content style="margin-top: 5%;">
+              <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;border-radius: 0;height: 50px;margin: 0 0 1% 0;float: right;" (click)="save()">Guardar Cambios</button>
 
               <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;">
                 <div @fadeInUp class="card flex-auto">
@@ -163,158 +164,167 @@
                     <mat-card-content style="margin-top: 5%;">
 
                       <div style="width: 100%;float:left;">
+
                         <ng-container *ngFor="let colorKey of colorKeys">
-                          <div style="float: left; width: 100%;margin-top:3%" *ngFor="let groupLevel of groupedByColor[colorKey]; let groupIndex = index">
-                            <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
-                              <mat-slide-toggle (change)="activeGroup($event, groupLevel)" [checked]="groupLevel.active"></mat-slide-toggle>
-                            </div>
-                            <div style="float: left;width: 16%;">
-                              <div style="width:100%;text-align: center;border-radius: 0;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
-                                {{groupLevel.annotation}} - {{groupLevel.name}}
-                              </div>
-                              <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active">
-                                <mat-select placeholder="Nivel minimo del profesor" (selectionChange)="setLevelTeacher($event, groupLevel)" [value]="calculateMonitorLevel(groupLevel)">
-                                  <mat-option *ngFor="let item of levels" [value]="item">
-                                    {{ item.league }} - {{ item.name }}
-                                  </mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                            </div>
-                            <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                              <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                                Grupos 2g
-                              </div>
-                              <div style="width: 100%; margin-top: 10%;height: 60px">
-                                <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
-                              </div>
-                            </div>
 
-                            <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                              <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                                Edad
+                          <div  *ngFor="let groupLevel of groupedByColor[colorKey]; let groupIndex = index">
+                            <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true"></i>
+                            <i class="fa fa-close" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = false"></i>
+
+                            <div style="float: left; width: 100%;margin-top:3%">
+                              <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;border-radius:10px">
+                                <mat-slide-toggle (change)="activeGroup($event, groupLevel)" [checked]="groupLevel.active"></mat-slide-toggle>
                               </div>
-                              <form [formGroup]="rangeForm" novalidate>
+                              <div style="float: left;width: 16%;">
+                                <div style="width:100%;text-align: center;border-radius: 0;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                                  {{groupLevel.annotation}} - {{groupLevel.name}}
+                                </div>
+                                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active && groupLevel.visible">
+                                  <mat-select placeholder="Nivel minimo del profesor" (selectionChange)="setLevelTeacher($event, groupLevel)" [value]="calculateMonitorLevel(groupLevel)">
+                                    <mat-option *ngFor="let item of levels" [value]="item">
+                                      {{ item.league }} - {{ item.name }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
+                                  Grupos {{defaults.course_dates[0].groups[groupIndex].subgroups.length}}g
+                                </div>
+                                <div style="width: 100%; margin-top: 10%;height: 60px">
+                                  <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
+                                </div>
+                              </div>
+
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
+                                  Edad
+                                </div>
+                                <form [formGroup]="rangeForm" novalidate>
+                                  <mat-form-field style="width: 45%; margin-top: 10%;margin-right: 10%">
+                                    <input type="number" placeholder="Min." aria-label="Number" matInput [min]="0" (blur)="setMinAge($event, groupLevel)" [value]="groupLevel.age_min"
+                                    [value]="calculateAgeMin(groupLevel)"/>
+                                    <mat-error *ngIf="minAge.errors?.['min']">
+                                      La edad mínima debe ser al menos 3.
+                                    </mat-error>
+                                    <mat-error *ngIf="minAge.errors?.['required']">
+                                      Este campo es obligatorio.
+                                    </mat-error>
+                                  </mat-form-field>
+                                  <mat-form-field style="width: 45%; margin-top: 10%">
+                                    <input type="number" placeholder="Max" aria-label="Number" matInput [min]="0" (blur)="setMaxAge($event, groupLevel)" [value]="groupLevel.age_max"
+                                    [value]="calculateAgeMax(groupLevel)"/>
+                                    <mat-error *ngIf="maxAge.errors?.['ageRange']">
+                                      La edad máxima debe ser mayor que la edad mínima y menor o igual a 80.
+                                    </mat-error>
+                                    <mat-error *ngIf="maxAge.errors?.['max']">
+                                      La edad máxima no debe ser mayor a 80.
+                                    </mat-error>
+                                    <mat-error *ngIf="maxAge.errors?.['required']">
+                                      Este campo es obligatorio.
+                                    </mat-error>
+                                  </mat-form-field>
+                                </form>
+                              </div>
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
+                                  Duracion<br>
+                                  {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
+                                </div>
+                                <mat-form-field style="width: 100%; margin-top: 10%;margin-right: 10%">
+                                  <input type="text" placeholder="Duración" aria-label="Number" matInput
+                                    [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
+                                </mat-form-field>
+                              </div>
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                                <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
+                                  Alumnos <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
+                                </div>
                                 <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                                  <input type="number" placeholder="Edad Minima" aria-label="Number" matInput (blur)="setMinAge($event, groupLevel)"
-                                  [value]="calculateAgeMin(groupLevel)"/>
-                                  <mat-error *ngIf="minAge.errors?.['min']">
-                                    La edad mínima debe ser al menos 3.
-                                  </mat-error>
-                                  <mat-error *ngIf="minAge.errors?.['required']">
-                                    Este campo es obligatorio.
+                                  <input type="number" placeholder="Max per Group" [value]="calculateMaxGroup(groupLevel)" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" />
+                                  <mat-error *ngIf="groupLevel.max_participants > this.defaults.max_participants">
+                                    La capacidad del grupo no puede superar la capacidad del curso
                                   </mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                                  <input type="number" placeholder="Edad Máxima" aria-label="Number" matInput (blur)="setMaxAge($event, groupLevel)"
-                                  [value]="calculateAgeMax(groupLevel)"/>
-                                  <mat-error *ngIf="maxAge.errors?.['ageRange']">
-                                    La edad máxima debe ser mayor que la edad mínima y menor o igual a 80.
-                                  </mat-error>
-                                  <mat-error *ngIf="maxAge.errors?.['max']">
-                                    La edad máxima no debe ser mayor a 80.
-                                  </mat-error>
-                                  <mat-error *ngIf="maxAge.errors?.['required']">
-                                    Este campo es obligatorio.
-                                  </mat-error>
-                                </mat-form-field>
-                              </form>
-                            </div>
-                            <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                              <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                                Duracion<br>
-                                {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
                               </div>
-                              <mat-form-field style="width: 100%; margin-top: 10%;margin-right: 10%">
-                                <input type="text" placeholder="Duración" aria-label="Number" matInput
-                                  [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
-                              </mat-form-field>
-                            </div>
-                            <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                              <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                                Alumnos <strong>0/{{defaults.max_participants}}</strong>
-                              </div>
-                              <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                                <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" [value]="calculateSubGroupPaxes(groupLevel)"/>
 
-                              </mat-form-field>
-                            </div>
+                              <ng-container *ngIf="groupLevel.active && groupLevel.visible">
 
-                            <ng-container *ngIf="groupLevel.active">
+                                  <div style="width:100%;float:left;overflow: scroll;" *ngFor="let subGroup of readSubGroups(groupLevel.id); let subGroupIndex = index">
+                                    <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
+                                      <div>
+                                        <ul style="display: flex">
+                                          <li style="float: left; width: 20%;font-size: 18px" (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1)">
+                                            <span [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong> - {{groupLevel.name}} - {{ subGroupIndex + 1 }}</span>
+                                          </li>
+                                          <li *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;"
+                                              (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
+                                              [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
+                                              style="float: left; width: 13%; text-align: center; cursor: pointer;">
+                                            {{ dayLevel.dateString }}
+                                          </li>
 
-                              <div style="width:100%;float:left;overflow: scroll;" *ngFor="let subGroup of readSubGroups(groupLevel.id); let subGroupIndex = index">
-                                <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
-                                  <div>
-                                    <ul style="display: flex">
-                                      <li style="float: left; width: 20%;font-size: 18px" (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1)">
-                                        <span [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong> - {{groupLevel.name}} - {{ subGroupIndex + 1 }}</span>
-                                      </li>
-                                      <li *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;"
-                                          (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
-                                          [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
-                                          style="float: left; width: 13%; text-align: center; cursor: pointer;">
-                                        {{ dayLevel.dateString }}
-                                      </li>
-
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
-                                  <div>
-                                    <ul>
-                                      <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
-                                        <label for="monitor" style="font-size: 20px;">Monitor</label>
-
-                                        <mat-form-field class="flex-auto">
-
-                                          <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
-                                          <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
-                                            <mat-option *ngFor="let monitor of filteredMonitors | async"
-                                              (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
-                                              {{monitor.first_name}} {{monitor.last_name}}
-                                            </mat-option>
-                                          </mat-autocomplete>
-                                          <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-                                        </mat-form-field>
-                                      </li>
-                                      <li style="float: left; width: 13%;" *ngFor="let item of daysDatesLevels">
-                                        <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                        [ngStyle]="{'background-color': subGroup.monitor_id !== null ? '#CEE741': 'red'}"></div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <mat-divider class="text-border" style="float: left;width: 100%;border: 4px solid #f0f0f0;"></mat-divider>
-
-                                <!-- n iteraciones por alumno-->
-                                <ng-container *ngFor="let courseUser of courseUsers; let courseUserIndex = index">
-
-                                  <div style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%" *ngIf="courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id">
-                                    <div>
-                                      <ul>
-                                        <li style="float: left; width: 20%;" >
-                                          <div style="float: left; width: 100%;">
-                                            <div style="float: left; width: 25%;margin: 0 5% 0 0;">
-                                              <img [src]="getClient(courseUser.client_id)?.image || userAvatar" style="border-radius: 100%;height: 50px;width: 110px;">
-                                            </div>
-                                            <div style="float: left; width: 75%;">
-                                              <p style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}} {{getClient(courseUser.client_id)?.last_name}}</p>
-                                              <p style="font-size: 10px;">{{getNacionality(getClient(courseUser.client_id).country)}} · {{ getCountry(getClient(courseUser.client_id).country) }} · {{calculateAge(getClient(courseUser.client_id).birth_date)}} ans</p>
-                                            </div>
-                                          </div>
-                                        </li>
-
-                                        <li style="float: left; width: 13%;" *ngFor="let item of daysDatesLevels">
-                                          <div style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                          [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741': 'red'}">
-                                        </div>
-                                        </li>
-                                      </ul>
+                                        </ul>
+                                      </div>
                                     </div>
-                                  </div>
-                                </ng-container>
-                              </div>
+                                    <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
+                                      <div>
+                                        <ul>
+                                          <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
+                                            <label for="monitor" style="font-size: 20px;">Monitor</label>
 
-                            </ng-container>
+                                            <mat-form-field class="flex-auto">
+
+                                              <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
+                                              <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
+                                                <mat-option *ngFor="let monitor of filteredMonitors | async"
+                                                  (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
+                                                  {{monitor.first_name}} {{monitor.last_name}}
+                                                </mat-option>
+                                              </mat-autocomplete>
+                                              <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+                                            </mat-form-field>
+                                          </li>
+                                          <li style="float: left; width: 13%;margin: 3% 0 0 0;" *ngFor="let item of daysDatesLevels">
+                                            <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                            [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel)? '#CEE741': 'red'}"></div>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <mat-divider class="text-border" style="float: left;width: 100%;border: 4px solid #f0f0f0;"></mat-divider>
+
+                                    <!-- n iteraciones por alumno-->
+                                    <ng-container *ngFor="let courseUser of courseUsers; let courseUserIndex = index">
+
+                                      <div style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%" *ngIf="courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id">
+                                        <div>
+                                          <ul>
+                                            <li style="float: left; width: 20%;" >
+                                              <div style="float: left; width: 100%;">
+                                                <div style="float: left; width: 25%;margin: 0 5% 0 0;">
+                                                  <img [src]="getClient(courseUser.client_id)?.image || userAvatar" style="border-radius: 100%;height: 50px;width: 110px;">
+                                                </div>
+                                                <div style="float: left; width: 75%;">
+                                                  <p style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}} {{getClient(courseUser.client_id)?.last_name}}</p>
+                                                  <p style="font-size: 10px;">{{getNacionality(getClient(courseUser.client_id).country)}} · {{ getCountry(getClient(courseUser.client_id).country) }} · {{calculateAge(getClient(courseUser.client_id).birth_date)}} ans</p>
+                                                </div>
+                                              </div>
+                                            </li>
+
+                                            <li style="float: left; width: 13%;" *ngFor="let item of daysDatesLevels">
+                                              <div style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                              [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741': 'red'}">
+                                            </div>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+
+                                </ng-container>
+                            </div>
                           </div>
                         </ng-container>
                       </div>

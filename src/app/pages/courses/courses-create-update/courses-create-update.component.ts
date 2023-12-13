@@ -930,10 +930,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000)
+    this.crudService.list('/monitors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
-      });
+      })
   }
 
   getDegrees() {

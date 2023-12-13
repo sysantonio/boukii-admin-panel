@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
@@ -11,6 +11,7 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'vex-course-detail',
@@ -35,8 +36,6 @@ export class CourseDetailComponent implements OnInit {
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
-  mockLevels = LEVELS;
-  mockMonitors = MOCK_MONITORS;
   user: any;
   id: any;
 
@@ -120,26 +119,20 @@ export class CourseDetailComponent implements OnInit {
   selectedItem: any;
   daysDates = [];
   daysDatesLevels = [];
+  monitors = [];
   levels = [];
   courseUsers = [];
   clients = [];
+  schoolSports: any = [];
   countries = MOCK_COUNTRIES;
   rangeForm: UntypedFormGroup;
 
-  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog) {
+  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
+    private snackbar: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
     this.generateDurations();
-    this.mockLevels.forEach(level => {
-      if (!this.groupedByColor[level.color]) {
-        this.groupedByColor[level.color] = [];
-      }
-      this.groupedByColor[level.color].push(level);
-    });
-
-    this.colorKeys = Object.keys(this.groupedByColor);
-
     this.rangeForm = this.fb.group({
       minAge: ['', [Validators.required, Validators.min(3)]],
       maxAge: ['', [Validators.required, Validators.max(80)]]
@@ -163,6 +156,7 @@ export class CourseDetailComponent implements OnInit {
   ngOnInit() {
 
     this.getClients();
+    this.getMonitors();
 
     this.crudService.get('/admin/courses/'+this.id)
       .subscribe((data) => {
@@ -252,6 +246,7 @@ export class CourseDetailComponent implements OnInit {
                 level.active = true;
                 level.old = true;
               }
+              level.visible = false;
             });
           });
           this.selectedItem = this.daysDatesLevels[0].dateString;
@@ -259,7 +254,7 @@ export class CourseDetailComponent implements OnInit {
           this.groupedByColor[level.color].push(level);
         });
 
-        this.colorKeys = Object.keys(this.groupedByColor);
+        this.colorKeys = Object.keys(this.groupedByColor).reverse();
       })
   }
 
@@ -287,11 +282,24 @@ export class CourseDetailComponent implements OnInit {
     return ret;
   }
 
+  hasMonitorAssigned(date, level) {
+
+    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === date.date);
+    const group = courseDate.groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
+
+    if (group) {
+      const find = group.subgroups.find((c) => c.course_date_id === courseDate.id);
+      return find && find.monitor_id !== null;
+
+    }
+  }
+
   activeGroup(event: any, level: any) {
 
     this.selectedItem = this.daysDatesLevels[0].dateString;
     this.selectedDate = this.defaults.course_dates[0]?.date;
     level.active = event.source.checked;
+    level.visible = event.source.checked;
 
 
     if(event.source.checked) {
@@ -300,14 +308,23 @@ export class CourseDetailComponent implements OnInit {
       });
 
       this.defaults.course_dates.forEach(element => {
+        let prevGroup: any = {};
         element.groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
+            group.degree_id = level.id;
+            group.course_date_id = prevGroup.course_date_id;
+            group.course_id = prevGroup.course_id;
             group.subgroups.push({
               degree_id: level.id,
               monitor_id: null,
               max_participants:null
             })
+          } else {
+            prevGroup = {
+              course_date_id: group.course_date_id,
+              course_id: group.course_id,
+            }
           }
 
         });
@@ -357,10 +374,11 @@ export class CourseDetailComponent implements OnInit {
   }
 
   setLevelTeacher(event: any, level: any) {
+
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.teachers_min = event.value.id;
+          group.teacher_min_degree = event.value.id;
         }
 
       });
@@ -427,11 +445,10 @@ export class CourseDetailComponent implements OnInit {
       this.defaults.course_dates.forEach(courseDate => {
         courseDate.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            ret = level;
+            ret = this.levels.find((l) => l.id === group.teacher_min_degree);
           }
         });
       });
-
       return ret;
     }
 
@@ -484,13 +501,17 @@ export class CourseDetailComponent implements OnInit {
   }
 
   setSubGroupPax(event: any, level: any) {
-    level.max_participants = +event.target.value;
+    if (+event.target.value > this.defaults.max_participants) {
+      this.snackbar.open('La capacidad del grupo no puede ser superior al limete de participantes del curso', 'OK', {duration: 3000});
+    }
+
+    level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
 
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
           group.subgroups.forEach(subGroup => {
-            subGroup.max_participants = +event.target.value;
+            subGroup.max_participants =level.max_participants;
           });
         }
       });
@@ -528,6 +549,42 @@ export class CourseDetailComponent implements OnInit {
         }
       });
     });
+
+    return ret;
+  }
+
+  calculateMaxGroup(level: any) {
+    let ret = 0;
+    this.defaults.course_dates.forEach(courseDate => {
+      courseDate.groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          ret = group.subgroups[0].max_participants;
+        }
+      });
+    });
+
+    return ret;
+  }
+
+  calculateStudentsGroup(level: any) {
+    let ret = 0;
+    let group = null;
+    this.defaults.course_dates.forEach(courseDate => {
+      courseDate.groups.forEach(gr => {
+        if (level.id === gr.degree_id) {
+          group = gr;
+        }
+      });
+    });
+
+    if (group !== null) {
+      this.courseUsers.forEach(courseUser => {
+        if (courseUser.course_group_id === group.id) {
+          ret = ret + 1;
+        }
+      });
+    }
+
 
     return ret;
   }
@@ -660,6 +717,99 @@ export class CourseDetailComponent implements OnInit {
 
     });
     this.getDegrees();
+
+  }
+
+  getMonitors() {
+    this.crudService.list('/monitors', 1, 1000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        this.monitors = data.data;
+
+        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+          startWith(''),
+          map((value: any) => typeof value === 'string' ? value : value?.full_name),
+          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+        );
+      })
+  }
+
+  private _filterMonitor(name: string): any[] {
+    const filterValue = name.toLowerCase();
+    return this.monitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
+  }
+
+  save() {
+
+    let data: any = [];
+
+    if (this.defaults.course_type === 1) {
+      this.defaults.course_dates.forEach(dates => {
+        const group = [];
+        dates.groups.forEach(dateGroup => {
+          if (dateGroup.subgroups.length > 0) {
+            group.push(dateGroup);
+          }
+        });
+        dates.groups = group;
+      });
+    }
+
+    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        translations: null,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+
+    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: this.defaults.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: this.defaults.active,
+        online: this.defaults.online,
+        translations: null,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id, //sacar del global
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        course_dates: this.defaults.course_dates
+      }
+      console.log(data);
+    }
+
+    this.crudService.update('/admin/courses', data, this.id)
+      .subscribe((res) => {
+        console.log(res);
+        this.goTo('/courses');
+      })
 
   }
 }
