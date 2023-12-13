@@ -106,6 +106,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   selectedItem: any;
 
   defaults: any = {
+    unique: false,
     course_type: null,
     is_flexible: false,
     name: null,
@@ -299,6 +300,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.updateTable(null);
           this.getSeparatedDates(this.defaults.course_dates, true);
           this.getDegrees();
+
           this.courseTypeFormGroup = this.fb.group({
 
             sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
@@ -335,8 +337,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
             from: [null ],
             to: [null],
             image: [null],
-            periodeUnique: new FormControl(false),
-            periodeMultiple: new FormControl(false)
+            periodeUnique: new FormControl(this.defaults.unique),
+            periodeMultiple: new FormControl(!this.defaults.unique)
           })
 
           this.courseLevelFormGroup = this.fb.group({});
@@ -465,8 +467,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         image: [null],
         fromDateUnique: [null, Validators.required],
         toDateUnique: [null, Validators.required],
-        periodeUnique: [true],
-        periodeMultiple: [false]
+        periodeUnique: new FormControl(true),
+        periodeMultiple: new FormControl(false)
       })
 
       this.courseLevelFormGroup = this.fb.group({});
@@ -815,6 +817,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   setCourseType(type: string, id: number) {
 
     this.defaults = {
+      unique: false,
       course_type: null,
       is_flexible: this.defaults.is_flexible,
       name: null,
@@ -1520,7 +1523,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         age_min: this.defaults.min_age,
         age_max: this.defaults.max_age,
         course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings)
+        settings: JSON.stringify(this.defaults.settings),
+        unique: this.periodeUnique
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
@@ -1660,7 +1664,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         age_min: this.defaults.min_age,
         age_max: this.defaults.max_age,
         course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings)
+        settings: JSON.stringify(this.defaults.settings),
+        unique: this.periodeUnique
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
