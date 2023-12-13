@@ -197,6 +197,15 @@
           </ng-container>
         </ng-container>
 
+        <!-- Register Date Columns -->
+        <!-- Text Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] | date: 'dd/MM/YYYY' }}</td>
+          </ng-container>
+        </ng-container>
+
         <!-- Image Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'image'" [matColumnDef]="column.property">
@@ -282,7 +291,12 @@
             mat-row></tr>
       </table>
 
-      <mat-paginator class="sticky left-0" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRecords" (page)="onPageChange($event)"></mat-paginator>
+      <mat-paginator class="sticky left-0"
+            [pageSizeOptions]="[5, 10, 20]"
+            [pageSize]="10"
+            [length]="totalRecords"
+            (page)="onPageChange($event)">
+      </mat-paginator>
     </div>
 
   </vex-page-layout-content>

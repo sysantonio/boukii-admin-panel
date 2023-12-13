@@ -720,7 +720,6 @@ export class ClientDetailComponent {
   addUtilisateur() {
 
     if (this.canAddUtilisateur(this.defaults.birth_date)) {
-      this.crudService.delete('/users', 37).subscribe(() => {console.log('ok')})
       const dialogRef = this.dialog.open(AddClientUserModalComponent, {
         width: '600px',  // Asegurarse de que no haya un ancho máximo
         panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
@@ -731,7 +730,7 @@ export class ClientDetailComponent {
         if (data) {
 
           if(data.action === 'add') {
-            this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.id})
+            this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: parseInt(this.id)})
             .subscribe((res) => {
               this.getClientUtilisateurs();
             })

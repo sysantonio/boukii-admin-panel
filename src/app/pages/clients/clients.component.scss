@@ -1,3 +1,21 @@
 .table-show-detail {
   width: 65%;float:left
 }
+
+.card-users {
+  transition: border 0.1s;
+  cursor: pointer;
+  width: 25%;
+  height: 200px;
+  box-shadow: none;
+  float: left;
+}
+
+.active-border {
+  border: 2px solid #E91E63;
+  border-radius: 10px;
+}
+
+.card-users mat-card-header {
+  align-items: center;
+}

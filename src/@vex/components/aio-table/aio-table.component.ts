@@ -90,43 +90,42 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
+  ngOnInit() {}
+
   /**
    * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
    * We are simulating this request here.
    */
   getData(pageIndex: number, pageSize: number) {
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id')
-      .subscribe((response: any) => {
+    this.loading = true;
 
+  // Asegúrate de que pageIndex y pageSize se pasan correctamente.
+  // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
+  this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id')
+    .subscribe((response: any) => {
       this.data = response.data;
       this.dataSource.data = response.data;
-      this.totalRecords = response.totalCount; // Asumiendo que tu API envía un campo totalCount con el total de registros.
+      this.totalRecords = response.total; // Total de registros disponibles.
+      console.log(`Data received for page: ${pageIndex}`);
 
-      setTimeout(() => {
-        this.paginator.length = this.totalRecords;
-      }, 0);
       this.loading = false;
+    });
+}
 
-    })
-  }
+onPageChange(event: PageEvent) {
+  // La API puede esperar la primera página como 1, no como 0.
+  this.getData(event.pageIndex +1, event.pageSize);
+}
 
-  onPageChange(event: PageEvent) {
-    this.getData(event.pageIndex, event.pageSize);
-  }
+ngAfterViewInit() {
+  this.dataSource = new MatTableDataSource();
+  this.dataSource.sort = this.sort;
 
-  ngOnInit() {}
+  // Llama a getData con la primera página. Asegúrate de que este valor coincida con cómo tu API espera la primera página.
+  this.getData(1, 10); // Si tu API espera que la primera página sea 1 en lugar de 0.
 
-  ngAfterViewInit() {
-    this.dataSource = new MatTableDataSource();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
-    this.getData(0, 10);
-
-    this.searchCtrl.valueChanges.pipe(
-      untilDestroyed(this)
-    ).subscribe(value => this.onFilterChange(value));
-  }
+  // ... otros inicializadores
+}
 
   create() {
     if (!this.createOnModal) {
@@ -148,7 +147,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.getData(0, 10);
+        this.getData(1, 10);
 
       }
     });
@@ -174,7 +173,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.getData(0, 10);
+        this.getData(1, 10);
       }
     });
   }

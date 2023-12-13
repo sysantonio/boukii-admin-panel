@@ -15,21 +15,23 @@ import { Router } from '@angular/router';
 export class ClientsComponent {
 
   createComponent = ClientsCreateUpdateModule;
-  entity = '/clients'; showDetail: boolean = false;
+  entity = '/admin/clients';
+  showDetail: boolean = false;
 
   detailData: any;
+  utilizers: any;
   clientSport: any;
-  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  imageAvatar = '../../../assets/img/avatar.png';
   skiImage = 'https://school.boukii.com/assets/apps/sports/Ski.png';
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
   mockLevelData = LEVELS;
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
+  mainIdSelected = true;
+  borderActive = -1;
 
-  constructor(private crudService: ApiCrudService, private router: Router) {
-
-  }
+  constructor(private crudService: ApiCrudService, private router: Router) {}
 
   columns: TableColumn<any>[] = [
     { label: 'Tipo', property: 'type', type: 'text', visible: true, cssClasses: ['font-medium'] },
@@ -39,8 +41,7 @@ export class ClientsComponent {
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Sports', property: 'sport', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nivel', property: 'level', type: 'level', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Registro', property: 'register', type: 'register_date', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Status', property: 'status', type: 'light', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Registro', property: 'created_at', type: 'date', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
@@ -51,7 +52,10 @@ export class ClientsComponent {
       .subscribe((data) => {
         this.detailData = data.data;
 
-        this
+        this.crudService.get('/admin/clients/' + event.item.id +'/utilizers')
+          .subscribe((uti) => {
+            this.utilizers = uti.data;
+          })
         this.crudService.list('/client-sports', 1, 1000, null, null, '&client_id='+event.item.id)
           .subscribe((cl) => {
             this.clientSport = cl.data;
@@ -115,5 +119,11 @@ export class ClientsComponent {
 
   goTo(route: string) {
     this.router.navigate([route]);
+  }
+
+  toggleBorder(index: number, utilizer: any) {
+    this.mainIdSelected = false;
+    this.borderActive = index;
+
   }
 }
