@@ -61,7 +61,7 @@ export class MonitorsComponent {
 
   showDetailEvent(event: any) {
 
-    if (event.showDetail) {
+    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.crudService.get('/monitors/'+event.item.id)
       .subscribe((data) => {
         this.detailData = data.data;
@@ -90,7 +90,7 @@ export class MonitorsComponent {
                 });
             });
 
-            this.showDetail = event.showDetail;
+            this.showDetail = true;
           })
       })
     } else {

@@ -550,7 +550,7 @@
 
                   <div style="float: left; width: 100%;">
                       <ul>
-                          <li class="font-bold">{{getDateFormatLong(detailData?.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,detailData?.hour_end)}}</i></li>
+                          <li class="font-bold">{{getDateFormatLong(detailData?.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
                       </ul>
                   </div>
 
@@ -561,9 +561,9 @@
                   </div>
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                      <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
-                          <app-level-user *ngIf="detailData?.degrees_sport && detailData?.degrees_sport.length"
-                            [allLevels]="detailData?.degrees_sport" [selectLevel]="getClientDegree(detailData?.sport_id,client.client.sports)" [size]="80" [userImage]="getClient(client.client_id)?.image ? getClient(client.client_id)?.image : 'assets/img/avatar.png'"></app-level-user>
+                    <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                      <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
+                        [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
                               <span>

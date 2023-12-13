@@ -965,7 +965,7 @@ export class MonitorDetailComponent {
 
   showDetailEvent(event: any) {
 
-    if (event.showDetail) {
+    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.detailData = event.item;
 
       this.crudService.get('/admin/courses/'+this.detailData.course_id)
@@ -975,10 +975,14 @@ export class MonitorDetailComponent {
           .subscribe((sport) => {
             this.detailData.sport = sport.data;
           });
-          this.crudService.get('/degrees/'+this.detailData.degree_id)
-          .subscribe((degree) => {
-            this.detailData.degree = degree.data;
-          })
+
+          if (this.detailData.degree_id !== null) {
+            this.crudService.get('/degrees/'+this.detailData.degree_id)
+            .subscribe((degree) => {
+              this.detailData.degree = degree.data;
+            })
+          }
+
       })
 
       this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
@@ -1005,7 +1009,7 @@ export class MonitorDetailComponent {
 
             }
           });
-          this.showDetail = event.showDetail;
+          this.showDetail = true;
 
         });
 
@@ -1141,4 +1145,16 @@ export class MonitorDetailComponent {
     return country ? country.code : 'Aucun';
   }
 
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
+  }
 }
