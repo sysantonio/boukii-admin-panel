@@ -214,7 +214,7 @@
 
                 </ng-container>
                   <div class="chip-level" style="border: 2px black solid"  (click)="item.allowAdults = !item.allowAdults" [ngStyle]="{
-                    'background': item.allowAdults ? 'black' : '#fff'
+                    'background': checkMonitorAuthAdults(item) ? 'black' : '#fff'
                   }" (click)="authoriseAudlts(item)">
                     <p style="text-align: center"
                     [ngStyle]="{
@@ -808,19 +808,19 @@
                   <mat-header-cell *matHeaderCellDef [hidden]="true" style="width: 100%;float: left;"> Authorised Levels </mat-header-cell>
                   <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
                     <div style="width: 100%; float:left">
-                      <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
+                      <div *ngFor="let level of element.degrees" class="chip-level" [style.border]="'2px solid ' + level.color"
                       [ngStyle]="{
-                        'background': checkMonitorAuth(element, item) ? item.color : '#fff'
+                        'background': checkMonitorAuth(element, level) ? level.color : '#fff'
                       }"
-                        (click)="authoriseCurrentLevel(item, element)">
+                        (click)="authoriseCurrentLevel(level, element)">
                         <p style="color: #000;text-align: center"
                         [ngStyle]="{
-                          'color': checkMonitorAuth(element, item) ? '#fff': '#000'
+                          'color': checkMonitorAuth(element, level) ? '#fff': '#000'
                         }"
-                        >{{ item.annotation }}</p>
+                        >{{ level.annotation }}</p>
                       </div>
                       <div class="chip-level" style="border: 2px black solid"  (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
-                        'background': element.allowAdults ? 'black' : '#fff'
+                        'background': checkMonitorAuthAdults(element) ? 'black' : '#fff'
                       }" (click)="authoriseAudlts(element)">
                         <p style="text-align: center"
                         [ngStyle]="{

@@ -736,10 +736,19 @@ export class MonitorDetailComponent {
 
   authoriseAudlts(element) {
     element.authorisedLevels.forEach(auLevel => {
-      this.crudService.update('/monitor-sport-authorized-degrees',
-      {allow_adults: element.allowAdults, monitor_id: auLevel.monitor_id, degree_id: auLevel.degree_id, monitor_sport_id: auLevel.monitor_sport_id}, auLevel.id)
+      const data = {
+        is_default: false,
+        sport_id: element.sport_id,
+        school_id: this.user.schools[0].id,
+        degree_id: auLevel.degree_id,
+        monitor_id: this.id,
+        salary_level: element.salary_level,
+        allow_adults: element.allowAdults
+      }
+
+      this.crudService.update('/monitor-sports-degrees', data, auLevel.monitor_sport_id)
       .subscribe(() => {
-        this.snackbar.open('Monitor authorization created', 'OK', {duration: 3000});
+        this.snackbar.open('Monitor adult authorization updated', 'OK', {duration: 3000});
       })
     });
   }
@@ -770,6 +779,20 @@ export class MonitorDetailComponent {
     if (item.authorisedLevels){
       item.authorisedLevels.forEach(element => {
         if((element.degree_id || element.id) === id.id && !ret) {
+          ret = true;
+        }
+      });
+    }
+
+    return ret;
+  }
+
+  checkMonitorAuthAdults(item: any) {
+    let ret = false;
+
+    if (item.authorisedLevels){
+      this.monitorSportsDegree.forEach(element => {
+        if(element.sport_id === item.sport_id && !ret) {
           ret = true;
         }
       });
