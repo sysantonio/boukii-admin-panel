@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { CoursesCreateUpdateComponent } from './courses-create-update/courses-create-update.component';
-import { LEVELS } from 'src/app/static-data/level-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import moment from 'moment';
 import { Router } from '@angular/router';
@@ -27,13 +26,13 @@ export class CoursesComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true },
     { label: 'Type', property: 'course_type', type: 'image', visible: true },
     { label: 'Course', property: 'name', type: 'text', visible: true},
-    { label: 'Sport', property: 'sport', type: 'text', visible: true },
-    { label: 'FX-FI', property: 'max_participants', type: 'text', visible: true },
-    { label: 'Dates', property: 'dates', type: 'dates', visible: true },
-    { label: 'Duration', property: 'duration', type: 'text', visible: true },
+    { label: 'Sport', property: 'sport', type: 'sport', visible: true },
+    { label: 'FX-FI', property: 'is_flexible', type: 'flexible', visible: true },
+    { label: 'Dates', property: 'course_dates', type: 'datesCourse', visible: true },
+    { label: 'Duration', property: 'duration', type: 'duration', visible: true },
     { label: 'Price', property: 'price', type: 'price', visible: true },
-    { label: 'Enregistrée', property: 'register', type: 'register_date', visible: true },
-    { label: 'Reservas', property: 'bookings', type: 'bookings', visible: true },
+    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
+    { label: 'Reservas', property: 'max_participants', type: 'bookings', visible: true },
     { label: 'Status', property: 'active', type: 'light', visible: true },
     { label: 'Options', property: 'options', type: 'light', visible: true },
     { label: 'Online', property: 'online', type: 'light', visible: true },

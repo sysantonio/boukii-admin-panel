@@ -305,4 +305,26 @@ ngAfterViewInit() {
     }
 
   }
+
+  calculateMaxBookings(data: any) {
+    let ret = 0;
+
+    if (data.is_flexible && data.course_type === 1) {
+      data.course_dates.forEach(courseDate => {
+        courseDate.groups.forEach(group => {
+            group.subgroups.forEach(sb => {
+              ret = ret + sb.max_participants;
+            });
+        });
+
+      });
+    } else {
+      return data.max_participants * data.course_dates.length;
+
+
+    }
+
+
+    return ret;
+  }
 }

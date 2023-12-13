@@ -100,9 +100,8 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'bookings'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <strong><span style="color:#CEE741">26</span>/260</strong><br>
-              <strong><span style="color:#2D9BF0">234</span>/260</strong>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
+              <strong><span style="color:#2D9BF0">234</span>/{{calculateMaxBookings(data[i])}}</strong>
             </td>
           </ng-container>
         </ng-container>
@@ -189,6 +188,17 @@
           </ng-container>
         </ng-container>
 
+        <!-- Dates Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'datesCourse'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <strong><span style="text-align:center">{{row[column.property].length}} Jours</span></strong><br>
+              <span style="text-align:center">{{row[column.property][0].date | date: 'dd/MM/YYYY'}} - {{row[column.property][row[column.property].length - 1].date | date: 'dd/MM/YYYY'}}</span>
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Register Date Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'register_date'" [matColumnDef]="column.property">
@@ -198,11 +208,35 @@
         </ng-container>
 
         <!-- Register Date Columns -->
-        <!-- Text Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] | date: 'dd/MM/YYYY' }}</td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Register Date Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'duration'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] ? row[column.property] : 'FLEX' }}</td>
+          </ng-container>
+        </ng-container>
+
+
+        <!-- Sport Date Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'sport'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property].name }}</td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Sport Date Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'flexible'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] ? 'FX' : 'FI' }}</td>
           </ng-container>
         </ng-container>
 
