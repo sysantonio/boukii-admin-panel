@@ -441,7 +441,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -505,7 +505,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.id)

@@ -39,7 +39,7 @@ export class MonitorsComponent {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
 
-    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
     .subscribe((sport) => {
       this.sports = sport.data;
     })
@@ -66,12 +66,12 @@ export class MonitorsComponent {
       .subscribe((data) => {
         this.detailData = data.data;
 
-        this.crudService.list('/monitor-sports-degrees', 1, 1000, null, null, '&monitor_id='+event.item.id)
+        this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+event.item.id)
           .subscribe((mn) => {
             this.monitorSport = mn.data;
 
             this.monitorSport.forEach(element => {
-              this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, null, null, '&monitor_sport_id=' + element.id)
+              this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_sport_id=' + element.id)
                 .subscribe((msad) => {
                   element.authorized = msad.data;
                 });

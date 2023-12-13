@@ -81,7 +81,7 @@ export class CalendarComponent implements OnInit {
 
   getData() {
     this.events = [];
-    this.crudService.list('/monitor-nwds', 1, 1000, null, null, '&school_id=' + this.user.schools[0].id + '&monitor_id='+this.id)
+    this.crudService.list('/monitor-nwds', 1, 1000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&monitor_id='+this.id)
       .subscribe((data) => {
         data.data.forEach(element => {
           const event = {

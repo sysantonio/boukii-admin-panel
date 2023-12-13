@@ -146,7 +146,7 @@ export class CalendarEditComponent implements OnInit {
 
 
   getBlockages() {
-    this.crudService.list('/school-colors', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-colors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.blockages = data.data;
 
@@ -169,7 +169,7 @@ export class CalendarEditComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.id)

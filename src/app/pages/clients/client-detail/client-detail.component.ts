@@ -293,7 +293,7 @@ export class ClientDetailComponent {
 
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -344,7 +344,7 @@ export class ClientDetailComponent {
   }
 
   getClientObservations() {
-    this.crudService.list('/client-observations', 1, 1000, null, null, '&client_id='+this.id)
+    this.crudService.list('/client-observations', 1, 1000, 'desc', 'id', '&client_id='+this.id)
       .subscribe((data) => {
         if(data.data.length > 0) {
 
@@ -354,7 +354,7 @@ export class ClientDetailComponent {
   }
 
   getClientSchool() {
-    this.crudService.list('/clients-schools', 1, 1000, null, null, '&client_id='+this.id)
+    this.crudService.list('/clients-schools', 1, 1000, 'desc', 'id', '&client_id='+this.id)
     .subscribe((data) => {
       this.clientSchool = data.data;
 
@@ -362,7 +362,7 @@ export class ClientDetailComponent {
   }
 
   getClientSport() {
-    this.crudService.list('/client-sports', 1, 1000, null, null, '&client_id='+this.id)
+    this.crudService.list('/client-sports', 1, 1000, 'desc', 'id', '&client_id='+this.id)
       .subscribe((data) => {
         this.clientSport = data.data;
         this.selectedSport = this.clientSport[0];
@@ -400,7 +400,7 @@ export class ClientDetailComponent {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.id)
@@ -831,11 +831,11 @@ export class ClientDetailComponent {
   getGoals() {
     this.clientSport.forEach(cs => {
 
-      this.crudService.list('/degrees-school-sport-goals', 1, 1000, null, null, '&degree_id='+cs.degree_id)
+      this.crudService.list('/degrees-school-sport-goals', 1, 1000, 'desc', 'id', '&degree_id='+cs.degree_id)
         .subscribe((data) => {
           data.data.forEach(goal => {
 
-          this.crudService.list('/evaluation-fulfilled-goals', 1, 1000, null, null, '&degrees_school_sport_goals_id='+goal.id)
+          this.crudService.list('/evaluation-fulfilled-goals', 1, 1000, 'desc', 'id', '&degrees_school_sport_goals_id='+goal.id)
             .subscribe((ev: any) => {
               if (ev.data.length > 0) {
                 goal.score = ev.data[0].score;

@@ -485,7 +485,7 @@ export class MonitorDetailComponent {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -499,7 +499,7 @@ export class MonitorDetailComponent {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, null, null, '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.id)
@@ -525,7 +525,7 @@ export class MonitorDetailComponent {
   }
 
   getMonitorSportsDegree() {
-    this.crudService.list('/monitor-sports-degrees', 1, 1000, null, null, '&monitor_id='+this.id)
+    this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+this.id)
       .subscribe((monitorDegree) => {
         let selectedSports = []; // Obtén los deportes actualmente seleccionados o inicializa un arreglo vacío
         const level = [];
@@ -575,7 +575,7 @@ export class MonitorDetailComponent {
 
         monitorDegree.data.forEach(mDG => {
 
-          this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, null, null, '&monitor_sport_id=' + mDG.id)
+          this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_sport_id=' + mDG.id)
             .subscribe((data) => {
 
               selectedSports.forEach(element => {

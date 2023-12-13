@@ -235,7 +235,7 @@ export class BookingDetailComponent implements OnInit {
       .subscribe((data) => {
         this.booking = data.data;
 
-        this.crudService.list('/booking-users', 1, 1000, null, null, '&booking_id='+this.id)
+        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((bookingUser) => {
             this.bookingUsers = bookingUser.data;
 
@@ -272,7 +272,7 @@ export class BookingDetailComponent implements OnInit {
 
 
             this.bookingUsers.forEach((bu ,idx) => {
-              this.crudService.list('/booking-user-extras', 1, 1000, null, null, '&booking_user_id='+bu.id)
+              this.crudService.list('/booking-user-extras', 1, 1000, 'desc', 'id', '&booking_user_id='+bu.id)
                 .subscribe((bue) =>{
                   if (bue.data.length > 0) {
                     this.bookingExtras.push(bue.data[0]);

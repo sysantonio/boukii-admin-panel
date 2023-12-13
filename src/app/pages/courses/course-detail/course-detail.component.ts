@@ -169,7 +169,7 @@ export class CourseDetailComponent implements OnInit {
         this.defaults = data.data;
         this.getSeparatedDates(this.defaults.course_dates, true);
 
-        this.crudService.list('/booking-users', 1, 1000, null, null, '&course_id='+this.defaults.id)
+        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&course_id='+this.defaults.id)
             .subscribe((result) => {
               this.courseUsers = result.data;
               this.loading = false;
