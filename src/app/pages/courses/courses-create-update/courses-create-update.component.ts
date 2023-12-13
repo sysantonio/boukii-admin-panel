@@ -1287,7 +1287,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
 
 
-      return ret;
+        return ret === "undefined undefined" ? null : ret;
     }
 
     calculateMonitorLevel(level: any) {

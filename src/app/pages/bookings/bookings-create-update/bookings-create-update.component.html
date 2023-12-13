@@ -710,10 +710,11 @@
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
                   <p style="color: #EA0C60;">{{
-                  item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : (
-                    item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible ? item.courseDates[0].course?.price * item.courseDates.length : item.courseDates[0].course?.price)
 
-                   + (item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0).toFixed(2)}}{{item.currency}}</p>
+                  ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : (
+                    item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible ? item.courseDates[0].course?.price * item.courseDates.length : item.courseDates[0].course?.price))
+
+                   + (item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0)).toFixed(2)}}{{item.currency}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>

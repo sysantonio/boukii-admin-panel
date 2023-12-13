@@ -414,7 +414,7 @@ export class CourseDetailComponent implements OnInit {
 
   getMonitorValue(level: any, subGroupIndex: number, daySelectedIndex: number) {
 
-    let ret = null;
+    let ret = '';
     if(!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
@@ -437,7 +437,7 @@ export class CourseDetailComponent implements OnInit {
         }
 
 
-      return ret;
+      return ret === "undefined undefined" ? null : ret;
     }
 
     calculateMonitorLevel(level: any) {
@@ -736,6 +736,18 @@ export class CourseDetailComponent implements OnInit {
   private _filterMonitor(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.monitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
+  }
+
+  getCourseUsers(subGroup: any) {
+    let ret = [];
+
+    this.courseUsers.forEach(courseUser => {
+      if(courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id) {
+        ret.push(courseUser);
+      }
+    });
+
+    return ret;
   }
 
   save() {
