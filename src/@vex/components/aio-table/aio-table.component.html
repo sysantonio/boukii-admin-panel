@@ -105,6 +105,15 @@
           </ng-container>
         </ng-container>
 
+        <!-- Course type array monitor/client Columns -->
+
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'course_type_data'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>{{ getBookingCourse(data[i].course) }}</td>
+          </ng-container>
+        </ng-container>
+
         <!-- Booking users image Columns -->
 
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
@@ -187,6 +196,16 @@
           </ng-container>
         </ng-container>
 
+        <!-- payment_status_data Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'payment_status_data'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : '#E6E6E6'">
+              {{ data[i].booking[column.property] ? 'PAYÉ' : 'NON PAYE' | uppercase }}
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Cancelation Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'cancelation_status'" [matColumnDef]="column.property">
@@ -204,6 +223,17 @@
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
               <div *ngIf="row[column.property]" style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
               <div *ngIf="!row[column.property]" style="background-color: #E6E6E6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Light DATA Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'light_data'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell>
+              <div *ngIf="data[i].booking[column.property]" style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
+              <div *ngIf="!data[i].booking[column.property]" style="background-color: #E6E6E6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
             </td>
           </ng-container>
         </ng-container>

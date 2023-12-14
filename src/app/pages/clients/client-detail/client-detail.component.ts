@@ -154,20 +154,20 @@ export class ClientDetailComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Type', property: 'type', type: 'image', visible: true },
-    { label: 'Course', property: 'course', type: 'text', visible: true},
-    { label: 'Dates', property: 'dates', type: 'dates', visible: true },
-    { label: 'Client', property: 'client', type: 'text', visible: true },
-    { label: 'Enregistrée', property: 'register', type: 'register_date', visible: true },
+    { label: 'Course', property: 'course', type: 'course_type_data', visible: true},
+    { label: 'Client', property: 'client_id', type: 'client', visible: true },
+    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
     { label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'Bons', property: 'bonus', type: 'light', visible: true },
-    { label: 'OP. Rem', property: 'refund', type: 'light', visible: true },
-    { label: 'B. Care', property: 'assured', type: 'light', visible: true },
+    { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
+    { label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
     { label: 'Prix', property: 'price', type: 'price', visible: true },
     { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
-    { label: 'Status', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
     { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
      private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService) {
@@ -1164,5 +1164,10 @@ export class ClientDetailComponent {
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }
+  }
+
+  close() {
+    this.showDetail = false;
+    this.detailData = null;
   }
 }

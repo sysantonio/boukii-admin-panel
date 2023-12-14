@@ -365,6 +365,10 @@ ngAfterViewInit() {
     }
   }
 
+  getBookingCourseMonitorClient(data: any) {
+    return data.name;
+  }
+
   getMinMaxDates(data: any[]): { minDate: string, maxDate: string, days: number } {
     let days = 0;
     if (data.length === 0) {
