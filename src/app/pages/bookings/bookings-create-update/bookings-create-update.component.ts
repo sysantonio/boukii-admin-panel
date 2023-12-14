@@ -582,16 +582,19 @@ export class BookingsCreateUpdateComponent implements OnInit {
             let courseDateId = null;
             let monitorFind = false;
             item.course_groups.forEach(groups => {
-              if (!monitorFind) {
-                if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
-                  monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
-                  degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
-                  subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
-                  courseDateId = groups.course_date_id;
-                  groupId = groups.id;
-                  monitorFind = true;
+              if (groups.degree_id === this.levelForm.value.id) {
+                if (!monitorFind) {
+                  if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                    monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
+                    degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
+                    subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
+                    courseDateId = groups.course_date_id;
+                    groupId = groups.id;
+                    monitorFind = true;
+                  }
                 }
               }
+
             })
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
@@ -623,6 +626,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
               let monitorFind = false;
               item.course_groups.forEach(groups => {
+                if (groups.degree_id === this.levelForm.value.id) {
                 if (!monitorFind) {
                   if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                     monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
@@ -633,6 +637,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     monitorFind = true;
                   }
                 }
+              }
 
               });
               data.courseDates.push({
@@ -868,7 +873,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.crudService.update('/vouchers', data, element.bonus.id)
           .subscribe((result) => {
 
-            this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: bookingId,amount: data.payed})
+            this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: bookingId, amount: element.bonus.reducePrice})
               .subscribe((vresult) => {
                 console.log(vresult);
 
@@ -1167,10 +1172,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
           client.client_sports.forEach(sport => {
             if (sport.sport_id === this.defaults.sport_id) {
               const level = this.levels.find((l) => l.id === sport.degree_id);
-              this.levelForm.patchValue(level);
-              this.defaultsBookingUser.degree_id = level.id;
-              this.clientsForm.patchValue(client);
-              this.getCourses(level, this.monthAndYear);
+
+              if (level) {
+                this.levelForm.patchValue(level);
+                this.defaultsBookingUser.degree_id = level?.id;
+                this.clientsForm.patchValue(client);
+                this.getCourses(level, this.monthAndYear)
+              }
+              ;
             }
           });
         }

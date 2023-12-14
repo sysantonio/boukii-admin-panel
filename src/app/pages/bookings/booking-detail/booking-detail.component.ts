@@ -235,6 +235,18 @@ export class BookingDetailComponent implements OnInit {
       .subscribe((data) => {
         this.booking = data.data;
 
+        this.crudService.list('/vouchers-logs', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
+          .subscribe((vl) => {
+            if(vl.data.length > 0) {
+              vl.data.forEach(voucherLog => {
+                this.crudService.get('/vouchers/'+voucherLog.id)
+                  .subscribe((v) => {
+                    this.bonus.puhs(v);
+                  })
+              });
+            }
+          })
+
         this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((bookingUser) => {
             this.bookingUsers = bookingUser.data;

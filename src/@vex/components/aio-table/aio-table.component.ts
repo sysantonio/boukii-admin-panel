@@ -325,7 +325,7 @@ ngAfterViewInit() {
   }
 
   getSportNames(data: any) {
-    let ret = '';
+    let ret = 'NDF';
 
     data.forEach((element, idx) => {
       ret = element.sport.name + (idx + 1 === data.length ? '' : ', ');
