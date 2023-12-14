@@ -34,13 +34,12 @@ export class ClientsComponent {
   constructor(private crudService: ApiCrudService, private router: Router) {}
 
   columns: TableColumn<any>[] = [
-    { label: 'Tipo', property: 'type', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nombre', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Apellido', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Edad', property: 'birth_date', type: 'birth', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Usuarios', property: 'users', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Usuarios', property: 'utilizers', type: 'count', visible: true, cssClasses: ['font-medium'] },
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Sports', property: 'sport', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Nivel', property: 'level', type: 'level', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Sports', property: 'client_sports', type: 'sports', visible: true, cssClasses: ['font-medium'] },
     { label: 'Registro', property: 'created_at', type: 'date', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];

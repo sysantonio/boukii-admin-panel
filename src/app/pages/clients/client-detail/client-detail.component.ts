@@ -20,6 +20,7 @@ import { AddClientUserModalComponent } from '../add-client-user/add-client-user.
 import moment from 'moment';
 import { PasswordService } from 'src/service/password.service';
 import { MatStepper } from '@angular/material/stepper';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 
 
 @Component({
@@ -118,9 +119,9 @@ export class ClientDetailComponent {
 
   defaultsObservations = {
     id: null,
-    general: null,
-    notes: null,
-    historical: null,
+    general: '',
+    notes: '',
+    historical: '',
     client_id: null,
     school_id: null
   }
@@ -143,9 +144,30 @@ export class ClientDetailComponent {
   allLevels: any = [];
   selectedSport: any;
   clientSport = [];
+  clients = [];
   clientSchool = [];
   goals = [];
   mainId: any;
+  showDetail: boolean = false;
+  detailData: any;
+  entity = '/booking-users';
+  columns: TableColumn<any>[] = [
+    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Type', property: 'type', type: 'image', visible: true },
+    { label: 'Course', property: 'course', type: 'text', visible: true},
+    { label: 'Dates', property: 'dates', type: 'dates', visible: true },
+    { label: 'Client', property: 'client', type: 'text', visible: true },
+    { label: 'Enregistrée', property: 'register', type: 'register_date', visible: true },
+    { label: 'Options', property: 'options', type: 'text', visible: true },
+    { label: 'Bons', property: 'bonus', type: 'light', visible: true },
+    { label: 'OP. Rem', property: 'refund', type: 'light', visible: true },
+    { label: 'B. Care', property: 'assured', type: 'light', visible: true },
+    { label: 'Prix', property: 'price', type: 'price', visible: true },
+    { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
+    { label: 'Status', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true }
+  ];
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
      private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService) {
@@ -197,6 +219,7 @@ export class ClientDetailComponent {
             this.getStations();
             this.getClientSchool();
             this.getClientSport();
+            this.getClients();
             this.getClientObservations();
 
             if (!onChangeUser) {
@@ -612,7 +635,7 @@ export class ClientDetailComponent {
   }
 
   updateLevel(clientSport, level) {
-    this.crudService.update('/client-sports', {client_id: clientSport.data.id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
+    this.crudService.update('/client-sports', {client_id: clientSport.id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
       .subscribe((data) => {
         this.snackbar.open('Level updated', 'OK', {duration: 3000});
       })
@@ -641,6 +664,14 @@ export class ClientDetailComponent {
                 this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
                   .subscribe(() => {
                     console.log('client sport created');
+                  })
+              });
+
+              this.sportsCurrentData.data.forEach(element => {
+
+                this.crudService.update('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id}, element.id)
+                  .subscribe(() => {
+                    console.log('client sport updated');
                   })
               });
 
@@ -934,8 +965,204 @@ export class ClientDetailComponent {
 
   }
 
+  showDetailEvent(event: any) {
+
+    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
+      this.detailData = event.item;
+
+      this.crudService.get('/admin/courses/'+this.detailData.course_id)
+        .subscribe((course) => {
+          this.detailData.course = course.data;
+          this.crudService.get('/sports/'+this.detailData.course.sport_id)
+          .subscribe((sport) => {
+            this.detailData.sport = sport.data;
+          });
+
+          if (this.detailData.degree_id !== null) {
+            this.crudService.get('/degrees/'+this.detailData.degree_id)
+            .subscribe((degree) => {
+              this.detailData.degree = degree.data;
+            })
+          }
+
+      })
+
+      this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+        .subscribe((booking) => {
+          this.detailData.users = [];
+
+          booking.data.forEach((element, idx) => {
+            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+              this.detailData.users.push(element);
+
+                this.crudService.list('/client-sports', 1, 1000, 'desc', 'id', '&client_id='+element.client_id)
+                .subscribe((cd) => {
+
+                  if (cd.data.length > 0) {
+                    element.sports= [];
+
+                    cd.data.forEach(c => {
+                      element.sports.push(c);
+                    });
+                  }
+
+
+                })
+
+            }
+          });
+          this.showDetail = true;
+
+        });
+
+
+    } else {
+
+      this.showDetail = event.showDetail;
+      this.detailData = null;
+    }
+
+  }
+
   getNacionality(id: any) {
     const country = this.countries.find((c) => c.id === +id);
     return country ? country.code : 'NDF';
+  }
+
+
+  getAllLevelsBySport() {
+    let ret = [];
+    this.schoolSports.forEach(element => {
+      if (element.sport_id === this.detailData.sport.id) {
+        ret = element.degrees;
+      }
+    });
+
+    return ret;
+  }
+
+  getClient(id: any) {
+    if (id && id !== null) {
+      return this.clients.find((c) => c.id === id);
+    }
+  }
+
+  getClients() {
+    this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((client) => {
+        this.clients = client.data;
+      })
+  }
+
+  getDateIndex() {
+    let ret = 0;
+    if (this.detailData.course && this.detailData.course.course_dates) {
+      this.detailData.course.course_dates.forEach((element, idx) => {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+          ret = idx +1;
+        }
+      });
+    }
+
+    return ret;
+  }
+
+  getGroupsQuantity() {
+    let ret = 0;
+    if (this.detailData.course && this.detailData.course.course_dates) {
+      this.detailData.course.course_dates.forEach((element, idx) => {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+          ret = element.groups.length;
+        }
+      });
+    }
+
+    return ret;
+  }
+
+
+  getSubGroupsIndex() {
+    let ret = 0;
+    if (this.detailData.course && this.detailData.course.course_dates) {
+
+      this.detailData.course.course_dates.forEach((element, idx) => {
+        const group = element.groups.find((g) => g.id === this.detailData.course_group_id);
+
+        if (group){
+          group.subgroups.forEach((s, sindex) => {
+            if (s.id === this.detailData.course_subgroup_id) {
+              ret = sindex + 1;
+            }
+          });
+        }
+      });
+    }
+    return ret;
+  }
+
+  getDateFormatLong(date:string) {
+    return moment(date).format('dddd, D MMMM YYYY');
+  }
+
+  getHoursMinutes(hour_start:string, hour_end:string) {
+    const parseTime = (time:string) => {
+      const [hours, minutes] = time.split(':').map(Number);
+      return { hours, minutes };
+    };
+
+    const startTime = parseTime(hour_start);
+    const endTime = parseTime(hour_end);
+
+    let durationHours = endTime.hours - startTime.hours;
+    let durationMinutes = endTime.minutes - startTime.minutes;
+
+    if (durationMinutes < 0) {
+      durationHours--;
+      durationMinutes += 60;
+    }
+
+    return `${durationHours}h${durationMinutes}m`;
+  }
+
+  getHourRangeFormat(hour_start:string,hour_end:string) {
+    return hour_start.substring(0, 5)+' - '+hour_end.substring(0, 5);
+  }
+
+  getClientDegree(sport_id:any,sports:any) {
+    const sportObject = sports.find(sport => sport.sport_id === sport_id);
+    if (sportObject) {
+      return sportObject.degree_id;
+    }
+    else{
+      return 0;
+    }
+  }
+
+  getBirthYears(date:string) {
+    const birthDate = moment(date);
+    return moment().diff(birthDate, 'years');
+  }
+
+  getLanguageById(languageId: number): string {
+    const language = this.languages.find(c => c.id === languageId);
+    return language ? language.code.toUpperCase() : '';
+  }
+
+  getCountryById(countryId: number): string {
+    const country = MOCK_COUNTRIES.find(c => c.id === countryId);
+    return country ? country.code : 'Aucun';
+  }
+
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
   }
 }

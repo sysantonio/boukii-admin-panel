@@ -29,6 +29,8 @@ import { ClientDetailComponent } from './client-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ComponentsCustomModule } from '../../../components/components-custom.module';
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+import { ComponentsModule } from 'src/@vex/components/components.module';
 
 @NgModule({
   imports: [
@@ -63,7 +65,10 @@ import { ComponentsCustomModule } from '../../../components/components-custom.mo
     MatChipsModule,
     MatTabsModule,
     MatProgressBarModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    PageLayoutModule,
+    ComponentsCustomModule,
+    ComponentsModule
   ],
   declarations: [ClientDetailComponent],
   exports: [ClientDetailComponent]

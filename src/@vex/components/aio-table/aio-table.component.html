@@ -87,6 +87,24 @@
           </ng-container>
         </ng-container>
 
+        <!-- Count Columns -->
+
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'count'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property].length }}</td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Sports Columns -->
+
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'sports'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ getSportNames(row[column.property]) }}</td>
+          </ng-container>
+        </ng-container>
+
         <!-- Birth Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'birth'" [matColumnDef]="column.property">

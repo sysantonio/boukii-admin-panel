@@ -320,10 +320,16 @@ ngAfterViewInit() {
       });
     } else {
       return data.max_participants * data.course_dates.length;
-
-
     }
+    return ret;
+  }
 
+  getSportNames(data: any) {
+    let ret = '';
+
+    data.forEach((element, idx) => {
+      ret = element.sport.name + (idx + 1 === data.length ? '' : ', ');
+    });
 
     return ret;
   }
