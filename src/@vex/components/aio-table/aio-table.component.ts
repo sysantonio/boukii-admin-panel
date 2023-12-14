@@ -452,7 +452,8 @@ ngAfterViewInit() {
 
   getBookingImage(data: any) {
     //if (data.length === 1) {
-      return this.sports.find((s) => s.id === data.course.sport_id).name.toLowerCase();
+      const ret = this.sports.find((s) => s.id === data.course.sport_id);
+      return ret ? ret.name.toLowerCase() : '';
    /* } else {
       return 'MULTIPLE';
     }*/

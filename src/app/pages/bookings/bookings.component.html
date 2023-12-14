@@ -18,7 +18,7 @@
       <mat-card-header style="display:block">
         <div style="width: 100%;float: left;">
           <mat-icon style="float: right;cursor: pointer;" svgIcon="mat:close" (click)="showDetail = false"></mat-icon>
-          <mat-icon style="float: left;" svgIcon="mat:edit"></mat-icon>
+          <mat-icon style="float: left;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/bookigns/update/' + detailData.id)"></mat-icon>
 
         </div>
         <div style="width: 100%;float:left;">
@@ -81,7 +81,7 @@
                   {{item.course.type === 1 ? 'Collectif' : 'Privee'}} {{getSportName(item.course.sport_id)}} {{item.price}} {{item.currency}}
                 </p>
               </div>
-              <div style="float: left; width: 100%;">
+              <div style="float: left; width: 100%;" *ngIf="item.course.type">
                 <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(item.degree_id)?.color}">
                   {{getDegree(item.degree_id)?.league}} - {{getDegree(item.degree_id)?.annotation}}/{{getDegree(item.degree_id)?.name}}
                 </div>

@@ -81,8 +81,10 @@
             <p style="font-size: 20px;">Sports</p>
           </div>
           <ng-container *ngFor="let item of clientSport">
-            <div style="float: left; width: 50%;">
-              <img [src]="item.icon_selected" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080; margin: 0 0 0 37%">
+            <div style="float: left; width: 50%;margin: 2% 0 0 0;">
+              <img [src]="item.icon_selected" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080; margin: 0 0 0 37%" [ngStyle]="{
+                'background-color': item?.level?.color,
+                'border-color': item?.level?.color}">
               <p style="text-align: center;">{{item?.name}}</p>
               <div style="float: left; width: 90%; margin: 2% 0 0 0">
                 <div >

@@ -110,7 +110,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'course_type_data'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>{{ getBookingCourse(data[i].course) }}</td>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>{{ data[i].course.name }}</td>
           </ng-container>
         </ng-container>
 

@@ -754,7 +754,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const clientsWithoutSelectedSport = [];
     this.bookingsToCreate.forEach(element => {
       const client = this.clients.find((c) => c.id === element.courseDates[0].client_id);
-      const bookSport = client.client_sports.find((c) => c.id === element.courseDates[0].course.sport_id);
+      const bookSport = client.client_sports.find((c) => c.sport_id === element.courseDates[0].course.sport_id);
       if (!bookSport || bookSport === null) {
 
         clientsWithoutSelectedSport.push({

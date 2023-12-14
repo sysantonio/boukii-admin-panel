@@ -200,12 +200,12 @@
                   <div
                     @scaleIn
                     class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item.level.color">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item?.level?.color">
                   </div>
 
                   <div @fadeInRight *ngIf="!editSportInfo">
                     <p class="m-0 caption text-hint">Sport</p>
-                    <p class="m-0 body-1">{{item.name}}
+                    <p class="m-0 body-1">{{item?.name}}
                     </p>
                   </div>
                 </div>
@@ -219,8 +219,8 @@
 
                   <div @fadeInRight *ngIf="!editSportInfo">
                     <p class="m-0 caption text-hint">Level</p>
-                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item.level.color">
-                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
+                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
+                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
                     </div>
                   </div>
                 </div>
@@ -940,9 +940,9 @@
                     <mat-cell *matCellDef="let element">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                         <mat-label>Niveaux</mat-label>
-                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element.level.name" [(ngModel)]="element.level"/>
+                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element?.level?.name" [(ngModel)]="element.level"/>
                       <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                        <mat-option *ngFor="let level of element.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
+                        <mat-option *ngFor="let level of element?.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
                           {{level.annotation}} - {{level.name}}
                         </mat-option>
                       </mat-autocomplete>

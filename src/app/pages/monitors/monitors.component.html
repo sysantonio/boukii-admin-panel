@@ -17,7 +17,8 @@
     <mat-card style="padding: 0 3%;">
       <mat-card-header style="display:block">
         <div style="width: 100%;float: left;">
-          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
+          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float:right"></mat-icon>
+          <mat-icon style="float: left;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/monitors/update/' + detailData.id)"></mat-icon>
 
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
