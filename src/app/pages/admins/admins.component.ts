@@ -10,9 +10,12 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 export class AdminsComponent {
 
   createComponent = AdminCreateUpdateComponent;
-  entity = 'admins';
+  entity = '/users';
   columns: TableColumn<any>[] = [
-    { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Nombre', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Apellidos', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 }

@@ -163,6 +163,17 @@
           </ng-container>
         </ng-container>
 
+        <!-- Light school Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'light_school'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <div *ngIf="row[column.property] === schoolId" style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
+              <div *ngIf="row[column.property] !== schoolId" style="background-color: #E6E6E6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Status Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'status'" [matColumnDef]="column.property">

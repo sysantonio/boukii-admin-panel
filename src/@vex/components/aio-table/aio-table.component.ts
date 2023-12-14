@@ -85,11 +85,15 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl();
   loading = true;
+  user: any;
+  schoolId: any;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.schoolId = this.user.schools[0].id;
   }
 
   get visibleColumns() {
@@ -311,8 +315,8 @@ ngAfterViewInit() {
 
     if (data.is_flexible && data.course_type === 1) {
       data.course_dates.forEach(courseDate => {
-        courseDate.groups.forEach(group => {
-            group.subgroups.forEach(sb => {
+        courseDate.course_groups.forEach(group => {
+            group.course_subgroups.forEach(sb => {
               ret = ret + sb.max_participants;
             });
         });

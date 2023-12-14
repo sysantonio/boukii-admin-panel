@@ -40,6 +40,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
 
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.form = this.fb.group({
+      code:[null],
       quantity:[null, Validators.required],
       budget:[null],
       payed:[false, Validators.required]
@@ -71,7 +72,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
   create() {
 
     const data = {
-      code: "VOU-"+this.generateRandomNumber(),
+      code: this.defaults.code === null ? "VOU-"+this.generateRandomNumber() : this.defaults.code,
       quantity: this.defaults.quantity,
       remaining_balance: this.defaults.quantity,
       payed: this.defaults.payed,
@@ -106,6 +107,9 @@ export class BonusesCreateUpdateComponent implements OnInit {
 
   }
 
+  generateRandomCode() {
+    this.defaults.code = "VOU-"+this.generateRandomNumber();
+  }
   // pasar a utils
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();
