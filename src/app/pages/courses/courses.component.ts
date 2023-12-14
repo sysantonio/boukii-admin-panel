@@ -67,7 +67,7 @@ export class CoursesComponent {
 
 
             this.detailData.course_dates.forEach(cs => {
-              cs.groups.forEach(group => {
+              cs.course_groups.forEach(group => {
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
@@ -138,9 +138,9 @@ export class CoursesComponent {
     let ret = 0;
 
     this.detailData.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
+      courseDate.course_groups.forEach(group => {
         if (group.degree_id === levelId) {
-          group.subgroups.forEach(sb => {
+          group.course_subgroups.forEach(sb => {
             ret = ret + sb.max_participants;
           });
         }
@@ -155,7 +155,7 @@ export class CoursesComponent {
     let ret = 0;
 
     this.detailData.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
+      courseDate.course_groups.forEach(group => {
         if (group.degree_id === levelId) {
           ret = ret + 1;
         }
@@ -171,9 +171,9 @@ export class CoursesComponent {
 
     this.detailData.course_dates.forEach(courseDate => {
       let find = false;
-      courseDate.groups.forEach(group => {
+      courseDate.course_groups.forEach(group => {
         if (group.degree_id === levelId && !find) {
-          ret = group.subgroups[0].max_participants;
+          ret = group.course_subgroups[0].max_participants;
           find = true;
         }
       });

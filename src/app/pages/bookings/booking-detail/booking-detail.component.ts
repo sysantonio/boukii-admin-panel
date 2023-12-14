@@ -241,7 +241,7 @@ export class BookingDetailComponent implements OnInit {
               vl.data.forEach(voucherLog => {
                 this.crudService.get('/vouchers/'+voucherLog.id)
                   .subscribe((v) => {
-                    this.bonus.puhs(v);
+                    this.bonus.push(v);
                   })
               });
             }
