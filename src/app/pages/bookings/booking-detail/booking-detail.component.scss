@@ -379,3 +379,16 @@ img[mat-card-image] {
 }
 
 
+
+.qrcodeImage {
+  display: flex;
+  float: right;
+  margin: 0 25px 0 0;
+}
+
+/* Add custom styles here */
+.center {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}

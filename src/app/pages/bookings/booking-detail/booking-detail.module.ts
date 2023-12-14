@@ -31,6 +31,7 @@ import { AddReductionModalModule } from '../bookings-create-update/add-reduction
 import { AddDiscountBonusModalModule } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.module';
 import { BookingDetailComponent } from './booking-detail.component';
 import { CustomDateAdapter } from '../bookings-create-update/bookings-create-update.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -77,7 +78,8 @@ export const MY_DATE_FORMATS = {
     MatCheckboxModule,
     MatProgressSpinnerModule,
     AddReductionModalModule,
-    AddDiscountBonusModalModule
+    AddDiscountBonusModalModule,
+    QRCodeModule
   ],
   declarations: [BookingDetailComponent],
   exports: [BookingDetailComponent],

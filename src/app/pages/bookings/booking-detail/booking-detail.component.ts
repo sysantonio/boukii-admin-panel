@@ -179,6 +179,7 @@ export class BookingDetailComponent implements OnInit {
   finalPrice: any = null;
   finalPriceNoTaxes: any = null;
   bonus: any = [];
+  bonusLog: any = [];
   totalPrice: any = 0;
   booking: any;
   bookingUsers: any;
@@ -238,10 +239,13 @@ export class BookingDetailComponent implements OnInit {
         this.crudService.list('/vouchers-logs', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((vl) => {
             if(vl.data.length > 0) {
+              this.bonusLog = vl.data;
               vl.data.forEach(voucherLog => {
                 this.crudService.get('/vouchers/'+voucherLog.id)
                   .subscribe((v) => {
-                    this.bonus.push(v);
+                    v.data.currentPay = parseFloat(voucherLog.amount);
+                    v.data.before = true;
+                    this.bonus.push({bonus: v.data});
                   })
               });
             }
@@ -1203,11 +1207,11 @@ export class BookingDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(AddDiscountBonusModalComponent, {
       width: '600px',
       data: {
-        client_id: this.bookingsToCreate[0].client_main_id,
-        school_id: this.bookingsToCreate[0].school_id,
+        client_id: this.booking.client_main_id,
+        school_id: this.booking.school_id,
         currentPrice: this.finalPriceNoTaxes,
         appliedBonus: this.bonus,
-        currency:  this.bookingsToCreate[0].currency
+        currency:  this.booking.currency
       }
     });
 

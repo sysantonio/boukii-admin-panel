@@ -61,6 +61,7 @@ export class BookingsComponent {
   showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
+      this.bonus = [];
       this.detailData = event.item;
       this.getSchoolSportDegrees();
       this.crudService.list('/vouchers-logs', 1, 1000, 'desc', 'id', '&booking_id='+this.detailData.id)
@@ -69,6 +70,7 @@ export class BookingsComponent {
               vl.data.forEach(voucherLog => {
                 this.crudService.get('/vouchers/'+voucherLog.id)
                   .subscribe((v) => {
+                    v.data.currentPay = parseFloat(voucherLog.amount);
                     this.bonus.push(v.data);
                   })
               });
@@ -268,7 +270,7 @@ export class BookingsComponent {
     let ret = 0;
 
     this.bonus.forEach(element => {
-      ret = ret + element.quantity - element.remaining_balance;
+      ret = ret + element.currentPay;
     });
 
     return ret.toFixed(2);
