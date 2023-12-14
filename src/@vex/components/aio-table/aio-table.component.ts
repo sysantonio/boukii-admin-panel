@@ -358,11 +358,20 @@ ngAfterViewInit() {
   }
 
   getBookingCourse(data: any) {
-    if (data.length === 1) {
+    if (data.length === 1 || this.checkIfCourseIdIsSame(data)) {
       return data[0].course.name;
     } else {
       return 'MULTIPLE';
     }
+  }
+
+  checkIfCourseIdIsSame(data: any[]): boolean {
+    if (data.length === 0) {
+      return true; // o false, según tu lógica de negocio
+    }
+
+    const firstCourseId = data[0].course.id;
+    return data.every(item => item.course.id === firstCourseId);
   }
 
   getBookingCourseMonitorClient(data: any) {
