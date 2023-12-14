@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { UntypedFormControl } from '@angular/forms';
 import { ApiCrudService } from 'src/service/crud.service';
+import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
+import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
+import moment from 'moment';
 
 
 @UntilDestroy()
@@ -87,6 +90,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   loading = true;
   user: any;
   schoolId: any;
+  clients: any = [];
+  sports: any = [];
+  countries = MOCK_COUNTRIES;
+  provinces = MOCK_PROVINCES;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -100,7 +107,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getClients();
+    this.getSports();
+  }
 
   /**
    * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
@@ -336,5 +346,141 @@ ngAfterViewInit() {
     });
 
     return ret;
+  }
+  getSportNamesMonitor(data: any) {
+    let ret = 'NDF';
+
+    data.forEach((element, idx) => {
+      ret = element.name + (idx + 1 === data.length ? '' : ', ');
+    });
+
+    return ret;
+  }
+
+  getBookingCourse(data: any) {
+    if (data.length === 1) {
+      return data[0].course.name;
+    } else {
+      return 'MULTIPLE';
+    }
+  }
+
+  getMinMaxDates(data: any[]): { minDate: string, maxDate: string, days: number } {
+    let days = 0;
+    if (data.length === 0) {
+      return { minDate: '', maxDate: '', days: days };
+    }
+
+    let minDate = new Date(data[0].date);
+    let maxDate = new Date(data[0].date);
+
+    data.forEach(item => {
+      const currentDate = new Date(item.date);
+      if (currentDate < minDate) {
+        minDate = currentDate;
+      }
+      if (currentDate > maxDate) {
+        maxDate = currentDate;
+      }
+      days = days + 1;
+    });
+
+    return { minDate: minDate.toISOString(), maxDate: maxDate.toISOString(), days: days };
+  }
+
+  getMinMaxHours(data: any[]): { minHour: string, maxHour: string } {
+    if (data.length === 0) {
+      return { minHour: '', maxHour: '' };
+    }
+    let minHour = null;
+    let maxHour = null;
+    if (data[0].course.course_type === 2) {
+      minHour = data[0].hour_start;
+      maxHour = this.calculateHourEnd(data[0].hour_start, data[0].course.duration);
+
+    } else {
+      minHour = data[0].hour_start;
+      maxHour = data[0].hour_end;
+
+      data.forEach(item => {
+        if (item.hour_start < minHour) {
+          minHour = item.hour_start;
+        }
+        if (item.hour_end > maxHour) {
+          maxHour = item.hour_end;
+        }
+      });
+    }
+
+
+    return { minHour, maxHour };
+  }
+
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
+  }
+
+  getBookingType(data: any) {
+    //if (data.length === 1) {
+      return data.course.course_type === 1 ? 'collectif' : 'prive'
+    /*} else {
+      return 'MULTIPLE';
+    }*/
+  }
+
+  getBookingImage(data: any) {
+    //if (data.length === 1) {
+      return this.sports.find((s) => s.id === data.course.sport_id).name.toLowerCase();
+   /* } else {
+      return 'MULTIPLE';
+    }*/
+  }
+
+  getClient(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return client;
+    }
+  }
+
+  getClients() {
+    this.crudService.list('/admin/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((data: any) => {
+        this.clients = data.data;
+
+      })
+  }
+  getSports() {
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((data: any) => {
+        this.sports = data.data;
+
+      })
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id === +id);
+    return country ? country.name : 'NDF';
+  }
+
+  getProvince(id: any) {
+    const province = this.provinces.find((c) => c.id === +id);
+    return province ? province.name : 'NDF';
+  }
+
+  getNacionality(id: any) {
+    const country = this.countries.find((c) => c.id === +id);
+    return country ? country.code : 'NDF';
   }
 }

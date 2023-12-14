@@ -49,10 +49,10 @@ export class MonitorsComponent {
   entity = '/monitors';
   columns: TableColumn<any>[] = [
     { label: 'Name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Age', property: 'age', type: 'text', visible: true },
+    { label: 'Age', property: 'birth_date', type: 'birth', visible: true },
     { label: 'Email', property: 'email', type: 'text', visible: true },
     { label: 'Phone', property: 'phone', type: 'text', visible: true },
-    { label: 'Sports', property: 'sports', type: 'text', visible: true },
+    { label: 'Sports', property: 'sports', type: 'sports_monitor', visible: true },
     { label: 'Level', property: 'niveaux', type: 'level', visible: true },
     { label: 'Register', property: 'created_at', type: 'date', visible: true },
     { label: "Status", property: 'active_school', type: 'light_school', visible: true },

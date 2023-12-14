@@ -745,7 +745,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         school_id: element.school_id,
         client_main_id: element.client_main_id,
         paxes: paxes,
-        payment_method_id: element.payment_method_id
+        payment_method_id: this.defaults.payment_method_id
       }
 
 
