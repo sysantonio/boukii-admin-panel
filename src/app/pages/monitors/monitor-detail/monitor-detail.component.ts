@@ -213,7 +213,7 @@ export class MonitorDetailComponent {
               email: ['', [Validators.required, Validators.email]],
               username: [''],
               station: [''],
-              password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+              password: ['', [Validators.minLength(6), this.passwordValidator]],
 
             });
 
@@ -930,12 +930,12 @@ export class MonitorDetailComponent {
   }
 
   getCountry(id: any) {
-    const country = this.mockCountriesData.find((c) => c.id === +id);
+    const country = this.mockCountriesData.find((c) => c.id == +id);
     return country ? country.name : 'NDF';
   }
 
   getProvince(id: any) {
-    const province = this.mockProvincesData.find((c) => c.id === +id);
+    const province = this.mockProvincesData.find((c) => c.id == +id);
     return province ? province.name : 'NDF';
   }
 

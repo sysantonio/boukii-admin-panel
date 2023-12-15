@@ -100,12 +100,12 @@ export class MonitorsComponent {
   }
 
   getCountry(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
+    const country = this.countries.find((c) => c.id == +id);
     return country ? country.name : 'NDF';
   }
 
   getProvince(id: any) {
-    const province = this.provinces.find((c) => c.id === +id);
+    const province = this.provinces.find((c) => c.id == +id);
     return province ? province.name : 'NDF';
   }
 

@@ -120,7 +120,7 @@ export class BookingsComponent {
 
 
   getCountry(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
+    const country = this.countries.find((c) => c.id == +id);
     return country ? country.name : 'NDF';
   }
 

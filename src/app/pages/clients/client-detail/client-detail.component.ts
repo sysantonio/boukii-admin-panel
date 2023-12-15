@@ -233,7 +233,7 @@ export class ClientDetailComponent {
               surname: ['', Validators.required],
               email: ['', [Validators.required, Validators.email]],
               username: [''],
-              password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+              password: ['', [Validators.minLength(6), this.passwordValidator]],
 
             });
 
@@ -938,12 +938,12 @@ export class ClientDetailComponent {
   }
 
   getCountry(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
+    const country = this.countries.find((c) => c.id == +id);
     return country ? country.name : 'NDF';
   }
 
   getProvince(id: any) {
-    const province = this.provinces.find((c) => c.id === +id);
+    const province = this.provinces.find((c) => c.id == +id);
     return province ? province.name : 'NDF';
   }
 

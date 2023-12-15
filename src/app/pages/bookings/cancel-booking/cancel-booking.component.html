@@ -17,10 +17,10 @@
     <div style="width: 100%;">
       <p>Está a punto de cancelar una reserva. Elija los bonos que quieren devolverse:</p>
       <div style="float:left; width: 100%">
-        <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="calculateAllRemainingQuantity()"
-         style="float:left;width: 100%">{{item.bonus.code}}: {{getCurrentUse(item)}} {{defaults.booking.currency}}
+        <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="calculateAllRemainingQuantity() && defaults.currentBonus.length > 1"
+         style="float:left;width: 100%">{{item.bonus.code}}: <span style="color:#fe3085">{{getCurrentUse(item)}} {{defaults.booking.currency}} </span>
           <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">Fully applied</span>
-          <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #FEE6C6;">Partially applied</span>
+          <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #F99D22;"><span style="color:#A1D14F">({{item.bonus.quantity}} {{defaults.booking.currency}})</span> Partially applied </span>
         </mat-checkbox>
       </div>
     </div>

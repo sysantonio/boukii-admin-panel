@@ -1840,12 +1840,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === id);
+    const country = this.countries.find((c) => c.id == id);
     return country ? country.code : 'NDF';
   }
 
   getCountry(id: any) {
-    const country = this.countries.find((c) => c.id === id);
+    const country = this.countries.find((c) => c.id == id);
     return country ? country.name : 'NDF';
   }
 

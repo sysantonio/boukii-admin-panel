@@ -122,7 +122,6 @@ export class ClientCreateUpdateModalComponent implements OnInit {
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       username: [''],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
     });
 

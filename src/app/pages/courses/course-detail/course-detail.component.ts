@@ -673,12 +673,12 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getCountry(id: any) {
-    const country = this.countries.find((c) => c.id === id);
+    const country = this.countries.find((c) => c.id == id);
     return country ? country.name : 'NDF';
   }
 
   getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === id);
+    const country = this.countries.find((c) => c.id == id);
     return country ? country.code : 'NDF';
   }
 

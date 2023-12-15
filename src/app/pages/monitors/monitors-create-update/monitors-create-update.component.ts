@@ -143,7 +143,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       username: [''],
       station: [''],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
 
     });
 

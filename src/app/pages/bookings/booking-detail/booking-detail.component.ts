@@ -309,10 +309,10 @@ export class BookingDetailComponent implements OnInit {
                 })
             });
 
-            this.calculateFinalPrice();
             setTimeout(() => {
+              this.calculateFinalPrice();
               this.loading = false;
-            }, 0);
+            }, 500);
           })
         });
       });
@@ -1314,12 +1314,12 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === id);
+    const country = this.countries.find((c) => c.id == id);
     return country ? country.code : 'NDF';
   }
 
   getCountry(id: any) {
-    const country = this.countries.find((c) => c.id === id);
+    const country = this.countries.find((c) => c.id == id);
     return country ? country.name : 'NDF';
   }
 
@@ -1347,8 +1347,13 @@ export class BookingDetailComponent implements OnInit {
 
           if (element.bonus.remaining_balance > price) {
             price = price - price;
-          } else {
-            price = price - element.bonus.remaining_balance;
+          }  else {
+            if (element.bonus.before) {
+              price = price - element.bonus.currentPay;
+            } else{
+              price = price - element.bonus.remaining_balance;
+            }
+
           }
         }
       });

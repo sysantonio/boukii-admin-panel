@@ -32,7 +32,7 @@ export class UserCreateUpdateComponent {
       surname: [''],
       email: ['', [Validators.required, Validators.email]],
       rol: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+      password: ['', [Validators.minLength(6), this.passwordValidator]],
       confirmPassword: ['', [Validators.required]]
     }, { validator: this.checkPasswords });
   }

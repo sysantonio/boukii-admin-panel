@@ -120,7 +120,7 @@ export class ClientCreateUpdateComponent implements OnInit {
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       username: [''],
-      password: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+      password: ['', [Validators.minLength(6), this.passwordValidator]],
 
     });
 
