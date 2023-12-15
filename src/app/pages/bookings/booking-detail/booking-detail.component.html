@@ -17,7 +17,7 @@
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'non payé' | uppercase }}</p>
               <div class="qrcodeImage">
                 <qrcode
-                  [qrdata]="booking.id.toString()"
+                  [qrdata]="booking.client_main_id.toString()"
                   [allowEmptyString]="true"
                   [ariaLabel]="'QR Code image with the following content...'"
                   [cssClass]="'center'"
