@@ -8,8 +8,11 @@
     width:450px;position:fixed;height: calc(100% - 140px);top:140px;right:0;overflow-y:auto;
 }
 .header-navigation {
-    position: sticky;top: 118px;width: 100%;z-index: 1000;background: var(--background-base);display: flex;justify-content: space-between;align-items: center;padding: 16px;margin-top: 24px;font-size:15px;
+    position: sticky;top: 118px;width: 100%;z-index: 1000;background: var(--background-base);padding: 16px;margin-top: 24px;font-size:15px;
 }  
+.header-navigation-flex {
+    width:100%;display: flex;justify-content: space-between;align-items: center;
+}
 .date-navigation span {
     margin-right: 24px;font-weight:500;
 }
@@ -246,7 +249,7 @@
     position: relative;top: 5px;margin-left: 30px;
 }
 .filter-container {
-    width:100%;margin-bottom:24px;display:flex;gap:32px;
+    width:100%;margin-top:24px;margin-bottom:24px;display:flex;gap:32px;
 }
 .filter-container-column {
     display:flex;flex-direction:column;gap:0px;

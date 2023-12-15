@@ -11,62 +11,64 @@
 
         <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetail || showBlock}">
             <div class="header-navigation">
-                <div class="date-navigation">
-                <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
-                <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
-                <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
-                <button (click)="goToPrevious()">&lt;</button>
-                <button (click)="goToNext()">&gt;</button>
-                <button (click)="showFilter = !showFilter;scrollToTop()" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
+                <div class="header-navigation-flex">
+                    <div class="date-navigation">
+                    <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
+                    <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
+                    <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
+                    <button (click)="goToPrevious()">&lt;</button>
+                    <button (click)="goToNext()">&gt;</button>
+                    <button (click)="showFilter = !showFilter" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
 
-                
-                <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()">Reset filters</button>
-                <button color="primary" mat-raised-button (click)="applyFilters()">Apply filters</button>
+                    
+                    <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()">Reset filters</button>
+                    <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()">Apply filters</button>
+                    </div>
+                    
+                    <div class="view-selection">
+                        <span class="view-option" [ngClass]="{'selected': timelineView == 'day'}" (click)="changeView('day')">Jour</span>
+                        <span class="view-option" [ngClass]="{'selected': timelineView == 'week'}" (click)="changeView('week')">Semaine</span>
+                        <span class="view-option" [ngClass]="{'selected': timelineView == 'month'}" (click)="changeView('month')">Mois</span>
+                    </div>
                 </div>
-                
-                <div class="view-selection">
-                    <span class="view-option" [ngClass]="{'selected': timelineView == 'day'}" (click)="changeView('day')">Jour</span>
-                    <span class="view-option" [ngClass]="{'selected': timelineView == 'week'}" (click)="changeView('week')">Semaine</span>
-                    <span class="view-option" [ngClass]="{'selected': timelineView == 'month'}" (click)="changeView('month')">Mois</span>
+
+                <div *ngIf="showFilter" class="filter-container">
+                    <div class="filter-container-column">
+                        <span>MONITEUR</span>
+                        <mat-form-field appearance="fill">
+                        <mat-select [(ngModel)]="filterMonitor" color="primary">
+                            <ng-container *ngFor="let monitor of allMonitors">
+                                <mat-option *ngIf="monitor.id" [value]="monitor.id">{{monitor.first_name}} {{monitor.last_name}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        </mat-form-field>
+                    </div>
+                  
+                    <div class="filter-container-column">
+                      <span>MONITEURS</span>
+                      <mat-checkbox color="primary" [(ngModel)]="filterFree">Libre</mat-checkbox>
+                      <mat-checkbox color="primary" [(ngModel)]="filterOccupied">Ocupé</mat-checkbox>
+                    </div>
+                  
+                    <div class="filter-container-column">
+                      <span>TYPE D'ÉVÉNEMENT</span>
+                      <mat-checkbox color="primary" [(ngModel)]="filterCollective">Cours collectif</mat-checkbox>
+                      <mat-checkbox color="primary" [(ngModel)]="filterPrivate">Cours privés</mat-checkbox>
+                      <mat-checkbox color="primary" [(ngModel)]="filterNwd">Pas de disponibilités</mat-checkbox>
+                      <mat-checkbox color="primary" [(ngModel)]="filterBlockPayed">Blocages payés</mat-checkbox>
+                      <mat-checkbox color="primary" [(ngModel)]="filterBlockNotPayed">Blocages impayés</mat-checkbox>
+                    </div>
+                  
+                    <div class="filter-container-column">
+                      <span>SPORT</span>
+                      <mat-checkbox *ngFor="let sport of sports" color="primary"
+                            [checked]="checkedSports.has(sport.id)"
+                            (change)="onCheckChange(sport.id, $event.checked)">
+                        {{ sport.name }}
+                      </mat-checkbox>
+                    </div>
                 </div>
             </div>
-
-            <div *ngIf="showFilter" class="filter-container">
-                <div class="filter-container-column">
-                    <span>MONITEUR</span>
-                    <mat-form-field appearance="fill">
-                    <mat-select [(ngModel)]="filterMonitor" color="primary">
-                        <ng-container *ngFor="let monitor of allMonitors">
-                            <mat-option *ngIf="monitor.id" [value]="monitor.id">{{monitor.first_name}} {{monitor.last_name}}</mat-option>
-                        </ng-container>
-                    </mat-select>
-                    </mat-form-field>
-                </div>
-              
-                <div class="filter-container-column">
-                  <span>MONITEURS</span>
-                  <mat-checkbox color="primary" [(ngModel)]="filterFree">Libre</mat-checkbox>
-                  <mat-checkbox color="primary" [(ngModel)]="filterOccupied">Ocupé</mat-checkbox>
-                </div>
-              
-                <div class="filter-container-column">
-                  <span>TYPE D'ÉVÉNEMENT</span>
-                  <mat-checkbox color="primary" [(ngModel)]="filterCollective">Cours collectif</mat-checkbox>
-                  <mat-checkbox color="primary" [(ngModel)]="filterPrivate">Cours privés</mat-checkbox>
-                  <mat-checkbox color="primary" [(ngModel)]="filterNwd">Pas de disponibilités</mat-checkbox>
-                  <mat-checkbox color="primary" [(ngModel)]="filterBlockPayed">Blocages payés</mat-checkbox>
-                  <mat-checkbox color="primary" [(ngModel)]="filterBlockNotPayed">Blocages impayés</mat-checkbox>
-                </div>
-              
-                <div class="filter-container-column">
-                  <span>SPORT</span>
-                  <mat-checkbox *ngFor="let sport of sports" color="primary"
-                        [checked]="checkedSports.has(sport.id)"
-                        (change)="onCheckChange(sport.id, $event.checked)">
-                    {{ sport.name }}
-                  </mat-checkbox>
-                </div>
-              </div>
             
             <div>
 
