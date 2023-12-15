@@ -579,7 +579,7 @@ export class MonitorDetailComponent {
         sport.data.forEach((element, idx) => {
           this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data.reverse();
+            this.schoolSports[idx].degrees = data.data
           });
         });
       })
@@ -1274,7 +1274,7 @@ export class MonitorDetailComponent {
     let firstDate, lastDate;
     if (this.timelineView === 'week') {
       const startOfWeekDate = startOfWeek(date, { weekStartsOn: 1 });
-      const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 }); 
+      const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
       firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
       lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
       this.searchBookings(firstDate,lastDate);
@@ -1325,7 +1325,7 @@ export class MonitorDetailComponent {
     }
     return [];
   }
-  
+
   processData(data:any) {
     let allNwds = [];
     let allBookings = [];
@@ -1347,7 +1347,7 @@ export class MonitorDetailComponent {
                 const bookingArray = item.bookings[bookingKey];
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
                     const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
-                    allBookings.push(firstBooking);                      
+                    allBookings.push(firstBooking);
                 }
             }
         }
@@ -1369,12 +1369,12 @@ export class MonitorDetailComponent {
           default:
             type = 'unknown';
         }
-    
+
         const dateTotalAndIndex = booking.course.course_type === 2 ? { date_total: 0, date_index: 0 } : {
           date_total: booking.course.course_dates.length,
           date_index: this.getPositionDate(booking.course.course_dates, booking.course_date_id)
         };
-        
+
         //Get Sport and Degree objects
         const sport = this.sports.find(s => s.id === booking.course.sport_id);
         console.log(sport);
@@ -1393,7 +1393,7 @@ export class MonitorDetailComponent {
           }
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
         }
-    
+
         return {
           booking_id: booking.id,
           date: moment(booking.date).format('YYYY-MM-DD'),
@@ -1433,7 +1433,7 @@ export class MonitorDetailComponent {
         } else if (nwd.user_nwd_subtype_id === 3) {
             type = 'block_no_payed';
         } else {
-            type = 'unknown'; 
+            type = 'unknown';
         }
         const hourTimesNwd = nwd.full_day ? {
             hour_start: this.hoursRange[0],
@@ -1458,7 +1458,7 @@ export class MonitorDetailComponent {
         };
       })
     ];
-    
+
     console.log('Combined Tasks Calendar:', tasksCalendar);
 
     this.calculateTaskPositions(tasksCalendar);
@@ -1478,62 +1478,62 @@ export class MonitorDetailComponent {
        const rangeStartMinutes = rangeStart.getHours() * 60 + rangeStart.getMinutes();
        const leftMinutes = startMinutes - rangeStartMinutes;
        const leftPixels = leftMinutes * pixelsPerMinute;
- 
+
        const endTime = this.parseTime(task.hour_end);
        const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
        const durationMinutes = endMinutes - startMinutes;
        const widthPixels = durationMinutes * pixelsPerMinute;
- 
+
        //Only 1 monitor
        const monitorIndex = 0;
        const topPixels = monitorIndex * 100;
- 
+
        const style = {
          'left': `${leftPixels}px`,
          'width': `${widthPixels}px`,
          'top': `${topPixels}px`
        };
- 
+
        //Style for weeks
        const taskDate = new Date(task.date);
        const dayOfWeek = taskDate.getDay();
        const initialLeftOffset = (dayOfWeek === 0 ? 6 : dayOfWeek - 1) * 300;
- 
+
        const startTimeWeek = this.parseTime(task.hour_start);
        const rangeStartWeek = this.parseTime(this.hoursRange[0]);
        const startMinutesWeek = startTimeWeek.getHours() * 60 + startTimeWeek.getMinutes();
        const rangeStartMinutesWeek = rangeStartWeek.getHours() * 60 + rangeStartWeek.getMinutes();
        const leftMinutesWeek = startMinutesWeek - rangeStartMinutesWeek;
        const additionalLeftPixels = leftMinutesWeek * pixelsPerMinuteWeek;
- 
+
        const endTimeWeek = this.parseTime(task.hour_end);
        const endMinutesWeek = endTimeWeek.getHours() * 60 + endTimeWeek.getMinutes();
        const durationMinutesWeek = endMinutesWeek - startMinutesWeek;
        const widthPixelsWeek = durationMinutesWeek * pixelsPerMinuteWeek;
- 
+
        const styleWeek = {
          'left': `${initialLeftOffset + additionalLeftPixels}px`,
          'width': `${widthPixelsWeek}px`,
          'top': `${topPixels}px`
        };
- 
+
        //Style for months
        const taskMonthInfo = this.getMonthWeekInfo(task.date);
        const topPixelsMonth = (taskMonthInfo.weekIndex * 100) + (monitorIndex * taskMonthInfo.totalWeeks * 100);
- 
+
        const styleMonth = {
          'left': styleWeek.left,
          'width': styleWeek.width,
          'top': `${topPixelsMonth}px`
        };
- 
+
        //Background color of block tasks
        if (task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed') {
          style['background-color'] = task.color;
          styleWeek['background-color'] = task.color;
          styleMonth['background-color'] = task.color;
        }
- 
+
        return {
          ...task,
          style,
@@ -1542,9 +1542,9 @@ export class MonitorDetailComponent {
          class: `task-${task.type}`
        };
      });
- 
+
      this.plannerTasks = plannerTasks;
- 
+
      console.log('Planner Tasks:', this.plannerTasks);
    }
 

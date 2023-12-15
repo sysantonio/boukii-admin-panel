@@ -266,7 +266,7 @@ export class CourseDetailComponent implements OnInit {
           this.groupedByColor[level.color].push(level);
         });
 
-        this.colorKeys = Object.keys(this.groupedByColor).reverse();
+        this.colorKeys = Object.keys(this.groupedByColor);
       })
   }
 

@@ -14,10 +14,13 @@ export class CoursesComponent {
 
   showDetail: boolean = false;
   detailData: any;
-  imageAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  selectedLevel: any;
   imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
-
+  selectedGroup: any = [];
+  monitors: any = [];
   groupedByColor = {};
+  user:any;
+  imageAvatar = '../../../assets/img/avatar.png';
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
   createComponent = CoursesCreateUpdateComponent;
@@ -40,6 +43,8 @@ export class CoursesComponent {
   ];
 
   constructor(private crudService: ApiCrudService, private router: Router) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.getMonitors();
   }
 
   showDetailEvent(event: any) {
@@ -59,7 +64,7 @@ export class CoursesComponent {
           });
 
 
-           this.detailData.degrees.reverse().forEach(level => {
+           this.detailData.degrees.forEach(level => {
             if (!this.groupedByColor[level.color]) {
               this.groupedByColor[level.color] = [];
             }
@@ -78,7 +83,7 @@ export class CoursesComponent {
             this.groupedByColor[level.color].push(level);
           });
 
-          this.colorKeys = Object.keys(this.groupedByColor).reverse();
+          this.colorKeys = Object.keys(this.groupedByColor);
         });
 
         this.crudService.list('/stations', 1, 1000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
@@ -120,6 +125,22 @@ export class CoursesComponent {
     }
 
     return formattedDuration.trim();
+  }
+
+  getMonitors() {
+    this.crudService.list('/monitors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((monitor) => {
+        this.monitors = monitor.data;
+      })
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
+    }
   }
 
   getStudents(levelId: any) {
@@ -189,5 +210,22 @@ export class CoursesComponent {
 
   goTo(route: string) {
     this.router.navigate([route]);
+  }
+
+
+  selectGroup(level: any) {
+    this.selectedLevel = level;
+    this.detailData.course_dates[0].course_groups.forEach(group => {
+      if (group.degree_id === level.id) {
+        this.selectedGroup = group;
+      }
+    });
+
+    this.selectedGroup.course_subgroups.forEach(element => {
+      this.crudService.list('/booking-users', 1, 1000, 'asc', 'id', '&course_subgroup_id=' + element.id)
+        .subscribe((data) => {
+          element.totalUsers = data.data.length;
+        })
+    });
   }
 }

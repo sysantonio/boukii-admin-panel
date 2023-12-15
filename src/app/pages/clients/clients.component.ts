@@ -34,6 +34,7 @@ export class ClientsComponent {
   constructor(private crudService: ApiCrudService, private router: Router) {}
 
   columns: TableColumn<any>[] = [
+    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Nombre', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Apellido', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Edad', property: 'birth_date', type: 'birth', visible: true, cssClasses: ['font-medium'] },

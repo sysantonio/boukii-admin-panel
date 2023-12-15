@@ -671,7 +671,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               course_date_id: item.course_date_id,
               monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
               hour_start: item.hour_start,
-              hour_end: null, //calcular en base a la duracion del curso
+              hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
               price: parseFloat(price),
               currency: item.currency,
               paxes: item.paxes,
@@ -689,7 +689,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             course_date_id: item.course_date_id,
             monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
             hour_start: item.hour_start,
-            hour_end: null, //calcular en base a la duracion del curso
+            hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
             price: parseFloat(item.price),
             currency: item.currency,
             course: this.selectedItem,

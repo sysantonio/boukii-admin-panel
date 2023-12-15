@@ -413,18 +413,19 @@ ngAfterViewInit() {
 
     } else {
       minHour = data[0].hour_start;
-      maxHour = data[0].hour_end;
+      maxHour = data[0].hour_end.replace(':00', '');
 
       data.forEach(item => {
         if (item.hour_start < minHour) {
           minHour = item.hour_start;
         }
         if (item.hour_end > maxHour) {
-          maxHour = item.hour_end;
+          maxHour = item.hour_end.replace(':00', '');
         }
       });
     }
 
+    minHour = minHour.replace(':00', '');
 
     return { minHour, maxHour };
   }

@@ -164,7 +164,7 @@
 
                       <div style="width: 100%;float:left;">
 
-                        <ng-container *ngFor="let colorKey of colorKeys">
+                        <ng-container *ngFor="let colorKey of colorKeys.reverse()">
 
                           <div  *ngFor="let groupLevel of groupedByColor[colorKey]; let groupIndex = index">
                             <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true"></i>

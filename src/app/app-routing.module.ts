@@ -161,6 +161,10 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+  },
+  {
+    path: 'recover-password/:token',
+    loadChildren: () => import('./pages/recover-password/recover-password.module').then(m => m.RecoverPasswordModule),
   }
 ];
 

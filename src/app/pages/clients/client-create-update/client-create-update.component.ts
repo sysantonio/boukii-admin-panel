@@ -119,8 +119,7 @@ export class ClientCreateUpdateComponent implements OnInit {
       name: ['', Validators.required],
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      username: [''],
-      password: ['', [Validators.minLength(6), this.passwordValidator]],
+      username: ['']
 
     });
 
@@ -330,7 +329,7 @@ export class ClientCreateUpdateComponent implements OnInit {
         sport.data.forEach((element, idx) => {
           this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data.reverse();
+            this.schoolSports[idx].degrees = data.data;
           });
         });
       })

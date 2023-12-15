@@ -506,7 +506,7 @@ export class SettingsComponent implements OnInit {
     this.sportsList.forEach((element, idx) => {
       this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.school.id + '&sport_id='+element)
         .subscribe((data) => {
-          this.schoolSports[idx].degrees = data.data.reverse();
+          this.schoolSports[idx].degrees = data.data;
           this.selectedSport = this.schoolSports[0].id;
         });
     });

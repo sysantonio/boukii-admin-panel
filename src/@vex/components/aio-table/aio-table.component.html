@@ -128,7 +128,7 @@
           </ng-container>
         </ng-container>
 
-        <!-- Booking users image Columns -->
+        <!-- Booking users dates Columns -->
 
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'booking_dates'" [matColumnDef]="column.property">
@@ -136,7 +136,7 @@
             <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell>
               <!--Jours {{ getMinMaxDates(data[i].bookingusers).days}}<br>-->
               <strong>{{ getMinMaxDates(data[i].bookingusers).minDate | date: 'dd/MM/YYYY'}}<br>{{ getMinMaxDates(data[i].bookingusers).maxDate| date: 'dd/MM/YYYY' }}</strong><br>
-              {{getMinMaxHours(data[i].bookingusers).minHour}} - {{getMinMaxHours(data[i].bookingusers).maxHour}}
+              {{getMinMaxHours(data[i].bookingusers).minHour }}h - {{getMinMaxHours(data[i].bookingusers).maxHour}}h
             </td>
           </ng-container>
         </ng-container>

@@ -142,7 +142,8 @@ export class CourseUserTransferComponent implements OnInit {
         currency: element.currency,
         price: element.price,
         monitor_id: element.monitor_id,
-        school_id: this.user.schools[0].id
+        school_id: this.user.schools[0].id,
+        degree_id: this.subGroupsToChange.degree_id
       }
       this.crudService.update('/booking-users', data, element.id)
         .subscribe((data) => {
