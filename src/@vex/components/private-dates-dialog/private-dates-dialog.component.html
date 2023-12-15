@@ -4,7 +4,7 @@
     <label for="dateFrom">Date de Début</label>
 
     <mat-form-field>
-      <input id="dateFrom" matInput [matDatepicker]="picker"[(ngModel)]="selectedDateFrom" [min]="today" [max]="data.toDate">
+      <input id="dateFrom" matInput [matDatepicker]="picker"[(ngModel)]="selectedDateFrom" [min]="data.minDate" [max]="data.maxDate">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker [startAt]="today"></mat-datepicker>
     </mat-form-field>
@@ -14,7 +14,7 @@
     <label for="DateTo">Date de fin</label>
 
     <mat-form-field>
-      <input id="DateTo" matInput [matDatepicker]="pickerTo" [(ngModel)]="selectedDateTo" [min]="selectedDateFrom" [max]="data.toDate">
+      <input id="DateTo" matInput [matDatepicker]="pickerTo" [(ngModel)]="selectedDateTo" [min]="selectedDateFrom" [max]="data.maxDate">
       <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
       <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
     </mat-form-field>

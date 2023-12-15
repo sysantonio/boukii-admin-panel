@@ -202,6 +202,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   schoolData: any = [];
   schoolPriceRanges: any = [];
   season: any = [];
+  holidays: any = [];
+
+  myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
       private schoolService: SchoolService, private snackbar: MatSnackBar) {
@@ -274,6 +277,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
             this.minDate = moment(this.season.start_date, 'YYYY-MM-DD').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'YYYY-MM-DD').toDate() : this.minDate;
             this.maxDate = moment(this.season.end_date).toDate();
+
+            this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
+
+            this.holidays.forEach(element => {
+              this.myHolidayDates.push(moment(element).toDate());
+            });
           });
         this.schoolPriceRanges = JSON.parse(data.data.settings).prices_range;
         this.people = this.schoolPriceRanges.people ? this.schoolPriceRanges.people : 6;
@@ -694,9 +703,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
+  myHolidayFilter = (d: Date): boolean => {
+    if (d !== null) {
+
+      const time=d.getTime();
+      return !this.myHolidayDates.find(x=>x.getTime()==time);
+    }
+  }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
+      data: {minDate: this.minDate, maxDate: this.maxDate}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -740,7 +758,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       width: '300px',
       data: {
         iterations: this.dataSource.data.length,
-        dateFrom: this.minDate
+        minDate: this.minDate,
+        maxDate: this.maxDate
       }
     });
 

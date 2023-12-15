@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'vex-date-time-dialog',
@@ -16,7 +17,7 @@ export class DateTimeDialogComponent implements OnInit {
   selectedDuration: any;
   selectedDate: Date;
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data) { }
 
   ngOnInit(): void {
     this.generateDurations();
