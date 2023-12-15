@@ -26,123 +26,6 @@ export class TimelineComponent {
     { id: 3, name: 'Michael Brown' },
     { id: 4, name: 'Sarah Johnson' },
   ];
-  tasksCalendar: any[] = [
-    {date:'2023-11-13',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-13',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-16',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-16',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-19',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-19',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-22',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-22',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-27',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-27',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-03',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-03',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-07',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-07',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-12',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-12',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-18',hour_start:'09:30',hour_end:'11:00',type:'collective',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-18',hour_start:'11:30',hour_end:'13:30',type:'private',monitor:1,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-
-    {date:'2023-11-14',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-11-14',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-14',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-11-19',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-11-19',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-19',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-11-23',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-11-23',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-23',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-11-29',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-11-29',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-29',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-12-04',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-12-04',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-04',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-12-10',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-12-10',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-10',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-12-14',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-12-14',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-14',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-    {date:'2023-12-19',hour_start:'08:00',hour_end:'09:00',type:'block',monitor:2,title:'Blocage personnelle'},
-    {date:'2023-12-19',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:2,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-19',hour_start:'12:00',hour_end:'13:00',type:'other',monitor:2,title:'Événement ou activité'},
-
-    {date:'2023-11-13',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-13',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-13',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-11-18',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-18',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-18',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-11-22',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-22',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-22',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-11-28',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-28',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-28',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-12-02',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-02',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-02',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-12-06',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-06',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-06',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-12-10',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-10',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-10',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-12-18',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-18',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-18',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-12-23',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-23',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-23',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-    {date:'2023-12-26',hour_start:'11:00',hour_end:'12:00',type:'private',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-26',hour_start:'09:00',hour_end:'11:00',type:'collective',monitor:3,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-26',hour_start:'13:00',hour_end:'16:00',type:'block',monitor:3,title:'Blocage personnelle'},
-
-    {date:'2023-11-14',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-11-14',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-14',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-11-14',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-14',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-11-19',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-11-19',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-19',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-11-19',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-19',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-11-24',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-11-24',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-24',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-11-24',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-24',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-11-29',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-11-29',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-29',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-11-29',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-11-29',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-12-02',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-12-02',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-02',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-12-02',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-02',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-12-09',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-12-09',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-09',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-12-09',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-09',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-12-14',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-12-14',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-14',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-12-14',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-14',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-    {date:'2023-12-19',hour_start:'08:00',hour_end:'10:00',type:'block',monitor:4,title:'Blocage personnelle'},
-    {date:'2023-12-19',hour_start:'10:00',hour_end:'11:00',type:'private',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-19',hour_start:'11:00',hour_end:'13:00',type:'block-payed',monitor:4,title:'Blocage payant'},
-    {date:'2023-12-19',hour_start:'13:00',hour_end:'14:00',type:'collective',monitor:4,title:'Classes de ski / Dimanches Lève-tôt / dès 5 ans'},
-    {date:'2023-12-19',hour_start:'14:00',hour_end:'15:00',type:'other',monitor:4,title:'Événement ou activité'},
-  ];
 
   tasksCalendarStyle: any[];
   filteredTasks: any[];
@@ -379,7 +262,7 @@ export class TimelineComponent {
     );
   }
 
-  normalizeToArray(data) {
+  normalizeToArray(data:any) {
     //Nwds sometimes as object sometimes as array
     if (Array.isArray(data)) {
       return data;
@@ -577,7 +460,6 @@ export class TimelineComponent {
         } else if (nwd.user_nwd_subtype_id === 3) {
             type = 'block_no_payed';
         } else {
-            // Default case if needed
             type = 'unknown'; 
         }
         const hourTimesNwd = nwd.full_day ? {
@@ -613,7 +495,6 @@ export class TimelineComponent {
 
     this.calculateTaskPositions(tasksCalendar);
 
-    // Additional processing if needed...
     console.log(this.allMonitors);
     console.log(this.filteredMonitors);
     console.log(allBookings);
@@ -1169,13 +1050,5 @@ export class TimelineComponent {
 
     this.applyFilters();
   }
-
-  scrollToTop() {
-    const element = document.querySelector('.hours-container');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
 
 }
