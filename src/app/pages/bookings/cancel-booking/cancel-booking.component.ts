@@ -1,0 +1,75 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, map, startWith } from 'rxjs';
+import { ApiCrudService } from 'src/service/crud.service';
+
+@Component({
+  selector: 'vex-cancel-booking',
+  templateUrl: './cancel-booking.component.html',
+  styleUrls: ['./cancel-booking.scss']
+})
+export class CancelBookingModalComponent implements OnInit {
+
+  loading = true;
+  selectedBonus = [];
+  unifyBonus = false;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar,
+    private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>) {
+
+  }
+
+  ngOnInit(): void {
+
+   this.loading = false;
+  }
+
+
+  getCurrentUse(bonus: any) {
+    let ret = 0;
+    this.defaults.currentBonusLog.forEach(element => {
+      if (element.voucher_id === bonus.bonus.id) {
+        ret = parseFloat(element.amount);
+      }
+    });
+
+    return ret;
+  }
+
+  calculateCurrentPriceReducingItem(item) {
+    let ret = this.defaults.itemPrice;
+    this.defaults.currentBonus.forEach(element => {
+      if (element.bonus.id !== item.bonus.id) {
+        ret = ret - element.bonus.currentPay;
+      }
+
+    });
+
+    return item.bonus.currentPay >= ret;
+  }
+
+  checkBonus(event, item) {
+    if (event.source.checked) {
+      this.selectedBonus.push(item);
+    } else {
+      const index = this.selectedBonus.findIndex((b) => b.id === item.bonus.id);
+      this.selectedBonus.splice(index, 1);
+    }
+  }
+
+  calculateAllRemainingQuantity() {
+    let ret = 0;
+    if (this.selectedBonus.length > 0) {
+      this.selectedBonus.forEach(element => {
+        ret = ret + parseFloat(element.bonus.currentPay);
+      });
+    } else {
+      return false;
+    }
+
+    return ret >= this.defaults.itemPrice;
+  }
+
+}

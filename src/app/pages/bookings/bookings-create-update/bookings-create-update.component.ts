@@ -652,7 +652,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 subgroup_id: subgroupId,
                 hour_start: item.hour_start,
                 hour_end: item.hour_end,
-                price: +this.selectedItem.price,
+                price: parseFloat(this.selectedItem.price),
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
                 date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
@@ -672,7 +672,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
               hour_start: item.hour_start,
               hour_end: null, //calcular en base a la duracion del curso
-              price: price,
+              price: parseFloat(price),
               currency: item.currency,
               paxes: item.paxes,
               course: this.selectedItem,
@@ -690,7 +690,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
             hour_start: item.hour_start,
             hour_end: null, //calcular en base a la duracion del curso
-            price: +item.price,
+            price: parseFloat(item.price),
             currency: item.currency,
             course: this.selectedItem,
             date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
@@ -736,7 +736,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
       data = {
         price_total: this.finalPrice,
         has_cancellation_insurance: this.defaults.has_cancellation_insurance,
-        price_cancellation_insurance: this.defaults.has_cancellation_insurance ? element.price_total * 0.10 : 0,
+        has_boukii_care: this.defaults.has_boukii_care,
+        price_boukii_care: this.defaults.has_boukii_care ? this.defaults.price_boukii_care : 0,
+        price_cancellation_insurance: this.defaults.has_cancellation_insurance ? this.defaults.price_cancellation_insurance : 0,
         currency: element.currency,
         paid_total: element.paid_total,
         paid: element.paid,
@@ -1517,15 +1519,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
-  getBoukiiCare() {
-    return this.defaults.has_boukii_care ? this.getBasePrice() * 0.10 : 0;
-  }
-
-  getOpRemPrice() {
-    return this.defaults.has_cancellation_insurance ? this.getBasePrice() * 0.10 : 0;
-  }
-
-
   getAvailableWeekDays(settings: any) {
     if (settings !== null) {
       const data = typeof settings === 'string' ? JSON.parse(settings) : settings;
@@ -1562,7 +1555,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let ret = 0;
 
     this.bookingsToCreate.forEach(element => {
-      ret = ret + (element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 1 ? element.price_total * element.courseDates.length : element.price_total);
+      ret = ret + ((element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 1)
+        || (!element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 2)
+      ? element.price_total * element.courseDates.length : element.price_total);
     });
 
     return ret;

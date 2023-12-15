@@ -21,13 +21,13 @@
                   [allowEmptyString]="true"
                   [ariaLabel]="'QR Code image with the following content...'"
                   [cssClass]="'center'"
-                  [colorDark]="'#000000ff'"
+                  [colorDark]="'#808080'"
                   [colorLight]="'#ffffffff'"
-                  [elementType]="'svg'"
+                  [elementType]="'canvas'"
                   [errorCorrectionLevel]="'H'"
-                  [imageSrc]="'./assets/angular-logo.png'"
-                  [imageHeight]="75"
-                  [imageWidth]="75"
+                  [imageSrc]="'../../../../assets/img/10.png'"
+                  [imageHeight]="25"
+                  [imageWidth]="25"
                   [margin]="4"
                   [scale]="4"
                   [title]="'A custom title attribute'"
@@ -37,8 +37,6 @@
             </div>
 
             <mat-card-header>
-
-
               <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI, bookingsToCreate)">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
@@ -261,7 +259,7 @@
               <ng-container *ngIf="bonus.length > 0">
 
                 <span style="width: 100%; float:left" *ngFor="let item of bonus; let i = index">
-                  <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"></mat-icon>
+                  <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" *ngIf="!item?.bonus?.before"></mat-icon>
                   <p style="float:left">Bonus {{item?.bonus?.code}}</p>
                   <p style="float:right">-{{item?.bonus.before ? item?.bonus?.currentPay : item?.bonus?.reducePrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </span>

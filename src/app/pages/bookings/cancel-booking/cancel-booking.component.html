@@ -1,0 +1,52 @@
+<form >
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Anular reserva parcial</h2>
+
+    <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+      <mat-icon svgIcon="mat:more_vert"></mat-icon>
+    </button>-->
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="text-border"></mat-divider>
+
+  <mat-dialog-content class="flex flex-col" *ngIf="!loading">
+    <div style="width: 100%;">
+      <p>Está a punto de cancelar una reserva. Elija los bonos que quieren devolverse:</p>
+      <div style="float:left; width: 100%">
+        <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="calculateAllRemainingQuantity()"
+         style="float:left;width: 100%">{{item.bonus.code}}: {{getCurrentUse(item)}} {{defaults.booking.currency}}
+          <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">Fully applied</span>
+          <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #FEE6C6;">Partially applied</span>
+        </mat-checkbox>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div style="width: 100%;">
+      <p>O devuelva todos los importes del bono en uno unificado:</p>
+      <div style="float:left; width: 100%">
+        <mat-radio-group [(ngModel)]="unifyBonus" [ngModelOptions]="{standalone: true}">
+          <mat-radio-button [value]="true">
+            Si
+          </mat-radio-button>
+          <mat-radio-button [value]="false">
+            No
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end"  *ngIf="!loading">
+    <button color="primary" mat-flat-button >Confirmer</button>
+    <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+  </mat-dialog-actions>
+</form>
