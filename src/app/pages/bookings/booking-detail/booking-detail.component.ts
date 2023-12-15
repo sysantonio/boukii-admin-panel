@@ -21,6 +21,7 @@ import { AddReductionModalComponent } from '../bookings-create-update/add-reduct
 import { ActivatedRoute } from '@angular/router';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { SchoolService } from 'src/service/school.service';
+import { CancelBookingModalComponent } from '../cancel-booking/cancel-booking.component';
 
 @Component({
   selector: 'vex-booking-detail',
@@ -179,6 +180,7 @@ export class BookingDetailComponent implements OnInit {
   finalPrice: any = null;
   finalPriceNoTaxes: any = null;
   bonus: any = [];
+  currentBonus: any = [];
   bonusLog: any = [];
   totalPrice: any = 0;
   booking: any;
@@ -241,11 +243,12 @@ export class BookingDetailComponent implements OnInit {
             if(vl.data.length > 0) {
               this.bonusLog = vl.data;
               vl.data.forEach(voucherLog => {
-                this.crudService.get('/vouchers/'+voucherLog.id)
+                this.crudService.get('/vouchers/'+voucherLog.voucher_id)
                   .subscribe((v) => {
                     v.data.currentPay = parseFloat(voucherLog.amount);
                     v.data.before = true;
                     this.bonus.push({bonus: v.data});
+                    this.currentBonus.push({bonus: v.data});
                   })
               });
             }
@@ -1185,10 +1188,10 @@ export class BookingDetailComponent implements OnInit {
   deleteBooking(index: number, data: any) {
 
 
-    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+    const dialogRef = this.dialog.open(CancelBookingModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: data[index].price_total, booking: this.booking}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

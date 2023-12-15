@@ -14,37 +14,13 @@ import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-cli
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
-import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
-import { MatStepperModule } from '@angular/material/stepper';
-import {MatChipsModule} from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BookingsCreateUpdateModalModule } from '../bookings-create-update-modal/bookings-create-update-modal.module';
+import { CancelBookingModalComponent } from './cancel-booking.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { DateAdapter } from 'angular-calendar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AddReductionModalModule } from '../bookings-create-update/add-reduction/add-reduction.module';
-import { AddDiscountBonusModalModule } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.module';
-import { BookingDetailComponent } from './booking-detail.component';
-import { CustomDateAdapter } from '../bookings-create-update/bookings-create-update.component';
-import { QRCodeModule } from 'angularx-qrcode';
-import { CancelBookginModalModule } from '../cancel-booking/cancel-booking.module';
-
-export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @NgModule({
   imports: [
@@ -69,26 +45,11 @@ export const MY_DATE_FORMATS = {
     MatListModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    SecondaryToolbarModule,
-    BreadcrumbsModule,
-    MatStepperModule,
-    MatChipsModule,
     MatSlideToggleModule,
-    MatDialogModule,
-    BookingsCreateUpdateModalModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule,
-    AddReductionModalModule,
-    AddDiscountBonusModalModule,
-    QRCodeModule,
-    CancelBookginModalModule
-
+    MatCheckboxModule
   ],
-  declarations: [BookingDetailComponent],
-  exports: [BookingDetailComponent],
-  providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter }
-  ],
+  declarations: [CancelBookingModalComponent],
+  exports: [CancelBookingModalComponent]
 })
-export class BookingDetailModule {
+export class CancelBookginModalModule {
 }

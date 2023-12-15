@@ -189,6 +189,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
       reader.onload = () => {
         this.imagePreviewUrl = reader.result;
+        this.defaults.image = reader.result;
       };
 
       reader.readAsDataURL(file);

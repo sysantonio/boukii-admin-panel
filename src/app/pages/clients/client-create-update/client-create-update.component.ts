@@ -186,6 +186,7 @@ export class ClientCreateUpdateComponent implements OnInit {
 
       reader.onload = () => {
         this.imagePreviewUrl = reader.result;
+        this.defaults.image = reader.result;
       };
 
       reader.readAsDataURL(file);
@@ -399,7 +400,7 @@ export class ClientCreateUpdateComponent implements OnInit {
                 setTimeout(() => {
                   this.router.navigate(['/clients']);
 
-                }, 3000);
+                }, 500);
               })
           })
       })
