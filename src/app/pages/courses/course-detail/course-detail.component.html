@@ -172,8 +172,9 @@
                             <i class="fa fa-close" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = false"></i>
 
                             <div style="float: left; width: 100%;margin-top:3%">
-                              <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;">
-                                <mat-slide-toggle (change)="activeGroup($event, groupLevel)" [checked]="groupLevel.active"></mat-slide-toggle>
+                              <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;"
+                                  [title]="disableActive(groupLevel) ? 'Este grupo no puede eliminarse porque tiene reservas asociadas' : ''">
+                                <mat-slide-toggle (change)="activeGroup($event, groupLevel)" [disabled]="disableActive(groupLevel)" [checked]="groupLevel.active"></mat-slide-toggle>
                               </div>
                               <div style="float: left;width: 16%;">
                                 <div style="width:100%;text-align: center;border-radius:10px;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
@@ -254,7 +255,9 @@
                                     <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
                                       <div>
                                         <ul style="display: flex">
-                                          <li style="float: left; width: 20%;font-size: 18px" >
+                                          <li style="float: left; width: 20%;font-size: 14px" >
+                                            <mat-icon svgIcon="mat:delete" style="color:red;cursor: pointer;float:left;" (click)="deleteSubGroup(subGroup)"></mat-icon>
+
                                             <span [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong> - {{groupLevel.name}} - {{ subGroupIndex + 1 }}</span>
                                           </li>
                                           <li *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;"

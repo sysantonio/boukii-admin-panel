@@ -12,6 +12,7 @@ import { CourseUserTransferComponent } from '../course-user-transfer/course-user
 import { MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'vex-course-detail',
@@ -230,6 +231,28 @@ export class CourseDetailComponent implements OnInit {
     });
   }
 
+  deleteSubGroup(subgroup) {
+    if (subgroup.booking_users.length < 0) {
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+        panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+        data: {message: 'Do you want to remove this subgroup? This action will be permanetly', title: 'Delete subgroup'}
+      });
+
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          this.crudService.delete('/course-subgroups', subgroup.id)
+            .subscribe(() => {
+              this.snackbar.open('Grupo eliminado correctamente', 'OK', {duration: 3000})
+            })
+        }
+      });
+    } else {
+      this.snackbar.open('Este subgrupo tiene reserva asociadas y no puede ser eliminado', 'OK', {duration: 3000});
+    }
+
+  }
+
 
   //NIVELES
 
@@ -308,13 +331,12 @@ export class CourseDetailComponent implements OnInit {
 
   activeGroup(event: any, level: any) {
 
-    this.selectedItem = this.daysDatesLevels[0].dateString;
-    this.selectedDate = this.defaults.course_dates[0]?.date;
-    level.active = event.source.checked;
-    level.visible = event.source.checked;
-
-
     if(event.source.checked) {
+      this.selectedItem = this.daysDatesLevels[0].dateString;
+      this.selectedDate = this.defaults.course_dates[0]?.date;
+      level.active = event.source.checked;
+      level.visible = event.source.checked;
+
       this.defaults.course_dates.forEach(element => {
         element.groups.push(this.generateGroups(level));
       });
@@ -344,18 +366,92 @@ export class CourseDetailComponent implements OnInit {
     } else {
       // eliminar el curso o desactivarlo
 
-      this.defaults.course_dates.forEach((element) => {
-        element.groups.forEach((group, idx) => {
+      let hasBookings = false;
+      const groupsToDelete = [];
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
           if (group.degree_id === level.id) {
-            element.groups.splice(idx, 1);
-
+            groupsToDelete.push(group.id)
           }
         });
       });
 
+      groupsToDelete.forEach(element => {
+        if (!hasBookings) {
+          this.defaults.course_dates.forEach(cs => {
+            cs.groups.forEach(gs => {
+              if (gs.degree_id === level.id) {
 
+                if (groupsToDelete.find((g) => g === gs.id)) {
+                  gs.subgroups.forEach(sgs => {
+                    if (sgs.booking_users.length > 0) {
+                      hasBookings = true;
+                    }
+                  });
+                }
+              }
+            });
+          });
+        }
+
+      });
+
+      if (!hasBookings) {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+          maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+          panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+          data: {message: 'Do you want to remove this group? This action will be permanetly', title: 'Delete group'}
+        });
+
+        dialogRef.afterClosed().subscribe((data: any) => {
+          if (data) {
+            groupsToDelete.forEach(element => {
+              this.crudService.delete('/course-groups', element)
+                .subscribe(() => {
+                  this.snackbar.open('Grupo eleiminado correctamente', 'OK', {duration: 3000});
+                })
+            });
+          }
+        });
+      } else {
+        this.snackbar.open('Este grupo tiene reserva asociadas y no puede ser eliminado', 'OK', {duration: 3000});
+      }
     }
 
+  }
+
+  disableActive(level: any) {
+    let hasBookings = false;
+      const groupsToDelete = [];
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (group.degree_id === level.id) {
+            groupsToDelete.push(group.id)
+          }
+        });
+      });
+
+      groupsToDelete.forEach(element => {
+        if (!hasBookings) {
+          this.defaults.course_dates.forEach(cs => {
+            cs.groups.forEach(gs => {
+              if (gs.degree_id === level.id) {
+
+                if (groupsToDelete.find((g) => g === gs.id)) {
+                  gs.subgroups.forEach(sgs => {
+                    if (sgs.booking_users.length > 0) {
+                      hasBookings = true;
+                    }
+                  });
+                }
+              }
+            });
+          });
+        }
+
+      });
+
+      return hasBookings;
   }
 
   addSubGroup(level: any) {
