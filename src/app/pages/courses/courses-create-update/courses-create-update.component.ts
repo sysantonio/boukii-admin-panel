@@ -1343,6 +1343,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
       return ret;
     }
 
+  checkIfExistInDate(daySelectedIndex, monitor, level) {
+
+    let blocked = false;
+    this.defaults.course_dates[daySelectedIndex].groups.forEach(gs => {
+      if (!blocked) {
+        gs.subgroups.forEach(sbs => {
+          if (sbs.monitor_id === monitor.id) {
+            blocked = true;
+          }
+        });
+      }
+
+    });
+
+    return blocked;
+  }
+
   setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
 
     let monitorSet = false;
@@ -1365,6 +1382,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.subgroups[subGroupSelectedIndex].monitor = monitor;
+            group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
           }
 
         });

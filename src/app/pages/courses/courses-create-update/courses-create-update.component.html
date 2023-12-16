@@ -1136,10 +1136,12 @@
                                     <mat-form-field class="flex-auto">
                                       <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
-                                        <mat-option *ngFor="let monitor of filteredMonitors | async"
+                                        <ng-container  *ngFor="let monitor of filteredMonitors | async">
+                                        <mat-option *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
                                           (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
                                           {{monitor?.first_name}} {{monitor?.last_name}}
                                         </mat-option>
+                                      </ng-container>
                                       </mat-autocomplete>
                                       <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
                                     </mat-form-field>
