@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, map, startWith } from 'rxjs';
@@ -16,6 +16,10 @@ export class CancelBookingModalComponent implements OnInit {
   selectedBonus = [];
   unifyBonus = false;
 
+  noRefundForm: FormGroup;
+  refundForm: FormGroup;
+  bonusForm: FormGroup;
+
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar,
     private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>) {
 
@@ -23,6 +27,9 @@ export class CancelBookingModalComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.refundForm = this.fb.group({
+      reason: ['', Validators.required]
+    })
    this.loading = false;
   }
 

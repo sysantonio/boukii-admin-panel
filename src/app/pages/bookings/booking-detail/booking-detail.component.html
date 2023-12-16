@@ -8,7 +8,7 @@
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " >Anular reserva totalmente</button>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; "  (click)="deleteBooking(bookingsToCreate)">Anular reserva totalmente</button>
 
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
@@ -37,7 +37,7 @@
             </div>
 
             <mat-card-header>
-              <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI, bookingsToCreate)">
+              <button mat-icon-button color="warn" class="delete-icon">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>

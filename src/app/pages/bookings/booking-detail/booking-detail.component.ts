@@ -1185,22 +1185,21 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
-  deleteBooking(index: number, data: any) {
+  deleteBooking(data: any) {
 
 
     const dialogRef = this.dialog.open(CancelBookingModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: data[index].price_total, booking: this.booking}
+      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: this.booking.price_total, booking: this.booking}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.delete('/booking-users', data.id)
+        this.crudService.delete('/booking', this.id)
           .subscribe(() => {
-            this.bookingsToCreate.splice(index, 1);
-            this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+            this.snackbar.open('Booking deleted', 'OK', {duration: 3000});
           })
       }
     });

@@ -21,6 +21,8 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-mat
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CancelBookingModalComponent } from './cancel-booking.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
@@ -46,7 +48,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     MatSlideToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatStepperModule,
+    MatTabsModule
   ],
   declarations: [CancelBookingModalComponent],
   exports: [CancelBookingModalComponent]
