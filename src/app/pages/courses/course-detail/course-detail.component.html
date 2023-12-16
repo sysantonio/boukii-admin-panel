@@ -158,7 +158,7 @@
             <mat-card-content style="margin-top: 5%;">
               <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;border-radius: 0;height: 50px;margin: 0 0 1% 0;float: right;" (click)="save()">Guardar Cambios</button>
 
-              <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;">
+              <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;" *ngIf="!loading">
                 <div @fadeInUp class="card flex-auto">
                   <mat-card style="padding: 0 3%;">
                     <mat-card-content style="margin-top: 5%;">
@@ -190,7 +190,7 @@
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
-                                  Grupos {{defaults.course_dates[0].groups[groupIndex].subgroups.length}}g
+                                  Grupos {{defaults?.course_dates[0]?.groups[groupIndex]?.subgroups.length}}g
                                 </div>
                                 <div style="width: 100%; margin-top: 10%;height: 60px">
                                   <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
@@ -280,10 +280,13 @@
 
                                               <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                               <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
-                                                <mat-option *ngFor="let monitor of filteredMonitors | async"
-                                                  (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
-                                                  {{monitor && monitor?.first_name ? monitor?.first_name : '' }} {{monitor && monitor?.last_name ? monitor?.last_name : ''}}
-                                                </mat-option>
+
+                                                <ng-container *ngFor="let monitor of filteredMonitors | async">
+                                                  <mat-option *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
+                                                    (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
+                                                    {{monitor && monitor?.first_name ? monitor?.first_name : '' }} {{monitor && monitor?.last_name ? monitor?.last_name : ''}}
+                                                  </mat-option>
+                                                </ng-container>
                                               </mat-autocomplete>
                                               <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
                                             </mat-form-field>

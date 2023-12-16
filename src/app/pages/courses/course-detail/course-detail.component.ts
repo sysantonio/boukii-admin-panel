@@ -420,6 +420,23 @@ export class CourseDetailComponent implements OnInit {
 
   }
 
+  checkIfExistInDate(daySelectedIndex, monitor, level) {
+
+    let blocked = false;
+    this.defaults.course_dates[daySelectedIndex].groups.forEach(gs => {
+      if (!blocked) {
+        gs.subgroups.forEach(sbs => {
+          if (sbs.monitor_id === monitor.id) {
+            blocked = true;
+          }
+        });
+      }
+
+    });
+
+    return blocked;
+  }
+
   disableActive(level: any) {
     let hasBookings = false;
       const groupsToDelete = [];
@@ -439,7 +456,7 @@ export class CourseDetailComponent implements OnInit {
 
                 if (groupsToDelete.find((g) => g === gs.id)) {
                   gs.subgroups.forEach(sgs => {
-                    if (sgs.booking_users.length > 0) {
+                    if (sgs.booking_users && sgs.booking_users.length > 0) {
                       hasBookings = true;
                     }
                   });
@@ -600,6 +617,7 @@ export class CourseDetailComponent implements OnInit {
         this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.subgroups[subGroupSelectedIndex].monitor = monitor;
+            group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
           }
 
         });
