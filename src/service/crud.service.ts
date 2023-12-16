@@ -24,8 +24,7 @@ export class ApiCrudService extends ApiService {
   }
 
   get(url: string) {
-    return this.http.get<ApiResponse>(this.baseUrl + url,
-      { headers: this.getHeaders()});
+    return this.http.get<ApiResponse>(this.baseUrl + url, { headers: this.getHeaders()});
   }
 
   getAll(url: string) {

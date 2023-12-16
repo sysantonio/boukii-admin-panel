@@ -968,7 +968,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
             this.levels.push(element);
           }
         });
-        this.levels.reverse().forEach(level => {
+        this.levels.forEach(level => {
           if (!this.groupedByColor[level.color]) {
             this.groupedByColor[level.color] = [];
           }

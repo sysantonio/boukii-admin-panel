@@ -24,7 +24,7 @@
           <div style="float: left;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>`
           <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>
-          <mat-icon style="float: right;" svgIcon="mat:edit" (click)="goTo('/courses/detail/'+detailData.id)"></mat-icon>
+          <mat-icon style="float: right;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/courses/detail/'+detailData.id)"></mat-icon>
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">
@@ -75,7 +75,7 @@
           <p><strong>Niveles / Grupos</strong></p>
 
           <ng-container *ngFor="let colorKey of colorKeys">
-            <div style="float: left; width: 100%;margin-top:3%" *ngFor="let level of groupedByColor[colorKey]" (click)="selectGroup(level)">
+            <div style="float: left; width: 100%;margin-top:3%;cursor: pointer;" *ngFor="let level of groupedByColor[colorKey]" (click)="selectGroup(level)">
               <div  style="float: left;width: 22%;border-radius: 11%;height: 110px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
                 <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;margin: 0 auto;" />
 

@@ -245,7 +245,7 @@ export class CourseDetailComponent implements OnInit {
 
           }
         });
-        this.levels.reverse().forEach(level => {
+        this.levels.forEach(level => {
           if (!this.groupedByColor[level.color]) {
             this.groupedByColor[level.color] = [];
           }

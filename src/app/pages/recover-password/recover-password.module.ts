@@ -9,6 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RecoverPasswordComponent } from './recover-password.component';
+import { RecoverPasswordRoutingModule } from './recover-password-routing.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { RecoverPasswordComponent } from './recover-password.component';
     FormsModule,
     MatTooltipModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    RecoverPasswordRoutingModule
   ]
 })
 export class RecoverPasswordModule {

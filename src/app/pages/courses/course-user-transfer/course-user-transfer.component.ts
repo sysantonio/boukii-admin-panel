@@ -132,25 +132,21 @@ export class CourseUserTransferComponent implements OnInit {
   }
 
   transferStudent() {
+    const data = {
+      initialSubgroupId: this.defaults.subgroup.id,
+      targetSubgroupId: this.subGroupsToChange.id,
+      clientIds: [],
+      moveAllDays: true
+    }
     this.studentToChange.forEach(element => {
-      const data = {
-        course_group_id: this.subGroupsToChange.course_group_id,
-        course_subgroup_id: this.subGroupsToChange.id,
-        course_date_id: this.subGroupsToChange.course_date_id,
-        booking_id: element.booking_id,
-        client_id: element.client_id,
-        currency: element.currency,
-        price: element.price,
-        monitor_id: element.monitor_id,
-        school_id: this.user.schools[0].id,
-        degree_id: this.subGroupsToChange.degree_id
-      }
-      this.crudService.update('/booking-users', data, element.id)
-        .subscribe((data) => {
-          this.snackbar.open('Alumno transferido', 'OK', {duration: 3000});
-          this.getData();
-        })
+      data.clientIds.push(element.client_id);
     });
+
+    this.crudService.post('/clients/transfer', data)
+      .subscribe((data) => {
+        this.snackbar.open('Alumno transferido', 'OK', {duration: 3000});
+        this.getData();
+      })
   }
 
   getUserInSubGroup(subgroup: any) {

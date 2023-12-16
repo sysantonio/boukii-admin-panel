@@ -81,7 +81,8 @@
                 <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.description">
                   </p>
-                  <p style="float: left;width: 50%;text-align: right;" >De {{defaults.age_min}} a {{defaults.age_max}} años</p>
+                  <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 2">De {{defaults.age_min}} a {{defaults.age_max}} años</p>
+                  <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 1">FLEX</p>
                 </div>
               </div>
 
@@ -164,7 +165,7 @@
 
                       <div style="width: 100%;float:left;">
 
-                        <ng-container *ngFor="let colorKey of colorKeys.reverse()">
+                        <ng-container *ngFor="let colorKey of colorKeys">
 
                           <div  *ngFor="let groupLevel of groupedByColor[colorKey]; let groupIndex = index">
                             <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true"></i>
