@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { AuthService } from 'src/service/auth.service';
@@ -23,14 +23,19 @@ export class RecoverPasswordComponent implements OnInit {
   visible = false;
   visibleRepeat = false;
   loading = true;
+  updated = false;
+  token: any;
 
   constructor(private router: Router,
               private fb: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
-              private crudService: ApiCrudService
+              private crudService: ApiCrudService,
+              private activatedRoute: ActivatedRoute,
+              private snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {
+    this.token = this.activatedRoute.snapshot.params.id;
 
 
     this.form = this.fb.group({
@@ -57,8 +62,10 @@ export class RecoverPasswordComponent implements OnInit {
 
   send() {
     //this.authService.login(this.form.value.email, this.form.value.password);
-    this.crudService.update('/users', {password: this.form.value.password}, 1)
+    this.crudService.post('/users', {token: this.token, password: this.form.value.password})
       .subscribe(() => {
+        this.snackbar.open('Contraseña actualizada corectamente' , 'OK', {duration: 3000});
+        this.updated = true;
         this.router.navigate(['']);
       })
   }
