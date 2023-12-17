@@ -108,17 +108,58 @@
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0;">
 
-              <div class="flex-auto" style="width: 40%">
-                <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
-                <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
-                  <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
-                    El nombre del curso es obligatorio
-                  </mat-error>
-                </mat-form-field>
-              </div>
+              <mat-tab-group style="margin-top:-50px" [(selectedIndex)]="selectedTabNameIndex" (selectedTabChange)="onTabNameChanged($event);">
+                <mat-tab label="FR">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 0">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.translations.fr.name">
+                      <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
+                        El nombre del curso es obligatorio
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="EN">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 1">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_en" matInput required type="text" [(ngModel)]="defaults.translations.en.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="DE">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 2">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_de" matInput required type="text" [(ngModel)]="defaults.translations.de.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="ES">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 3">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_es" matInput required type="text" [(ngModel)]="defaults.translations.es.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="IT">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 4">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_it" matInput required type="text" [(ngModel)]="defaults.translations.it.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+              </mat-tab-group>
 
               <div class="flex-auto" style="width: 15%">
                 <label for="courseName">Prix (CHF) <span style="color:red">(*)</span></label>
@@ -198,24 +239,70 @@
             </div>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
-              <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
-                <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
-                  Escriba un resumen
-                </mat-error>
-              </div>
-            </div>
+              <mat-tab-group style="width: 100%" [(selectedIndex)]="selectedTabDescIndex" (selectedTabChange)="onTabDesChanged($event);">
+                <mat-tab label="FR">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
+                    <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
+                      Escriba un resumen
+                    </mat-error>
+                  </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
+                    <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
+                      Escriba una descripcion
+                    </mat-error>
+                  </div>
+                </mat-tab>
+                <mat-tab label="EN">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></angular-editor>
+                  </div>
 
-              <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
-                <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
-                  Escriba una descripcion
-                </mat-error>
-              </div>
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></angular-editor>
+                  </div>
+                </mat-tab>
+                <mat-tab label="DE">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></angular-editor>
+                  </div>
+                </mat-tab>
+                <mat-tab label="ES">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></angular-editor>
+                  </div>
+                </mat-tab>
+                <mat-tab label="IT">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></angular-editor>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+
             </div>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
@@ -733,16 +820,56 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <div class="flex-auto" style="width: 40%">
-                <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
-                <mat-form-field style="width: 100%">
-                  <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.name">
-                  <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
-                    El nombre del curso es obligatorio
-                  </mat-error>
-                </mat-form-field>
-              </div>
+              <mat-tab-group style="margin-top:-50px" [(selectedIndex)]="selectedTabNameIndex" (selectedTabChange)="onTabNameChanged($event);">
+                <mat-tab label="FR">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 0">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name" matInput required type="text" [(ngModel)]="defaults.translations.fr.name">
+                      <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
+                        El nombre del curso es obligatorio
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
 
+                </mat-tab>
+                <mat-tab label="EN">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 1">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_en" matInput required type="text" [(ngModel)]="defaults.translations.en.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="DE">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 2">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_de" matInput required type="text" [(ngModel)]="defaults.translations.de.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="ES">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 3">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_es" matInput required type="text" [(ngModel)]="defaults.translations.es.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+                <mat-tab label="IT">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 4">
+                    <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
+                    <mat-form-field style="width: 100%">
+                      <input id="courseName" formControlName="course_name_it" matInput required type="text" [(ngModel)]="defaults.translations.it.name">
+                    </mat-form-field>
+                  </div>
+
+                </mat-tab>
+              </mat-tab-group>
               <div class="flex-auto" style="width: 15%">
                 <label for="price" *ngIf="defaults.is_flexible">Prix per date (CHF) <span style="color:red">(*)</span></label>
                 <label for="price" *ngIf="!defaults.is_flexible">Prix (CHF) <span style="color:red">(*)</span></label>
@@ -791,16 +918,72 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
+            </div><div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
-              <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.short_description" formControlName="summary"></angular-editor>
-                <mat-error *ngIf="courseInfoFormGroup.controls.summary.errors?.['required']">
-                  Escriba un resumen
-                </mat-error>
-              </div>
+              <mat-tab-group style="width: 100%" [(selectedIndex)]="selectedTabDescIndex" (selectedTabChange)="onTabDesChanged($event);">
+                <mat-tab label="FR">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
+                    <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
+                      Escriba un resumen
+                    </mat-error>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
+                    <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
+                      Escriba una descripcion
+                    </mat-error>
+                  </div>
+                </mat-tab>
+                <mat-tab label="EN">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></angular-editor>
+                  </div>
+                </mat-tab>
+                <mat-tab label="DE">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></angular-editor>
+                  </div>
+                </mat-tab>
+                <mat-tab label="ES">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></angular-editor>
+                  </div>
+                </mat-tab>
+                <mat-tab label="IT">
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
+                    <label for="summary" style="font-size: 18px">RESUME <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></angular-editor>
+                  </div>
+
+                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
+                    <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
+                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></angular-editor>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">

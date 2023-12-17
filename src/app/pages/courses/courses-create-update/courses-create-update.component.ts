@@ -104,6 +104,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   subGroupSelectedIndex: any = 0;
   selectedDate: string;
   selectedItem: any;
+  selectedTabNameIndex: any = 0;
+  selectedTabDescIndex: any = 0;
 
   defaults: any = {
     unique: false,
@@ -122,7 +124,34 @@ export class CoursesCreateUpdateComponent implements OnInit {
     active: true,
     online: true,
     image: this.imagePreviewUrl,
-    translations: null,
+    translations:
+      {
+        es: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        en: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        fr: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        it: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        de: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+      },
     price_range: null,
     discounts: null,
     settings: {
@@ -321,10 +350,22 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseInfoFormGroup = this.fb.group({
 
             course_name: [null, Validators.required],
+            course_name_en: [null],
+            course_name_de: [null],
+            course_name_es: [null],
+            course_name_it: [null],
             price: [null],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
+            summary_en: [null],
+            description_en: [null],
+            summary_de: [null],
+            description_de: [null],
+            summary_es: [null],
+            description_es: [null],
+            summary_it: [null],
+            description_it: [null],
             image: [null],
             ageFrom: [null],
             ageTo: [null],
@@ -354,10 +395,24 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseInfoCollecDateSplitFormGroup = this.fb.group({
             course_name: [null, Validators.required],
+
+            course_name_en: [null],
+            course_name_de: [null],
+            course_name_es: [null],
+            course_name_it: [null],
             price: [null],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
+
+            summary_en: [null],
+            description_en: [null],
+            summary_de: [null],
+            description_de: [null],
+            summary_es: [null],
+            description_es: [null],
+            summary_it: [null],
+            description_it: [null],
             duration: [null, Validators.required],
             participants: [null, Validators.required],
             image: [null],
@@ -365,10 +420,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseInfoPriveSeparatedFormGroup = this.fb.group({
             course_name: [null, Validators.required],
+
+            course_name_en: [null],
+            course_name_de: [null],
+            course_name_es: [null],
+            course_name_it: [null],
             price: ['Flexible'],
             station: [null, Validators.required],
             summary: [null, Validators.required],
             description: [null, Validators.required],
+            summary_en: [null],
+            description_en: [null],
+            summary_de: [null],
+            description_de: [null],
+            summary_es: [null],
+            description_es: [null],
+            summary_it: [null],
+            description_it: [null],
             duration: [null, Validators.required],
             participants: [null, Validators.required],
             image: [null],
@@ -449,10 +517,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.courseInfoFormGroup = this.fb.group({
 
         course_name: [null, Validators.required],
+        course_name_en: [null],
+        course_name_de: [null],
+        course_name_es: [null],
+        course_name_it: [null],
         price: [null],
         station: [null, Validators.required],
         summary: [null, Validators.required],
         description: [null, Validators.required],
+
+        summary_en: [null],
+        description_en: [null],
+        summary_de: [null],
+        description_de: [null],
+        summary_es: [null],
+        description_es: [null],
+        summary_it: [null],
+        description_it: [null],
         duration: [null],
         participants: [null],
         ageFrom: [null],
@@ -484,10 +565,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       this.courseInfoCollecDateSplitFormGroup = this.fb.group({
         course_name: [null, Validators.required],
+        course_name_en: [null],
+        course_name_de: [null],
+        course_name_es: [null],
+        course_name_it: [null],
         price: [null],
         station: [null, Validators.required],
         summary: [null, Validators.required],
         description: [null, Validators.required],
+
+        summary_en: [null],
+        description_en: [null],
+        summary_de: [null],
+        description_de: [null],
+        summary_es: [null],
+        description_es: [null],
+        summary_it: [null],
+        description_it: [null],
         duration: [null, Validators.required],
         participants: [null, Validators.required],
         image: [null],
@@ -495,10 +589,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
       this.courseInfoPriveSeparatedFormGroup = this.fb.group({
         course_name: [null, Validators.required],
+        course_name_en: [null],
+        course_name_de: [null],
+        course_name_es: [null],
+        course_name_it: [null],
         price: ['Flexible'],
         station: [null, Validators.required],
         summary: [null, Validators.required],
         description: [null, Validators.required],
+
+        summary_en: [null],
+        description_en: [null],
+        summary_de: [null],
+        description_de: [null],
+        summary_es: [null],
+        description_es: [null],
+        summary_it: [null],
+        description_it: [null],
         duration: [null, Validators.required],
         participants: [null, Validators.required],
         image: [null],
@@ -852,7 +959,34 @@ export class CoursesCreateUpdateComponent implements OnInit {
       active: true,
       online: true,
       image: this.imagePreviewUrl,
-      translations: null,
+      translations:
+      {
+        es: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        en: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        fr: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        it: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        de: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+      },
       price_range: this.dataSourceFlexiblePrices,
       discounts: null,
       settings: {
@@ -1479,9 +1613,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
+        name: this.defaults.translations.fr.name,
+        short_description: this.defaults.translations.fr.short_description,
+        description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1492,7 +1626,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         discounts: JSON.stringify(this.dataSourceReductions.data),
         sport_id: this.defaults.sport_id,
         school_id: null, //sacar del global
@@ -1506,9 +1640,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
+        name: this.defaults.translations.fr.name,
+        short_description: this.defaults.translations.fr.short_description,
+        description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1519,7 +1653,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         sport_id: this.defaults.sport_id,
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
@@ -1536,9 +1670,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
+        name: this.defaults.translations.fr.name,
+        short_description: this.defaults.translations.fr.short_description,
+        description: this.defaults.translations.fr.description,
         price: 0,
         currency: 'CHF',
         date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
@@ -1549,7 +1683,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         online: this.defaults.online,
         image: this.imagePreviewUrl,
         confirm_attendance: false,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
         price_range: this.dataSourceFlexiblePrices,
         sport_id: this.defaults.sport_id,
@@ -1569,9 +1703,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
+        name: this.defaults.translations.fr.name,
+        short_description: this.defaults.translations.fr.short_description,
+        description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: 'CHF',
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1582,7 +1716,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         online: this.defaults.online,
         image: this.imagePreviewUrl,
         confirm_attendance: false,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         price_range: null,
         sport_id: this.defaults.sport_id,
         school_id: this.defaults.school_id,
@@ -1638,7 +1772,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         discounts: JSON.stringify(this.dataSourceReductions.data),
         sport_id: this.defaults.sport_id,
         school_id: null, //sacar del global
@@ -1665,7 +1799,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         sport_id: this.defaults.sport_id,
         school_id: null, //sacar del global
         station_id: this.defaults.station_id.id,
@@ -1690,7 +1824,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         online: this.defaults.online,
         image: this.imagePreviewUrl,
         confirm_attendance: false,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
         price_range: this.dataSourceFlexiblePrices,
         sport_id: this.defaults.sport_id,
@@ -1728,7 +1862,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         online: this.defaults.online,
         image: this.imagePreviewUrl,
         confirm_attendance: false,
-        translations: null,
+        translations: JSON.stringify(this.defaults.translations),
         price_range: null,
         sport_id: this.defaults.sport_id,
         school_id: this.defaults.school_id,
@@ -1753,7 +1887,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   checkStep2PrivateNoFlex(stepper: MatStepper) {
-    if(this.defaults.name === null) {
+    if(this.defaults.translations.fr.name === null) {
       this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
       return;
     }
@@ -1778,12 +1912,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
       return;
     }
 
-    if(this.defaults.short_description === null) {
+    if(this.defaults.translations.fr.short_description === null) {
       this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
       return;
     }
 
-    if(this.defaults.description === null) {
+    if(this.defaults.translations.fr.description === null) {
       this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
       return;
     }
@@ -1874,7 +2008,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   checkStep2ColectiveNoFlex(stepper: MatStepper) {
     if (this.mode === 'create') {
-      if(this.defaults.name === null) {
+      if(this.defaults.translations.fr.name === null) {
         this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
         return;
       }
@@ -1889,12 +2023,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
         return;
       }
 
-      if(this.defaults.short_description === null) {
+      if(this.defaults.translations.fr.short_description === null) {
         this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
         return;
       }
 
-      if(this.defaults.description === null) {
+      if(this.defaults.translations.fr.description === null) {
         this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
         return;
       }
@@ -1926,4 +2060,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     stepper.next();
   }
 
+  onTabNameChanged(event: any) {
+    this.selectedTabNameIndex = event.index;
+  }
+
+  onTabDesChanged(event: any) {
+    this.selectedTabDescIndex = event.index;
+  }
 }
