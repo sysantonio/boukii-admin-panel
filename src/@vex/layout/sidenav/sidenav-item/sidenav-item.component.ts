@@ -114,4 +114,8 @@ export class SidenavItemComponent implements OnInit, OnChanges {
   isFunction(prop: NavigationLink['route']) {
     return prop instanceof Function;
   }
+
+  isExternalLink(url: string): boolean {
+    return url.startsWith('http');
+  }
 }

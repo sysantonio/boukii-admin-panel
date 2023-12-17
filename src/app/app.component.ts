@@ -223,7 +223,7 @@ export class AppComponent {
         children: [{
           type: 'link',
           label: 'Boukii Pay',
-          route: '/user',
+          route: 'https://login.pay.boukii.com/fr/',
           icon: 'mat:supervised_user_circle',
           routerLinkActiveOptions: { exact: true }
         },
