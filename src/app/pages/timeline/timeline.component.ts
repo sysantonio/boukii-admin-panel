@@ -21,6 +21,7 @@ moment.locale('fr');
 export class TimelineComponent {
 
   hoursRange: string[] = this.generateHoursRange('08:00', '20:00');
+  hoursRangeMinusLast:string[];
 
   monitors = [
     { id: 1, name: 'David Wilson' },
@@ -88,6 +89,8 @@ export class TimelineComponent {
     });
 
     this.colorKeys = Object.keys(this.groupedByColor);
+
+    this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
   }
 
   async ngOnInit() {
@@ -980,7 +983,51 @@ export class TimelineComponent {
     });
   }
 
-  handleDbClickEvent(action: string, event: any): void {
+  handleDbClickEvent(action: string, event: any, type:string, position:any, monitor_id:any, hourDay?:any, positionWeek?:any): void {
+
+    /* GET DATE,HOUR,MONITOR -> DOUBLE CLICK */
+
+    let dateInfo;
+    let currentDate = moment(this.currentDate);
+
+    switch (type) {
+      case 'day':
+          dateInfo = {
+            date: this.currentDate,
+            date_format: moment(this.currentDate).format('DD-MM-YYYY'),
+            hour: position,
+            monitor_id: monitor_id
+          };
+          break;
+      case 'week':
+          let mondayOfWeek = currentDate.clone().startOf('isoWeek');
+          let weekDayDate = mondayOfWeek.add(position, 'days');
+          dateInfo = {
+            date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
+            date_format: moment(weekDayDate).format('DD-MM-YYYY'),
+            hour: hourDay,
+            monitor_id: monitor_id
+          };
+          break;
+      case 'month':
+          let firstDayOfMonth = currentDate.clone().startOf('month');
+          let startOfWeek = firstDayOfMonth.add(positionWeek, 'weeks');
+          startOfWeek.startOf('isoWeek');
+          let monthDayDate = startOfWeek.add(position, 'days');
+          dateInfo = {
+            date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
+            date_format: moment(monthDayDate).format('DD-MM-YYYY'),
+            hour: hourDay,
+            monitor_id: monitor_id
+          };
+          break;
+      default:
+          throw new Error('Invalid type');
+    } 
+
+    console.log(dateInfo);
+
+    /* END DATA DOUBLE CLICK */
 
     console.log(action, event);
     const dialogRef = this.dialog.open(CalendarEditComponent, {
