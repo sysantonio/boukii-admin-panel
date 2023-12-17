@@ -139,7 +139,7 @@
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="timelineView == 'week'">
-                                <div class="grid-cell-day" *ngFor="let day of weekDays;let dayIndex = index" [ngClass]="{'outside-month': !isDayVisibleWeek(dayIndex)}">
+                                <div class="grid-cell-day" *ngFor="let day of weekDays;let dayIndex = index" [ngClass]="{'outside-month': !isDayVisibleWeek(dayIndex)}" (dblclick)="handleDbClickEvent('Clicked', $event)">
                                     <div class="grid-cell-inside" *ngFor="let hour of hoursRange"></div>
                                     <div *ngIf="monitorIndex % 5 === 0  && monitorIndex !== 0" class="hour-day-scroll">{{ day }}</div>
                                 </div>
@@ -198,7 +198,7 @@
                 </div>
 
 
-                <div class="schedule-container" *ngIf="filteredMonitors && filteredMonitors.length && timelineView == 'month'">
+                <div class="schedule-container" *ngIf="filteredMonitors && filteredMonitors.length && timelineView == 'month'" (dblclick)="handleDbClickEvent('Clicked', $event)">
                     <div class="monitors-column">
                     <ng-container *ngFor="let monitor of filteredMonitors; let monitorIndex = index">
                         <ng-container *ngFor="let week of weeksInMonth; let weekIndex = index">
