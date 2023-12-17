@@ -105,7 +105,7 @@
     border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 300px;width: 300px;height: 100px;display: flex;justify-content: space-between;position:relative;
 }
 .grid-cell-inside {
-    border-left:1px solid #ddd;
+    border-left:1px solid #ddd;width:inherit;
 }
 .grid-row:last-child .grid-cell {
     border-bottom: none;
