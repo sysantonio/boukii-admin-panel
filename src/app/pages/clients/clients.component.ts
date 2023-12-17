@@ -18,6 +18,7 @@ export class ClientsComponent {
 
   createComponent = ClientsCreateUpdateModule;
   entity = '/admin/clients';
+  deleteEntity = '/clients';
   showDetail: boolean = false;
 
   detailData: any;

@@ -47,6 +47,8 @@ export class MonitorsComponent {
 
   createComponent = MonitorsCreateUpdateComponent;
   entity = '/monitors';
+  deleteEntity = '/monitors';
+
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },

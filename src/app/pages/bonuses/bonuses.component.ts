@@ -11,6 +11,7 @@ export class BonusesComponent {
 
   createComponent = BonusesCreateUpdateComponent;
   entity = '/vouchers';
+  deleteEntity = '/vouchers';
   columns: TableColumn<any>[] = [
     { label: 'Code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Quantity', property: 'quantity', type: 'text', visible: true },

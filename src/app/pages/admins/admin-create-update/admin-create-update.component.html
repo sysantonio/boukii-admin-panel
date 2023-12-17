@@ -21,7 +21,7 @@
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
-            Active <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
+            Active <mat-slide-toggle [(ngModel)]="defaults.active"></mat-slide-toggle>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Nom d'utilisateur</mat-label>
-                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaults.username">
                 </mat-form-field>
               </div>
 
@@ -69,19 +69,19 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
                 <mat-label>Password</mat-label>
-                <input formControlName="password" matInput required type="text" [(ngModel)]="defaultsUser.password">
+                <input formControlName="password" matInput required type="text" [(ngModel)]="defaults.password">
 
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
-              <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
-              <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
+              <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
+              <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
+                Save
               </button>
             </div>
           </form>
         </mat-step>
-        <mat-step [stepControl]="formPersonalInfo">
+        <!--<mat-step [stepControl]="formPersonalInfo">
           <form [formGroup]="formPersonalInfo">
             <ng-template matStepLabel>Données Personnelles</ng-template>
 
@@ -169,7 +169,7 @@
               </button>
             </div>
           </form>
-        </mat-step>
+        </mat-step>-->
       </mat-vertical-stepper>
     </div>
   </div>

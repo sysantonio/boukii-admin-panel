@@ -25,6 +25,8 @@ export class CoursesComponent {
 
   createComponent = CoursesCreateUpdateComponent;
   entity = '/admin/courses';
+  deleteEntity = '/courses';
+
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true },
     { label: 'Type', property: 'course_type', type: 'image', visible: true },

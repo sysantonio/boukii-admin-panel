@@ -29,6 +29,7 @@ export class BookingsComponent {
 
   createComponent = BookingsCreateUpdateComponent;
   entity = '/bookings';
+  deleteEntity = '/bookings';
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Type', property: 'type', type: 'booking_users_image', visible: true },

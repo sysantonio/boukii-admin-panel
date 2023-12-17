@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -45,38 +45,23 @@ export class AdminCreateUpdateComponent implements OnInit {
   maxSelection = 6;
 
   defaults = {
-    email: null,
+    username: null,
     first_name: null,
     last_name: null,
-    birth_date: null,
-    phone: null,
-    telephone: null,
-    address: null,
-    cp: null,
-    city: null,
-    province: null,
-    country: null,
-    language1_id:null,
-    language2_id:null,
-    language3_id:null,
-    language4_id:null,
-    language5_id:null,
-    language6_id:null,
-    user_id: null
+    email: null,
+    image: null,
+    type: "admin",
+    active: true,
+    password: null
   }
 
-  defaultsUser = {
-    username: null,
-    email: null,
-    password: null,
-    type: 'admin',
-    active: false,
-  }
+
+  id: any = null;
 
   user: any;
   mode: 'create' | 'update' = 'create';
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private snackbar: MatSnackBar, private router: Router, private crudService: ApiCrudService) {
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private snackbar: MatSnackBar, private router: Router, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -85,45 +70,96 @@ export class AdminCreateUpdateComponent implements OnInit {
   ngOnInit(): void {
 
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.id = this.activatedRoute.snapshot.params.id;
 
-    this.formInfoAccount = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      password: ['', [Validators.minLength(6), this.passwordValidator]],
+    if (!this.id || this.id === null) {
+      this.mode = 'create';
+      this.formInfoAccount = this.fb.group({
+        name: ['', Validators.required],
+        surname: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        username: [''],
+        password: [''],
 
-    });
+      });
 
-    this.formPersonalInfo = this.fb.group({
-      fromDate: [''],
-      phone: ['', Validators.required],
-      mobile: ['', Validators.required],
-      address: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      country: this.myControlCountries,
-      province: this.myControlProvinces
+      this.formPersonalInfo = this.fb.group({
+        fromDate: [''],
+        phone: [''],
+        mobile: ['', Validators.required],
+        address: [''],
+        postalCode: [''],
+        country: this.myControlCountries,
+        province: this.myControlProvinces
 
-    });
+      });
 
 
-    this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
-    );
+      this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+      );
 
-    this.myControlCountries.valueChanges.subscribe(country => {
-      this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-      this.filteredProvinces = this._filterProvinces(country.id);
-    });
+      this.myControlCountries.valueChanges.subscribe(country => {
+        this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+        this.filteredProvinces = this._filterProvinces(country.id);
+      });
 
-    this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-      startWith(''),
-      map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-    );
+      this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+        startWith(''),
+        map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+      );
 
-    this.getLanguages();
+      this.getLanguages();
+    } else {
+      this.mode = 'update';
+      this.crudService.get('/users/'+this.id)
+        .subscribe((data) => {
+          this.defaults = data.data;
+
+          this.formInfoAccount = this.fb.group({
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            username: [''],
+            password: [''],
+
+          });
+
+          this.formPersonalInfo = this.fb.group({
+            fromDate: [''],
+            phone: [''],
+            mobile: ['', Validators.required],
+            address: [''],
+            postalCode: [''],
+            country: this.myControlCountries,
+            province: this.myControlProvinces
+
+          });
+
+
+          this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value.name),
+            map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+          );
+
+          this.myControlCountries.valueChanges.subscribe(country => {
+            this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+            this.filteredProvinces = this._filterProvinces(country.id);
+          });
+
+          this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+            startWith(''),
+            map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+          );
+
+          this.getLanguages();
+        })
+    }
+
+
   }
 
   passwordValidator(formControl: FormControl) {
@@ -216,45 +252,22 @@ export class AdminCreateUpdateComponent implements OnInit {
   }
 
   create() {
-    console.log(this.defaults);
-    console.log(this.defaultsUser);
-    this.defaultsUser.email = this.defaults.email;
-    this.setLanguages();
 
-    this.crudService.create('/users', this.defaultsUser)
+
+    this.crudService.create('/users', this.defaults)
       .subscribe((user) => {
-        this.defaults.user_id = user.data.id;
-
-        this.crudService.create('/clients', this.defaults)
-          .subscribe((client) => {
-            this.snackbar.open('Administrador creado correctamente', 'OK', {duration: 3000});
-            this.router.navigate(['/admins']);
-          })
+        this.snackbar.open('Administrador creado correctamente', 'OK', {duration: 3000});
+        this.router.navigate(['/admins']);
       })
   }
 
-  update() {}
+  update() {
 
-  setLanguages() {
-    if (this.selectedLanguages.length >= 1) {
-
-      this.defaults.language1_id = this.selectedLanguages[0].id;
-    } else if (this.selectedLanguages.length >= 2) {
-
-      this.defaults.language2_id = this.selectedLanguages[1].id;
-    } else if (this.selectedLanguages.length >= 3) {
-
-      this.defaults.language3_id = this.selectedLanguages[2].id;
-    } else if (this.selectedLanguages.length >= 4) {
-
-      this.defaults.language4_id = this.selectedLanguages[3].id;
-    } else if (this.selectedLanguages.length >= 5) {
-
-      this.defaults.language5_id = this.selectedLanguages[4].id;
-    } else if (this.selectedLanguages.length === 6) {
-
-      this.defaults.language6_id = this.selectedLanguages[5].id;
-    }
+    this.crudService.update('/users', this.defaults, this.id)
+      .subscribe((user) => {
+        this.snackbar.open('Administrador actualizado correctamente', 'OK', {duration: 3000});
+        this.router.navigate(['/admins']);
+      })
   }
 }
 

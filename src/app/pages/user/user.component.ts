@@ -11,6 +11,7 @@ export class UserComponent {
 
   createComponent = UserCreateUpdateComponent;
   entity = 'users';
+  deleteEntity = 'users';
   columns: TableColumn<any>[] = [
     { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Mail', property: 'email', type: 'text', visible: true },

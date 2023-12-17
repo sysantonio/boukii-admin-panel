@@ -19,6 +19,7 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import moment from 'moment';
+import { ConfirmModalComponent } from 'src/app/pages/monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 
 
 @UntilDestroy()
@@ -55,6 +56,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   columns: TableColumn<any>[] = [];
   @Input()
   entity: string;
+  @Input()
+  deleteEntity: string;
   @Input()
   updatePage: string = 'update';
   @Input()
@@ -203,22 +206,22 @@ ngAfterViewInit() {
   }
 
   async delete(item: any) {
-    /**
-     * Here we are updating our local array.
-     * You would probably make an HTTP request here.
-     */
-    this.data.splice(this.data.findIndex((existing) => existing.id === item.id), 1);
-    this.selection.deselect(item);
-    this.subject$.next(this.data);
 
-    try {
-      const db = getFirestore();
-      const menuRef = doc(collection(db, this.entity), item.id);
-      await deleteDoc(menuRef);
-      console.log('Menu deleted successfully');
-    } catch (error) {
-      console.error('Error deleting menu:', error);
-    }
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.delete(this.deleteEntity, item.id)
+          .subscribe(() => {
+            this.getData(1, 10);
+          })
+      }
+    });
   }
 
   deleteMultiple(items: any[]) {
