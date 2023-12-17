@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, ChangeDetectorRef, Inject } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin, map, of, startWith } from 'rxjs';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Platform } from '@angular/cdk/platform';
@@ -259,7 +259,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService, private cdr: ChangeDetectorRef) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -306,7 +306,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
 
-
         this.filterSportsByType(true);
 
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
@@ -343,7 +342,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
             setTimeout(() => {
-              this.clientsForm.patchValue(this.clients[0]);
+              this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.clientId));
+              this.clientsForm.disable();
               this.loading = false;
             }, 500);
           }, 500);
@@ -1588,7 +1588,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.bookingsToCreate.splice(index, 1);
 
         if(this.bookingsToCreate.length === 0) {
-          this.clientsForm.enable();
           this.bookingComplete = false;
         }
       }

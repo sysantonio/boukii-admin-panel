@@ -52,9 +52,11 @@ export class ClientsComponent {
     const dialogRef = this.dialog.open(BookingsCreateUpdateModalComponent, {
       width: '100%',
       height: '1200px',
-      maxWidth: '90vw',  // Asegurarse de que no haya un ancho máximo
-
-      panelClass: 'full-screen-dialog'  // Si necesitas estilos adicionales
+      maxWidth: '90vw',
+      panelClass: 'full-screen-dialog',
+      data: {
+        clientId: this.detailData.id
+      }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
