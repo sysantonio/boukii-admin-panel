@@ -1888,7 +1888,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if(this.defaults.has_boukii_care) {
       // coger valores de reglajes
-      price = price + this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      price = price + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
 
     // añadir desde reglajes el tva

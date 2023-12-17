@@ -1,27 +1,22 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin, map, of, startWith } from 'rxjs';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
 import { ApiCrudService } from 'src/service/crud.service';
-import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { Platform } from '@angular/cdk/platform';
-import { DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
+import { MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import * as moment from 'moment';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CalendarService } from 'src/service/calendar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
 import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { SchoolService } from 'src/service/school.service';
 import { CancelBookingModalComponent } from '../cancel-booking/cancel-booking.component';
+import { CancelPartialBookingModalComponent } from '../cancel-partial-booking/cancel-partial-booking.component';
 
 @Component({
   selector: 'vex-booking-detail',
@@ -195,7 +190,7 @@ export class BookingDetailComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute, private schoolService: SchoolService) {
+    private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute, private schoolService: SchoolService, private router: Router) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -1127,14 +1122,6 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
-  getBoukiiCare() {
-    return this.defaults.has_boukii_care ? this.getBasePrice() * 0.10 : 0;
-  }
-
-  getOpRemPrice() {
-    return this.defaults.has_cancellation_insurance ? this.getBasePrice() * 0.10 : 0;
-  }
-
 
   getAvailableWeekDays(settings: any) {
     const data = JSON.parse(settings);
@@ -1205,6 +1192,27 @@ export class BookingDetailComponent implements OnInit {
     });
   }
 
+  deletePartialBooking(index: number, data: any) {
+
+
+    const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: data[index].price_total, booking: this.booking}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.delete('/booking-users', data.id)
+          .subscribe(() => {
+            this.bookingsToCreate.splice(index, 1);
+            this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+          })
+      }
+    });
+  }
+
   addBonus() {
     const dialogRef = this.dialog.open(AddDiscountBonusModalComponent, {
       width: '600px',
@@ -1259,56 +1267,39 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
 
   calculateRem(event: any) {
     if(event.source.checked) {
-      this.opRem = this.getBasePrice() * 0.10;
+      this.opRem = this.getBasePrice() * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
-      this.defaults.price_cancellation_insurance = this.getBasePrice() * 0.10;
-      return this.getBasePrice() * 0.10;
+      this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
+      this.calculateFinalPrice();
+      return this.getBasePrice() *this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
       this.defaults.price_cancellation_insurance = 0;
+      this.calculateFinalPrice();
       return 0;
     }
   }
 
   calculateBoukiiCare(event: any) {
     if(event.source.checked) {
-      this.boukiiCare = this.getBasePrice() * 0.10;
-
+      this.boukiiCare = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
-      this.defaults.price_boukii_care = this.getBasePrice() * 0.10;
-      return this.getBasePrice() * 0.10;
+      this.defaults.price_boukii_care = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      return this.getBasePrice() + this.boukiiCarePrice;
     } else {
       this.boukiiCare = 0;
-
+      this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
       this.defaults.price_boukii_care = 0;
       return 0;
-    }
-  }
-
-  setReemToItem(event: any, item: any) {
-    if(event.source.checked) {
-      item.has_cancellation_insurance = event.source.checked;
-      item.price_cancellation_insurance = item.price_total * 0.10;
-    } else {
-      item.has_cancellation_insurance = event.source.checked;
-      item.price_cancellation_insurance = 0;
-
-    }
-  }
-
-  setBoukiiCareToItem(event: any, item: any) {
-    if(event.source.checked) {
-      item.has_boukii_care = event.source.checked;
-      item.price_boukii_care = item.price_total * 0.10;
-    } else {
-      item.has_boukii_care = event.source.checked;
-      item.price_boukii_care = 0;
-
     }
   }
 
@@ -1364,7 +1355,7 @@ export class BookingDetailComponent implements OnInit {
 
     if(this.booking.has_boukii_care) {
       // coger valores de reglajes
-      price = price + this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      price = price  + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
 
     // añadir desde reglajes el tva
@@ -1425,12 +1416,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getBookingPaxes(){
-    let ret = 0;
-    this.bookingsToCreate.forEach(element => {
-      ret = ret + element.paxes;
-    });
-
-    return ret;
+    return this.bookingUsers.length;
   }
 
   getBookingDates(){
