@@ -147,6 +147,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   selectedSubGroupItem: any = null;
   selectedSubGroupItemIndex: any = null;
   courseDates: any = [];
+  selectedPrivateDates: any = [];
   reservableCourseDate: any = [];
 
   periodUnique = true;
@@ -415,6 +416,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  inUseDatesFilter = (d: Date): boolean => {
+    if (d !== null) {
+
+      const time=moment(d).startOf('day').toDate().getTime();
+      return this.selectedPrivateDates.find(x=>x.getTime()==time);
+    }
+  }
+
   selectItem(item: any) {
 
     if(this.snackBarRef!==null) {
@@ -432,9 +441,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.selectedSubGroupItem  = null;
       this.courseDates.push(this.defaultsBookingUser);
     } else {
+
+
       this.generateArray(item.max_participants);
       this.courseDates = [];
-
+      this.selectedPrivateDates = [];
 
       this.selectedItem = item;
       this.courseDates.push({
@@ -443,19 +454,23 @@ export class BookingsCreateUpdateComponent implements OnInit {
         client_id: this.defaultsBookingUser.client_id,
         course_subgroup_id: null,
         course_id: item.id,
+        course_date_id: this.selectedItem.course_dates[0].id,
+        date: this.selectedItem.course_dates[0].date,
         hour_start: null,
         hour_end: null,
         price: this.selectedItem.price,
         currency: this.selectedItem.currency,
-        date: null,
         attended: false
       });
+
+      item.course_dates.forEach(element => {
+        this.selectedPrivateDates.push(moment(element.date).startOf('day').toDate())
+      });
+
       if (item.is_flexible) {
         this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration);
       }
     }
-
-
   }
 
   selectSubGroupItem(item: any, subGroupIndex: any) {
@@ -489,8 +504,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   setCourseDateItemPrivateNoFlexible(item: any, date: any) {
-    item.course_date_id = date.id;
-    item.date = date.date;
+
+    this.selectedItem.course_dates.forEach(element => {
+      if (moment(element.date).startOf('day').format('YYYY-MM-DD') === moment(date.value).startOf('day').format('YYYY-MM-DD')) {
+
+        item.course_date_id = element.id;
+        item.date = element.date;
+      }
+    });
   }
 
   calculateAvailableHours(selectedCourseDateItem: any, time: any) {

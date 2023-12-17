@@ -198,19 +198,26 @@
 
               <ng-container *ngFor="let courseDate of courseDates; let i = index">
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field class="flex-auto" style="width: 50%;">
                     <mat-label>Fecha</mat-label>
-                    <mat-select>
-                      <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index" >
-                        <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
-                        [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)"
-                        (onSelectionChange)="courseDate.hour_start = selectedCourseDateItem.date">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
-                      </ng-container>
 
-                    </mat-select>
+                    <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" [matDatepickerFilter]="inUseDatesFilter"
+                        (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)">
+                      <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerDateFrom [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
+
+                      <!--
+                      <mat-select>
+                        <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index" >
+                          <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
+                          [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
+                        </ng-container>
+
+                      </mat-select>
+                    -->
                   </mat-form-field>
 
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field class="flex-auto" style="width: 50%;">
                     <mat-label>Hora</mat-label>
                     <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration)">
                       <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration)"
@@ -219,7 +226,7 @@
                     </mat-select>
                   </mat-form-field>
 
-                  </div>
+                </div>
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="selectedItem.is_flexible">
 
