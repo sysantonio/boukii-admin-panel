@@ -289,13 +289,12 @@
                       </div>
                       <div class="content-container">
                         <div class="title-container">
-                          <h3 class="title" style="width: 70%;float: left;">{{ course.name | uppercase}}</h3>
+                          <h3 class="title" style="width: 70%;float: left; text-wrap:balance">{{ course.name | uppercase}}</h3>
                           <h3 class="price">
                             {{course.price}} {{ course.currency }}
                           </h3>
                         </div>
                         <p>{{course.course_type === 1 ? 'collectif' : 'privee'}} {{course.sport.name}}</p>
-                        <p>{{course.short_description}}</p>
                         <div style="float: left; width: 100%;margin-top: 5%;">
                           <ul>
                             <ng-container *ngIf="course.is_flexible">
