@@ -26,6 +26,7 @@ import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { CoursesDetailModule } from './course-detail/course-detail.module';
 import { CourseUserTransferComponent } from './course-user-transfer/course-user-transfer.component';
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
+import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -48,6 +49,7 @@ import { CourseUserTransferModalModule } from './course-user-transfer/course-use
     WidgetTableModule,
     CoursesCreateUpdateModule,
     CoursesDetailModule,
+    CoursesDetailModalModule,
     MatDialogModule,
     ComponentsModule,
     MatSlideToggleModule,

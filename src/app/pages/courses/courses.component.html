@@ -49,14 +49,37 @@
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-        <div style="float: left; width: 100%;margin-top: 5%;">
+        <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type === 1">
           <ul>
             <li *ngFor="let item of detailData.course_dates; let i = index">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+          </ul>
+        </div>
+        <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type ===2">
+          <ul>
+            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start}}h - {{detailData.course_dates[0].hour_end}}h</i></li>
+            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">
+              {{detailData.course_dates[detailData.course_dates.length - 1].hour_start}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end}}h
+              </i>
+            </li>
           </ul>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
       </mat-card-header>
+      <mat-card-content *ngIf="detailData.course_type === 2">
+        <div style="float: left; width: 100%;">
+          <div style="float: left;width: 100%;">
+            <div style="float: left; width: 20%; margin-top: 5%">
+              <img [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
+            </div>
+            <div style="float: left; width: 75%;margin:6% 0 0 2%">
+              <p><strong>{{detailData.name}}</strong></p>
+              <p> {{detailData.course_type === 1 ? 'Collectif' : 'Privee'}} {{ detailData.sport.name}}</p>
+              <p>{{detailData.station.name}}</p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
       <mat-card-content *ngIf="detailData.course_type === 1">
         <div style="float: left; width: 100%;">
           <div style="float: left;width: 100%;">

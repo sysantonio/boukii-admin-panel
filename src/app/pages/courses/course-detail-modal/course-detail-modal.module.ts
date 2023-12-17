@@ -18,10 +18,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { BookingsCreateUpdateModalComponent } from './bookings-create-update-modal.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatStepperModule} from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
+import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CourseDetailModalComponent } from './course-detail-modal.component';
 
 @NgModule({
   imports: [
@@ -46,12 +53,20 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatListModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    MatCheckboxModule,
+    MatStepperModule,
     MatSlideToggleModule,
-    MatProgressSpinnerModule
+    BreadcrumbsModule,
+    SecondaryToolbarModule,
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatChipsModule,
+    MatCheckboxModule,
+    AngularEditorModule,
+    MatTabsModule
   ],
-  declarations: [BookingsCreateUpdateModalComponent],
-  exports: [BookingsCreateUpdateModalComponent]
+  declarations: [CourseDetailModalComponent],
+  exports: [CourseDetailModalComponent]
 })
-export class BookingsCreateUpdateModalModule {
+export class CoursesDetailModalModule {
 }

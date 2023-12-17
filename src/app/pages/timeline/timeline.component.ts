@@ -9,6 +9,8 @@ import { CalendarEditComponent } from '../monitors/monitor-detail/calendar/calen
 import { EventService } from 'src/service/event.service';
 import * as moment from 'moment';
 import 'moment/locale/fr';
+import { CourseDetailComponent } from '../courses/course-detail/course-detail.component';
+import { CourseDetailModalComponent } from '../courses/course-detail-modal/course-detail-modal.component';
 moment.locale('fr');
 
 @Component({
@@ -136,7 +138,7 @@ export class TimelineComponent {
     try {
       const data: any = await this.crudService.get('/school-sports?school_id='+this.activeSchool+'&perPage='+99999).toPromise();
       console.log(data);
-      this.sports = this.sportsReceived.filter(sport => 
+      this.sports = this.sportsReceived.filter(sport =>
         data.data.some(newSport => newSport.sport_id === sport.id)
       );
       this.sports.forEach(sport => this.checkedSports.add(sport.id));
@@ -221,7 +223,7 @@ export class TimelineComponent {
     let firstDate, lastDate;
     if (this.timelineView === 'week') {
       const startOfWeekDate = startOfWeek(date, { weekStartsOn: 1 });
-      const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 }); 
+      const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
       firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
       lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
       this.searchBookings(firstDate,lastDate);
@@ -272,7 +274,7 @@ export class TimelineComponent {
     }
     return [];
   }
-  
+
   processData(data:any) {
     this.allMonitors = [{
         id: null
@@ -331,7 +333,7 @@ export class TimelineComponent {
           }
           else {
             if(hasAtLeastOne){
-              const filteredNwds = nwdsArray.filter(nwd => 
+              const filteredNwds = nwdsArray.filter(nwd =>
                 (this.filterNwd || nwd.user_nwd_subtype_id !== 1) &&
                 (this.filterBlockPayed || nwd.user_nwd_subtype_id !== 2) &&
                 (this.filterBlockNotPayed || nwd.user_nwd_subtype_id !== 3)
@@ -392,12 +394,12 @@ export class TimelineComponent {
           default:
             type = 'unknown';
         }
-    
+
         const dateTotalAndIndex = booking.course.course_type === 2 ? { date_total: 0, date_index: 0 } : {
           date_total: booking.course.course_dates.length,
           date_index: this.getPositionDate(booking.course.course_dates, booking.course_date_id)
         };
-        
+
         //Get Sport and Degree objects
         const sport = this.sports.find(s => s.id === booking.course.sport_id);
         const degrees_sport = this.degrees.filter(degree => degree.sport_id === booking.course.sport_id);
@@ -420,7 +422,7 @@ export class TimelineComponent {
         if(booking.monitor_id){
           monitor = this.filteredMonitors.find(monitor => monitor.id === booking.monitor_id) || null;
         }
-    
+
         return {
           booking_id: booking.id,
           date: moment(booking.date).format('YYYY-MM-DD'),
@@ -460,7 +462,7 @@ export class TimelineComponent {
         } else if (nwd.user_nwd_subtype_id === 3) {
             type = 'block_no_payed';
         } else {
-            type = 'unknown'; 
+            type = 'unknown';
         }
         const hourTimesNwd = nwd.full_day ? {
             hour_start: this.hoursRange[0],
@@ -490,7 +492,7 @@ export class TimelineComponent {
         };
       })
     ];
-    
+
     console.log('Combined Tasks Calendar:', tasksCalendar);
 
     this.calculateTaskPositions(tasksCalendar);
@@ -836,7 +838,7 @@ export class TimelineComponent {
         panelClass: 'full-screen-dialog',
         data: { message: "Are you sure you want to move this task?", title: "Confirm Move" }
       });
-  
+
       dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
         if (userConfirmed) {
           this.moveTask = true;
@@ -848,7 +850,7 @@ export class TimelineComponent {
       });
     }
   }
-  
+
   moveMonitor(monitor_id:any,event: MouseEvent): void {
     if (this.moveTask) {
       console.log('Grid row clicked');
@@ -880,20 +882,20 @@ export class TimelineComponent {
       const [hours, minutes] = time.split(':').map(Number);
       return { hours, minutes };
     };
-  
+
     const startTime = parseTime(hour_start);
     const endTime = parseTime(hour_end);
-  
+
     let durationHours = endTime.hours - startTime.hours;
     let durationMinutes = endTime.minutes - startTime.minutes;
-  
+
     if (durationMinutes < 0) {
       durationHours--;
       durationMinutes += 60;
     }
-  
+
     return `${durationHours}h${durationMinutes}m`;
-  }  
+  }
 
   getBirthYears(date:string) {
     const birthDate = moment(date);
@@ -959,8 +961,28 @@ export class TimelineComponent {
     this.showEditMonitor = false;
   }
 
+  goToEditCourse() {
+    const dialogRef = this.dialog.open(CourseDetailModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',
+      panelClass: 'full-screen-dialog',
+      data: {
+        id: this.taskDetail.course.id
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+        console.log(result);
+      }
+    });
+  }
 
   handleDbClickEvent(action: string, event: any): void {
+
+    console.log(action, event);
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       data: {
         event,

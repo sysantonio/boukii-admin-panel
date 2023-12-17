@@ -2,7 +2,7 @@
 
     <vex-secondary-toolbar>
       <vex-breadcrumbs [crumbs]="['Timeline', 'List']" class="flex-auto"></vex-breadcrumbs>
-  
+
       <button class="ml-2" color="primary" mat-icon-button type="button">
         <mat-icon svgIcon="mat:more_vert"></mat-icon>
       </button>
@@ -20,11 +20,11 @@
                     <button (click)="goToNext()">&gt;</button>
                     <button (click)="showFilter = !showFilter" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
 
-                    
+
                     <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()">Reset filters</button>
                     <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()">Apply filters</button>
                     </div>
-                    
+
                     <div class="view-selection">
                         <span class="view-option" [ngClass]="{'selected': timelineView == 'day'}" (click)="changeView('day')">Jour</span>
                         <span class="view-option" [ngClass]="{'selected': timelineView == 'week'}" (click)="changeView('week')">Semaine</span>
@@ -43,13 +43,13 @@
                         </mat-select>
                         </mat-form-field>
                     </div>
-                  
+
                     <div class="filter-container-column">
                       <span>MONITEURS</span>
                       <mat-checkbox color="primary" [(ngModel)]="filterFree">Libre</mat-checkbox>
                       <mat-checkbox color="primary" [(ngModel)]="filterOccupied">Ocupé</mat-checkbox>
                     </div>
-                  
+
                     <div class="filter-container-column">
                       <span>TYPE D'ÉVÉNEMENT</span>
                       <mat-checkbox color="primary" [(ngModel)]="filterCollective">Cours collectif</mat-checkbox>
@@ -58,7 +58,7 @@
                       <mat-checkbox color="primary" [(ngModel)]="filterBlockPayed">Blocages payés</mat-checkbox>
                       <mat-checkbox color="primary" [(ngModel)]="filterBlockNotPayed">Blocages impayés</mat-checkbox>
                     </div>
-                  
+
                     <div class="filter-container-column">
                       <span>SPORT</span>
                       <mat-checkbox *ngFor="let sport of sports" color="primary"
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div>
 
                 <div class="schedule-container" *ngIf="filteredMonitors && filteredMonitors.length && timelineView != 'month'">
@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="monitor-right">
                                         <div *ngFor="let sport of monitor.sports" class="monitor-sport">
-                                            <img [src]="sport.icon_selected" />
+                                            <img [src]="sport.icon_selected" style="background-color: #fe3085;border-radius: 5px;"/>
                                             <div>{{sport.name}}</div>
                                         </div>
                                     </div>
@@ -150,9 +150,9 @@
                         <ng-container *ngFor="let task of plannerTasks">
                             <!--DAY-->
                             <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" class="task-wrapper cursor-pointer" [ngClass]="[
-                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ? 
-                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                                '', 
+                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ?
+                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                                '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.style">
@@ -173,9 +173,9 @@
                             </div>
                             <!--WEEK-->
                             <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
-                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ? 
-                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                                '', 
+                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ?
+                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                                '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleWeek">
@@ -276,9 +276,9 @@
                         <ng-container *ngFor="let task of plannerTasks">
                             <!--MONTH-->
                             <div class="task-wrapper-week cursor-pointer" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" [ngClass]="[
-                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ? 
-                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                                '', 
+                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ?
+                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                                '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleMonth">
@@ -299,7 +299,7 @@
                     </div>
                     </div>
                 </div>
-                
+
             </div>
 
             <!--Modal Grouped Tasks-->
@@ -308,9 +308,9 @@
                     <mat-icon class="cursor-pointer" svgIcon="mat:close" (click)="hideGrouped()"></mat-icon>
                 </div>
                 <div *ngFor="let task of groupedTasks" (click)="toggleDetail(task)" class="modal-grouped-task-wrapper cursor-pointer" (contextmenu)="toggleDetailMove(task, $event)" [ngClass]="[
-                    (task.booking_id && (idDetail == task.booking_id)) ? 
-                    (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                    '', 
+                    (task.booking_id && (idDetail == task.booking_id)) ?
+                    (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                    '',
                     task.class
                 ]">
                     <div class="task-text">
@@ -334,11 +334,11 @@
             <mat-card-header style="display:block">
                 <div style="width: 100%;float: left;">
                 <mat-icon class="cursor-pointer" svgIcon="mat:close" (click)="hideDetail()"></mat-icon>
+                <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="goToEditCourse()"></mat-icon>
 
                 </div>
                 <div style="width: 100%;float:left;">
                 <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles curso</mat-card-title>
-                <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
                 </div>
                 <div style="width:100%; margin-top:5%;float:left">
                 <div style="width: 100%;">
@@ -440,7 +440,7 @@
                     </div>
 
                     <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-                    
+
                     <div style="width: 100%;float:left;margin-bottom:12px;">
                         <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
                     </div>
@@ -623,9 +623,8 @@
             </mat-card-content>
             </mat-card>
         </vex-page-layout-content>
-          
+
 
     </vex-page-layout-content>
-  
+
   </vex-page-layout>
-  

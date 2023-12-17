@@ -6,6 +6,8 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-update-modal/bookings-create-update-modal.component';
 
 @Component({
   selector: 'vex-clients',
@@ -31,7 +33,7 @@ export class ClientsComponent {
   mainIdSelected = true;
   borderActive = -1;
 
-  constructor(private crudService: ApiCrudService, private router: Router) {}
+  constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog) {}
 
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
@@ -44,6 +46,23 @@ export class ClientsComponent {
     { label: 'Registro', property: 'created_at', type: 'date', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
+
+  createBooking() {
+    const dialogRef = this.dialog.open(BookingsCreateUpdateModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',  // Asegurarse de que no haya un ancho máximo
+
+      panelClass: 'full-screen-dialog'  // Si necesitas estilos adicionales
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+      }
+    });
+  }
 
   showDetailEvent(event: any) {
 
