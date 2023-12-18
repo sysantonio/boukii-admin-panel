@@ -48,4 +48,12 @@ export class DateTimeDialogComponent implements OnInit {
       minutes += 15;
     }
   }
+
+  myHolidayFilter = (d: Date): boolean => {
+    if (d !== null) {
+
+      const time=d.getTime();
+      return !this.data.holidays.find(x=>x.getTime()==time);
+    }
+  }
 }

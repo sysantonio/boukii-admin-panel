@@ -144,14 +144,14 @@ export class AppComponent {
             route: '/timeline',
             icon: 'mat:schedule',
             routerLinkActiveOptions: { exact: true }
-          },
+          },/*
           {
             type: 'link',
             label: 'Calendrier',
             route: '/calendar',
             icon: 'mat:calendar_today',
             routerLinkActiveOptions: { exact: true }
-          },
+          },*/
           {
             type: 'link',
             label: 'Reservations',

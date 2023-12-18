@@ -443,9 +443,9 @@
               <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
                 <strong>{{ courseDate.course?.name}}</strong>
               </p>
-              <p style="float: left; width: 100%;">
+              <!--<p style="float: left; width: 100%;">
                 {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{!courseDate.course?.is_flexible ? courseDate.course?.price : courseDate.price}} {{courseDate.course?.currency}}
-              </p>
+              </p>-->
             </div>
 
             <div style="float: left; width: 100%;margin-top: 5%;">
@@ -643,7 +643,7 @@
                     </div>
 
                     <div>
-                      <p> +{{item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                      <p> +{{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}} CHF</p>
                     </div>
                   </div>
 
@@ -706,7 +706,7 @@
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
                   <p style="width: 60%;float: left;">Total Opciones</p>
-                  <p style="color: #EA0C60;">{{item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                  <p style="color: #EA0C60;">{{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}} CHF</p>
                 </div>
               </div>
 
@@ -718,11 +718,10 @@
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
                   <p style="color: #EA0C60;">{{
 
-                  ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : (
-                    (item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible) || (item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
-                    ? item.courseDates[0].course?.price * item.courseDates.length : item.courseDates[0].course?.price))
+                  ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : ((item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
+                    ? item.courseDates[0].course?.price * item.courseDates.length : item?.price_total))
 
-                   + (item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0))}}{{item.currency}}</p>
+                   + (item.forfait ?  + (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0))}}{{item.currency}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -832,7 +831,7 @@
               <ng-container *ngFor="let item of bookingsToCreate; let i = index">
                 <span style="width: 100%; float:left" *ngIf="item.forfait">
                   <p style="float:left">Forfait {{item.forfait.id}}</p>
-                  <p style="float:right">{{((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100)}}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                  <p style="float:right">{{(item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100))}}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
                 </span>
               </ng-container>
 
@@ -866,7 +865,7 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">Cash</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 3" [class.selected]="selectedSubButton==='2'">Autre</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">Autre</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>

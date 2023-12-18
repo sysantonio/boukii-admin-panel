@@ -25,7 +25,7 @@
         <mat-divider></mat-divider>
 
         <mat-dialog-actions align="end"  *ngIf="!loading">
-          <button color="primary" mat-flat-button >Confirmer</button>
+          <button color="primary" mat-flat-button (click)="closeAndSave('no_refund')">Confirmer</button>
           <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
         </mat-dialog-actions>
       </mat-dialog-content>
@@ -51,7 +51,7 @@
             <mat-divider></mat-divider>
 
             <mat-dialog-actions align="end"  *ngIf="!loading">
-              <button color="primary" mat-flat-button >Confirmer</button>
+              <button color="primary" mat-flat-button (click)="closeAndSaveRefund('refund', refundForm.value.reason)">Confirmer</button>
               <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
             </mat-dialog-actions>
           </mat-dialog-content>
@@ -73,7 +73,7 @@
             <mat-divider></mat-divider>
 
             <mat-dialog-actions align="end"  *ngIf="!loading">
-              <button color="primary" mat-flat-button >Confirmer</button>
+              <button color="primary" mat-flat-button (click)="closeAndSaveGift('refund_gift')">Confirmer</button>
               <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
             </mat-dialog-actions>
           </mat-dialog-content>
@@ -88,8 +88,8 @@
         <div style="width: 100%;">
           <p>Está a punto de cancelar una reserva. Elija los bonos que quieren devolverse:</p>
           <div style="float:left; width: 100%">
-            <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="calculateAllRemainingQuantity() && defaults.currentBonus.length > 1"
-            style="float:left;width: 100%">{{item.bonus.code}}: <span style="color:#fe3085">{{getCurrentUse(item)}} {{defaults.booking.currency}} </span>
+            <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="(calculateAllRemainingQuantity() && defaults.currentBonus.length > 1) || unifyBonus"
+              [checked]="unifyBonus || checkBonusChecked(item)" style="float:left;width: 100%">{{item.bonus.code}}: <span style="color:#fe3085">{{getCurrentUse(item)}} {{defaults.booking.currency}} </span>
               <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">Fully applied</span>
               <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #F99D22;"><span style="color:#A1D14F">({{item.bonus.quantity}} {{defaults.booking.currency}})</span> Partially applied </span>
             </mat-checkbox>
@@ -115,7 +115,7 @@
         <mat-divider></mat-divider>
 
         <mat-dialog-actions align="end"  *ngIf="!loading">
-          <button color="primary" mat-flat-button >Confirmer</button>
+          <button color="primary" mat-flat-button  (click)="closeAndSaveBonus('refund_bonus')">Confirmer</button>
           <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
         </mat-dialog-actions>
       </mat-dialog-content>

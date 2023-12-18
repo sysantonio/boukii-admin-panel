@@ -95,16 +95,21 @@ export class CourseUserTransferComponent implements OnInit {
   }
 
   calculateAge(birthDateString) {
-    const today = new Date();
-    const birthDate = new Date(birthDateString);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
+    if(birthDateString && birthDateString !== null) {
+      const today = new Date();
+      const birthDate = new Date(birthDateString);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
 
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+
+      return age;
+    } else {
+      return 0;
     }
 
-    return age;
   }
 
   getNacionality(id: any) {

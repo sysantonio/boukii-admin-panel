@@ -985,17 +985,6 @@
               </mat-tab-group>
 
             </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0">
-
-              <div class="flex-auto" style="width: 60%">
-                <label for="summary" style="font-size: 18px">DESCRIPTION <span style="color:red">(*)</span></label>
-                <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="defaults.description" formControlName="description"></angular-editor>
-                <mat-error *ngIf="courseInfoFormGroup.controls.description.errors?.['required']">
-                  Escriba una descripcion
-                </mat-error>
-              </div>
-            </div>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
@@ -1233,7 +1222,7 @@
                         </div>
                         <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                           <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                            Grupos {{defaults.course_dates[0].groups[groupIndex].subgroups.length}}g
+                            Grupos {{defaults?.course_dates[0]?.groups[groupIndex]?.subgroups.length}}g
                           </div>
                           <div style="width: 100%; margin-top: 10%;height: 60px">
                             <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
@@ -1302,7 +1291,7 @@
                                     <span [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong> - {{groupLevel.name}} - {{ subGroupIndex + 1 }}</span>
                                   </li>
                                   <li *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;"
-                                      (click)="selectItem(dayLevel, dayIndex, subGroupIndex)"
+                                      (click)="selectItem(dayLevel, dayIndex, subGroupIndex, groupLevel)"
                                       [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
                                       style="float: left; width: 13%; text-align: center; cursor: pointer;">
                                     {{ dayLevel.dateString }}
@@ -1314,7 +1303,7 @@
                             <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
                               <div>
                                 <ul>
-                                  <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
+                                  <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex; checkAvailableMonitors(groupLevel);">
                                     <label for="monitor">Monitor</label>
                                     <mat-form-field class="flex-auto">
                                       <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>

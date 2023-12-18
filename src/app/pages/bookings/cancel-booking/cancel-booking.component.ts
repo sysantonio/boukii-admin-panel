@@ -66,6 +66,10 @@ export class CancelBookingModalComponent implements OnInit {
     }
   }
 
+  checkBonusChecked(item: any) {
+    return this.selectedBonus.findIndex((s) => s.id == item.bonus.id) !== -1;
+  }
+
   calculateAllRemainingQuantity() {
     let ret = 0;
     if (this.selectedBonus.length > 0) {
@@ -77,6 +81,22 @@ export class CancelBookingModalComponent implements OnInit {
     }
 
     return ret >= this.defaults.itemPrice;
+  }
+
+  closeAndSave(type: string) {
+    this.dialogRef.close({type: type});
+  }
+
+  closeAndSaveRefund(type: string, reason: string) {
+    this.dialogRef.close({type: type, reason: reason});
+  }
+
+  closeAndSaveGift(type: string) {
+    this.dialogRef.close({type: type});
+  }
+
+  closeAndSaveBonus(type: string) {
+    this.dialogRef.close({type: type, bonus: this.unifyBonus ? this.defaults.currentBonus : this.selectedBonus, unifyBonus: this.unifyBonus});
   }
 
 }

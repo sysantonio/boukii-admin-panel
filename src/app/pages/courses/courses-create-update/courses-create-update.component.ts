@@ -791,7 +791,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   private _filterMonitor(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.monitors.filter(monitor => monitor.full_name.toLowerCase().includes(filterValue));
+    return this.monitors.filter(monitor => monitor.first_name.toLowerCase().includes(filterValue) || monitor.last_name.toLowerCase().includes(filterValue));
   }
 
   generateDurations() {
@@ -821,7 +821,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate}
+      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: this.myHolidayDates},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -866,7 +866,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       data: {
         iterations: this.dataSource.data.length,
         minDate: this.minDate,
-        maxDate: this.maxDate
+        maxDate: this.maxDate,
+        holidays: this.myHolidayDates
       }
     });
 
@@ -1127,6 +1128,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
       })
   }
 
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h') && duration.includes('min')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
+  }
+
   calculateAgeMin(level: any) {
     let ret = 0;
     this.defaults.course_dates.forEach(courseDate => {
@@ -1296,7 +1314,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.selectedDate = this.defaults.course_dates[0]?.date;
     level.active = event.source.checked;
 
-
     if(event.source.checked) {
       this.defaults.course_dates.forEach(element => {
         element.groups.push(this.generateGroups(level));
@@ -1306,6 +1323,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         element.groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
+            group.teachers_min = level.id;
             group.subgroups.push({
               degree_id: level.id,
               monitor_id: null,
@@ -1315,6 +1333,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
         });
       });
+
+      this.checkAvailableMonitors(level);
     } else {
       // eliminar el curso o desactivarlo
 
@@ -1436,14 +1456,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
         } else {
           this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
             if (group.degree_id === level.id) {
-              ret = group.subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor?.last_name;
+              ret = group?.subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group?.subgroups[subGroupIndex]?.monitor?.last_name;
             }
 
           });
         }
 
 
-        return ret === "undefined undefined" ? null : ret;
+        return ret === "undefined undefined" || "undefined" ? null : ret;
     }
 
     calculateMonitorLevel(level: any) {
@@ -1544,12 +1564,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
   }
 
-  selectItem(item: any, index: any, subGroupIndex: any) {
+  selectItem(item: any, index: any, subGroupIndex: any, level) {
     this.subGroupSelectedIndex = null;
     this.selectedItem = item.dateString;
     this.selectedDate = item.date;
     this.daySelectedIndex = index;
     this.subGroupSelectedIndex = subGroupIndex;
+
+    this.checkAvailableMonitors(level);
   }
 
   setStation(station: any) {
@@ -2066,5 +2088,31 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   onTabDesChanged(event: any) {
     this.selectedTabDescIndex = event.index;
+  }
+
+  checkAvailableMonitors(level: any) {
+    let minDegree = 0;
+    this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
+      if (element.degree_id === level.id) {
+        minDegree = element.teachers_min;
+      }
+    });
+    const data = {
+      sportId: this.defaults.sport_id,
+      minimumDegreeId: minDegree,
+      startTime: this.dataSource.data[this.daySelectedIndex].hour,
+      endTime: this.calculateHourEnd(this.dataSource.data[this.daySelectedIndex].hour, this.dataSource.data[this.daySelectedIndex].duration),
+      date: this.daysDatesLevels[this.daySelectedIndex].date
+    };
+
+    this.crudService.post('/admin/monitors/available', data)
+      .subscribe((response) => {
+        this.monitors = response.data;
+        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+          startWith(''),
+          map((value: any) => typeof value === 'string' ? value : value?.full_name),
+          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+        );
+      })
   }
 }

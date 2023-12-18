@@ -569,11 +569,15 @@ ngAfterViewInit() {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h')) {
+    if(duration.includes('h') && duration.includes('min')) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
     } else {
       const minutes = duration.split(' ')[0].replace('min', '');
 

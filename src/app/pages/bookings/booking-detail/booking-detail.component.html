@@ -9,7 +9,7 @@
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
             <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/courses')">Atrás</button>
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking(bookingsToCreate)">Anular reserva totalmente</button>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">Anular reserva totalmente</button>
 
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
@@ -38,7 +38,7 @@
             </div>
 
             <mat-card-header>
-              <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, bookingsToCreate)">
+              <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>
@@ -299,18 +299,17 @@
             <div class="square-buttons-container">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">Online</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">Confirmer sans paiment</button>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">Cash</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 3" [class.selected]="selectedSubButton==='2'">Autre</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">Autre</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
               <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" [checked]="defaults.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">

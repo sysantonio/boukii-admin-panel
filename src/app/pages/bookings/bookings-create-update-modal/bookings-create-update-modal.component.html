@@ -652,7 +652,7 @@
                         </div>
 
                         <div>
-                          <p> +{{item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                          <p> +{{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}} CHF</p>
                         </div>
                       </div>
 
@@ -715,7 +715,7 @@
                   <div style="width: 100%;float:left; margin-top: 10px">
                     <div>
                       <p style="width: 60%;float: left;">Total Opciones</p>
-                      <p style="color: #EA0C60;">{{item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0}} CHF</p>
+                      <p style="color: #EA0C60;">{{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}} CHF</p>
                     </div>
                   </div>
 
@@ -731,7 +731,7 @@
                         (item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible) || (item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
                         ? item.courseDates[0].course?.price * item.courseDates.length : item.courseDates[0].course?.price))
 
-                       + (item.forfait ? ((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100) : 0))}}{{item.currency}}</p>
+                        + (item.forfait ?  + (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0))}}{{item.currency}}</p>
                     </div>
                   </div>
                   <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -841,7 +841,7 @@
                   <ng-container *ngFor="let item of bookingsToCreate; let i = index">
                     <span style="width: 100%; float:left" *ngIf="item.forfait">
                       <p style="float:left">Forfait {{item.forfait.id}}</p>
-                      <p style="float:right">{{((item.forfait.price * item.courseDates.length) * item.paxes) + ((item.forfait.price * item.forfait.tva) / 100)}}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                      <p style="float:right">{{(item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100))}}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
                     </span>
                   </ng-container>
 

@@ -205,8 +205,8 @@ export class BookingDetailComponent implements OnInit {
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.schoolSettings = data.data;
-        this.tva = parseFloat(this.schoolSettings.cancellation_insurance_percent);
-        this.cancellationInsurance = parseFloat(this.schoolSettings.bookings_comission_cash);
+        this.tva = parseFloat(this.schoolSettings.bookings_comission_cash);
+        this.cancellationInsurance = parseFloat(this.schoolSettings.cancellation_insurance_percent);
         this.boukiiCarePrice = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
       })
     this.getData();
@@ -216,7 +216,6 @@ export class BookingDetailComponent implements OnInit {
   getData() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
-
 
     this.crudService.get('/schools/'+this.user.schools[0].id)
     .subscribe((school) => {
@@ -648,6 +647,11 @@ export class BookingDetailComponent implements OnInit {
           });
       })*/
 
+      this.crudService.update('/bookings', {paid: this.defaults.paid, payment_method_id: this.defaults.payment_method_id}, this.id)
+        .subscribe((res) => {
+          this.snackbar.open('Reserva actualizada correctamente', 'OK', {duration: 3000});
+          this.getData();
+        })
   }
 
   update() {
@@ -1110,13 +1114,17 @@ export class BookingDetailComponent implements OnInit {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h')) {
+    if(duration.includes('h') && duration.includes('min')) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
     } else {
-      const minutes = duration.split(' ')[1].replace('min', '');
+      const minutes = duration.split(' ')[0].replace('min', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }
@@ -1172,7 +1180,7 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
-  deleteBooking(data: any) {
+  deleteBooking() {
 
 
     const dialogRef = this.dialog.open(CancelBookingModalComponent, {
@@ -1184,33 +1192,310 @@ export class BookingDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.delete('/booking', this.id)
+        if(data.type === 'no_refund') {
+          this.crudService.update('/bookings', {status: 2}, this.booking.id)
           .subscribe(() => {
-            this.snackbar.open('Booking deleted', 'OK', {duration: 3000});
+            this.crudService.update('/bookings', {status: 2}, this.booking.id)
+            .subscribe(() => {
+              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+              this.goTo('/bookings');
+            })
           })
+
+        } else if(data.type === 'refund') {
+
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+          .subscribe(() => {
+            this.crudService.update('/bookings', {status: 2}, this.booking.id)
+            .subscribe(() => {
+              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+              this.goTo('/bookings');
+
+            })
+          })
+
+        } else if(data.type === 'refund_gift') {
+          const vData = {
+            code: "VOU-"+this.generateRandomNumber(),
+            quantity: this.booking.price_total,
+            remaining_balance: this.booking.price_total,
+            payed: false,
+            client_id: data.client_main_id,
+            school_id: this.user.schools[0].id
+          };
+
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
+          .subscribe(() => {
+            this.crudService.update('/bookings', {status: 2}, this.booking.id)
+            .subscribe(() => {
+
+              this.crudService.create('/vouchers', vData)
+                .subscribe((result) => {
+
+                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                        .subscribe((vresult) => {
+                          console.log(vresult);
+
+                        })
+                  this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                  this.goTo('/bookings');
+
+                })
+            })
+          })
+        } else if(data.type === 'refund_bonus') {
+
+          if (data.unifyBonus) {
+
+            this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
+            .subscribe(() => {
+              this.crudService.update('/bookings', {status: 2}, this.booking.id)
+              .subscribe(() => {
+
+                let vData = {
+                  code: "VOU-"+this.generateRandomNumber(),
+                  quantity: 0,
+                  remaining_balance: 0,
+                  payed: false,
+                  client_id: this.booking.client_main_id,
+                  school_id: this.user.schools[0].id
+                };
+                data.bonus.forEach(element => {
+                  vData.quantity = vData.quantity + element.currentPay;
+                  vData.remaining_balance = vData.remaining_balance + element.currentPay;
+                });
+
+                  this.crudService.create('/vouchers', vData)
+                    .subscribe((result) => {
+
+                      this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                        .subscribe((vresult) => {
+                          console.log(vresult);
+                          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                          this.goTo('/bookings');
+
+                        })
+                    })
+
+              })
+            })
+
+          } else {
+            if (data.bonus.length > 0) {
+              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
+                .subscribe(() => {
+
+                this.crudService.update('/bookings', {status: 2}, this.booking.id)
+                .subscribe(() => {
+                  data.bonus.forEach(element => {
+                    const vData = {
+                      code: element.bonus.code,
+                      quantity: element.bonus.currentPay,
+                      remaining_balance: element.bonus.remaining_balance + element.bonus.currentPay,
+                      payed: false,
+                      client_id: element.bonus.client_id,
+                      school_id: this.user.schools[0].id
+                    };
+                    this.crudService.update('/vouchers', vData, element.bonus.id)
+                      .subscribe((result) => {
+
+                        this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: element.bonus.reducePrice})
+                          .subscribe((vresult) => {
+                            console.log(vresult);
+                            this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                            this.goTo('/bookings');
+
+                          })
+                      })
+                  });
+                })
+              })
+
+            } else {
+              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
+                .subscribe(() => {
+                this.crudService.delete('/bookings', this.booking.id)
+                .subscribe(() => {
+                  this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                  this.goTo('/bookings');
+
+                })
+              })
+            }
+          }
+        }
+
       }
     });
   }
 
-  deletePartialBooking(index: number, data: any) {
-
+  deletePartialBooking(index: number, book: any) {
 
     const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: data[index].price_total, booking: this.booking}
+      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: book.price_total, booking: this.booking}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.delete('/booking-users', data.id)
+        if(data.type === 'no_refund') {
+
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
           .subscribe(() => {
-            this.bookingsToCreate.splice(index, 1);
-            this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+
+            book.courseDates.forEach(element => {
+              this.crudService.delete('/booking-users', element.id)
+              .subscribe(() => {
+                this.bookingsToCreate.splice(index, 1);
+              })
+            });
+          });
+          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+
+        } else if(data.type === 'refund') {
+
+          this.crudService.create('/booking-logs', {booking_id: this.id, action:'partial cancelation', before_change: 'confirmed', user_id: this.user.id, description: data.reason})
+          .subscribe(() => {
+            book.courseDates.forEach(element => {
+              this.crudService.update('/booking-users', {status: 2}, element.id)
+              .subscribe(() => {
+              })
+            })
           })
+          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+
+        } else if(data.type === 'refund_gift') {
+          const vData = {
+            code: "VOU-"+this.generateRandomNumber(),
+            quantity: data[index].price_total,
+            remaining_balance: data[index].price_total,
+            payed: false,
+            client_id: data.client_main_id,
+            school_id: this.user.schools[0].id
+          };
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
+          .subscribe(() => {
+            book.courseDates.forEach(element => {
+              this.crudService.update('/booking-users', {status:2}, element.id)
+              .subscribe(() => {
+                this.bookingsToCreate.splice(index, 1);
+              })
+            })
+          })
+
+          this.crudService.create('/vouchers', vData)
+            .subscribe((result) => {
+
+              this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                .subscribe((vresult) => {
+                console.log(vresult);
+            })
+          })
+          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+
+        } else if(data.type === 'refund_bonus') {
+
+          if (data.unifyBonus) {
+
+            this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
+            .subscribe(() => {
+              book.courseDates.forEach(element => {
+                this.crudService.update('/booking-users', {status: 2}, element.id)
+                .subscribe(() => {
+                  this.bookingsToCreate.splice(index, 1);
+                })
+              })
+            })
+
+            let vData = {
+              code: "VOU-"+this.generateRandomNumber(),
+              quantity: 0,
+              remaining_balance: 0,
+              payed: false,
+              client_id: this.booking.client_main_id,
+              school_id: this.user.schools[0].id
+            };
+            data.bonus.forEach(element => {
+              vData.quantity = vData.quantity + element.currentPay;
+              vData.remaining_balance = vData.remaining_balance + element.currentPay;
+            });
+
+              this.crudService.create('/vouchers', vData)
+                .subscribe((result) => {
+
+                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                    .subscribe((vresult) => {
+                      console.log(vresult);
+                      this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+
+                    })
+
+              this.bookingsToCreate.splice(index, 1);
+            })
+
+          } else {
+            if (data.bonus.length > 0) {
+
+              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
+              .subscribe(() => {
+                book.courseDates.forEach(element => {
+                  this.crudService.update('/booking-users', {status: 2}, element.id)
+                  .subscribe(() => {
+                    this.bookingsToCreate.splice(index, 1);
+                  })
+                })
+              })
+
+              data.bonus.forEach(element => {
+                const vData = {
+                  code: element.bonus.code,
+                  quantity: element.bonus.currentPay,
+                  remaining_balance: element.bonus.remaining_balance + element.bonus.currentPay,
+                  payed: false,
+                  client_id: element.bonus.client_id,
+                  school_id: this.user.schools[0].id
+                };
+                this.crudService.update('/vouchers', vData, element.bonus.id)
+                  .subscribe((result) => {
+
+                    this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: element.bonus.reducePrice})
+                      .subscribe((vresult) => {
+                        console.log(vresult);
+
+                      })
+                  })
+              });
+              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+
+            } else {
+              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
+              .subscribe(() => {
+                book.courseDates.forEach(element => {
+                  this.crudService.update('/booking-users', {status: 2}, element.id)
+                  .subscribe(() => {
+                    this.bookingsToCreate.splice(index, 1);
+                  })
+                })
+              })
+              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+            }
+          }
+        }
+
       }
     });
+  }
+
+  generateRandomNumber() {
+    const min = 10000; // límite inferior para un número de 5 cifras
+    const max = 99999; // límite superior para un número de 5 cifras
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  generateRandomCode() {
+    return "VOU-"+this.generateRandomNumber();
   }
 
   addBonus() {
