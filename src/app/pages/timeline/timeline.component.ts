@@ -22,6 +22,7 @@ export class TimelineComponent {
 
   hoursRange: string[] = this.generateHoursRange('08:00', '20:00');
   hoursRangeMinusLast:string[];
+  hoursRangeMinutes: string[] = this.generateHoursRangeMinutes('08:00', '20:00');
 
   monitors = [
     { id: 1, name: 'David Wilson' },
@@ -68,6 +69,7 @@ export class TimelineComponent {
   editedMonitor:any;
   moveTask:boolean=false;
   taskMoved:any;
+  showEditBlock:boolean = false;
 
   showFilter:boolean=false;
   checkedSports = new Set();
@@ -79,6 +81,14 @@ export class TimelineComponent {
   filterNwd:boolean=true;
   filterBlockPayed:boolean=true;
   filterBlockNotPayed:boolean=true;
+
+  allHoursDay:boolean=false;
+  startTimeDay:string;
+  endTimeDay:string;
+  nameBlockDay:string;
+  divideDay:boolean=false;
+  startTimeDivision:string;
+  endTimeDivision:string;
 
   constructor(private crudService: ApiCrudService,private dialog: MatDialog,private eventService: EventService) {
     this.mockLevels.forEach(level => {
@@ -482,15 +492,20 @@ export class TimelineComponent {
 
         return {
           school_id: nwd.school_id,
+          station_id: nwd.station_id,
           block_id: nwd.id,
           date: moment(nwd.start_date).format('YYYY-MM-DD'),
           date_format: moment(nwd.start_date).format('DD/MM/YYYY'),
           full_day: nwd.full_day,
           type: type,
-          color: nwd.user_nwd_subtype_id === 1 ? '#999999' : nwd.color,
+          color: nwd.user_nwd_subtype_id === 1 ? '#bbbbbb' : nwd.color,
           name: nwd.description,
           monitor_id: nwd.monitor_id,
           monitor: monitor,
+          user_nwd_subtype_id: nwd.user_nwd_subtype_id,
+          color_block: nwd.color,
+          start_date: nwd.start_date,
+          end_date: nwd.end_date,
           ...hourTimesNwd
         };
       })
@@ -570,6 +585,20 @@ export class TimelineComponent {
     while (currentTime <= endTime) {
       times.push(this.formatTime(currentTime));
       currentTime.setHours(currentTime.getHours() + 1);
+    }
+
+    return times;
+  }
+
+  generateHoursRangeMinutes(start: string, end: string): string[] {
+    const startTime = this.parseTime(start);
+    const endTime = this.parseTime(end);
+    let currentTime = new Date(startTime);
+    let times = [];
+
+    while (currentTime <= endTime) {
+      times.push(this.formatTime(currentTime));
+      currentTime = new Date(currentTime.getTime() + 15 * 60000);
     }
 
     return times;
@@ -930,7 +959,6 @@ export class TimelineComponent {
     this.showEditMonitor = true;
   }
 
-
   hideEditMonitor() {
     this.editedMonitor = null;
     this.showEditMonitor = false;
@@ -1118,6 +1146,137 @@ export class TimelineComponent {
     this.filterBlockNotPayed=true;
 
     this.applyFilters();
+  }
+
+  /* Edit blocks */
+
+  openEditBlock() {
+    this.allHoursDay = this.blockDetail.full_day;
+    this.startTimeDay = this.blockDetail.hour_start;
+    this.endTimeDay = this.blockDetail.hour_end;
+    this.nameBlockDay = this.blockDetail.name;
+    this.divideDay = false;
+    this.startTimeDivision = '';
+    this.endTimeDivision = '';
+    this.showEditBlock = true;
+  }
+
+  hideEditBlock() {
+    this.showEditBlock = false;
+  }
+
+  onStartTimeDayChange() {
+    const filteredEndHours = this.filteredEndHoursDay;
+  
+    if (!filteredEndHours.includes(this.endTimeDay)) {
+      this.endTimeDay = filteredEndHours[0] || '';
+    }
+  }
+
+  get filteredEndHoursDay() {
+    const startIndex = this.hoursRangeMinutes.indexOf(this.startTimeDay);
+    return this.hoursRangeMinutes.slice(startIndex + 1);
+  }
+
+  onStartTimeDivisionChange() {
+    const filteredEndHours = this.filteredEndHoursDivision;
+    if (!filteredEndHours.includes(this.endTimeDivision)) {
+      this.endTimeDivision = filteredEndHours[0] || '';
+    }
+  }  
+
+  get filteredStartHoursDivision() {
+    const startIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
+    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
+    return this.hoursRangeMinutes.slice(startIndex + 1, endIndex - 1);
+  }
+  
+  get filteredEndHoursDivision() {
+    const defaultStartIndex = this.calculateDefaultStartTimeDivisionIndex();
+    const startIndex = this.startTimeDivision ? this.hoursRangeMinutes.indexOf(this.startTimeDivision) : defaultStartIndex;
+    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
+    return this.hoursRangeMinutes.slice(startIndex + 1, endIndex);
+  }
+  
+  calculateDefaultStartTimeDivisionIndex() {
+    const blockStartTimeIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
+    return blockStartTimeIndex + 1;
+  }
+
+  isButtonDayEnabled() {
+    if (this.divideDay) {
+      return this.nameBlockDay && this.startTimeDivision && this.endTimeDivision && (this.allHoursDay || (this.startTimeDay && this.endTimeDay));
+    } else {
+      return this.nameBlockDay && (this.allHoursDay || (this.startTimeDay && this.endTimeDay));
+    }
+  }
+
+  saveEditedBlock() {
+      const commonData = {
+        monitor_id: this.blockDetail.monitor_id,
+        school_id: this.blockDetail.school_id,
+        station_id: this.blockDetail.station_id,
+        description: this.nameBlockDay,
+        color: this.blockDetail.color_block,
+        user_nwd_subtype_id: this.blockDetail.user_nwd_subtype_id,
+      };
+      let firstBlockData:any = { ...commonData, start_date: this.blockDetail.start_date, end_date: this.blockDetail.end_date };
+      let secondBlockData:any;
+
+      // Calculate time moments
+      firstBlockData.start_time = this.allHoursDay ? `${this.hoursRangeMinutes[0]}:00` : `${this.startTimeDay}:00`;
+      firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
+      firstBlockData.full_day = this.allHoursDay && !this.divideDay;
+  
+      // Function update first block -> CALL LATER
+      const updateFirstBlock = () => {
+          this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetail.block_id).subscribe(
+              response => {
+                  //console.log('First block updated:', response);
+                  this.hideEditBlock();
+                  this.hideBlock();
+                  this.loadBookings(this.currentDate);
+              },
+              error => {
+                  console.error('Error updating first block:', error);
+              }
+          );
+      };
+  
+          if (this.divideDay) {
+              secondBlockData = { ...commonData, start_date: this.blockDetail.start_date, end_date: this.blockDetail.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
+  
+                  this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
+                      secondResponse => {
+                          //console.log('Second block created:', secondResponse);
+                          updateFirstBlock();
+                      },
+                      error => {
+                          console.error('Error creating second block:', error);
+                      }
+                  );
+
+          } else {
+              // Update FIRST
+              updateFirstBlock();
+          }
+  }
+
+  deleteEditedBlock() {
+        const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer le blocage?');
+        if (isConfirmed) {
+            this.crudService.delete('/monitor-nwds', this.blockDetail.block_id).subscribe(
+                response => {
+                    //console.log('Response:', response);
+                    this.hideEditBlock();
+                    this.hideBlock();
+                    this.loadBookings(this.currentDate);
+                },
+                error => {
+                    console.error('Error:', error);
+                }
+            );
+        }
   }
 
 }
