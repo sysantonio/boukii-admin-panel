@@ -128,7 +128,7 @@
         </div>
         <div *ngIf="entity.includes('monitor')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData()">
-            <span [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">Terminé</span>
+            <span [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">Inactif</span>
           </button>
         </div>
         <div *ngIf="entity.includes('monitor')">
@@ -563,9 +563,13 @@
       <mat-icon svgIcon="mat:edit"></mat-icon>
       <span>Modify</span>
     </button>
-    <button (click)="delete(item)" mat-menu-item>
+    <button (click)="delete(item)" mat-menu-item *ngIf="canDelete">
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>Delete</span>
+    </button>
+    <button (click)="deactivate(item)" mat-menu-item *ngIf="canDeactivate">
+      <mat-icon svgIcon="mat:delete"></mat-icon>
+      <span>Deactivate</span>
     </button>
   </ng-template>
 </mat-menu>

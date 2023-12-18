@@ -369,7 +369,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.snackBarRef.dismiss();
     }
 
-    this.selectedItem = [];
+    this.selectedItem = null;
     this.sportTypeSelected = this.form.get('sportType').value;
     let selectedSportType = this.form.get('sportType').value;
     this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === selectedSportType));

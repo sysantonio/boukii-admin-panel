@@ -8,6 +8,7 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
-      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'Admins'" [route]="'admins'" [createComponent]="createComponent" [filterField]="'admin'" [filterColumn]="'type'"></vex-aio-table>
+      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'Admins'" [route]="'admins'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false"
+      [filterField]="'admin'" [filterColumn]="'type'"></vex-aio-table>
   </vex-page-layout-content>
 </vex-page-layout>
