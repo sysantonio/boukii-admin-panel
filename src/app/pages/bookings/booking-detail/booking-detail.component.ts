@@ -1574,10 +1574,10 @@ export class BookingDetailComponent implements OnInit {
 
   calculateBoukiiCare(event: any) {
     if(event.source.checked) {
-      this.boukiiCare = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      this.boukiiCare = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
-      this.defaults.price_boukii_care = this.getBasePrice() + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+      this.defaults.price_boukii_care = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
       return this.getBasePrice() + this.boukiiCarePrice;
     } else {
       this.boukiiCare = 0;

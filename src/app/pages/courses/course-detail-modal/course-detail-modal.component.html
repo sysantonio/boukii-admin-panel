@@ -162,7 +162,7 @@
                         <ng-container *ngFor="let colorKey of colorKeys">
 
                           <div  *ngFor="let groupLevel of groupedByColor[colorKey]; let groupIndex = index">
-                            <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true"></i>
+                            <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true; checkAvailableMonitors(groupLevel);"></i>
                             <i class="fa fa-close" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = false"></i>
 
                             <div style="float: left; width: 100%;margin-top:3%">
@@ -267,7 +267,7 @@
                                     <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
                                       <div>
                                         <ul>
-                                          <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
+                                          <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex; checkAvailableMonitors(groupLevel)">
                                             <label for="monitor" style="font-size: 20px;">Monitor</label>
 
                                             <mat-form-field class="flex-auto">

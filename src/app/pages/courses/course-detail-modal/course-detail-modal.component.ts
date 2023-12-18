@@ -956,4 +956,30 @@ export class CourseDetailModalComponent implements OnInit {
       })
 
   }
+
+  checkAvailableMonitors(level: any) {
+    let minDegree = 0;
+    this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
+      if (element.degree_id === level.id) {
+        minDegree = element.teachers_min;
+      }
+    });
+    const data = {
+      sportId: this.defaults.sport_id,
+      minimumDegreeId: minDegree,
+      startTime: this.defaults.course_dates[this.daySelectedIndex].hour_start,
+      endTime: this.defaults.course_dates[this.daySelectedIndex].hour_end,
+      date: this.daysDatesLevels[this.daySelectedIndex].date
+    };
+
+    this.crudService.post('/admin/monitors/available', data)
+      .subscribe((response) => {
+        this.monitors = response.data;
+        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+          startWith(''),
+          map((value: any) => typeof value === 'string' ? value : value?.full_name),
+          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+        );
+      })
+  }
 }

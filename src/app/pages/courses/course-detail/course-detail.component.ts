@@ -363,6 +363,7 @@ export class CourseDetailComponent implements OnInit {
 
         });
       });
+      this.checkAvailableMonitors(level);
     } else {
       // eliminar el curso o desactivarlo
 
@@ -954,5 +955,49 @@ export class CourseDetailComponent implements OnInit {
         this.goTo('/courses');
       })
 
+  }
+
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h') && duration.includes('min')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
+  }
+
+
+  checkAvailableMonitors(level: any) {
+    let minDegree = 0;
+    this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
+      if (element.degree_id === level.id) {
+        minDegree = element.teachers_min;
+      }
+    });
+    const data = {
+      sportId: this.defaults.sport_id,
+      minimumDegreeId: minDegree,
+      startTime: this.defaults.course_dates[this.daySelectedIndex].hour_start,
+      endTime: this.defaults.course_dates[this.daySelectedIndex].hour_end,
+      date: this.daysDatesLevels[this.daySelectedIndex].date
+    };
+
+    this.crudService.post('/admin/monitors/available', data)
+      .subscribe((response) => {
+        this.monitors = response.data;
+        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+          startWith(''),
+          map((value: any) => typeof value === 'string' ? value : value?.full_name),
+          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+        );
+      })
   }
 }
