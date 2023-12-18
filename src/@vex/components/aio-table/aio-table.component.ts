@@ -67,6 +67,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @Input()
   withHeader: boolean = true;
   @Input()
+  canDelete: boolean = false;
+  @Input()
+  canDeactivate: boolean = false;
+  @Input()
   createOnModal: boolean = false;
   @Input()
   widthModal?: string = '90vw';
@@ -337,6 +341,24 @@ ngAfterViewInit() {
     });
   }
 
+  deactivate(item: any) {
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.update(this.deleteEntity, {active: false}, item.id)
+          .subscribe(() => {
+            this.getData(1, 10);
+          })
+      }
+    });
+  }
   deleteMultiple(items: any[]) {
     /**
      * Here we are updating our local array.
