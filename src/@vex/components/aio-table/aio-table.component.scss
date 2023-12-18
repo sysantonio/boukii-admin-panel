@@ -7,3 +7,12 @@ th {
   text-wrap: nowrap;
 }
 
+.filter-container {
+  width:100%;margin-top:24px;margin-bottom:24px;display:flex;gap:32px;
+}
+.filter-container-column {
+  display:flex;flex-direction:column;gap:0px;
+}
+.filter-container-column span {
+  margin-bottom:8px;
+}

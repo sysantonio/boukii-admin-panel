@@ -7,11 +7,58 @@
         <h1 class="title mt-0 mb-1">{{ title | uppercase}}</h1>
       </div>
     </div>
+
   </vex-page-layout-header>
+
 
   <vex-page-layout-content class="-mt-6 fullwidth">
 
     <div class="card overflow-auto -mt-16">
+
+      <div style="float:left; width: 100%; padding:2%" *ngIf="openFilters">
+
+        <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
+          <span style="float:left; width: 100%; font-size:16px">TYPE DE RÉSERVATION</span>
+          <mat-checkbox color="primary" [checked]="reservationTypeSingle">Single</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="reservationTypeMultiple">Multiple</mat-checkbox>
+        </div>
+
+        <div style="float:left; width: 30%" *ngIf="entity.includes('bookings') || entity.includes('courses')">
+          <span style="float:left; width: 100%; font-size:16px">TYPE D'ÉVÉNEMENT</span>
+          <mat-checkbox color="primary" [checked]="courseColective" (change)="courseColective = !courseColective; filterData()"><span style="color:#fac710">Cours collectif</span></mat-checkbox>
+          <mat-checkbox color="primary" [checked]="coursePrivate" (change)="coursePrivate = !coursePrivate;filterData()"><span style="color:#2fca45">Cours privés</span></mat-checkbox>
+        </div>
+
+        <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
+          <span style="float:left; width: 100%; font-size:16px">TYPE DE RÉSERVATION</span>
+          <mat-checkbox color="primary" [checked]="bookingPayed" (change)="bookingPayed = !bookingPayed; filterData()">Paye</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="bookingNoPayed" (change)="bookingNoPayed = !bookingNoPayed;filterData()">Non Paye</mat-checkbox>
+        </div>
+
+        <div style="float:left; width: 70%" *ngIf="entity.includes('courses') || entity.includes('monitors')">
+          <span style="float:left; width: 100%; font-size:16px">SPORT</span>
+          <mat-form-field style="float:left; width: 100%;" class="flex-auto" appearance="fill">
+
+            <mat-select [formControl]="sportsControl" multiple (selectionChange)="filterData()">
+
+              <mat-select-trigger>
+                <div *ngIf="sportsControl.value?.length > 0 && sportsControl.value?.length !== sports.length;">
+                  {{ getSelectedSportsNames() }}
+                </div>
+                <div *ngIf="sportsControl.value?.length === sports.length;">
+                  {{ 'ALL' }}
+                </div>
+              </mat-select-trigger>
+
+              <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection(sport);">
+                {{sport.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+
       <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
 
         <div *ngIf="selection.hasValue()" class="mr-4 pr-4 border-r flex-none">
@@ -36,7 +83,68 @@
                  type="search">
         </div>
 
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('courses')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="activeCourse = true;inActiveCourse=false;finishedCourse = false; allCourse = false;filterData('&active=1')">
+            <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">Active</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('courses')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="inActiveCourse = true;activeCourse=false;finishedCourse = false; allCourse = false;filterData('&active=0')">
+            <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'black'}">Inactif</span>
+
+          </button>
+        </div>
+        <div *ngIf="entity.includes('courses')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData()">
+            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">Terminé</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('courses')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="allCourse = true;activeCourse=false;inActiveCourse = false; finishedCourse = false; filterData()">
+            <span [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">Tout</span>
+          </button>
+        </div>
+
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="activeBooking = true; finishedBooking=false; allBookings=false; filterData()">
+            <span [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">Active</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('bookings')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
+            <span [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">Terminé</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('bookings')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData()">
+            <span [ngStyle]="{'color': allBookings ? '#fe3085' : 'black'}">Tout</span>
+          </button>
+        </div>
+
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('monitor')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="activeMonitor = true; inactiveMonitor=false; allMonitors=false; filterData()">
+            <span [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'black'}">Active</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('monitor')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData()">
+            <span [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">Terminé</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('monitor')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="allMonitors = true; activeMonitor=false; inactiveMonitor=false; filterData()">
+            <span [ngStyle]="{'color': allMonitors ? '#fe3085' : 'black'}">Tout</span>
+          </button>
+        </div>
+
         <span class="flex-1"></span>
+
+        <button class="ml-4 flex-none" (click)="openFilters = !openFilters"
+                mat-icon-button
+                matTooltip="Filter Data"
+                type="button">
+          <mat-icon svgIcon="mat:youtube_searched_for"></mat-icon>
+        </button>
 
         <button [matMenuTriggerFor]="columnFilterMenu"
                 class="ml-4 flex-none"
@@ -55,6 +163,7 @@
           <mat-icon svgIcon="mat:add"></mat-icon>
         </button>
       </div>
+
 
       <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort *ngIf="!loading">
 

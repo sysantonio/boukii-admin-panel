@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map, startWith, tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,7 +14,7 @@ import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { Router } from '@angular/router';
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, UntypedFormControl } from '@angular/forms';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
@@ -97,11 +97,37 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   sports: any = [];
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
+  sportsControl = new FormControl();
+  filteredSports: Observable<any[]>;
+  selectedSports: any[] = [];
+  openFilters: boolean = false;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService) {
+  reservationTypeSingle = false;
+  reservationTypeMultiple = false;
+
+  courseColective = false;
+  coursePrivate = false;
+
+  bookingPayed = false;
+  bookingNoPayed = false;
+
+  activeCourse = false;
+  inActiveCourse = false;
+  finishedCourse = false;
+  allCourse = true;
+
+  activeBooking = false;
+  finishedBooking = false;
+  allBookings = true;
+
+  activeMonitor = false;
+  inactiveMonitor = false;
+  allMonitors = true;
+
+  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService, private cdr: ChangeDetectorRef) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.schoolId = this.user.schools[0].id;
   }
@@ -115,6 +141,93 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     this.getSports();
   }
 
+  onButtonGroupClick($event){
+    let clickedElement = $event.target || $event.srcElement;
+
+    if( clickedElement.nodeName === "BUTTON" ) {
+
+      let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
+      // if a Button already has Class: .active
+      if( isCertainButtonAlreadyActive ) {
+        isCertainButtonAlreadyActive.classList.remove("active");
+      }
+
+      clickedElement.className += " active";
+    }
+
+  }
+
+  filterData(incFilter = '') {
+    let filter = '';
+
+    if(this.entity.includes('booking')) {
+
+      if (this.courseColective && !this.coursePrivate) {
+        filter = filter + '&course_type=1';
+      } else if (!this.courseColective && this.coursePrivate) {
+        filter = filter + '&course_type=2';
+      }
+
+      if (this.bookingPayed && !this.bookingNoPayed) {
+        filter = filter + '&paid=1';
+      } else if (!this.bookingPayed && this.bookingNoPayed) {
+        filter = filter + '&paid=0';
+      }
+
+      if (this.courseColective && !this.coursePrivate) {
+        filter = filter + '&courseType=1';
+      } else if (!this.courseColective && this.coursePrivate) {
+        filter = filter + '&courseType=2';
+      }
+
+      if (this.reservationTypeSingle && !this.reservationTypeMultiple) {
+        filter = filter + '&isMultiple=0';
+      } else if (!this.reservationTypeSingle && this.reservationTypeMultiple) {
+        filter = filter + '&isMultiple=1';
+      }
+
+    }
+
+    if(this.entity.includes('courses')) {
+
+      if (this.courseColective && !this.coursePrivate) {
+        filter = filter + '&course_type=1';
+      } else if (!this.courseColective && this.coursePrivate) {
+        filter = filter + '&course_type=2';
+      }
+
+      if(this.sportsControl.value.length !== this.sports.length) {
+        const ids = [];
+        this.sportsControl.value.forEach(element => {
+          ids.push(element.id);
+        });
+        filter = filter + '&sport_id='+ids.toString();
+      }
+    }
+    this.getFilteredData(1, 10, incFilter + filter);
+  }
+
+  /**
+   * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
+   * We are simulating this request here.
+   */
+  getFilteredData(pageIndex: number, pageSize: number, filter: any) {
+    this.loading = true;
+
+    // Asegúrate de que pageIndex y pageSize se pasan correctamente.
+    // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
+    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', filter + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', '', this.with)
+      .subscribe((response: any) => {
+        this.data = response.data;
+        this.dataSource.data = response.data;
+        this.totalRecords = response.total; // Total de registros disponibles.
+        console.log(`Data received for page: ${pageIndex}`);
+
+        this.loading = false;
+      });
+  }
+
+
   /**
    * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
    * We are simulating this request here.
@@ -122,18 +235,18 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   getData(pageIndex: number, pageSize: number) {
     this.loading = true;
 
-  // Asegúrate de que pageIndex y pageSize se pasan correctamente.
-  // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-  this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', '', this.with)
-    .subscribe((response: any) => {
-      this.data = response.data;
-      this.dataSource.data = response.data;
-      this.totalRecords = response.total; // Total de registros disponibles.
-      console.log(`Data received for page: ${pageIndex}`);
+    // Asegúrate de que pageIndex y pageSize se pasan correctamente.
+    // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
+    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', '', this.with)
+      .subscribe((response: any) => {
+        this.data = response.data;
+        this.dataSource.data = response.data;
+        this.totalRecords = response.total; // Total de registros disponibles.
+        console.log(`Data received for page: ${pageIndex}`);
 
-      this.loading = false;
-    });
-}
+        this.loading = false;
+      });
+  }
 
 onPageChange(event: PageEvent) {
   // La API puede esperar la primera página como 1, no como 0.
@@ -480,9 +593,15 @@ ngAfterViewInit() {
       })
   }
   getSports() {
-    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((data: any) => {
+    this.crudService.list('/sports', 1, 1000, 'asc', 'name', '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
         this.sports = data.data;
+        this.sportsControl.patchValue(data.data);
+
+        this.filteredSports = this.sportsControl.valueChanges.pipe(
+          startWith(''),
+          map((sport: string | null) => sport ? this._filterSports(sport) : this.sports.slice())
+        );
 
       })
   }
@@ -501,4 +620,29 @@ ngAfterViewInit() {
     const country = this.countries.find((c) => c.id == +id);
     return country ? country.code : 'NDF';
   }
+
+  getSelectedSportsNames(): string {
+    return this.sportsControl.value?.map(sport => sport.name).join(', ') || '';
+  }
+
+  private _filterSports(value: any): any[] {
+    const filterValue = typeof value === 'string' ? value?.toLowerCase() : value?.name.toLowerCase();
+    return this.sports.filter(sport => sport?.name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  toggleSelection(sport: any): void {
+    const index = this.selectedSports.findIndex(s => s.sport_id === sport.sport_id);
+    if (index >= 0) {
+      this.selectedSports.splice(index, 1);
+    } else {
+      this.selectedSports.push(sport);
+    }
+
+    // Crear una nueva referencia para el array
+    this.selectedSports = [...this.selectedSports];
+
+    // Detectar cambios manualmente para asegurarse de que Angular reconozca los cambios
+    this.cdr.detectChanges();
+  }
+
 }
