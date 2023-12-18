@@ -323,7 +323,7 @@
                       <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
 
 
-                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngIf="getLevelOrder(subgroup.degree_id) === levelForm.value.degree_order && subgroup.degree_id === levelForm.value.id"
+                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngIf="getLevelOrder(subgroup.degree_id) === levelForm.value.degree_order && subgroup.degree_id === levelForm.value.id && !subgroup.is_full"
                           (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
                           <div style="float: left;width: 50%;">
 
