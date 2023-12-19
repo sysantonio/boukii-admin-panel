@@ -403,8 +403,6 @@ export class SettingsComponent implements OnInit {
       });
     }
 
-
-
     const data = {
       name: "Temporada 1",
       start_date: moment(this.selectedFrom,).format('YYYY-MM-DD'),
@@ -421,6 +419,7 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
+        this.getData();
         this.schoolService.refreshSchoolData();
       });
     } else {
@@ -428,6 +427,7 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
+        this.getData();
         this.schoolService.refreshSchoolData();
       });
     }
@@ -448,6 +448,7 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open('Datos guardados con éxito', 'Close', {duration: 3000});
+        this.getData();
         this.schoolService.refreshSchoolData();
       });
   }
@@ -543,11 +544,10 @@ export class SettingsComponent implements OnInit {
       element.school_id = this.school.id;
       this.crudService.update('/school-colors', element, element.id)
         .subscribe(() => {
-
         })
     });
 
-    this.snackbar.open('Los bloqueos se han actualizado correctamente', 'OK', {duration: 3000})
+    this.snackbar.open('Los bloqueos se han actualizado correctamente', 'OK', {duration: 3000});
   }
 
 
@@ -572,6 +572,7 @@ export class SettingsComponent implements OnInit {
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
         this.snackbar.open('Autorizaciones guardadas correctamente', 'OK', {duration: 3000});
+        this.getData();
         this.schoolService.refreshSchoolData();
       })
   }
@@ -718,7 +719,11 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
-        this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000})
+        this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000});
+        this.schoolService.refreshSchoolData();
+
+        this.getData();
+
       })
   }
 
@@ -740,6 +745,8 @@ export class SettingsComponent implements OnInit {
 
         this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
+        this.getData();
+
       })
   }
 
