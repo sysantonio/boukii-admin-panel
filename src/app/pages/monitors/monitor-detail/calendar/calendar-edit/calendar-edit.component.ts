@@ -174,7 +174,7 @@ export class CalendarEditComponent implements OnInit {
     this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.id)
+          this.crudService.get('/stations/'+element.station_id)
             .subscribe((data) => {
               this.stations.push(data.data);
               this.filteredStations = this.myControlStations.valueChanges

@@ -243,7 +243,7 @@ export class AppComponent {
           label: 'Réglages',
           route: '/settings',
           icon: '../assets/img/icons/reglajes-2.svg',
-          icon_active: '../assets/img/icons/reglajes.svg',
+          icon_active: '../assets/img/icons/reglages.svg',
           routerLinkActiveOptions: { exact: true }
         }]
       }

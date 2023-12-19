@@ -215,6 +215,11 @@ export class MonitorDetailComponent {
   }
 
   async ngOnInit() {
+
+    this.getData();
+  }
+
+  async getData() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
     this.getClients();
@@ -353,7 +358,6 @@ export class MonitorDetailComponent {
       await this.calculateWeeksInMonth();
       //await this.calculateTaskPositions();
       this.loadBookings(this.currentDate);
-
   }
 
 
@@ -563,7 +567,7 @@ export class MonitorDetailComponent {
     this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.id)
+          this.crudService.get('/stations/'+element.station_id)
             .subscribe((data) => {
               this.stations.push(data.data);
 
@@ -810,6 +814,7 @@ export class MonitorDetailComponent {
       this.crudService.update('/monitor-sports-degrees', data, auLevel.monitor_sport_id)
       .subscribe(() => {
         this.snackbar.open('Monitor adult authorization updated', 'OK', {duration: 3000});
+        this.getData();
       })
     });
   }
