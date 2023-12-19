@@ -832,6 +832,7 @@ export class TimelineComponent {
         this.showDetail = true;
       }
       this.hideBlock();
+      this.hideEditBlock();
     }
   }
 
@@ -839,8 +840,9 @@ export class TimelineComponent {
     console.log(block);
     this.idBlock = block.block_id;
     this.blockDetail = block;
-    this.showBlock = true;
     this.hideDetail();
+    this.hideEditBlock();
+    this.showBlock = true;
   }
 
   hideDetail() {
@@ -1063,7 +1065,7 @@ export class TimelineComponent {
       data: {
         event,
         monitor_id: dateInfo.monitor_id,
-        date_param: dateInfo.date,
+        date_param: dateInfo.date_format,
         hour_start: dateInfo.hour
       }
     });
@@ -1289,5 +1291,22 @@ export class TimelineComponent {
             );
         }
   }
+
+  getDayOfWeek(dayIndex: number): number {
+    const startOfWeek = moment(this.currentDate).startOf('isoWeek');
+    const specificDate = startOfWeek.add(dayIndex, 'days');
+    return specificDate.date();
+  }
+
+  /*
+  getDayOfMonth(weekIndex: number, dayIndex: number): string {
+    const startOfWeek = moment(startOfMonth(this.currentDate)).add(weekIndex, 'weeks');
+    const specificDate = startOfWeek.startOf('isoWeek').add(dayIndex, 'days');
+    if (specificDate.month() === this.currentDate.getMonth()) {
+        return specificDate.format('D');
+    }
+    return '';
+  }
+  */
 
 }
