@@ -23,7 +23,7 @@
               </p>
               <div class="qrcodeImage">
                 <qrcode
-                  [qrdata]="booking.client_main_id.toString()"
+                  [qrdata]="booking?.client_main_id?.toString()"
                   [allowEmptyString]="true"
                   [ariaLabel]="'QR Code image with the following content...'"
                   [cssClass]="'center'"
@@ -47,8 +47,8 @@
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>
-              <mat-card-subtitle>{{getClientName(booking.client_main_id)}}</mat-card-subtitle>
-              <mat-card-subtitle>{{ getNacionality(getClient(booking.client_main_id).country) }} · {{ getCountry(getClient(booking.client_main_id).country) }} · {{calculateAge(getClient(booking.client_main_id).birth_date) }} ans</mat-card-subtitle>
+              <mat-card-subtitle>{{getClientName(booking?.client_main_id)}}</mat-card-subtitle>
+              <mat-card-subtitle>{{ getNacionality(getClient(booking?.client_main_id)?.country) }} · {{ getCountry(getClient(booking?.client_main_id)?.country) }} · {{calculateAge(getClient(booking?.client_main_id)?.birth_date) }} ans</mat-card-subtitle>
             </mat-card-header>
 
             <mat-divider class="text-border"></mat-divider>
@@ -98,7 +98,7 @@
 
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
-                      <li *ngFor="let forfait of settings.extras.forfait">
+                      <li *ngFor="let forfait of settings?.extras?.forfait">
                           <mat-checkbox class="radio" [disabled]="true" [value]="forfait" (change)="setForfait($event, forfait)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
                             <span>{{forfait.id}}</span>
                           </mat-checkbox>
@@ -221,7 +221,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(booking.client_main_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getNacionality(getClient(booking.client_main_id).country) }} · {{ getCountry(getClient(booking.client_main_id).country) }} · {{calculateAge(getClient(booking.client_main_id).birth_date) }} ans
+                {{ getNacionality(getClient(booking.client_main_id)?.country) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} ans
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
@@ -242,11 +242,11 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Option Remboursement (10%)</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid"style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid"style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">Résumé</h3>

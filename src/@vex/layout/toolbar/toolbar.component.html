@@ -15,28 +15,23 @@
           [matMenuTriggerFor]="addNewMenu"
           color="primary"
           mat-flat-button
-          type="button">Add New
+          type="button">Add...
   </button>
 
   <mat-menu #addNewMenu="matMenu" [overlapTrigger]="false" xPosition="after" yPosition="below">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="goTo('/clients/create')">
       <mat-icon svgIcon="mat:person_add"></mat-icon>
-      <span>Add Contact</span>
+      <span>Añadir Cliente</span>
     </button>
 
-    <button mat-menu-item>
+    <button mat-menu-item (click)="goTo('/tasks/create')" *ngIf="false">
       <mat-icon svgIcon="mat:done_all"></mat-icon>
-      <span>Add Task</span>
+      <span>Añadir tarea</span>
     </button>
 
-    <button mat-menu-item>
+    <button mat-menu-item (click)="goTo('/bookings/create')">
       <mat-icon svgIcon="mat:assignment_turned_in"></mat-icon>
-      <span>Add Project</span>
-    </button>
-
-    <button [matMenuTriggerFor]="documentMenu" mat-menu-item>
-      <mat-icon svgIcon="mat:ballot"></mat-icon>
-      <span>Add Document</span>
+      <span>Añadir reserva</span>
     </button>
   </mat-menu>
 
@@ -57,7 +52,7 @@
     </button>
   </mat-menu>
 
-  <div #megaMenuOriginRef class="ltr:ml-2 rtl:mr-2">
+  <div #megaMenuOriginRef class="ltr:ml-2 rtl:mr-2" *ngIf="false">
     <button *ngIf="isHorizontalLayout$ | async"
             [class.hidden]="mobileQuery"
             (click)="openMegaMenu(megaMenuOriginRef)"

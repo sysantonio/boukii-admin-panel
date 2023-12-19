@@ -17,7 +17,7 @@ import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-
 export class ClientsComponent {
 
   createComponent = ClientsCreateUpdateModule;
-  entity = '/admin/clients';
+  entity = '/admin/clients/mains';
   deleteEntity = '/clients';
   showDetail: boolean = false;
 

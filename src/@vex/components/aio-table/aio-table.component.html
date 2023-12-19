@@ -223,6 +223,20 @@
           </ng-container>
         </ng-container>
 
+        <!-- Course image Columns -->
+
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'course_image'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
+              <img [src]="'https://school.boukii.com/assets/icons/'+ getCourseType(data[i])+'_' + getCourseImage(data[i]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
+              <!--<ng-container *ngIf="data[i].bookingusers > 1" >
+                <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
+              </ng-container>-->
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Booking users image Columns -->
 
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">

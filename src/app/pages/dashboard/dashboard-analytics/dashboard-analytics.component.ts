@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { defaultChartOptions } from 'src/@vex/utils/default-chart-options';
 import { tableSalesData } from 'src/app/static-data/table-sales-data';
+import { BookingsCreateUpdateComponent } from '../../bookings/bookings-create-update/bookings-create-update.component';
 
 @Component({
   selector: 'vex-dashboard-analytics',
@@ -10,11 +11,23 @@ import { tableSalesData } from 'src/app/static-data/table-sales-data';
 })
 export class DashboardAnalyticsComponent {
 
-  entity = 'bookings';
+  entity = '/bookings';
+  createComponent = BookingsCreateUpdateComponent;
+  deleteEntity = '/bookings';
   columns: TableColumn<any>[] = [
-    { label: 'Nombre', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Mail', property: 'email', type: 'text', visible: true },
-    { label: 'Rol', property: 'rol', type: 'text', visible: true },
+    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Type', property: 'type', type: 'booking_users_image', visible: true },
+    { label: 'Course', property: 'bookingusers', type: 'booking_users', visible: true},
+    { label: 'Client', property: 'client_main_id', type: 'client', visible: true },
+    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
+    { label: 'Options', property: 'options', type: 'text', visible: true },
+    { label: 'Bons', property: 'bonus', type: 'light', visible: true },
+    { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light', visible: true },
+    { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
+    { label: 'Prix', property: 'price_total', type: 'price', visible: true },
+    { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
+    { label: 'Status', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

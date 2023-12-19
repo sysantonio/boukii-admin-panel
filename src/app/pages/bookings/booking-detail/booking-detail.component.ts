@@ -205,9 +205,6 @@ export class BookingDetailComponent implements OnInit {
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.schoolSettings = data.data;
-        this.tva = parseFloat(this.schoolSettings.bookings_comission_cash);
-        this.cancellationInsurance = parseFloat(this.schoolSettings.cancellation_insurance_percent);
-        this.boukiiCarePrice = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
       })
     this.getData();
   }
@@ -221,6 +218,9 @@ export class BookingDetailComponent implements OnInit {
     .subscribe((school) => {
       this.school = school.data;
       this.settings = JSON.parse(school.data.settings);
+      this.cancellationInsurance =  parseFloat(this.settings.taxes.cancellation_insurance_percent);
+      this.boukiiCarePrice = parseInt(this.settings.taxes.boukii_care_price);
+      this.tva = parseFloat(this.settings.taxes.tva);
 
       forkJoin([this.getSportsType(), this.getClients()])
       .subscribe((data: any) => {

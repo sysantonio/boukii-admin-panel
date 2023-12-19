@@ -219,8 +219,8 @@
 
                   <mat-form-field class="flex-auto" style="width: 50%;">
                     <mat-label>Hora</mat-label>
-                    <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration)">
-                      <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration)"
+                    <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.length == 8 ? this.transformTime(selectedItem.duration) : selectedItem.duration)">
+                      <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.length == 8 ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
                       [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
                         (onSelectionChange)="courseDate.hour_start = time;">{{ time }}</mat-option>
                     </mat-select>
@@ -795,9 +795,9 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addReduction()">Appliquer une réduction</button>
+            <button mat-raised-button color="accent" *ngIf="cancellationInsurance" (click)="addReduction()">Appliquer une réduction</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addBonus()">Utiliziser un bon d'achat</button>
+            <button mat-raised-button color="accent" *ngIf="boukiiCarePrice" (click)="addBonus()">Utiliziser un bon d'achat</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Option Remboursement (10%)</p>

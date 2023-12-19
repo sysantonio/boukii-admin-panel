@@ -52,7 +52,12 @@
                 <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'">
                 <ul style="margin: 2% 0 0 0;">
                   <li style="margin: 0 0 2% 0"><strong>Dates</strong></li>
-                  <li *ngFor="let item of defaults.course_dates">{{parseDateToDay(item.date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date, 'YYYY-MM-DD', 'LL')}} <i style="text-align: right;float:right">{{parseDateToDay(item.hour_start, 'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end, 'HH:mm:ss', 'HH:mm')}}h</i></li>
+                  <li>{{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'LL')}}
+                    <i style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[0].hour_start, 'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(defaults.course_dates[0].hour_end, 'HH:mm:ss', 'HH:mm')}}h</i>
+                  </li>
+                  <li>{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date, 'YYYY-MM-DD', 'LL')}}
+                    <i style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_start, 'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_end, 'HH:mm:ss', 'HH:mm')}}h</i>
+                  </li>
                 </ul>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
@@ -338,10 +343,10 @@
             </mat-card-content>
           </mat-card>
         </mat-tab>
-        <mat-tab label="Reservations">
+        <mat-tab label="Reservations" *ngIf="false">
 
         </mat-tab>
-        <mat-tab label="Statistiques">
+        <mat-tab label="Statistiques" *ngIf="false">
 
         </mat-tab>
 
