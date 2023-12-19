@@ -11,8 +11,8 @@
               <div style="float: left; width: 100%;">
                 <div style="float: left;width: 50%;">
                   <div style="float: left; margin-right: 2%">
-                    <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ defaults?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100">
-                  </div>
+                    <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ defaults?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" *ngIf="defaults.course_type === 1">
+                    <img [src]="'https://school.boukii.com/assets/icons/prive_'+ defaults?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" *ngIf="defaults.course_type === 2">                  </div>
                   <div style="float: left; width: 75%;">
                     <p><strong>{{defaults.name}}</strong></p>
                     <p>{{defaults.course_type === 1 ? 'Collectif' : 'Privee'}}  {{defaults.sport.name}}</p>

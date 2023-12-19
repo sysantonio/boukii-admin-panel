@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter, map, startWith, tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,6 +20,7 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import moment from 'moment';
 import { ConfirmModalComponent } from 'src/app/pages/monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @UntilDestroy()
@@ -41,6 +42,7 @@ import { ConfirmModalComponent } from 'src/app/pages/monitors/monitor-detail/con
   ]
 })
 export class AioTableComponent implements OnInit, AfterViewInit {
+  private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
   layoutCtrl = new UntypedFormControl('boxed');
 
@@ -94,6 +96,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl();
+
   loading = true;
   user: any;
   schoolId: any;
@@ -248,14 +251,17 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         this.totalRecords = response.total; // Total de registros disponibles.
         console.log(`Data received for page: ${pageIndex}`);
 
+        this.searchCtrl.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((value) => this.onFilterChange(value));
         this.loading = false;
       });
   }
 
-onPageChange(event: PageEvent) {
-  // La API puede esperar la primera página como 1, no como 0.
-  this.getData(event.pageIndex +1, event.pageSize);
-}
+  onPageChange(event: PageEvent) {
+    // La API puede esperar la primera página como 1, no como 0.
+    this.getData(event.pageIndex +1, event.pageSize);
+  }
 
 ngAfterViewInit() {
   this.dataSource = new MatTableDataSource();

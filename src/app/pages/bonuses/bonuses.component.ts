@@ -14,6 +14,7 @@ export class BonusesComponent {
   deleteEntity = '/vouchers';
   columns: TableColumn<any>[] = [
     { label: 'Code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Client', property: 'client_id', type: 'client', visible: true },
     { label: 'Quantity', property: 'quantity', type: 'text', visible: true },
     { label: 'Remaining', property: 'remaining_balance', type: 'text', visible: true },
     { label: 'Payed', property: 'payed', type: 'status', visible: true },

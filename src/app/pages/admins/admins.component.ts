@@ -12,9 +12,15 @@ export class AdminsComponent {
   createComponent = AdminCreateUpdateComponent;
   entity = '/users';
   deleteEntity = '/users';
+  user: any;
+
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
+
+  constructor() {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+  }
 }

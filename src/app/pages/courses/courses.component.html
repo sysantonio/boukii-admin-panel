@@ -12,7 +12,7 @@
       [ngClass]="{'table-show-detail': this.showDetail}"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
-      [updatePage]="'detail'"
+      [updatePage]="'detail'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
       ></vex-aio-table>
   </vex-page-layout-content>
 
@@ -99,42 +99,44 @@
           <p><strong>Niveles / Grupos</strong></p>
 
           <ng-container *ngFor="let colorKey of colorKeys">
-            <div style="float: left; width: 100%;margin-top:3%;cursor: pointer;" *ngFor="let level of groupedByColor[colorKey]" (click)="selectGroup(level)">
-              <div  style="float: left;width: 22%;border-radius: 11%;height: 110px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
-                <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;margin: 0 auto;" />
+            <ng-container *ngFor="let level of groupedByColor[colorKey]">
+              <div style="float: left; width: 100%;margin-top:3%;cursor: pointer;" *ngIf="getSubGroups(level.id) > 0" (click)="selectGroup(level)">
+                <div  style="float: left;width: 22%;border-radius: 11%;height: 110px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                  <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;margin: 0 auto;" />
 
-                <p style="font-size: 12px;text-align: center">{{level.league}}</p>
-                <p style="font-size: 12px;text-align: center">{{level.annotation}} - {{level.name}}</p>
-              </div>
-              <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-                <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                Grupos <strong style="text-align: center;">{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</strong>
-              </div>
-              <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-                <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                Días <br><strong style="text-align: center;">{{detailData.course_dates.length}}</strong>
-              </div>
-              <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-                <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                Duración <strong style="text-align: center;">{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</strong>
-              </div>
-              <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                  <p style="font-size: 12px;text-align: center">{{level.league}}</p>
+                  <p style="font-size: 12px;text-align: center">{{level.annotation}} - {{level.name}}</p>
+                </div>
+                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                  <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;margin: 0 auto;" />
+                  Grupos <strong style="text-align: center;">{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</strong>
+                </div>
+                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                  <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;margin: 0 auto;" />
+                  Días <br><strong style="text-align: center;">{{detailData.course_dates.length}}</strong>
+                </div>
+                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
+                  <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;margin: 0 auto;" />
+                  Duración <strong style="text-align: center;">{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</strong>
+                </div>
+                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
 
-                Alumnos <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
-              </div>
-              <div *ngFor="let item of selectedGroup.course_subgroups; let i = index">
-                <div *ngIf="level.id === item.degree_id" style="float: left; width: 100%; padding: 5%;">
-                  <p style="float: left; width: 100%;">Group {{i+1}}</p>
-                  <div style="float: left;width: 70%;">
-                    <img [src]="getMonitor(item.id)?.image ? getMonitor(item.id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0;">
-                    <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.id)?.first_name ? getMonitor(item.id)?.first_name + ' ' + getMonitor(item.id)?.last_name : 'No monitor asigned'}}</span>
-                  </div>
-                  <div style="float: left;width: 30%;margin: 6% 0 0 0;">
-                    <strong style="text-align: right;float: right;">{{item.totalUsers}}/{{item.max_participants}} utilisateurs</strong>
+                  Alumnos <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
+                </div>
+                <div *ngFor="let item of selectedGroup.course_subgroups; let i = index">
+                  <div *ngIf="level.id === item.degree_id" style="float: left; width: 100%; padding: 5%;">
+                    <p style="float: left; width: 100%;">Group {{i+1}}</p>
+                    <div style="float: left;width: 70%;">
+                      <img [src]="getMonitor(item.id)?.image ? getMonitor(item.id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0;">
+                      <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.id)?.first_name ? getMonitor(item.id)?.first_name + ' ' + getMonitor(item.id)?.last_name : 'No monitor asigned'}}</span>
+                    </div>
+                    <div style="float: left;width: 30%;margin: 6% 0 0 0;">
+                      <strong style="text-align: right;float: right;">{{item.totalUsers}}/{{item.max_participants}} utilisateurs</strong>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </ng-container>
           </ng-container>
         </div>
       </mat-card-content>

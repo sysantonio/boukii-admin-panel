@@ -72,7 +72,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
   create() {
 
     const data = {
-      code: this.defaults.code === null ? "VOU-"+this.generateRandomNumber() : this.defaults.code,
+      code: this.defaults.code === null ? "BOU-"+this.generateRandomNumber() : this.defaults.code,
       quantity: this.defaults.quantity,
       remaining_balance: this.defaults.quantity,
       payed: this.defaults.payed,
@@ -108,7 +108,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
   }
 
   generateRandomCode() {
-    this.defaults.code = "VOU-"+this.generateRandomNumber();
+    this.defaults.code = "BOU-"+this.generateRandomNumber();
   }
   // pasar a utils
   private _filter(name: string): any[] {
@@ -147,8 +147,8 @@ export class BonusesCreateUpdateComponent implements OnInit {
   }
 
   generateRandomNumber() {
-    const min = 10000; // límite inferior para un número de 5 cifras
-    const max = 99999; // límite superior para un número de 5 cifras
+    const min = 10000000; // límite inferior para un número de 5 cifras
+    const max = 99999999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
