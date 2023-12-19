@@ -563,7 +563,7 @@
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Porcentaje que retiene la escuela</p>
                   <mat-form-field class="flex-auto">
-                    <input matInput placeholder="Percentaje" type="number" [value]="this.school.cancellation_insurance_percent * 100" (blur)="updateInsuranceValue($event)">
+                    <input matInput placeholder="Percentaje" type="number" [value]="cancellationInsurancePercent * 100" (blur)="updateInsuranceValue($event)">
 
                   </mat-form-field>
                 </div>
@@ -586,7 +586,7 @@
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Precio fijo del seguro</p>
                   <mat-form-field class="flex-auto">
-                    <input matInput placeholder="Percentaje" type="number" [value]="this.school.bookings_comission_boukii_pay"  (blur)="updateBoukiiCareValue($event)">
+                    <input matInput placeholder="Percentaje" type="number" [value]="boukiiCarePrice" (blur)="updateBoukiiCareValue($event)">
 
                   </mat-form-field>
                 </div>
@@ -625,7 +625,7 @@
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">Porcentaje del impuesto</p>
                   <mat-form-field class="flex-auto">
-                    <input matInput placeholder="TVA" type="number" [value]="this.school.bookings_comission_cash * 100" (blur)="updateTVAValue($event)">
+                    <input matInput placeholder="TVA" type="number" [value]="tva* 100" (blur)="updateTVAValue($event)">
 
                   </mat-form-field>
                 </div>

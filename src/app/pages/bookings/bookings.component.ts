@@ -34,7 +34,7 @@ export class BookingsComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Type', property: 'type', type: 'booking_users_image', visible: true },
     { label: 'Course', property: 'bookingusers', type: 'booking_users', visible: true},
-    { label: 'Client', property: 'client_main_id', type: 'client', visible: true },
+//    { label: 'Dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
     { label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'Bons', property: 'bonus', type: 'light', visible: true },
@@ -165,7 +165,7 @@ export class BookingsComponent {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((client) => {
         this.clients = client.data;
       })

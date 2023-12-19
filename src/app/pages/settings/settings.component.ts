@@ -67,6 +67,10 @@ export class SettingsComponent implements OnInit {
   displayedSportColumns: string[] = ['id', 'sport', 'name', 'price', 'tva', 'status', 'edit', 'delete'];
   displayedExtrasColumns: string[] = ['id', 'product', 'name', 'price', 'tva', 'status', 'edit', 'delete'];
 
+  tva = 0;
+  boukiiCarePrice = 0;
+  cancellationInsurancePercent = 0;
+
   today = new Date();
 
   selectedFrom = null;
@@ -166,10 +170,6 @@ export class SettingsComponent implements OnInit {
 
         this.school = data.data;
 
-        this.hasCancellationInsurance = parseFloat(this.school.cancellation_insurance_percent) !== 0;
-        this.hasBoukiiCare = parseInt(this.school.bookings_comission_boukii_pay) !== 0;
-        this.hasTVA = parseFloat(this.school.bookings_comission_cash) !== 0;
-
         forkJoin([this.getSchoolSeason(),this.getSports(),this.getBlockages(), this.getSchoolSports()])
           .subscribe((data: any) => {
             this.season = data[0].data.filter((s) => s.is_active)[0];
@@ -242,6 +242,15 @@ export class SettingsComponent implements OnInit {
               }
               return fila;
             });
+
+
+            this.hasCancellationInsurance = parseFloat(settings.taxes.cancellation_insurance_percent) !== 0;
+            this.hasBoukiiCare = parseInt(settings.taxes.boukii_care_price) !== 0;
+            this.hasTVA = parseFloat(settings.taxes.tva) !== 0;
+
+            this.cancellationInsurancePercent = parseFloat(settings.taxes.cancellation_insurance_percent);
+            this.boukiiCarePrice = parseInt(settings.taxes.boukii_care_price);
+            this.tva = parseFloat(settings.taxes.tva);
 
             this.dataSourceForfait.data = settings?.extras.forfait;
             this.dataSourceFood.data = settings?.extras.food;
@@ -716,16 +725,19 @@ export class SettingsComponent implements OnInit {
   saveTaxes() {
 
     const data = {
-      cancellation_insurance_percent: this.hasCancellationInsurance ? this.school.cancellation_insurance_percent : 0,
-      bookings_comission_boukii_pay: this.hasBoukiiCare ? this.school.bookings_comission_boukii_pay : 0,
-      bookings_comission_cash: this.hasTVA ? this.school.bookings_comission_cash : 0,
-      name: this.school.name,
-      description: this.school.description
+      taxes: {cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0,
+        tva: this.hasTVA ? this.tva : 0},
+      prices_range: {people: this.people, prices: this.dataSource},
+      monitor_app_client_messages_permission: this.authorized,
+      monitor_app_client_bookings_permission: this.authorizedBookingComm,
+      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      degrees: this.dataSourceLevels.data
     }
 
-
-    this.crudService.update('/schools', data, this.school.id)
+    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
+
         this.snackbar.open('Extras modificados correctamente', 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
       })
@@ -733,17 +745,17 @@ export class SettingsComponent implements OnInit {
 
   updateTVAValue(event: any) {
 
-    this.school.bookings_comission_cash = parseInt(event.target.value) / 100;
+    this.tva = parseInt(event.target.value) / 100;
   }
 
   updateBoukiiCareValue(event: any) {
 
-    this.school.bookings_comission_boukii_pay = parseInt(event.target.value);
+    this.boukiiCarePrice = parseInt(event.target.value);
   }
 
   updateInsuranceValue(event: any) {
 
-    this.school.cancellation_insurance_percent = parseInt(event.target.value) / 100;
+    this.cancellationInsurancePercent = parseInt(event.target.value) / 100;
   }
 
   updateSportDegrees() {

@@ -271,13 +271,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.schoolService.getSchoolData()
-      .subscribe((data) => {
-        this.schoolSettings = data.data;
-        this.tva = parseFloat(this.schoolSettings.bookings_comission_cash);
-        this.cancellationInsurance = parseFloat(this.schoolSettings.cancellation_insurance_percent);
-        this.boukiiCarePrice = parseInt(this.schoolSettings.bookings_comission_boukii_pay);
-      })
     this.getData();
   }
 
@@ -1132,7 +1125,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
+    return this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -1230,7 +1223,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.crudService.create('/client-sports', {client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
             .subscribe(() => {
               console.log('client sport created');
-              this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+              this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
                 .subscribe((cl) => {
                   this.clients = cl.data;
                   const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
@@ -1397,6 +1390,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       .subscribe((school) => {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
+
+        this.cancellationInsurance =  parseFloat(this.settings.taxes.cancellation_insurance_percent);
+        this.boukiiCarePrice = parseInt(this.settings.taxes.boukii_care_price);
+        this.tva = parseFloat(this.settings.taxes.tva);
       })
   }
 
@@ -1806,7 +1803,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+        this.crudService.list('/admin/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
           .subscribe((cl: any) => {
             const newClient = cl.data.find((c) => c.id = data.data.id);
             this.clientsForm.patchValue(newClient);

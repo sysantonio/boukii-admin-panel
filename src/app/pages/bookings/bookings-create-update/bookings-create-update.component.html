@@ -795,9 +795,9 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addReduction()">Appliquer une réduction</button>
+            <button mat-raised-button color="accent" *ngIf="cancellationInsurance" (click)="addReduction()">Appliquer une réduction</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addBonus()">Utiliziser un bon d'achat</button>
+            <button mat-raised-button color="accent" *ngIf="boukiiCarePrice" (click)="addBonus()">Utiliziser un bon d'achat</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Option Remboursement (10%)</p>
