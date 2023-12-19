@@ -55,19 +55,23 @@
             <mat-datepicker #startDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time" [disabled]="true">
-              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-checkbox formControlName="full_day">Todo el día</mat-checkbox>
 
-          <mat-form-field>
-            <mat-label>Hora Fin</mat-label>
-            <mat-select [value]="defaults.end_time">
-              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <ng-container *ngIf="!form.get('full_day').value">
+            <mat-form-field>
+              <mat-label>Hora Inicio</mat-label>
+              <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
+                <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Hora Fin</mat-label>
+              <mat-select [value]="defaults.end_time">
+                <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
 
           <mat-form-field>
             <input type="text" id="description" formControlName="description" placeholder="Añade una descripción" matInput [value]="defaults.description" [(ngModel)]="defaults.description">
@@ -81,7 +85,7 @@
           <mat-form-field>
             <mat-label>Selecciona un bloqueo</mat-label>
             <mat-select formControlName="blockage" [(ngModel)]="blockageSelected" [value]="blockageSelected">
-              <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color" [style.background]="blockage.color"
+              <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color;defaults.description = blockage.name" [style.background]="blockage.color"
               >
                 <span style="color: #fff">{{ blockage.name }}</span>
               </mat-option>
@@ -103,19 +107,23 @@
             <mat-datepicker #startDatepickerPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time" [disabled]="true">
-              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-checkbox formControlName="full_day">Todo el día</mat-checkbox>
 
-          <mat-form-field>
-            <mat-label>Hora Fin</mat-label>
-            <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
-              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <ng-container *ngIf="!form.get('full_day').value">
+            <mat-form-field>
+              <mat-label>Hora Inicio</mat-label>
+              <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
+                <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Hora Fin</mat-label>
+              <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
+                <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
 
           <mat-form-field>
             <input type="text" id="description" formControlName="description" placeholder="La description" matInput [value]="defaults.description" [(ngModel)]="defaults.description">
@@ -153,19 +161,23 @@
             <mat-datepicker #startDatepickerNonPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Hora Inicio</mat-label>
-            <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time" [disabled]="true">
-              <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-checkbox formControlName="full_day">Todo el día</mat-checkbox>
 
-          <mat-form-field>
-            <mat-label>Hora Fin</mat-label>
-            <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
-              <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <ng-container *ngIf="!form.get('full_day').value">
+            <mat-form-field>
+              <mat-label>Hora Inicio</mat-label>
+              <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
+                <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Hora Fin</mat-label>
+              <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
+                <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
 
           <mat-form-field>
             <input type="text" id="description" formControlName="description" placeholder="La description" [value]="defaults.description" matInput [(ngModel)]="defaults.description">

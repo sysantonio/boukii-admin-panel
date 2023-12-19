@@ -599,7 +599,7 @@ export class TimelineComponent {
 
     while (currentTime <= endTime) {
       times.push(this.formatTime(currentTime));
-      currentTime = new Date(currentTime.getTime() + 15 * 60000);
+      currentTime = new Date(currentTime.getTime() + 5 * 60000);
     }
 
     return times;
@@ -1062,7 +1062,7 @@ export class TimelineComponent {
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       data: {
         event,
-        monitor_id: 1,
+        monitor_id: dateInfo.monitor_id,
         date_param: dateInfo.date,
         hour_start: dateInfo.hour
       }
@@ -1074,15 +1074,16 @@ export class TimelineComponent {
         console.log(result);
 
         const data = {
-          start_date: result.start_date, end_date: result.end_date, start_time: `${result.start_time}:00`, end_time: `${result.end_time}:00`, full_day: false, station_id: result.station_id, description: result.description
+          user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
         }
         this.crudService.create('/monitor-nwds', data)
           .subscribe((data) => {
 
             //this.getData();
+            this.loadBookings(this.currentDate);
             this.snackbar.open('Event created');
           })
-        //CHANGE
+          //CHANGE
         /*let id = 1
         result.monitor_id = id;
 

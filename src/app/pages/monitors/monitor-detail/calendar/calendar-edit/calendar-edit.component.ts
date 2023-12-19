@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ApiCrudService } from 'src/service/crud.service';
 import { CommonModule } from '@angular/common';
 import { Observable, map, startWith } from 'rxjs';
@@ -27,6 +28,7 @@ import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/booki
   standalone: true,
   imports: [
     MatDialogModule,
+    FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -35,6 +37,7 @@ import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/booki
     MatTabsModule,
     MatAutocompleteModule,
     MatSelectModule,
+    MatCheckboxModule,
     CommonModule
   ]
 })
@@ -89,7 +92,8 @@ export class CalendarEditComponent implements OnInit {
       endNonPayedBlock: null,
       description: null,
       station: null,
-      blockage: null
+      blockage: null,
+      full_day:false
     });
 
 
@@ -115,10 +119,11 @@ export class CalendarEditComponent implements OnInit {
       this.defaults.color = this.blockageSelected.color;
     }
 
-    this.defaults.user_nwd_subtype_id = this.type;
+    this.defaults.user_nwd_subtype_id = this.type + 1;
     this.defaults.school_id = this.user.schools[0].id;
     this.defaults.start_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
     this.defaults.end_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
+    this.defaults.full_day = this.form.get('full_day').value;
 
     this.dialogRef.close({
       ...this.event,
@@ -149,6 +154,7 @@ export class CalendarEditComponent implements OnInit {
   getBlockages() {
     this.crudService.list('/school-colors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
+        console.log(data.data);
         this.blockages = data.data;
 
         if(this.event && this.event.start) {
