@@ -109,8 +109,10 @@ export class CalendarEditComponent implements OnInit {
   }
 
   save() {
-    if (this.type === 0 || this.type === 1) {
+    if (this.type === 0 || this.type === 2) {
       this.defaults.color = '#89add1';
+    } else {
+      this.defaults.color = this.blockageSelected.color;
     }
 
     this.defaults.user_nwd_subtype_id = this.type;

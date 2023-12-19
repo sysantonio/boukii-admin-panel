@@ -647,6 +647,21 @@ export class BookingDetailComponent implements OnInit {
           });
       })*/
 
+      setTimeout(() => {
+
+        if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
+          this.crudService.post('/admin/bookings/payments/' + this.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
+             reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
+            .subscribe((result: any) => {
+              console.log((result));
+              window.open(result.payrexx_link, "_self");
+            })
+        } else {
+          this.snackbar.open('La reserva se ha creado correctamente', 'OK', {duration: 1000});
+          this.goTo('/bookings');
+        }
+      }, 1000);
+
       this.crudService.update('/bookings', {paid: this.defaults.paid, payment_method_id: this.defaults.payment_method_id}, this.id)
         .subscribe((res) => {
           this.snackbar.open('Reserva actualizada correctamente', 'OK', {duration: 3000});

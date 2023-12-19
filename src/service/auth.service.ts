@@ -9,6 +9,7 @@ import { getFirestore } from '@angular/fire/firestore';
 import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiCrudService } from './crud.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ import { ApiCrudService } from './crud.service';
 export class AuthService extends ApiService {
   user: User | null = null;
 
-  constructor(private auth: Auth,private router: Router, http: HttpClient, private crudService: ApiCrudService) {
+  constructor(private auth: Auth,private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar) {
     super(http)
     const user = JSON.parse(localStorage.getItem('boukiiUser'));
     if (user) {
@@ -44,9 +45,11 @@ export class AuthService extends ApiService {
           localStorage.setItem('boukiiUserToken', JSON.stringify(data.data.token));
           this.user = data.data.user;
           this.router.navigate(['/home']);
+        }, (error) => {
+          this.snackbar.open('Error con las credenciales', 'OK', {duration: 3000});
         })
     } catch (error) {
-      console.error('Error during login:', error);
+      this.snackbar.open('Error con las credenciales', 'OK', {duration: 3000});
     }
   }
 

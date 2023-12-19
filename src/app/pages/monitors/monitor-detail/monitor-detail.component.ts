@@ -238,7 +238,7 @@ export class MonitorDetailComponent {
               email: ['', [Validators.required, Validators.email]],
               username: [''],
               station: [''],
-              password: ['', [Validators.minLength(6), this.passwordValidator]],
+              password: [''],
 
             });
 
@@ -1665,7 +1665,10 @@ export class MonitorDetailComponent {
   }
 
   isDayVisibleDay(){
-    return !this.vacationDays.includes(moment(this.currentDate).format('YYYY-MM-DD'));
+    if (this.vacationDays) {
+
+      return !this.vacationDays.includes(moment(this.currentDate).format('YYYY-MM-DD'));
+    }
   }
 
 

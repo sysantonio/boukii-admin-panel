@@ -46,7 +46,7 @@ export class ApiCrudService extends ApiService {
 
 
   login(model: string, data: any): Observable < ApiResponse > {
-    return this.http.post<ApiResponse>(this.baseUrl + model, data);
+    return this.http.post<ApiResponse>(this.baseUrl + model, data, {headers: this.getHeadersLogin()});
   }
 
   create(model: string, data: any): Observable < ApiResponse > {

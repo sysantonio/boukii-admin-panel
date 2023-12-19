@@ -1063,8 +1063,8 @@ export class TimelineComponent {
       data: {
         event,
         monitor_id: 1,
-        date_param: '2023-12-12',
-        hour_start: '09:00'
+        date_param: dateInfo.date,
+        hour_start: dateInfo.hour
       }
     });
 
@@ -1073,6 +1073,15 @@ export class TimelineComponent {
 
         console.log(result);
 
+        const data = {
+          start_date: result.start_date, end_date: result.end_date, start_time: `${result.start_time}:00`, end_time: `${result.end_time}:00`, full_day: false, station_id: result.station_id, description: result.description
+        }
+        this.crudService.create('/monitor-nwds', data)
+          .subscribe((data) => {
+
+            //this.getData();
+            this.snackbar.open('Event created');
+          })
         //CHANGE
         /*let id = 1
         result.monitor_id = id;
