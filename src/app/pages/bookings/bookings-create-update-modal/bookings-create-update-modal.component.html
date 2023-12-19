@@ -211,7 +211,7 @@
                         <mat-label>Fecha</mat-label>
 
                         <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" [matDatepickerFilter]="inUseDatesFilter"
-                            (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)">
+                            (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate">
                           <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
                           <mat-datepicker #pickerDateFrom [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
 
@@ -251,16 +251,19 @@
                       <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
                         <mat-label>Personas</mat-label>
                         <mat-select [disabled]="!courseDate.duration">
-                          <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person">{{ person }}</mat-option>
+                          <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person; checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date)">
+                            {{ person }}
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="(sameMonitor && i === 0) || !sameMonitor">
 
-                      <mat-form-field class="flex-auto">
+                      <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
                         <mat-label>Chercher Moniteur</mat-label>
-                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" />
+                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes))
+                        || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"/>
                         <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
                           <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="courseDate.monitor_id = monitor.id">
                             {{monitor.first_name}} {{monitor.last_name}}
@@ -285,7 +288,6 @@
                   </div>
                 </div>
               </div>
-
               <!-- Listado de los cursos colectivos -->
               <div class="list-column" *ngIf="courseType === 'collectif' && defaultsBookingUser.degree_id !== null">
                 <div class="list-overflow-container">

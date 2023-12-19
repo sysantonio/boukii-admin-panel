@@ -2122,4 +2122,41 @@ export class BookingsCreateUpdateComponent implements OnInit {
   itemExist(item: any) {
     return this.reservableCourseDate.find((r) => r.id === item.id);
   }
+
+  checkAvailableMonitors(start: any, duration: any, date) {
+
+    let data: any;
+    if(this.selectedItem.is_flexible) {
+      data = {
+        sportId: this.defaults.sport_id,
+        minimumDegreeId: this.levelForm.value.id,
+        startTime: start,
+        endTime: this.calculateHourEnd(start, duration),
+        date: moment(date).format('YYYY-MM-DD')
+      };
+    } else{
+      data = {
+        sportId: this.defaults.sport_id,
+        minimumDegreeId: this.levelForm.value.id,
+        startTime: start,
+        endTime: this.calculateHourEnd(start, this.selectedItem.duration),
+        date: moment(date).format('YYYY-MM-DD')
+      };
+    }
+
+    this.crudService.post('/admin/monitors/available', data)
+      .subscribe((response) => {
+        this.monitors = response.data;
+        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+          startWith(''),
+          map((value: any) => typeof value === 'string' ? value : value?.full_name),
+          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+        );
+
+        if (response.data.length === 0) {
+
+          this.snackbar.open('No hay monitores disponibles que coincidan con el nivel, hora y duraciñon del curso', 'OK', {duration:3000});
+        }
+      })
+  }
 }
