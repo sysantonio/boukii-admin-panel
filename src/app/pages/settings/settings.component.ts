@@ -777,8 +777,8 @@ export class SettingsComponent implements OnInit {
   }
 
   generateRandomNumber() {
-    const min = 10000; // límite inferior para un número de 5 cifras
-    const max = 99999; // límite superior para un número de 5 cifras
+    const min = 10000000; // límite inferior para un número de 5 cifras
+    const max = 99999999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }

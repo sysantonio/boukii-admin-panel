@@ -9,7 +9,7 @@
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'Monitors'" [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-      (showDetailEvent)="showDetailEvent($event)" [with]="'&with[]=sports'"
+      (showDetailEvent)="showDetailEvent($event)" [with]="'&with[]=sports'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 

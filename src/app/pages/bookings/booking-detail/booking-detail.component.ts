@@ -1247,7 +1247,7 @@ export class BookingDetailComponent implements OnInit {
 
         } else if(data.type === 'refund_gift') {
           const vData = {
-            code: "VOU-"+this.generateRandomNumber(),
+            code: "BOU-"+this.generateRandomNumber(),
             quantity: this.booking.price_total,
             remaining_balance: this.booking.price_total,
             payed: false,
@@ -1284,7 +1284,7 @@ export class BookingDetailComponent implements OnInit {
               .subscribe(() => {
 
                 let vData = {
-                  code: "VOU-"+this.generateRandomNumber(),
+                  code: "BOU-"+this.generateRandomNumber(),
                   quantity: 0,
                   remaining_balance: 0,
                   payed: false,
@@ -1399,7 +1399,7 @@ export class BookingDetailComponent implements OnInit {
 
         } else if(data.type === 'refund_gift') {
           const vData = {
-            code: "VOU-"+this.generateRandomNumber(),
+            code: "BOU-"+this.generateRandomNumber(),
             quantity: data[index].price_total,
             remaining_balance: data[index].price_total,
             payed: false,
@@ -1441,7 +1441,7 @@ export class BookingDetailComponent implements OnInit {
             })
 
             let vData = {
-              code: "VOU-"+this.generateRandomNumber(),
+              code: "BOU-"+this.generateRandomNumber(),
               quantity: 0,
               remaining_balance: 0,
               payed: false,
@@ -1520,13 +1520,13 @@ export class BookingDetailComponent implements OnInit {
   }
 
   generateRandomNumber() {
-    const min = 10000; // límite inferior para un número de 5 cifras
-    const max = 99999; // límite superior para un número de 5 cifras
+    const min = 10000000; // límite inferior para un número de 5 cifras
+    const max = 99999999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   generateRandomCode() {
-    return "VOU-"+this.generateRandomNumber();
+    return "BOU-"+this.generateRandomNumber();
   }
 
   addBonus() {

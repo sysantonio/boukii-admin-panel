@@ -20,6 +20,7 @@ export class ClientsComponent {
   entity = '/admin/clients/mains';
   deleteEntity = '/clients';
   showDetail: boolean = false;
+  user: any;
 
   detailData: any;
   utilizers: any;
@@ -34,7 +35,10 @@ export class ClientsComponent {
   mainIdSelected = true;
   borderActive = -1;
 
-  constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog) {}
+  constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
+  }
 
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
