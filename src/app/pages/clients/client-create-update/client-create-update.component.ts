@@ -170,11 +170,12 @@ export class ClientCreateUpdateComponent implements OnInit {
 
 
     this.getSchoolSportDegrees();
-    this.getStations();
     this.getLanguages();
 
     setTimeout(() => {
       this.getSports();
+      this.loading = false;
+
     }, 500);
   }
 

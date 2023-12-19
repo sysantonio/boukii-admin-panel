@@ -43,11 +43,11 @@
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="getClient(detailData.client_main_id).image" width="100" height="100" style="border-radius: 100%">
+              <img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p>{{getNacionality(getClient(detailData.client_main_id).country)}} · {{ getCountry(getClient(detailData.client_main_id).country) }} · {{calculateAge(getClient(detailData.client_main_id).birth_date)}} ans</p>
-              <p><strong>{{getClient(detailData.client_main_id)?.first_name}} {{getClient(detailData.client_main_id)?.last_name}} (+3)</strong></p>
+              <p>{{getNacionality(getClient(detailData?.client_main_id)?.country)}} · {{ getCountry(getClient(detailData?.client_main_id)?.country) }} · {{calculateAge(getClient(detailData?.client_main_id)?.birth_date)}} ans</p>
+              <p><strong>{{getClient(detailData?.client_main_id)?.first_name}} {{getClient(detailData?.client_main_id)?.last_name}} (+3)</strong></p>
               <div>
                 <mat-icon svgIcon="mat:chat"></mat-icon>
                 <mat-icon svgIcon="mat:mail_outline"></mat-icon>
@@ -60,11 +60,11 @@
         <ng-container *ngFor="let item of detailData.bookingusers">
           <div style="float: left; width: 100%;">
             <div style="float: left; width: 15%;margin: 2% 0 0 0 ">
-              <img [src]="getClient(item.client_id).image" width="50" height="50" style="border-radius: 100%">
+              <img [src]="getClient(item.client_id)?.image !== null ? getClient(item.client_id)?.image : imageAvatar" width="50" height="50" style="border-radius: 100%">
             </div>
             <div style="float: left; width: 65%;">
-              <p>{{getNacionality(getClient(item.client_id).country)}} · {{ getCountry(getClient(item.client_id).country) }} · {{calculateAge(getClient(item.client_id).birth_date)}} ans</p>
-                <p>{{getClient(item.client_id)?.first_name}} {{getClient(item.client_id)?.last_name}} (+3)</p>
+              <p>{{getNacionality(getClient(item?.client_id)?.country)}} · {{ getCountry(getClient(item?.client_id)?.country) }} · {{calculateAge(getClient(item?.client_id)?.birth_date)}} ans</p>
+                <p>{{getClient(item?.client_id)?.first_name}} {{getClient(item?.client_id)?.last_name}} (+3)</p>
             </div>
             <div style="float: left; width: 20%;">
               <p style="text-align: right;color:#dbd616">{{'Anulée' }}</p>
@@ -75,41 +75,41 @@
             <div style="float: left; width: 50%;">
               <div style="float: left; width: 100%;">
                 <p style="float: left; width: 100%; font-size: 18px">
-                  <strong>{{item.course.name}}</strong>
+                  <strong>{{item?.course?.name}}</strong>
                 </p>
                 <p style="float: left; width: 100%;">
-                  {{item.course.type === 1 ? 'Collectif' : 'Privee'}} {{getSportName(item.course.sport_id)}} {{item.price}} {{item.currency}}
+                  {{item?.course?.type === 1 ? 'Collectif' : 'Privee'}} {{getSportName(item?.course?.sport_id)}} {{item?.price}} {{item?.currency}}
                 </p>
               </div>
               <div style="float: left; width: 100%;" *ngIf="item.course.type">
-                <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(item.degree_id)?.color}">
-                  {{getDegree(item.degree_id)?.league}} - {{getDegree(item.degree_id)?.annotation}}/{{getDegree(item.degree_id)?.name}}
+                <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(item?.degree_id)?.color}">
+                  {{getDegree(item?.degree_id)?.league}} - {{getDegree(item?.degree_id)?.annotation}}/{{getDegree(item?.degree_id)?.name}}
                 </div>
 
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
                 <ul>
-                  <li>{{item.date |date: 'dd/MM/YYYY'}} <i>{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+                  <li>{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
                 </ul>
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
                 <div style="float: left; width: 20%;">
-                  <img [src]="getMonitor(item.monitor_id) ? getMonitor(item.monitor_id)?.image : imageAvatar">
+                  <img [src]="getMonitor(item?.monitor_id) ? getMonitor(item?.monitor_id)?.image : imageAvatar">
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="getMonitor(item.monitor_id)">
-                  <p>{{getMonitor(item.monitor_id)?.first_name}} {{getMonitor(item.monitor_id)?.last_name}}</p>
-                  <p style="font-size:8px"><i>{{getNacionality(getMonitor(item.monitor_id)?.country)}} · {{ getCountry(getMonitor(item.monitor_id)?.country) }} · {{calculateAge(getMonitor(item.monitor_id)?.birth_date)}} ans</i></p>
+                  <p>{{getMonitor(item?.monitor_id)?.first_name}} {{getMonitor(item?.monitor_id)?.last_name}}</p>
+                  <p style="font-size:8px"><i>{{getNacionality(getMonitor(item?.monitor_id)?.country)}} · {{ getCountry(getMonitor(item?.monitor_id)?.country) }} · {{calculateAge(getMonitor(item?.monitor_id)?.birth_date)}} ans</i></p>
                 </div>
-                <div style="float: left; width: 80%;" *ngIf="!getMonitor(item.monitor_id)">
+                <div style="float: left; width: 80%;" *ngIf="!getMonitor(item?.monitor_id)">
                   <p style="margin: 5% 0 0 5%;">No monitor asigned</p>
                 </div>
 
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle [disabled]="true" [checked]="detailData.has_cancellation_insurance"></mat-slide-toggle> Op. Rem (10%)
+                <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_cancellation_insurance"></mat-slide-toggle> Op. Rem (10%)
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle [disabled]="true" [checked]="detailData.has_boukii_care"></mat-slide-toggle> Boukii Care
+                <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_boukii_care"></mat-slide-toggle> Boukii Care
               </div>
             </div>
             <div style="float: left; width: 50%;">
@@ -118,7 +118,7 @@
 
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle [disabled]="true" [checked]="item.courseExtras.length > 0"></mat-slide-toggle> Fortrait Ski
+                <mat-slide-toggle [disabled]="true" [checked]="item?.courseExtras?.length > 0"></mat-slide-toggle> Fortrait Ski
 
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
@@ -139,22 +139,22 @@
 
           <div style="text-align: left;width: 50%;float:left">
             <ul>
-              <li *ngIf="detailData.has_cancellation_insurance">{{'Option Rembousement (10%)'}}</li>
-              <li *ngIf="detailData.has_boukii_care">{{'Boukii Care'}}</li>
+              <li *ngIf="detailData?.has_cancellation_insurance">{{'Option Rembousement (10%)'}}</li>
+              <li *ngIf="detailData?.has_boukii_care">{{'Boukii Care'}}</li>
               <li *ngIf="existExtras()">{{'Extras'}}</li>
-              <li *ngIf="bonus.length > 0">{{'Bon'}}</li>
+              <li *ngIf="bonus?.length > 0">{{'Bon'}}</li>
               <li *ngIf="getTVA()">{{'TVA'}}</li>
               <li><strong>{{'Montant total' | uppercase}}</strong></li>
             </ul>
           </div>
           <div style="text-align: right;width: 50%;float:left">
             <ul>
-              <li *ngIf="detailData.has_cancellation_insurance"> {{detailData.price_cancellation_insurance}} {{detailData.currency}}</li>
-              <li *ngIf="detailData.has_boukii_care">{{detailData.price_boukii_care}} {{detailData.currency}}</li>
+              <li *ngIf="detailData?.has_cancellation_insurance"> {{detailData.price_cancellation_insurance}} {{detailData.currency}}</li>
+              <li *ngIf="detailData?.has_boukii_care">{{detailData.price_boukii_care}} {{detailData.currency}}</li>
               <li *ngIf="existExtras()">{{getExtrasPrice()}} {{detailData.currency}}</li>
-              <li *ngIf="bonus.length > 0">-{{getBonusPrice()}} {{detailData.currency}}</li>
-              <li *ngIf="getTVA()">{{(detailData.price_total * getTVAValue()).toFixed(2)}} {{detailData.currency}}</li>
-              <li><strong>{{detailData.price_total}} {{detailData.currency}}</strong></li>
+              <li *ngIf="bonus?.length > 0">-{{getBonusPrice()}} {{detailData.currency}}</li>
+              <li *ngIf="getTVA()">{{(detailData?.price_total * getTVAValue()).toFixed(2)}} {{detailData.currency}}</li>
+              <li><strong>{{detailData?.price_total}} {{detailData.currency}}</strong></li>
             </ul>
           </div>
         </div>

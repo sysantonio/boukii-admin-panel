@@ -114,8 +114,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   createComponent = BookingsCreateUpdateModalComponent;
   selectedDatePrivate = new Date();
 
-  title = 'Título de la Reserva';
-  titleMoniteur = 'Nombre monitor';
+  imageAvatar = '../../../../assets/img/avatar.png';
   usersCount = 5;
   duration = '3 horas';
   dates = ['03/11/2023', '04/11/2023', '05/11/2023']; // Ejemplo de fechas
@@ -346,6 +345,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             setTimeout(() => {
               this.clientsForm.patchValue(this.clients[0]);
+              this.loadingCalendar = false;
               this.loading = false;
             }, 500);
           }, 500);
