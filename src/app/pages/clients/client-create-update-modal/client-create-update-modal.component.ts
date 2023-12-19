@@ -97,13 +97,13 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     email: null,
     password: null,
     image: null,
-    type: 'client',
+    type: 'clients',
     active: false,
   }
 
   loading: boolean = true;
   user: any;
-  mode: 'create' | 'update' = 'create';
+  mode: 'create' |'update';
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
     private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>) {

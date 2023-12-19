@@ -585,10 +585,27 @@ ngAfterViewInit() {
     }
   }
 
+  getCourseType(data: any) {
+    //if (data.length === 1) {
+      return data.course_type === 1 ? 'collectif' : 'prive'
+    /*} else {
+      return 'MULTIPLE';
+    }*/
+  }
+
   getBookingType(data: any) {
     //if (data.length === 1) {
       return data.course.course_type === 1 ? 'collectif' : 'prive'
     /*} else {
+      return 'MULTIPLE';
+    }*/
+  }
+
+  getCourseImage(data: any) {
+    //if (data.length === 1) {
+      const ret = this.sports.find((s) => s.id === data.sport_id);
+      return ret ? ret.name.toLowerCase() : '';
+   /* } else {
       return 'MULTIPLE';
     }*/
   }
@@ -612,7 +629,7 @@ ngAfterViewInit() {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 
