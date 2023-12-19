@@ -735,7 +735,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques client</mat-label>
-                    <input matInput required type="text" (blur)="setClientsNotes($event)">
+                    <input matInput required type="text" (blur)="setClientsNotes($event, item)">
 
                   </mat-form-field>
 
@@ -745,7 +745,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques ecole</mat-label>
-                    <input  matInput required type="text" (blur)="setSchoolNotes($event)">
+                    <input  matInput required type="text" (blur)="setSchoolNotes($event, item)">
 
                   </mat-form-field>
 

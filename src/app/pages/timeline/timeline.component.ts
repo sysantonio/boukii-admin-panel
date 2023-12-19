@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import 'moment/locale/fr';
 import { CourseDetailComponent } from '../courses/course-detail/course-detail.component';
 import { CourseDetailModalComponent } from '../courses/course-detail-modal/course-detail-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 moment.locale('fr');
 
 @Component({
@@ -90,7 +91,7 @@ export class TimelineComponent {
   startTimeDivision:string;
   endTimeDivision:string;
 
-  constructor(private crudService: ApiCrudService,private dialog: MatDialog,private eventService: EventService) {
+  constructor(private crudService: ApiCrudService,private dialog: MatDialog,private eventService: EventService, private snackbar: MatSnackBar) {
     this.mockLevels.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -1051,7 +1052,7 @@ export class TimelineComponent {
           break;
       default:
           throw new Error('Invalid type');
-    } 
+    }
 
     console.log(dateInfo);
 
@@ -1071,9 +1072,9 @@ export class TimelineComponent {
       if (result) {
 
         console.log(result);
-        /*
+
         //CHANGE
-        let id = 1
+        /*let id = 1
         result.monitor_id = id;
 
         const isOverlap = this.eventService.isOverlap(this.events, result);
@@ -1102,8 +1103,8 @@ export class TimelineComponent {
             })
           // hacer el update y el create
           this.snackbar.open('Existe un solapamiento', 'OK', {duration: 3000});
-        }
-*/
+        }*/
+
       }
     });
   }
@@ -1167,7 +1168,7 @@ export class TimelineComponent {
 
   onStartTimeDayChange() {
     const filteredEndHours = this.filteredEndHoursDay;
-  
+
     if (!filteredEndHours.includes(this.endTimeDay)) {
       this.endTimeDay = filteredEndHours[0] || '';
     }
@@ -1183,21 +1184,21 @@ export class TimelineComponent {
     if (!filteredEndHours.includes(this.endTimeDivision)) {
       this.endTimeDivision = filteredEndHours[0] || '';
     }
-  }  
+  }
 
   get filteredStartHoursDivision() {
     const startIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
     const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
     return this.hoursRangeMinutes.slice(startIndex + 1, endIndex - 1);
   }
-  
+
   get filteredEndHoursDivision() {
     const defaultStartIndex = this.calculateDefaultStartTimeDivisionIndex();
     const startIndex = this.startTimeDivision ? this.hoursRangeMinutes.indexOf(this.startTimeDivision) : defaultStartIndex;
     const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
     return this.hoursRangeMinutes.slice(startIndex + 1, endIndex);
   }
-  
+
   calculateDefaultStartTimeDivisionIndex() {
     const blockStartTimeIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
     return blockStartTimeIndex + 1;
@@ -1227,7 +1228,7 @@ export class TimelineComponent {
       firstBlockData.start_time = this.allHoursDay ? `${this.hoursRangeMinutes[0]}:00` : `${this.startTimeDay}:00`;
       firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
       firstBlockData.full_day = this.allHoursDay && !this.divideDay;
-  
+
       // Function update first block -> CALL LATER
       const updateFirstBlock = () => {
           this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetail.block_id).subscribe(
@@ -1242,10 +1243,10 @@ export class TimelineComponent {
               }
           );
       };
-  
+
           if (this.divideDay) {
               secondBlockData = { ...commonData, start_date: this.blockDetail.start_date, end_date: this.blockDetail.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
-  
+
                   this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
                       secondResponse => {
                           //console.log('Second block created:', secondResponse);

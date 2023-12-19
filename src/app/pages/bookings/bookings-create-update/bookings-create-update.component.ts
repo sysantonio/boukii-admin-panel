@@ -569,7 +569,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         checkAval.bookingUsers.push({
           client_id: this.defaultsBookingUser.client_id,
           hour_start: element.hour_start.replace(': 00'),
-          hour_end: element.hour_start.replace(': 00'),
+          hour_end: element.hour_end.replace(': 00'),
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
@@ -579,7 +579,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         checkAval.bookingUsers.push({
           client_id: this.defaultsBookingUser.client_id,
           hour_start: element.hour_start.replace(': 00'),
-          hour_end: element.hour_start.replace(': 00'),
+          hour_end: element.hour_end.replace(': 00'),
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
@@ -879,6 +879,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 price: item.price,
                 currency: item.currency,
                 date: item.date,
+                notes: item.notes,
+                school_notes: item.school_notes,
                 attended: false
               });
             }
@@ -897,6 +899,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
               price: item.price,
               currency: item.currency,
               paxes: item.paxes,
+              notes: item.notes,
+              school_notes: item.school_notes,
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }
@@ -929,21 +933,23 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 })
             }
 
-            setTimeout(() => {
 
-              if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
-                this.crudService.post('/bookings/payment/' + booking.data.id, {payment_method_id: this.defaults.payment_method_id})
-                  .subscribe((result) => {
-
-                  })
-              } else {
-                this.snackbar.open('La reserva se ha creado correctamente', 'OK', {duration: 1000});
-                this.goTo('/bookings');
-              }
-            }, 1000);
           });
         });
+        setTimeout(() => {
 
+          if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
+            this.crudService.post('/admin/bookings/payments/' + booking.data.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
+               reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
+              .subscribe((result: any) => {
+                console.log((result));
+                window.open(result.payrexx_link, "_self");
+              })
+          } else {
+            this.snackbar.open('La reserva se ha creado correctamente', 'OK', {duration: 1000});
+            this.goTo('/bookings');
+          }
+        }, 1000);
       })
 
   }
@@ -1561,12 +1567,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.getCourses(this.levelForm.value, this.monthAndYear);
   }
 
-  setClientsNotes(event: any) {
-    this.defaults.notes = event.target.value;
+  setClientsNotes(event: any, item: any) {
+    item.notes = event.target.value;
   }
 
-  setSchoolNotes(event: any) {
-    this.defaults.school_notes = event.target.value;
+  setSchoolNotes(event: any, item: any) {
+    item.school_notes = event.target.value;
   }
 
   public monthChanged(value: any, widget: any): void {

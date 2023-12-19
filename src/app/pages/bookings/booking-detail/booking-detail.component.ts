@@ -1081,13 +1081,29 @@ export class BookingDetailComponent implements OnInit {
     this.getCourses(this.levelForm.value, this.monthAndYear);
   }
 
-  setClientsNotes(event: any) {
-    this.defaults.notes = event.target.value;
+  setClientsNotes(event: any, bookingUsers: any) {
+
+    bookingUsers.forEach(element => {
+      this.crudService.update('/booking-users', {notes: event.target.value}, element.id)
+      .subscribe(() => {
+
+      })
+
+      this.snackbar.open('Notas del cliente actualizadas', 'OK', {duration:3000})
+    });
   }
 
-  setSchoolNotes(event: any) {
-    this.defaults.school_notes = event.target.value;
+  setSchoolNotes(event: any, bookingUsers: any) {
+    bookingUsers.forEach(element => {
+      this.crudService.update('/booking-users', {notes_school: event.target.value}, element.id)
+      .subscribe(() => {
+
+      })
+
+      this.snackbar.open('Notas del cliente actualizadas', 'OK', {duration:3000})
+    });
   }
+
 
   public monthChanged(value: any, widget: any): void {
     this.monthAndYear = moment(this.minDate).isAfter(moment(value)) ? this.minDate : value;

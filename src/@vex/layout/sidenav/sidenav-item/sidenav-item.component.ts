@@ -118,4 +118,8 @@ export class SidenavItemComponent implements OnInit, OnChanges {
   isExternalLink(url: string): boolean {
     return url.startsWith('http');
   }
+
+  isRouteActive(item: any) {
+    return location.pathname.includes(item.route);
+  }
 }

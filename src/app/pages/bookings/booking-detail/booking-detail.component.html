@@ -15,7 +15,12 @@
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
               <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
-              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'non payé' | uppercase }}</p>
+              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="!booking.paid">
+                {{'non payé' | uppercase }}
+              </p>
+              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f" *ngIf="booking.paid">
+                {{'paiement effectué' | uppercase }}
+              </p>
               <div class="qrcodeImage">
                 <qrcode
                   [qrdata]="booking.client_main_id.toString()"
@@ -171,7 +176,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques client</mat-label>
-                    <input matInput required type="text" (blur)="setClientsNotes($event)">
+                    <input matInput required type="text" (blur)="setClientsNotes($event, item)">
 
                   </mat-form-field>
 
@@ -181,7 +186,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Remarques ecole</mat-label>
-                    <input  matInput required type="text" (blur)="setSchoolNotes($event)">
+                    <input  matInput required type="text" (blur)="setSchoolNotes($event, item)">
 
                   </mat-form-field>
 
@@ -204,7 +209,7 @@
     </div>
 
 
-    <div class="column-container">
+    <div class="column-container" *ngIf="!loading">
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
@@ -231,17 +236,17 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addReduction()">Appliquer une réduction</button>
+            <button mat-raised-button color="accent" (click)="addReduction()" [disabled]="booking.paid">Appliquer une réduction</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addBonus()">Utiliziser un bon d'achat</button>
+            <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid">Utiliziser un bon d'achat</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Option Remboursement (10%)</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" (change)="calculateRem($event)" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" (change)="calculateBoukiiCare($event)" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid"style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">Résumé</h3>
@@ -295,6 +300,7 @@
               </span>
             </div>
 
+            <ng-container *ngIf="!booking.paid">
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>
@@ -309,7 +315,7 @@
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
               <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" [checked]="defaults.paid" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.paid" [checked]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
@@ -321,6 +327,7 @@
             <div class="square-buttons-container" *ngIf="selectedButton==='3'">
               <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirmer reservation</button>
             </div>
+          </ng-container>
           </mat-card>
         </div>
       </div>

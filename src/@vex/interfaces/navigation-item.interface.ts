@@ -6,6 +6,7 @@ export interface NavigationLink {
   fragment?: string;
   label: string;
   icon?: string;
+  icon_active?: string;
   routerLinkActiveOptions?: { exact: boolean };
   badge?: {
     value: string;

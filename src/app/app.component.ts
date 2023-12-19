@@ -135,14 +135,17 @@ export class AppComponent {
             type: 'link',
             label: 'Home',
             route: '/home',
-            icon: 'mat:home',
+            icon: '../assets/img/icons/home-2.png',
+            icon_active: '../assets/img/icons/home.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Planification',
             route: '/timeline',
-            icon: 'mat:schedule',
+            icon: '../assets/img/icons/planificador-2.png',
+            icon_active: '../assets/img/icons/planificador.svg',
+
             routerLinkActiveOptions: { exact: true }
           },/*
           {
@@ -156,35 +159,40 @@ export class AppComponent {
             type: 'link',
             label: 'Reservations',
             route: '/bookings',
-            icon: 'mat:event_available',
+            icon: '../assets/img/icons/reservas-2.svg',
+            icon_active: '../assets/img/icons/reservas.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Courses',
             route: '/courses',
-            icon: 'mat:book',
+            icon: '../assets/img/icons/cursos-2.svg',
+            icon_active: '../assets/img/icons/cursos.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: "Bons d'achat",
             route: '/bonuses',
-            icon: 'mat:local_play',
+            icon: '../assets/img/icons/bonos-2.svg',
+            icon_active: '../assets/img/icons/bonos.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Communication',
             route: '/messages',
-            icon: 'mat:message',
+            icon: '../assets/img/icons/comunicacion-2.svg',
+            icon_active: '../assets/img/icons/comunicacion.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Statistiques',
             route: '/stats',
-            icon: 'mat:poll',
+            icon: '../assets/img/icons/stats-2.svg',
+            icon_active: '../assets/img/icons/stats.svg',
             routerLinkActiveOptions: { exact: true }
           }
         ]
@@ -198,21 +206,24 @@ export class AppComponent {
             type: 'link',
             label: 'Moniteurs',
             route: '/monitors',
-            icon: 'mat:school',
+            icon: '../assets/img/icons/monitores-3.svg',
+            icon_active: '../assets/img/icons/monitores-2.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Clients',
             route: '/clients',
-            icon: 'mat:person_pin',
+            icon: '../assets/img/icons/clientes2.svg',
+            icon_active: '../assets/img/icons/clientes.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
             type: 'link',
             label: 'Administrateurs',
             route: '/admins',
-            icon: 'mat:supervised_user_circle',
+            icon: '../assets/img/icons/admin.svg',
+            icon_active: '../assets/img/icons/Admins.svg',
             routerLinkActiveOptions: { exact: true }
           }
         ]
@@ -224,14 +235,15 @@ export class AppComponent {
           type: 'link',
           label: 'Boukii Pay',
           route: 'https://login.pay.boukii.com/fr/',
-          icon: 'mat:supervised_user_circle',
+          icon: '../assets/img/icons/boukii-pay.png',
           routerLinkActiveOptions: { exact: true }
         },
         {
           type: 'link',
           label: 'Réglages',
           route: '/settings',
-          icon: 'mat:settings',
+          icon: '../assets/img/icons/reglajes-2.svg',
+          icon_active: '../assets/img/icons/reglajes.svg',
           routerLinkActiveOptions: { exact: true }
         }]
       }

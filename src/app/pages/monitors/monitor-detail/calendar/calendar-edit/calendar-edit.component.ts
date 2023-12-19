@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogModule,
   MatDialogRef
 } from '@angular/material/dialog';
@@ -17,6 +18,7 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { CommonModule } from '@angular/common';
 import { Observable, map, startWith } from 'rxjs';
 import * as moment from 'moment';
+import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/bookings-create-update-modal/bookings-create-update-modal.component';
 
 @Component({
   selector: 'vex-calendar-edit',
@@ -67,37 +69,34 @@ export class CalendarEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CalendarEditComponent>,
     @Inject(MAT_DIALOG_DATA) public event: any,
-    private fb: UntypedFormBuilder, private crudService: ApiCrudService
+    private fb: UntypedFormBuilder, private crudService: ApiCrudService, private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem('boukiiUser'));;
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
+    this.defaults.start_time = this.event.hour_start;
+    this.defaults.start_date = moment(this.event.date_param).toDate();
 
     this.form = this.fb.group({
-      startAvailable: null,
+      startAvailable: this.defaults.start_date,
       endAvailable: null,
-      startNonAvailable: null,
+      startNonAvailable: this.defaults.start_date,
       endNonAvailable: null,
-      startPayedBlock: null,
+      startPayedBlock: this.defaults.start_date,
       endPayedBlock: null,
-      startNonPayedBlock: null,
+      startNonPayedBlock: this.defaults.start_date,
       endNonPayedBlock: null,
       description: null,
       station: null,
       blockage: null
     });
 
+
+
     this.getStations();
     this.getBlockages();
-    this.filteredStations = this.myControlStations.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filterStations(value))
-      );
 
-      this.myControlStations.valueChanges.subscribe(value => {
-        this.form.get('station').setValue(value);
-    });
   }
 
   onStartTimeChange() {
@@ -164,6 +163,7 @@ export class CalendarEditComponent implements OnInit {
           this.blockageSelected = this.blockages.find((b) => b.color === this.event.color);
           this.onStartTimeChange();
         }
+        this.onStartTimeChange();
         this.loading = false;
       })
   }
@@ -175,7 +175,15 @@ export class CalendarEditComponent implements OnInit {
           this.crudService.get('/stations/'+element.id)
             .subscribe((data) => {
               this.stations.push(data.data);
+              this.filteredStations = this.myControlStations.valueChanges
+              .pipe(
+                startWith(''),
+                map(value => this._filterStations(value))
+              );
 
+              this.myControlStations.valueChanges.subscribe(value => {
+                this.form.get('station').setValue(value);
+            });
             })
         });
       })
@@ -186,32 +194,52 @@ export class CalendarEditComponent implements OnInit {
     this.form.reset();
     this.type = event.index;
 
-    if(this.event && this.event.start) {
-      this.defaults.start_date = this.event.start;
-      this.defaults.end_date = this.event.end;
-      this.defaults.start_time = this.event.start_time.substring(0, this.event.start_time.length-3);;
-      this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
-      this.defaults.color = this.event.color;
-      this.defaults.full_day = this.event.allDay;
-      this.defaults.user_nwd_subtype_id = this.event.user_nwd_subtype_id;
-      this.blockageSelected = this.blockages.find((b) => b.color === this.event.color);
-
-      this.onStartTimeChange();
+    if (event.index === 3) {
+      this.openCreateBooking();
     } else {
-      this.defaults = {
-        start_date: null,
-        end_date: null,
-        start_time: null,
-        end_time: null,
-        monitor_id: null,
-        school_id: null,
-        station_id: null,
-        full_day: false,
-        description: null,
-        color: null,
-        user_nwd_subtype_id: this.type,
-      };
+      if(this.event && this.event.date_param) {
+        this.defaults.start_date = moment(this.event.date_param).toDate();
+        //this.defaults.end_date = this.event.end;
+        this.defaults.start_time = this.event.hour_start;
+        //this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
+        this.defaults.color = this.event.color;
+        this.defaults.full_day = this.event.allDay;
+        this.defaults.user_nwd_subtype_id = this.event.user_nwd_subtype_id;
+        this.blockageSelected = this.blockages.find((b) => b.color === this.event.color);
+
+        this.onStartTimeChange();
+      } else {
+        this.defaults = {
+          start_date: null,
+          end_date: null,
+          start_time: null,
+          end_time: null,
+          monitor_id: null,
+          school_id: null,
+          station_id: null,
+          full_day: false,
+          description: null,
+          color: null,
+          user_nwd_subtype_id: this.type,
+        };
+      }
     }
 
+
+  }
+
+  openCreateBooking() {
+    const dialogRef = this.dialog.open(BookingsCreateUpdateModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',
+      panelClass: 'full-screen-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+      }
+      this.selectedIndex = 0;
+    });
   }
 }
