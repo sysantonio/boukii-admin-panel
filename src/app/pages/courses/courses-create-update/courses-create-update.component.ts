@@ -330,12 +330,45 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.crudService.get('/admin/courses/'+this.id)
         .subscribe((course) => {
           this.defaults = course.data;
+          if (this.defaults.translations === null) {
+            this.defaults.translations = {
+              es: {
+                name: '',
+                short_description: '',
+                description: ''
+              },
+              en: {
+                name: '',
+                short_description: '',
+                description: ''
+              },
+              fr: {
+                name: '',
+                short_description: '',
+                description: ''
+              },
+              it: {
+                name: '',
+                short_description: '',
+                description: ''
+              },
+              de: {
+                name: '',
+                short_description: '',
+                description: ''
+              },
+            };
+
+          }
+          this.defaults.translations.fr.name = this.defaults.name;
+          this.defaults.translations.fr.short_description = this.defaults.short_description;
+          this.defaults.translations.fr.description = this.defaults.description;
           this.defaults.hour_min = this.defaults.course_dates[0].hour_start.replace(': 00', '');
           this.defaults.hour_max = this.defaults.course_dates[0].hour_end.replace(': 00', '');
           this.people = this.defaults.max_participants;
           this.defaults.settings = typeof course.data.settings === 'string' ? JSON.parse(course.data.settings) : course.data.settings;
-          this.dataSourceFlexiblePrices = this.defaults.price_range;
-          this.updateTable(null);
+          /*this.dataSourceFlexiblePrices = this.defaults.price_range;
+          this.updateTable(null);*/
           this.getSeparatedDates(this.defaults.course_dates, true);
           this.getDegrees();
 

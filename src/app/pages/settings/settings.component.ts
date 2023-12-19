@@ -382,7 +382,7 @@ export class SettingsComponent implements OnInit {
     this.holidaysSelected.push(moment(selectedDate).format('YYYY-MM-DD'));
   }
   getSchoolSeason() {
-    return this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id=1');
+    return this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id);
   }
 
   deleteHoliday(index: any) {
@@ -408,7 +408,7 @@ export class SettingsComponent implements OnInit {
       start_date: moment(this.selectedFrom,).format('YYYY-MM-DD'),
       end_date: moment(this.selectedTo,).format('YYYY-MM-DD'),
       is_active: true,
-      school_id: 1,
+      school_id: this.user.schools[0].id,
       hour_start: this.selectedFromHour,
       hour_end: this.selectedToHour,
       vacation_days: JSON.stringify(holidays)

@@ -463,9 +463,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
       });
 
       if (item.is_flexible) {
-        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration);
+        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 8 ? this.transformTime(item.duration) : item.duration);
       }
     }
+  }
+
+  transformTime(time: string): string {
+    let duration = moment.duration(time);
+    let hours = duration.hours();
+    let minutes = duration.minutes();
+    return `${hours}h ${minutes}min`;
   }
 
   selectSubGroupItem(item: any, subGroupIndex: any) {
@@ -724,8 +731,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
             }
           });
         } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
+          const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
           this.courseDates.forEach(item => {
-            const price = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
+            const price = data.price_total + (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[item.paxes]));
             data.price_total = data.price_total + price;
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
@@ -2050,8 +2058,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const tableDurations = [];
     const tablePaxes = [];
 
+    const priceRangeCourse = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
     durations.forEach(element => {
-      const priceRange = this.selectedItem.price_range.find((p) => p.intervalo === element);
+      const priceRange = priceRangeCourse.find((p) => p.intervalo === element);
       if (priceRange && priceRange.intervalo === element ) {
 
         if (this.extractValues(priceRange)[0]) {
@@ -2078,7 +2087,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   calculateAvailablePaxes(event: any) {
     const paxes = [];
 
-    const data = this.selectedItem.price_range.find(p => p.intervalo === event);
+    const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
+    const data = priceRange.find(p => p.intervalo === event);
 
     this.extractValues(data).forEach(element => {
       const pax = element.key;

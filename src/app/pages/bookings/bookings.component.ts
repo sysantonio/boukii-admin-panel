@@ -34,7 +34,7 @@ export class BookingsComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Type', property: 'type', type: 'booking_users_image', visible: true },
     { label: 'Course', property: 'bookingusers', type: 'booking_users', visible: true},
-//    { label: 'Dates', property: 'dates', type: 'booking_dates', visible: true },
+    { label: 'Dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
     { label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'Bons', property: 'bonus', type: 'light', visible: true },

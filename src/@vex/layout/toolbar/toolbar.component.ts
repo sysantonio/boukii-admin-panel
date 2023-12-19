@@ -6,6 +6,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { PopoverService } from '../../components/popover/popover.service';
 import { MegaMenuComponent } from '../../components/mega-menu/mega-menu.component';
 import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'vex-toolbar',
@@ -33,7 +34,8 @@ export class ToolbarComponent {
   constructor(private layoutService: LayoutService,
               private configService: ConfigService,
               private navigationService: NavigationService,
-              private popoverService: PopoverService) { }
+              private popoverService: PopoverService,
+              private router: Router) { }
 
   openQuickpanel(): void {
     this.layoutService.openQuickpanel();
@@ -72,5 +74,9 @@ export class ToolbarComponent {
 
   openSearch(): void {
     this.layoutService.openSearch();
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 }
