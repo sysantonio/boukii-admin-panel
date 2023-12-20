@@ -324,36 +324,38 @@
 
                       <ng-container *ngFor="let group of getBookableCourses(course.course_dates)">
                       <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
+                        <ng-container  *ngIf="getLevelOrder(subgroup.degree_id) === levelForm.value.degree_order && subgroup.degree_id === levelForm.value.id && !subgroup.is_full">
 
 
-                        <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;" *ngIf="getLevelOrder(subgroup.degree_id) === levelForm.value.degree_order && subgroup.degree_id === levelForm.value.id && !subgroup.is_full"
-                          (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
-                          <div style="float: left;width: 50%;">
+                          <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;"
+                            (click)="selectSubGroupItem(subgroup, subGroupIndex)" [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
+                            <div style="float: left;width: 50%;">
 
-                            <div style="float: left; width: 20%;">
-                              <img [src]="subgroup.monitor_id !== null ? getMonitorAvatar(subgroup.monitor_id) : userAvatar" style="border-radius: 50%;">
+                              <div style="float: left; width: 20%;">
+                                <img [src]="subgroup.monitor_id !== null ? getMonitorAvatar(subgroup.monitor_id) : userAvatar" style="border-radius: 50%;">
+                              </div>
+                              <div style="float: left; width: 80%;">
+                                <p style="margin: 0 0 0 10px;">{{subgroup.monitor_id !== null ? getMonitorName(subgroup.monitor_id) : 'No monitor asigned'}}</p>
+                                <p style="font-size:8px;margin: 0 0 0 10px;" *ngIf="subgroup.monitor_id !== null"><i>
+                                  {{ getNacionality(getMonitorCountry(subgroup.monitor_id)) }} · {{ getCountry(getMonitorProvince(subgroup.monitor_id)) }} · {{calculateAge(getMonitorBirth(subgroup.monitor_id)) }} ans</i></p>
+                              </div>
                             </div>
-                            <div style="float: left; width: 80%;">
-                              <p style="margin: 0 0 0 10px;">{{subgroup.monitor_id !== null ? getMonitorName(subgroup.monitor_id) : 'No monitor asigned'}}</p>
-                              <p style="font-size:8px;margin: 0 0 0 10px;" *ngIf="subgroup.monitor_id !== null"><i>
-                                {{ getNacionality(getMonitorCountry(subgroup.monitor_id)) }} · {{ getCountry(getMonitorProvince(subgroup.monitor_id)) }} · {{calculateAge(getMonitorBirth(subgroup.monitor_id)) }} ans</i></p>
+                            <div style="float: left;width: 50%;">
+                              <div style="width: 100%;text-align: center;padding: 5%;color: #fff;float: right;"
+                                [ngStyle]="
+                                  {
+                                    'background': getLevelColor(subgroup.degree_id)
+
+                                  }
+                                ">
+                                {{getLevelName(subgroup.degree_id)}}
+                              </div>
+                              <div style="text-align: right;width: 100%;">
+                                {{getLevelName(subgroup.degree_id)}} {{subGroupIndex + 1}}
+                              </div>
                             </div>
                           </div>
-                          <div style="float: left;width: 50%;">
-                            <div style="width: 100%;text-align: center;padding: 5%;color: #fff;float: right;"
-                              [ngStyle]="
-                                {
-                                  'background': getLevelColor(subgroup.degree_id)
-
-                                }
-                              ">
-                              {{getLevelName(subgroup.degree_id)}}
-                            </div>
-                            <div style="text-align: right;width: 100%;">
-                              {{getLevelName(subgroup.degree_id)}} {{subGroupIndex + 1}}
-                            </div>
-                          </div>
-                        </div>
+                      </ng-container>
                     </ng-container>
                   </ng-container>
                   </ng-container>
