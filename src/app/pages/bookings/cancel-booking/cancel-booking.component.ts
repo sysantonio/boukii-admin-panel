@@ -15,6 +15,7 @@ export class CancelBookingModalComponent implements OnInit {
   loading = true;
   selectedBonus = [];
   unifyBonus = false;
+  reason = '';
 
   noRefundForm: FormGroup;
   refundForm: FormGroup;
@@ -99,4 +100,7 @@ export class CancelBookingModalComponent implements OnInit {
     this.dialogRef.close({type: type, bonus: this.unifyBonus ? this.defaults.currentBonus : this.selectedBonus, unifyBonus: this.unifyBonus});
   }
 
+  setReason(event: any) {
+    this.reason = event.target.value;
+  }
 }

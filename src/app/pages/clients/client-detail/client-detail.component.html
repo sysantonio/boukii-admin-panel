@@ -781,7 +781,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>Nom d'utilisateur</mat-label>
-                    <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                    <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
                   </mat-form-field>
                 </div>
 
@@ -789,7 +789,7 @@
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
                   <mat-label>Password</mat-label>
-                  <input formControlName="password" matInput required type="password" [(ngModel)]="defaultsUser.password">
+                  <input formControlName="password" matInput type="password" [(ngModel)]="defaultsUser.password">
 
                 </mat-form-field>
               </div>
@@ -820,7 +820,7 @@
                 <mat-form-field class="flex-auto">
                   <mat-label>Teléphone</mat-label>
 
-                  <input formControlName="phone" matInput required type="tel"  [(ngModel)]="defaults.telephone">
+                  <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
@@ -834,12 +834,12 @@
                 <mat-form-field class="flex-auto">
                   <mat-label>Addresse</mat-label>
 
-                  <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
+                  <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
                   <mat-label>Code Postal</mat-label>
-                  <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
+                  <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
 
                 </mat-form-field>
               </div>

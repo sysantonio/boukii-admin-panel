@@ -365,8 +365,8 @@ export class CourseDetailComponent implements OnInit {
       });
       this.checkAvailableMonitors(level);
     } else {
-      // eliminar el curso o desactivarlo
 
+      // eliminar el curso o desactivarlo
       let hasBookings = false;
       const groupsToDelete = [];
       this.defaults.course_dates.forEach(element => {
@@ -394,7 +394,6 @@ export class CourseDetailComponent implements OnInit {
             });
           });
         }
-
       });
 
       if (!hasBookings) {
@@ -504,7 +503,7 @@ export class CourseDetailComponent implements OnInit {
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.teacher_min_degree = event.value.id;
+          group.teachers_min = event.value.id;
         }
 
       });
@@ -571,7 +570,7 @@ export class CourseDetailComponent implements OnInit {
       this.defaults.course_dates.forEach(courseDate => {
         courseDate.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            ret = this.levels.find((l) => l.id === group.teacher_min_degree);
+            ret = this.levels.find((l) => l.id === group.teachers_min);
           }
         });
       });

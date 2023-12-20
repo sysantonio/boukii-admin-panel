@@ -41,9 +41,9 @@ export class BookingsComponent {
     { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light', visible: true },
     { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
     { label: 'Prix', property: 'price_total', type: 'price', visible: true },
-    { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
-    { label: 'Status', property: 'paid', type: 'payment_status', visible: true },
-    { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
+    { label: 'M. Paiment', property: 'payment_method_id', type: 'payment_method_id', visible: true },
+    { label: 'Paid', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'Status', property: 'status', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

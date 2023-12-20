@@ -210,6 +210,7 @@ export class ClientDetailComponent {
         if (!onChangeUser) {
           this.mainClient = data.data;
         }
+
         this.crudService.get('/users/'+data.data.user_id)
           .subscribe((user)=> {
 
@@ -233,7 +234,7 @@ export class ClientDetailComponent {
               surname: ['', Validators.required],
               email: ['', [Validators.required, Validators.email]],
               username: [''],
-              password: ['', [Validators.minLength(6), this.passwordValidator]],
+              password: [''],
 
             });
 

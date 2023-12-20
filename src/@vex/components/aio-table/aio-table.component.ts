@@ -694,4 +694,22 @@ ngAfterViewInit() {
     this.cdr.detectChanges();
   }
 
+
+  getPaymentMethod(id: number) {
+    switch(id) {
+      case 1:
+        return 'CASH';
+      case 2:
+        return 'BOUKII PAY';
+      case 3:
+        return 'ONLINE';
+      case 4:
+        return 'AUTRE';
+      case 5:
+        return 'NO PAID';
+
+      default:
+        return 'NO PAID'
+    }
+  }
 }

@@ -15,6 +15,7 @@ export class CancelPartialBookingModalComponent implements OnInit {
   loading = true;
   selectedBonus = [];
   unifyBonus = false;
+  reason = '';
 
   noRefundForm: FormGroup;
   refundForm: FormGroup;
@@ -29,6 +30,10 @@ export class CancelPartialBookingModalComponent implements OnInit {
 
     this.refundForm = this.fb.group({
       reason: ['', Validators.required]
+    })
+
+    this.bonusForm = this.fb.group({
+      unify: [false]
     })
    this.loading = false;
   }
@@ -99,4 +104,7 @@ export class CancelPartialBookingModalComponent implements OnInit {
     this.dialogRef.close({type: type, bonus: this.unifyBonus ? this.defaults.currentBonus : this.selectedBonus, unifyBonus: this.unifyBonus});
   }
 
+  setReason(event: any) {
+    this.reason = event.target.value;
+  }
 }

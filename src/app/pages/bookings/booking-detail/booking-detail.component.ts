@@ -269,16 +269,24 @@ export class BookingDetailComponent implements OnInit {
 
             for (const courseId in groupedByCourseId) {
               if (groupedByCourseId.hasOwnProperty(courseId)) {
-                const data = {price_total: 0, courseDates: []}
-                groupedByCourseId[courseId].forEach(element => {
-                  data.price_total = data.price_total + parseInt(element.price);
-                  data.courseDates.push(element);
-                });
-                this.bookingsToCreate.push(data);
+
 
                 this.crudService.get('/admin/courses/' + courseId)
                   .subscribe((course) => {
                     this.courses.push(course.data);
+
+                    const data = {price_total: 0, courseDates: []}
+                      groupedByCourseId[courseId].forEach((element, idx) => {
+
+                        if (course.data.course_type === 1 && !course.data.is_flexible) {
+                          if (idx === 0) {
+                            data.price_total = parseFloat(element.price);
+                          }
+                        }
+                        data.courseDates.push(element);
+                      });
+
+                      this.bookingsToCreate.push(data);
                   })
               }
             }
@@ -1192,14 +1200,9 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getBasePrice() {
-    let ret = 0;
-
-    this.bookingsToCreate.forEach(element => {
-      ret = ret + element.price_total;
-    });
-
-    return ret;
+    return parseFloat(this.booking.price_total);
   }
+
 
   setForfait(event:any, forfait: any) {
 
@@ -1263,7 +1266,7 @@ export class BookingDetailComponent implements OnInit {
               this.crudService.create('/vouchers', vData)
                 .subscribe((result) => {
 
-                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
                         .subscribe((vresult) => {
                           console.log(vresult);
 
@@ -1292,14 +1295,14 @@ export class BookingDetailComponent implements OnInit {
                   school_id: this.user.schools[0].id
                 };
                 data.bonus.forEach(element => {
-                  vData.quantity = vData.quantity + element.currentPay;
-                  vData.remaining_balance = vData.remaining_balance + element.currentPay;
+                  vData.quantity = vData.quantity + element.bonus.currentPay;
+                  vData.remaining_balance = vData.remaining_balance + element.bonus.currentPay;
                 });
 
                   this.crudService.create('/vouchers', vData)
                     .subscribe((result) => {
 
-                      this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                      this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
                         .subscribe((vresult) => {
                           console.log(vresult);
                           this.snackbar.open('Item deleted', 'OK', {duration: 3000});
@@ -1330,7 +1333,7 @@ export class BookingDetailComponent implements OnInit {
                     this.crudService.update('/vouchers', vData, element.bonus.id)
                       .subscribe((result) => {
 
-                        this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: element.bonus.reducePrice})
+                        this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -element.bonus.reducePrice})
                           .subscribe((vresult) => {
                             console.log(vresult);
                             this.snackbar.open('Item deleted', 'OK', {duration: 3000});
@@ -1377,7 +1380,7 @@ export class BookingDetailComponent implements OnInit {
           .subscribe(() => {
 
             book.courseDates.forEach(element => {
-              this.crudService.delete('/booking-users', element.id)
+              this.crudService.update('/booking-users', {status: 2}, element.id)
               .subscribe(() => {
                 this.bookingsToCreate.splice(index, 1);
               })
@@ -1419,7 +1422,7 @@ export class BookingDetailComponent implements OnInit {
           this.crudService.create('/vouchers', vData)
             .subscribe((result) => {
 
-              this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+              this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
                 .subscribe((vresult) => {
                 console.log(vresult);
             })
@@ -1440,7 +1443,7 @@ export class BookingDetailComponent implements OnInit {
               })
             })
 
-            let vData = {
+            const vData = {
               code: "BOU-"+this.generateRandomNumber(),
               quantity: 0,
               remaining_balance: 0,
@@ -1449,14 +1452,14 @@ export class BookingDetailComponent implements OnInit {
               school_id: this.user.schools[0].id
             };
             data.bonus.forEach(element => {
-              vData.quantity = vData.quantity + element.currentPay;
-              vData.remaining_balance = vData.remaining_balance + element.currentPay;
+              vData.quantity = vData.quantity + element.bonus.currentPay;
+              vData.remaining_balance = vData.remaining_balance + element.bonus.currentPay;
             });
 
               this.crudService.create('/vouchers', vData)
                 .subscribe((result) => {
 
-                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: vData.quantity})
+                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
                     .subscribe((vresult) => {
                       console.log(vresult);
                       this.snackbar.open('Item deleted', 'OK', {duration: 3000});
@@ -1491,7 +1494,7 @@ export class BookingDetailComponent implements OnInit {
                 this.crudService.update('/vouchers', vData, element.bonus.id)
                   .subscribe((result) => {
 
-                    this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: element.bonus.reducePrice})
+                    this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -element.bonus.reducePrice})
                       .subscribe((vresult) => {
                         console.log(vresult);
 
@@ -1515,6 +1518,22 @@ export class BookingDetailComponent implements OnInit {
           }
         }
 
+        setTimeout(() => {
+          if (this.bookingsToCreate.length === 0){
+            this.crudService.update('/booking', {status: 2}, this.id)
+            .subscribe(() => {
+              this.getData();
+
+            })
+
+          } else {
+            this.crudService.update('/booking', {status: 3}, this.id)
+            .subscribe(() => {
+              this.getData();
+
+            })
+          }
+        }, 1000);
       }
     });
   }

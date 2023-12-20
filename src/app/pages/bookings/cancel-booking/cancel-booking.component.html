@@ -43,7 +43,7 @@
               <div style="float:left; width: 100%">
                 <mat-form-field class="flex-auto" style="float:left; width: 100%">
                   <mat-label>Reason</mat-label>
-                  <input type="text" formControlName="reason" matInput required>
+                  <input type="text" formControlName="reason" (blur)="setReason($event)" matInput required>
                 </mat-form-field>
               </div>
             </div>

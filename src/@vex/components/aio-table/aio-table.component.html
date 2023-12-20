@@ -196,6 +196,14 @@
           </ng-container>
         </ng-container>
 
+        <!-- Paiment method Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'payment_method_id'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ getPaymentMethod(row[column.property]) }}</td>
+          </ng-container>
+        </ng-container>
+
         <!-- Count Columns -->
 
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
@@ -313,7 +321,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'payment_status'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : '#E6E6E6'">
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
               {{ row[column.property] ? 'PAYÉ' : 'NON PAYE' | uppercase }}
             </td>
           </ng-container>
@@ -323,7 +331,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'payment_status_data'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-            <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : '#E6E6E6'">
+            <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
               {{ data[i].booking[column.property] ? 'PAYÉ' : 'NON PAYE' | uppercase }}
             </td>
           </ng-container>
@@ -333,8 +341,8 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'cancelation_status'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : '#E6E6E6'">
-              {{ row[column.property] ? 'ANNULÉ' : 'NON ANNULÉ' | uppercase }}
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] === 1 ? '#CEE741' : '#fac710'">
+              {{ row[column.property] === 1 ? 'NON ANNULÉ' : row[column.property] === 2 ? 'ANNULÉ' : 'PARTIALLY ANNULÉ' | uppercase }}
             </td>
           </ng-container>
         </ng-container>

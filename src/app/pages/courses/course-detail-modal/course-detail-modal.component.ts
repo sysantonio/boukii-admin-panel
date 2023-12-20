@@ -504,7 +504,7 @@ export class CourseDetailModalComponent implements OnInit {
     this.defaults.course_dates.forEach(element => {
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.teacher_min_degree = event.value.id;
+          group.teachers_min = event.value.id;
         }
 
       });
@@ -571,7 +571,7 @@ export class CourseDetailModalComponent implements OnInit {
       this.defaults.course_dates.forEach(courseDate => {
         courseDate.groups.forEach(group => {
           if (level.id === group.degree_id) {
-            ret = this.levels.find((l) => l.id === group.teacher_min_degree);
+            ret = this.levels.find((l) => l.id === group.teachers_min);
           }
         });
       });
