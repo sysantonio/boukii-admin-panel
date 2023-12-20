@@ -659,14 +659,14 @@
               <button (click)="goToPrevious()">&lt;</button>
               <button (click)="goToNext()">&gt;</button>
               </div>
-              
+
               <div class="view-selection">
                   <span class="view-option" [ngClass]="{'selected': timelineView == 'day'}" (click)="changeView('day')">Jour</span>
                   <span class="view-option" [ngClass]="{'selected': timelineView == 'week'}" (click)="changeView('week')">Semaine</span>
                   <span class="view-option" [ngClass]="{'selected': timelineView == 'month'}" (click)="changeView('month')">Mois</span>
               </div>
           </div>
-          
+
           <div>
 
               <div class="schedule-container" *ngIf="timelineView != 'month'">
@@ -694,9 +694,9 @@
                       <ng-container *ngFor="let task of plannerTasks">
                           <!--DAY-->
                           <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlockTimeline(task) : toggleDetailTimeline(task)" class="task-wrapper cursor-pointer" [ngClass]="[
-                              (task.booking_id && idDetailTimeline == task.booking_id) ? 
-                              (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                              '', 
+                              (task.booking_id && idDetailTimeline == task.booking_id) ?
+                              (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                              '',
                               task.class,
                               (task.block_id && idBlockTimeline == task.block_id) ? 'border-selected' : ''
                           ]" [ngStyle]="task.style">
@@ -712,9 +712,9 @@
                           </div>
                           <!--WEEK-->
                           <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlockTimeline(task) : toggleDetailTimeline(task)" class="task-wrapper-week cursor-pointer" [ngClass]="[
-                              (task.booking_id && idDetailTimeline == task.booking_id) ? 
-                              (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                              '', 
+                              (task.booking_id && idDetailTimeline == task.booking_id) ?
+                              (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                              '',
                               task.class,
                               (task.block_id && idBlockTimeline == task.block_id) ? 'border-selected' : ''
                           ]" [ngStyle]="task.styleWeek">
@@ -748,9 +748,9 @@
                       <ng-container *ngFor="let task of plannerTasks">
                           <!--MONTH-->
                           <div class="task-wrapper-week cursor-pointer" (click)="task.block_id ? toggleBlockTimeline(task) : toggleDetailTimeline(task)" [ngClass]="[
-                              (task.booking_id && idDetailTimeline == task.booking_id) ? 
-                              (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') : 
-                              '', 
+                              (task.booking_id && idDetailTimeline == task.booking_id) ?
+                              (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
+                              '',
                               task.class,
                               (task.block_id && idBlockTimeline == task.block_id) ? 'border-selected' : ''
                           ]" [ngStyle]="task.styleMonth">
@@ -766,7 +766,7 @@
                   </div>
                   </div>
               </div>
-              
+
           </div>
         </div>
 
@@ -881,7 +881,7 @@
                   </div>
 
                   <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-                  
+
                   <div style="width: 100%;float:left;margin-bottom:12px;">
                       <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
                   </div>
@@ -1055,552 +1055,564 @@
 <div class="mt-6 flex flex-col md:flex-row md:items-start" *ngIf="!loading && editing">
   <mat-tab-group style="width: 100%">
     <mat-tab label="Profile">
-      <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true"  [selectedIndex]="selectedTabIndex">
-
-        <ng-template matStepperIcon="edit">
-          <mat-icon svgIcon="mat:done_all"></mat-icon>
-        </ng-template>
-
-        <ng-template matStepperIcon="done">
-          <mat-icon svgIcon="mat:done_all"></mat-icon>
-        </ng-template>
-
-        <mat-step [stepControl]="formInfoAccount">
-          <form [formGroup]="formInfoAccount">
-            <ng-template matStepLabel>Info de compte</ng-template>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <div class="image-container">
-                <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;">
-              </div>
-
-              <div class="input-container">
-
-                <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                <label for="file" class="btn-1">upload file</label>
-                <p>Maximum 2mb</p>
-                <p>Formats supportés: PNG, JPG</p>
-              </div>
+      <div @fadeInUp class="card flex-auto">
+        <div class="px-6 py-4 border-b flex items-center">
+          <div style="float: left;width: 50%;">
+            <h2 class="title m-0">Edit monitor</h2>
+          </div>
+          <div style="float: left;width: 50%;">
+            <div style="float:right">
+              Active <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
             </div>
+          </div>
+        </div>
+        <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true"  [selectedIndex]="selectedTabIndex">
+
+          <ng-template matStepperIcon="edit">
+            <mat-icon svgIcon="mat:done_all"></mat-icon>
+          </ng-template>
+
+          <ng-template matStepperIcon="done">
+            <mat-icon svgIcon="mat:done_all"></mat-icon>
+          </ng-template>
+
+          <mat-step [stepControl]="formInfoAccount">
+            <form [formGroup]="formInfoAccount">
+              <ng-template matStepLabel>Info de compte</ng-template>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <div class="image-container">
+                  <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;">
+                </div>
+
+                <div class="input-container">
+
+                  <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
+                  <label for="file" class="btn-1">upload file</label>
+                  <p>Maximum 2mb</p>
+                  <p>Formats supportés: PNG, JPG</p>
+                </div>
+              </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Nom</mat-label>
+                    <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
+
+                  </mat-form-field>
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Prenom</mat-label>
+                    <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
+                  </mat-form-field>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Email</mat-label>
+                    <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
+
+                  </mat-form-field>
+
+                  <mat-form-field class="flex-auto">
+                    <mat-label>Nom d'utilisateur</mat-label>
+                    <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                  </mat-form-field>
+                </div>
+
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="flex-auto" style="width: 50%">
+                  <mat-label>Password</mat-label>
+                  <input formControlName="password" matInput required [type]="inputType" [(ngModel)]="defaultsUser.password">
+                  <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Ver contraseña" type="button">
+                    <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
+                    <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+                  </button>
+                </mat-form-field>
+
+                <mat-form-field class="vex-flex-form-field flex-auto" style="width: 50%">
+                  <mat-label>Station</mat-label>
+
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
+
+                  <mat-autocomplete #autoStation="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.active_station = option.id">
+                      {{option.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="actions flex items-center justify-end gap-2">
+                <button mat-button type="button" (click)="editing = false;">Ir a Preview</button>
+
+                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+
+                <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
+                <button color="primary" mat-raised-button matStepperNext>
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="formPersonalInfo">
+            <form [formGroup]="formPersonalInfo">
+              <ng-template matStepLabel>Données Personnelles</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-                <mat-form-field class="flex-auto">
-                  <mat-label>Nom</mat-label>
-                  <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
-
-                </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Prenom</mat-label>
-                  <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
+                  <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
+                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
                 </mat-form-field>
-             </div>
+
+              </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Email</mat-label>
-                  <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
+                  <mat-label>Teléphone</mat-label>
 
+                  <input formControlName="phone" matInput required type="tel" [(ngModel)]="defaults.telephone">
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Nom d'utilisateur</mat-label>
-                  <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                  <mat-label>Portable</mat-label>
+                  <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
+
+                </mat-form-field>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Addresse</mat-label>
+
+                  <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>Code Postal</mat-label>
+                  <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
+
                 </mat-form-field>
               </div>
 
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto" style="width: 50%">
-                <mat-label>Password</mat-label>
-                <input formControlName="password" matInput required [type]="inputType" [(ngModel)]="defaultsUser.password">
-                <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Ver contraseña" type="button">
-                  <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
-                  <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="vex-flex-form-field flex-auto">
+                  <mat-label>Pays</mat-label>
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
+                  <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
+                    <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
+                      {{country.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="vex-flex-form-field flex-auto">
+                  <mat-label>Canton</mat-label>
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
+                  <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
+                    <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
+                      {{province.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto" appearance="fill">
+                  <mat-label>Idiomas</mat-label>
+                  <mat-select [formControl]="languagesControl" multiple>
+                    <mat-select-trigger>
+                      <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
+                        {{ getSelectedLanguageNames() }}
+                      </div>
+                      <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages($event, language)">
+                      {{language.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="actions flex items-center justify-end gap-2">
+                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+
+                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+
+
+                <button  color="primary" mat-raised-button matStepperNext>
+                  Next
                 </button>
-              </mat-form-field>
+              </div>
 
-              <mat-form-field class="vex-flex-form-field flex-auto" style="width: 50%">
-                <mat-label>Station</mat-label>
-
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
-
-                <mat-autocomplete #autoStation="matAutocomplete">
-                  <mat-option *ngFor="let option of filteredStations | async" [value]="option.name" (onSelectionChange)="defaults.active_station = option.id">
-                    {{option.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-            <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="editing = false;">Ir a Preview</button>
-
-              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
-
-              <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
-              <button color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
-        <mat-step [stepControl]="formPersonalInfo">
-          <form [formGroup]="formPersonalInfo">
-            <ng-template matStepLabel>Données Personnelles</ng-template>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-
-              <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
-                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
-              </mat-form-field>
-
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
-                <mat-label>Teléphone</mat-label>
-
-                <input formControlName="phone" matInput required type="tel" [(ngModel)]="defaults.telephone">
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Portable</mat-label>
-                <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-
-              </mat-form-field>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
-                <mat-label>Addresse</mat-label>
-
-                <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Code Postal</mat-label>
-                <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
-
-              </mat-form-field>
-            </div>
+              <div class="actions flex items-center justify-end gap-2">
+                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
 
+                <button  color="primary" mat-raised-button matStepperNext>
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Pays</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
-                <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
-                    {{country.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
+          <mat-step [stepControl]="formWorkInfo">
+            <form [formGroup]="formWorkInfo">
+              <ng-template matStepLabel>Information de travail</ng-template>
 
-              <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Canton</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
-                <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
-                  <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
-                    {{province.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Nº AVS</mat-label>
+                  <input formControlName="avs" matInput required type="text" [(ngModel)]="defaults.avs">
 
-              <mat-form-field class="flex-auto" appearance="fill">
-                <mat-label>Idiomas</mat-label>
-                <mat-select [formControl]="languagesControl" multiple>
-                  <mat-select-trigger>
-                    <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
-                      {{ getSelectedLanguageNames() }}
-                    </div>
-                    <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
-                  </mat-select-trigger>
-                  <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages($event, language)">
-                    {{language.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                </mat-form-field>
 
-            <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+                <mat-form-field class="flex-auto">
+                  <mat-label>Permis de travail</mat-label>
+                  <input formControlName="workId" matInput required type="text" [(ngModel)]="defaults.work_license">
+                </mat-form-field>
+              </div>
 
-              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="flex-auto">
+                  <mat-label>IBAN</mat-label>
+                  <input formControlName="iban" matInput required type="text" [(ngModel)]="defaults.bank_details">
 
+                </mat-form-field>
+              </div>
 
-              <button  color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="vex-flex-form-field flex-auto">
+                  <mat-label>Pays</mat-label>
+                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
+                  <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
+                    <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country" (onSelectionChange)="defaults.world_country = country.id">
+                      {{country.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
 
-            <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+                <mat-form-field class="flex-auto">
+                  <mat-label>Children</mat-label>
+                  <input formControlName="children" matInput required type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
 
+                </mat-form-field>
+              </div>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <button  color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-          </form>
-        </mat-step>
+                <!-- Añadir niños con modal -->
+                <mat-table #childrenTable [dataSource]="childrenData" *ngIf="formWorkInfo.value.children > 0">
 
-        <mat-step [stepControl]="formWorkInfo">
-          <form [formGroup]="formWorkInfo">
-            <ng-template matStepLabel>Information de travail</ng-template>
+                  <!-- Otros contenedores según tu descripción -->
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-              <mat-form-field class="flex-auto">
-                <mat-label>Nº AVS</mat-label>
-                <input formControlName="avs" matInput required type="text" [(ngModel)]="defaults.avs">
+                  <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                        <mat-label>Name</mat-label>
+                        <input matInput [(ngModel)]="element.name" formControlName="childName" type="text">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
 
-              </mat-form-field>
+                  <ng-container matColumnDef="date">
+                    <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                        <input matInput [matDatepicker]="pickerFromChild" placeholder="Date de naissance" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
+                        <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
 
-              <mat-form-field class="flex-auto">
-                <mat-label>Permis de travail</mat-label>
-                <input formControlName="workId" matInput required type="text" [(ngModel)]="defaults.work_license">
-              </mat-form-field>
-            </div>
+                  <!-- Ícono para eliminar
+                  <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
+                    </mat-cell>
+                  </ng-container> -->
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
-                <mat-label>IBAN</mat-label>
-                <input formControlName="iban" matInput required type="text" [(ngModel)]="defaults.bank_details">
-
-              </mat-form-field>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Pays</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
-                <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
-                  <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country" (onSelectionChange)="defaults.world_country = country.id">
-                    {{country.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Children</mat-label>
-                <input formControlName="children" matInput required type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
-
-              </mat-form-field>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-
-             <!-- Añadir niños con modal -->
-              <mat-table #childrenTable [dataSource]="childrenData" *ngIf="formWorkInfo.value.children > 0">
-
-                <!-- Otros contenedores según tu descripción -->
-
-                <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Name</mat-label>
-                      <input matInput [(ngModel)]="element.name" formControlName="childName" type="text">
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="date">
-                  <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <input matInput [matDatepicker]="pickerFromChild" placeholder="Date de naissance" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
-                      <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
-                      <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
-
-                <!-- Ícono para eliminar
-                <ng-container matColumnDef="delete">
-                  <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
-                  </mat-cell>
-                </ng-container> -->
-
-                <mat-header-row *matHeaderRowDef="displayedColumnsChildren"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsChildren;"></mat-row>
-              </mat-table>
-            </div>
+                  <mat-header-row *matHeaderRowDef="displayedColumnsChildren"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumnsChildren;"></mat-row>
+                </mat-table>
+              </div>
 
 
-          </form>
-        </mat-step>
+            </form>
+          </mat-step>
 
-        <mat-step [stepControl]="formSportInfo">
-          <ng-template matStepLabel>Deportes</ng-template>
+          <mat-step [stepControl]="formSportInfo">
+            <ng-template matStepLabel>Deportes</ng-template>
 
-          <div style="margin: 3% 0 0 0;">
+            <div style="margin: 3% 0 0 0;">
 
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto" appearance="fill">
-                <mat-label>Deportes</mat-label>
-                <mat-select [formControl]="sportsControl" multiple>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field class="flex-auto" appearance="fill">
+                  <mat-label>Deportes</mat-label>
+                  <mat-select [formControl]="sportsControl" multiple>
 
-                  <mat-select-trigger>
-                    <div *ngIf="sportsControl.value?.length > 0; else placeholder">
-                      {{ getSelectedSportsNames() }}
-                    </div>
-                    <ng-template #placeholder>Selecciona los deportes</ng-template>
-                  </mat-select-trigger>
+                    <mat-select-trigger>
+                      <div *ngIf="sportsControl.value?.length > 0; else placeholder">
+                        {{ getSelectedSportsNames() }}
+                      </div>
+                      <ng-template #placeholder>Selecciona los deportes</ng-template>
+                    </mat-select-trigger>
 
-                  <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection($event, sport)">
-                    {{sport.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                    <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection($event, sport)">
+                      {{sport.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-table class="sports-table" #sportsCurrentTable [dataSource]="sportsCurrentData">
-                <caption style="width: 100px"> Current sports</caption>
-                 <!-- Otros contenedores según tu descripción -->
-                 <ng-container matColumnDef="delete">
-                  <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">Eliminar</mat-header-cell>
-                  <mat-cell *matCellDef="let element; let i = index" class="delete-column" style="width: 20%;float: left;">
-                    <mat-icon svgIcon="mat:delete" (click)="removeSport(i, element)"></mat-icon>
-                  </mat-cell>
-                </ng-container>
-                 <ng-container matColumnDef="name" >
-                  <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;"> Name </mat-header-cell>
-                  <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Name</mat-label>
-                      <input matInput [value]="element.name" type="text" [readonly]="true">
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-table class="sports-table" #sportsCurrentTable [dataSource]="sportsCurrentData">
+                  <caption style="width: 100px"> Current sports</caption>
+                    <!-- Otros contenedores según tu descripción -->
+                    <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">Eliminar</mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index" class="delete-column" style="width: 20%;float: left;">
+                      <mat-icon svgIcon="mat:delete" (click)="removeSport(i, element)"></mat-icon>
+                    </mat-cell>
+                  </ng-container>
+                    <ng-container matColumnDef="name" >
+                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;"> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                        <mat-label>Name</mat-label>
+                        <input matInput [value]="element.name" type="text" [readonly]="true">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
 
-                <ng-container matColumnDef="level">
-                  <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Niveaux</mat-header-cell>
-                  <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                     <mat-label>Niveaux</mat-label>
-                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element.level.name" [(ngModel)]="element.level"/>
-                     <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                       <mat-option *ngFor="let level of element.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
-                         {{level.annotation}} - {{level.name}}
-                       </mat-option>
-                     </mat-autocomplete>
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
+                  <ng-container matColumnDef="level">
+                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Niveaux</mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                        <mat-label>Niveaux</mat-label>
+                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element.level.name" [(ngModel)]="element.level"/>
+                        <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                          <mat-option *ngFor="let level of element.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
+                            {{level.annotation}} - {{level.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
 
-                <ng-container matColumnDef="salary">
-                  <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Salary</mat-header-cell>
-                  <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                     <mat-label>Salary</mat-label>
-                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [value]="getSalary(element.salary_level)?.name" [matAutocomplete]="autoSalary"/>
-                     <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
-                       <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id" (onSelectionChange)="updateSalary(element, salary)">
-                         {{salary.name}}
-                       </mat-option>
-                     </mat-autocomplete>
-                    </mat-form-field>
-                  </mat-cell>
-                </ng-container>
+                  <ng-container matColumnDef="salary">
+                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Salary</mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                        <mat-label>Salary</mat-label>
+                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [value]="getSalary(element.salary_level)?.name" [matAutocomplete]="autoSalary"/>
+                        <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
+                          <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id" (onSelectionChange)="updateSalary(element, salary)">
+                            {{salary.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
 
-                <ng-container matColumnDef="auth">
-                  <mat-header-cell *matHeaderCellDef [hidden]="true" style="width: 100%;float: left;"> Authorised Levels </mat-header-cell>
+                  <ng-container matColumnDef="auth">
+                    <mat-header-cell *matHeaderCellDef [hidden]="true" style="width: 100%;float: left;"> Authorised Levels </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
+                      <div style="width: 100%; float:left">
+                        <div *ngFor="let level of element.degrees" class="chip-level" [style.border]="'2px solid ' + level.color"
+                        [ngStyle]="{
+                          'background': checkMonitorAuth(element, level) ? level.color : '#fff'
+                        }"
+                          (click)="authoriseCurrentLevel(level, element)">
+                          <p style="color: #000;text-align: center"
+                          [ngStyle]="{
+                            'color': checkMonitorAuth(element, level) ? '#fff': '#000'
+                          }"
+                          >{{ level.annotation }}</p>
+                        </div>
+                        <div class="chip-level" style="border: 2px black solid"  (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
+                          'background': checkMonitorAuthAdults(element) ? 'black' : '#fff'
+                        }" (click)="authoriseAudlts(element)">
+                          <p style="text-align: center"
+                          [ngStyle]="{
+                            'color': checkMonitorAuthAdults(element) ? '#fff' : 'black'
+                          }"
+                          >A</p>
+                        </div>
+                        </div>
+
+                    </mat-cell>
+                  </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedCurrentColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedCurrentColumns;"></mat-row>
+                  </mat-table>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+
+                <mat-table class="sports-table" #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
+                  <caption style="width: 100px"> New sports</caption>
+
+                  <!-- Otros contenedores según tu descripción -->
+                  <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                        <mat-label>Name</mat-label>
+                        <input matInput [value]="element.name" type="text" [readonly]="true">
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="level">
+                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Niveaux</mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-label>Niveaux</mat-label>
+                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
+                      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                        <mat-option *ngFor="let level of element.degrees" [value]="level">
+                          {{level.annotation}} - {{level.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="salary">
+                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
+                      <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-label>Salary</mat-label>
+                      <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
+                      <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
+                        <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
+                          {{salary.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="auth">
+                  <mat-header-cell *matHeaderCellDef style="width: 100%;float: left;" [hidden]="true"> Authorised Levels </mat-header-cell>
                   <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
                     <div style="width: 100%; float:left">
-                      <div *ngFor="let level of element.degrees" class="chip-level" [style.border]="'2px solid ' + level.color"
+                      <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
                       [ngStyle]="{
-                        'background': checkMonitorAuth(element, level) ? level.color : '#fff'
+                        'background': isAuthorized(item) ? item.color : '#fff'
                       }"
-                        (click)="authoriseCurrentLevel(level, element)">
+                        (click)="authoriseLevel(item)">
                         <p style="color: #000;text-align: center"
                         [ngStyle]="{
-                          'color': checkMonitorAuth(element, level) ? '#fff': '#000'
+                          'color': isAuthorized(item) ? '#fff': '#000'
                         }"
-                        >{{ level.annotation }}</p>
+                        >{{ item.annotation }}</p>
                       </div>
-                      <div class="chip-level" style="border: 2px black solid"  (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
-                        'background': checkMonitorAuthAdults(element) ? 'black' : '#fff'
-                      }" (click)="authoriseAudlts(element)">
+                      <div class="chip-level" style="border: 1px black solid" (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
+                        'background': element.allowAdults ? 'black' : '#fff'
+                      }">
                         <p style="text-align: center"
                         [ngStyle]="{
-                          'color': checkMonitorAuthAdults(element) ? '#fff' : 'black'
+                          'color': element.allowAdults ? '#fff' : 'black'
                         }"
                         >A</p>
                       </div>
-                     </div>
-
+                    </div>
                   </mat-cell>
                 </ng-container>
+                  <!-- Ícono para eliminar
+                  <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
+                    </mat-cell>
+                  </ng-container> -->
 
-                 <mat-header-row *matHeaderRowDef="displayedCurrentColumns"></mat-header-row>
-                 <mat-row *matRowDef="let row; columns: displayedCurrentColumns;"></mat-row>
-               </mat-table>
-             </div>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
 
-             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <mat-table class="sports-table" #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
-                <caption style="width: 100px"> New sports</caption>
+              </div>
+              <div class="actions flex items-center justify-end gap-2">
+                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
-                <!-- Otros contenedores según tu descripción -->
-                <ng-container matColumnDef="name">
-                 <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> Name </mat-header-cell>
-                 <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
-                   <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                     <mat-label>Name</mat-label>
-                     <input matInput [value]="element.name" type="text" [readonly]="true">
-                   </mat-form-field>
-                 </mat-cell>
-               </ng-container>
 
-               <ng-container matColumnDef="level">
-                 <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Niveaux</mat-header-cell>
-                 <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
-                   <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                    <mat-label>Niveaux</mat-label>
-                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
-                    <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                      <mat-option *ngFor="let level of element.degrees" [value]="level">
-                        {{level.annotation}} - {{level.name}}
-                      </mat-option>
-                    </mat-autocomplete>
-                   </mat-form-field>
-                 </mat-cell>
-               </ng-container>
-
-               <ng-container matColumnDef="salary">
-                 <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
-                 <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
-                   <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                    <mat-label>Salary</mat-label>
-                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
-                    <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
-                      <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
-                        {{salary.name}}
-                      </mat-option>
-                    </mat-autocomplete>
-                   </mat-form-field>
-                 </mat-cell>
-               </ng-container>
-
-               <ng-container matColumnDef="auth">
-                <mat-header-cell *matHeaderCellDef style="width: 100%;float: left;" [hidden]="true"> Authorised Levels </mat-header-cell>
-                <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
-                  <div style="width: 100%; float:left">
-                    <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
-                    [ngStyle]="{
-                      'background': isAuthorized(item) ? item.color : '#fff'
-                    }"
-                      (click)="authoriseLevel(item)">
-                      <p style="color: #000;text-align: center"
-                      [ngStyle]="{
-                        'color': isAuthorized(item) ? '#fff': '#000'
-                      }"
-                      >{{ item.annotation }}</p>
-                    </div>
-                    <div class="chip-level" style="border: 1px black solid" (click)="element.allowAdults = !element.allowAdults" [ngStyle]="{
-                     'background': element.allowAdults ? 'black' : '#fff'
-                   }">
-                     <p style="text-align: center"
-                     [ngStyle]="{
-                       'color': element.allowAdults ? '#fff' : 'black'
-                     }"
-                     >A</p>
-                   </div>
-                  </div>
-                </mat-cell>
-              </ng-container>
-                <!-- Ícono para eliminar
-                <ng-container matColumnDef="delete">
-                  <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-icon svgIcon="mat:delete" (click)="removeChild(element)"></mat-icon>
-                  </mat-cell>
-                </ng-container> -->
-
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-              </mat-table>
-
+                <button  color="primary" mat-raised-button matStepperNext>
+                  Next
+                </button>
+              </div>
 
             </div>
-            <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+          </mat-step>
+
+          <mat-step [stepControl]="formCivilStatusInfo">
+            <form [formGroup]="formCivilStatusInfo">
+              <ng-template matStepLabel>Etat civil</ng-template>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Estado Civil</mat-label>
+                  <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus" [value]="defaults.civil_status" >
+                  <mat-autocomplete #autoCivilStatus="matAutocomplete">
+                    <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus" (onSelectionChange)="defaults.civil_status = civilStatus">
+                      {{ civilStatus }}
+                    </mat-option>
+                  </mat-autocomplete>
+
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>Conjoint travaille?</mat-label>
+                  <mat-select formControlName="spouse" (selectionChange)="setValueSpouse($event)">
+                    <mat-option value="y">Yes</mat-option>
+                    <mat-option value="n">No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>Demande d'allocation familiales?</mat-label>
+                  <mat-select formControlName="workMobility" (selectionChange)="setValueLocation($event)">
+                    <mat-option value="y" >Yes</mat-option>
+                    <mat-option value="n" >No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Permis travail du conjoint</mat-label>
+                  <input formControlName="spouseWorkId" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
+
+                </mat-form-field>
+                <mat-form-field class="flex-auto">
+                  <mat-label>Pourcentage du conjoint (%)</mat-label>
+                  <input formControlName="spousePercentage" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
+
+                </mat-form-field>
+              </div>
+              <div class="actions flex items-center justify-end gap-2">
+                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
 
-              <button  color="primary" mat-raised-button matStepperNext>
-                Next
-              </button>
-            </div>
-
-          </div>
-        </mat-step>
-
-        <mat-step [stepControl]="formCivilStatusInfo">
-          <form [formGroup]="formCivilStatusInfo">
-            <ng-template matStepLabel>Etat civil</ng-template>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-              <mat-form-field class="flex-auto">
-                <mat-label>Estado Civil</mat-label>
-                <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus" [value]="defaults.civil_status" >
-                <mat-autocomplete #autoCivilStatus="matAutocomplete">
-                  <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus" (onSelectionChange)="defaults.civil_status = civilStatus">
-                    {{ civilStatus }}
-                  </mat-option>
-                </mat-autocomplete>
-
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Conjoint travaille?</mat-label>
-                <mat-select formControlName="spouse" (selectionChange)="setValueSpouse($event)">
-                  <mat-option value="y">Yes</mat-option>
-                  <mat-option value="n">No</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field class="flex-auto">
-                <mat-label>Demande d'allocation familiales?</mat-label>
-                <mat-select formControlName="workMobility" (selectionChange)="setValueLocation($event)">
-                  <mat-option value="y" >Yes</mat-option>
-                  <mat-option value="n" >No</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
-              <mat-form-field class="flex-auto">
-                <mat-label>Permis travail du conjoint</mat-label>
-                <input formControlName="spouseWorkId" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
-
-              </mat-form-field>
-              <mat-form-field class="flex-auto">
-                <mat-label>Pourcentage du conjoint (%)</mat-label>
-                <input formControlName="spousePercentage" matInput required type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
-
-              </mat-form-field>
-            </div>
-            <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-              <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
-
-
-              <button  color="primary" mat-raised-button matStepperNext (click)="save()">
-                Save
-              </button>
-            </div>
-          </form>
-        </mat-step>
-      </mat-vertical-stepper>
+                <button  color="primary" mat-raised-button matStepperNext (click)="save()">
+                  Save
+                </button>
+              </div>
+            </form>
+          </mat-step>
+        </mat-vertical-stepper>
+      </div>
     </mat-tab>
 
     <mat-tab label="Cours">

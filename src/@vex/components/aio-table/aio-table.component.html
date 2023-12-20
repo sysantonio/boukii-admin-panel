@@ -296,7 +296,7 @@
           <ng-container *ngIf="column.type === 'bookings'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <strong><span style="color:#2D9BF0">{{data[i].total_available_places}}</span>/{{data[i].total_reservations}}</strong>
+              <strong><span style="color:#2D9BF0">{{data[i].total_reservations}}</span>/{{data[i].total_available_places}}</strong>
             </td>
           </ng-container>
         </ng-container>
