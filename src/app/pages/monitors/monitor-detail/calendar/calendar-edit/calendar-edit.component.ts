@@ -79,7 +79,10 @@ export class CalendarEditComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.defaults.start_time = this.event.hour_start;
-    this.defaults.start_date = moment(this.event.date_param).toDate();
+    this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
+
+    console.log(this.event.date_param);
+    console.log(this.defaults.start_date);
 
     this.form = this.fb.group({
       startAvailable: this.defaults.start_date,
@@ -123,7 +126,12 @@ export class CalendarEditComponent implements OnInit {
     this.defaults.school_id = this.user.schools[0].id;
     this.defaults.start_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
     this.defaults.end_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
-    this.defaults.full_day = this.form.get('full_day').value;
+    if(this.form.get('full_day').value){
+      this.defaults.full_day = this.form.get('full_day').value;
+    }
+    else{
+      this.defaults.full_day = false;
+    }
 
     this.dialogRef.close({
       ...this.event,
@@ -206,7 +214,7 @@ export class CalendarEditComponent implements OnInit {
       this.openCreateBooking();
     } else {
       if(this.event && this.event.date_param) {
-        this.defaults.start_date = moment(this.event.date_param).toDate();
+        this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
         //this.defaults.end_date = this.event.end;
         this.defaults.start_time = this.event.hour_start;
         //this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;

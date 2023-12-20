@@ -27,6 +27,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MonitorDetailComponent } from './monitor-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CalendarMonitorModule } from './calendar/calendar.module';
 import { ConfirmModalModule } from './confirm-dialog/confirm-dialog.component.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
@@ -68,6 +69,7 @@ import { ComponentsCustomModule } from 'src/app/components/components-custom.mod
     NgIf,
     MatTabsModule,
     MatTableModule,
+    MatCheckboxModule,
     CalendarMonitorModule,
     ConfirmModalModule,
     PageLayoutModule,

@@ -15,6 +15,8 @@ import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from './confirm-dialog/confirm-dialog.component';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { CalendarEditComponent } from './calendar/calendar-edit/calendar-edit.component';
+import { CourseDetailModalComponent } from '../../courses/course-detail-modal/course-detail-modal.component';
 import { addDays, getDay, startOfWeek, endOfWeek, addWeeks, subWeeks, format, isSameMonth, startOfMonth, endOfMonth, addMonths, subMonths, max, min } from 'date-fns';
 @Component({
   selector: 'vex-monitor-detail',
@@ -181,6 +183,8 @@ export class MonitorDetailComponent {
 
   //Planificador
   hoursRange: string[] = this.generateHoursRange('08:00', '20:00');
+  hoursRangeMinusLast:string[];
+  hoursRangeMinutes: string[] = this.generateHoursRangeMinutes('08:00', '20:00');
   activeSchool:any=null;
   sports:any[] = [];
   degrees:any[] = [];
@@ -190,6 +194,15 @@ export class MonitorDetailComponent {
   showBlockTimeline:boolean=false;
   idBlockTimeline:any;
   blockDetailTimeline:any;
+
+  showEditBlock:boolean = false;
+  allHoursDay:boolean=false;
+  startTimeDay:string;
+  endTimeDay:string;
+  nameBlockDay:string;
+  divideDay:boolean=false;
+  startTimeDivision:string;
+  endTimeDivision:string;
 
   plannerTasks:any[] =[];
   vacationDays:any[];
@@ -212,6 +225,8 @@ export class MonitorDetailComponent {
     });
 
     this.colorKeys = Object.keys(this.groupedByColor);
+
+    this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
   }
 
   async ngOnInit() {
@@ -1454,15 +1469,20 @@ export class MonitorDetailComponent {
 
         return {
           school_id: nwd.school_id,
+          station_id: nwd.station_id,
           block_id: nwd.id,
           date: moment(nwd.start_date).format('YYYY-MM-DD'),
           date_format: moment(nwd.start_date).format('DD/MM/YYYY'),
           full_day: nwd.full_day,
           type: type,
-          color: nwd.user_nwd_subtype_id === 1 ? '#999999' : nwd.color,
+          color: nwd.user_nwd_subtype_id === 1 ? '#bbbbbb' : nwd.color,
           name: nwd.description,
           monitor_id: nwd.monitor_id,
           monitor: this.defaults,
+          user_nwd_subtype_id: nwd.user_nwd_subtype_id,
+          color_block: nwd.color,
+          start_date: nwd.start_date,
+          end_date: nwd.end_date,
           ...hourTimesNwd
         };
       })
@@ -1571,6 +1591,20 @@ export class MonitorDetailComponent {
     while (currentTime <= endTime) {
       times.push(this.formatTime(currentTime));
       currentTime.setHours(currentTime.getHours() + 1);
+    }
+
+    return times;
+  }
+
+  generateHoursRangeMinutes(start: string, end: string): string[] {
+    const startTime = this.parseTime(start);
+    const endTime = this.parseTime(end);
+    let currentTime = new Date(startTime);
+    let times = [];
+
+    while (currentTime <= endTime) {
+      times.push(this.formatTime(currentTime));
+      currentTime = new Date(currentTime.getTime() + 5 * 60000);
     }
 
     return times;
@@ -1685,16 +1719,18 @@ export class MonitorDetailComponent {
         console.log(task);
         this.idDetailTimeline = task.booking_id;
         this.taskDetailTimeline = task;
-        this.showDetailTimeline = true;
       this.hideBlockTimeline();
+      this.hideEditBlock();
+      this.showDetailTimeline = true;
     }
   }
 
   toggleBlockTimeline(block:any){
     this.idBlockTimeline = block.block_id;
     this.blockDetailTimeline = block;
-    this.showBlockTimeline = true;
     this.hideDetailTimeline();
+    this.hideEditBlock();
+    this.showBlockTimeline = true;
   }
 
   hideDetailTimeline() {
@@ -1708,5 +1744,285 @@ export class MonitorDetailComponent {
     this.blockDetailTimeline = null;
     this.showBlockTimeline = false;
   }
+
+  goToEditCourse() {
+    const dialogRef = this.dialog.open(CourseDetailModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',
+      panelClass: 'full-screen-dialog',
+      data: {
+        id: this.taskDetailTimeline.course.id
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+        console.log(result);
+      }
+    });
+  }
+
+  handleDbClickEvent(action: string, event: any, type:string, position:any, hourDay?:any, positionWeek?:any): void {
+
+    /* GET DATE,HOUR,MONITOR -> DOUBLE CLICK */
+
+    let dateInfo;
+    let currentDate = moment(this.currentDate);
+    console.log(currentDate);
+
+    switch (type) {
+      case 'day':
+          dateInfo = {
+            date: this.currentDate,
+            date_format: moment(this.currentDate).format('DD-MM-YYYY'),
+            hour: position,
+            monitor_id: this.id
+          };
+          break;
+      case 'week':
+          let mondayOfWeek = currentDate.clone().startOf('isoWeek');
+          let weekDayDate = mondayOfWeek.add(position, 'days');
+          console.log(mondayOfWeek);
+          console.log(weekDayDate);
+          dateInfo = {
+            date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
+            date_format: moment(weekDayDate).format('DD-MM-YYYY'),
+            hour: hourDay,
+            monitor_id: this.id
+          };
+          break;
+      case 'month':
+          let firstDayOfMonth = currentDate.clone().startOf('month');
+          let startOfWeek = firstDayOfMonth.add(positionWeek, 'weeks');
+          startOfWeek.startOf('isoWeek');
+          let monthDayDate = startOfWeek.add(position, 'days');
+          dateInfo = {
+            date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
+            date_format: moment(monthDayDate).format('DD-MM-YYYY'),
+            hour: hourDay,
+            monitor_id: this.id
+          };
+          break;
+      default:
+          throw new Error('Invalid type');
+    }
+
+    console.log(dateInfo);
+
+    /* END DATA DOUBLE CLICK */
+
+    console.log(action, event);
+    const dialogRef = this.dialog.open(CalendarEditComponent, {
+      data: {
+        event,
+        monitor_id: dateInfo.monitor_id,
+        date_param: dateInfo.date_format,
+        hour_start: dateInfo.hour
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+        console.log(result);
+
+        const data = {
+          user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
+        }
+        this.crudService.create('/monitor-nwds', data)
+          .subscribe((data) => {
+
+            //this.getData();
+            this.loadBookings(this.currentDate);
+            this.snackbar.open('Event created');
+          })
+          //CHANGE
+        /*let id = 1
+        result.monitor_id = id;
+
+        const isOverlap = this.eventService.isOverlap(this.events, result);
+        if (isOverlap.length === 0) {
+          if (result.user_nwd_subtype_id !== 0) {
+
+            this.crudService.create('/monitor-nwds', result)
+            .subscribe((data) => {
+
+              this.getData();
+              this.snackbar.open('Event created');
+            })
+          }
+        } else {
+
+          const updateEdit = this.events[isOverlap[0].overlapedId].id;
+          this.crudService.update('/monitor-nwds', isOverlap[0].dates[0], updateEdit)
+            .subscribe((data) => {
+              isOverlap[0].dates[1].start_time = data.data.end_time;
+              this.crudService.create('/monitor-nwds', isOverlap[0].dates[1])
+              .subscribe((data) => {
+
+                this.getData();
+                this.snackbar.open('Event created');
+              })
+            })
+          // hacer el update y el create
+          this.snackbar.open('Existe un solapamiento', 'OK', {duration: 3000});
+        }*/
+
+      }
+    });
+  }
+
+  /* Edit blocks */
+
+  openEditBlock() {
+    this.allHoursDay = this.blockDetailTimeline.full_day;
+    this.startTimeDay = this.blockDetailTimeline.hour_start;
+    this.endTimeDay = this.blockDetailTimeline.hour_end;
+    this.nameBlockDay = this.blockDetailTimeline.name;
+    this.divideDay = false;
+    this.startTimeDivision = '';
+    this.endTimeDivision = '';
+    this.showEditBlock = true;
+  }
+
+  hideEditBlock() {
+    this.showEditBlock = false;
+  }
+
+  onStartTimeDayChange() {
+    const filteredEndHours = this.filteredEndHoursDay;
+
+    if (!filteredEndHours.includes(this.endTimeDay)) {
+      this.endTimeDay = filteredEndHours[0] || '';
+    }
+  }
+
+  get filteredEndHoursDay() {
+    const startIndex = this.hoursRangeMinutes.indexOf(this.startTimeDay);
+    return this.hoursRangeMinutes.slice(startIndex + 1);
+  }
+
+  onStartTimeDivisionChange() {
+    const filteredEndHours = this.filteredEndHoursDivision;
+    if (!filteredEndHours.includes(this.endTimeDivision)) {
+      this.endTimeDivision = filteredEndHours[0] || '';
+    }
+  }
+
+  get filteredStartHoursDivision() {
+    const startIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
+    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
+    return this.hoursRangeMinutes.slice(startIndex + 1, endIndex - 1);
+  }
+
+  get filteredEndHoursDivision() {
+    const defaultStartIndex = this.calculateDefaultStartTimeDivisionIndex();
+    const startIndex = this.startTimeDivision ? this.hoursRangeMinutes.indexOf(this.startTimeDivision) : defaultStartIndex;
+    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
+    return this.hoursRangeMinutes.slice(startIndex + 1, endIndex);
+  }
+
+  calculateDefaultStartTimeDivisionIndex() {
+    const blockStartTimeIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
+    return blockStartTimeIndex + 1;
+  }
+
+  isButtonDayEnabled() {
+    if (this.divideDay) {
+      return this.nameBlockDay && this.startTimeDivision && this.endTimeDivision && (this.allHoursDay || (this.startTimeDay && this.endTimeDay));
+    } else {
+      return this.nameBlockDay && (this.allHoursDay || (this.startTimeDay && this.endTimeDay));
+    }
+  }
+
+  saveEditedBlock() {
+      const commonData = {
+        monitor_id: this.blockDetailTimeline.monitor_id,
+        school_id: this.blockDetailTimeline.school_id,
+        station_id: this.blockDetailTimeline.station_id,
+        description: this.nameBlockDay,
+        color: this.blockDetailTimeline.color_block,
+        user_nwd_subtype_id: this.blockDetailTimeline.user_nwd_subtype_id,
+      };
+      let firstBlockData:any = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date };
+      let secondBlockData:any;
+
+      // Calculate time moments
+      firstBlockData.start_time = this.allHoursDay ? `${this.hoursRangeMinutes[0]}:00` : `${this.startTimeDay}:00`;
+      firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
+      firstBlockData.full_day = this.allHoursDay && !this.divideDay;
+
+      console.log(this.blockDetailTimeline);
+      console.log(firstBlockData);
+
+      // Function update first block -> CALL LATER
+      const updateFirstBlock = () => {
+          this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetailTimeline.block_id).subscribe(
+              response => {
+                  //console.log('First block updated:', response);
+                  this.hideEditBlock();
+                  this.hideBlockTimeline();
+                  this.loadBookings(this.currentDate);
+              },
+              error => {
+                  console.error('Error updating first block:', error);
+              }
+          );
+      };
+
+          if (this.divideDay) {
+              secondBlockData = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
+
+                  this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
+                      secondResponse => {
+                          //console.log('Second block created:', secondResponse);
+                          updateFirstBlock();
+                      },
+                      error => {
+                          console.error('Error creating second block:', error);
+                      }
+                  );
+
+          } else {
+              // Update FIRST
+              updateFirstBlock();
+          }
+  }
+
+  deleteEditedBlock() {
+        const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer le blocage?');
+        if (isConfirmed) {
+            this.crudService.delete('/monitor-nwds', this.blockDetailTimeline.block_id).subscribe(
+                response => {
+                    //console.log('Response:', response);
+                    this.hideEditBlock();
+                    this.hideBlockTimeline();
+                    this.loadBookings(this.currentDate);
+                },
+                error => {
+                    console.error('Error:', error);
+                }
+            );
+        }
+  }
+
+  getDayOfWeek(dayIndex: number): number {
+    const startOfWeek = moment(this.currentDate).startOf('isoWeek');
+    const specificDate = startOfWeek.add(dayIndex, 'days');
+    return specificDate.date();
+  }
+
+  /*
+  getDayOfMonth(weekIndex: number, dayIndex: number): string {
+    const startOfWeek = moment(startOfMonth(this.currentDate)).add(weekIndex, 'weeks');
+    const specificDate = startOfWeek.startOf('isoWeek').add(dayIndex, 'days');
+    if (specificDate.month() === this.currentDate.getMonth()) {
+        return specificDate.format('D');
+    }
+    return '';
+  }
+  */
 
 }

@@ -675,17 +675,17 @@
                       <div class="hour" *ngFor="let hour of hoursRange">{{ hour }}</div>
                   </div>
                   <div class="hours-row" *ngIf="timelineView == 'week'">
-                      <div class="day" *ngFor="let day of weekDays">{{ day }}</div>
+                      <div class="day" *ngFor="let day of weekDays;let dayIndex = index">{{ day }} {{ getDayOfWeek(dayIndex) }}</div>
                   </div>
                   <div class="grid-container">
                       <div class="grid-row"  [ngClass]="{'outside-month-day': !isDayVisibleDay() && timelineView == 'day'}">
                           <ng-container *ngIf="timelineView == 'day'">
-                              <div class="grid-cell" *ngFor="let hour of hoursRange">
+                              <div class="grid-cell" *ngFor="let hour of hoursRange" (dblclick)="handleDbClickEvent('Clicked', $event, 'day', hour)">
                               </div>
                           </ng-container>
                           <ng-container *ngIf="timelineView == 'week'">
                               <div class="grid-cell-day" *ngFor="let day of weekDays;let dayIndex = index" [ngClass]="{'outside-month': !isDayVisibleWeek(dayIndex)}">
-                                  <div class="grid-cell-inside" *ngFor="let hour of hoursRange"></div>
+                                  <div class="grid-cell-inside" *ngFor="let hour of hoursRangeMinusLast" (dblclick)="handleDbClickEvent('Clicked', $event, 'week', dayIndex, hour)"></div>
                               </div>
                           </ng-container>
                       </div>
@@ -740,7 +740,7 @@
                   <div class="grid-container">
                           <div class="grid-row" *ngFor="let week of weeksInMonth;let weekIndex = index">
                               <div class="grid-cell-day" *ngFor="let day of weekDays;let dayIndex = index" [ngClass]="{'outside-month': !isDayInMonth(dayIndex, weekIndex)}">
-                                  <div class="grid-cell-inside" *ngFor="let hour of hoursRange"></div>
+                                  <div class="grid-cell-inside" *ngFor="let hour of hoursRangeMinusLast" (dblclick)="handleDbClickEvent('Clicked', $event, 'month', dayIndex, hour, weekIndex)"></div>
                               </div>
                           </div>
 
@@ -775,11 +775,11 @@
           <mat-card-header style="display:block">
               <div style="width: 100%;float: left;">
               <mat-icon class="cursor-pointer" svgIcon="mat:close" (click)="hideDetailTimeline()"></mat-icon>
+              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="goToEditCourse()"></mat-icon>
 
               </div>
               <div style="width: 100%;float:left;">
               <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles curso</mat-card-title>
-              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
               </div>
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
@@ -981,7 +981,10 @@
               </div>
               <div style="width: 100%;float:left;">
               <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles bloqueo</mat-card-title>
-              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
+              <div style="float: right;display: flex;gap: 6px;align-items: center;">
+                  <mat-icon (click)="openEditBlock()" class="cursor-pointer" svgIcon="mat:edit"></mat-icon>
+                  <mat-icon (click)="deleteEditedBlock()" class="cursor-pointer" svgIcon="mat:delete"></mat-icon>
+              </div>
               </div>
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
@@ -1013,6 +1016,72 @@
               </div>
               </div>
               <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+
+              <ng-container *ngIf="showEditBlock">
+                  <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
+                      <mat-card-title class="font-bold" style="float: left;width: 100%;">Editar Bloqueo</mat-card-title>
+                  </div>
+
+                  <mat-checkbox [(ngModel)]="allHoursDay" [ngModelOptions]="{standalone: true}">Todo el día</mat-checkbox>
+
+                  <ng-container *ngIf="!allHoursDay">
+                      <mat-form-field class="flex-auto" style="width: 100%;">
+                          <mat-select placeholder="Hora inicio" [(ngModel)]="startTimeDay" [ngModelOptions]="{standalone: true}" (change)="onStartTimeDayChange()">
+                          <ng-container *ngFor="let hour of hoursRangeMinutes">
+                              <mat-option [value]="hour">
+                                  {{hour}}
+                              </mat-option>
+                          </ng-container>
+                          </mat-select>
+                      </mat-form-field>
+
+                      <mat-form-field class="flex-auto" style="width: 100%;">
+                          <mat-select placeholder="Hora final" [(ngModel)]="endTimeDay" [ngModelOptions]="{standalone: true}">
+                          <ng-container *ngFor="let hour of filteredEndHoursDay">
+                              <mat-option [value]="hour">
+                                  {{hour}}
+                              </mat-option>
+                          </ng-container>
+                          </mat-select>
+                      </mat-form-field>
+                  </ng-container>
+
+                  <mat-form-field class="flex-auto" style="width: 100%;">
+                      <input matInput placeholder="Title" [(ngModel)]="nameBlockDay" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+
+                  <mat-checkbox [(ngModel)]="divideDay" [ngModelOptions]="{standalone: true}">Dividir</mat-checkbox>
+
+                  <ng-container *ngIf="divideDay">
+                      <mat-form-field class="flex-auto" style="width: 100%;">
+                          <mat-select placeholder="Inicio división" [(ngModel)]="startTimeDivision" [ngModelOptions]="{standalone: true}" (change)="onStartTimeDivisionChange()">
+                          <ng-container *ngFor="let hour of filteredStartHoursDivision">
+                              <mat-option [value]="hour">
+                                  {{hour}}
+                              </mat-option>
+                          </ng-container>
+                          </mat-select>
+                      </mat-form-field>
+
+                      <mat-form-field class="flex-auto" style="width: 100%;">
+                          <mat-select placeholder="Fin división" [(ngModel)]="endTimeDivision" [ngModelOptions]="{standalone: true}">
+                          <ng-container *ngFor="let hour of filteredEndHoursDivision">
+                              <mat-option [value]="hour">
+                                  {{hour}}
+                              </mat-option>
+                          </ng-container>
+                          </mat-select>
+                      </mat-form-field>
+                  </ng-container>
+
+                  <div class="actions flex items-center justify-end gap-2">
+                      <button (click)="hideEditBlock()" mat-button type="button">Cancelar</button>
+                      <button (click)="saveEditedBlock()" [disabled]="!isButtonDayEnabled()" color="primary" mat-raised-button>
+                        Guardar
+                      </button>
+                  </div>
+
+              </ng-container>
 
           </mat-card-header>
           <mat-card-content>
