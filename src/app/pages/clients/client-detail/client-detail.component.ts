@@ -174,7 +174,7 @@ export class ClientDetailComponent {
      private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
-    this.minDate.setFullYear(this.today.getFullYear() - 18);
+    this.minDate.setFullYear(this.today.getFullYear() - 3);
 
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
