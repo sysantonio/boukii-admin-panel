@@ -329,6 +329,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     if (this.mode === 'update') {
       this.crudService.get('/admin/courses/'+this.id)
         .subscribe((course) => {
+          let translations = null;
           this.defaults = course.data;
           if (this.defaults.translations === null) {
             this.defaults.translations = {
@@ -359,6 +360,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
               },
             };
 
+          } else {
+            this.defaults.translations = JSON.parse(this.defaults.translations);
           }
           this.defaults.translations.fr.name = this.defaults.name;
           this.defaults.translations.fr.short_description = this.defaults.short_description;
