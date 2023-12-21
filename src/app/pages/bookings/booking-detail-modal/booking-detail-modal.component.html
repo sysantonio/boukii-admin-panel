@@ -8,7 +8,7 @@
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
-            <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/courses')">Atrás</button>
+            <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " [mat-dialog-close]="false">Atrás</button>
             <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">Anular reserva totalmente</button>
 
           </div>

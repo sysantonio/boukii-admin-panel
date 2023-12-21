@@ -1014,7 +1014,7 @@ export class BookingDetailModalComponent implements OnInit {
     if (id && id !== null) {
 
       const level = this.levels.find((l) => l.id === id);
-      return level.annotation + ' - ' + level.name;
+      return level?.annotation + ' - ' + level?.name;
     }
   }
 
@@ -1034,7 +1034,7 @@ export class BookingDetailModalComponent implements OnInit {
 
       const monitor = this.monitors.find((m) => m.id === id);
 
-      return monitor.first_name + ' ' + monitor.last_name;
+      return monitor?.first_name + ' ' + monitor?.last_name;
     }
   }
 
@@ -1045,7 +1045,7 @@ export class BookingDetailModalComponent implements OnInit {
     } else {
 
       const client = this.clients.find((m) => m.id === id);
-      return client.image;
+      return client?.image;
     }
   }
 
@@ -1054,7 +1054,7 @@ export class BookingDetailModalComponent implements OnInit {
 
       const client = this.clients.find((m) => m.id === id);
 
-      return client.first_name + ' ' + client.last_name;
+      return client?.first_name + ' ' + client?.last_name;
     }
   }
 
