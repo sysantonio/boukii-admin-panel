@@ -712,4 +712,24 @@ ngAfterViewInit() {
         return 'NO PAID'
     }
   }
+
+  calculateFormattedDuration(hourStart: string, hourEnd: string): string {
+    // Parsea las horas de inicio y fin
+    let start = moment(hourStart.replace(': 00', ''), "HH:mm");
+    let end = moment(hourEnd.replace(': 00', ''), "HH:mm");
+
+    // Calcula la duración
+    let duration = moment.duration(end.diff(start));
+
+    // Formatea la duración
+    let formattedDuration = "";
+    if (duration.hours() > 0) {
+      formattedDuration += duration.hours() + "h ";
+    }
+    if (duration.minutes() > 0) {
+      formattedDuration += duration.minutes() + "m";
+    }
+
+    return formattedDuration.trim();
+  }
 }

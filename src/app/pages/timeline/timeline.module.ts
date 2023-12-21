@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TimelineComponent } from './timeline.component';
 import { TimelineRoutingModule } from './timeline-routing.module';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [TimelineComponent],
@@ -58,7 +59,8 @@ import { ComponentsCustomModule } from '../../components/components-custom.modul
     MatButtonModule,
     MatInputModule,
     ComponentsModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    MatProgressSpinnerModule
   ]
 })
 export class TimelineModule {

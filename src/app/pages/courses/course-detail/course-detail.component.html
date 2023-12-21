@@ -287,7 +287,8 @@
                                           <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex; checkAvailableMonitors(groupLevel);">
                                             <label for="monitor" style="font-size: 20px;">Monitor</label>
 
-                                            <mat-form-field class="flex-auto">
+                                            <mat-spinner *ngIf="loadingMonitors"> </mat-spinner>
+                                            <mat-form-field class="flex-auto" *ngIf="!loadingMonitors">
 
                                               <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                               <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >

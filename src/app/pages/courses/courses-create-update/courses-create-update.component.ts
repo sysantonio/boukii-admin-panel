@@ -106,7 +106,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   selectedItem: any;
   selectedTabNameIndex: any = 0;
   selectedTabDescIndex: any = 0;
-
+  loadingMonitors = true;
   defaults: any = {
     unique: false,
     course_type: null,
@@ -2127,6 +2127,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   checkAvailableMonitors(level: any) {
+    this.loadingMonitors = true;
     let minDegree = 0;
     this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
       if (element.degree_id === level.id) {
@@ -2149,6 +2150,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
           map((value: any) => typeof value === 'string' ? value : value?.full_name),
           map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
         );
+
+        this.loadingMonitors = false;
       })
   }
 }

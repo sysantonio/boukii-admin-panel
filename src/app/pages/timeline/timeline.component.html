@@ -501,12 +501,13 @@
                 </div>
 
                 <ng-container *ngIf="showEditMonitor">
+                  <mat-spinner *ngIf="loadingMonitors"></mat-spinner>
+
                     <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
                         <mat-card-title class="font-bold" style="float: left;width: 100%;">Nuevo monitor</mat-card-title>
                     </div>
-
                     <mat-form-field class="flex-auto" style="width: 100%;">
-                        <mat-select placeholder="Nuevo monitor" [(ngModel)]="editedMonitor">
+                        <mat-select placeholder="Nuevo monitor" [(ngModel)]="editedMonitor"  *ngIf="!loadingMonitors">
                         <ng-container *ngFor="let monitor of filteredMonitors" >
                             <mat-option *ngIf="monitor.id != taskDetail.monitor_id" [value]="monitor">
                                 {{ monitor.first_name }} {{ monitor.last_name }}

@@ -29,6 +29,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CourseDetailModalComponent } from './course-detail-modal.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { CourseDetailModalComponent } from './course-detail-modal.component';
     MatChipsModule,
     MatCheckboxModule,
     AngularEditorModule,
-    MatTabsModule
+    MatTabsModule,
+    MatProgressSpinnerModule
   ],
   declarations: [CourseDetailModalComponent],
   exports: [CourseDetailModalComponent]

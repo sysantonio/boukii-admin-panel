@@ -121,6 +121,7 @@ export class CourseDetailModalComponent implements OnInit {
   daysDates = [];
   daysDatesLevels = [];
   monitors = [];
+  loadingMonitors = true;
   levels = [];
   courseUsers = [];
   clients = [];
@@ -958,6 +959,7 @@ export class CourseDetailModalComponent implements OnInit {
   }
 
   checkAvailableMonitors(level: any) {
+    this.loadingMonitors = true;
     let minDegree = 0;
     this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
       if (element.degree_id === level.id) {
@@ -980,6 +982,7 @@ export class CourseDetailModalComponent implements OnInit {
           map((value: any) => typeof value === 'string' ? value : value?.full_name),
           map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
         );
+        this.loadingMonitors = false;
       })
   }
 }

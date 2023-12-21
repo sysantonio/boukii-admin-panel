@@ -32,6 +32,8 @@ export class TimelineComponent {
     { id: 4, name: 'Sarah Johnson' },
   ];
 
+  loadingMonitors = true;
+
   tasksCalendarStyle: any[];
   filteredTasks: any[];
   currentDate = new Date();
@@ -960,6 +962,7 @@ export class TimelineComponent {
   openEditMonitor() {
     this.editedMonitor = null;
     this.showEditMonitor = true;
+    this.checkAvailableMonitors();
   }
 
   hideEditMonitor() {
@@ -1308,5 +1311,24 @@ export class TimelineComponent {
     return '';
   }
   */
+
+  checkAvailableMonitors() {
+
+    this.loadingMonitors = true;
+    const data = {
+      sportId: this.taskDetail.sport_id,
+      minimumDegreeId: this.taskDetail.degree_id || this.taskDetail.degree.id,
+      startTime: this.taskDetail.hour_start,
+      endTime: this.taskDetail.hour_end,
+      date: this.taskDetail.date
+    };
+
+    this.crudService.post('/admin/monitors/available', data)
+      .subscribe((response) => {
+        this.monitors = response.data;
+        this.filteredMonitors = response.data;
+        this.loadingMonitors = false;
+      })
+  }
 
 }

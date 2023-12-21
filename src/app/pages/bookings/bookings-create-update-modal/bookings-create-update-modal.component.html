@@ -260,7 +260,7 @@
 
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="(sameMonitor && i === 0) || !sameMonitor">
 
-                      <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
+                      <mat-form-field class="flex-auto">
                         <mat-label>Chercher Moniteur</mat-label>
                         <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes))
                         || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"/>
