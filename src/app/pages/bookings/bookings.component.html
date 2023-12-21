@@ -31,7 +31,10 @@
           </div>
           <div style="width: 100%;">
             <p style="float: left;width: 60%;text-align: left;"><b>{{detailData.created_at | date: 'dd/MM/YYYY'}}</b> {{detailData.created_at | date: 'HH:mm'}}</p>
-            <p style="float: left;width: 40%;text-align: right;color:#5ade47">{{'paiement effectué' | uppercase }}</p>
+            <p style="float: left;width: 40%;text-align: right;color:#5ade47" *ngIf="detailData.status === 1 && detailData.paid">{{'paiement effectué' | uppercase }}</p>
+            <p style="float: left;width: 40%;text-align: right;color:#5ade47" *ngIf="detailData.status === 1 && !detailData.paid">{{'non payé' | uppercase }}</p>
+            <p style="float: left;width: 40%;text-align: right;color:#5ade47" *ngIf="detailData.status === 2">{{'anuleé' | uppercase }}</p>
+            <p style="float: left;width: 40%;text-align: right;color:#5ade47" *ngIf="detailData.status === 3">{{'partially anuleé' | uppercase }}</p>
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
@@ -67,7 +70,9 @@
                 <p>{{getClient(item?.client_id)?.first_name}} {{getClient(item?.client_id)?.last_name}} (+3)</p>
             </div>
             <div style="float: left; width: 20%;">
-              <p style="text-align: right;color:#dbd616">{{'Anulée' }}</p>
+              <p style="text-align: right;color:#5ade47" *ngIf="item?.status === 1 && detailData.paid">{{'paiement effectué' }}</p>
+              <p style="text-align: right;color:#dbd616" *ngIf="item?.status === 1 && !detailData.paid">{{'non payé' }}</p>
+              <p style="text-align: right;color:#dbd616"*ngIf="item?.status === 2">{{'Anulée' }}</p>
             </div>
           </div>
           <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
