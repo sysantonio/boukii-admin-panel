@@ -92,6 +92,7 @@ export class ClientDetailComponent {
   mockLevelData: any = LEVELS;
 
   mainClient: any;
+  currentImage: any;
   defaults = {
     id: null,
     email: null,
@@ -207,6 +208,8 @@ export class ClientDetailComponent {
     this.crudService.get('/clients/'+ getId)
       .subscribe((data) => {
         this.defaults = data.data;
+
+        this.currentImage = data.data.image;
         if (!onChangeUser) {
           this.mainClient = data.data;
         }
@@ -403,6 +406,7 @@ export class ClientDetailComponent {
       reader.onload = () => {
         this.imagePreviewUrl = reader.result;
         this.defaults.image = reader.result;
+        this.defaultsUser.image = reader.result;
       };
 
       reader.readAsDataURL(file);
@@ -644,6 +648,11 @@ export class ClientDetailComponent {
 
   save() {
     this.setLanguages();
+
+    if (this.currentImage === this.defaults.image) {
+      delete this.defaults.image;
+      delete this.defaultsUser.image;
+    }
 
     this.crudService.update('/users', this.defaultsUser, this.defaultsUser.id)
       .subscribe((user) => {

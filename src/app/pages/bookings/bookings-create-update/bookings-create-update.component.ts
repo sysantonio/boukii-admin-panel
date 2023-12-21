@@ -1986,35 +1986,63 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
-  generateCourseHours(startTime: string, endTime: string, interval: string): string[] {
+  generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const intervalParts = interval.split(' ');
+    const mainDurationParts = mainDuration.split(' ');
 
     let intervalHours = 0;
     let intervalMinutes = 0;
+    let mainDurationHours = 0;
+    let mainDurationMinutes = 0;
 
     intervalParts.forEach(part => {
-      if (part.includes('h')) {
-        intervalHours = parseInt(part, 10);
-      } else if (part.includes('min')) {
-        intervalMinutes = parseInt(part, 10);
-      }
+        if (part.includes('h')) {
+            intervalHours = parseInt(part, 10);
+        } else if (part.includes('min')) {
+            intervalMinutes = parseInt(part, 10);
+        }
+    });
+
+    mainDurationParts.forEach(part => {
+        if (part.includes('h')) {
+            mainDurationHours = parseInt(part, 10);
+        } else if (part.includes('min')) {
+            mainDurationMinutes = parseInt(part, 10);
+        }
     });
 
     let currentHours = startHours;
     let currentMinutes = startMinutes;
     const result = [];
 
-    while (currentHours <= endHours || (currentHours === endHours && currentMinutes <= endMinutes)) {
-      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
-      currentMinutes += intervalMinutes;
-      currentHours += intervalHours + Math.floor(currentMinutes / 60);
-      currentMinutes %= 60;
+    while (true) {
+        let nextIntervalEndHours = currentHours + mainDurationHours;
+        let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
+
+        nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
+        nextIntervalEndMinutes %= 60;
+
+        if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
+            break;
+        }
+
+        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+
+        currentMinutes += intervalMinutes;
+        currentHours += intervalHours + Math.floor(currentMinutes / 60);
+        currentMinutes %= 60;
+
+        if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
+            break;
+        }
     }
 
     return result;
   }
+
+
 
   generateCourseDurations(startTime: any, endTime: any, interval: any) {
 

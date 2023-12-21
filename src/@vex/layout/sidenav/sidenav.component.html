@@ -4,9 +4,10 @@
      [class.open]="collapsed && collapsedOpen$ | async"
      class="sidenav flex flex-col">
   <div class="vex-sidenav-toolbar__container">
-    <div class="sidenav-toolbar flex-none flex items-center">
-      <img [src]="imageUrl$ | async" alt="Logo" class="vex-sidenav-toolbar__headline flex-auto"/>
-      <!--<button (click)="toggleCollapse()"
+    <div class="sidenav-toolbar flex-none flex items-center" style="width: 40% !important;">
+      <img [src]="imageUrl$ | async" alt="Logo"/>
+      <p style="margin: 0 0 0 10px;">{{ title$ | async }}</p>
+      <button (click)="toggleCollapse()"
               *ngIf="showCollapsePin$ | async"
               class="-mr-4 leading-none flex-none hidden lg:block"
               mat-icon-button
@@ -17,7 +18,7 @@
         <mat-icon *ngIf="collapsed"
                   class="icon-xs"
                   svgIcon="mat:radio_button_unchecked"></mat-icon>
-      </button>-->
+      </button>
     </div>
 
     <!--<div *ngIf="searchVisible$ | async" class="vex-sidenav-search__container">

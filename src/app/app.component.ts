@@ -13,6 +13,8 @@ import { ColorSchemeName } from '../@vex/config/colorSchemeName';
 import { MatIconRegistry, SafeResourceUrlWithIconOptions } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ColorVariable, colorVariables } from '../@vex/components/config-panel/color-variables';
+import { defaultConfig } from 'src/@vex/config/configs';
+import { SchoolService } from 'src/service/school.service';
 
 @Component({
   selector: 'vex-root',
@@ -29,9 +31,22 @@ export class AppComponent {
               private route: ActivatedRoute,
               private navigationService: NavigationService,
               private splashScreenService: SplashScreenService,
+              private schoolService: SchoolService,
               private readonly matIconRegistry: MatIconRegistry,
               private readonly domSanitizer: DomSanitizer) {
     Settings.defaultLocale = this.localeId;
+
+    this.schoolService.getSchoolData()
+                .subscribe((data) => {
+                  defaultConfig.imgSrc = data.data.logo;
+                  this.configService.updateConfig({
+                    sidenav: {
+                      imageUrl: data.data.logo,
+                      title: data.data.name,
+                      showCollapsePin: false
+                    }
+                  });
+                })
 
     if (this.platform.BLINK) {
       this.renderer.addClass(this.document.body, 'is-blink');
