@@ -463,7 +463,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       });
 
       if (item.is_flexible) {
-        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 8 ? this.transformTime(item.duration) : item.duration);
+        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 9 ? this.transformTime(item.duration) : item.duration);
       }
     }
   }

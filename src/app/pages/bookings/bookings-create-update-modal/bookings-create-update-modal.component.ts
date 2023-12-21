@@ -462,9 +462,16 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       });
 
       if (item.is_flexible) {
-        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration);
+        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 9 ? this.transformTime(item.duration) : item.duration);
       }
     }
+  }
+
+  transformTime(time: string): string {
+    let duration = moment.duration(time);
+    let hours = duration.hours();
+    let minutes = duration.minutes();
+    return `${hours}h ${minutes}min`;
   }
 
   selectSubGroupItem(item: any, subGroupIndex: any) {
