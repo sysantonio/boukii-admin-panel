@@ -26,11 +26,11 @@
           <mat-checkbox style="float: left;width: 15%;" (change)="addToStudentChangeList($event, item, i)"> </mat-checkbox>
 
           <div style="float: left;width: 15%">
-            <img [src]="getClient(item.client_id).image" style="border-radius: 100%;"/>
+            <img [src]="getClient(item.client_id)?.image" style="border-radius: 100%;"/>
           </div>
           <div style="float: left;width: 65%;margin:0 0 0 3%">
-            <p>{{getClient(item.client_id).first_name}} {{getClient(item.client_id).last_name}}</p>
-            <p>{{getNacionality(getClient(item.client_id).country)}} · {{calculateAge(getClient(item.client_id).birth_date)}} ans</p>
+            <p>{{getClient(item.client_id)?.first_name}} {{getClient(item.client_id).last_name}}</p>
+            <p>{{getNacionality(getClient(item.client_id)?.country)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}} ans</p>
           </div>
 
         </div>
@@ -57,7 +57,6 @@
               <ng-container *ngFor="let item of getCourseSubgroups(groupLevel); let itemIndex = index">
                 <div class="list-item" >
                   <p [style.color]="colorKey"><strong>{{ groupLevel.league }} {{itemIndex+1}}</strong></p>
-                  <p>Arsene Garcia FR · ALL</p>
                   <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
                     [disabled]="getUserInSubGroup(item) === item.max_participants">
                     <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>

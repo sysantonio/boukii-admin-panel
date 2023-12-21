@@ -664,10 +664,13 @@ export class ClientDetailComponent {
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
-            this.crudService.update('/client-observations', this.defaultsObservations, this.defaultsObservations.id)
+            if (this.defaultsObservations.id) {
+              this.crudService.update('/client-observations', this.defaultsObservations, this.defaultsObservations.id)
               .subscribe((obs) => {
                 console.log('client observation created');
               })
+
+            }
 
               this.sportsData.data.forEach(element => {
 
