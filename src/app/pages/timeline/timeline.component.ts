@@ -12,6 +12,8 @@ import 'moment/locale/fr';
 import { CourseDetailComponent } from '../courses/course-detail/course-detail.component';
 import { CourseDetailModalComponent } from '../courses/course-detail-modal/course-detail-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-update-modal/bookings-create-update-modal.component';
+import { BookingDetailModalComponent } from '../bookings/booking-detail-modal/booking-detail-modal.component';
 moment.locale('fr');
 
 @Component({
@@ -112,8 +114,11 @@ export class TimelineComponent {
     await this.getSports();
     await this.getSchoolSports();
     await this.getDegrees();
-    let vacationDaysString = "[\"2023-12-08\",\"2024-01-06\",\"2024-01-17\",\"2024-02-01\",\"2024-02-02\"]";
-    this.vacationDays = JSON.parse(vacationDaysString);
+    this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+      .subscribe((season) => {
+        this.vacationDays = JSON.parse(season.data[0].vacation_days);
+      })
+
     await this.calculateWeeksInMonth();
     //await this.calculateTaskPositions();
     this.loadBookings(this.currentDate);
@@ -440,7 +445,7 @@ export class TimelineComponent {
         }
 
         return {
-          booking_id: booking.id,
+          booking_id: booking?.booking.id,
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
@@ -1331,4 +1336,21 @@ export class TimelineComponent {
       })
   }
 
+  createBooking() {
+    const dialogRef = this.dialog.open(BookingDetailModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',
+      panelClass: 'full-screen-dialog',
+      data: {
+        id: this.taskDetail.booking_id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
+      }
+    });
+  }
 }

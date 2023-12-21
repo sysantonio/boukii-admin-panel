@@ -418,7 +418,7 @@ export class SettingsComponent implements OnInit {
       this.crudService.update('/seasons', data, this.season.id)
       .subscribe((res) => {
         console.log(res);
-        this.snackbar.open('Temporada guardada con éxito', 'Close', {duration: 3000});
+        this.snackbar.open('Temporada modificada con éxito', 'Close', {duration: 3000});
         this.getData();
         this.schoolService.refreshSchoolData();
       });

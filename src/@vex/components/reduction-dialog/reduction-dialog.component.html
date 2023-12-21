@@ -5,7 +5,7 @@
     <mat-label>Fecha</mat-label>
     <mat-select [(ngModel)]="selectedDateIndex">
         <mat-option *ngFor="let i of generatedNumbers; let idx = index" [value]="idx">
-            Date {{ i + 1 }}
+            {{ i + 1 }} Fecha reservada(s)
         </mat-option>
     </mat-select>
 </mat-form-field>

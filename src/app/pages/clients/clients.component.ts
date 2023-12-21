@@ -8,6 +8,7 @@ import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-update-modal/bookings-create-update-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'vex-clients',
@@ -35,7 +36,7 @@ export class ClientsComponent {
   mainIdSelected = true;
   borderActive = -1;
 
-  constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog) {
+  constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
   }
@@ -66,7 +67,7 @@ export class ClientsComponent {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-
+        this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
       }
     });
   }

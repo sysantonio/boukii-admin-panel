@@ -108,9 +108,9 @@
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0;">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 50px 0 0 0;">
 
-              <mat-tab-group style="margin-top:-50px" [(selectedIndex)]="selectedTabNameIndex" (selectedTabChange)="onTabNameChanged($event);">
+              <mat-tab-group  style="margin-top:-50px" [(selectedIndex)]="selectedTabNameIndex" (selectedTabChange)="onTabNameChanged($event);">
                 <mat-tab label="FR">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabNameIndex === 0">
                     <label for="courseName">Nom de cours <span style="color:red">(*)</span></label>
@@ -368,7 +368,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="durationPrivate">DURÉ <span style="color:red">(*)</span></label>
+                <label for="durationPrivate">DURÉE MINIMALE <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
                   <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimesPrivate" [(ngModel)]="defaults.duration">
                   <mat-autocomplete #autoTimesPrivate="matAutocomplete">
@@ -442,8 +442,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
               <div class="flex-auto" style="width:50%">
 
-                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE À PARTIR DE <span style="color:red">(*)</span></label>
-                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
+                <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start">
@@ -457,8 +456,7 @@
               </div>
               <div class="flex-auto" style="width:50%">
 
-                <label for="dateToPrivate" *ngIf="defaults.is_flexible">DATE RÉSERVABLE JUSQU'À <span style="color:red">(*)</span></label>
-                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À <span style="color:red">(*)</span></label>
+                <label for="dateToPrivate" *ngIf="defaults.is_flexible">JUSQU'À <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerToUnique" formControlName="toDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="courseInfoPriveFormGroup?.value?.fromDateUnique" [max]="maxDate" [(ngModel)]="defaults.date_end"
@@ -818,7 +816,7 @@
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 50px 0 0 0;">
 
               <mat-tab-group style="margin-top:-50px" [(selectedIndex)]="selectedTabNameIndex" (selectedTabChange)="onTabNameChanged($event);">
                 <mat-tab label="FR">
