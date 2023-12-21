@@ -342,7 +342,7 @@
           <ng-container *ngIf="column.type === 'cancelation_status'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] === 1 ? '#CEE741' : '#fac710'">
-              {{ row[column.property] === 1 ? 'NON ANNULÉ' : row[column.property] === 2 ? 'ANNULÉ' : 'PARTIALLY ANNULÉ' | uppercase }}
+              {{ row[column.property] === 1 ? 'ACTIVE' : row[column.property] === 2 ? 'ANNULÉ' : 'PARTIALLY ANNULÉ' | uppercase }}
             </td>
           </ng-container>
         </ng-container>

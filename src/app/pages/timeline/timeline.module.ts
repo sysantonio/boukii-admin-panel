@@ -29,6 +29,7 @@ import { TimelineRoutingModule } from './timeline-routing.module';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BookingDetailModalModule } from '../bookings/booking-detail-modal/booking-detail-modal.module';
+import { CourseUserTransferTimelineModalModule } from './course-user-transfer-timeline/course-user-transfer-timeline.module';
 
 @NgModule({
   declarations: [TimelineComponent],
@@ -62,7 +63,8 @@ import { BookingDetailModalModule } from '../bookings/booking-detail-modal/booki
     ComponentsModule,
     ComponentsCustomModule,
     MatProgressSpinnerModule,
-    BookingDetailModalModule
+    BookingDetailModalModule,
+    CourseUserTransferTimelineModalModule
   ]
 })
 export class TimelineModule {

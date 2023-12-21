@@ -14,6 +14,8 @@ import { CourseDetailModalComponent } from '../courses/course-detail-modal/cours
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-update-modal/bookings-create-update-modal.component';
 import { BookingDetailModalComponent } from '../bookings/booking-detail-modal/booking-detail-modal.component';
+import { CourseUserTransferComponent } from '../courses/course-user-transfer/course-user-transfer.component';
+import { CourseUserTransferTimelineComponent } from './course-user-transfer-timeline/course-user-transfer-timeline.component';
 moment.locale('fr');
 
 @Component({
@@ -1350,6 +1352,23 @@ export class TimelineComponent {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
+      }
+    });
+  }
+
+  openUserTransfer() {
+    const dialogRef = this.dialog.open(CourseUserTransferTimelineComponent, {
+      width: '800px',
+      height: '800px',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: {degree: this.taskDetail.degree, subgroup: this.taskDetail.course_subgroup_id, id: this.taskDetail.course_id,
+        subgroupNumber: this.taskDetail.subgroup_number, currentDate: moment(this.taskDetail.date), degrees: this.taskDetail.degrees_sport}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        dialogRef.close();
       }
     });
   }

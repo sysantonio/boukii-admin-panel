@@ -527,7 +527,7 @@
                 <ng-container *ngIf="taskDetail.type == 'collective'">
                     <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
                         <mat-card-title class="font-bold" style="float: left;width: 80%;">Alumnos {{taskDetail.clients_number}}/{{taskDetail.max_participants}}</mat-card-title>
-                        <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
+                        <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz" (click)="openUserTransfer()"></mat-icon>
                     </div>
 
                     <div style="display:flex;width:100%;flex-direction:column;gap:8px;">

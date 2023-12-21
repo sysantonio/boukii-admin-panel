@@ -228,7 +228,7 @@ export class CourseDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-
+        dialogRef.close();
       }
     });
   }
