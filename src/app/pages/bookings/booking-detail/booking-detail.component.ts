@@ -232,7 +232,7 @@ export class BookingDetailComponent implements OnInit {
       .subscribe((data) => {
         this.booking = data.data;
 
-        this.crudService.list('/vouchers-logs', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
+        this.crudService.list('/vouchers-logs', 1, 1000, 'asc', 'id', '&booking_id='+this.id)
           .subscribe((vl) => {
             if(vl.data.length > 0) {
               this.bonusLog = vl.data;
@@ -241,8 +241,17 @@ export class BookingDetailComponent implements OnInit {
                   .subscribe((v) => {
                     v.data.currentPay = parseFloat(voucherLog.amount);
                     v.data.before = true;
-                    this.bonus.push({bonus: v.data});
-                    this.currentBonus.push({bonus: v.data});
+
+                    if (parseFloat(voucherLog.amount) < 0) {
+                      const idx = this.bonus.findIndex((b) => b.bonus.id === voucherLog.voucher_id);
+
+                      this.bonus.splice(idx, 1);
+                      this.currentBonus.splice(idx, 1);
+                    } else {
+
+                      this.bonus.push({bonus: v.data});
+                      this.currentBonus.push({bonus: v.data});
+                    }
                   })
               });
             }
@@ -1200,9 +1209,18 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getBasePrice() {
-    return parseFloat(this.booking.price_total);
-  }
+    let ret = 0;
 
+    if (this.courses.length > 0) {
+      this.bookingsToCreate.forEach((b, idx) => {
+        ret = ret + parseFloat((!this.courses[idx].is_flexible && this.courses[idx].course_type === 2)
+        ? b.price_total : b.courseDates[0].price);
+      });
+
+      return ret;
+    }
+
+  }
 
   setForfait(event:any, forfait: any) {
 

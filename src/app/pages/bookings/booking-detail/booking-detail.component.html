@@ -170,7 +170,12 @@
 
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
-                  <p style="color: #EA0C60;">{{item.price_total + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                  <p style="color: #EA0C60;">{{
+
+                  ((courses[bI]?.course_type === 2 && courses[bI]?.is_flexible ? item.courseDates[0].price
+                    : ((courses[bI]?.course_type === 2 && !courses[bI]?.is_flexible)
+                    ? item?.courseDates[0].price * item.courseDates.length : item?.price_total)))
+                  + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -286,12 +291,12 @@
 
               <span style="width: 100%; float:left" *ngIf="booking.has_cancellation_insurance">
                 <p style="float:left">Option Remboursement</p>
-                <p style="float:right">{{(getBasePrice()*this.cancellationInsurance).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                <p style="float:right">{{booking.price_cancellation_insurance}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{((this.boukiiCarePrice * getBookingPaxes() * getBookingDates())).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{booking.price_boukii_care}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
