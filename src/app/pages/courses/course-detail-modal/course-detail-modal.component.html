@@ -272,7 +272,7 @@
                                     <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
                                       <div>
                                         <ul>
-                                          <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;  checkAvailableMonitors(groupLevel);">
+                                          <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
                                             <label for="monitor" style="font-size: 20px;">Monitor</label>
 
                                             <mat-spinner *ngIf="loadingMonitors"> </mat-spinner>

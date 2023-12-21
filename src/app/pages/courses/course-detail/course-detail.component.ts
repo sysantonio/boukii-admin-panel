@@ -987,8 +987,8 @@ export class CourseDetailComponent implements OnInit {
     const data = {
       sportId: this.defaults.sport_id,
       minimumDegreeId: minDegree,
-      startTime: this.defaults.course_dates[this.daySelectedIndex].hour_start,
-      endTime: this.defaults.course_dates[this.daySelectedIndex].hour_end,
+      startTime: this.defaults.course_dates[this.daySelectedIndex].hour_start.replace(':00', ''),
+      endTime: this.defaults.course_dates[this.daySelectedIndex].hour_end.replace(':00', ''),
       date: this.daysDatesLevels[this.daySelectedIndex].date
     };
 
