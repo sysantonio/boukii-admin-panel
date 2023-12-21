@@ -44,31 +44,33 @@
       </div>
       <mat-accordion class="example-headers-align" multi>
         <ng-container *ngFor="let colorKey of this.defaults.colorKeys">
+          <ng-container *ngFor="let groupLevel of this.defaults.groupedByColor[colorKey]; let groupIndex = index" >
 
-          <mat-expansion-panel *ngFor="let groupLevel of this.defaults.groupedByColor[colorKey]; let groupIndex = index" style="margin-bottom: 3%;">
-            <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
-              <mat-panel-description style="color: #fff">
-                {{ groupLevel.league }} - {{groupLevel.annotation}} {{groupLevel.name}}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
+            <mat-expansion-panel *ngIf="groupLevel.active" style="margin-bottom: 3%;">
+              <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
+                <mat-panel-description style="color: #fff">
+                  {{ groupLevel.league }} - {{groupLevel.annotation}} {{groupLevel.name}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
 
-            <!-- aqui el listado -->
-            <div class="list-group">
-              <ng-container *ngFor="let item of getCourseSubgroups(groupLevel); let itemIndex = index">
-                <div class="list-item" >
-                  <p [style.color]="colorKey"><strong>{{ groupLevel.league }} {{itemIndex+1}}</strong></p>
-                  <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
-                    [disabled]="getUserInSubGroup(item) === item.max_participants">
-                    <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
-                  </mat-checkbox>
-                </div>
-              </ng-container>
-            </div>
-            <div class="confirm-button">
-              <button mat-raised-button color="accent" style="border-radius: 0" (click)="transferStudent()">Confirmar</button>
-            </div>
+              <!-- aqui el listado -->
+              <div class="list-group">
+                <ng-container *ngFor="let item of getCourseSubgroups(groupLevel); let itemIndex = index">
+                  <div class="list-item" >
+                    <p [style.color]="colorKey"><strong>{{ groupLevel.league }} {{itemIndex+1}}</strong></p>
+                    <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
+                      [disabled]="getUserInSubGroup(item) === item.max_participants">
+                      <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
+                    </mat-checkbox>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="confirm-button">
+                <button mat-raised-button color="accent" style="border-radius: 0" (click)="transferStudent()">Confirmar</button>
+              </div>
 
-          </mat-expansion-panel>
+            </mat-expansion-panel>
+          </ng-container>
         </ng-container>
       </mat-accordion>
     </div>
