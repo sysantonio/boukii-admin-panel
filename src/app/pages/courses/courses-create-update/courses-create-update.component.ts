@@ -1292,7 +1292,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
               hour_end: hourEnd,
             })
           } else {
-            this.defaults.course_dates[index].active = moment(this.defaults.date_start_res).isSameOrBefore(currentDate);
+            this.defaults.course_dates[index].active = moment(this.defaults.date_end_res).isSameOrAfter(currentDate);
           }
           currentDate = currentDate.add(1, 'days');
 
@@ -1927,7 +1927,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     let dates: any = [];
     let sortedDates: any = [];
 
-    if (this.defaults.course_type === 2) {
+    if (this.defaults.course_type === 2 && this.defaults.is_flexible && this.periodeMultiple) {
       dates = this.dataSourceDatePrivate.data.filter((date) => date.active || date.active === 1);
       sortedDates = dates.map(d => new Date(d.dateFrom)).sort((a, b) => a - b);
     } else {

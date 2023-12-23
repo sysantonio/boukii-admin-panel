@@ -733,7 +733,14 @@ ngAfterViewInit() {
     return formattedDuration.trim();
   }
 
+  countActives(dates: any) {
+    return dates.filter(objeto => objeto.active === 1 || objeto.active === true).length;
+  }
+
   findFirstActive(dates: any) {
-    return dates.find((d) => d.active || d.active === 1 );
+    let min = dates.find(objeto => objeto.active === 1 || objeto.active === true);
+    let max = dates.slice().reverse().find(objeto => objeto.active === 1 || objeto.active === true);
+
+    return {min: min.date, max: max.date}
   }
 }
