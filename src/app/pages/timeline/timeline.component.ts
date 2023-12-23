@@ -118,7 +118,9 @@ export class TimelineComponent {
     await this.getDegrees();
     this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
-        this.vacationDays = JSON.parse(season.data[0].vacation_days);
+        if (season.data.length > 0) {
+          this.vacationDays = JSON.parse(season.data[0].vacation_days);
+        }
       })
 
     await this.calculateWeeksInMonth();

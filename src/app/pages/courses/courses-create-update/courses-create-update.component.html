@@ -327,7 +327,7 @@
                 <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" [matDatepickerFilter]="myHolidayFilter" formControlName="fromDate" [min]="mode==='update' ? null : minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" [matDatepickerFilter]="myHolidayFilter" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
 
@@ -347,7 +347,8 @@
                 <label for="dateToPrivate" *ngIf="!defaults.is_flexible">JUSQU'À <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [matDatepickerFilter]="myHolidayFilter" [min]="courseInfoPriveFormGroup.value.fromDate" [max]="maxDate" [(ngModel)]="defaults.date_end_res"
+                  <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [matDatepickerFilter]="myHolidayFilter" [min]="courseInfoPriveFormGroup.value.fromDate" [max]="maxDate"
+                  [(ngModel)]="defaults.date_end_res"
                   [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerTo [startAt]="courseInfoPriveFormGroup.value.fromDate"></mat-datepicker>
@@ -370,7 +371,7 @@
 
                 <label for="durationPrivate">DURÉE MINIMALE <span style="color:red">(*)</span></label>
                 <mat-form-field class="flex-auto" style="width: 100%">
-                  <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE" matInput [matAutocomplete]="autoTimesPrivate" [(ngModel)]="defaults.duration">
+                  <input type="text" id="durationPrivate" formControlName="duration" placeholder="DURÉE MINIMALE" matInput [matAutocomplete]="autoTimesPrivate" [(ngModel)]="defaults.duration">
                   <mat-autocomplete #autoTimesPrivate="matAutocomplete">
                     <mat-option *ngFor="let duration of durations" [value]="duration.text">
                       {{duration.text}}
@@ -439,7 +440,7 @@
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !periodeMultiple && defaults.is_flexible">
               <div class="flex-auto" style="width:50%">
 
                 <label for="dateFromPrivate" *ngIf="defaults.is_flexible">DEPUIS <span style="color:red">(*)</span></label>
@@ -472,25 +473,25 @@
 
             </div>
 
-            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="defaults.course_type === 2 && this.courseInfoPriveFormGroup.value.periodeMultiple && defaults.is_flexible">
+            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="defaults.course_type === 2 && periodeMultiple && defaults.is_flexible">
               <div style="width: 100%">
 
                 <table #privateDatesTable id="private-date-table" mat-table [dataSource]="dataSourceDatePrivate" matSort style="border: 1px solid #e6e6e6">
 
                   <ng-container matColumnDef="dateFrom">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date de début </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dateFrom}} </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.dateFrom}}</span> </td>
                   </ng-container>
 
                   <ng-container matColumnDef="dateTo">
                     <th mat-header-cell *matHeaderCellDef> Date de fin </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dateTo}} </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.dateTo}}</span> </td>
                   </ng-container>
 
                   <ng-container matColumnDef="delete">
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let idx = index">
-                      <mat-icon svgIcon="mat:delete" (click)="removePrivateDate(idx)"></mat-icon>
+                      <mat-icon svgIcon="mat:delete" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="removePrivateDate(idx)"></mat-icon>
                     </td>
                   </ng-container>
 
@@ -501,7 +502,7 @@
               <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
                 <div style="width: 5%; float:left;">
 
-                  <button class="add-date" mat-fab (click)="openDialogPrivateDate()">
+                  <button class="add-date" style="cursor:pointer" mat-fab (click)="openDialogPrivateDate()">
                     <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                   </button>
                 </div>
@@ -873,7 +874,7 @@
                 <label for="price" *ngIf="!defaults.is_flexible">Prix (CHF) <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
                   <input id="price" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
-                  <mat-error *ngIf="courseInfoFormGroup.controls?.course_name?.errors?.['required']">
+                  <mat-error *ngIf="courseInfoFormGroup.controls?.price?.errors?.['required']">
                     El precio del curso es obligatorio
                   </mat-error>
                 </mat-form-field>
@@ -992,7 +993,7 @@
           </div>
         </mat-step>
 
-        <mat-step [stepControl]="courseConfigForm" *ngIf="defaults.course_type === 1 && mode==='create'">
+        <mat-step [stepControl]="courseConfigForm" *ngIf="defaults.course_type === 1">
           <ng-template matStepLabel>Configuration</ng-template>
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseConfigForm">
@@ -1054,23 +1055,23 @@
 
                   <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.date}} </span></td>
                   </ng-container>
 
                   <ng-container matColumnDef="duration">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Durée </th>
-                    <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.duration}}</span> </td>
                   </ng-container>
 
                   <ng-container matColumnDef="hour">
                     <th mat-header-cell *matHeaderCellDef> Hour </th>
-                    <td mat-cell *matCellDef="let element"> {{element.hour}} </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.hour}}</span> </td>
                   </ng-container>
 
                   <ng-container matColumnDef="delete">
                     <th mat-header-cell *matHeaderCellDef>  </th>
-                    <td mat-cell *matCellDef="let element">
-                      <mat-icon svgIcon="mat:delete" (click)="removeteDate(element)"></mat-icon>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                      <mat-icon svgIcon="mat:delete" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="removeteDate(i)"></mat-icon>
                     </td>
                   </ng-container>
 
@@ -1137,8 +1138,11 @@
 
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button color="primary" mat-raised-button (click)="checkStep3ColectiveNoFlex(stepper)">
+            <button color="primary" mat-raised-button (click)="checkStep3ColectiveNoFlex(stepper)" *ngIf="mode==='create'">
               Siguiente
+            </button>
+            <button color="primary" mat-raised-button (click)="update()" *ngIf="mode==='update'">
+              Guardar
             </button>
           </div>
         </mat-step>

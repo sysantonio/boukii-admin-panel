@@ -472,7 +472,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let duration = moment.duration(time);
     let hours = duration.hours();
     let minutes = duration.minutes();
-    return `${hours}h ${minutes}min`;
+    return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
   }
 
   selectSubGroupItem(item: any, subGroupIndex: any) {

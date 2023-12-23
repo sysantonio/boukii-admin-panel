@@ -425,9 +425,9 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'datesCourse'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+            <td *matCellDef="let row, let i = index" [ngClass]="column.cssClasses" mat-cell>
               <strong><span style="text-align:center">{{row[column.property].length}} Jours</span></strong><br>
-              <span style="text-align:center">{{row[column.property][0].date | date: 'dd/MM/YYYY'}} - {{row[column.property][row[column.property].length - 1].date | date: 'dd/MM/YYYY'}}</span>
+              <span style="text-align:center">{{findFirstActive(row[column.property]).date | date: 'dd/MM/YYYY'}} - {{row[column.property][row[column.property].length - 1].date | date: 'dd/MM/YYYY'}}</span>
             </td>
           </ng-container>
         </ng-container>

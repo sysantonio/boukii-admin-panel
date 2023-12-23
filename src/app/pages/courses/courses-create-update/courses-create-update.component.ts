@@ -62,9 +62,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
-  dataSource = new MatTableDataSource([]);
+  dataSource: any = new MatTableDataSource([]);
   dataSourceReductions = new MatTableDataSource([]);
-  dataSourceDatePrivate = new MatTableDataSource([]);
+  dataSourceDatePrivate: any = new MatTableDataSource([]);
   dataSourceReductionsPrivate = new MatTableDataSource([]);
 
   dataSourceFlexiblePrices: any;
@@ -313,8 +313,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
               this.myHolidayDates.push(moment(element).toDate());
             });
           });
-        this.schoolPriceRanges = JSON.parse(data.data.settings).prices_range;
-        this.people = this.schoolPriceRanges.people ? this.schoolPriceRanges.people : 6;
+        this.schoolPriceRanges = JSON.parse(data.data.settings)?.prices_range;
+        this.people = this.schoolPriceRanges?.people ? this.schoolPriceRanges.people : 6;
         this.displayedColumnsFlexiblePrices = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
         this.dataSourceFlexiblePrices = this.schoolPriceRanges && this.schoolPriceRanges.prices && this.schoolPriceRanges.prices !== null ? this.schoolPriceRanges.prices :
         this.intervalos.map(intervalo => {
@@ -329,7 +329,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     if (this.mode === 'update') {
       this.crudService.get('/admin/courses/'+this.id)
         .subscribe((course) => {
-          let translations = null;
           this.defaults = course.data;
           if (this.defaults.translations === null) {
             this.defaults.translations = {
@@ -369,6 +368,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.defaults.hour_min = this.defaults.course_dates[0].hour_start.replace(': 00', '');
           this.defaults.hour_max = this.defaults.course_dates[0].hour_end.replace(': 00', '');
           this.people = this.defaults.max_participants;
+          this.defaults.course_dates = this.sortEventsByDate();
           this.defaults.settings = typeof course.data.settings === 'string' ? JSON.parse(course.data.settings) : course.data.settings;
           /*this.dataSourceFlexiblePrices = this.defaults.price_range;
           this.updateTable(null);*/
@@ -416,16 +416,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
             fromHour: [this.defaults.course_dates[0].hour_start.replace(': 00', ''), Validators.required],
             toHour: [this.defaults.course_dates[0].hour_end.replace(': 00', '') , Validators.required],
             participants: [this.defaults.max_participants, Validators.required],
-            fromDate: [null],
-            toDate: [null],
+            fromDate: [this.toDate(this.defaults.date_start)],
+            toDate: [this.toDate(this.defaults.date_end)],
             fromDateUnique: [null],
             toDateUnique: [null],
-            from: [null ],
-            to: [null],
+            from: [this.toDate(this.defaults.date_start) ],
+            to: [this.toDate(this.defaults.date_end)],
             image: [null],
-            periodeUnique: new FormControl(this.defaults.unique),
-            periodeMultiple: new FormControl(!this.defaults.unique)
-          })
+            periodeUnique: [this.defaults.unique],
+            periodeMultiple: [!this.defaults.unique]
+          });
+
+          this.courseInfoPriveFormGroup.controls.periodeUnique.patchValue(this.defaults.unique);
+          this.courseInfoPriveFormGroup.controls.periodeMultiple.patchValue(!this.defaults.unique);
+          this.courseInfoPriveFormGroup.controls.periodeUnique.disable();
+          this.courseInfoPriveFormGroup.controls.periodeMultiple.disable();
 
           this.courseLevelFormGroup = this.fb.group({});
 
@@ -480,10 +485,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseConfigForm = this.fb.group({
 
-            fromDate: [null, Validators.required],
-            toDate: [null, Validators.required],
-            from: [null],
-            to: [null],
+            fromDate: [this.toDate(this.defaults.date_start), Validators.required],
+            toDate: [this.toDate(this.defaults.date_end), Validators.required],
+            from: [this.toDate(this.defaults.date_start)],
+            to: [this.toDate(this.defaults.date_end)],
             duration: [null],
             participants: [null, Validators.required],
           });
@@ -533,6 +538,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
             this.updateToHourOptions(selectedStartHour);
           });
 
+
+          if (this.defaults.course_type === 2 && this.defaults.is_flexible) {
+            this.defaults.course_dates.forEach(element => {
+              this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('YYYY-MM-DD'), dateTo: moment(element.date).format('YYYY-MM-DD'), active: element.active, id: element.id});
+            });
+          }
+          if (this.defaults.course_type === 1) {
+            this.defaults.course_dates.forEach(element => {
+              this.dataSource.data.push({date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start + ' - ' + element.hour_end,
+                duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id});
+            });
+          }
 
 
           setTimeout(() => {
@@ -855,14 +872,24 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   openDialog(): void {
+    let blockedDays = this.myHolidayDates;
+    if (this.mode === 'update') {
+
+      this.dataSource.data.forEach(element => {
+        if (element.active || element.active === 1) {
+          blockedDays.push(moment(element.date).toDate())
+        }
+      });
+    }
+
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: this.myHolidayDates},
+      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays},
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data.push({date: moment(result.date).format('DD-MM-YYYY'), duration: result.duration, hour: result.hour});
+        this.dataSource.data.push({date: moment(result.date).format('YYYY-MM-DD'), duration: result.duration, hour: result.hour, active: true});
         this.dateTable?.renderRows();
       }
     });
@@ -897,13 +924,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   openDialogPrivateDate(): void {
+
+    let blockedDays = this.myHolidayDates;
+    if (this.mode === 'update') {
+
+      this.dataSourceDatePrivate.data.forEach(element => {
+        if (element.active || element.active === 1) {
+          blockedDays.push(moment(element.dateFrom).toDate())
+        }
+      });
+    }
     const dialogRef = this.dialog.open(PrivateDatesDialogComponent, {
       width: '300px',
       data: {
         iterations: this.dataSource.data.length,
         minDate: this.minDate,
         maxDate: this.maxDate,
-        holidays: this.myHolidayDates
+        holidays: blockedDays
       }
     });
 
@@ -958,15 +995,31 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   removeteDate(index: any) {
-    this.dataSource.data.splice(index, 1);
-    this.dateTable.renderRows();
+
+
+    if (this.mode === 'update') {
+      this.dataSource.data[index].active = false;
+      this.defaults.course_dates[index].active = false;
+      this.dateTable.renderRows();
+    } else {
+      this.dataSource.data.splice(index, 1);
+      this.dateTable.renderRows();
+    }
 
     // Aquí también puedes deseleccionar el chip correspondiente
   }
 
   removePrivateDate(index: any) {
-    this.dataSourceDatePrivate.data.splice(index, 1);
-    this.privateDatesTable.renderRows();
+
+    if (this.mode === 'update') {
+      this.dataSourceDatePrivate.data[index].active = false;
+      this.defaults.course_dates[index].active = false;
+      this.privateDatesTable.renderRows();
+    } else {
+      this.dataSourceDatePrivate.data.splice(index, 1);
+      this.privateDatesTable.renderRows();
+    }
+
 
     // Aquí también puedes deseleccionar el chip correspondiente
   }
@@ -1145,10 +1198,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
           }
           level.active = false;
 
-          if (this.mode === 'update') {
+          if (this.mode === 'update' && this.defaults.course_type === 1) {
 
             this.defaults.course_dates.forEach(cs => {
-              cs.groups.forEach(group => {
+              cs.course_groups.forEach(group => {
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
@@ -1209,6 +1262,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   getDatesBetween(startDate, endDate, process, hourStart = null, hourEnd = null) {
 
+    let index = 0;
     if (process) {
       this.daysDatesLevels = [];
       let daysOfWeekAdded = new Set();
@@ -1237,6 +1291,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
               hour_start: hourStart,
               hour_end: hourEnd,
             })
+          } else {
+            this.defaults.course_dates[index].active = moment(this.defaults.date_start_res).isSameOrBefore(currentDate);
           }
           currentDate = currentDate.add(1, 'days');
 
@@ -1248,7 +1304,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           })
           currentDate = currentDate.add(1, 'days');
         }
-
+        index = index + 1;
       }
     }
 
@@ -1264,43 +1320,103 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.defaults.course_dates = [];
     }
 
-    dates.forEach(element => {
+    if (this.mode === 'update') {
+      this.dataSource.data.forEach(element => {
+        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
+        if(!existDate) {
 
-      if (!onLoad) {
-        const hour = element.hour;
-        const duration = element.duration;
-        const [hours, minutes] = duration.split(' ').reduce((acc, part) => {
-          if (part.includes('h')) {
-            acc[0] = parseInt(part, 10);
-          } else if (part.includes('min')) {
-            acc[1] = parseInt(part, 10);
-          }
-          return acc;
-        }, [0, 0]);
-
-        this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
-        if (this.courseType === 'privee') {
-
-          this.defaults.course_dates.push({
-            date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+          const dataNew = {
+            date: moment(element.date).format('YYYY-MM-DD'),
             hour_start: element.hour,
-            hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
-          })
-        } else {
-
-          this.defaults.course_dates.push({
-            date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-            hour_start: element.hour,
-            hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
+            hour_end: this.calculateHourEnd(element.hour, element.duration),
             groups: []
-          })
-        }
-      } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', '')});
-      }
+          }
 
+          this.defaults.course_dates[0].course_groups.forEach(element => {
+            this.generateGroupForNewDate(dataNew, element);
+          });
+
+          this.defaults.course_dates.push(dataNew)
+        }
+      });
+
+    } else {
+
+      dates.forEach(element => {
+
+        if (!onLoad) {
+          const hour = element.hour;
+          const duration = element.duration;
+          const [hours, minutes] = duration.split(' ').reduce((acc, part) => {
+            if (part.includes('h')) {
+              acc[0] = parseInt(part, 10);
+            } else if (part.includes('min')) {
+              acc[1] = parseInt(part, 10);
+            }
+            return acc;
+          }, [0, 0]);
+
+          this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
+          if (this.courseType === 'privee') {
+
+            this.defaults.course_dates.push({
+              date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+              hour_start: element.hour,
+              hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
+            })
+          } else {
+
+            this.defaults.course_dates.push({
+              date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+              hour_start: element.hour,
+              hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
+              groups: []
+            })
+
+          }
+        } else {
+          this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', '')});
+        }
+
+      });
+    }
+
+
+
+
+  }
+
+  generateGroupForNewDate(date: any, group: any) {
+
+    date.groups.push({
+      course_id: group.course_id,
+      course_date_id: null,
+      degree_id: group.degree_id,
+      age_min: group.age_min,
+      age_max: group.age_max,
+      recommended_age: group.recommended_age,
+      teacher_min_degree: group.teacher_min_degree,
+      teachers_min: null,
+      teachers_max: null,
+      observations: null,
+      auto: true,
+      subgroups: []
     });
 
+
+    group.course_subgroups.forEach(element => {
+      date.groups.forEach(group => {
+        if (group.degree_id === element.degree_id) {
+          group.active = true;
+          group.teachers_min = group.teacher_min_degree;
+          group.subgroups.push({
+            degree_id: element.degree_id,
+            max_participants: element.max_participants
+          })
+        }
+
+      });
+    });
   }
 
   updateMaxDurationOptions(selectedMinDuration) {
@@ -1687,7 +1803,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         translations: JSON.stringify(this.defaults.translations),
         discounts: JSON.stringify(this.dataSourceReductions.data),
         sport_id: this.defaults.sport_id,
-        school_id: null, //sacar del global
+        school_id: this.user.schools[0].id, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
@@ -1713,7 +1829,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         image: this.imagePreviewUrl,
         translations: JSON.stringify(this.defaults.translations),
         sport_id: this.defaults.sport_id,
-        school_id: null, //sacar del global
+        school_id: this.user.schools[0].id, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
@@ -1808,12 +1924,25 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     let data: any = [];
 
-    let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
+    let dates: any = [];
+    let sortedDates: any = [];
+
+    if (this.defaults.course_type === 2) {
+      dates = this.dataSourceDatePrivate.data.filter((date) => date.active || date.active === 1);
+      sortedDates = dates.map(d => new Date(d.dateFrom)).sort((a, b) => a - b);
+    } else {
+
+      dates = this.dataSource.data.filter((date) => date.active || date.active === 1);
+      sortedDates = dates.map(d => new Date(d.date)).sort((a, b) => a - b);
+    }
 
     let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
     let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
 
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
+      this.defaults.date_start_res = this.defaults.date_start;
+      this.defaults.date_end_res = this.defaults.date_end;
+      this.getSeparatedDates(this.defaults.course_dates);
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -1841,6 +1970,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       console.log(data);
 
     } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
+      this.defaults.date_start_res = this.defaults.date_start;
+      this.defaults.date_end_res = this.defaults.date_end;
+      this.getSeparatedDates(this.defaults.course_dates);
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -1859,7 +1991,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         image: this.imagePreviewUrl,
         translations: JSON.stringify(this.defaults.translations),
         sport_id: this.defaults.sport_id,
-        school_id: null, //sacar del global
+        school_id: this.defaults.school_id, //sacar del global
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
@@ -1898,7 +2030,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       };
       console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
-      this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
+      this.getDatesBetween(this.defaults.course_dates[0].date, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
       let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
 
       let lowestDateP = moment(sortedDates[0]).format('YYYY-MM-DD');
@@ -2153,5 +2285,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
         this.loadingMonitors = false;
       })
+  }
+
+  toDate(date) {
+    return moment(date).toDate()
   }
 }

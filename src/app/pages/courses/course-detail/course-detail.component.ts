@@ -264,34 +264,38 @@ export class CourseDetailComponent implements OnInit {
     this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
       .subscribe((data) => {
 
-        data.data.forEach(element => {
-          if(element.active) {
-            this.levels.push(element);
+        if (this.defaults.course_type === 1) {
+          data.data.forEach(element => {
+            if(element.active) {
+              this.levels.push(element);
 
-          }
-        });
-        this.levels.forEach(level => {
-          if (!this.groupedByColor[level.color]) {
-            this.groupedByColor[level.color] = [];
-          }
-          level.active = false;
-
-
-          this.defaults.course_dates.forEach(cs => {
-            cs.groups.forEach(group => {
-              if (group.degree_id === level.id) {
-                level.active = true;
-                level.old = true;
-              }
-              level.visible = false;
-            });
+            }
           });
-          this.selectedItem = this.daysDatesLevels[0].dateString;
-          this.subGroupSelectedItemDate = moment(this.daysDatesLevels[0].date);
-          this.groupedByColor[level.color].push(level);
-        });
 
-        this.colorKeys = Object.keys(this.groupedByColor);
+          this.levels.forEach(level => {
+            if (!this.groupedByColor[level.color]) {
+              this.groupedByColor[level.color] = [];
+            }
+            level.active = false;
+
+
+            this.defaults.course_dates.forEach(cs => {
+              cs.groups.forEach(group => {
+                if (group.degree_id === level.id) {
+                  level.active = true;
+                  level.old = true;
+                }
+                level.visible = false;
+              });
+            });
+            this.selectedItem = this.daysDatesLevels[0].dateString;
+            this.subGroupSelectedItemDate = moment(this.daysDatesLevels[0].date);
+            this.groupedByColor[level.color].push(level);
+          });
+
+          this.colorKeys = Object.keys(this.groupedByColor);
+        }
+
       })
   }
 

@@ -18,11 +18,12 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { CalendarEditComponent } from './calendar/calendar-edit/calendar-edit.component';
 import { CourseDetailModalComponent } from '../../courses/course-detail-modal/course-detail-modal.component';
 import { addDays, getDay, startOfWeek, endOfWeek, addWeeks, subWeeks, format, isSameMonth, startOfMonth, endOfMonth, addMonths, subMonths, max, min } from 'date-fns';
+import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
   styleUrls: ['./monitor-detail.component.scss'],
-  animations: [fadeInRight400ms, scaleIn400ms, stagger20ms]
+  animations: [fadeInRight400ms, scaleIn400ms, stagger20ms, fadeInUp400ms]
 })
 export class MonitorDetailComponent {
   @ViewChild('sportsCurrentTable') currentSportsTable: MatTable<any>;

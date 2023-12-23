@@ -476,7 +476,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
         this.crudService.create('/monitors', this.defaults)
           .subscribe((monitor) => {
-            this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+            this.snackbar.open('Monitor creado correctamente', 'OK', {duration: 3000});
 
             this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
               .subscribe((monitorSchool) => {

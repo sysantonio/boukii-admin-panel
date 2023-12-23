@@ -1135,7 +1135,7 @@
             </div>
           </div>
         </div>
-        <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true"  [selectedIndex]="selectedTabIndex">
+        <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false"  [selectedIndex]="selectedTabIndex">
 
           <ng-template matStepperIcon="edit">
             <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -1315,16 +1315,6 @@
                   Next
                 </button>
               </div>
-
-              <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
-
-
-                <button  color="primary" mat-raised-button matStepperNext>
-                  Next
-                </button>
-              </div>
             </form>
           </mat-step>
 
@@ -1411,7 +1401,15 @@
                 </mat-table>
               </div>
 
+              <div class="actions flex items-center justify-end gap-2">
+                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
 
+
+                <button  color="primary" mat-raised-button matStepperNext>
+                  Next
+                </button>
+              </div>
             </form>
           </mat-step>
 

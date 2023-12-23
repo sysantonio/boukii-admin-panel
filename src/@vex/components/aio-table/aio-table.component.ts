@@ -732,4 +732,8 @@ ngAfterViewInit() {
 
     return formattedDuration.trim();
   }
+
+  findFirstActive(dates: any) {
+    return dates.find((d) => d.active || d.active === 1 );
+  }
 }
