@@ -1340,7 +1340,7 @@ export class TimelineComponent {
       })
   }
 
-  createBooking() {
+  detailBooking() {
     const dialogRef = this.dialog.open(BookingDetailModalComponent, {
       width: '100%',
       height: '1200px',

@@ -19,6 +19,8 @@ import { CalendarEditComponent } from './calendar/calendar-edit/calendar-edit.co
 import { CourseDetailModalComponent } from '../../courses/course-detail-modal/course-detail-modal.component';
 import { addDays, getDay, startOfWeek, endOfWeek, addWeeks, subWeeks, format, isSameMonth, startOfMonth, endOfMonth, addMonths, subMonths, max, min } from 'date-fns';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { BookingDetailModalComponent } from '../../bookings/booking-detail-modal/booking-detail-modal.component';
+import { CourseUserTransferTimelineComponent } from '../../timeline/course-user-transfer-timeline/course-user-transfer-timeline.component';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
@@ -2026,4 +2028,38 @@ export class MonitorDetailComponent {
   }
   */
 
+  detailBooking() {
+    const dialogRef = this.dialog.open(BookingDetailModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',
+      panelClass: 'full-screen-dialog',
+      data: {
+        id: this.taskDetailTimeline.booking_id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
+      }
+    });
+  }
+
+  openUserTransfer() {
+    const dialogRef = this.dialog.open(CourseUserTransferTimelineComponent, {
+      width: '800px',
+      height: '800px',
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: {degree: this.taskDetailTimeline.degree, subgroup: this.taskDetailTimeline.course_subgroup_id, id: this.taskDetailTimeline.course_id,
+        subgroupNumber: this.taskDetailTimeline.subgroup_number, currentDate: moment(this.taskDetailTimeline.date), degrees: this.taskDetailTimeline.degrees_sport}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        dialogRef.close();
+      }
+    });
+  }
 }
