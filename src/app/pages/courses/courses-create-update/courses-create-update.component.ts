@@ -60,7 +60,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   separatedDates = false;
   displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
-  displayedReductionsColumns: string[] = ['date', 'percentage'];
+  displayedReductionsColumns: string[] = ['date', 'percentage', 'delete'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
   dataSource: any = new MatTableDataSource([]);
   dataSourceReductions = new MatTableDataSource([]);
@@ -543,12 +543,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
             this.defaults.course_dates.forEach(element => {
               this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('YYYY-MM-DD'), dateTo: moment(element.date).format('YYYY-MM-DD'), active: element.active, id: element.id});
             });
+
+            this.dataSourceReductionsPrivate.data = JSON.parse(this.defaults.discounts);
           }
           if (this.defaults.course_type === 1) {
             this.defaults.course_dates.forEach(element => {
               this.dataSource.data.push({date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start + ' - ' + element.hour_end,
                 duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id});
             });
+
+            if (this.defaults.is_flexible) {
+              this.dataSourceReductions.data = JSON.parse(this.defaults.discounts);
+            }
           }
 
 
@@ -608,8 +614,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         from: [null],
         to: [null],
         image: [null],
-        fromDateUnique: [null, Validators.required],
-        toDateUnique: [null, Validators.required],
+        fromDateUnique: [null],
+        toDateUnique: [null],
         periodeUnique: new FormControl(true),
         periodeMultiple: new FormControl(false)
       })
@@ -1849,8 +1855,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         description: this.defaults.translations.fr.description,
         price: 0,
         currency: 'CHF',
-        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
@@ -2158,15 +2164,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     if (this.defaults.date_end_res === null) {
       this.snackbar.open('El campo fecha reservable hasta es obligatorio', 'OK', {duration: 3000});
-      return;
-    }
-    if (this.defaults.date_start === null) {
-      this.snackbar.open('El campo fecha desde es obligatorio', 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.date_end === null) {
-      this.snackbar.open('El campo fecha hasta es obligatorio', 'OK', {duration: 3000});
       return;
     }
 
