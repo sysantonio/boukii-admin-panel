@@ -65,6 +65,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @Input()
   title: string;
   @Input()
+  sectionIcon: string;
+  @Input()
   route: string;
   @Input()
   withHeader: boolean = true;

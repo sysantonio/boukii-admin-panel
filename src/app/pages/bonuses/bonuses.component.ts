@@ -12,6 +12,8 @@ export class BonusesComponent {
   createComponent = BonusesCreateUpdateComponent;
   entity = '/vouchers';
   deleteEntity = '/vouchers';
+  icon = '../../../assets/img/icons/bonos.svg';
+
   columns: TableColumn<any>[] = [
     { label: 'Code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Client', property: 'client_id', type: 'client', visible: true },

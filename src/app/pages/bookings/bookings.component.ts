@@ -29,6 +29,7 @@ export class BookingsComponent {
   school: any;
 
   createComponent = BookingsCreateUpdateComponent;
+  icon = '../../../assets/img/icons/reservas.svg';
   entity = '/bookings';
   deleteEntity = '/bookings';
   columns: TableColumn<any>[] = [

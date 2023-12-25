@@ -75,6 +75,8 @@ export class ConfigService {
      */
     this.document.body.style.setProperty('--color-primary', style.colors.primary.default.replace('rgb(', '').replace(')', ''));
     this.document.body.style.setProperty('--color-primary-rgb', style.colors.primary.default);
+    this.document.body.style.setProperty('--color-primary-sidenav', style.colors.primary.sidenav.replace('rgb(', '').replace(')', ''));
+    this.document.body.style.setProperty('--color-primary-sidenav-rgb', style.colors.primary.sidenav);
     this.document.body.style.setProperty('--color-primary-contrast', style.colors.primary.contrast.replace('rgb(', '').replace(')', ''));
     this.document.body.style.setProperty('--color-primary-contrast-rgb', style.colors.primary.contrast);
   }

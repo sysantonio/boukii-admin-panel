@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ClientsComponent {
 
+  icon = '../../../assets/img/icons/clientes.svg';
   createComponent = ClientsCreateUpdateModule;
   entity = '/admin/clients/mains';
   deleteEntity = '/clients';

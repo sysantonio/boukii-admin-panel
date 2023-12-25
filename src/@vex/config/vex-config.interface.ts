@@ -12,6 +12,7 @@ export interface VexConfig {
     colors: {
       primary: {
         default: string;
+        sidenav:string;
         contrast: string;
       }
     };

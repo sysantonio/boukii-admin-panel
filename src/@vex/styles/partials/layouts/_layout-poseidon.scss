@@ -2,8 +2,8 @@
   $sidenav-background: #0a1929;
   --sidenav-item-min-height: 40px;
 
-  --sidenav-item-background-hover: rgba(var(--color-primary), 0.1);
-  --sidenav-item-background-active: rgba(var(--color-primary), 0.2);
+  --sidenav-item-background-hover: rgba(var(--color-primary-sidenav), 0.1);
+  --sidenav-item-background-active: rgba(var(--color-primary-sidenav), 0.2);
   --sidenav-item-dropdown-background: var(--sidenav-background);
   --sidenav-item-dropdown-background-hover: rgba(var(--color-primary), 0.1);
   --sidenav-item-dropdown-background-active: rgba(var(--color-primary), 0.2);

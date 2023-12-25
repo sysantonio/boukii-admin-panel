@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class MonitorsComponent {
 
+  icon = '../../../assets/img/icons/monitores.svg';
   showDetail: boolean = false;
   monitorSport: any;
   detailData: any;

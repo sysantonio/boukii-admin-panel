@@ -10,6 +10,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 export class AdminsComponent {
 
   createComponent = AdminCreateUpdateComponent;
+  icon = '../../../assets/img/icons/Admins.svg';
   entity = '/users';
   deleteEntity = '/users';
   user: any;

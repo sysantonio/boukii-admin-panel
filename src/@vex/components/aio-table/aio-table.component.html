@@ -1,13 +1,13 @@
 <vex-page-layout>
 
-  <vex-page-layout-header *ngIf="withHeader" class="pb-16 flex flex-col items-start justify-center">
+  <vex-page-layout-header *ngIf="withHeader" class="pb-16 flex flex-col items-start justify-center" style="background-color: #ececec;">
     <div
          class="w-full flex flex-col sm:flex-row justify-between fullwidth">
       <div>
-        <h1 class="title mt-0 mb-1">{{ title | uppercase}}</h1>
+        <img style="float: left;font-size: 30px;margin: 0 10px 0 0;color: #f53d7c;" [src]="sectionIcon">
+        <h1 class="title mt-0 mb-1" style="float: left;font-size: 24px;">{{ title | uppercase}}</h1>
       </div>
     </div>
-
   </vex-page-layout-header>
 
 

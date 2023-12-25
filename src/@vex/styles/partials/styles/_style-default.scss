@@ -14,6 +14,8 @@
 
   --color-primary: 99, 102, 241;
   --color-primary-rgb: rgb(99, 102, 241);
+  --color-primary-sidenav: 249, 249, 249;
+  --color-primary-sidenav-rgb: rgb(249, 249, 249);
   --color-primary-contrast: 255, 255, 255;
   --color-primary-contrast-rgb: rgb(255, 255, 255);
 
@@ -111,8 +113,8 @@
   --sidenav-item-color-hover: #{$light-primary-text};
   --sidenav-item-color-active: #{$light-primary-text};
   --sidenav-item-icon-color: #494B74;
-  --sidenav-item-icon-color-hover: rgb(var(--color-primary));
-  --sidenav-item-icon-color-active: rgb(var(--color-primary));
+  --sidenav-item-icon-color-hover: rgb(var(--color-primary-sidenav));
+  --sidenav-item-icon-color-active: rgb(var(--color-primary-sidenav));
   --sidenav-item-icon-gap: 16px;
   --sidenav-item-icon-size: 24px;
   --sidenav-item-dropdown-background: #{darken($sidenav-background, 3)};
