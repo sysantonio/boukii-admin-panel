@@ -1037,9 +1037,9 @@ export class ClientDetailComponent {
 
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
   }
 
 

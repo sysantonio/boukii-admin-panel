@@ -101,6 +101,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   user: any;
   schoolId: any;
   clients: any = [];
+  languages: any = [];
   sports: any = [];
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
@@ -146,6 +147,15 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getClients();
     this.getSports();
+    this.getLanguages();
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
   }
 
   onButtonGroupClick($event){
@@ -665,9 +675,9 @@ ngAfterViewInit() {
     return province ? province.name : 'NDF';
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id == +id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
   }
 
   getSelectedSportsNames(): string {

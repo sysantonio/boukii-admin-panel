@@ -26,8 +26,10 @@ export class MonitorsComponent {
   mockLevelData = LEVELS;
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
+  languages = [];
 
   constructor(private crudService: ApiCrudService, private router: Router) {
+    this.getLanguages();
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -129,9 +131,17 @@ export class MonitorsComponent {
 
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
   }
 
   goTo(route: string) {

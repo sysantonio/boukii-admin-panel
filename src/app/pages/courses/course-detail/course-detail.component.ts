@@ -126,6 +126,7 @@ export class CourseDetailComponent implements OnInit {
   levels = [];
   courseUsers = [];
   clients = [];
+  languages = [];
   schoolSports: any = [];
   countries = MOCK_COUNTRIES;
   rangeForm: UntypedFormGroup;
@@ -158,6 +159,7 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit() {
 
+    this.getLanguages();
     this.getClients();
     this.getMonitors();
 
@@ -802,11 +804,18 @@ export class CourseDetailComponent implements OnInit {
     return country ? country.name : 'NDF';
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id == id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
   }
 
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
+  }
   getSeparatedDates(dates: any, onLoad: boolean = false) {
 
     this.daysDates = [];

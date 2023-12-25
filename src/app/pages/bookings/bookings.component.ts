@@ -22,6 +22,7 @@ export class BookingsComponent {
   provinces = MOCK_PROVINCES;
   clients = [];
   monitors = [];
+  languages = [];
   sports = [];
   bonus: any = [];
   user: any;
@@ -56,6 +57,7 @@ export class BookingsComponent {
     this.getMonitors();
     this.getClients();
     this.getSports();
+    this.getLanguages();
   }
 
   showDetailEvent(event: any) {
@@ -147,12 +149,18 @@ export class BookingsComponent {
 
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
   }
 
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
 
+      })
+  }
 
   getClient(id: any) {
     if (id && id !== null) {

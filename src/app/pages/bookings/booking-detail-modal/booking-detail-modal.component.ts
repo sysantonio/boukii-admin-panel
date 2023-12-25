@@ -103,6 +103,7 @@ export class BookingDetailModalComponent implements OnInit {
   opRem = 0;
   boukiiCare = 0;
   form: UntypedFormGroup;
+  languages = [];
   defaults: any = {
     price_total: null,
     has_cancellation_insurance: false,
@@ -202,6 +203,7 @@ export class BookingDetailModalComponent implements OnInit {
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
+    this.getLanguages();
     this.getMonitors();
     this.schoolService.getSchoolData()
       .subscribe((data) => {
@@ -1639,10 +1641,6 @@ export class BookingDetailModalComponent implements OnInit {
     }
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id == id);
-    return country ? country.code : 'NDF';
-  }
 
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id == id);
@@ -1699,14 +1697,28 @@ export class BookingDetailModalComponent implements OnInit {
     this.finalPriceNoTaxes = price;
   }
 
-  getMonitorCountry(id: number) {
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
+  }
+
+  getMonitorLang(id: number) {
     if (id && id !== null) {
 
       const monitor = this.monitors.find((m) => m.id === id);
 
-      return +monitor?.country;
+      return +monitor?.language1_id;
     }
   }
+
 
   getMonitorProvince(id: number) {
     if (id && id !== null) {

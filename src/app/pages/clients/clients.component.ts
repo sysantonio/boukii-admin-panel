@@ -33,12 +33,13 @@ export class ClientsComponent {
   mockLevelData = LEVELS;
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
+  languages = [];
   mainIdSelected = true;
   borderActive = -1;
 
   constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    this.getLanguages();
   }
 
   columns: TableColumn<any>[] = [
@@ -139,9 +140,17 @@ export class ClientsComponent {
 
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === +id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
   }
 
   goTo(route: string) {

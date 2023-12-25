@@ -97,7 +97,7 @@ export class BookingDetailComponent implements OnInit {
   filteredSports: Observable<any[]>;
   filteredLevel: Observable<any[]>;
   filteredMonitors: Observable<any[]>;
-
+  languages = [];
   courseType: any = 'collectif';
   courseTypeId: any = 1;
   opRem = 0;
@@ -202,6 +202,7 @@ export class BookingDetailComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.getMonitors();
+    this.getLanguages();
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.schoolSettings = data.data;
@@ -1656,9 +1657,17 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id == id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
   }
 
   getCountry(id: any) {
@@ -1716,12 +1725,12 @@ export class BookingDetailComponent implements OnInit {
     this.finalPriceNoTaxes = price;
   }
 
-  getMonitorCountry(id: number) {
+  getMonitorLang(id: number) {
     if (id && id !== null) {
 
       const monitor = this.monitors.find((m) => m.id === id);
 
-      return +monitor?.country;
+      return +monitor?.language1_id;
     }
   }
 

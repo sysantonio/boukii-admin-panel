@@ -30,7 +30,7 @@
           </div>
           <div style="float: left;width: 65%;margin:0 0 0 3%">
             <p>{{getClient(item.client_id)?.first_name}} {{getClient(item.client_id)?.last_name}}</p>
-            <p>{{getNacionality(getClient(item.client_id)?.country)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}} ans</p>
+            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}} ans</p>
           </div>
 
         </div>

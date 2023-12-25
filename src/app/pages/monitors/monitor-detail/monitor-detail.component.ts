@@ -1016,10 +1016,11 @@ export class MonitorDetailComponent {
 
   }
 
-  getNacionality(id: any) {
-    const country = this.mockCountriesData.find((c) => c.id === +id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
   }
+
 
   showDetailEvent(event: any) {
 

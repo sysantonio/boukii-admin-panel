@@ -241,6 +241,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   monitors = [];
   season = [];
   school = [];
+  languages = [];
   settings: any = [];
   user: any;
   mainIdSelected = true;
@@ -290,6 +291,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       sameMonitor: [false]
     });
 
+    this.getLanguages();
     this.getSports();
     this.getMonitors();
     this.getSeason();
@@ -1481,12 +1483,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
-  getMonitorCountry(id: number) {
+  getMonitorLang(id: number) {
     if (id && id !== null) {
 
       const monitor = this.monitors.find((m) => m.id === id);
 
-      return +monitor?.country;
+      return +monitor?.language1_id;
     }
   }
 
@@ -1924,9 +1926,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id == id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
   }
 
   getCountry(id: any) {

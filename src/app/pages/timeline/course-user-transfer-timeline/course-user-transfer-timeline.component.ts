@@ -17,6 +17,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
   courseSubGroups: any = [];
   currentStudents: any = [];
   studentToChange: any = [];
+  languages: any = [];
   subGroupsToChange: any = null;
   clients: any = [];
   course: any = [];
@@ -31,6 +32,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getLanguages();
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.defaults.degrees.forEach(level => {
@@ -124,9 +126,17 @@ export class CourseUserTransferTimelineComponent implements OnInit {
 
   }
 
-  getNacionality(id: any) {
-    const country = this.countries.find((c) => c.id === id);
-    return country ? country.code : 'NDF';
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
   }
 
   addToStudentChangeList(event: any, item: any, idx: number) {
