@@ -40,7 +40,7 @@
         <div class="flex-auto">
           <div class="card">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">Données Personnelles
+              <h2 class="title m-0">{{'personal_data' | translate }}
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"(click)="showInfoEditEvent(true)"></mat-icon>
@@ -56,7 +56,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Nom</p>
+                  <p class="m-0 caption text-hint">{{'name' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.first_name}}</p>
                 </div>
 
@@ -70,7 +70,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Prenom</p>
+                  <p class="m-0 caption text-hint">{{'surname' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.last_name}}</p>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Fecha de nacimient</p>
+                  <p class="m-0 caption text-hint">{{'birth_date' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.birth_date | date: 'dd/MM/YYYY'}}
                   </p>
                 </div>
@@ -97,7 +97,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Movil</p>
+                  <p class="m-0 caption text-hint">{{'mobile' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.phone}}
                   </p>
                 </div>
@@ -125,7 +125,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Idiomas</p>
+                  <p class="m-0 caption text-hint">{{'langs' | translate }}</p>
                   <p class="m-0 body-1">{{getSelectedLanguageNames()}}
                   </p>
                 </div>
@@ -139,7 +139,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Nombre de usuario</p>
+                  <p class="m-0 caption text-hint">{{'username' | translate }}</p>
                   <p class="m-0 body-1">{{defaultsUser.username || 'No asigned'}}</p>
                 </div>
 
@@ -162,7 +162,7 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">Deportes
+              <h2 class="title m-0">{{'sports' | translate }}
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
@@ -180,7 +180,7 @@
                   </div>
 
                   <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">Sport</p>
+                    <p class="m-0 caption text-hint">{{'sport' | translate}}</p>
                     <p class="m-0 body-1">{{item.name}}
                     </p>
                   </div>
@@ -190,7 +190,7 @@
                 <div class="py-3 flex items-center">
 
                   <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">Level</p>
+                    <p class="m-0 caption text-hint">{{'level' | translate}}</p>
                     <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item.level.color">
                       <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
                     </div>
@@ -230,7 +230,7 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">Direccion
+              <h2 class="title m-0">{{'address' | translate}}
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showAddressInfoEditEvent(true)"></mat-icon>
@@ -246,7 +246,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Calle -nº</p>
+                  <p class="m-0 caption text-hint">{{'address' | translate}}</p>
                   <p class="m-0 body-1">{{defaults.address}}</p>
                 </div>
 
@@ -260,7 +260,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">CP</p>
+                  <p class="m-0 caption text-hint">{{'cp' | translate}}</p>
                   <p class="m-0 body-1">{{defaults.cp}}</p>
                 </div>
               </div>
@@ -273,7 +273,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Ciudad</p>
+                  <p class="m-0 caption text-hint">{{'city' | translate}}</p>
                   <p class="m-0 body-1">{{getProvince(defaults.province)}}
                   </p>
                 </div>
@@ -287,7 +287,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Canton</p>
+                  <p class="m-0 caption text-hint">{{'province' | translate }}</p>
                   <p class="m-0 body-1">{{getCountry(defaults.country)}}
                   </p>
                 </div>
@@ -297,7 +297,7 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">Work Info
+              <h2 class="title m-0">{{'work_info' | translate }}
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
@@ -314,7 +314,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Work License</p>
+                  <p class="m-0 caption text-hint">{{'work_id' | translate }}</p>
                   <p class="m-0 body-1"> {{defaults.work_license}}</p>
                 </div>
 
@@ -339,7 +339,7 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">Family Info
+              <h2 class="title m-0">{{'family_data' | translate }}
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showFamilyInfo" (click)="showFamilyInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showFamilyInfo" (click)="showFamilyInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showFamilyInfoEditEvent(true)"></mat-icon>
@@ -355,7 +355,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Civil Status</p>
+                  <p class="m-0 caption text-hint">{{'civil_status' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.civil_status || 'No asigned'}}</p>
                 </div>
 
@@ -369,7 +369,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Children</p>
+                  <p class="m-0 caption text-hint">{{'children' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.children}}</p>
                 </div>
               </div>
@@ -382,7 +382,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Conjoint works</p>
+                  <p class="m-0 caption text-hint">{{'wife_status' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.partner_works ? 'Y' : 'N'}}</p>
                 </div>
 
@@ -396,7 +396,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Conjoint license</p>
+                  <p class="m-0 caption text-hint">{{'wife_id' | translate}}</p>
                   <p class="m-0 body-1">{{defaults.partner_work_license}}</p>
                 </div>
 
@@ -410,7 +410,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Conjoint Percentaje</p>
+                  <p class="m-0 caption text-hint">C{{'wife_perent' | translate }}</p>
                   <p class="m-0 body-1">{{defaults.partner_percentaje}}</p>
                 </div>
 
@@ -424,7 +424,7 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">Family Allowance</p>
+                  <p class="m-0 caption text-hint">{{'mobility' | translate}}</p>
                   <p class="m-0 body-1">{{defaults.family_allowance}}</p>
                 </div>
 
@@ -453,13 +453,13 @@
 
               </div>
               <div style="width: 100%;float:left;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles curso</mat-card-title>
+              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' |translate}}</mat-card-title>
               <mat-icon svgIcon="mat:close" style="float: right;cursor:pointer; color:red;" (click)="close()"></mat-icon>
               </div>
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-                  <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'from' |translate}}</b></p>
+                  <p style="float: left;width: 20%;text-align: right;"><b>{{'to' |translate}}</b></p>
               </div>
               <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
@@ -470,8 +470,8 @@
 
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
-                  <p style="float: left;width: 35%;text-align: left;"><b>Precio</b></p>
-                  <p style="float: left;width: 65%;text-align: right;"><b>Participantes Max</b></p>
+                  <p style="float: left;width: 35%;text-align: left;"><b>{{'price' |translate}}</b></p>
+                  <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' |translate}}</b></p>
               </div>
               <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
@@ -503,10 +503,10 @@
                   <p><strong>{{detailData?.course?.name}}</strong></p>
                   <p>
                       <ng-container *ngIf="detailData?.course?.course_type == 1">
-                          Collectif
+                        {{'colective' |translate}}
                       </ng-container>
                       <ng-container *ngIf="detailData?.course?.course_type == 2">
-                          Private
+                        {{'private' |translate}}
                       </ng-container>
                       <ng-container *ngIf="detailData?.sport">
                           {{detailData?.sport.name}}
@@ -526,17 +526,17 @@
                   </div>
                   <div class="box-detail-box box-background-grey">
                       <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
-                      <div>Grupos</div>
+                      <div>{{'groups' |translate}}</div>
                       <div class="font-bold">{{getGroupsQuantity()}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
                       <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
-                      <div>Duración</div>
+                      <div>{{'duration' |translate}}</div>
                       <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
                       <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
-                      <div>Días</div>
+                      <div>{{'days' |translate}}</div>
                       <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
                   </div>
               </div>
@@ -546,7 +546,7 @@
               <ng-container *ngIf="detailData?.course.course_type == 2">
 
                   <div style="width: 100%;float:left;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">Reserva</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' |translate}}</mat-card-title>
                   </div>
 
                   <div style="float: left; width: 100%;">
@@ -558,7 +558,7 @@
                   <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                   <div style="width: 100%;float:left;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'user' |translate}}</mat-card-title>
                   </div>
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
@@ -577,7 +577,7 @@
                                   <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                       {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                   </ng-container>
-                                  {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} ans
+                                  {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
                                   · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                               </span>
                               <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
@@ -592,7 +592,7 @@
               </ng-container>
 
               <div style="width: 100%;float:left;margin-bottom:12px;">
-                  <mat-card-title class="font-bold" style="float: left;width: 80%;">Monitor</mat-card-title>
+                  <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' |translate}}</mat-card-title>
               </div>
 
               <div *ngIf="defaults" class="box-detail-user-block">
@@ -605,7 +605,7 @@
                           <ng-container *ngIf="defaults.language1_id">
                               {{getLanguageById(defaults.language1_id)}} ·
                           </ng-container>
-                          {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}} ans
+                          {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}}{{'years' | translate }}
                           · {{defaults.phone}} · {{defaults.email}}
                       </span>
                   </div>
@@ -613,7 +613,7 @@
 
               <ng-container *ngIf="detailData?.course.course_type == 1">
                   <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">Alumnos {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' |translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
                       <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
                   </div>
 
@@ -633,7 +633,7 @@
                                   <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                       {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                   </ng-container>
-                                  {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} ans
+                                  {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
                                   · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                               </span>
                           </div>
@@ -675,7 +675,7 @@
                       <div class="hour" *ngFor="let hour of hoursRange">{{ hour }}</div>
                   </div>
                   <div class="hours-row" *ngIf="timelineView == 'week'">
-                      <div class="day" *ngFor="let day of weekDays;let dayIndex = index">{{ day }} {{ getDayOfWeek(dayIndex) }}</div>
+                      <div class="day" *ngFor="let day of weekDays;let dayIndex = index">{{ day | translate }} {{ getDayOfWeek(dayIndex) }}</div>
                   </div>
                   <div class="grid-container">
                       <div class="grid-row"  [ngClass]="{'outside-month-day': !isDayVisibleDay() && timelineView == 'day'}">
@@ -735,7 +735,7 @@
               <div class="schedule-container" *ngIf="timelineView == 'month'">
                   <div class="hours-container">
                   <div class="hours-row">
-                      <div class="day" *ngFor="let day of weekDays">{{ day }}</div>
+                      <div class="day" *ngFor="let day of weekDays">{{ day | translate }}</div>
                   </div>
                   <div class="grid-container">
                           <div class="grid-row" *ngFor="let week of weeksInMonth;let weekIndex = index">
@@ -779,12 +779,12 @@
 
               </div>
               <div style="width: 100%;float:left;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles curso</mat-card-title>
+              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' |translate}}</mat-card-title>
               </div>
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-                  <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'from' |translate}}</b></p>
+                  <p style="float: left;width: 20%;text-align: right;"><b>{{'to' |translate}}</b></p>
               </div>
               <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"><b>{{taskDetailTimeline.date_start}}</b></p>
@@ -795,8 +795,8 @@
 
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
-                  <p style="float: left;width: 35%;text-align: left;"><b>Precio</b></p>
-                  <p style="float: left;width: 65%;text-align: right;"><b>Participantes Max</b></p>
+                  <p style="float: left;width: 35%;text-align: left;"><b>{{'price' |translate}}</b></p>
+                  <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' |translate}}</b></p>
               </div>
               <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"><b>{{taskDetailTimeline.course.price}}</b> {{taskDetailTimeline.course.currency}}</p>
@@ -828,10 +828,10 @@
                   <p><strong>{{taskDetailTimeline.name}}</strong></p>
                   <p>
                       <ng-container *ngIf="taskDetailTimeline.type == 'collective'">
-                          Collectif
+                        {{'colective' |translate}}
                       </ng-container>
                       <ng-container *ngIf="taskDetailTimeline.type == 'private'">
-                          Private
+                        {{'private' |translate}}
                       </ng-container>
                       <ng-container *ngIf="taskDetailTimeline.sport">
                           {{taskDetailTimeline.sport.name}}
@@ -850,17 +850,17 @@
                   </div>
                   <div class="box-detail-box box-background-grey">
                       <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
-                      <div>Grupos</div>
+                      <div>{{'groups' |translate}}</div>
                       <div class="font-bold">{{taskDetailTimeline.total_subgroups}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
                       <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
-                      <div>Duración</div>
+                      <div>{{'duration' |translate}}</div>
                       <div class="font-bold">{{getHoursMinutes(taskDetailTimeline.hour_start,taskDetailTimeline.hour_end)}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
                       <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
-                      <div>Días</div>
+                      <div>{{'days' |translate}}</div>
                       <div class="font-bold">{{taskDetailTimeline.date_index}}/{{taskDetailTimeline.course.course_dates.length}}</div>
                   </div>
               </div>
@@ -870,7 +870,7 @@
               <ng-container *ngIf="taskDetailTimeline.type == 'private'">
 
                   <div style="width: 100%;float:left;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">Reserva</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' |translate}}</mat-card-title>
                       <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="detailBooking()"></mat-icon>
                   </div>
 
@@ -883,7 +883,7 @@
                   <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                   <div style="width: 100%;float:left;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'user' |translate}}</mat-card-title>
                   </div>
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
@@ -901,7 +901,7 @@
                                   <ng-container *ngIf="client.client.language3_id">
                                       {{getLanguageById(client.client.language3_id)}} ·
                                   </ng-container>
-                                  {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} ans
+                                  {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}}{{'years' | translate }}
                                   · {{client.client.phone}} · {{client.client.email}}
                               </span>
                               <div *ngIf="taskDetailTimeline.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetailTimeline.degree.color}">
@@ -916,7 +916,7 @@
               </ng-container>
 
               <div style="width: 100%;float:left;margin-bottom:12px;">
-                  <mat-card-title class="font-bold" style="float: left;width: 80%;">Monitor</mat-card-title>
+                  <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' |translate}}</mat-card-title>
               </div>
 
               <div *ngIf="taskDetailTimeline.monitor" class="box-detail-user-block">
@@ -929,18 +929,18 @@
                           <ng-container *ngIf="taskDetailTimeline.monitor.language1_id">
                               {{getLanguageById(taskDetailTimeline.monitor.language1_id)}} ·
                           </ng-container>
-                          {{getCountryById(taskDetailTimeline.monitor.country)}} · {{getBirthYears(taskDetailTimeline.monitor.birth_date)}} ans
+                          {{getCountryById(taskDetailTimeline.monitor.country)}} · {{getBirthYears(taskDetailTimeline.monitor.birth_date)}}{{'years' | translate }}
                           · {{taskDetailTimeline.monitor.phone}} · {{taskDetailTimeline.monitor.email}}
                       </span>
                   </div>
               </div>
               <div *ngIf="!taskDetailTimeline.monitor">
-                  Ningún monitor asignado
+                {{'no_monitor' |translate}}
               </div>
 
               <ng-container *ngIf="taskDetailTimeline.type == 'collective'">
                   <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">Alumnos {{taskDetailTimeline.clients_number}}/{{taskDetailTimeline.max_participants}}</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' |translate}} {{taskDetailTimeline.clients_number}}/{{taskDetailTimeline.max_participants}}</mat-card-title>
                       <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
                   </div>
 
@@ -959,7 +959,7 @@
                                   <ng-container *ngIf="client.client.language3_id">
                                       {{getLanguageById(client.client.language3_id)}} ·
                                   </ng-container>
-                                  {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} ans
+                                  {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}}{{'years' | translate }}
                                   · {{client.client.phone}} · {{client.client.email}}
                               </span>
                           </div>
@@ -980,7 +980,7 @@
 
               </div>
               <div style="width: 100%;float:left;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles bloqueo</mat-card-title>
+              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'block_detail' | translate }}</mat-card-title>
               <div style="float: right;display: flex;gap: 6px;align-items: center;">
                   <mat-icon (click)="openEditBlock()" class="cursor-pointer" svgIcon="mat:edit"></mat-icon>
                   <mat-icon (click)="deleteEditedBlock()" class="cursor-pointer" svgIcon="mat:delete"></mat-icon>
@@ -993,8 +993,8 @@
               </div>
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-                  <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
+                  <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
               </div>
               <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"><b>{{blockDetailTimeline.hour_start}}</b></p>
@@ -1005,11 +1005,13 @@
 
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
-                  <p style="float: left;width: 100%;text-align: left;"><b>
-                      <ng-container *ngIf="blockDetailTimeline.type=='block_personal'">No working day</ng-container>
-                      <ng-container *ngIf="blockDetailTimeline.type=='block_payed'">Bloqueo pagado</ng-container>
-                      <ng-container *ngIf="blockDetailTimeline.type=='block_no_payed'">Bloqueo no pagado</ng-container>
-                  </b></p>
+                  <p style="float: left;width: 100%;text-align: left;">
+                    <b>
+                      <ng-container *ngIf="blockDetailTimeline.type=='block_personal'">{{'no_working_day' | translate }}</ng-container>
+                      <ng-container *ngIf="blockDetailTimeline.type=='block_payed'">{{'paid_block' | translate }}</ng-container>
+                      <ng-container *ngIf="blockDetailTimeline.type=='block_no_payed'">{{'no_paid_block' | translate }}</ng-container>
+                    </b>
+                  </p>
               </div>
               <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;">{{blockDetailTimeline.name}}</p>
@@ -1019,10 +1021,10 @@
 
               <ng-container *ngIf="showEditBlock">
                   <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 100%;">Editar Bloqueo</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'edit_block' | translate }}</mat-card-title>
                   </div>
 
-                  <mat-checkbox [(ngModel)]="allHoursDay" [ngModelOptions]="{standalone: true}">Todo el día</mat-checkbox>
+                  <mat-checkbox [(ngModel)]="allHoursDay" [ngModelOptions]="{standalone: true}">{{'full_day' | translate }}</mat-checkbox>
 
                   <ng-container *ngIf="!allHoursDay">
                       <mat-form-field class="flex-auto" style="width: 100%;">
@@ -1050,7 +1052,7 @@
                       <input matInput placeholder="Title" [(ngModel)]="nameBlockDay" [ngModelOptions]="{standalone: true}">
                   </mat-form-field>
 
-                  <mat-checkbox [(ngModel)]="divideDay" [ngModelOptions]="{standalone: true}">Dividir</mat-checkbox>
+                  <mat-checkbox [(ngModel)]="divideDay" [ngModelOptions]="{standalone: true}">{{'split' | translate }}</mat-checkbox>
 
                   <ng-container *ngIf="divideDay">
                       <mat-form-field class="flex-auto" style="width: 100%;">
@@ -1075,9 +1077,9 @@
                   </ng-container>
 
                   <div class="actions flex items-center justify-end gap-2">
-                      <button (click)="hideEditBlock()" mat-button type="button">Cancelar</button>
+                      <button (click)="hideEditBlock()" mat-button type="button">{{'cancel' | translate }}</button>
                       <button (click)="saveEditedBlock()" [disabled]="!isButtonDayEnabled()" color="primary" mat-raised-button>
-                        Guardar
+                        {{'save' | translate }}
                       </button>
                   </div>
 
@@ -1087,7 +1089,7 @@
           <mat-card-content>
 
               <div style="width: 100%;float:left;margin-bottom:12px;">
-                  <mat-card-title class="font-bold" style="float: left;width: 80%;">Monitor</mat-card-title>
+                  <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
               </div>
 
               <div *ngIf="blockDetailTimeline.monitor" class="box-detail-user-block">
@@ -1100,7 +1102,7 @@
                           <ng-container *ngIf="blockDetailTimeline.monitor.language1_id">
                               {{getLanguageById(blockDetailTimeline.monitor.language1_id)}} ·
                           </ng-container>
-                          {{getCountryById(blockDetailTimeline.monitor.country)}} · {{getBirthYears(blockDetailTimeline.monitor.birth_date)}} ans
+                          {{getCountryById(blockDetailTimeline.monitor.country)}} · {{getBirthYears(blockDetailTimeline.monitor.birth_date)}}{{'years' | translate }}
                           · {{blockDetailTimeline.monitor.phone}} · {{blockDetailTimeline.monitor.email}}
                       </span>
                   </div>
@@ -1127,11 +1129,11 @@
       <div @fadeInUp class="card flex-auto">
         <div class="px-6 py-4 border-b flex items-center">
           <div style="float: left;width: 50%;">
-            <h2 class="title m-0">Edit monitor</h2>
+            <h2 class="title m-0">{{'edit_monitor' | translate }}</h2>
           </div>
           <div style="float: left;width: 50%;">
             <div style="float:right">
-              Active <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
+              {{'active' | translate}} <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
             </div>
           </div>
         </div>
@@ -1147,7 +1149,7 @@
 
           <mat-step [stepControl]="formInfoAccount">
             <form [formGroup]="formInfoAccount">
-              <ng-template matStepLabel>Info de compte</ng-template>
+              <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <div class="image-container">
@@ -1157,21 +1159,22 @@
                 <div class="input-container">
 
                   <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                  <label for="file" class="btn-1">upload file</label>
-                  <p>Maximum 2mb</p>
-                  <p>Formats supportés: PNG, JPG</p>
+                  <label for="file" class="btn-1"><mat-icon svgIcon="mat:cloud_upload"></mat-icon></label>
+                  <p style="font-size: 12px">{{'image_max' | translate}}</p>
+                  <p style="font-size: 12px">{{'image_format' | translate}}</p>
+                  <p style="font-size: 12px">{{'image_recomendation' | translate}}</p>
                 </div>
               </div>
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                   <mat-form-field class="flex-auto">
-                    <mat-label>Nom</mat-label>
+                    <mat-label>{{'name' | translate }}</mat-label>
                     <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
 
                   </mat-form-field>
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Prenom</mat-label>
+                    <mat-label>{{'surname' | translate }}</mat-label>
                     <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                   </mat-form-field>
                 </div>
@@ -1184,7 +1187,7 @@
                   </mat-form-field>
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Nom d'utilisateur</mat-label>
+                    <mat-label>{{'username' | translate }}</mat-label>
                     <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
                   </mat-form-field>
                 </div>
@@ -1201,7 +1204,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="vex-flex-form-field flex-auto" style="width: 50%">
-                  <mat-label>Station</mat-label>
+                  <mat-label>{{'station' | translate }}</mat-label>
 
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
@@ -1213,25 +1216,25 @@
                 </mat-form-field>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false;">Ir a Preview</button>
+                <button mat-button type="button" (click)="editing = false;">{{'go_preview' | translate }}</button>
 
-                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
                 <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
                 <button color="primary" mat-raised-button matStepperNext>
-                  Next
+                  {{'next' | translate}}
                 </button>
               </div>
             </form>
           </mat-step>
           <mat-step [stepControl]="formPersonalInfo">
             <form [formGroup]="formPersonalInfo">
-              <ng-template matStepLabel>Données Personnelles</ng-template>
+              <ng-template matStepLabel>{{'personal_data' | translate }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
                 <mat-form-field class="flex-auto">
-                  <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
+                  <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
                 </mat-form-field>
@@ -1240,13 +1243,13 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Teléphone</mat-label>
+                  <mat-label>{{'phone' | translate }}</mat-label>
 
                   <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Portable</mat-label>
+                  <mat-label>{{'mobile' | translate }}</mat-label>
                   <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
 
                 </mat-form-field>
@@ -1254,13 +1257,13 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Addresse</mat-label>
+                  <mat-label>{{'address' | translate }}</mat-label>
 
                   <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Code Postal</mat-label>
+                  <mat-label>{{'cp' | translate }}</mat-label>
                   <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
 
                 </mat-form-field>
@@ -1270,7 +1273,7 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="vex-flex-form-field flex-auto">
-                  <mat-label>Pays</mat-label>
+                  <mat-label>{{'country' | translate }}</mat-label>
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                   <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
                     <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
@@ -1280,7 +1283,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="vex-flex-form-field flex-auto">
-                  <mat-label>Canton</mat-label>
+                  <mat-label>{{'province' | translate }}</mat-label>
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                   <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
                     <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
@@ -1290,13 +1293,13 @@
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto" appearance="fill">
-                  <mat-label>Idiomas</mat-label>
+                  <mat-label>{{'langs' | translate }}</mat-label>
                   <mat-select [formControl]="languagesControl" multiple>
                     <mat-select-trigger>
                       <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
                         {{ getSelectedLanguageNames() }}
                       </div>
-                      <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
+                      <ng-template #placeholderLangs>{{'choose_langs' | translate }}</ng-template>
                     </mat-select-trigger>
                     <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages($event, language)">
                       {{language.name}}
@@ -1306,13 +1309,13 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
+                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
 
-                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
 
                 <button  color="primary" mat-raised-button matStepperNext>
-                  Next
+                  {{'next' | translate}}
                 </button>
               </div>
             </form>
@@ -1320,7 +1323,7 @@
 
           <mat-step [stepControl]="formWorkInfo">
             <form [formGroup]="formWorkInfo">
-              <ng-template matStepLabel>Information de travail</ng-template>
+              <ng-template matStepLabel>{{'work_data' | translate }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                 <mat-form-field class="flex-auto">
@@ -1330,7 +1333,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Permis de travail</mat-label>
+                  <mat-label>{{'work_id' | translate }}</mat-label>
                   <input formControlName="workId" matInput type="text" [(ngModel)]="defaults.work_license">
                 </mat-form-field>
               </div>
@@ -1345,7 +1348,7 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="vex-flex-form-field flex-auto">
-                  <mat-label>Pays</mat-label>
+                  <mat-label>{{'country' | translate }}</mat-label>
                   <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
                   <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
                     <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country" (onSelectionChange)="defaults.world_country = country.id">
@@ -1355,7 +1358,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Children</mat-label>
+                  <mat-label>{{'children' | translate }}</mat-label>
                   <input formControlName="children" matInput type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
 
                 </mat-form-field>
@@ -1368,20 +1371,20 @@
                   <!-- Otros contenedores según tu descripción -->
 
                   <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef> {{'name' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let element">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                        <mat-label>Name</mat-label>
+                        <mat-label>{{'name' | translate }}</mat-label>
                         <input matInput [(ngModel)]="element.name" formControlName="childName" type="text">
                       </mat-form-field>
                     </mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="date">
-                    <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>  {{'birth_date' | translate }} </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                        <input matInput [matDatepicker]="pickerFromChild" placeholder="Date de naissance" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
+                        <input matInput [matDatepicker]="pickerFromChild" placeholder="{{'birth_date' | translate }}" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
                         <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
                         <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
                       </mat-form-field>
@@ -1402,33 +1405,33 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
 
                 <button  color="primary" mat-raised-button matStepperNext>
-                  Next
+                  {{'next' | translate}}
                 </button>
               </div>
             </form>
           </mat-step>
 
           <mat-step [stepControl]="formSportInfo">
-            <ng-template matStepLabel>Deportes</ng-template>
+            <ng-template matStepLabel>{{'sports' | translate}}</ng-template>
 
             <div style="margin: 3% 0 0 0;">
 
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto" appearance="fill">
-                  <mat-label>Deportes</mat-label>
+                  <mat-label>{{'sports' | translate}}</mat-label>
                   <mat-select [formControl]="sportsControl" multiple>
 
                     <mat-select-trigger>
                       <div *ngIf="sportsControl.value?.length > 0; else placeholder">
                         {{ getSelectedSportsNames() }}
                       </div>
-                      <ng-template #placeholder>Selecciona los deportes</ng-template>
+                      <ng-template #placeholder>{{'choose_sports' | translate }}</ng-template>
                     </mat-select-trigger>
 
                     <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection($event, sport)">
@@ -1440,7 +1443,7 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-table class="sports-table" #sportsCurrentTable [dataSource]="sportsCurrentData">
-                  <caption style="width: 100px"> Current sports</caption>
+                  <caption style="width: 100px"> {{'current_sports' | translate }}</caption>
                     <!-- Otros contenedores según tu descripción -->
                     <ng-container matColumnDef="delete">
                     <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">Eliminar</mat-header-cell>
@@ -1449,20 +1452,20 @@
                     </mat-cell>
                   </ng-container>
                     <ng-container matColumnDef="name" >
-                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;"> Name </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;"> {{'name' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                        <mat-label>Name</mat-label>
+                        <mat-label>{{'name' | translate }}</mat-label>
                         <input matInput [value]="element.name" type="text" [readonly]="true">
                       </mat-form-field>
                     </mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="level">
-                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Niveaux</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">{{'level' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                        <mat-label>Niveaux</mat-label>
+                        <mat-label>{{'level' | translate }}</mat-label>
                         <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element.level.name" [(ngModel)]="element.level"/>
                         <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
                           <mat-option *ngFor="let level of element.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
@@ -1477,7 +1480,7 @@
                     <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Salary</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                        <mat-label>Salary</mat-label>
+                        <mat-label>{{'salary' | translate }}</mat-label>
                         <input type="text" placeholder="Pick one" aria-label="Number" matInput [value]="getSalary(element.salary_level)?.name" [matAutocomplete]="autoSalary"/>
                         <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
                           <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id" (onSelectionChange)="updateSalary(element, salary)">
@@ -1525,24 +1528,24 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                 <mat-table class="sports-table" #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
-                  <caption style="width: 100px"> New sports</caption>
+                  <caption style="width: 100px"> {{'sports' | translate }}</caption>
 
                   <!-- Otros contenedores según tu descripción -->
                   <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> Name </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> {{'name' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                        <mat-label>Name</mat-label>
+                        <mat-label>{{'name' | translate }}</mat-label>
                         <input matInput [value]="element.name" type="text" [readonly]="true">
                       </mat-form-field>
                     </mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="level">
-                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Niveaux</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">{{'level' | translate }}</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Niveaux</mat-label>
+                      <mat-label>{{'level' | translate }}</mat-label>
                       <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
                       <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
                         <mat-option *ngFor="let level of element.degrees" [value]="level">
@@ -1557,7 +1560,7 @@
                     <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Salary</mat-label>
+                      <mat-label>{{'salary' | translate }}</mat-label>
                       <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
                       <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
                         <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
@@ -1610,12 +1613,12 @@
 
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
 
                 <button  color="primary" mat-raised-button matStepperNext>
-                  Next
+                  {{'next' | translate}}
                 </button>
               </div>
 
@@ -1624,11 +1627,11 @@
 
           <mat-step [stepControl]="formCivilStatusInfo">
             <form [formGroup]="formCivilStatusInfo">
-              <ng-template matStepLabel>Etat civil</ng-template>
+              <ng-template matStepLabel>{{'civil_status' | translate }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Estado Civil</mat-label>
+                  <mat-label>{{'civil_status' | translate }}</mat-label>
                   <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus" [value]="defaults.civil_status" >
                   <mat-autocomplete #autoCivilStatus="matAutocomplete">
                     <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus" (onSelectionChange)="defaults.civil_status = civilStatus">
@@ -1639,41 +1642,41 @@
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Conjoint travaille?</mat-label>
+                  <mat-label>{{'wife_status' | translate }}</mat-label>
                   <mat-select formControlName="spouse" (selectionChange)="setValueSpouse($event)">
-                    <mat-option value="y">Yes</mat-option>
-                    <mat-option value="n">No</mat-option>
+                    <mat-option value="y">{{'yes' | translate}}</mat-option>
+                    <mat-option value="n">{{'no' | translate}}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Demande d'allocation familiales?</mat-label>
+                  <mat-label>{{'mobility' | translate }}</mat-label>
                   <mat-select formControlName="workMobility" (selectionChange)="setValueLocation($event)">
-                    <mat-option value="y" >Yes</mat-option>
-                    <mat-option value="n" >No</mat-option>
+                    <mat-option value="y" >{{'next' | translate}}</mat-option>
+                    <mat-option value="n" >{{'no' | translate}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Permis travail du conjoint</mat-label>
+                  <mat-label>{{'wife_id' | translate }}</mat-label>
                   <input formControlName="spouseWorkId" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
 
                 </mat-form-field>
                 <mat-form-field class="flex-auto">
-                  <mat-label>Pourcentage du conjoint (%)</mat-label>
+                  <mat-label>{{'wife_percent' | translate }} (%)</mat-label>
                   <input formControlName="spousePercentage" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
 
                 </mat-form-field>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">Ir a Preview</button>
-                <button mat-button type="button" (click)="goTo('/monitors')">Ir al listado</button>
+                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
 
                 <button  color="primary" mat-raised-button matStepperNext (click)="save()">
-                  Save
+                  {{'save' | translate}}
                 </button>
               </div>
             </form>
@@ -1700,12 +1703,12 @@
 
             </div>
             <div style="width: 100%;float:left;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles curso</mat-card-title>
+            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' | translate}}</mat-card-title>
             </div>
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-                <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-                <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
+                <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
             </div>
             <div style="width: 100%;">
                 <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
@@ -1716,8 +1719,8 @@
 
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-                <p style="float: left;width: 35%;text-align: left;"><b>Precio</b></p>
-                <p style="float: left;width: 65%;text-align: right;"><b>Participantes Max</b></p>
+                <p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate}}</b></p>
+                <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate}}</b></p>
             </div>
             <div style="width: 100%;">
                 <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
@@ -1749,10 +1752,10 @@
                 <p><strong>{{detailData?.course?.name}}</strong></p>
                 <p>
                     <ng-container *ngIf="detailData?.course?.course_type == 1">
-                        Collectif
+                      {{'colective' | translate}}
                     </ng-container>
                     <ng-container *ngIf="detailData?.course?.course_type == 2">
-                        Private
+                      {{'private' | translate}}
                     </ng-container>
                     <ng-container *ngIf="detailData?.sport">
                         {{detailData?.sport.name}}
@@ -1772,17 +1775,17 @@
                 </div>
                 <div class="box-detail-box box-background-grey">
                     <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
-                    <div>Grupos</div>
+                    <div>{{'groups' | translate}}</div>
                     <div class="font-bold">{{getGroupsQuantity()}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
                     <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
-                    <div>Duración</div>
+                    <div>{{'duration' | translate}}</div>
                     <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
                     <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
-                    <div>Días</div>
+                    <div>{{'days' | translate}}</div>
                     <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
                 </div>
             </div>
@@ -1792,7 +1795,7 @@
             <ng-container *ngIf="detailData?.course.course_type == 2">
 
                 <div style="width: 100%;float:left;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 80%;">Reserva</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' |translate}}</mat-card-title>
                 </div>
 
                 <div style="float: left; width: 100%;">
@@ -1804,7 +1807,7 @@
                 <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                 <div style="width: 100%;float:left;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'user' |translate}}</mat-card-title>
                 </div>
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
@@ -1823,7 +1826,7 @@
                                 <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                     {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                 </ng-container>
-                                {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} ans
+                                {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
                                 · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                             </span>
                             <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
@@ -1838,7 +1841,7 @@
             </ng-container>
 
             <div style="width: 100%;float:left;margin-bottom:12px;">
-                <mat-card-title class="font-bold" style="float: left;width: 80%;">Monitor</mat-card-title>
+                <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
             </div>
 
             <div *ngIf="defaults" class="box-detail-user-block">
@@ -1851,7 +1854,7 @@
                         <ng-container *ngIf="defaults.language1_id">
                             {{getLanguageById(defaults.language1_id)}} ·
                         </ng-container>
-                        {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}} ans
+                        {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}}{{'years' | translate }}
                         · {{defaults.phone}} · {{defaults.email}}
                     </span>
                 </div>
@@ -1859,7 +1862,7 @@
 
             <ng-container *ngIf="detailData?.course.course_type == 1">
                 <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 80%;">Alumnos {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
                     <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
                 </div>
 
@@ -1879,7 +1882,7 @@
                                 <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                     {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                 </ng-container>
-                                {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} ans
+                                {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
                                 · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                             </span>
                         </div>
@@ -1918,7 +1921,7 @@
                     <div class="hour" *ngFor="let hour of hoursRange">{{ hour }}</div>
                 </div>
                 <div class="hours-row" *ngIf="timelineView == 'week'">
-                    <div class="day" *ngFor="let day of weekDays;let dayIndex = index">{{ day }} {{ getDayOfWeek(dayIndex) }}</div>
+                    <div class="day" *ngFor="let day of weekDays;let dayIndex = index">{{ day | translate }} {{ getDayOfWeek(dayIndex) }}</div>
                 </div>
                 <div class="grid-container">
                     <div class="grid-row"  [ngClass]="{'outside-month-day': !isDayVisibleDay() && timelineView == 'day'}">
@@ -1978,7 +1981,7 @@
             <div class="schedule-container" *ngIf="timelineView == 'month'">
                 <div class="hours-container">
                 <div class="hours-row">
-                    <div class="day" *ngFor="let day of weekDays">{{ day }}</div>
+                    <div class="day" *ngFor="let day of weekDays">{{ day |translate}}</div>
                 </div>
                 <div class="grid-container">
                         <div class="grid-row" *ngFor="let week of weeksInMonth;let weekIndex = index">
@@ -2022,12 +2025,12 @@
 
             </div>
             <div style="width: 100%;float:left;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles curso</mat-card-title>
+            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' | translate}}</mat-card-title>
             </div>
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-                <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-                <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
+                <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
             </div>
             <div style="width: 100%;">
                 <p style="float: left;width: 50%;text-align: left;"><b>{{taskDetailTimeline.date_start}}</b></p>
@@ -2038,8 +2041,8 @@
 
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-                <p style="float: left;width: 35%;text-align: left;"><b>Precio</b></p>
-                <p style="float: left;width: 65%;text-align: right;"><b>Participantes Max</b></p>
+                <p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate }}</b></p>
+                <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate }}</b></p>
             </div>
             <div style="width: 100%;">
                 <p style="float: left;width: 50%;text-align: left;"><b>{{taskDetailTimeline.course.price}}</b> {{taskDetailTimeline.course.currency}}</p>
@@ -2071,10 +2074,10 @@
                 <p><strong>{{taskDetailTimeline.name}}</strong></p>
                 <p>
                     <ng-container *ngIf="taskDetailTimeline.type == 'collective'">
-                        Collectif
+                      {{'colective' | translate}}
                     </ng-container>
                     <ng-container *ngIf="taskDetailTimeline.type == 'private'">
-                        Private
+                      {{'private' | translate}}
                     </ng-container>
                     <ng-container *ngIf="taskDetailTimeline.sport">
                         {{taskDetailTimeline.sport.name}}
@@ -2093,17 +2096,17 @@
                 </div>
                 <div class="box-detail-box box-background-grey">
                     <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
-                    <div>Grupos</div>
+                    <div>{{'groups' | translate}}</div>
                     <div class="font-bold">{{taskDetailTimeline.total_subgroups}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
                     <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
-                    <div>Duración</div>
+                    <div>{{'duration' | translate}}</div>
                     <div class="font-bold">{{getHoursMinutes(taskDetailTimeline.hour_start,taskDetailTimeline.hour_end)}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
                     <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
-                    <div>Días</div>
+                    <div>{{'days' | translate}}</div>
                     <div class="font-bold">{{taskDetailTimeline.date_index}}/{{taskDetailTimeline.course.course_dates.length}}</div>
                 </div>
             </div>
@@ -2113,7 +2116,7 @@
             <ng-container *ngIf="taskDetailTimeline.type == 'private'">
 
                 <div style="width: 100%;float:left;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 80%;">Reserva</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' |translate}}</mat-card-title>
                     <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
                 </div>
 
@@ -2126,7 +2129,7 @@
                 <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                 <div style="width: 100%;float:left;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 100%;">Utilizador</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'user' |translate}}</mat-card-title>
                 </div>
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
@@ -2144,7 +2147,7 @@
                                 <ng-container *ngIf="client.client.language3_id">
                                     {{getLanguageById(client.client.language3_id)}} ·
                                 </ng-container>
-                                {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} ans
+                                {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}}{{'years' | translate }}
                                 · {{client.client.phone}} · {{client.client.email}}
                             </span>
                             <div *ngIf="taskDetailTimeline.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetailTimeline.degree.color}">
@@ -2159,7 +2162,7 @@
             </ng-container>
 
             <div style="width: 100%;float:left;margin-bottom:12px;">
-                <mat-card-title class="font-bold" style="float: left;width: 80%;">Monitor</mat-card-title>
+                <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
             </div>
 
             <div *ngIf="taskDetailTimeline.monitor" class="box-detail-user-block">
@@ -2172,18 +2175,18 @@
                         <ng-container *ngIf="taskDetailTimeline.monitor.language1_id">
                             {{getLanguageById(taskDetailTimeline.monitor.language1_id)}} ·
                         </ng-container>
-                        {{getCountryById(taskDetailTimeline.monitor.country)}} · {{getBirthYears(taskDetailTimeline.monitor.birth_date)}} ans
+                        {{getCountryById(taskDetailTimeline.monitor.country)}} · {{getBirthYears(taskDetailTimeline.monitor.birth_date)}}{{'years' | translate }}
                         · {{taskDetailTimeline.monitor.phone}} · {{taskDetailTimeline.monitor.email}}
                     </span>
                 </div>
             </div>
             <div *ngIf="!taskDetailTimeline.monitor">
-                Ningún monitor asignado
+                {{'no_monitor' | translate }}
             </div>
 
             <ng-container *ngIf="taskDetailTimeline.type == 'collective'">
                 <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 80%;">Alumnos {{taskDetailTimeline.clients_number}}/{{taskDetailTimeline.max_participants}}</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{taskDetailTimeline.clients_number}}/{{taskDetailTimeline.max_participants}}</mat-card-title>
                     <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz" (click)="openUserTransfer()"></mat-icon>
                 </div>
 
@@ -2202,7 +2205,7 @@
                                 <ng-container *ngIf="client.client.language3_id">
                                     {{getLanguageById(client.client.language3_id)}} ·
                                 </ng-container>
-                                {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} ans
+                                {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}}{{'years' | translate }}
                                 · {{client.client.phone}} · {{client.client.email}}
                             </span>
                         </div>
@@ -2223,7 +2226,7 @@
 
             </div>
             <div style="width: 100%;float:left;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">Detalles bloqueo</mat-card-title>
+            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'block_detail' | translate }}</mat-card-title>
             <div style="float: right;display: flex;gap: 6px;align-items: center;">
                 <mat-icon (click)="openEditBlock()" class="cursor-pointer" svgIcon="mat:edit"></mat-icon>
                 <mat-icon (click)="deleteEditedBlock()" class="cursor-pointer" svgIcon="mat:delete"></mat-icon>
@@ -2236,8 +2239,8 @@
             </div>
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-                <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-                <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+                <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
+                <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
             </div>
             <div style="width: 100%;">
                 <p style="float: left;width: 50%;text-align: left;"><b>{{blockDetailTimeline.hour_start}}</b></p>
@@ -2249,9 +2252,9 @@
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
                 <p style="float: left;width: 100%;text-align: left;"><b>
-                    <ng-container *ngIf="blockDetailTimeline.type=='block_personal'">No working day</ng-container>
-                    <ng-container *ngIf="blockDetailTimeline.type=='block_payed'">Bloqueo pagado</ng-container>
-                    <ng-container *ngIf="blockDetailTimeline.type=='block_no_payed'">Bloqueo no pagado</ng-container>
+                    <ng-container *ngIf="blockDetailTimeline.type=='block_personal'">{{'no_working_day' | translate }}</ng-container>
+                    <ng-container *ngIf="blockDetailTimeline.type=='block_payed'">{{'paid_block' | translate }}</ng-container>
+                    <ng-container *ngIf="blockDetailTimeline.type=='block_no_payed'">{{'no_paid_block' | translate }}</ng-container>
                 </b></p>
             </div>
             <div style="width: 100%;">
@@ -2262,10 +2265,10 @@
 
             <ng-container *ngIf="showEditBlock">
                 <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 100%;">Editar Bloqueo</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'edit_block' | translate }}</mat-card-title>
                 </div>
 
-                <mat-checkbox [(ngModel)]="allHoursDay" [ngModelOptions]="{standalone: true}">Todo el día</mat-checkbox>
+                <mat-checkbox [(ngModel)]="allHoursDay" [ngModelOptions]="{standalone: true}">{{'full_day' | translate }}</mat-checkbox>
 
                 <ng-container *ngIf="!allHoursDay">
                     <mat-form-field class="flex-auto" style="width: 100%;">
@@ -2293,7 +2296,7 @@
                     <input matInput placeholder="Title" [(ngModel)]="nameBlockDay" [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
 
-                <mat-checkbox [(ngModel)]="divideDay" [ngModelOptions]="{standalone: true}">Dividir</mat-checkbox>
+                <mat-checkbox [(ngModel)]="divideDay" [ngModelOptions]="{standalone: true}">{{'split' | translate }}</mat-checkbox>
 
                 <ng-container *ngIf="divideDay">
                     <mat-form-field class="flex-auto" style="width: 100%;">
@@ -2318,9 +2321,9 @@
                 </ng-container>
 
                 <div class="actions flex items-center justify-end gap-2">
-                    <button (click)="hideEditBlock()" mat-button type="button">Cancelar</button>
+                    <button (click)="hideEditBlock()" mat-button type="button">{{'cancel' | translate }}</button>
                     <button (click)="saveEditedBlock()" [disabled]="!isButtonDayEnabled()" color="primary" mat-raised-button>
-                      Guardar
+                      {{'save' | translate }}
                     </button>
                 </div>
 
@@ -2330,7 +2333,7 @@
         <mat-card-content>
 
             <div style="width: 100%;float:left;margin-bottom:12px;">
-                <mat-card-title class="font-bold" style="float: left;width: 80%;">Monitor</mat-card-title>
+                <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
             </div>
 
             <div *ngIf="blockDetailTimeline.monitor" class="box-detail-user-block">
@@ -2343,7 +2346,7 @@
                         <ng-container *ngIf="blockDetailTimeline.monitor.language1_id">
                             {{getLanguageById(blockDetailTimeline.monitor.language1_id)}} ·
                         </ng-container>
-                        {{getCountryById(blockDetailTimeline.monitor.country)}} · {{getBirthYears(blockDetailTimeline.monitor.birth_date)}} ans
+                        {{getCountryById(blockDetailTimeline.monitor.country)}} · {{getBirthYears(blockDetailTimeline.monitor.birth_date)}}{{'years' | translate }}
                         · {{blockDetailTimeline.monitor.phone}} · {{blockDetailTimeline.monitor.email}}
                     </span>
                 </div>

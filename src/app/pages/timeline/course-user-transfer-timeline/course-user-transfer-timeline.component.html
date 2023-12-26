@@ -1,6 +1,6 @@
 <form>
   <div class="flex items-center" mat-dialog-title>
-    <h2 class="headline m-0 flex-auto">Transer student</h2>
+    <h2 class="headline m-0 flex-auto">{{'courses.transfer.title' | translate }}</h2>
 
     <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
@@ -16,12 +16,12 @@
 
   <mat-dialog-content class="container" *ngIf="!loading">
     <div class="column left-column">
-      <h3>Seleccion de alumnos</h3>
+      <h3>{{'choose_students' | translate}}</h3>
       <div class="subgroup-title">
         <p [style.color]="defaults.degree.color"><strong>{{defaults.degree.league}}</strong> {{defaults.degree.annotation}} {{defaults.degree.name}} - {{defaults.subgroupNumber}}</p>
       </div>
       <div class="students-list">
-        <mat-checkbox>Seleccionar todos</mat-checkbox>
+        <mat-checkbox>{{'choose_all' | translate}}</mat-checkbox>
         <div *ngFor="let item of currentStudents; let i = index" style="float: left;width: 100%;">
           <mat-checkbox style="float: left;width: 15%;" (change)="addToStudentChangeList($event, item, i)"> </mat-checkbox>
 
@@ -30,7 +30,7 @@
           </div>
           <div style="float: left;width: 65%;margin:0 0 0 3%">
             <p>{{getClient(item.client_id)?.first_name}} {{getClient(item.client_id)?.last_name}}</p>
-            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}} ans</p>
+            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}}{{'years' | translate }}</p>
           </div>
 
         </div>
@@ -39,8 +39,8 @@
 
     <div class="column right-column">
       <div class="example-action-buttons">
-        <button mat-button (click)="accordion.openAll()">Expand All</button>
-        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+        <button mat-button (click)="accordion.openAll()">{{'expand_all' | translate }}</button>
+        <button mat-button (click)="accordion.closeAll()">{{'collapse_all' | translate }}</button>
       </div>
       <mat-accordion class="example-headers-align" multi>
         <ng-container *ngFor="let colorKey of this.colorKeys">

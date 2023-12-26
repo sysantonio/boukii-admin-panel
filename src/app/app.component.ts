@@ -15,6 +15,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ColorVariable, colorVariables } from '../@vex/components/config-panel/color-variables';
 import { defaultConfig } from 'src/@vex/config/configs';
 import { SchoolService } from 'src/service/school.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-root',
@@ -31,6 +32,7 @@ export class AppComponent {
               @Inject(LOCALE_ID) private localeId: string,
               private layoutService: LayoutService,
               private route: ActivatedRoute,
+              private translateService: TranslateService,
               private navigationService: NavigationService,
               private splashScreenService: SplashScreenService,
               private schoolService: SchoolService,
@@ -38,7 +40,7 @@ export class AppComponent {
               private readonly domSanitizer: DomSanitizer) {
     Settings.defaultLocale = this.localeId;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    this.translateService.setDefaultLang(navigator.language.split('-')[0]);
     if (this.user) {
       this.schoolService.getSchoolData()
       .subscribe((data) => {

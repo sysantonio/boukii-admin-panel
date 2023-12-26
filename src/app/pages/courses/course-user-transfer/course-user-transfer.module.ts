@@ -22,6 +22,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CourseUserTransferComponent } from './course-user-transfer.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     NgxMatTimepickerModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    TranslateModule
   ],
   declarations: [CourseUserTransferComponent],
   exports: [CourseUserTransferComponent]

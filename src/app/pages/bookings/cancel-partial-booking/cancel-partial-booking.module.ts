@@ -23,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CancelPartialBookingModalComponent } from './cancel-partial-booking.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { CancelPartialBookingModalComponent } from './cancel-partial-booking.com
     MatSlideToggleModule,
     MatCheckboxModule,
     MatStepperModule,
-    MatTabsModule
+    MatTabsModule,
+    TranslateModule
   ],
   declarations: [CancelPartialBookingModalComponent],
   exports: [CancelPartialBookingModalComponent]

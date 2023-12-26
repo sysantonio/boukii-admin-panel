@@ -34,18 +34,18 @@ export class BookingsComponent {
   deleteEntity = '/bookings';
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Type', property: 'type', type: 'booking_users_image', visible: true },
-    { label: 'Course', property: 'bookingusers', type: 'booking_users', visible: true},
-    { label: 'Dates', property: 'dates', type: 'booking_dates', visible: true },
-    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
-    { label: 'Options', property: 'options', type: 'text', visible: true },
-    { label: 'Bons', property: 'bonus', type: 'light', visible: true },
-    { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light', visible: true },
+    { label: 'type', property: 'type', type: 'booking_users_image', visible: true },
+    { label: 'course', property: 'bookingusers', type: 'booking_users', visible: true},
+    { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
+    { label: 'options', property: 'options', type: 'text', visible: true },
+    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
+    { label: 'op_rem', property: 'has_cancellation_insurance', type: 'light', visible: true },
     { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
-    { label: 'Prix', property: 'price_total', type: 'price', visible: true },
-    { label: 'M. Paiment', property: 'payment_method_id', type: 'payment_method_id', visible: true },
-    { label: 'Paid', property: 'paid', type: 'payment_status', visible: true },
-    { label: 'Status', property: 'status', type: 'cancelation_status', visible: true },
+    { label: 'price', property: 'price_total', type: 'price', visible: true },
+    { label: 'method_paiment', property: 'payment_method_id', type: 'payment_method_id', visible: true },
+    { label: 'paid', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'status', property: 'status', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

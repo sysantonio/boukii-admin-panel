@@ -7,7 +7,7 @@ import { PopoverService } from '../../components/popover/popover.service';
 import { MegaMenuComponent } from '../../components/mega-menu/mega-menu.component';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'vex-toolbar',
   templateUrl: './toolbar.component.html',
@@ -22,7 +22,7 @@ export class ToolbarComponent {
   hasShadow: boolean;
 
   navigationItems = this.navigationService.items;
-
+  flag: any = 'flag:spain';
   isHorizontalLayout$: Observable<boolean> = this.configService.config$.pipe(map(config => config.layout === 'horizontal'));
   isVerticalLayout$: Observable<boolean> = this.configService.config$.pipe(map(config => config.layout === 'vertical'));
   isNavbarInToolbar$: Observable<boolean> = this.configService.config$.pipe(map(config => config.navbar.position === 'in-toolbar'));
@@ -35,7 +35,27 @@ export class ToolbarComponent {
               private configService: ConfigService,
               private navigationService: NavigationService,
               private popoverService: PopoverService,
-              private router: Router) { }
+              private router: Router,
+              private translateService: TranslateService) {
+
+                switch(translateService.getDefaultLang()) {
+                  case 'es':
+                    this.flag = 'flag:spain';
+                  break;
+                  case 'de':
+                    this.flag = 'flag:germany';
+                  break;
+                  case 'it':
+                    this.flag = 'flag:italy';
+                  break;
+                  case 'fr':
+                    this.flag = 'flag:france';
+                  break;
+                  case 'en':
+                    this.flag = 'flag:uk';
+                  break;
+                }
+              }
 
   openQuickpanel(): void {
     this.layoutService.openQuickpanel();
@@ -43,6 +63,11 @@ export class ToolbarComponent {
 
   openSidenav(): void {
     this.layoutService.openSidenav();
+  }
+
+  changeLang(flag: string, lang: string) {
+    this.flag = flag;
+    this.translateService.setDefaultLang(lang);
   }
 
   openMegaMenu(origin: ElementRef | HTMLElement): void {

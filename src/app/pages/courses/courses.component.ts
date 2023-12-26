@@ -30,17 +30,17 @@ export class CoursesComponent {
 
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true },
-    { label: 'Type', property: 'course_type', type: 'course_image', visible: true },
-    { label: 'Course', property: 'name', type: 'text', visible: true},
-    { label: 'Sport', property: 'sport', type: 'sport', visible: true },
+    { label: 'type', property: 'course_type', type: 'course_image', visible: true },
+    { label: 'course', property: 'name', type: 'text', visible: true},
+    { label: 'sport', property: 'sport', type: 'sport', visible: true },
     { label: 'FX-FI', property: 'is_flexible', type: 'flexible', visible: true },
-    { label: 'Dates', property: 'course_dates', type: 'datesCourse', visible: true },
-    { label: 'Duration', property: 'duration', type: 'duration', visible: true },
-    { label: 'Price', property: 'price', type: 'price', visible: true },
-    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
-    { label: 'Reservas', property: 'max_participants', type: 'bookings', visible: true },
-    { label: 'Status', property: 'active', type: 'light', visible: true },
-    { label: 'Options', property: 'options', type: 'light', visible: true },
+    { label: 'dates', property: 'course_dates', type: 'datesCourse', visible: true },
+    { label: 'duration', property: 'duration', type: 'duration', visible: true },
+    { label: 'price', property: 'price', type: 'price', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
+    { label: 'bookings', property: 'max_participants', type: 'bookings', visible: true },
+    { label: 'status', property: 'active', type: 'light', visible: true },
+    { label: 'options', property: 'options', type: 'light', visible: true },
     { label: 'Online', property: 'online', type: 'light', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];

@@ -1,5 +1,5 @@
 <vex-secondary-toolbar current="Bookings">
-  <vex-breadcrumbs [crumbs]="['Bookings', 'Nouvelle réservation']" class="flex-auto"></vex-breadcrumbs>
+  <vex-breadcrumbs [crumbs]="['bookings', 'bookings_page.creation.title']" class="flex-auto"></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
@@ -9,13 +9,13 @@
   <div class="flex flex-col sm:flex-row gap-4" style="width: 65%;float:left" *ngIf="!loading && !bookingComplete">
     <div @fadeInUp class="card flex-auto" style="width: 65%">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Nouvelle réservation</h2>
+        <h2 class="title m-0">{{'bookings_page.creation.title' | translate}}</h2>
       </div>
       <div class="px-6 py-4 flex flex-col" [formGroup]="form">
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
           <mat-form-field class="client-search-container">
-            <mat-label>Client</mat-label>
-            <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
+            <mat-label>{{'client' | translate}}</mat-label>
+            <input type="text" placeholder="{{'choose_client' | translate}}" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let filteredClient of filteredOptions | async" [value]="filteredClient" (onSelectionChange)="getUtilzers(filteredClient)">
                 {{filteredClient.first_name}} {{filteredClient.last_name}}
@@ -25,6 +25,7 @@
           </mat-form-field>
 
           <div class="flex-auto">
+            <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()"> Nuevo cliente </button>
             <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()"> Nuevo cliente </button>
           </div>
        </div>
@@ -40,7 +41,7 @@
           </mat-card-header>
           <mat-card-content>
             <mat-card-title style="text-align: center;">{{ defaults?.client_main_id?.first_name }} {{ defaults?.client_main_id?.last_name }}</mat-card-title>
-            <mat-card-subtitle style="text-align: center;">{{ getLanguage(defaults?.client_main_id?.language1_id) }} · {{calculateAge(defaults?.client_main_id?.birth_date) }} ans · {{ getCountry(defaults?.client_main_id?.country) }}</mat-card-subtitle>
+            <mat-card-subtitle style="text-align: center;">{{ getLanguage(defaults?.client_main_id?.language1_id) }} · {{calculateAge(defaults?.client_main_id?.birth_date) }} {{'years' | translate}} · {{ getCountry(defaults?.client_main_id?.country) }}</mat-card-subtitle>
           </mat-card-content>
           <mat-card-actions>
             <!-- Botones de acción, si son necesarios -->
@@ -56,7 +57,7 @@
             </mat-card-header>
             <mat-card-content>
               <mat-card-title style="text-align: center;">{{ item.first_name }} {{ item.last_name }}</mat-card-title>
-              <mat-card-subtitle style="text-align: center;">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} ans · {{ getCountry(item.country) }}</mat-card-subtitle>
+              <mat-card-subtitle style="text-align: center;">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} {{'years' | translate}} · {{ getCountry(item.country) }}</mat-card-subtitle>
             </mat-card-content>
             <mat-card-actions>
               <!-- Botones de acción, si son necesarios -->
@@ -71,7 +72,7 @@
 
             </mat-card-header>
             <mat-card-content>
-              <mat-card-title style="text-align: center;position: relative;top: 100%;">Nuevo usuario</mat-card-title>
+              <mat-card-title style="text-align: center;position: relative;top: 100%;">{{'new_user' | translate }}</mat-card-title>
             </mat-card-content>
             <mat-card-actions>
               <!-- Botones de acción, si son necesarios -->
@@ -108,19 +109,19 @@
           <div class="flex-auto" style="width:20%">
             <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="this.selectedItem = null;setCourseType('collectif', 1)">
               <mat-card-content>
-                <p>Cours Collectif</p>
+                <p>{{'course_colective' | translate }}</p>
               </mat-card-content>
             </mat-card>
           </div>
           <div class="flex-auto" style="width:20%">
             <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'" (click)="this.selectedItem = null;setCourseType('privee', 2)">
               <mat-card-content>
-                <p>Cours Privés</p>
+                <p>{{'course_private' | translate }}</p>
               </mat-card-content>
             </mat-card>
           </div>
           <mat-form-field class="flex-auto" style="width: 48%">
-            <input type="text" placeholder="Choose level" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel"  />
+            <input type="text" placeholder="{{'choose_level' | translate}}" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel"  />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
               <mat-option *ngFor="let level of filteredLevel | async" [value]="level" (onSelectionChange)="getCourses(level, monthAndYear)">
                 {{level.annotation}} - {{level.name}}
@@ -159,7 +160,7 @@
                         {{course.price}} {{ course.currency }}
                       </h3>
                       <h3 class="price" *ngIf="course.is_flexible">
-                        FLEXIBLE
+                        {{'flex' | uppercase |translate}}
                       </h3>
                     </div>
                     <p>{{course.course_type === 1 ? 'collectif' : 'privee'}} {{course.sport.name}}</p>
@@ -199,7 +200,7 @@
               <ng-container *ngFor="let courseDate of courseDates; let i = index">
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
                   <mat-form-field class="flex-auto" style="width: 50%;">
-                    <mat-label>Fecha</mat-label>
+                    <mat-label>{{'date' | translate}}</mat-label>
 
                     <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" [matDatepickerFilter]="inUseDatesFilter"
                         (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate">
@@ -218,7 +219,7 @@
                   </mat-form-field>
 
                   <mat-form-field class="flex-auto" style="width: 50%;">
-                    <mat-label>Hora</mat-label>
+                    <mat-label>{{'hour' | translate}}</mat-label>
                     <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)">
                       <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':')
                       ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min')"
@@ -232,7 +233,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="selectedItem.is_flexible">
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Duración</mat-label>
+                    <mat-label>{{'duration' |translate}}</mat-label>
                     <mat-select (selectionChange)="calculateAvailablePaxes($event.value)" [disabled]="!courseDate.hour_start">
                       <ng-container >
                       <mat-option *ngFor="let duration of durations" [value]="duration" (onSelectionChange)="courseDate.duration = duration">{{ duration }}</mat-option>
@@ -241,7 +242,7 @@
                   </mat-form-field>
 
                   <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
-                    <mat-label>Personas</mat-label>
+                    <mat-label>{{'paxes' |translate}}</mat-label>
                     <mat-select [disabled]="!courseDate.duration">
                       <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person; checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date)">
                         {{ person }}
@@ -253,8 +254,8 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="(sameMonitor && i === 0) || !sameMonitor">
 
                   <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
-                    <mat-label>Chercher Moniteur</mat-label>
-                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes))
+                    <mat-label>{{'choose_monitor' | translate }}</mat-label>
+                    <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes))
                     || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"/>
                     <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
                       <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="courseDate.monitor_id = monitor.id">
@@ -276,7 +277,7 @@
                 </button>
               </div>
               <div style="width: 80%; float:left;margin: 3% 0 0 0;">
-                <p> Ajouter date</p>
+                <p> {{'add_date' | translate }} </p>
               </div>
             </div>
           </div>
@@ -338,7 +339,7 @@
                               <div style="float: left; width: 80%;">
                                 <p style="margin: 0 0 0 10px;">{{subgroup.monitor_id !== null ? getMonitorName(subgroup.monitor_id) : 'No monitor asigned'}}</p>
                                 <p style="font-size:8px;margin: 0 0 0 10px;" *ngIf="subgroup.monitor_id !== null"><i>
-                                  {{ getLanguage(getMonitorLang(subgroup.monitor_id)) }} · {{ getCountry(getMonitorProvince(subgroup.monitor_id)) }} · {{calculateAge(getMonitorBirth(subgroup.monitor_id)) }} ans</i></p>
+                                  {{ getLanguage(getMonitorLang(subgroup.monitor_id)) }} · {{ getCountry(getMonitorProvince(subgroup.monitor_id)) }} · {{calculateAge(getMonitorBirth(subgroup.monitor_id)) }} {{'years' | translate }}</i></p>
                               </div>
                             </div>
                             <div style="float: left;width: 50%;">
@@ -375,8 +376,8 @@
           </div>
         </div>
         <div class="flex items-center justify-end gap-2">
-          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 1" [disabled]="(courseTypeId === 1 && selectedItem === null || selectedSubGroupItem === null)" (click)="confirmBooking()"> Confirmar </button>
-          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 2" [disabled]="(courseTypeId === 2 && selectedItem === null)" (click)="confirmBooking()"> Confirmar </button>
+          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 1" [disabled]="(courseTypeId === 1 && selectedItem === null || selectedSubGroupItem === null)" (click)="confirmBooking()"> {{'confirm' | translate}} </button>
+          <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 2" [disabled]="(courseTypeId === 2 && selectedItem === null)" (click)="confirmBooking()"> {{'confirm' | translate}} </button>
         </div>
       </div>
     </div>
@@ -394,12 +395,12 @@
 
       </div>
       <div style="width: 100%;float:left;">
-        <mat-card-title style="float: left;width: 90%;">Actividad #{{bookI + 1 }}</mat-card-title>
+        <mat-card-title style="float: left;width: 90%;">{{'activity' | translate}} #{{bookI + 1 }}</mat-card-title>
       </div>
       <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
         <div style="width: 100%;">
-          <p style="float: left;width: 80%;text-align: left;"><b>Enregistrée</b></p>
-          <p style="float: left;width: 20%;text-align: right;"><b>Etat</b></p>
+          <p style="float: left;width: 80%;text-align: left;"><b>{{'register' | translate}}</b></p>
+          <p style="float: left;width: 20%;text-align: right;"><b>{{'status' | translate}}</b></p>
         </div>
         <div style="width: 100%;">
           <p style="float: left;width: 60%;text-align: left;"><b>{{ minDate | date: 'dd/MM/YYYY'}}</b> {{ minDate | date: 'HH:mm'}}</p>
@@ -411,14 +412,14 @@
       <mat-card-content *ngIf="showDetail === bookI">
         <div style="float: left; width: 100%;">
           <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">Client</p>
+            <p style="font-size: 20px;">{{'client' | translate}}</p>
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%;height: 80px;">
               <img [src]="getClientAvatar(defaults.client_main_id.id)" width="100" height="100" style="border-radius: 100%;height:100%">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p>{{ getLanguage(getMonitorLang(defaults.client_main_id.id)) }} · {{ getCountry(getMonitorProvince(defaults.client_main_id.id)) }} · {{calculateAge(defaults.client_main_id.birth_date) }}ans</p>
+              <p>{{ getLanguage(getMonitorLang(defaults.client_main_id.id)) }} · {{ getCountry(getMonitorProvince(defaults.client_main_id.id)) }} · {{calculateAge(defaults.client_main_id.birth_date) }}{{'years' | translate}}</p>
               <p><strong>{{ getClientName(defaults.client_main_id.id)}}</strong></p>
               <div>
                 <mat-icon svgIcon="mat:chat"></mat-icon>
@@ -437,7 +438,7 @@
             <div style="float: left; width: 80%;">
               <p>{{getClientName(courseDate.client_id) || 'no monitor asigned'}}</p>
               <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} ans</i></p>
+                {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} {{'years' | translate}}</i></p>
             </div>
 
           </div>
@@ -476,7 +477,7 @@
               <div style="float: left; width: 70%;">
                 <p>{{getMonitorName(courseDate.monitor_id) || 'no monitor asigned'}}</p>
                 <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                  {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} ans</i></p>
+                  {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }}{{'years' | translate }}</i></p>
               </div>
 
             </div>
@@ -527,7 +528,7 @@
             <p>{{item.price_boukii_care}}{{item.currency}}</p>
           </div>-->
           <div style="float: left; width: 50%;">
-            <p>Course Price</p>
+            <p>{{'course_price' | translate }}</p>
           </div>
           <div style="float: right; width: 50%;">
             <p><strong>{{
@@ -540,11 +541,11 @@
 
           <div style="text-align: left;width: 50%;float:left">
             <ul>
-              <li>{{'sous total' | uppercase}}</li>
+              <li>{{'base_price' | translate | uppercase}}</li>
               <!--<li>{{'Option Rembousement (10%)'}}</li>
               <li>{{'Boukii Care'}}</li>-->
-              <li>{{'TVA'}}</li>
-              <li><strong>{{'Montant total' | uppercase}}</strong></li>
+              <li>{{'tva' | translate | uppercase}}</li>
+              <li><strong>{{'total' | translate | uppercase}}</strong></li>
             </ul>
           </div>
           <div style="text-align: right;width: 50%;float:left">
@@ -552,19 +553,19 @@
               <li>{{item.price_total}}{{item.currency}}</li>
              <!-- <li>{{item.price_cancellation_insurance}}{{item.currency}}</li>
               <li>{{item.price_boukii_care}}{{item.currency}}</li>-->
-              <li>{{item.price_total* (0.21)}} {{item.currency}}</li>
-              <li><strong>{{item.price_total + (item.price_total* (0.21)) + item.price_cancellation_insurance + item.price_boukii_care}} {{item.currency}}</strong></li>
+              <li>{{item.price_total* tva}} {{item.currency}}</li>
+              <li><strong>{{item.price_total + (item.price_total + item.price_cancellation_insurance + item.price_boukii_care) * (tva)}} {{item.currency}}</strong></li>
             </ul>
           </div>
         </div>
 
         <div style="float: left;margin: 5% 0 0 0;width: 50%;">
-          <button color="primary" mat-raised-button type="button" style="border-radius: 0;" [disabled]="bookingsToCreate.length === 0" (click)="addAnotherCourse()"> + Añadir otro cruso </button>
+          <button color="primary" mat-raised-button type="button" style="border-radius: 0;" [disabled]="bookingsToCreate.length === 0" (click)="addAnotherCourse()"> + {{'add_another_course' | translate}} </button>
 
         </div>
 
         <div style="float: right;margin: 5% 0 0 0;width: 50%;">
-          <button color="primary" mat-raised-button type="button" style="border-radius: 0;float:right" (click)="save()" [disabled]="bookingsToCreate.length === 0"> Finalizar reserva </button>
+          <button color="primary" mat-raised-button type="button" style="border-radius: 0;float:right" (click)="save()" [disabled]="bookingsToCreate.length === 0"> {{'end_booking' | translate}} </button>
 
         </div>
       </mat-card-content>
@@ -581,16 +582,16 @@
         <!-- Nuevo contenedor para las cards -->
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
+            <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate }}</h2>
             <div style="width: 50%">
-              <button mat-button type="button" (click)="bookingComplete = false" style="background: #FF4081;float: right;color: #fff;">Atras</button>
+              <button mat-button type="button" (click)="bookingComplete = false" style="background: #FF4081;float: right;color: #fff;">{{'back' | translate}}</button>
 
               <!-- Added (click) event here -->
             </div>
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">{{'participant' | translate }}</p>
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'non payé' | uppercase }}</p>
             </div>
 
@@ -602,7 +603,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
               <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(defaults.client_main_id.language1_id) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} ans
+                {{ getLanguage(defaults.client_main_id.language1_id) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} {{'years' | translate}}
               </mat-card-subtitle>
             </mat-card-header>
 
@@ -619,7 +620,7 @@
                 }}
                 {{item.courseDates[0].course?.currency}} </div>
             </mat-card-title>
-              <mat-card-subtitle style="margin: 0">{{item.courseDates[0].course?.course_type === 1 ? 'collectif' : 'privee'}} {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle>
+              <mat-card-subtitle style="margin: 0">{{item.courseDates[0].course?.course_type === 1 ? 'colective' : 'private' | translate}} {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
@@ -634,12 +635,12 @@
                 </div>
                 <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
                   <span style="float: left;width: 100%;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
-                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} ans</span>
+                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} {{'years' | translate}}</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
 
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Opciones</p>
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'options' | translate}}</p>
 
               <div style="width: 100%; float:left">
                 <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" >
@@ -711,7 +712,7 @@
               </div>
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
-                  <p style="width: 60%;float: left;">Total Opciones</p>
+                  <p style="width: 60%;float: left;">{{'options_total' | translate}}</p>
                   <p style="color: #EA0C60;">{{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}} CHF</p>
                 </div>
               </div>
@@ -721,7 +722,7 @@
               <div style="width: 100%;float:left;">
 
                 <div>
-                  <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
+                  <p style="width: 60%;font-size: 21px;float:left">{{'booking_total' | translate}}</p>
                   <p style="color: #EA0C60;">{{
 
                   ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : ((item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
@@ -737,7 +738,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Remarques client</mat-label>
+                    <mat-label>{{'observation_client' | translate}}</mat-label>
                     <input matInput required type="text" (blur)="setClientsNotes($event, item)">
 
                   </mat-form-field>
@@ -747,7 +748,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Remarques ecole</mat-label>
+                    <mat-label>{{'observation_school' | translate}}</mat-label>
                     <input  matInput required type="text" (blur)="setSchoolNotes($event, item)">
 
                   </mat-form-field>
@@ -757,9 +758,9 @@
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
               <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-                <p style="font-size: 12px;"><strong>Enregistrée</strong>:{{ minDate | date: 'dd/MM/YYYY'}} {{ minDate | date: 'HH:mm'}} / Mirko Maternini</p>
-                <p style="font-size: 12px;"><strong>Desde donde:</strong>: Admin</p>
-                <p style="font-size: 12px;"><strong>Por</strong>: Mirko Maternini</p>
+                <p style="font-size: 12px;"><strong>{{'register' | translate}}</strong>:{{ minDate | date: 'dd/MM/YYYY'}} {{ minDate | date: 'HH:mm'}}</p>
+                <p style="font-size: 12px;"><strong>{{'from' | translate}}:</strong>: Admin</p>
+                <p style="font-size: 12px;"><strong>{{'by' | translate}}</strong>: {{user.first_name}} {{user.last_name}}</p>
               </div>
             </mat-card-content>
           </mat-card>
@@ -776,14 +777,14 @@
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0">Information del cliente</h2>
+            <h2 class="title m-0">{{'client_info' | translate }} </h2>
           </div>
           <mat-card style="width: 100%;padding:1%">
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(defaults.client_main_id.id) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(defaults.client_main_id.id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(defaults.client_main_id.language1_id) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} ans
+                {{ getLanguage(defaults.client_main_id.language1_id) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} {{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
@@ -798,12 +799,12 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" *ngIf="cancellationInsurance" (click)="addReduction()">Appliquer une réduction</button>
+            <button mat-raised-button color="accent" *ngIf="cancellationInsurance" (click)="addReduction()">{{'apply_reduction' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" *ngIf="boukiiCarePrice" (click)="addBonus()">Utiliziser un bon d'achat</button>
+            <button mat-raised-button color="accent" *ngIf="boukiiCarePrice" (click)="addBonus()">{{'apply_bonus' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
-              <p style="float: left;">Option Remboursement (10%)</p>
+              <p style="float: left;">{{'op_rem' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" (change)="calculateRem($event)" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;">
@@ -811,16 +812,16 @@
               <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care" (change)="calculateBoukiiCare($event)" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <h3 style="font-size: 1.5rem!important;">Résumé</h3>
+            <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
-                <p style="float:left">SOUS-TOTAL</p>
+                <p style="float:left">{{'base_price' | translate}}</p>
                 <p style="float:right">{{getBasePrice()}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="reduction !== null">
                 <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="reduction = null; calculateFinalPrice()"></mat-icon>
-                <p style="float:left">Reduction</p>
+                <p style="float:left">{{'reduction' |translate}}</p>
                 <p style="float:right">-{{calculateReduction().toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
@@ -828,7 +829,7 @@
 
                 <span style="width: 100%; float:left" *ngFor="let item of bonus; let i = index">
                   <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="deleteBonus(i)"></mat-icon>
-                  <p style="float:left">Bonus {{item.bonus.code}}</p>
+                  <p style="float:left">{{'bonus' | translate}} {{item.bonus.code}}</p>
                   <p style="float:right">-{{item.bonus.reducePrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
                 </span>
               </ng-container>
@@ -842,7 +843,7 @@
               </ng-container>
 
               <span style="width: 100%; float:left" *ngIf="defaults.has_cancellation_insurance">
-                <p style="float:left">Option Remboursement</p>
+                <p style="float:left">{{'op_rem' | translate}}</p>
                 <p style="float:right">{{(getBasePrice()*this.cancellationInsurance).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
@@ -852,42 +853,42 @@
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
-                <p style="float:left">TVA</p>
+                <p style="float:left">{{'tva' | translate}}</p>
                 <p style="float:right">{{ (finalPrice * this.tva).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left">
-                <p style="float:left">MONTANT TOTAL</p>
+                <p style="float:left">{{'total' | translate}}</p>
                 <p style="float:right">{{(finalPrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
             </div>
 
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">Online</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">Confirmer sans paiment</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">{{'payment_direct' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">{{'payment_online' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">{{'payment_no_payment' | translate}}</button>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">Cash</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">Autre</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">{{'payment_cash' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">{{'payment_other' | translate}}</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
-              <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
+              <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
-              <button mat-raised-button color="accent" class="square-button" (click)="create()">Confirmer Reservation</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="create()">{{'confirm_booking' | translate }}</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='2'">
-              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirm by email</button>
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">{{'confirm_email' |translate}}</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='3'">
-              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirmer reservation</button>
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">{{'confirm_booking' | translate }}</button>
             </div>
           </mat-card>
         </div>

@@ -7,23 +7,23 @@
         <!-- Nuevo contenedor para las cards -->
         <div @fadeInUp class="card flex-auto" style="padding: 1px;">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0" style="width: 80%;">Information de la réserve</h2>
-            <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/courses')">Atrás</button>
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">Anular reserva totalmente</button>
+            <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
+            <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/courses')">{{'back' | translate }}</button>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">{{'bookings_page.detail.full_cancel' | translate}}</button>
 
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">Participant</p>
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">{{'participant' | translate}} | translate </p>
 
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="!booking.paid && item.courseDates[0].status === 1">
-                {{'non payé' | uppercase }}
+                {{'no_paid' | translate | uppercase }}
               </p>
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f" *ngIf="booking.status === 1 && booking.paid && item.courseDates[0].status === 1">
-                {{'paiement effectué' | uppercase }}
+                {{'paid' | translate | uppercase }}
               </p>
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="booking.status === 1  && item.courseDates[0].status === 2">
-                {{'Anulée' | uppercase }}
+                {{'cancelled' | translate | uppercase }}
               </p>
 
               <div class="qrcodeImage">
@@ -53,11 +53,11 @@
               </button>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>
               <mat-card-subtitle>{{getClientName(booking?.client_main_id)}}</mat-card-subtitle>
-              <mat-card-subtitle>{{ getLanguage(getClient(booking?.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking?.client_main_id)?.country) }} · {{calculateAge(getClient(booking?.client_main_id)?.birth_date) }} ans</mat-card-subtitle>
+              <mat-card-subtitle>{{ getLanguage(getClient(booking?.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking?.client_main_id)?.country) }} · {{calculateAge(getClient(booking?.client_main_id)?.birth_date) }} {{'years' |translate}}</mat-card-subtitle>
             </mat-card-header>
 
             <mat-divider class="text-border"></mat-divider>
-            <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Actividad</p>
+            <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'activity' | translate}}</p>
 
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + (getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? collectifIcon : privateIcon) + ')'" style="border-radius: 5px"></div>
@@ -66,7 +66,7 @@
                 <div class="ng-tns-c545279033-6" style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"> {{item?.courseDates[0]?.course_id?.price}} {{item?.courseDates[0]?.course_id?.currency}} </div>
             </mat-card-title>
               <mat-card-subtitle style="margin: 0;float: left;width: 100%;">
-                {{getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? 'collectif' : 'privee'}}
+                {{getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? 'colective' : 'private' | translate}}
                 {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
@@ -82,12 +82,12 @@
                 </div>
                 <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
                   <span style="float: left;width: 100%;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
-                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} ans</span>
+                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} {{'years' | translate}}</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
 
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Opciones</p>
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'options' | translate}}</p>
 
               <div style="width: 100%; float:left">
                 <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" >
@@ -159,7 +159,7 @@
               </div>
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
-                  <p style="width: 60%;float: left;">Total Opciones</p>
+                  <p style="width: 60%;float: left;">{{'total_options' | translate }}</p>
                   <p style="color: #EA0C60;">{{getCourseExtraForfaitPrice(item.courseDates[0])}} CHF</p>
                 </div>
               </div>
@@ -169,7 +169,7 @@
               <div style="width: 100%;float:left;">
 
                 <div>
-                  <p style="width: 60%;font-size: 21px;float:left">Total Reserva</p>
+                  <p style="width: 60%;font-size: 21px;float:left">{{'total_booking' | translate }}</p>
                   <p style="color: #EA0C60;">{{
 
                   ((courses[bI]?.course_type === 2 && courses[bI]?.is_flexible ? item.courseDates[0].price
@@ -185,7 +185,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Remarques client</mat-label>
+                    <mat-label>{{'observation_client' | translate }}</mat-label>
                     <input matInput required type="text" (blur)="setClientsNotes($event, item)">
 
                   </mat-form-field>
@@ -195,7 +195,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                   <mat-form-field class="flex-auto">
-                    <mat-label>Remarques ecole</mat-label>
+                    <mat-label>{{'observation_school' | translate }}</mat-label>
                     <input  matInput required type="text" (blur)="setSchoolNotes($event, item)">
 
                   </mat-form-field>
@@ -205,9 +205,9 @@
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
               <div style="width: 100%;float:left;margin: 20px 0 0 0;">
-                <p style="font-size: 12px;"><strong>Enregistrée</strong>:{{ minDate | date: 'dd/MM/YYYY'}} {{ minDate | date: 'HH:mm'}} / Mirko Maternini</p>
-                <p style="font-size: 12px;"><strong>Desde donde:</strong>: Admin</p>
-                <p style="font-size: 12px;"><strong>Por</strong>: Mirko Maternini</p>
+                <p style="font-size: 12px;"><strong>{{'register' |translate}}</strong>:{{ minDate | date: 'dd/MM/YYYY'}} {{ minDate | date: 'HH:mm'}}</p>
+                <p style="font-size: 12px;"><strong>{{'from' |translate}}:</strong>: Admin</p>
+                <p style="font-size: 12px;"><strong>{{'by' |translate}}</strong>: {{user.first_name}} {{user.last_name}}</p>
               </div>
             </mat-card-content>
           </mat-card>
@@ -223,7 +223,7 @@
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0">Information del cliente</h2>
+            <h2 class="title m-0">{{'client_info' | translate }}</h2>
 
           </div>
           <mat-card style="width: 100%;padding:1%">
@@ -231,7 +231,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(booking.client_main_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} ans
+                {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} {{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
@@ -246,12 +246,12 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addReduction()" [disabled]="booking.paid">Appliquer une réduction</button>
+            <button mat-raised-button color="accent" (click)="addReduction()" [disabled]="booking.paid">{{'apply_reduction' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid">Utiliziser un bon d'achat</button>
+            <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid">{{'apply_bonus' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
-              <p style="float: left;">Option Remboursement (10%)</p>
+              <p style="float: left;">{{'op_rem' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;">
@@ -259,16 +259,16 @@
               <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid"style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <h3 style="font-size: 1.5rem!important;">Résumé</h3>
+            <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
-                <p style="float:left">SOUS-TOTAL</p>
+                <p style="float:left">{{'base_price' | uppercase | translate}}</p>
                 <p style="float:right">{{getBasePrice()}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="reduction !== null">
                 <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" (click)="reduction = null; calculateFinalPrice()"></mat-icon>
-                <p style="float:left">Reduction</p>
+                <p style="float:left">{{'reduction' | translate}}</p>
                 <p style="float:right">-{{calculateReduction().toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
@@ -276,7 +276,7 @@
 
                 <span style="width: 100%; float:left" *ngFor="let item of bonus; let i = index">
                   <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" *ngIf="!item?.bonus?.before"></mat-icon>
-                  <p style="float:left">Bonus {{item?.bonus?.code}}</p>
+                  <p style="float:left">{{'bonus' | translate}} {{item?.bonus?.code}}</p>
                   <p style="float:right">-{{item?.bonus.before ? item?.bonus?.currentPay : item?.bonus?.reducePrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </span>
               </ng-container>
@@ -290,7 +290,7 @@
               </ng-container>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_cancellation_insurance">
-                <p style="float:left">Option Remboursement</p>
+                <p style="float:left">{{'op_rem' | uppercase | translate}}</p>
                 <p style="float:right">{{booking.price_cancellation_insurance}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
@@ -300,12 +300,12 @@
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
-                <p style="float:left">TVA</p>
+                <p style="float:left">{{'tva' | uppercase | translate}}</p>
                 <p style="float:right">{{ (finalPrice * this.tva).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left">
-                <p style="float:left">MONTANT TOTAL</p>
+                <p style="float:left">{{'price_total' | uppercase | translate}}</p>
                 <p style="float:right">{{(finalPrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
             </div>
@@ -313,29 +313,29 @@
             <ng-container *ngIf="!booking.paid">
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">Direct</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">Online</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">{{'payment_direct' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">{{'payment_online' | translate}}</button>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">Cash</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">Autre</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">{{'payment_cash' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">{{'payment_other' | translate}}</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
-              <p style="float:left;width: 100%;">LE CLIENT A PAYÉ LA RÉSERVATION ?</p>
+              <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="booking.paid" [checked]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
-              <button mat-raised-button color="accent" class="square-button" (click)="create()">Confirmer Reservation</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="create()">{{'confirm_booking' | translate }}</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='2'">
-              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirm by email</button>
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">{{'confirm_email' |translate}}</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='3'">
-              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">Confirmer reservation</button>
+              <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">{{'confirm_booking' | translate }}</button>
             </div>
           </ng-container>
           </mat-card>

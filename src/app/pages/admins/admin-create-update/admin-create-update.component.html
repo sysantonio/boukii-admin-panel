@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Admins">
   <vex-breadcrumbs
-    [crumbs]="['Admins', 'Nouvelle Admin']"
+    [crumbs]="['admins', 'admins.new']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -17,11 +17,11 @@
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <div style="float: left;width: 50%;">
-          <h2 class="title m-0">Nouvelle admin</h2>
+          <h2 class="title m-0">{{'admins.new' | translate}}</h2>
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
-            Active <mat-slide-toggle [(ngModel)]="defaults.active"></mat-slide-toggle>
+            {{'active' |translate}} <mat-slide-toggle [(ngModel)]="defaults.active"></mat-slide-toggle>
           </div>
         </div>
       </div>
@@ -37,17 +37,17 @@
 
         <mat-step [stepControl]="formInfoAccount">
           <form [formGroup]="formInfoAccount">
-            <ng-template matStepLabel>Info de compte</ng-template>
+            <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Nom</mat-label>
+                  <mat-label>{{'name' | translate }}</mat-label>
                   <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
 
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Prenom</mat-label>
+                  <mat-label>{{'surname' | translate }}</mat-label>
                   <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                 </mat-form-field>
              </div>
@@ -60,7 +60,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Nom d'utilisateur</mat-label>
+                  <mat-label>{{'username' | translate }}</mat-label>
                   <input formControlName="username" matInput required type="text" [(ngModel)]="defaults.username">
                 </mat-form-field>
               </div>
@@ -76,19 +76,19 @@
             <div class="actions flex items-center justify-end gap-2">
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
-                Save
+                {{'save' | translate}}
               </button>
             </div>
           </form>
         </mat-step>
         <!--<mat-step [stepControl]="formPersonalInfo">
           <form [formGroup]="formPersonalInfo">
-            <ng-template matStepLabel>Données Personnelles</ng-template>
+            <ng-template matStepLabel>{{'personal_data' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
               <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
               </mat-form-field>
@@ -97,13 +97,13 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
-                <mat-label>Teléphone</mat-label>
+                <mat-label>{{'phone' | translate }}</mat-label>
 
                 <input formControlName="phone" matInput required type="tel" [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Portable</mat-label>
+                <mat-label>{{'mobile' | translate }}</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
 
               </mat-form-field>
@@ -111,13 +111,13 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
-                <mat-label>Addresse</mat-label>
+                <mat-label>{{'address' | translate }}</mat-label>
 
                 <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Code Postal</mat-label>
+                <mat-label>{{'cp' | translate }}</mat-label>
                 <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
 
               </mat-form-field>
@@ -127,7 +127,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Pays</mat-label>
+                <mat-label>{{'country' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
                   <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
@@ -137,7 +137,7 @@
               </mat-form-field>
 
               <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Canton</mat-label>
+                <mat-label>{{'province' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
                   <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
@@ -147,13 +147,13 @@
               </mat-form-field>
 
               <mat-form-field class="flex-auto" appearance="fill">
-                <mat-label>Idiomas</mat-label>
+                <mat-label>{{'langs' | translate }}</mat-label>
                 <mat-select [formControl]="languagesControl" multiple>
                   <mat-select-trigger>
                     <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
                       {{ getSelectedLanguageNames() }}
                     </div>
-                    <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
+                    <ng-template #placeholderLangs>{{'choose_langs' | translate }}</ng-template>
                   </mat-select-trigger>
                   <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages(language)">
                     {{language.name}}

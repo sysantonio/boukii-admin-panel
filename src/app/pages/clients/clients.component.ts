@@ -45,13 +45,13 @@ export class ClientsComponent {
 
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Nombre', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Apellido', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Edad', property: 'birth_date', type: 'birth', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Usuarios', property: 'utilizers', type: 'count', visible: true, cssClasses: ['font-medium'] },
+    { label: 'name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'surname', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'age', property: 'birth_date', type: 'birth', visible: true, cssClasses: ['font-medium'] },
+    { label: 'users', property: 'utilizers', type: 'count', visible: true, cssClasses: ['font-medium'] },
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Sports', property: 'client_sports', type: 'sports', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Registro', property: 'created_at', type: 'date', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sports', property: 'client_sports', type: 'sports', visible: true, cssClasses: ['font-medium'] },
+    { label: 'register', property: 'created_at', type: 'date', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

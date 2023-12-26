@@ -22,6 +22,7 @@ import { MonitorDetailModule } from './monitor-detail/monitor-detail.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [MonitorsComponent],
@@ -42,7 +43,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
-    //LanguageCreateUpdateModule,
+    TranslateModule,
     MatDialogModule,
     ComponentsModule,
     MonitorDetailModule,

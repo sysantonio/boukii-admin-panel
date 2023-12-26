@@ -3,27 +3,27 @@
   <vex-page-layout-header class="flex flex-col items-start justify-center" style="background-color: #ececec;">
     <div class="container" style="max-width: none;">
       <i class="fa fa-cog" style="float: left;font-size: 30px;margin: 0 10px 0 0;color: #f53d7c;"></i>
-      <h2 class="title m-0" style="float: left;font-size: 30px;">Reglajes</h2>
+      <h2 class="title m-0" style="float: left;font-size: 30px;">{{'settings' | translate}}</h2>
     </div>
   </vex-page-layout-header>
 
   <vex-page-layout-content class="container" style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
       <mat-tab-group>
-        <mat-tab label="Temporada" [formGroup]="seasonForm">
+        <mat-tab label="{{'season' | translate}}" [formGroup]="seasonForm">
 
           <vex-page-layout>
             <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-              <h1 style="color:#808080;font-size:24px">Nueva Temporada</h1>
-              <p style="padding: 1%; color:#808080">Gracias a las múltiples opciones configurables y otros servicios, tu escuela podrá aportar a sus clientes un gran valor añadido.</p>
+              <h1 style="color:#808080;font-size:24px">{{'settings.new_season' | translate}}</h1>
+              <p style="padding: 1%; color:#808080">{{'settings.new_season.save' | translate}}</p>
               <div style="width: 100%; float: left;padding: 1%">
                 <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                   <div style="float:left; width:30%">
 
-                    <p style="font-weight: bold; color:#808080">Datos generales</p>
+                    <p style="font-weight: bold; color:#808080">{{'settings.new_season.general' | translate}}</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveSeason()">Save season</button>
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveSeason()">{{'settings.new_season.save' | translate}}</button>
                   </div>
 
                 </div>
@@ -31,7 +31,7 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
 
                     <div class="flex-auto">
-                      <label for="dateFrom">Inicio de temporada</label>
+                      <label for="dateFrom">{{'settings.new_season.start' | translate}}</label>
                       <mat-form-field style="width: 100%">
 
                         <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="selectedFrom" [value]="selectedFrom">
@@ -40,7 +40,7 @@
                       </mat-form-field>
                     </div>
                     <div class="flex-auto">
-                      <label for="dateTo">Fin de temporada</label>
+                      <label for="dateTo">{{'settings.new_season.end' | translate}}</label>
 
                       <mat-form-field style="width: 100%">
 
@@ -53,7 +53,7 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
 
                     <div class="flex-auto">
-                      <label for="hour">Hora de inicio de cursos</label>
+                      <label for="hour">{{'settings.new_season.hour_start' | translate }}</label>
                       <mat-form-field style="width: 100%;">
                         <input id="hour" type="text" placeholder="Hora " matInput [matAutocomplete]="matHourFrom" formControlName="startHour">
                         <mat-autocomplete #matHourFrom="matAutocomplete">
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="flex-auto">
-                      <label for="endHour">Hora de fin de cursos</label>
+                      <label for="endHour">{{'settings.new_season.hour_end' | translate }}</label>
                       <mat-form-field style="width: 100%;">
                         <input id="endHour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" formControlName="endHour">
                         <mat-autocomplete #matHourTo="matAutocomplete">
@@ -84,7 +84,7 @@
 
                       </div>
                       <div style="width: 95%; float:left;">
-                        <label for="holiday-{{i}}">Día festivo</label>
+                        <label for="holiday-{{i}}">{{'settings.new_season.holiday' | translate }}</label>
 
                         <mat-form-field style="width: 100%">
                           <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)"  [value]="holiday">
@@ -102,7 +102,7 @@
                       </button>
                     </div>
                     <div style="width: 95%; float:left;margin: 1% 0 0 0;">
-                      <p>Añadir día festivo</p>
+                      <p>{{'settings.new_season.holiday_add' | translate }}</p>
                     </div>
                   </div>
                 </div>
@@ -112,16 +112,16 @@
                 <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                   <div style="float:left; width:30%">
 
-                    <p style="font-weight: bold; color:#808080">Datos (Para emails)</p>
+                    <p style="font-weight: bold; color:#808080">{{'settings.school.title' | translate}}</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveContactData()">Save contact data</button>
+                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveContactData()">{{'settings.school.save' | translate}}</button>
                   </div>
                 </div>
                 <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field class="flex-auto">
-                      <mat-label>Calle</mat-label>
+                      <mat-label>{{'address' | translate}}</mat-label>
 
                       <input formControlName="contact_phone" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_address">
                     </mat-form-field>
@@ -134,20 +134,20 @@
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field class="flex-auto">
-                      <mat-label>CP</mat-label>
+                      <mat-label>{{'cp' | translate}}</mat-label>
 
                       <input formControlName="contact_address_number" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_cp">
                     </mat-form-field>
 
                     <mat-form-field class="flex-auto">
-                      <mat-label>Teléfono</mat-label>
+                      <mat-label>{{'phone' | translate}}</mat-label>
                       <input formControlName="contact_cp" matInput required type="tel" [(ngModel)]="defaultsSchoolData.contact_phone">
 
                     </mat-form-field>
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field class="vex-flex-form-field flex-auto">
-                      <mat-label>Pays</mat-label>
+                      <mat-label>{{'country' | translate }}</mat-label>
                       <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="contact_city" >
                       <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
                         <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaultsSchoolData.contact_city = country.id">
@@ -157,7 +157,7 @@
                     </mat-form-field>
 
                     <mat-form-field class="vex-flex-form-field flex-auto">
-                      <mat-label>Canton</mat-label>
+                      <mat-label>{{'province' | translate }}</mat-label>
                       <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="contact_province" >
                       <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
                         <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaultsSchoolData.contact_province = province.id">
@@ -173,20 +173,20 @@
         </mat-tab>
         <mat-tab label="Sports">
           <mat-tab-group>
-            <mat-tab label="Deportes Activos">
+            <mat-tab label="{{'settings.sports.title' | translate}}">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Deportes activos</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.sports.title' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Selecciona los deportes de tu escuela.<br>
-                      No es necesario que los selecciones todos ahora, podrás hacerlo mas adelante según las necesidades
+                      {{'settings.sports.subtitle_' | translate }}.<br>
+                      {{'settings.sports.subtitle_info' | translate }}
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveSchoolSports()">Guardar Cambios</button>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveSchoolSports()">{{'save_changes' | translate}}</button>
 
                   </div>
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">Invierno</p>
+                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'winter' | translate }}</p>
                     <ng-container *ngFor="let item of sports">
                       <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
 
@@ -205,7 +205,7 @@
                   </div>
 
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">Verano</p>
+                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'summer' | translate }}</p>
                     <ng-container *ngFor="let item of sports">
                       <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
 
@@ -225,7 +225,7 @@
 
                   <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
 
-                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">All sessions</p>
+                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'settings.sports.all_sessions' | translate}}</p>
                     <ng-container *ngFor="let item of sports">
                       <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" (click)="setSport(item.id)">
 
@@ -245,17 +245,17 @@
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
-            <mat-tab label="Niveles">
+            <mat-tab label="{{'levels' | translate}}">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Niveles</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'levels' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Configura los niveles como mejor se adapten a tu escuela.<br>
-                      Los colores son fijos, no se pueden modificar.<br>
-                      Recuerda que los hemos clasificado de menor a mayor, siendo el verde el nivel más bajo.
+                      {{'settings.sports.levels.text1' | translate}}<br>
+                      {{'settings.sports.levels.text2' | translate}}<br>
+                      {{'settings.sports.levels.text2' | translate}}
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="updateSportDegrees()">Guardar Cambios</button>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="updateSportDegrees()">{{'save_changes' | translate}}</button>
 
                   </div>
 
@@ -285,15 +285,16 @@
                     <table #reductionTable id="table-level" mat-table [dataSource]="dataSourceLevels" matSort style="border: 1px solid #e6e6e6">
 
                       <ng-container matColumnDef="ageMin">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad Desde</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_from'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field class="flex-auto">
                             <input matInput placeholder="Acronym" type="number" [value]="element.age_min" [(ngModel)]="element.age_min">
                           </mat-form-field>
-                        </td>                      </ng-container>
+                        </td>
+                      </ng-container>
 
                       <ng-container matColumnDef="ageMax">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad Hasta</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_to'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field class="flex-auto">
                             <input matInput placeholder="Acronym" type="number" [value]="element.age_max" [(ngModel)]="element.age_max">
@@ -302,7 +303,7 @@
                       </ng-container>
 
                       <ng-container matColumnDef="annotation">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acrónimo </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'acronym'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
 
                           <mat-form-field class="flex-auto">
@@ -313,7 +314,7 @@
                       </ng-container>
 
                       <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field class="flex-auto">
                             <input matInput placeholder="Name" type="text" [value]="element.name" [(ngModel)]="element.name">
@@ -322,14 +323,14 @@
                       </ng-container>
 
                       <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
                           <mat-slide-toggle [checked]="element.active" [(ngModel)]="element.active"></mat-slide-toggle>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="color">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'color'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
                           <div style="width: 50%;float: left;height: 35px;border-radius: 5px;" [style.background-color]="element.color">
 
@@ -354,14 +355,14 @@
           </mat-tab-group>
 
         </mat-tab>
-        <mat-tab label="Cursos">
-          <ng-template matStepLabel>Prices</ng-template>
+        <mat-tab label="{{'courses' | translate}}">
+          <ng-template matStepLabel>{{'prices'|translate}}</ng-template>
           <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin:2%;">
-            <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Tabla de precios</h1>
+            <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.prices.table' | translate}}</h1>
             <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-              Configura los precios como mejor se adapten a tu escuela.<br>
+              {{'settings.prices.text' | translate}}<br>
             </p>
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="savePrices()">Guardar Cambios</button>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="savePrices()">{{'save_changes' | translate}}</button>
 
           </div>
           <div class="p-6">
@@ -372,11 +373,11 @@
 
             <div class="table-container" >
               <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" #scrollContainer>
-                <caption>Price in CFH</caption>
+                <caption>{{'price' |translate}} {{'in'|translate}} CFH</caption>
 
                 <!-- Intervalo Column -->
                 <ng-container matColumnDef="intervalo">
-                  <th mat-header-cell *matHeaderCellDef> Intervalo </th>
+                  <th mat-header-cell *matHeaderCellDef>  {{'interval'|translate}} </th>
                   <td mat-cell *matCellDef="let row"> {{row.intervalo}} </td>
                 </ng-container>
 
@@ -396,16 +397,16 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Página de Reservas">
+        <mat-tab label="{{'settings.book_page' | translate}}">
           <vex-page-layout>
             <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Página de reservas</h1>
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.book_page' | translate}}</h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Gracias a las múltiples opciones configurables y a otros servicios, tu escuela podrá aportar a<br>
-                  sus clientes un gran valor añadido.
+                  {{'settings.book_page.text1' | translate}}<br>
+                  {{'settings.book_page.text2' | translate}}
                 </p>
-                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="setTheme()">Guardar Cambios</button>
+                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="setTheme()">{{'save_changes' | translate}}</button>
 
               </div>
 
@@ -418,21 +419,14 @@
                         <div class="flex-auto">
                           <mat-radio-group [(ngModel)]="theme">
                             <mat-radio-button class="radio" [value]="'light'">
-                              Claro
+                              {{'settings.book_page.light' | translate}}
                             </mat-radio-button>
                             <mat-radio-button class="radio" [value]="'dark'">
-                              Oscuro
+                              {{'settings.book_page.dark' | translate}}
                             </mat-radio-button>
                           </mat-radio-group>
                         </div>
                       </div>
-                    </div>
-                    <div style="float:left; width:100%">
-                      <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                        Este porcentaje se aplica al importe total de la reserva y no es reembolsable en ningún caso.<br>
-                        Es opcional para el cliente.<br>
-                        La activación lo hace visible a la finalización del proceso de reserva junto con los importes a pagar.
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -440,18 +434,18 @@
             </vex-page-layout-content>
           </vex-page-layout>
         </mat-tab>
-        <mat-tab label="Profesores">
+        <mat-tab label="{{'settings.monitors' | translate}}">
 
           <mat-tab-group>
 
-            <mat-tab label="Salaries">
+            <mat-tab label="{{'salarys' | translate}}">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Salarios</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'salarys' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Esta funcionalidad permite configurar los salarios de los empleados / profesores de tu escuela.<br>
-                      Puedes crear tantos salarios como necesites. Luego, deberás asignarlos a cada profesor.<br>
+                      {{'settings.monitors.salaris.text1' | translate}}<br>
+                      {{'settings.monitors.salaris.text2' | translate}}<br>
                     </p>
 
                   </div>
@@ -460,17 +454,17 @@
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
-            <mat-tab label="Bloqueos pagados">
+            <mat-tab label="{{'paid_blocks' | translate}}">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
 
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Bloqueos</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'blocks' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Esta funcionalidad permite configurar los bloqueaos de los empleados / profesores de tu escuela.<br>
-                      Puedes crear tantos bloqueaos como necesites. Luego, deberás asignarlos a cada profesor.<br>
+                      {{'settings.blocks.text1' | translate}}<br>
+                      {{'settings.blocks.text2' | translate}}<br>
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveBlockages()">Guardar Cambios</button>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveBlockages()">{{'save_changes' | translate}}</button>
 
                   </div>
 
@@ -498,46 +492,46 @@
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
-            <mat-tab label="Autorizaciones">
+            <mat-tab label="{{'settings.auths' | translate}}">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Niveles</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'levels' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Configura las autorizaciones para los monitores de la escuela.
+                      {{'settings.auths.text1' | translate}}
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveMonitorsAuth()">Guardar Cambios</button>
+                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveMonitorsAuth()">{{'save_changes' | translate}}</button>
 
                   </div>
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Mensajes a clientes desde la app</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app' | translate}}</h1>
                     <div style="width:100%; float:left;">
-                      <p style="width:100%; float:left;">Por defecto</p>
+                      <p style="width:100%; float:left;">{{'by_default' |translate}} </p>
                       <div>
-                        <mat-checkbox [(ngModel)]="authorized" (change)="onAuthorizedChange(true)">Autorizado</mat-checkbox>
-                        <mat-checkbox [(ngModel)]="!authorized" (change)="onAuthorizedChange(false)">No autorizado</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="authorized" (change)="onAuthorizedChange(true)">{{'settings.auths.auth' | translate}}</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="!authorized" (change)="onAuthorizedChange(false)">{{'settings.auths.no_auth' | translate}}</mat-checkbox>
                       </div>
                     </div>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Este parámetro permite por defecto que los profesores se comuniquen con sus alumnos<br>
-                      mediante el sistema de mensajería de la app Boukii Teach.<br><br>
-                      Con cualquiera de las dos opciones podrás activarlo individualmente desde la ficha del profesor.
+                      {{'settings.auths.text2' | translate}}<br>
+                      {{'settings.auths.text3' | translate}}<br><br>
+                      {{'settings.auths.text4' | translate}}
                     </p>
 
                   </div>
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Reservas desde la app Boukii Teach</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app2' | translate}}</h1>
                     <div style="width:100%; float:left;">
-                      <p style="width:100%; float:left;">Por defecto</p>
+                      <p style="width:100%; float:left;">{{'by_default' |translate}}</p>
                       <div>
-                        <mat-checkbox [(ngModel)]="authorizedBookingComm" (change)="onAuthorizedBookingChange(true)">Autorizado</mat-checkbox>
-                        <mat-checkbox [(ngModel)]="!authorizedBookingComm" (change)="onAuthorizedBookingChange(false)">No autorizado</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="authorizedBookingComm" (change)="onAuthorizedBookingChange(true)">{{'settings.auths.auth' | translate}}</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="!authorizedBookingComm" (change)="onAuthorizedBookingChange(false)">{{'settings.auths.no_auth' | translate}}</mat-checkbox>
                       </div>
                     </div>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Este parámetro permite por defecto que los profesores se comuniquen con sus alumnos<br>
-                      mediante el sistema de mensajería de la app Boukii Teach.<br><br>
-                      Con cualquiera de las dos opciones podrás activarlo individualmente desde la ficha del profesor.
+                      {{'settings.auths.text2' | translate}}<br>
+                      {{'settings.auths.text3' | translate}}<br><br>
+                      {{'settings.auths.text4' | translate}}
                     </p>
 
                   </div>
@@ -546,31 +540,31 @@
             </mat-tab>
           </mat-tab-group>
         </mat-tab>
-        <mat-tab label="Reservas">
+        <mat-tab label="{{'bookings'|translate}}">
           <vex-page-layout>
             <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Reservas</h1>
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'bookings'|translate}}</h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Configura los diferentes suplementos para tus reservas.
+                  {{'settings.bookings.text'|translate}}
                 </p>
-                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveTaxes()">Guardar Cambios</button>
+                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveTaxes()">{{'save_changes' | translate}}</button>
 
               </div>
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
-                  <mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle> Opción Reembolso</h1>
+                  <mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle> {{'op_rem'|translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">Porcentaje que retiene la escuela</p>
+                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.op_rem_text'|translate}}</p>
                   <mat-form-field class="flex-auto">
                     <input matInput placeholder="Percentaje" type="number" [value]="cancellationInsurancePercent * 100" (blur)="updateInsuranceValue($event)">
 
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Este porcentaje se aplica al importe total de la reserva y no es reembolsable en ningún caso.<br>
-                  Es opcional para el cliente.<br>
-                  La activación lo hace visible a la finalización del proceso de reserva junto con los importes a pagar.
+                  {{'settings.bookings.op_rem_text2'|translate}}<br>
+                  {{'settings.bookings.op_rem_text3'|translate}}<br>
+                  {{'settings.bookings.op_rem_text4'|translate}}
                 </p>
 
               </div>
@@ -578,13 +572,13 @@
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
                   <mat-slide-toggle [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care <span style="color: #e6e6e6">(Seguro adicional)</span></h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Boukii Care es un seguro que ponemos a vuestra disposición para cubrir posibles<br>
-                  eventualidades del cliente, desligando a la escuela de cualquier trámite burocrático.<br>
-                  El importe será deducido de la factura final emitida desde la plataforma Boukii Pay.<br><br>
-                  Puedes consultar las condiciones de utilización aqui: <a href="" style="text-decoration:none; color: #f53d7c;">Enlace</a>
+                  {{'settings.bookings.boukii_care_text1' |translate}}<br>
+                  {{'settings.bookings.boukii_care_text2' |translate}}<br>
+                  {{'settings.bookings.boukii_care_text3' |translate}}<br><br>
+                  {{'settings.bookings.boukii_care_text4' |translate}}<a href="" style="text-decoration:none; color: #f53d7c;">Enlace</a>
                 </p>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">Precio fijo del seguro</p>
+                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.boukii_care_price' | translate}}</p>
                   <mat-form-field class="flex-auto">
                     <input matInput placeholder="Percentaje" type="number" [value]="boukiiCarePrice" (blur)="updateBoukiiCareValue($event)">
 
@@ -592,45 +586,45 @@
                 </div>
               </div>
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Anulaciones</h1>
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations' | translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">Anulación posible con reembolso total (Sin "Opción reembolso")</p>
+                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.cancelations.text1' | translate}}</p>
                   <mat-form-field class="flex-auto">
                     <mat-select>
                       <mat-option value="10">
-                        78h antes del inicio del curso
+                        {{'settings.bookings.cancelations.text2' | translate}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">Anulación posible con reembolso total (Con "Opción reembolso")</p>
+                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.cancelations.text3' | translate}}</p>
                   <mat-form-field class="flex-auto">
                     <mat-select>
                       <mat-option value="10">
-                        24h antes del inicio del curso
+                        {{'settings.bookings.cancelations.text4' | translate}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Estas limitaciones afectan únicamente a las reservas realizadas por el cliente desde.<br>
-                  la página de reservas y la app. La escuela tiene libre control desde el panel de admin.<br>
+                  {{'settings.bookings.cancelations.text5' | translate}}<br>
+                  {{'settings.bookings.cancelations.text6' | translate}}<br>
                 </p>
               </div>
 
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
-                  <mat-slide-toggle [(ngModel)]="hasTVA"></mat-slide-toggle>TVA</h1>
+                  <mat-slide-toggle [(ngModel)]="hasTVA"></mat-slide-toggle>{{'tva' | translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">Porcentaje del impuesto</p>
+                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.tva.text1' | translate}}</p>
                   <mat-form-field class="flex-auto">
                     <input matInput placeholder="TVA" type="number" [value]="tva* 100" (blur)="updateTVAValue($event)">
 
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                  Se aplica al importe total de la reserva
+                  {{'settings.bookings.tva.text2' | translate}}
                 </p>
 
               </div>
@@ -638,40 +632,42 @@
           </vex-page-layout>
         </mat-tab>
 
-        <mat-tab label="Extras">
+        <mat-tab label="{{'extras' | translate}}">
           <mat-tab-group>
 
-            <mat-tab label="Alquiler" *ngIf="false">
+            <mat-tab label="{{'rent' | translate}}" *ngIf="false">
 
 
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Extras / Opciones de curso</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'extras' | translate}} / {{'course_options' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Esta funcionalidad permite configurar los productos / servicios asociados a un curso.<br>
-                      Al asociarlos tomarán como referencia tantas fechas como fechas tenga el curso.<br>
-                      Ejemplo: <strong>5 días de curso colectivo</strong> (si activamos la opcion Material se relaizará un alquiler por los 5 días / fechas de ese curso)
+                      {{'settings.bookings.extras.text1' | translate}}<br>
+                      {{'settings.bookings.extras.text2' | translate}}<br>
+                      {{'settings.bookings.extras.text3' | translate}}<strong>{{'settings.bookings.extras.text4' | translate}}
+                      </strong>
+                      {{'settings.bookings.extras.text5' | translate}}
                     </p>
 
                   </div>
 
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Alquiler</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'rent' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
-                      Podrás crear un máximo de 5 items por deporte para sección.<br>
+                      {{'settings.bookings.extras.text4' | translate}}<br>
+                      {{'settings.bookings.extras.text5' | translate}}<br>
                     </p>
 
                   </div>
 
                   <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Elije que deportes de tu escuela tienen opciones para alquilar
+                      {{'settings.bookings.extras.text6' | translate}}
                     </p>
                     <div style="float: left;width: 100%;padding: 1%">
                       <p style="color:#808080;float: left; width: 100%;">
-                        Deporte
+                        {{'sport' | translate}}
                       </p>
                       <mat-checkbox [checked]="true">Ski</mat-checkbox>
                       <mat-checkbox>Snowboard</mat-checkbox>
@@ -750,23 +746,24 @@
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
-            <mat-tab label="Otros">
+            <mat-tab label="{{'others' | translate}}">
               <vex-page-layout>
                 <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
                   <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Extras / Opciones de curso</h1>
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'extras' | translate}} / {{'course_options' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Esta funcionalidad permite configurar los productos / servicios asociados a un curso.<br>
-                      Al asociarlos tomarán como referencia tantas fechas como fechas tenga el curso.<br>
-                      Ejemplo: <strong>5 días de curso colectivo</strong> (si activamos la opcion Material se relaizará un alquiler por los 5 días / fechas de ese curso)
+                      {{'settings.bookings.extras.text1' | translate}}<br>
+                      {{'settings.bookings.extras.text2' | translate}}<br>
+                      {{'settings.bookings.extras.text3' | translate}}<strong>{{'settings.bookings.extras.text3_1' | translate}}
+                      </strong> {{'settings.bookings.extras.text3_2' | translate}}
                     </p>
 
                   </div>
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Forfait</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
-                      Podrás crear un máximo de 2 variables para sección.<br>
+                      {{'settings.bookings.extras.text4' | translate}}<br>
+                      {{'settings.bookings.extras.text5' | translate}}<br>
                     </p>
 
                   </div>
@@ -779,29 +776,29 @@
                     </ng-container>
 
                     <ng-container matColumnDef="product">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'product' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/dia </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'tva' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
 
@@ -831,7 +828,7 @@
                     </button>
                   </div>
 
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                  <div *ngIf="false" style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Transporte</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
@@ -840,7 +837,7 @@
 
                   </div>
 
-                  <table #transportTable id="table-extras-transport" mat-table [dataSource]="dataSourceTransport" matSort style="border: 1px solid #e6e6e6">
+                  <table *ngIf="false" #transportTable id="table-extras-transport" mat-table [dataSource]="dataSourceTransport" matSort style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
@@ -894,13 +891,13 @@
                     <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
-                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                  <div *ngIf="false" class="flex-auto" style="margin: 1% 0 0 0">
                     <button class="add-date" mat-fab (click)="createExtra('Transport', false, null, null)" [disabled]="dataSourceTransport.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
 
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                  <div *ngIf="false" style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Comida</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
@@ -909,7 +906,7 @@
 
                   </div>
 
-                  <table #foodTable id="table-extras-food" mat-table [dataSource]="dataSourceFood" matSort style="border: 1px solid #e6e6e6">
+                  <table *ngIf="false" #foodTable id="table-extras-food" mat-table [dataSource]="dataSourceFood" matSort style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
@@ -964,7 +961,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
 
-                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                  <div *ngIf="false" class="flex-auto" style="margin: 1% 0 0 0">
                     <button class="add-date" mat-fab (click)="createExtra('Food', false, null, null)" [disabled]="dataSourceFood.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>

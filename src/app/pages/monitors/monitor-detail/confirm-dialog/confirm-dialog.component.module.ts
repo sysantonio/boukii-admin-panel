@@ -20,9 +20,11 @@ import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ConfirmModalComponent } from './confirm-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
+    TranslateModule,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,

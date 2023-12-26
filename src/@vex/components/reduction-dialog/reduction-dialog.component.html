@@ -19,7 +19,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button mat-dialog-close>{{'cancel' | translate }}</button>
   <!-- Enviando la fecha y el porcentaje al cerrar el diálogo -->
   <button mat-button [mat-dialog-close]="{dateIndex: selectedDateIndex+1, percentage: percentage}" [disabled]="selectedDateIndex === null || (percentage > 100 || percentage < 0)">Aceptar</button>
 </mat-dialog-actions>

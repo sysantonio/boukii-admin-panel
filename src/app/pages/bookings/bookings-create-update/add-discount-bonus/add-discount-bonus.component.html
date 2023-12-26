@@ -1,6 +1,6 @@
 <form >
   <div class="flex items-center" mat-dialog-title>
-    <h2 class="headline m-0 flex-auto">Aplicar reducción</h2>
+    <h2 class="headline m-0 flex-auto">{{'bookings_page.bonus.title' | translate }}</h2>
 
     <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
@@ -19,7 +19,7 @@
       <mat-radio-group>
         <ng-container *ngFor="let b of bonuses">
         <mat-radio-button *ngIf="!b.payed " [disabled]="isInUse(b.id)" class="radio"  (change)="bonus = b" [value]="b">
-          {{ b.code }} - Remaining Balance: {{ b.remaining_balance }} {{defaults.currency}} <span style="color:#8fd14f">{{ isInUse(b.id) ? 'Applied' : ''}}</span>
+          {{ b.code }} - {{'remaining_balance' | translate}}: {{ b.remaining_balance }} {{defaults.currency}} <span style="color:#8fd14f">{{ isInUse(b.id) ? 'applied' : '' | translate}}</span>
         </mat-radio-button>
       </ng-container>
       </mat-radio-group>
@@ -27,7 +27,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button color="primary" mat-flat-button (click)="closeModal()">Confirmer</button>
-    <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+    <button color="primary" mat-flat-button (click)="closeModal()">{{'confirm' | translate}}</button>
+    <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
   </mat-dialog-actions>
 </form>

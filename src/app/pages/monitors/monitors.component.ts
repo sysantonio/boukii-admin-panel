@@ -54,13 +54,13 @@ export class MonitorsComponent {
 
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Age', property: 'birth_date', type: 'birth', visible: true },
+    { label: 'name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'age', property: 'birth_date', type: 'birth', visible: true },
     { label: 'Email', property: 'email', type: 'text', visible: true },
-    { label: 'Phone', property: 'phone', type: 'text', visible: true },
-    { label: 'Sports', property: 'sports', type: 'sports_monitor', visible: true },
-    { label: 'Register', property: 'created_at', type: 'date', visible: true },
-    { label: "Status", property: 'active_school', type: 'light_school', visible: true },
+    { label: 'mobile', property: 'phone', type: 'text', visible: true },
+    { label: 'sports', property: 'sports', type: 'sports_monitor', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
+    { label: "statis", property: 'active_school', type: 'light_school', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

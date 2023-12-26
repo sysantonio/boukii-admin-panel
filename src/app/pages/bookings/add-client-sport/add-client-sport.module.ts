@@ -22,9 +22,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddClientSportModalComponent } from './add-client-sport.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
+    TranslateModule,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,

@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Moniteurs">
   <vex-breadcrumbs
-    [crumbs]="['Moniteurs', 'Nouvelle moniteur']"
+    [crumbs]="['monitor', 'monitors.creation.title']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -17,11 +17,11 @@
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <div style="float: left;width: 50%;">
-          <h2 class="title m-0">Nouvelle moniteur</h2>
+          <h2 class="title m-0">{{'monitors.creation.title' | translate}}</h2>
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
-            Active <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
+            {{'active' |translate}} <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
 
         <mat-step [stepControl]="formInfoAccount">
           <form [formGroup]="formInfoAccount">
-            <ng-template matStepLabel>Info de compte</ng-template>
+            <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="image-container">
@@ -47,26 +47,28 @@
               <div class="input-container">
 
                 <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                <label for="file" class="btn-1">upload file</label>
-                <p>Maximum 2mb</p>
-                <p>Formats supportés: PNG, JPG</p>
+                    <label for="file" class="btn-1"><mat-icon svgIcon="mat:cloud_upload"></mat-icon></label>
+                    <p style="font-size: 12px">{{'image_max' | translate}}</p>
+                    <p style="font-size: 12px">{{'image_format' | translate}}</p>
+                    <p style="font-size: 12px">{{'image_recomendation' | translate}}</p>
+
               </div>
             </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
                 <mat-form-field class="flex-auto">
-                  <mat-label>Nom</mat-label>
+                  <mat-label>{{'name' | translate }}</mat-label>
                   <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
                   <mat-error *ngIf="formInfoAccount.controls?.name?.errors?.['required']">
-                    El nombre del monitor es obligatorio
+                    {{'monitors.creation.errors.name' | translate }}
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Prenom</mat-label>
+                  <mat-label>{{'surname' | translate }}</mat-label>
                   <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                   <mat-error *ngIf="formInfoAccount.controls?.surname?.errors?.['required']">
-                    El apellido del monitor es obligatorio
+                    {{'monitors.creation.errors.surname' | translate }}
                   </mat-error>
                 </mat-form-field>
              </div>
@@ -76,15 +78,15 @@
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
                   <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
-                    El email del monitor es obligatorio
+                    {{'monitors.creation.errors.email' | translate }}
                   </mat-error>
                   <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['email']">
-                    El email no tiene un formato adecuado. Utilice example@domain.subdomain (.com, .es...)
+                    {{'monitors.creation.errors.email_format' | translate }}
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="flex-auto">
-                  <mat-label>Nom d'utilisateur</mat-label>
+                  <mat-label>{{'username' | translate }}</mat-label>
                   <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
                 </mat-form-field>
               </div>
@@ -93,7 +95,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
               <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Station</mat-label>
+                <mat-label>{{'station' | translate }}</mat-label>
 
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
@@ -105,27 +107,27 @@
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">{{'cancel' | translate }}</button>
 
               <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
+                {{'next' | translate}}
               </button>
             </div>
           </form>
         </mat-step>
         <mat-step [stepControl]="formPersonalInfo">
           <form [formGroup]="formPersonalInfo">
-            <ng-template matStepLabel>Données Personnelles</ng-template>
+            <ng-template matStepLabel>{{'personal_data' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
               <mat-form-field class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom" placeholder="Date de naissance" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required>
+                <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required>
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
                 <mat-error *ngIf="formPersonalInfo.controls?.fromDate?.errors?.['required']">
-                  La fecha de nacimiento monitor es obligatorio
+                 {{'monitors.creation.errors.monitor_date' | translate }}
                 </mat-error>
               </mat-form-field>
 
@@ -133,29 +135,29 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
-                <mat-label>Teléphone</mat-label>
+                <mat-label>{{'phone' | translate }}</mat-label>
 
                 <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Portable</mat-label>
+                <mat-label>{{'mobile' | translate }}</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
                 <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
-                  El móvil monitor es obligatorio
+                  {{'monitors.creation.errors.mobile' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto">
-                <mat-label>Addresse</mat-label>
+                <mat-label>{{'address' | translate }}</mat-label>
 
                 <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Code Postal</mat-label>
+                <mat-label>{{'cp' | translate }}</mat-label>
                 <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
 
               </mat-form-field>
@@ -163,7 +165,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Pays</mat-label>
+                <mat-label>{{'country' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
                   <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
@@ -173,7 +175,7 @@
               </mat-form-field>
 
               <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Canton</mat-label>
+                <mat-label>{{'province' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
                   <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
@@ -183,13 +185,13 @@
               </mat-form-field>
 
               <mat-form-field class="flex-auto" appearance="fill">
-                <mat-label>Idiomas</mat-label>
+                <mat-label>{{'langs' | translate }}</mat-label>
                 <mat-select [formControl]="languagesControl" multiple>
                   <mat-select-trigger>
                     <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
                       {{ getSelectedLanguageNames() }}
                     </div>
-                    <ng-template #placeholderLangs>Selecciona los idiomas</ng-template>
+                    <ng-template #placeholderLangs>{{'choose_langs' | translate }}</ng-template>
                   </mat-select-trigger>
                   <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages(language)">
                     {{language.name}}
@@ -199,11 +201,11 @@
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">{{'cancel' | translate }}</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="goToStep3(stepper)">
-                Next
+                {{'next' | translate}}
               </button>
             </div>
           </form>
@@ -211,7 +213,7 @@
 
         <mat-step [stepControl]="formWorkInfo">
           <form [formGroup]="formWorkInfo">
-            <ng-template matStepLabel>Information de travail</ng-template>
+            <ng-template matStepLabel>{{'work_data' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
               <mat-form-field class="flex-auto">
@@ -221,7 +223,7 @@
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Permis de travail</mat-label>
+                <mat-label>{{'work_id' | translate }}</mat-label>
                 <input formControlName="workId" matInput type="text" [(ngModel)]="defaults.work_license">
               </mat-form-field>
             </div>
@@ -236,7 +238,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="vex-flex-form-field flex-auto">
-                <mat-label>Pays</mat-label>
+                <mat-label>{{'country' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
                 <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
                   <mat-option *ngFor="let country of filteredWorkCountries | async" [value]="country" (onSelectionChange)="defaults.world_country = country.id">
@@ -246,7 +248,7 @@
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Children</mat-label>
+                <mat-label>{{'children' | translate }}</mat-label>
                 <input formControlName="children" matInput type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
 
               </mat-form-field>
@@ -259,20 +261,20 @@
                 <!-- Otros contenedores según tu descripción -->
 
                 <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef> {{'name' | translate }}</mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Name</mat-label>
+                      <mat-label>{{'name' | translate }}</mat-label>
                       <input matInput [(ngModel)]="element.name" formControlName="childName" type="text">
                     </mat-form-field>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="date">
-                  <mat-header-cell *matHeaderCellDef>  Date de naissance </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>  {{'birth_date' | translate }} </mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <input matInput [matDatepicker]="pickerFromChild" placeholder="Date de naissance" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
+                      <input matInput [matDatepicker]="pickerFromChild" placeholder="{{'birth_date' | translate }}" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
                       <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
                       <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
                     </mat-form-field>
@@ -293,32 +295,32 @@
             </div>
 
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">{{'cancel' | translate }}</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
+                {{'next' | translate}}
               </button>
             </div>
           </form>
         </mat-step>
 
         <mat-step [stepControl]="formSportInfo">
-          <ng-template matStepLabel>Deportes</ng-template>
+          <ng-template matStepLabel>{{'sports' | translate}}</ng-template>
 
           <div style="margin: 3% 0 0 0;">
 
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field class="flex-auto" appearance="fill">
-                <mat-label>Deportes</mat-label>
+                <mat-label>{{'sports' | translate}}</mat-label>
                 <mat-select [formControl]="sportsControl" multiple>
 
                   <mat-select-trigger>
                     <div *ngIf="sportsControl.value?.length > 0; else placeholder">
                       {{ getSelectedSportsNames() }}
                     </div>
-                    <ng-template #placeholder>Selecciona los deportes</ng-template>
+                    <ng-template #placeholder>{{'choose_sports' | translate }}</ng-template>
                   </mat-select-trigger>
 
                   <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection(sport)">
@@ -333,20 +335,20 @@
 
                 <!-- Otros contenedores según tu descripción -->
                 <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> Name </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> {{'name' | translate }}</mat-header-cell>
                   <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                      <mat-label>Name</mat-label>
+                      <mat-label>{{'name' | translate }}</mat-label>
                       <input matInput [value]="element.name" type="text" [readonly]="true">
                     </mat-form-field>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="level">
-                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Niveaux</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">{{'level' | translate }}</mat-header-cell>
                   <mat-cell *matCellDef="let element"  style="width: 30%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                    <mat-label>Niveaux</mat-label>
+                    <mat-label>{{'level' | translate }}</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
                     <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
                       <mat-option *ngFor="let level of element.degrees" [value]="level">
@@ -361,7 +363,7 @@
                   <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
                   <mat-cell *matCellDef="let element"  style="width: 30%;float: left;">
                     <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
-                    <mat-label>Salary</mat-label>
+                    <mat-label>{{'salary' | translate }}</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
                     <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
                       <mat-option *ngFor="let salary of filteredSalary | async" [value]="salary" (onSelectionChange)="element.salary_id = salary.id">
@@ -417,22 +419,22 @@
             </div>
           </div>
           <div class="actions flex items-center justify-end gap-2">
-            <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+            <button mat-button type="button" (click)="goTo('/monitors')">{{'cancel' | translate }}</button>
 
             <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
             <button color="primary" mat-raised-button (click)="goToStep5(stepper)">
-              Next
+              {{'next' | translate}}
             </button>
           </div>
         </mat-step>
 
         <mat-step [stepControl]="formCivilStatusInfo">
           <form [formGroup]="formCivilStatusInfo">
-            <ng-template matStepLabel>Etat civil</ng-template>
+            <ng-template matStepLabel>{{'civil_status' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
               <mat-form-field class="flex-auto">
-                <mat-label>Estado Civil</mat-label>
+                <mat-label>{{'civil_status' | translate }}</mat-label>
                 <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus">
                 <mat-autocomplete #autoCivilStatus="matAutocomplete">
                   <mat-option *ngFor="let civilStatus of filteredCivilStatus | async" [value]="civilStatus" (onSelectionChange)="defaults.civil_status = civilStatus">
@@ -443,40 +445,40 @@
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Conjoint travaille?</mat-label>
+                <mat-label>{{'wife_status' | translate }}</mat-label>
                 <mat-select formControlName="spouse" (selectionChange)="setValueSpouse($event)">
-                  <mat-option value="y">Yes</mat-option>
-                  <mat-option value="n">No</mat-option>
+                  <mat-option value="y">{{'yes' | translate}}</mat-option>
+                  <mat-option value="n">{{'no' | translate}}</mat-option>
                 </mat-select>
               </mat-form-field>
 
               <mat-form-field class="flex-auto">
-                <mat-label>Demande d'allocation familiales?</mat-label>
+                <mat-label>{{'mobility' | translate }}</mat-label>
                 <mat-select formControlName="workMobility" (selectionChange)="setValueLocation($event)">
-                  <mat-option value="y" >Yes</mat-option>
-                  <mat-option value="n" >No</mat-option>
+                  <mat-option value="y" >{{'yes' | translate}}</mat-option>
+                  <mat-option value="n" >{{'no' | translate}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
               <mat-form-field class="flex-auto">
-                <mat-label>Permis travail du conjoint</mat-label>
+                <mat-label>{{'wife_id' | translate }}</mat-label>
                 <input formControlName="spouseWorkId" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
 
               </mat-form-field>
               <mat-form-field class="flex-auto">
-                <mat-label>Pourcentage du conjoint (%)</mat-label>
+                <mat-label>{{'wife_percent' | translate }} (%)</mat-label>
                 <input formControlName="spousePercentage" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
 
               </mat-form-field>
             </div>
             <div class="actions flex items-center justify-end gap-2">
-              <button mat-button type="button" (click)="goTo('/monitors')">Cancelar</button>
+              <button mat-button type="button" (click)="goTo('/monitors')">{{'cancel' | translate }}</button>
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
-                Save
+                {{'save' | translate}}
               </button>
             </div>
           </form>

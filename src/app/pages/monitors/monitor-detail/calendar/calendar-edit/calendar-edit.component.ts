@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { Observable, map, startWith } from 'rxjs';
 import * as moment from 'moment';
 import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/bookings-create-update-modal/bookings-create-update-modal.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-calendar-edit',
@@ -38,7 +39,8 @@ import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/booki
     MatAutocompleteModule,
     MatSelectModule,
     MatCheckboxModule,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ]
 })
 export class CalendarEditComponent implements OnInit {

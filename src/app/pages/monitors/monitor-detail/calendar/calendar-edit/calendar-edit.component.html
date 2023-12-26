@@ -55,7 +55,7 @@
             <mat-datepicker #startDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
-          <mat-checkbox formControlName="full_day">Todo el día</mat-checkbox>
+          <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
 
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field>
@@ -107,7 +107,7 @@
             <mat-datepicker #startDatepickerPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-checkbox formControlName="full_day">Todo el día</mat-checkbox>
+          <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
 
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field>
@@ -130,7 +130,7 @@
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Station</mat-label>
+            <mat-label>{{'station' | translate }}</mat-label>
 
             <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 
@@ -161,7 +161,7 @@
             <mat-datepicker #startDatepickerNonPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-checkbox formControlName="full_day">Todo el día</mat-checkbox>
+          <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
 
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field>
@@ -183,7 +183,7 @@
             <input type="text" id="description" formControlName="description" placeholder="La description" [value]="defaults.description" matInput [(ngModel)]="defaults.description">
           </mat-form-field>
           <mat-form-field>
-            <mat-label>Station</mat-label>
+            <mat-label>{{'station' | translate }}</mat-label>
 
             <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
 

@@ -22,6 +22,7 @@ import { BookingsCreateUpdateModalComponent } from './bookings-create-update-mod
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     NgxMatTimepickerModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TranslateModule
   ],
   declarations: [BookingsCreateUpdateModalComponent],
   exports: [BookingsCreateUpdateModalComponent]

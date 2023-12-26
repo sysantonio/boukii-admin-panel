@@ -1,6 +1,6 @@
 <form >
   <div class="flex items-center" mat-dialog-title>
-    <h2 class="headline m-0 flex-auto">Anular reserva</h2>
+    <h2 class="headline m-0 flex-auto">{{'bookings_page.cancelations.cancel_booking' | translate }}</h2>
 
     <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
@@ -16,33 +16,33 @@
   <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
 
     <mat-step [stepControl]="noRefundForm" >
-      <ng-template matStepLabel>Sin Reembolso</ng-template>
+      <ng-template matStepLabel>{{'bookings_page.cancelations.no_refund' | translate }}</ng-template>
 
       <mat-dialog-content class="flex flex-col" *ngIf="!loading">
         <div style="width: 100%;">
-          <p>Está a punto de cancelar una reserva sin opción a reembolso por el precio de <span style="color:#fe3085">{{defaults.itemPrice}} {{defaults.booking.currency}}</span></p>
+          <p>{{'bookings_page.cancelations.no_refund_text' | translate}} <span style="color:#fe3085">{{defaults.itemPrice}} {{defaults.booking.currency}}</span></p>
         </div>
         <mat-divider></mat-divider>
 
         <mat-dialog-actions align="end"  *ngIf="!loading">
-          <button color="primary" mat-flat-button (click)="closeAndSave('no_refund')">Confirmer</button>
-          <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+          <button color="primary" mat-flat-button (click)="closeAndSave('no_refund')">{{'confirm' | translate}}</button>
+          <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
         </mat-dialog-actions>
       </mat-dialog-content>
     </mat-step>
     <mat-step [stepControl]="refundForm">
-      <ng-template matStepLabel>Reembolso</ng-template>
+      <ng-template matStepLabel>{{'bookings_page.cancelations.refund' | translate }}</ng-template>
 
       <mat-tab-group>
         <mat-tab label="Boukii Pay"></mat-tab>
-        <mat-tab label="Cash or others">
+        <mat-tab label="{{'bookings_page.cancelations.cash' | translate}}">
 
           <mat-dialog-content class="flex flex-col" *ngIf="!loading">
             <div style="width: 100%;">
-              <p>Está a punto de cancelar una reserva. Por favor, indique el motivo de la cancelación:</p>
+              <p>{{'bookings_page.cancelations.refund_text' | translate }}</p>
               <div style="float:left; width: 100%">
                 <mat-form-field class="flex-auto" style="float:left; width: 100%">
-                  <mat-label>Reason</mat-label>
+                  <mat-label>{{'reason' | translate}}</mat-label>
                   <input type="text" formControlName="reason" (blur)="setReason($event)" matInput required>
                 </mat-form-field>
               </div>
@@ -51,21 +51,21 @@
             <mat-divider></mat-divider>
 
             <mat-dialog-actions align="end"  *ngIf="!loading">
-              <button color="primary" mat-flat-button (click)="closeAndSaveRefund('refund', refundForm.value.reason)">Confirmer</button>
-              <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+              <button color="primary" mat-flat-button (click)="closeAndSaveRefund('refund', refundForm.value.reason)">{{'confirm' | translate}}</button>
+              <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
             </mat-dialog-actions>
           </mat-dialog-content>
         </mat-tab>
-        <mat-tab label="Gift Voucher">
+        <mat-tab label="{{'bookings_page.cancelations.gift_voucher' | translate}}">
 
           <mat-dialog-content class="flex flex-col" *ngIf="!loading">
             <div style="width: 100%;">
-              <p>Está a punto de cancelar una reserva. Se generará un bono regalo teniendo en cuenta los siguientes bonos que no serán reembolsados:</p>
+              <p>{{'bookings_page.cancelations.gift_voucher_text' | translate}}</p>
               <div style="float:left; width: 100%">
                 <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="calculateAllRemainingQuantity() && defaults.currentBonus.length > 1" [disabled]="true" [checked]="true"
                 style="float:left;width: 100%">{{item.bonus.code}}: <span style="color:#fe3085">{{getCurrentUse(item)}} {{defaults.booking.currency}} </span>
-                  <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">Fully applied</span>
-                  <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #F99D22;"><span style="color:#A1D14F">({{item.bonus.quantity}} {{defaults.booking.currency}})</span> Partially applied </span>
+                  <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">{{'bookings_page.cancelations.full' | translate}}</span>
+                  <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #F99D22;"><span style="color:#A1D14F">({{item.bonus.quantity}} {{defaults.booking.currency}})</span> {{'bookings_page.cancelations.partial' | translate}} </span>
                 </mat-checkbox>
               </div>
             </div>
@@ -73,8 +73,8 @@
             <mat-divider></mat-divider>
 
             <mat-dialog-actions align="end"  *ngIf="!loading">
-              <button color="primary" mat-flat-button (click)="closeAndSaveGift('refund_gift')">Confirmer</button>
-              <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+              <button color="primary" mat-flat-button (click)="closeAndSaveGift('refund_gift')">{{'confirm' | translate}}</button>
+              <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
             </mat-dialog-actions>
           </mat-dialog-content>
         </mat-tab>
@@ -82,16 +82,16 @@
     </mat-step>
     <mat-step [stepControl]="bonusForm">
 
-      <ng-template matStepLabel>Devolución a través de bonos</ng-template>
+      <ng-template matStepLabel>{{'bookings_page.cancelations.bonus_refund' | translate}}</ng-template>
 
       <mat-dialog-content class="flex flex-col" *ngIf="!loading">
         <div style="width: 100%;">
-          <p>Está a punto de cancelar una reserva. Elija los bonos que quieren devolverse:</p>
+          <p>{{'bookings_page.cancelations.bonus_refund_text' | translate}}</p>
           <div style="float:left; width: 100%">
             <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="(calculateAllRemainingQuantity() && defaults.currentBonus.length > 1) || unifyBonus"
               [checked]="unifyBonus || checkBonusChecked(item)" style="float:left;width: 100%">{{item.bonus.code}}: <span style="color:#fe3085">{{getCurrentUse(item)}} {{defaults.booking.currency}} </span>
-              <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">Fully applied</span>
-              <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #F99D22;"><span style="color:#A1D14F">({{item.bonus.quantity}} {{defaults.booking.currency}})</span> Partially applied </span>
+              <span *ngIf="getCurrentUse(item) === item.bonus.quantity" style="font-weight: bold; color: #A1D14F;">{{'bookings_page.cancelations.full' | translate}}</span>
+              <span *ngIf="getCurrentUse(item) < item.bonus.quantity" style="font-weight: bold; color: #F99D22;"><span style="color:#A1D14F">({{item.bonus.quantity}} {{defaults.booking.currency}})</span> {{'bookings_page.cancelations.partial' | translate}} </span>
             </mat-checkbox>
           </div>
         </div>
@@ -99,14 +99,14 @@
         <mat-divider></mat-divider>
 
         <div style="width: 100%;">
-          <p>O devuelva todos los importes del bono en uno unificado:</p>
+          <p>{{'bookings_page.cancelations.bonus_refund_text_all' | translate}}</p>
           <div style="float:left; width: 100%">
             <mat-radio-group [(ngModel)]="unifyBonus" [ngModelOptions]="{standalone: true}">
               <mat-radio-button [value]="true">
-                Si
+                {{'yes' | translate}}
               </mat-radio-button>
               <mat-radio-button [value]="false">
-                No
+                {{'no' | translate}}
               </mat-radio-button>
             </mat-radio-group>
           </div>
@@ -115,8 +115,8 @@
         <mat-divider></mat-divider>
 
         <mat-dialog-actions align="end"  *ngIf="!loading">
-          <button color="primary" mat-flat-button  (click)="closeAndSaveBonus('refund_bonus')">Confirmer</button>
-          <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
+          <button color="primary" mat-flat-button  (click)="closeAndSaveBonus('refund_bonus')">{{'confirm' | translate}}</button>
+          <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
         </mat-dialog-actions>
       </mat-dialog-content>
     </mat-step>

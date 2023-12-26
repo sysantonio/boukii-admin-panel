@@ -33,6 +33,7 @@ import { ConfirmModalModule } from './confirm-dialog/confirm-dialog.component.mo
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { ComponentsCustomModule } from 'src/app/components/components-custom.mod
     ConfirmModalModule,
     PageLayoutModule,
     ComponentsModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    TranslateModule
   ],
   declarations: [MonitorDetailComponent],
   exports: [MonitorDetailComponent]

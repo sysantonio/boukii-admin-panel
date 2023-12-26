@@ -27,6 +27,7 @@ import { CoursesDetailModule } from './course-detail/course-detail.module';
 import { CourseUserTransferComponent } from './course-user-transfer/course-user-transfer.component';
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
 import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -55,7 +56,8 @@ import { CoursesDetailModalModule } from './course-detail-modal/course-detail-mo
     MatSlideToggleModule,
     MatDividerModule,
     MatCardModule,
-    CourseUserTransferModalModule
+    CourseUserTransferModalModule,
+    TranslateModule
   ]
 })
 export class CoursesModule {

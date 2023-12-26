@@ -13,7 +13,7 @@ import { trackByValue } from '../../utils/track-by';
       <ng-container *ngFor="let crumb of crumbs; trackBy: trackByValue">
         <div class="w-1 h-1 bg-gray rounded-full ltr:mr-2 rtl:ml-2"></div>
         <vex-breadcrumb>
-          <a [routerLink]="[]">{{ crumb }}</a>
+          <a [routerLink]="[]">{{ crumb | translate }}</a>
         </vex-breadcrumb>
       </ng-container>
     </div>

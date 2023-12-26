@@ -31,6 +31,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ComponentsCustomModule } from '../../../components/components-custom.module';
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
     ComponentsCustomModule,
     PageLayoutModule,
     ComponentsCustomModule,
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule
   ],
   declarations: [ClientDetailComponent],
   exports: [ClientDetailComponent]

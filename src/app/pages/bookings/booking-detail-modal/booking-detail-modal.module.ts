@@ -34,6 +34,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { CancelBookginModalModule } from '../cancel-booking/cancel-booking.module';
 import { CancelPartialBookginModalModule } from '../cancel-partial-booking/cancel-partial-booking.module';
 import { BookingDetailModalComponent } from './booking-detail-modal.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -83,7 +84,8 @@ export const MY_DATE_FORMATS = {
     AddDiscountBonusModalModule,
     QRCodeModule,
     CancelBookginModalModule,
-    CancelPartialBookginModalModule
+    CancelPartialBookginModalModule,
+    TranslateModule
   ],
   declarations: [BookingDetailModalComponent],
   exports: [BookingDetailModalComponent],

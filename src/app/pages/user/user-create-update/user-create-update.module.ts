@@ -17,6 +17,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserCreateUpdateComponent } from './user-create-update.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { UserCreateUpdateComponent } from './user-create-update.component';
     MatFormFieldModule,
     NgxDropzoneModule,
     MatSlideToggleModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    TranslateModule
   ],
   declarations: [UserCreateUpdateComponent],
   exports: [UserCreateUpdateComponent]

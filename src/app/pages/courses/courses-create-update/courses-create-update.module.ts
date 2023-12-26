@@ -32,6 +32,7 @@ import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill'
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCheckboxModule,
     AngularEditorModule,
     MatProgressSpinnerModule,
-    MatTabsModule
+    MatTabsModule,
+    TranslateModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

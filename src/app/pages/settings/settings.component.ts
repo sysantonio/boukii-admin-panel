@@ -122,9 +122,9 @@ export class SettingsComponent implements OnInit {
   dataSourceSalary = new MatTableDataSource();
   columns: TableColumn<any>[] = [
     { label: '#', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Nom', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Paiment', property: 'pay', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Status', property: 'active', type: 'status', visible: true, cssClasses: ['font-medium'] },
+    { label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'method_paiment', property: 'pay', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'status', property: 'active', type: 'status', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
 
   ];

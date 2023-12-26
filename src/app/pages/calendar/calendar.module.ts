@@ -23,6 +23,7 @@ import { CalendarA11y, CalendarCommonModule, CalendarDateFormatter, CalendarDayM
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [CalendarComponent],
@@ -54,7 +55,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     CalendarModule,
     MatSnackBarModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule,
   ], providers: [
     {
       provide: DateAdapter,

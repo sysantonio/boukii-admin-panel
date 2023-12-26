@@ -26,6 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddClientUserModalModule } from './add-client-user/add-client-user.module';
 import { ClientsCreateUpdateModalModule } from './client-create-update-modal/client-create-update-modal.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [ClientsComponent],
@@ -54,7 +55,8 @@ import { ClientsCreateUpdateModalModule } from './client-create-update-modal/cli
     MatCardModule,
     MatSlideToggleModule,
     AddClientUserModalModule,
-    ClientsCreateUpdateModalModule
+    ClientsCreateUpdateModalModule,
+    TranslateModule
   ]
 })
 export class ClientsModule {

@@ -26,9 +26,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { ClientCreateUpdateModalComponent } from './client-create-update-modal.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
+    TranslateModule,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,

@@ -4,12 +4,14 @@ import { RouterModule } from '@angular/router';
 import { BreadcrumbsComponent } from './breadcrumbs.component';
 import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    MatIconModule
+    MatIconModule,
+    TranslateModule
   ],
   declarations: [BreadcrumbsComponent, BreadcrumbComponent],
   exports: [BreadcrumbsComponent]

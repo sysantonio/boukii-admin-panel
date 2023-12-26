@@ -14,7 +14,7 @@
     <div [formGroup]="form" class="p-6 flex flex-col gap-4 flex-auto flex flex-col">
       <div>
         <mat-form-field class="flex-1 block">
-          <mat-label>Name</mat-label>
+          <mat-label>{{'name' | translate }}</mat-label>
           <input formControlName="name" matInput required>
         </mat-form-field>
 

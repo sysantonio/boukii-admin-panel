@@ -26,6 +26,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClientCreateUpdateComponent } from './client-create-update.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatDialogModule,
     MatTableModule,
     MatSortModule,
-    MatChipsModule
+    MatChipsModule,
+    TranslateModule
   ],
   declarations: [ClientCreateUpdateComponent],
   exports: [ClientCreateUpdateComponent]

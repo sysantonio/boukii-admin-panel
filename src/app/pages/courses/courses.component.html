@@ -1,14 +1,14 @@
 <vex-page-layout>
 
   <vex-secondary-toolbar>
-    <vex-breadcrumbs [crumbs]="['Courses', 'List']" class="flex-auto"></vex-breadcrumbs>
+    <vex-breadcrumbs [crumbs]="['courses.title', 'list']" class="flex-auto"></vex-breadcrumbs>
 
     <button class="ml-2" color="primary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
-      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'Courses'" [route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'courses'" [route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
       [ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
@@ -20,7 +20,7 @@
     <mat-card style="padding: 0 3%;">
       <mat-card-header style="display:block">
         <div style="width: 100%;float:left;">
-          <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+          <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate}}</mat-card-title>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0;" [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"></div>
           <div style="float: left;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>`
@@ -29,8 +29,8 @@
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">
-            <p style="float: left;width: 80%;text-align: left;"><b>Desde</b></p>
-            <p style="float: left;width: 20%;text-align: right;"><b>Hasta</b></p>
+            <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate}}</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate}}</b></p>
           </div>
           <div style="width: 100%;">
             <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
@@ -41,8 +41,8 @@
 
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">
-            <p style="float: left;width: 80%;text-align: left;"><b>Precio</b></p>
-            <p style="float: left;width: 20%;text-align: right;"><b>Participantes</b></p>
+            <p style="float: left;width: 80%;text-align: left;"><b>{{'price' | translate}}</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>{{'participants' | translate}}</b></p>
           </div>
           <div style="width: 100%;">
             <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.price}}</b> CHF</p>
@@ -89,14 +89,14 @@
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p><strong>{{detailData.name}}</strong></p>
-              <p> {{detailData.course_type === 1 ? 'Collectif' : 'Privee'}} {{ detailData.sport.name}}</p>
+              <p> {{detailData.course_type === 1 ? 'colective' : 'private' | translate}} {{ detailData.sport.name}}</p>
               <p>{{detailData.station.name}}</p>
             </div>
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
         <div style="float: left; width: 100%;">
-          <p><strong>Niveles / Grupos</strong></p>
+          <p><strong>{{'courses.levels_and_groups' | translate }}</strong></p>
 
           <ng-container *ngFor="let colorKey of colorKeys">
             <ng-container *ngFor="let level of groupedByColor[colorKey]">
@@ -109,19 +109,19 @@
                 </div>
                 <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
                   <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                  Grupos <strong style="text-align: center;">{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</strong>
+                  {{'groups' | translate}} <strong style="text-align: center;">{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</strong>
                 </div>
                 <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
                   <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                  Días <br><strong style="text-align: center;">{{detailData.course_dates.length}}</strong>
+                  {{'days' | translate}} <br><strong style="text-align: center;">{{detailData.course_dates.length}}</strong>
                 </div>
                 <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
                   <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                  Duración <strong style="text-align: center;">{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</strong>
+                  {{'duration' | translate}} <strong style="text-align: center;">{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</strong>
                 </div>
                 <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
 
-                  Alumnos <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
+                  {{'students' | translate}} <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
                 </div>
                 <div *ngFor="let item of selectedGroup.course_subgroups; let i = index">
                   <div *ngIf="level.id === item.degree_id" style="float: left; width: 100%; padding: 5%;">
@@ -131,7 +131,7 @@
                       <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.id)?.first_name ? getMonitor(item.id)?.first_name + ' ' + getMonitor(item.id)?.last_name : 'No monitor asigned'}}</span>
                     </div>
                     <div style="float: left;width: 30%;margin: 6% 0 0 0;">
-                      <strong style="text-align: right;float: right;">{{item.totalUsers}}/{{item.max_participants}} utilisateurs</strong>
+                      <strong style="text-align: right;float: right;">{{item.totalUsers}}/{{item.max_participants}} {{'users' | translate}}</strong>
                     </div>
                   </div>
                 </div>

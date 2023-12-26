@@ -26,15 +26,15 @@
       <mat-card-content>
         <div style="float: left; width: 100%;">
           <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">Moniteur</p>
+            <p style="font-size: 20px;">{{'monitor' | translate }}</p>
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
               <img [src]="detailData.image" width="100" height="100" style="border-radius: 100%;">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p><strong>{{detailData?.first_name}} {{detailData?.last_name}} (+3)</strong></p>
-              <p>{{getLanguage(detailData?.language1_id)}} · {{getCountry(detailData?.country)}} · {{calculateAge(detailData?.birth_date)}} ans</p>
+              <p><strong>{{detailData?.first_name}} {{detailData?.last_name}}</strong></p>
+              <p>{{getLanguage(detailData?.language1_id)}} · {{getCountry(detailData?.country)}} · {{calculateAge(detailData?.birth_date)}}{{'years' | translate }}</p>
               <div>
                 <mat-icon svgIcon="mat:chat"></mat-icon>
                 <mat-icon svgIcon="mat:mail_outline"></mat-icon>
@@ -76,22 +76,22 @@
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">Données</p>
+            <p style="font-size: 20px;">{{'data' | translate}}</p>
           </div>
           <div style="width: 100%;float:left;">
             <p style="float: left;width: 50%;text-align: left;"><b>Email</b></p>
             <p style="float: left;width: 50%;text-align: right;">{{detailData.email}}</p>
           </div>
           <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>Teléphone</b></p>
+            <p style="float: left;width: 50%;text-align: left;"><b>{{'mobile' | translate}}</b></p>
             <p style="float: left;width: 50%;text-align: right;">{{detailData.phone}}</p>
           </div>
           <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>Date de Naissance</b></p>
+            <p style="float: left;width: 50%;text-align: left;"><b>{{'birth_date' | translate }}</b></p>
             <p style="float: left;width: 50%;text-align: right;">{{detailData.birth_date | date: 'dd/MM/YYYYY'}}</p>
           </div>
           <div style="width: 100%;float:left;">
-            <p style="float: left;width: 30%;text-align: left;"><b>Address</b></p>
+            <p style="float: left;width: 30%;text-align: left;"><b>{{'address' | translate}}</b></p>
             <p style="float: left;width: 70%;text-align: right;">{{detailData.address}}, {{detailData.cp}}</p>
           </div>
         </div>

@@ -20,6 +20,7 @@ import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddReductionModalComponent } from './add-reduction.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { AddReductionModalComponent } from './add-reduction.component';
     MatListModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    TranslateModule
   ],
   declarations: [AddReductionModalComponent],
   exports: [AddReductionModalComponent]

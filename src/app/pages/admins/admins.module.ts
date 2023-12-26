@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AdminsComponent } from './admins.component';
 import { AdminsRoutingModule } from './admins-routing.module';
 import { AdminCreateUpdateComponent } from './admin-create-update/admin-create-update.component';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [AdminsComponent],
   imports: [
@@ -39,7 +40,8 @@ import { AdminCreateUpdateComponent } from './admin-create-update/admin-create-u
     WidgetLargeChartModule,
     WidgetTableModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule
   ]
 })
 export class AdminsModule {

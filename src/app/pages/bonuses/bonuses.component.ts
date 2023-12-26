@@ -15,11 +15,11 @@ export class BonusesComponent {
   icon = '../../../assets/img/icons/bonos.svg';
 
   columns: TableColumn<any>[] = [
-    { label: 'Code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Client', property: 'client_id', type: 'client', visible: true },
-    { label: 'Quantity', property: 'quantity', type: 'text', visible: true },
-    { label: 'Remaining', property: 'remaining_balance', type: 'text', visible: true },
-    { label: 'Payed', property: 'payed', type: 'status', visible: true },
+    { label: 'code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'quantity', property: 'quantity', type: 'text', visible: true },
+    { label: 'remaining_balance', property: 'remaining_balance', type: 'text', visible: true },
+    { label: 'ispaid', property: 'payed', type: 'status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 }

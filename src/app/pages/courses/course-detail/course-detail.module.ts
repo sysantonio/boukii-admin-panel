@@ -30,6 +30,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { CourseDetailComponent } from './course-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCheckboxModule,
     AngularEditorModule,
     MatTabsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TranslateModule
   ],
   declarations: [CourseDetailComponent],
   exports: [CourseDetailComponent]

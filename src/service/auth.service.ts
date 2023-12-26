@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, onAuthStateChanged, getAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { User } from '@firebase/auth';
 import { createUserWithEmailAndPassword } from '@angular/fire/auth';
@@ -20,7 +19,7 @@ import { defaultConfig } from 'src/@vex/config/configs';
 export class AuthService extends ApiService {
   user: User | null = null;
 
-  constructor(private auth: Auth,private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar,
+  constructor(private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar,
     private schoolService: SchoolService, private configService: ConfigService) {
     super(http)
     const user = JSON.parse(localStorage.getItem('boukiiUser'));
@@ -71,18 +70,7 @@ export class AuthService extends ApiService {
     }
   }
 
-  async register(email: string, password: string): Promise<void> {
-    try {
-      const auth = getAuth();
-      await createUserWithEmailAndPassword(auth, email, password);
-      this.router.navigate(['/home']);
-    } catch (error) {
-      console.error('Error during registration:', error);
-    }
-  }
-
   async logout() {
-    await signOut(this.auth);
     this.user = null;
     localStorage.removeItem('boukiiUser');
   }

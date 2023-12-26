@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Courses">
   <vex-breadcrumbs
-    [crumbs]="['Detail Course', 'Detail course']"
+    [crumbs]="['course_detail']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -35,7 +35,7 @@
 
                     <div style="float: right;margin: 0 0 0 25px;">
                       <mat-slide-toggle [checked]="true">
-                        Options
+                        {{'options' | translate}}
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0;">
@@ -45,7 +45,7 @@
                     </div>
                     <div style="float: right;margin: 0 25px 0 0;">
                       <mat-slide-toggle [checked]="true">
-                        Status
+                        {{'status' | translate}}
                       </mat-slide-toggle>
                     </div>
                   </div>
@@ -58,7 +58,7 @@
               <div style="float: left; width: 47%;margin: 2% 3% 0 0;">
                 <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/defult.jpg'">
                 <ul style="margin: 2% 0 0 0;" *ngIf="defaults.course_type === 2">
-                  <li style="margin: 0 0 2% 0"><strong>Dates</strong></li>
+                  <li style="margin: 0 0 2% 0"><strong>{{'dates' | translate}}</strong></li>
                   <li>{{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'LL')}}
                     <i style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[0].hour_start, 'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(defaults.course_dates[0].hour_end, 'HH:mm:ss', 'HH:mm')}}h</i>
                   </li>
@@ -68,14 +68,14 @@
                 </ul>
 
                 <ul style="margin: 2% 0 0 0;" *ngIf="defaults.course_type === 1">
-                  <li style="margin: 0 0 2% 0"><strong>Dates</strong></li>
+                  <li style="margin: 0 0 2% 0"><strong>{{'dates' | translate}}</strong></li>
                   <li *ngFor="let item of defaults.course_dates">{{parseDateToDay(item.date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date, 'YYYY-MM-DD', 'LL')}} <i style="text-align: right;float:right">{{parseDateToDay(item.hour_start, 'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end, 'HH:mm:ss', 'HH:mm')}}h</i></li>
                 </ul>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>Résumé</b></p>
-                  <p style="float: left;width: 20%;text-align: right;"><b>Precio</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'summary' | translate}}</b></p>
+                  <p style="float: left;width: 20%;text-align: right;"><b>{{'price' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.short_description">
@@ -86,13 +86,13 @@
               </div>
               <div style="width:50%; margin-top:2%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>Description</b></p>
-                  <p style="float: left;width: 20%;text-align: right;"><b>Edad</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'desc' | translate}}</b></p>
+                  <p style="float: left;width: 20%;text-align: right;"><b>{{'age' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.description">
                   </p>
-                  <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 2">De {{defaults.age_min}} a {{defaults.age_max}} años</p>
+                  <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 2">{{'from' | translate}} {{defaults.age_min}} {{'to' | translate}} {{defaults.age_max}} años</p>
                   <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 1">FLEX</p>
                 </div>
               </div>
@@ -102,7 +102,7 @@
 
                   <div class="flex-auto">
 
-                    <label for="dateFrom">DATE RÉSERVABLE À PARTIR DE</label>
+                    <label for="dateFrom">{{'courses.date_reservable' | translate}}</label>
                     <mat-form-field style="width: 100%">
 
                       <input matInput id="dateFrom" [value]="defaults.date_start_res | date: 'dd/MM/YYYY'" [readonly]="true">
@@ -110,7 +110,7 @@
                   </div>
                   <div class="flex-auto">
 
-                    <label for="dateTo">DATE RÉSERVABLE JUSQU'À</label>
+                    <label for="dateTo">{{'courses.date_reservable_to' | translate}}</label>
                     <mat-form-field style="width: 100%">
 
                       <input matInput id="dateTo" [value]="defaults.date_end_res | date: 'dd/MM/YYYY'" [readonly]="true">
@@ -120,17 +120,17 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                   <div class="flex-auto" style="width: 50%; float:left">
-                    <label for="duration">DURÉE</label>
+                    <label for="duration">{{'duration' | translate}}</label>
                     <mat-form-field style="width: 100%">
 
                       <input id="duration" matInput required type="text" placeholder="DURÉE" [value]="defaults.duration ? defaults.duration : 'FLEXIBLE'" [readonly]="true">
                     </mat-form-field>
                   </div>
                   <div class="flex-auto" style="width: 50%; float:left">
-                    <label for="participants">PARTICIPANTS MÁX</label>
+                    <label for="participants">{{'max_pax' | translate}}</label>
 
                     <mat-form-field style="width: 100%">
-                      <mat-label>PARTICIPANTS MÁX.</mat-label>
+                      <mat-label>{{'max_pax' | translate}}</mat-label>
                       <input id="participants" matInput required type="number" [value]="defaults.max_participants" [(ngModel)]="defaults.max_participants" [readonly]="true">
                     </mat-form-field>
                   </div>
@@ -140,16 +140,16 @@
           </mat-card>
         </mat-tab>
 
-        <mat-tab label="Niveaux" *ngIf="defaults.course_type === 1">
+        <mat-tab label="{{'level' | translate }}" *ngIf="defaults.course_type === 1">
 
           <mat-card style="padding: 0 3%;">
             <mat-card-header style="display:block">
               <div style="width: 100%;float:left;">
-                <mat-card-title style="float: left;width: 35%;">Detalles curso</mat-card-title>
+                <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate }}</mat-card-title>
                 <div style="float:right;width: 65%">
                   <div style="float: right;margin: 0 0 0 25px;">
                     <mat-slide-toggle [checked]="true">
-                      Options
+                      {{'options' | translate }}
                     </mat-slide-toggle>
                   </div>
                   <div style="float: right;margin: 0;">
@@ -159,7 +159,7 @@
                   </div>
                   <div style="float: right;margin: 0 25px 0 0;">
                     <mat-slide-toggle [checked]="true">
-                      Status
+                      {{'status' | translate }}
                     </mat-slide-toggle>
                   </div>
                 </div>
@@ -167,7 +167,7 @@
               <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
             </mat-card-header>
             <mat-card-content style="margin-top: 5%;">
-              <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;border-radius: 0;height: 50px;margin: 0 0 1% 0;float: right;" (click)="save()">Guardar Cambios</button>
+              <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;border-radius: 0;height: 50px;margin: 0 0 1% 0;float: right;" (click)="save()">{{'save_changes' | translate}}</button>
 
               <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;" *ngIf="!loading">
                 <div @fadeInUp class="card flex-auto">
@@ -201,7 +201,7 @@
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
-                                  Grupos {{defaults?.course_dates[0]?.groups[groupIndex]?.subgroups.length}}g
+                                  {{'groups' | translate}} {{defaults?.course_dates[0]?.groups[groupIndex]?.subgroups.length}}g
                                 </div>
                                 <div style="width: 100%; margin-top: 10%;height: 60px">
                                   <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
@@ -210,30 +210,30 @@
 
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
-                                  Edad
+                                  {{'age' | translate}}
                                 </div>
                                 <form [formGroup]="rangeForm" novalidate>
                                   <mat-form-field style="width: 45%; margin-top: 10%;margin-right: 10%">
                                     <input type="number" placeholder="Min." aria-label="Number" matInput [min]="0" (blur)="setMinAge($event, groupLevel)" [value]="groupLevel.age_min"
                                     [value]="calculateAgeMin(groupLevel)"/>
                                     <mat-error *ngIf="minAge.errors?.['min']">
-                                      La edad mínima debe ser al menos 3.
+                                      {{'courses.errors.min_age_levels' | translate}}
                                     </mat-error>
                                     <mat-error *ngIf="minAge.errors?.['required']">
-                                      Este campo es obligatorio.
+                                      {{'mandatory' | translate}}
                                     </mat-error>
                                   </mat-form-field>
                                   <mat-form-field style="width: 45%; margin-top: 10%">
                                     <input type="number" placeholder="Max" aria-label="Number" matInput [min]="0" (blur)="setMaxAge($event, groupLevel)" [value]="groupLevel.age_max"
                                     [value]="calculateAgeMax(groupLevel)"/>
                                     <mat-error *ngIf="maxAge.errors?.['ageRange']">
-                                      La edad máxima debe ser mayor que la edad mínima y menor o igual a 80.
+                                      {{'courses.errors.max_age_range' | translate}}
                                     </mat-error>
                                     <mat-error *ngIf="maxAge.errors?.['max']">
-                                      La edad máxima no debe ser mayor a 80.
+                                      {{'courses.errors.max_age_levels' | translate}}
                                     </mat-error>
                                     <mat-error *ngIf="maxAge.errors?.['required']">
-                                      Este campo es obligatorio.
+                                      {{'mandatory' | translate}}
                                     </mat-error>
                                   </mat-form-field>
                                 </form>
@@ -250,12 +250,12 @@
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
                                 <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
-                                  Alumnos <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
+                                  {{'students' | translate}} <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
                                 <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
                                   <input type="number" placeholder="Max per Group" [value]="calculateMaxGroup(groupLevel)" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" />
                                   <mat-error *ngIf="groupLevel.max_participants > this.defaults.max_participants">
-                                    La capacidad del grupo no puede superar la capacidad del curso
+                                    {{'courses.errors.students' | translate }}
                                   </mat-error>
                                 </mat-form-field>
                               </div>
@@ -285,7 +285,7 @@
                                       <div>
                                         <ul>
                                           <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
-                                            <label for="monitor" style="font-size: 20px;">Monitor</label>
+                                            <label for="monitor" style="font-size: 20px;">{{'monitor' | translate}}</label>
 
                                             <mat-spinner *ngIf="loadingMonitors"> </mat-spinner>
                                             <mat-form-field class="flex-auto" *ngIf="!loadingMonitors">
@@ -328,7 +328,7 @@
                                                 </div>
                                                 <div style="float: left; width: 75%;">
                                                   <p style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}} {{getClient(courseUser.client_id)?.last_name}}</p>
-                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id).language1_id)}} · {{ getCountry(getClient(courseUser.client_id).country) }} · {{calculateAge(getClient(courseUser.client_id).birth_date)}} ans</p>
+                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id).language1_id)}} · {{ getCountry(getClient(courseUser.client_id).country) }} · {{calculateAge(getClient(courseUser.client_id).birth_date)}}{{'years' | translate }}</p>
                                                 </div>
                                               </div>
                                             </li>

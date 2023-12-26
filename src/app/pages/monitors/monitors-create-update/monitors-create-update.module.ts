@@ -26,6 +26,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MonitorsCreateUpdateComponent } from './monitors-create-update.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { MonitorsCreateUpdateComponent } from './monitors-create-update.componen
     MatDialogModule,
     MatTableModule,
     MatSortModule,
-    MatChipsModule
+    MatChipsModule,
+    TranslateModule
   ],
   declarations: [MonitorsCreateUpdateComponent],
   exports: [MonitorsCreateUpdateComponent]

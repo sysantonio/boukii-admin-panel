@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Bonuses">
   <vex-breadcrumbs
-    [crumbs]="['Bonuses', 'Nouvelle bonus']"
+    [crumbs]="['bonus', 'new_bonus']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -16,26 +16,26 @@
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">Nouvelle bonus</h2>
+        <h2 class="title m-0">{{'bonus.new_bonus' |translate}}</h2>
       </div>
       <div class="px-6 py-4 flex flex-col" [formGroup]="form">
 
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
           <mat-form-field class="flex-auto" style="width: 80%;" [ngStyle]="{'width': mode === 'create' ? '80%' : '100%'}">
-            <mat-label>Code</mat-label>
+            <mat-label>{{'bonus.code' |translate}}</mat-label>
             <input formControlName="code" [(ngModel)]="defaults.code" matInput required [readonly]="mode === 'update'">
           </mat-form-field>
 
           <div class="flex-auto" *ngIf="mode === 'create'" style="width: 20%;">
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%; border-radius: 0; margin: 3% 0 0 0;" (click)="generateRandomCode()">Generar código automaticamente</button>
+            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%; border-radius: 0; margin: 3% 0 0 0;" (click)="generateRandomCode()">{{'bonus.generate' | translate}}</button>
           </div>
         </div>
         <mat-form-field class="flex-auto">
-          <mat-label>Client</mat-label>
+          <mat-label>{{'client' | translate}}</mat-label>
           <input
             type="text"
-            placeholder="Pick one"
+            placeholder="{{'choose_client' | translate}}"
             aria-label="Number"
             matInput
             [formControl]="clientsForm"
@@ -54,32 +54,32 @@
         </mat-form-field>
 
         <mat-form-field class="flex-auto" *ngIf="mode === 'create'">
-          <mat-label>MONTANT</mat-label>
+          <mat-label>{{'quantity' | translate}}</mat-label>
           <input formControlName="quantity" [(ngModel)]="defaults.quantity" matInput required>
         </mat-form-field>
 
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="mode === 'update'">
 
           <mat-form-field class="flex-auto">
-            <mat-label>MONTANT</mat-label>
+            <mat-label>{{'quantity' | translate}}</mat-label>
             <input formControlName="quantity" [(ngModel)]="defaults.quantity" matInput required>
           </mat-form-field>
 
           <mat-form-field class="flex-auto">
-            <mat-label>Solde restant?</mat-label>
+            <mat-label>{{'quantity_res' | translate}}</mat-label>
             <input formControlName="budget" matInput [value]="defaults.remaining_balance" [(ngModel)]="defaults.remaining_balance" readonly="true">
           </mat-form-field>
         </div>
 
         <div class="flex-auto">
-          <mat-label>Payé?</mat-label><br>
+          <mat-label>{{'is_paued' | translate}}</mat-label><br>
           <mat-slide-toggle
             color="accent"
             formControlName="payed" [(ngModel)]="defaults.payed">
           </mat-slide-toggle>
         </div>
         <div class="flex items-center justify-end gap-2">
-          <button mat-button type="button" (click)="goTo('/bonuses')">Cancelar</button>
+          <button mat-button type="button" (click)="goTo('/bonuses')">{{'cancel' | translate }}</button>
           <!-- Added (click) event here -->
           <button
             color="primary"
@@ -88,7 +88,7 @@
             (click)="save()"
             [disabled]="form.invalid"
           >
-            Guardar
+            {{'save' | translate }}
           </button>
         </div>
       </div>
