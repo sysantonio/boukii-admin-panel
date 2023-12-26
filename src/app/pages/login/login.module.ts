@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     MatTooltipModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    TranslateModule
   ]
 })
 export class LoginModule {

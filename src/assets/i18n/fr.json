@@ -354,5 +354,10 @@
   "menu.people": "Clients et moniteurs",
   "menu.config": "Paramètres",
   "menu.settings": "Gestion",
-  "menu.monitors": "Moniteurs"
+  "menu.monitors": "Moniteurs",
+  "login.welcome": "Accueillir",
+  "login.email_error": "Veuillez entrer votre email",
+  "login.pass_error": "s'il vous plait entrez votre mot de passe",
+  "login.ok": "MONTEZ",
+  "login.text1": "Accédez avec votre email et votre mot de passe."
 }
