@@ -21,7 +21,7 @@ export class SchoolService {
   }
 
   getSchoolData(user = null) {
-    if (this.user) {
+    if (this.user || user) {
 
       return this.crudService.get('/schools/'+this.user.schools[0].id);
     }
