@@ -22,6 +22,8 @@ import { SchoolService } from 'src/service/school.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  user: any;
+
   constructor(private configService: ConfigService,
               private renderer: Renderer2,
               private platform: Platform,
@@ -35,18 +37,22 @@ export class AppComponent {
               private readonly matIconRegistry: MatIconRegistry,
               private readonly domSanitizer: DomSanitizer) {
     Settings.defaultLocale = this.localeId;
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
-    this.schoolService.getSchoolData()
-                .subscribe((data) => {
-                  defaultConfig.imgSrc = data.data.logo;
-                  this.configService.updateConfig({
-                    sidenav: {
-                      imageUrl: data.data.logo,
-                      title: data.data.name,
-                      showCollapsePin: false
-                    }
-                  });
-                })
+    if (this.user) {
+      this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        defaultConfig.imgSrc = data.data.logo;
+        this.configService.updateConfig({
+          sidenav: {
+            imageUrl: data.data.logo,
+            title: data.data.name,
+            showCollapsePin: false
+          }
+        });
+      })
+    }
+
 
     if (this.platform.BLINK) {
       this.renderer.addClass(this.document.body, 'is-blink');

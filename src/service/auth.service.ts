@@ -10,6 +10,9 @@ import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiCrudService } from './crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfigService } from 'src/@vex/config/config.service';
+import { SchoolService } from './school.service';
+import { defaultConfig } from 'src/@vex/config/configs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +20,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AuthService extends ApiService {
   user: User | null = null;
 
-  constructor(private auth: Auth,private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar) {
+  constructor(private auth: Auth,private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar,
+    private schoolService: SchoolService, private configService: ConfigService) {
     super(http)
     const user = JSON.parse(localStorage.getItem('boukiiUser'));
     if (user) {
@@ -44,7 +48,21 @@ export class AuthService extends ApiService {
           localStorage.setItem('boukiiUser', JSON.stringify(data.data.user));
           localStorage.setItem('boukiiUserToken', JSON.stringify(data.data.token));
           this.user = data.data.user;
-          this.router.navigate(['/home']);
+
+          this.schoolService.getSchoolData(this.user)
+            .subscribe((data) => {
+              defaultConfig.imgSrc = data.data.logo;
+              this.configService.updateConfig({
+                sidenav: {
+                  imageUrl: data.data.logo,
+                  title: data.data.name,
+                  showCollapsePin: false
+                }
+              });
+              this.router.navigate(['/home']);
+
+            })
+
         }, (error) => {
           this.snackbar.open('Error con las credenciales', 'OK', {duration: 3000});
         })

@@ -20,8 +20,11 @@ export class SchoolService {
       })
   }
 
-  getSchoolData() {
-    return this.crudService.get('/schools/'+this.user.schools[0].id);
+  getSchoolData(user = null) {
+    if (this.user) {
+
+      return this.crudService.get('/schools/'+this.user.schools[0].id);
+    }
   }
 }
 
