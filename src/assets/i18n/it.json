@@ -1,5 +1,9 @@
 
 {
+  "add": "Aggiungere...",
+  "add_client": "Aggiungi cliente",
+  "add_task": "Aggiungi attività",
+  "add_booking": "Aggiungi prenotazione",
   "france": "francese",
   "english": "Inglese",
   "germany": "Tedesco",
@@ -343,5 +347,13 @@
   "settings.bookings.extras.text3_2": "(se attiviamo l'opzione Materiale, verrà effettuato un noleggio per i 5 giorni/date di quel corso)",
   "settings.bookings.extras.text4": "Crea i prodotti che saranno noleggiabili in opzione al momento della prenotazione.",
   "settings.bookings.extras.text5": "Puoi creare un massimo di 5 articoli per sport per sezione.",
-  "settings.bookings.extras.text6": "Scegli per quali sport la tua scuola offre opzioni di noleggio"
+  "settings.bookings.extras.text6": "Scegli per quali sport la tua scuola offre opzioni di noleggio",
+  "menu.home": "Inizio",
+  "menu.bonus": "Bonus acquisto",
+  "menu.communication": "Comunicazioni",
+  "menu.stats": "Statistiche",
+  "menu.people": "Clienti e monitor",
+  "menu.config": "Impostazioni",
+  "menu.settings": "Gestione",
+  "menu.monitors": "Monitora"
 }

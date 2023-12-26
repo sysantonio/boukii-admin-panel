@@ -152,11 +152,11 @@ export class AppComponent {
 
       {
         type: 'subheading',
-        label: 'Gestion',
+        label: 'menu.settings',
         children: [
           {
             type: 'link',
-            label: 'Home',
+            label: 'menu.home',
             route: '/home',
             icon: '../assets/img/icons/home-2.png',
             icon_active: '../assets/img/icons/home.svg',
@@ -164,7 +164,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: 'Planification',
+            label: 'timeline.timeline',
             route: '/timeline',
             icon: '../assets/img/icons/planificador-2.png',
             icon_active: '../assets/img/icons/planificador.svg',
@@ -180,7 +180,7 @@ export class AppComponent {
           },*/
           {
             type: 'link',
-            label: 'Reservations',
+            label: 'bookings',
             route: '/bookings',
             icon: '../assets/img/icons/reservas-2.svg',
             icon_active: '../assets/img/icons/reservas.svg',
@@ -188,7 +188,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: 'Courses',
+            label: 'courses.title',
             route: '/courses',
             icon: '../assets/img/icons/cursos-2.svg',
             icon_active: '../assets/img/icons/cursos.svg',
@@ -196,7 +196,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: "Bons d'achat",
+            label: "menu.bonus",
             route: '/bonuses',
             icon: '../assets/img/icons/bonos-2.svg',
             icon_active: '../assets/img/icons/bonos.svg',
@@ -204,7 +204,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: 'Communication',
+            label: 'menu.communication',
             route: '/messages',
             icon: '../assets/img/icons/comunicacion-2.svg',
             icon_active: '../assets/img/icons/comunicacion.svg',
@@ -212,7 +212,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: 'Statistiques',
+            label: 'menu.stats',
             route: '/stats',
             icon: '../assets/img/icons/stats-2.svg',
             icon_active: '../assets/img/icons/stats.svg',
@@ -223,11 +223,11 @@ export class AppComponent {
       // Otra seccion
       {
         type: 'subheading',
-        label: 'Personees',
+        label: 'menu.people',
         children: [
           {
             type: 'link',
-            label: 'Moniteurs',
+            label: 'menu.monitors',
             route: '/monitors',
             icon: '../assets/img/icons/monitores-3.svg',
             icon_active: '../assets/img/icons/monitores-2.svg',
@@ -235,7 +235,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: 'Clients',
+            label: 'clients',
             route: '/clients',
             icon: '../assets/img/icons/clientes2.svg',
             icon_active: '../assets/img/icons/clientes.svg',
@@ -243,7 +243,7 @@ export class AppComponent {
           },
           {
             type: 'link',
-            label: 'Administrateurs',
+            label: 'admins',
             route: '/admins',
             icon: '../assets/img/icons/admin.svg',
             icon_active: '../assets/img/icons/Admins.svg',
@@ -253,7 +253,7 @@ export class AppComponent {
       },
       {
         type: 'subheading',
-        label: 'Configuration',
+        label: 'menu.config',
         children: [{
           type: 'link',
           label: 'Boukii Pay',
@@ -263,7 +263,7 @@ export class AppComponent {
         },
         {
           type: 'link',
-          label: 'Réglages',
+          label: 'settings',
           route: '/settings',
           icon: '../assets/img/icons/reglajes-2.svg',
           icon_active: '../assets/img/icons/reglages.svg',

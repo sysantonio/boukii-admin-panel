@@ -1,4 +1,8 @@
 {
+  "add": "Add...",
+  "add_client": "Add client",
+  "add_task": "Add task",
+  "add_booking": "Add reservation",
   "france": "French",
   "english": "English",
   "germany": "German",
@@ -343,5 +347,13 @@
   "settings.bookings.extras.text5": "You can create a maximum of 5 items per sport per section.",
   "settings.bookings.extras.text6": "Choose which sports your school has rental options for",
   "payment_one": "Other",
-  "payment_other": "Other"
+  "payment_other": "Other",
+  "menu.home": "Start",
+  "menu.bonus": "Purchase bonuses",
+  "menu.communication": "Communications",
+  "menu.stats": "Statistics",
+  "menu.people": "Clients and Monitors",
+  "menu.config": "Settings",
+  "menu.settings": "Management",
+  "menu.monitors": "Monitors"
 }

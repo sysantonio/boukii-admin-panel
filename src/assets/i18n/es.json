@@ -1,4 +1,8 @@
 {
+  "add": "Añadir...",
+  "add_client": "Añadir cliente",
+  "add_task": "Añadir tarea",
+  "add_booking": "Añadir reserva",
   "france": "Francés",
   "english": "Inglés",
   "germany": "Alemán",
@@ -346,5 +350,13 @@
   "settings.bookings.extras.text3_2": "(si activamos la opcion Material se relaizará un alquiler por los 5 días / fechas de ese curso)",
   "settings.bookings.extras.text4": "Crea los productos que estarán como opción para poderlos alquilar durante la reserva.",
   "settings.bookings.extras.text5": "Podrás crear un máximo de 5 items por deporte para sección.",
-  "settings.bookings.extras.text6": "Elije que deportes de tu escuela tienen opciones para alquilar"
+  "settings.bookings.extras.text6": "Elije que deportes de tu escuela tienen opciones para alquilar",
+  "menu.home": "Inicio",
+  "menu.bonus": "Bonos de compra",
+  "menu.communication": "Comunicaciones",
+  "menu.stats": "Estadísticas",
+  "menu.people": "Clientes y Monitores",
+  "menu.config": "Configuraciones",
+  "menu.settings": "Gestión",
+  "menu.monitors": "Monitores"
 }

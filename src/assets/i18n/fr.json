@@ -1,4 +1,8 @@
 {
+  "add": "Ajouter...",
+  "add_client": "Ajouter un client",
+  "add_task": "Ajouter une tâche",
+  "add_booking": "Ajouter une réservation",
   "france": "Français",
   "english": "Anglais",
   "germany": "Allemand",
@@ -342,5 +346,13 @@
   "settings.bookings.extras.text3_2": "(si nous activons l'option Matériel, une location sera effectuée pour les 5 jours/dates de ce cours)",
   "settings.bookings.extras.text4": "Créez les produits qui seront en option à louer lors de la réservation.",
   "settings.bookings.extras.text5": "Vous pouvez créer un maximum de 5 éléments par sport et par section.",
-  "settings.bookings.extras.text6": "Choisissez les sports pour lesquels votre école propose des options de location"
+  "settings.bookings.extras.text6": "Choisissez les sports pour lesquels votre école propose des options de location",
+  "menu.home": "Début",
+  "menu.bonus": "Bonus d'achat",
+  "menu.communication": "Communications",
+  "menu.stats": "Statistiques",
+  "menu.people": "Clients et moniteurs",
+  "menu.config": "Paramètres",
+  "menu.settings": "Gestion",
+  "menu.monitors": "Moniteurs"
 }

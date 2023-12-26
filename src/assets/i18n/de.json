@@ -1,5 +1,9 @@
 
 {
+  "add": "Hinzufügen...",
+  "add_client": "Kunde hinzufügen",
+  "add_task": "Aufgabe hinzufügen",
+  "add_booking": "Reservierung hinzufügen",
   "france": "Französisch",
   "english": "Englisch",
   "germany": "Deutsch",
@@ -344,5 +348,13 @@
   "settings.bookings.extras.text5": "Sie können maximal 5 Artikel pro Sportart und Abschnitt erstellen.",
   "settings.bookings.extras.text6": "Wählen Sie aus, für welche Sportarten Ihre Schule Mietoptionen anbietet",
   "payment_one": "Andere",
-  "payment_other": "Andere"
+  "payment_other": "Andere",
+  "menu.home": "Start",
+  "menu.bonus": "Kaufboni",
+  "menu.communication": "Kommunikation",
+  "menu.stats": "Statistiken",
+  "menu.people": "Clients und Monitore",
+  "menu.config": "Einstellungen",
+  "menu.settings": "Management",
+  "menu.monitors": "Monitore"
 }

@@ -5,6 +5,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MatRippleModule } from '@angular/material/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -12,7 +13,7 @@ import { MatRippleModule } from '@angular/material/core';
   imports: [
     CommonModule,
     MatMenuModule,
-
+    TranslateModule,
     MatIconModule,
     RouterModule,
     MatRippleModule

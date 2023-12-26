@@ -4,7 +4,7 @@
    [routerLink]="item.route"
    class="navigation-item"
    matRipple>
-  {{ item.label }}
+  {{ item.label | translate }}
 </a>
 
 <div (click)="item.route()"
@@ -12,7 +12,7 @@
      [class.hover:bg-hover]="!(isActive$ | async)(item)"
      class="navigation-item navigation-color"
      matRipple>
-  {{ item.label }}
+  {{ item.label | translate }}
 </div>
 
 <ng-container *ngIf="(isSubheading(item) && item.children?.length > 0) || isDropdown(item)">
@@ -21,7 +21,7 @@
        [ngClass]="{ 'bg-primary text-primary-contrast': (isActive$ | async)(item), 'navigation-color': !(isActive$ | async)(item) }"
        class="navigation-item"
        matRipple>
-    {{ item.label }}
+    {{ item.label | translate }}
   </div>
 
   <mat-menu #menu="matMenu" yPosition="below">
@@ -61,7 +61,7 @@
               <button [matMenuTriggerFor]="level2"
                       class="navigation-menu-item"
                       [ngClass]="{ 'text-primary': (isActive$ | async)(item) }"
-                      mat-menu-item>{{ item.label }}</button>
+                      mat-menu-item>{{ item.label | translate }}</button>
 
               <mat-menu #level2="matMenu" yPosition="below">
                 <ng-container *ngFor="let child of item.children">
@@ -83,7 +83,7 @@
                           <button [matMenuTriggerFor]="level4"
                                   class="navigation-menu-item"
                                   [ngClass]="{ 'text-primary': (isActive$ | async)(item) }"
-                                  mat-menu-item>{{ item.label }}</button>
+                                  mat-menu-item>{{ item.label | translate }}</button>
 
                           <mat-menu #level4="matMenu" yPosition="below">
                             <ng-container *ngFor="let child of item.children">
@@ -124,12 +124,12 @@
        [routerLink]="item.route"
        class="navigation-menu-item"
        [ngClass]="{ 'text-primary': (isActive$ | async)(item) }"
-       mat-menu-item>{{ item.label }}</a>
+       mat-menu-item>{{ item.label | translate }}</a>
 
     <div (click)="item.route()"
          *ngIf="isLink(item) && isFunction(item.route)"
          class="navigation-menu-item"
          [ngClass]="{ 'text-primary': (isActive$ | async)(item) }"
-         mat-menu-item>{{ item.label }}</div>
+         mat-menu-item>{{ item.label | translate }}</div>
   </ng-template>
 </ng-container>
