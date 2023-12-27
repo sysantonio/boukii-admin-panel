@@ -16,6 +16,7 @@ import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-
 import { BookingDetailModalComponent } from '../bookings/booking-detail-modal/booking-detail-modal.component';
 import { CourseUserTransferComponent } from '../courses/course-user-transfer/course-user-transfer.component';
 import { CourseUserTransferTimelineComponent } from './course-user-transfer-timeline/course-user-transfer-timeline.component';
+import { TranslateService } from '@ngx-translate/core';
 moment.locale('fr');
 
 @Component({
@@ -97,7 +98,7 @@ export class TimelineComponent {
   startTimeDivision:string;
   endTimeDivision:string;
 
-  constructor(private crudService: ApiCrudService,private dialog: MatDialog,private eventService: EventService, private snackbar: MatSnackBar) {
+  constructor(private crudService: ApiCrudService,private dialog: MatDialog,private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.mockLevels.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -143,7 +144,6 @@ export class TimelineComponent {
       const data: any = await this.crudService.get('/languages?&perPage='+99999).toPromise();
       this.languages = data.data;
     } catch (error) {
-      console.error('There was an error!', error);
     }
   }
 
@@ -152,7 +152,6 @@ export class TimelineComponent {
       const data: any = await this.crudService.get('/sports?perPage='+99999).toPromise();
       this.sportsReceived = data.data;
     } catch (error) {
-      console.error('There was an error!', error);
     }
   }
 
@@ -164,7 +163,6 @@ export class TimelineComponent {
       );
       this.sports.forEach(sport => this.checkedSports.add(sport.id));
     } catch (error) {
-      console.error('There was an error!', error);
     }
   }
 
@@ -177,7 +175,6 @@ export class TimelineComponent {
         degree.inactive_color = this.lightenColor(degree.color, 30);
       });
     } catch (error) {
-      console.error('There was an error!', error);
     }
   }
 
@@ -280,7 +277,6 @@ export class TimelineComponent {
         this.processData(data.data);
       },
       error => {
-        console.error('There was an error!', error);
       }
     );
   }
@@ -775,7 +771,6 @@ export class TimelineComponent {
     // Combine adjusted tasks with the rest
     this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
 
-    console.log('Planner Tasks:', this.plannerTasks);
   }
 
   getMonthWeekInfo(dateString:any) {
@@ -876,9 +871,7 @@ export class TimelineComponent {
         if (userConfirmed) {
           this.moveTask = true;
           this.taskMoved = task;
-          console.log('MOVEEEE');
         } else {
-          console.log('Move cancelled');
         }
       });
     }
@@ -886,16 +879,13 @@ export class TimelineComponent {
 
   moveMonitor(monitor_id:any,event: MouseEvent): void {
     if (this.moveTask) {
-      console.log('Grid row clicked');
       event.stopPropagation();
 
       if(this.taskMoved != monitor_id){
-        console.log('CHANGE TO '+monitor_id);
         this.moveTask = false;
         this.taskMoved = null;
       }
       else{
-        console.log('same monitor');
         this.moveTask = false;
         this.taskMoved = null;
       }
@@ -1057,7 +1047,6 @@ export class TimelineComponent {
 
     /* END DATA DOUBLE CLICK */
 
-    console.log(action, event);
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       data: {
         event,
@@ -1241,13 +1230,11 @@ export class TimelineComponent {
       const updateFirstBlock = () => {
           this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetail.block_id).subscribe(
               response => {
-                  //console.log('First block updated:', response);
                   this.hideEditBlock();
                   this.hideBlock();
                   this.loadBookings(this.currentDate);
               },
               error => {
-                  console.error('Error updating first block:', error);
               }
           );
       };
@@ -1257,11 +1244,9 @@ export class TimelineComponent {
 
                   this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
                       secondResponse => {
-                          //console.log('Second block created:', secondResponse);
                           updateFirstBlock();
                       },
                       error => {
-                          console.error('Error creating second block:', error);
                       }
                   );
 
@@ -1276,13 +1261,11 @@ export class TimelineComponent {
         if (isConfirmed) {
             this.crudService.delete('/monitor-nwds', this.blockDetail.block_id).subscribe(
                 response => {
-                    //console.log('Response:', response);
                     this.hideEditBlock();
                     this.hideBlock();
                     this.loadBookings(this.currentDate);
                 },
                 error => {
-                    console.error('Error:', error);
                 }
             );
         }
@@ -1337,7 +1320,7 @@ export class TimelineComponent {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
       }
     });
   }
