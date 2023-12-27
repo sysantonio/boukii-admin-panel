@@ -60,7 +60,7 @@ export class MonitorsComponent {
     { label: 'mobile', property: 'phone', type: 'text', visible: true },
     { label: 'sports', property: 'sports', type: 'sports_monitor', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
-    { label: "statis", property: 'active_school', type: 'light_school', visible: true },
+    { label: "status", property: 'active_school', type: 'light_school', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
