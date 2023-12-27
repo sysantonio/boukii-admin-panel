@@ -21,9 +21,12 @@ export class SchoolService {
   }
 
   getSchoolData(user = null) {
-    if (this.user || user) {
+    if (this.user) {
 
       return this.crudService.get('/schools/'+this.user.schools[0].id);
+    } else {
+      return this.crudService.get('/schools/'+user.schools[0].id);
+
     }
   }
 }
