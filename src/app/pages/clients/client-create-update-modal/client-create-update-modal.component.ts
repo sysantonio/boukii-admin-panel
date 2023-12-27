@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -106,7 +107,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   mode: 'create' |'update';
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-    private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>) {
+    private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>, private translateService: TranslateService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -304,7 +305,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
     }
   }
 
@@ -368,7 +369,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
         this.crudService.create('/clients', this.defaults)
           .subscribe((client) => {
-            this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -421,7 +422,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
   goToStep3(stepper: MatStepper) {
     if(this.selectedLanguages.length === 0) {
-      this.snackbar.open('Debe seleccionar al menos 1 idioma', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('nackbar.client.mandatory_language'), 'OK', {duration: 3000});
       return;
     }
 

@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
 import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -236,7 +237,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-      private schoolService: SchoolService, private snackbar: MatSnackBar) {
+      private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -410,7 +411,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           this.courseInfoPriveFormGroup = this.fb.group({
 
-            duration: [null, Validators.required],
+            duration: [null],
             minDuration: [null],
             maxDuration: [null],
             fromHour: [this.defaults.course_dates[0].hour_start.replace(': 00', ''), Validators.required],
@@ -1706,7 +1707,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   setSubGroupPax(event: any, level: any) {
 
     if (+event.target.value > this.defaults.max_participants) {
-      this.snackbar.open('La capacidad del grupo no puede ser superior al limete de participantes del curso', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', {duration: 3000});
     }
 
     level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
@@ -2084,37 +2085,37 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   checkStep2PrivateNoFlex(stepper: MatStepper) {
     if(this.defaults.translations.fr.name === null) {
-      this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
       return;
     }
 
     if(this.defaults.price === null && !this.defaults.is_flexible) {
-      this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', {duration: 3000})
       return;
     }
 
     if(this.myControlStations.value === null) {
-      this.snackbar.open('El campo estacion es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', {duration: 3000})
       return;
     }
 
     if(this.defaults.min_age === null) {
-      this.snackbar.open('El campo edad minima es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.min_age'), 'OK', {duration: 3000})
       return;
     }
 
     if(this.defaults.max_age === null) {
-      this.snackbar.open('El campo edad maxima es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.max_age'), 'OK', {duration: 3000})
       return;
     }
 
     if(this.defaults.translations.fr.short_description === null) {
-      this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', {duration: 3000})
       return;
     }
 
     if(this.defaults.translations.fr.description === null) {
-      this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', {duration: 3000})
       return;
     }
 
@@ -2124,32 +2125,32 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   checkStep3PrivateNoFlex() {
     if (this.defaults.date_start_res === null) {
-      this.snackbar.open('El campo fecha desde es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.date_end_res === null) {
-      this.snackbar.open('El campo fecha hassta es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.duration === null) {
-      this.snackbar.open('El campo duracion es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.max_participants === null) {
-      this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.hour_min === null) {
-      this.snackbar.open('El campo hora de inicio es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.hour_max === null) {
-      this.snackbar.open('El campo hora de fin es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', {duration: 3000});
       return;
     }
 
@@ -2158,32 +2159,32 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   checkStep3PrivateFlex(stepper: MatStepper) {
     if (this.defaults.date_start_res === null) {
-      this.snackbar.open('El campo fecha reservable desde es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_from'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.date_end_res === null) {
-      this.snackbar.open('El campo fecha reservable hasta es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_to'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.duration === null) {
-      this.snackbar.open('El campo duracion es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.max_participants === null) {
-      this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.hour_min === null) {
-      this.snackbar.open('El campo hora de inicio es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.hour_max === null) {
-      this.snackbar.open('El campo hora de fin es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', {duration: 3000});
       return;
     }
 
@@ -2196,27 +2197,27 @@ export class CoursesCreateUpdateComponent implements OnInit {
   checkStep2ColectiveNoFlex(stepper: MatStepper) {
     if (this.mode === 'create') {
       if(this.defaults.translations.fr.name === null) {
-        this.snackbar.open('El campo nombre es obligatorio', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
         return;
       }
 
       if(this.defaults.price === null) {
-        this.snackbar.open('El campo precio es obligatorio', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', {duration: 3000})
         return;
       }
 
       if(this.myControlStations.value === null) {
-        this.snackbar.open('El campo estacion es obligatorio', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', {duration: 3000})
         return;
       }
 
       if(this.defaults.translations.fr.short_description === null) {
-        this.snackbar.open('El campo resumen es obligatorio', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', {duration: 3000})
         return;
       }
 
       if(this.defaults.translations.fr.description === null) {
-        this.snackbar.open('El campo descripcion es obligatorio', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', {duration: 3000})
         return;
       }
 
@@ -2230,17 +2231,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
   checkStep3ColectiveNoFlex(stepper: MatStepper) {
 
     if (this.defaults.date_start_res === null) {
-      this.snackbar.open('El campo fecha desde es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.date_end_res === null) {
-      this.snackbar.open('El campo fecha hassta es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
       return;
     }
 
     if (this.defaults.max_participants === null) {
-      this.snackbar.open('El campo participantes es obligatorio', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
       return;
     }
 

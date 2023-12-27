@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -124,7 +125,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   schoolSports: any[] = [];
   stations: any[] = [];
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router) {
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService,
+    private snackbar: MatSnackBar, private router: Router, private translateService: TranslateService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDateChild = new Date(this.today);
@@ -425,7 +427,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
     }
   }
 
@@ -476,7 +478,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
         this.crudService.create('/monitors', this.defaults)
           .subscribe((monitor) => {
-            this.snackbar.open('Monitor creado correctamente', 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.monitor.create'), 'OK', {duration: 3000});
 
             this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
               .subscribe((monitorSchool) => {
@@ -593,7 +595,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   goToStep3(stepper: MatStepper) {
     if(this.selectedLanguages.length === 0) {
-      this.snackbar.open('Debe seleccionar al menos 1 idioma', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', {duration: 3000});
       return;
     }
 
@@ -602,7 +604,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   goToStep5(stepper: MatStepper) {
     if(this.selectedSports.length === 0) {
-      this.snackbar.open('Debe seleccionar al menos 1 deporte', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.client.sport_language'), 'OK', {duration: 3000});
       return;
     }
 

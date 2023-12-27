@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-update-modal/bookings-create-update-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-clients',
@@ -38,7 +39,8 @@ export class ClientsComponent {
   mainIdSelected = true;
   borderActive = -1;
 
-  constructor(private crudService: ApiCrudService, private router: Router, private dialog: MatDialog, private snackbar: MatSnackBar) {
+  constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService,
+    private dialog: MatDialog, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.getLanguages();
   }
@@ -69,7 +71,7 @@ export class ClientsComponent {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
       }
     });
   }

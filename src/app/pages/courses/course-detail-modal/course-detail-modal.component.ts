@@ -13,6 +13,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-course-detail-modal',
@@ -131,7 +132,7 @@ export class CourseDetailModalComponent implements OnInit {
   rangeForm: UntypedFormGroup;
 
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
-    private snackbar: MatSnackBar, private cdr: ChangeDetectorRef, @Inject(MAT_DIALOG_DATA) public externalData: any) {
+    private snackbar: MatSnackBar, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.externalData.id;
@@ -247,12 +248,12 @@ export class CourseDetailModalComponent implements OnInit {
         if (data) {
           this.crudService.delete('/course-subgroups', subgroup.id)
             .subscribe(() => {
-              this.snackbar.open('Grupo eliminado correctamente', 'OK', {duration: 3000})
+              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
             })
         }
       });
     } else {
-      this.snackbar.open('Este subgrupo tiene reserva asociadas y no puede ser eliminado', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
     }
 
   }
@@ -416,13 +417,13 @@ export class CourseDetailModalComponent implements OnInit {
             groupsToDelete.forEach(element => {
               this.crudService.delete('/course-groups', element)
                 .subscribe(() => {
-                  this.snackbar.open('Grupo eleiminado correctamente', 'OK', {duration: 3000});
+                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
                 })
             });
           }
         });
       } else {
-        this.snackbar.open('Este grupo tiene reserva asociadas y no puede ser eliminado', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.course.snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
       }
     }
 
@@ -636,7 +637,7 @@ export class CourseDetailModalComponent implements OnInit {
 
   setSubGroupPax(event: any, level: any) {
     if (+event.target.value > this.defaults.max_participants) {
-      this.snackbar.open('La capacidad del grupo no puede ser superior al limete de participantes del curso', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', {duration: 3000});
     }
 
     level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;

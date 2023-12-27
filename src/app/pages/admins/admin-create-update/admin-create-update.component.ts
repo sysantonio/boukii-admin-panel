@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -61,7 +62,8 @@ export class AdminCreateUpdateComponent implements OnInit {
   user: any;
   mode: 'create' | 'update' = 'create';
 
-  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private snackbar: MatSnackBar, private router: Router, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute) {
+  constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private snackbar: MatSnackBar, private router: Router, private crudService: ApiCrudService,
+    private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -223,7 +225,7 @@ export class AdminCreateUpdateComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
     }
   }
 
@@ -256,7 +258,7 @@ export class AdminCreateUpdateComponent implements OnInit {
 
     this.crudService.create('/users', this.defaults)
       .subscribe((user) => {
-        this.snackbar.open('Administrador creado correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.admin.create'), 'OK', {duration: 3000});
         this.router.navigate(['/admins']);
       })
   }
@@ -265,7 +267,7 @@ export class AdminCreateUpdateComponent implements OnInit {
 
     this.crudService.update('/users', this.defaults, this.id)
       .subscribe((user) => {
-        this.snackbar.open('Administrador actualizado correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.admin.update'), 'OK', {duration: 3000});
         this.router.navigate(['/admins']);
       })
   }

@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { AuthService } from 'src/service/auth.service';
 import { ApiCrudService } from 'src/service/crud.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-recover-password',
@@ -31,7 +32,8 @@ export class RecoverPasswordComponent implements OnInit {
               private cd: ChangeDetectorRef,
               private crudService: ApiCrudService,
               private activatedRoute: ActivatedRoute,
-              private snackbar: MatSnackBar
+              private snackbar: MatSnackBar,
+              private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -64,7 +66,7 @@ export class RecoverPasswordComponent implements OnInit {
     //this.authService.login(this.form.value.email, this.form.value.password);
     this.crudService.post('/users', {token: this.token, password: this.form.value.password})
       .subscribe(() => {
-        this.snackbar.open('Contraseña actualizada corectamente' , 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.password_updated') , 'OK', {duration: 3000});
         this.updated = true;
         this.router.navigate(['']);
       })

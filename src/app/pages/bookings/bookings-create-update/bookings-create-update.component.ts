@@ -24,7 +24,7 @@ import { ClientCreateUpdateModalComponent } from '../../clients/client-create-up
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { AddClientSportModalComponent } from '../add-client-sport/add-client-sport.component';
 import { Router } from '@angular/router';
-import { SchoolService } from 'src/service/school.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'custom-header',
@@ -261,7 +261,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private schoolService: SchoolService, private cdr: ChangeDetectorRef) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private translateService: TranslateService, private cdr: ChangeDetectorRef) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -409,7 +409,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
 
     if (!hasSport) {
-      this.snackbar.open('El usuario no tiene este deporte asociado. Si se crea una reserva con este deporte, se le asignará automáticamente el nivel seleccionado', 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:3000});
     }
   }
 
@@ -553,13 +553,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open(this.sameMonitor ? 'Complete los campos de monitor, fecha y hora de la reserva del curso' : 'Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
+      this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});
       return;
     }
 
     if (this.courseTypeId === 1 && this.selectedItem.is_flexible && this.reservableCourseDate.length === 0) {
 
-      this.snackbar.open('Selecciona alguna de las fechas del curso flexible seleccionado', 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.select_dates'), 'OK', {duration:3000});
       return;
     }
 
@@ -782,7 +782,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.reservableCourseDate = [];
         this.clientsForm.disable();
       }, (error) => {
-        this.snackbar.open('Existe un solapamiento para el cliente en esta reserva: ' +
+        this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
           moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', {duration: 3000})
       });
 
@@ -949,7 +949,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 window.open(result.payrexx_link, "_self");
               })
           } else {
-            this.snackbar.open('La reserva se ha creado correctamente', 'OK', {duration: 1000});
+            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
             this.goTo('/bookings');
           }
         }, 1000);
@@ -1116,13 +1116,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       if (!hasSport) {
         this.courses = [];
-          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_1') + this.selectedSport.name + this.translateService.instant('snackbar.booking.no_sport_2'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
       }
     } else {
-      this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+      this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
       this.snackBarRef.onAction().subscribe(() => {
         this.addSportToUser(this.selectedSport.sport_id);
       });
@@ -1202,13 +1202,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
 
         if (!hasSport && client.client_sports.length === 0) {
-          this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
         } else if(!hasSport && client.client_sports.length > 0) {
           this.courses = [];
-          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_1') + this.selectedSport.name + this.translateService.instant('snackbar.booking.no_sport_2'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
@@ -1333,7 +1333,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         }
 
         if (data.data.length === 0) {
-          this.snackbar.open('No hay cursos disponibles con estos filtros', 'OK', {duration: 1500});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
         }
         this.loading = false;
         this.loadingCalendar = false;
@@ -1884,7 +1884,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             this.crudService.create('/clients', client)
               .subscribe((clientCreated) => {
-                this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+                this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
                 this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
                   .subscribe((clientSchool) => {
@@ -2206,7 +2206,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         if (response.data.length === 0) {
 
-          this.snackbar.open('No hay monitores disponibles que coincidan con el nivel, hora y duraciñon del curso', 'OK', {duration:3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
         }
       })
   }

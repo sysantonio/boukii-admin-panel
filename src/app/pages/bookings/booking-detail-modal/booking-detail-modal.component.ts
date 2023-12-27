@@ -17,6 +17,7 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { SchoolService } from 'src/service/school.service';
 import { CancelBookingModalComponent } from '../cancel-booking/cancel-booking.component';
 import { CancelPartialBookingModalComponent } from '../cancel-partial-booking/cancel-partial-booking.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-booking-detail-modal',
@@ -191,7 +192,7 @@ export class BookingDetailModalComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute, private schoolService: SchoolService, private router: Router,
+    private snackbar: MatSnackBar, private translateService: TranslateService, private schoolService: SchoolService, private router: Router,
     @Inject(MAT_DIALOG_DATA) public incData: any, private dialogRef: MatDialogRef<any>,) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
@@ -464,8 +465,7 @@ export class BookingDetailModalComponent implements OnInit {
 
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open('Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
-      return;
+      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.mandatory'), 'OK', {duration:3000});      return;
     }
 
     let data: any = {};
@@ -668,14 +668,14 @@ export class BookingDetailModalComponent implements OnInit {
               window.open(result.payrexx_link, "_self");
             })
         } else {
-          this.snackbar.open('La reserva se ha creado correctamente', 'OK', {duration: 1000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
           this.goTo('/bookings');
         }
       }, 1000);
 
       this.crudService.update('/bookings', {paid: this.defaults.paid, payment_method_id: this.defaults.payment_method_id}, this.id)
         .subscribe((res) => {
-          this.snackbar.open('Reserva actualizada correctamente', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 3000});
           this.getData();
         })
   }
@@ -1115,7 +1115,7 @@ export class BookingDetailModalComponent implements OnInit {
 
       })
 
-      this.snackbar.open('Notas del cliente actualizadas', 'OK', {duration:3000})
+      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.notes_client'), 'OK', {duration:3000})
     });
   }
 
@@ -1126,7 +1126,7 @@ export class BookingDetailModalComponent implements OnInit {
 
       })
 
-      this.snackbar.open('Notas del cliente actualizadas', 'OK', {duration:3000})
+      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.notes_school'), 'OK', {duration:3000})
     });
   }
 
@@ -1234,7 +1234,7 @@ export class BookingDetailModalComponent implements OnInit {
           .subscribe(() => {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
-              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
               this.goTo('/bookings');
             })
           })
@@ -1245,7 +1245,7 @@ export class BookingDetailModalComponent implements OnInit {
           .subscribe(() => {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
-              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
               this.goTo('/bookings');
 
             })
@@ -1274,7 +1274,7 @@ export class BookingDetailModalComponent implements OnInit {
                           console.log(vresult);
 
                         })
-                  this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                  this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                   this.goTo('/bookings');
 
                 })
@@ -1308,7 +1308,7 @@ export class BookingDetailModalComponent implements OnInit {
                       this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
                         .subscribe((vresult) => {
                           console.log(vresult);
-                          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                           this.goTo('/bookings');
 
                         })
@@ -1339,7 +1339,7 @@ export class BookingDetailModalComponent implements OnInit {
                         this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -element.bonus.reducePrice})
                           .subscribe((vresult) => {
                             console.log(vresult);
-                            this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                             this.goTo('/bookings');
 
                           })
@@ -1353,7 +1353,7 @@ export class BookingDetailModalComponent implements OnInit {
                 .subscribe(() => {
                 this.crudService.delete('/bookings', this.booking.id)
                 .subscribe(() => {
-                  this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                  this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                   this.goTo('/bookings');
 
                 })
@@ -1389,7 +1389,7 @@ export class BookingDetailModalComponent implements OnInit {
               })
             });
           });
-          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
         } else if(data.type === 'refund') {
 
@@ -1401,7 +1401,7 @@ export class BookingDetailModalComponent implements OnInit {
               })
             })
           })
-          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
         } else if(data.type === 'refund_gift') {
           const vData = {
@@ -1430,7 +1430,7 @@ export class BookingDetailModalComponent implements OnInit {
                 console.log(vresult);
             })
           })
-          this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
         } else if(data.type === 'refund_bonus') {
 
@@ -1465,7 +1465,7 @@ export class BookingDetailModalComponent implements OnInit {
                   this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
                     .subscribe((vresult) => {
                       console.log(vresult);
-                      this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+                      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
                     })
 
@@ -1504,7 +1504,7 @@ export class BookingDetailModalComponent implements OnInit {
                       })
                   })
               });
-              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
             } else {
               this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
@@ -1516,7 +1516,7 @@ export class BookingDetailModalComponent implements OnInit {
                   })
                 })
               })
-              this.snackbar.open('Item deleted', 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
             }
           }
         }

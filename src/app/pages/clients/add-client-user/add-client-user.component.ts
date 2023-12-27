@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
 import { ApiCrudService } from 'src/service/crud.service';
 
@@ -28,7 +29,7 @@ export class AddClientUserModalComponent implements OnInit {
   minDate: Date;
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>) {
+    private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>, private translateService: TranslateService) {
 
     this.today = new Date();
     this.minDate = new Date(this.today);
@@ -91,7 +92,7 @@ export class AddClientUserModalComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
     }
   }
 

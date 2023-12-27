@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
   mode: 'create' | 'update' = 'create';
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private dialogRef: MatDialogRef<any>, private fb: UntypedFormBuilder,
-    private crudService: ApiCrudService, private snackbar: MatSnackBar) {
+    private crudService: ApiCrudService, private snackbar: MatSnackBar, private translateService: TranslateService) {
 
   }
 
@@ -51,7 +52,7 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
     data.school_id = 1;
     this.crudService.create('/school-salary-levels', data)
       .subscribe((data) => {
-        this.snackbar.open('Salario creado correctamente', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_created'), 'OK', {duration: 3000})
         this.dialogRef.close(data);
       })
   }
@@ -61,7 +62,7 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
     data.school_id = 1;
     this.crudService.update('/school-salary-levels', data, this.defaults.id)
       .subscribe((data) => {
-        this.snackbar.open('Salario modificado correctamente', 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000})
         this.dialogRef.close(data);
       })
   }

@@ -21,6 +21,7 @@ import moment from 'moment';
 import { PasswordService } from 'src/service/password.service';
 import { MatStepper } from '@angular/material/stepper';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -171,7 +172,8 @@ export class ClientDetailComponent {
 
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-     private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService) {
+     private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
+     private translateService: TranslateService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 3);
@@ -633,7 +635,7 @@ export class ClientDetailComponent {
         this.crudService.delete('/clients-utilizers', id)
           .subscribe(() => {
             this.getClientUtilisateurs();
-            this.snackbar.open('User removed', 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.client.removed_user'), 'OK', {duration: 3000});
           })
       }
     });
@@ -642,7 +644,7 @@ export class ClientDetailComponent {
   updateLevel(clientSport, level) {
     this.crudService.update('/client-sports', {client_id: clientSport.id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
       .subscribe((data) => {
-        this.snackbar.open('Level updated', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', {duration: 3000});
       })
   }
 
@@ -660,7 +662,7 @@ export class ClientDetailComponent {
 
         this.crudService.update('/clients', this.defaults, this.id)
           .subscribe((client) => {
-            this.snackbar.open('Cliente modificado correctamente', 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -819,7 +821,7 @@ export class ClientDetailComponent {
 
               this.crudService.create('/clients', client)
                 .subscribe((clientCreated) => {
-                  this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+                  this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
                   this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
                     .subscribe((clientSchool) => {
@@ -836,7 +838,7 @@ export class ClientDetailComponent {
         }
       });
     } else {
-      this.snackbar.open('El usuario no es mayor de edad y no puede tener utilizadores', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.client.no_age'), 'OK', {duration: 3000});
     }
 
   }
@@ -865,7 +867,7 @@ export class ClientDetailComponent {
 
   goToStep3(stepper: MatStepper) {
     if(this.selectedLanguages.length === 0) {
-      this.snackbar.open('Debe seleccionar al menos 1 idioma', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', {duration: 3000});
       return;
     }
 

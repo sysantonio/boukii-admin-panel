@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -25,7 +26,8 @@ export class CourseUserTransferComponent implements OnInit {
   loading = true;
   user: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar) {
+  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService,
+   private snackbar: MatSnackBar, private translateService: TranslateService) {
 
   }
 
@@ -159,7 +161,7 @@ export class CourseUserTransferComponent implements OnInit {
 
     this.crudService.post('/clients/transfer', data)
       .subscribe((data) => {
-        this.snackbar.open('Alumno transferido', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.course.trasnfer_user'), 'OK', {duration: 3000});
         this.getData();
       })
   }

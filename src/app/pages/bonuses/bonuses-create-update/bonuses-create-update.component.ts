@@ -7,6 +7,7 @@ import { CLIENTS } from 'src/app/static-data/clients-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-bonuses-create-update',
@@ -36,7 +37,8 @@ export class BonusesCreateUpdateComponent implements OnInit {
   clients = [];
   id: any = null;
 
-  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private translateService: TranslateService,
+    private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
 
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.form = this.fb.group({
@@ -82,7 +84,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
 
     this.crudService.create('/vouchers', data)
       .subscribe((res) => {
-        this.snackbar.open('Bono creado correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.bonus.create'), 'OK', {duration: 3000});
         this.router.navigate(['/bonuses'])
       })
   }
@@ -101,7 +103,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
     this.crudService.update('/vouchers', data, this.id)
       .subscribe((res) => {
 
-        this.snackbar.open('Bono modificado correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.bonus.update'), 'OK', {duration: 3000});
         this.router.navigate(['/bonuses'])
       })
 

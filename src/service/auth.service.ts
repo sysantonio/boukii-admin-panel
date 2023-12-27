@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfigService } from 'src/@vex/config/config.service';
 import { SchoolService } from './school.service';
 import { defaultConfig } from 'src/@vex/config/configs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class AuthService extends ApiService {
   user: User | null = null;
 
   constructor(private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private schoolService: SchoolService, private configService: ConfigService) {
+    private schoolService: SchoolService, private configService: ConfigService, private translateService: TranslateService) {
     super(http)
     const user = JSON.parse(localStorage.getItem('boukiiUser'));
     if (user) {
@@ -63,10 +64,10 @@ export class AuthService extends ApiService {
             })
 
         }, (error) => {
-          this.snackbar.open('Error con las credenciales', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.credential_error'), 'OK', {duration: 3000});
         })
     } catch (error) {
-      this.snackbar.open('Error con las credenciales', 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.credential_error'), 'OK', {duration: 3000});
     }
   }
 

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -27,7 +28,8 @@ export class CourseUserTransferTimelineComponent implements OnInit {
   groupedByColor = {};
   colorKeys: string[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>) {
+  constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private translateService: TranslateService,
+  private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>) {
 
   }
 
@@ -171,7 +173,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
 
     this.crudService.post('/clients/transfer', data)
       .subscribe((data) => {
-        this.snackbar.open('Alumno transferido', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.course.trasnfer_user'), 'OK', {duration: 3000});
         this.dialogRef.close();
       })
   }

@@ -21,6 +21,7 @@ import { addDays, getDay, startOfWeek, endOfWeek, addWeeks, subWeeks, format, is
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { BookingDetailModalComponent } from '../../bookings/booking-detail-modal/booking-detail-modal.component';
 import { CourseUserTransferTimelineComponent } from '../../timeline/course-user-transfer-timeline/course-user-transfer-timeline.component';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
@@ -219,7 +220,7 @@ export class MonitorDetailComponent {
   weeksInMonth: any[] = [];
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
-    private activatedRoute: ActivatedRoute, private dialog: MatDialog) {
+    private activatedRoute: ActivatedRoute, private dialog: MatDialog, private translateService: TranslateService) {
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];
@@ -553,7 +554,7 @@ export class MonitorDetailComponent {
           this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
         }
       } else {
-        this.snackbar.open('Tan solo pueden seleccionarse 6 idiomas', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
       }
     }
   }
@@ -805,13 +806,13 @@ export class MonitorDetailComponent {
       this.crudService.delete('/monitor-sport-authorized-degrees', authLevel.id)
         .subscribe(() => {
           element.authorisedLevels.splice(index, 1);
-          this.snackbar.open('Monitor authorization deleted', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.monitor.delete_auth'), 'OK', {duration: 3000});
         });
     } else {
       this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: element.authorisedLevels[0].monitor_sport_id, degree_id: level.id})
         .subscribe((data) => {
           element.authorisedLevels.push(data.data);
-          this.snackbar.open('Monitor authorization created', 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth'), 'OK', {duration: 3000});
 
         });
     }
@@ -831,7 +832,7 @@ export class MonitorDetailComponent {
 
       this.crudService.update('/monitor-sports-degrees', data, auLevel.monitor_sport_id)
       .subscribe(() => {
-        this.snackbar.open('Monitor adult authorization updated', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth_adult'), 'OK', {duration: 3000});
         this.getData();
       })
     });
@@ -934,7 +935,7 @@ export class MonitorDetailComponent {
 
         this.crudService.update('/monitors', this.defaults, this.id)
           .subscribe((monitor) => {
-            this.snackbar.open('Monitor modificado correctamente', 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
 
             // revisar a partir de aqui
               this.sportsData.data.forEach(element => {
@@ -964,16 +965,14 @@ export class MonitorDetailComponent {
     this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
        degree_id: level.id, salary_level: monitorDegree.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
-        this.snackbar.open('Level updated', 'OK', {duration: 3000});
-      })
+        this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', {duration: 3000});      })
   }
 
   updateSalary(monitorDegree, salary) {
     this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
        degree_id: monitorDegree.level.id, salary_level: salary.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
-        this.snackbar.open('Salary updated', 'OK', {duration: 3000});
-      })
+        this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000});      })
   }
 
   toggleVisibility() {
@@ -2042,7 +2041,7 @@ export class MonitorDetailComponent {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.snackbar.open('Reserva creada correctamente', 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
       }
     });
   }

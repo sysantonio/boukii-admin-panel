@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
 import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
 import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'custom-header',
@@ -261,7 +262,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
@@ -339,7 +340,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
             setTimeout(() => {
-              this.clientsForm.patchValue(this.clients[0]);
+              this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.clientId));
+              this.loadingCalendar = false;
               this.loading = false;
             }, 500);
           }, 500);
@@ -408,7 +410,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     });
 
     if (!hasSport) {
-      this.snackbar.open('El usuario no tiene este deporte asociado. Si se crea una reserva con este deporte, se le asignará automáticamente el nivel seleccionado', 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:3000});
     }
   }
 
@@ -464,7 +466,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       });
 
       if (item.is_flexible) {
-        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.includes(':')  ? this.transformTime(item.duration) : item.duration);
+        this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 9 ? this.transformTime(item.duration) : item.duration);
       }
     }
   }
@@ -552,13 +554,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open(this.sameMonitor ? 'Complete los campos de monitor, fecha y hora de la reserva del curso' : 'Complete los campos de fecha y hora de la reserva del curso', 'OK', {duration:3000});
+      this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});
       return;
     }
 
     if (this.courseTypeId === 1 && this.selectedItem.is_flexible && this.reservableCourseDate.length === 0) {
 
-      this.snackbar.open('Selecciona alguna de las fechas del curso flexible seleccionado', 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.select_dates'), 'OK', {duration:3000});
       return;
     }
 
@@ -570,7 +572,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         checkAval.bookingUsers.push({
           client_id: this.defaultsBookingUser.client_id,
           hour_start: element.hour_start.replace(': 00'),
-          hour_end: element.hour_start.replace(': 00'),
+          hour_end: element.hour_end.replace(': 00'),
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
@@ -580,7 +582,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         checkAval.bookingUsers.push({
           client_id: this.defaultsBookingUser.client_id,
           hour_start: element.hour_start.replace(': 00'),
-          hour_end: element.hour_start.replace(': 00'),
+          hour_end: element.hour_end.replace(': 00'),
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
@@ -620,9 +622,10 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       let price = this.selectedItem.price;
       if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
         const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
+        price = price * this.reservableCourseDate.length;
         discounts.forEach(element => {
           if (element.date === this.reservableCourseDate.length) {
-            price = price - (this.selectedItem.price * (element.percentage / 100));
+            price = price - (price * (element.percentage / 100));
           }
         });
       }
@@ -731,8 +734,9 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             }
           });
         } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
+          const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
           this.courseDates.forEach(item => {
-            const price = data.price_total + (parseFloat(this.selectedItem.price_range.find((p) => p.intervalo === item.duration)[item.paxes]));
+            const price = data.price_total + (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[item.paxes]));
             data.price_total = data.price_total + price;
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
@@ -779,7 +783,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.reservableCourseDate = [];
         this.clientsForm.disable();
       }, (error) => {
-        this.snackbar.open('Existe un solapamiento para el cliente en esta reserva: ' +
+        this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
           moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', {duration: 3000})
       });
 
@@ -933,22 +937,23 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 })
             }
 
-            setTimeout(() => {
 
-              if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
-                this.crudService.post('/bookings/payment/' + booking.data.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus, reduction:this.reduction})
-                  .subscribe((result: any) => {
-                    console.log((result));
-                    window.open(result.payrexx_link, "_self");
-                  })
-              } else {
-                this.snackbar.open('La reserva se ha creado correctamente', 'OK', {duration: 1000});
-                this.goTo('/bookings');
-              }
-            }, 1000);
           });
         });
+        setTimeout(() => {
 
+          if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
+            this.crudService.post('/admin/bookings/payments/' + booking.data.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
+               reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
+              .subscribe((result: any) => {
+                console.log((result));
+                window.open(result.payrexx_link, "_self");
+              })
+          } else {
+            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
+            this.goTo('/bookings');
+          }
+        }, 1000);
       })
 
   }
@@ -1112,13 +1117,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
       if (!hasSport) {
         this.courses = [];
-          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_1') + this.selectedSport.name + this.translateService.instant('snackbar.booking.no_sport_2'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
       }
     } else {
-      this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+      this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
       this.snackBarRef.onAction().subscribe(() => {
         this.addSportToUser(this.selectedSport.sport_id);
       });
@@ -1198,13 +1203,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         });
 
         if (!hasSport && client.client_sports.length === 0) {
-          this.snackBarRef = this.snackbar.open('Este usuario no tiene ningún deporte asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
         } else if(!hasSport && client.client_sports.length > 0) {
           this.courses = [];
-          this.snackBarRef = this.snackbar.open('Este usuario no tiene el deporte ' + this.selectedSport.name + ' asociado. ¿Quieres añadirlo?', 'Si', {duration: 10000});
+          this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_1') + this.selectedSport.name + this.translateService.instant('snackbar.booking.no_sport_2'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
@@ -1329,7 +1334,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
 
         if (data.data.length === 0) {
-          this.snackbar.open('No hay cursos disponibles con estos filtros', 'OK', {duration: 1500});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
         }
         this.loading = false;
         this.loadingCalendar = false;
@@ -1396,6 +1401,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       .subscribe((school) => {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
+
         this.cancellationInsurance =  parseFloat(this.settings.taxes.cancellation_insurance_percent);
         this.boukiiCarePrice = parseInt(this.settings.taxes.boukii_care_price);
         this.tva = parseFloat(this.settings.taxes.tva);
@@ -1659,8 +1665,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let ret = 0;
 
     this.bookingsToCreate.forEach(element => {
-      ret = ret + ((element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 1)
-        || (!element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 2)
+      ret = ret + ((!element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 2)
       ? element.price_total * element.courseDates.length : element.price_total);
     });
 
@@ -1880,7 +1885,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
             this.crudService.create('/clients', client)
               .subscribe((clientCreated) => {
-                this.snackbar.open('Cliente creado correctamente', 'OK', {duration: 3000});
+                this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
                 this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
                   .subscribe((clientSchool) => {
@@ -2048,6 +2053,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     return result;
   }
 
+
+
   generateCourseDurations(startTime: any, endTime: any, interval: any) {
 
     const timeToMinutes = (time: string) => {
@@ -2090,8 +2097,9 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const tableDurations = [];
     const tablePaxes = [];
 
+    const priceRangeCourse = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
     durations.forEach(element => {
-      const priceRange = this.selectedItem.price_range.find((p) => p.intervalo === element);
+      const priceRange = priceRangeCourse.find((p) => p.intervalo === element);
       if (priceRange && priceRange.intervalo === element ) {
 
         if (this.extractValues(priceRange)[0]) {
@@ -2118,7 +2126,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   calculateAvailablePaxes(event: any) {
     const paxes = [];
 
-    const data = this.selectedItem.price_range.find(p => p.intervalo === event);
+    const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
+    const data = priceRange.find(p => p.intervalo === event);
 
     this.extractValues(data).forEach(element => {
       const pax = element.key;
@@ -2198,7 +2207,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
         if (response.data.length === 0) {
 
-          this.snackbar.open('No hay monitores disponibles que coincidan con el nivel, hora y duraciñon del curso', 'OK', {duration:3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
         }
       })
   }
