@@ -134,7 +134,6 @@ export class TimelineComponent {
     if (activeSchool) {
         return activeSchool.id;
     } else {
-        console.log("No active school found.");
         return null;
     }
   }
@@ -142,7 +141,6 @@ export class TimelineComponent {
   async getLanguages() {
     try {
       const data: any = await this.crudService.get('/languages?&perPage='+99999).toPromise();
-      console.log(data);
       this.languages = data.data;
     } catch (error) {
       console.error('There was an error!', error);
@@ -152,7 +150,6 @@ export class TimelineComponent {
   async getSports(){
     try {
       const data: any = await this.crudService.get('/sports?perPage='+99999).toPromise();
-      console.log(data);
       this.sportsReceived = data.data;
     } catch (error) {
       console.error('There was an error!', error);
@@ -162,7 +159,6 @@ export class TimelineComponent {
   async getSchoolSports(){
     try {
       const data: any = await this.crudService.get('/school-sports?school_id='+this.activeSchool+'&perPage='+99999).toPromise();
-      console.log(data);
       this.sports = this.sportsReceived.filter(sport =>
         data.data.some(newSport => newSport.sport_id === sport.id)
       );
@@ -175,7 +171,7 @@ export class TimelineComponent {
   async getDegrees(){
     try {
       const data: any = await this.crudService.get('/degrees?school_id='+this.activeSchool+'&perPage='+99999).toPromise();
-      console.log(data);
+
       this.degrees = data.data.sort((a, b) => a.degree_order - b.degree_order);
       this.degrees.forEach((degree: any) => {
         degree.inactive_color = this.lightenColor(degree.color, 30);
@@ -280,7 +276,7 @@ export class TimelineComponent {
   searchBookings(firstDate:string,lastDate:string){
     this.crudService.get('/admin/getPlanner?date_start='+firstDate+'&date_end='+lastDate+'&school_id='+this.activeSchool+'&perPage='+99999).subscribe(
       (data:any) => {
-        console.log(data);
+
         this.processData(data.data);
       },
       error => {
@@ -523,14 +519,8 @@ export class TimelineComponent {
       })
     ];
 
-    console.log('Combined Tasks Calendar:', tasksCalendar);
 
     this.calculateTaskPositions(tasksCalendar);
-
-    console.log(this.allMonitors);
-    console.log(this.filteredMonitors);
-    console.log(allBookings);
-    console.log(allNwds);
   }
 
   getPositionDate(courseDates: any[], courseDateId: string): number {
@@ -831,13 +821,11 @@ export class TimelineComponent {
       if(task.grouped_tasks && task.grouped_tasks.length > 1){
         //Open Modal grouped courses
         this.groupedTasks = task.grouped_tasks;
-        console.log(this.groupedTasks);
         this.idGroupedTasks = task.booking_id;
         this.showGrouped = true;
       }
       else{
         //Load course
-        console.log(task);
         this.idDetail = task.booking_id;
         this.taskDetail = task;
         this.showDetail = true;
@@ -848,7 +836,6 @@ export class TimelineComponent {
   }
 
   toggleBlock(block:any){
-    console.log(block);
     this.idBlock = block.block_id;
     this.blockDetail = block;
     this.hideDetail();
@@ -1002,7 +989,7 @@ export class TimelineComponent {
       };
     }
 
-    console.log(data);
+
     this.editedMonitor = null;
     this.showEditMonitor = false;
   }
@@ -1021,7 +1008,6 @@ export class TimelineComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
 
-        console.log(result);
       }
     });
   }
@@ -1068,7 +1054,6 @@ export class TimelineComponent {
           throw new Error('Invalid type');
     }
 
-    console.log(dateInfo);
 
     /* END DATA DOUBLE CLICK */
 
@@ -1085,7 +1070,6 @@ export class TimelineComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
 
-        console.log(result);
 
         const data = {
           user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
