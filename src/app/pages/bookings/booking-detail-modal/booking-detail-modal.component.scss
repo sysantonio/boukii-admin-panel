@@ -337,7 +337,18 @@ img[mat-card-image] {
 }
 
 /* Puedes agregar más estilos para personalizar la tarjeta a tu gusto */
+@media only screen and (max-width: 1400px) {
+  .reservation-detail-card {
+    width: 48%;
+  }
 
+  .button-cancel {
+    width: 100% !important;
+  }
+  .button-cancel {
+    width: 100% !important;
+  }
+}
 @media only screen and (max-width: 1024px) {
   .reservation-detail-card {
     width: 90%;
@@ -352,6 +363,12 @@ img[mat-card-image] {
 
   .column-container:nth-child(2) { /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
+  }
+  .button-cancel {
+    width: 100% !important;
+  }
+  .button-cancel {
+    width: 100% !important;
   }
 }
 
@@ -369,6 +386,12 @@ img[mat-card-image] {
 
   .column-container:nth-child(2) { /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
+  }
+  .button-cancel {
+    width: 100%;
+  }
+  .button-cancel {
+    width: 100%;
   }
 }
 
