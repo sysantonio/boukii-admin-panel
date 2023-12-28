@@ -5,7 +5,7 @@
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
       <div class="card-container">
         <!-- Nuevo contenedor para las cards -->
-        <div @fadeInUp class="card flex-auto" style="padding: 1px;">
+        <div style="height: 100%; padding: 1px" @fadeInUp class="card flex-auto">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
             <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/courses')">{{'back' | translate }}</button>
@@ -159,7 +159,7 @@
               </div>
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
-                  <p style="width: 60%;float: left;">{{'total_options' | translate }}</p>
+                  <p style="width: 60%;float: left;">{{'options_total' | translate }}</p>
                   <p style="color: #EA0C60;">{{getCourseExtraForfaitPrice(item.courseDates[0])}} CHF</p>
                 </div>
               </div>
@@ -169,12 +169,12 @@
               <div style="width: 100%;float:left;">
 
                 <div>
-                  <p style="width: 60%;font-size: 21px;float:left">{{'total_booking' | translate }}</p>
+                  <p style="width: 60%;font-size: 21px;float:left">{{'booking_total' | translate }}</p>
                   <p style="color: #EA0C60;">{{
 
-                  ((courses[bI]?.course_type === 2 && courses[bI]?.is_flexible ? item.courseDates[0].price
-                    : ((courses[bI]?.course_type === 2 && !courses[bI]?.is_flexible)
-                    ? item?.courseDates[0].price * item.courseDates.length : item?.price_total)))
+                  parseFloatValue(((courses[bI]?.course_type === 2 && courses[bI]?.is_flexible ? getPrivateFlexPrice(item.courseDates)
+                    : ((courses[bI]?.course_type === 1 && courses[bI]?.is_flexible)
+                    ? item?.courseDates[0].price * item.courseDates.length : (courses[bI]?.course_type === 1 ? item?.price_total : courses[bI]?.price * item.courseDates.length)))))
                   + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </div>
               </div>
@@ -250,19 +250,19 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid">{{'apply_bonus' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <div style="float: left;width: 100%;">
+            <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.cancellationInsurance)">
               <p style="float: left;">{{'op_rem' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
-            <div style="float: left;width: 100%;">
+            <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice)">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid"style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
-                <p style="float:left">{{'base_price' | uppercase | translate}}</p>
+                <p style="float:left">{{'base_price' | translate | uppercase}}</p>
                 <p style="float:right">{{getBasePrice()}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
@@ -305,7 +305,7 @@
               </span>
 
               <span style="width: 100%; float:left">
-                <p style="float:left">{{'price_total' | uppercase | translate}}</p>
+                <p style="float:left">{{'total' | uppercase | translate}}</p>
                 <p style="float:right">{{(finalPrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
             </div>

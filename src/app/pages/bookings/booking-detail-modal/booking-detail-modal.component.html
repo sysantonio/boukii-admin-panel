@@ -5,16 +5,16 @@
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
       <div class="card-container">
         <!-- Nuevo contenedor para las cards -->
-        <div @fadeInUp class="card flex-auto" style="padding: 1px;">
+        <div style="height: 100%; padding: 1px" @fadeInUp class="card flex-auto">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
-            <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " [mat-dialog-close]="false">{{'back' | translate}}</button>
+            <button mat-raised-button color="primary" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/courses')">{{'back' | translate }}</button>
             <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">{{'bookings_page.detail.full_cancel' | translate}}</button>
 
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
-              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">{{'participant' | translate}}</p>
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">{{'participant' | translate}} | </p>
 
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="!booking.paid && item.courseDates[0].status === 1">
                 {{'no_paid' | translate | uppercase }}
@@ -25,7 +25,6 @@
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="booking.status === 1  && item.courseDates[0].status === 2">
                 {{'cancelled' | translate | uppercase }}
               </p>
-
 
               <div class="qrcodeImage">
                 <qrcode
@@ -58,7 +57,7 @@
             </mat-card-header>
 
             <mat-divider class="text-border"></mat-divider>
-            <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Actividad</p>
+            <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'activity' | translate}}</p>
 
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + (getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? collectifIcon : privateIcon) + ')'" style="border-radius: 5px"></div>
@@ -83,7 +82,7 @@
                 </div>
                 <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
                   <span style="float: left;width: 100%;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
-                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} {{'years' |translate}}</span>
+                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} {{'years' | translate}}</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -160,7 +159,7 @@
               </div>
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
-                  <p style="width: 60%;float: left;">{{'total_options' | translate }}</p>
+                  <p style="width: 60%;float: left;">{{'options_total' | translate }}</p>
                   <p style="color: #EA0C60;">{{getCourseExtraForfaitPrice(item.courseDates[0])}} CHF</p>
                 </div>
               </div>
@@ -170,8 +169,13 @@
               <div style="width: 100%;float:left;">
 
                 <div>
-                  <p style="width: 60%;font-size: 21px;float:left">{{'total_booking' | translate }}</p>
-                  <p style="color: #EA0C60;">{{item.price_total + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                  <p style="width: 60%;font-size: 21px;float:left">{{'booking_total' | translate }}</p>
+                  <p style="color: #EA0C60;">{{
+
+                  parseFloatValue(((courses[bI]?.course_type === 2 && courses[bI]?.is_flexible ? getPrivateFlexPrice(item.courseDates)
+                    : ((courses[bI]?.course_type === 1 && courses[bI]?.is_flexible)
+                    ? item?.courseDates[0].price * item.courseDates.length : (courses[bI]?.course_type === 1 ? item?.price_total : courses[bI]?.price * item.courseDates.length)))))
+                  + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -219,7 +223,7 @@
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0">Information del cliente</h2>
+            <h2 class="title m-0">{{'client_info' | translate }}</h2>
 
           </div>
           <mat-card style="width: 100%;padding:1%">
@@ -227,7 +231,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(booking.client_main_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} {{'years' |translate}}
+                {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} {{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
@@ -246,19 +250,19 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid">{{'apply_bonus' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <div style="float: left;width: 100%;">
+            <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.cancellationInsurance)">
               <p style="float: left;">{{'op_rem' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
-            <div style="float: left;width: 100%;">
+            <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice)">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid"style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
-                <p style="float:left">{{'base_price' | uppercase | translate}}</p>
+                <p style="float:left">{{'base_price' | translate | uppercase}}</p>
                 <p style="float:right">{{getBasePrice()}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
@@ -287,12 +291,12 @@
 
               <span style="width: 100%; float:left" *ngIf="booking.has_cancellation_insurance">
                 <p style="float:left">{{'op_rem' | uppercase | translate}}</p>
-                <p style="float:right">{{(getBasePrice()*this.cancellationInsurance).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                <p style="float:right">{{booking.price_cancellation_insurance}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{((this.boukiiCarePrice * getBookingPaxes() * getBookingDates())).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{booking.price_boukii_care}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
@@ -301,7 +305,7 @@
               </span>
 
               <span style="width: 100%; float:left">
-                <p style="float:left">{{'price_total' | uppercase | translate}}</p>
+                <p style="float:left">{{'total' | uppercase | translate}}</p>
                 <p style="float:right">{{(finalPrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
             </div>

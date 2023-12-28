@@ -324,7 +324,8 @@
               <div class="flex-auto" style="width: 50%;">
 
                 <label for="dateFromPrivate" *ngIf="defaults.is_flexible">{{'courses.date_reservable' | translate}} <span style="color:red">(*)</span></label>
-                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">{{'from' | translate}} <span style="color:red">(*)</span></label> <mat-form-field style="width: 100%">
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">{{'from' | translate}} <span style="color:red">(*)</span></label>
+                <mat-form-field style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" [matDatepickerFilter]="myHolidayFilter" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
@@ -391,6 +392,7 @@
               </div>
 
             </div>
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!defaults.is_flexible">
               <div class="flex-auto">
 
@@ -424,6 +426,7 @@
                 </mat-form-field>
               </div>
             </div>
+
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.is_flexible">
               <div class="flex-auto">
 
@@ -436,6 +439,7 @@
               <div class="flex-auto">
 
                 <mat-checkbox (change)="onCheckboxChange('multiple')" [checked]="periodeMultiple" formControlName="periodeMultiple">{{'courses.multiperiod' | translate}}</mat-checkbox>
+              </div>
               </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !periodeMultiple && defaults.is_flexible">
@@ -644,8 +648,9 @@
                 </div>
               </div>
             </div>
-            </div>
           </div>
+
+
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button color="primary" mat-raised-button *ngIf="defaults.is_flexible" (click)="checkStep3PrivateFlex(stepper)">
@@ -1304,19 +1309,21 @@
                             <div style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%" *ngIf="subGroupSelectedIndex !== null">
                               <div>
                                 <ul>
-                                  <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;  checkAvailableMonitors(groupLevel);">
+                                  <li style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
                                     <label for="monitor" style="font-size: 20px;">{{'monitor' | translate}}</label>
 
                                     <mat-spinner *ngIf="loadingMonitors"> </mat-spinner>
-                                    <mat-form-field class="flex-auto">
+                                    <mat-form-field class="flex-auto" *ngIf="!loadingMonitors">
+
                                       <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >
-                                        <ng-container  *ngFor="let monitor of filteredMonitors | async">
-                                        <mat-option *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
-                                          (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
-                                          {{monitor?.first_name}} {{monitor?.last_name}}
-                                        </mat-option>
-                                      </ng-container>
+
+                                        <ng-container *ngFor="let monitor of filteredMonitors | async">
+                                          <mat-option *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
+                                            (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
+                                            {{monitor && monitor?.first_name ? monitor?.first_name : '' }} {{monitor && monitor?.last_name ? monitor?.last_name : ''}}
+                                          </mat-option>
+                                        </ng-container>
                                       </mat-autocomplete>
                                       <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
                                     </mat-form-field>

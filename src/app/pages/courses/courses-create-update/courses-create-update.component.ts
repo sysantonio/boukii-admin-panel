@@ -1363,18 +1363,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
             return acc;
           }, [0, 0]);
 
-          this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
+          this.daysDatesLevels.push({date: moment(element.date).format('YYYY-MM-DD'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
           if (this.courseType === 'privee') {
 
             this.defaults.course_dates.push({
-              date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+              date: moment(element.date).format('YYYY-MM-DD'),
               hour_start: element.hour,
               hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
             })
           } else {
 
             this.defaults.course_dates.push({
-              date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+              date: moment(element.date).format('YYYY-MM-DD'),
               hour_start: element.hour,
               hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
               groups: []
@@ -1382,7 +1382,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
           }
         } else {
-          this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', '')});
+          this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
         }
 
       });
@@ -1622,7 +1622,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
 
 
-        return ret === "undefined undefined" || "undefined" ? null : ret;
+        return ret;
     }
 
     calculateMonitorLevel(level: any) {

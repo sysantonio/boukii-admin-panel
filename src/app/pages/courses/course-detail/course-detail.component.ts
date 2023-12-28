@@ -283,7 +283,7 @@ export class CourseDetailComponent implements OnInit {
 
 
             this.defaults.course_dates.forEach(cs => {
-              cs.groups.forEach(group => {
+              cs.course_groups.forEach(group => {
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
@@ -317,7 +317,7 @@ export class CourseDetailComponent implements OnInit {
           teachers_max: null,
           observations: null,
           auto: null,
-          subgroups: []
+          course_subgroups: []
         }
       }
 
@@ -329,10 +329,10 @@ export class CourseDetailComponent implements OnInit {
   hasMonitorAssigned(date, level) {
 
     const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === date.date);
-    const group = courseDate.groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
+    const group = courseDate.course_groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
 
     if (group) {
-      const find = group.subgroups.find((c) => c.course_date_id === courseDate.id);
+      const find = group.course_subgroups.find((c) => c.course_date_id === courseDate.id);
       return find && find.monitor_id !== null;
 
     }
@@ -347,18 +347,18 @@ export class CourseDetailComponent implements OnInit {
       level.visible = event.source.checked;
 
       this.defaults.course_dates.forEach(element => {
-        element.groups.push(this.generateGroups(level));
+        element.course_groups.push(this.generateGroups(level));
       });
 
       this.defaults.course_dates.forEach(element => {
         let prevGroup: any = {};
-        element.groups.forEach(group => {
+        element.course_groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
             group.degree_id = level.id;
             group.course_date_id = prevGroup.course_date_id;
             group.course_id = prevGroup.course_id;
-            group.subgroups.push({
+            group.course_subgroups.push({
               degree_id: level.id,
               monitor_id: null,
               max_participants:null
@@ -372,14 +372,14 @@ export class CourseDetailComponent implements OnInit {
 
         });
       });
-      this.checkAvailableMonitors(level);
+      this.checkAvailableMonitors(level.id);
     } else {
 
       // eliminar el curso o desactivarlo
       let hasBookings = false;
       const groupsToDelete = [];
       this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
+        element.course_groups.forEach(group => {
           if (group.degree_id === level.id) {
             groupsToDelete.push(group.id)
           }
@@ -389,11 +389,11 @@ export class CourseDetailComponent implements OnInit {
       groupsToDelete.forEach(element => {
         if (!hasBookings) {
           this.defaults.course_dates.forEach(cs => {
-            cs.groups.forEach(gs => {
+            cs.course_groups.forEach(gs => {
               if (gs.degree_id === level.id) {
 
                 if (groupsToDelete.find((g) => g === gs.id)) {
-                  gs.subgroups.forEach(sgs => {
+                  gs.course_subgroups.forEach(sgs => {
                     if (sgs.booking_users.length > 0) {
                       hasBookings = true;
                     }
@@ -432,9 +432,9 @@ export class CourseDetailComponent implements OnInit {
   checkIfExistInDate(daySelectedIndex, monitor, level) {
 
     let blocked = false;
-    this.defaults.course_dates[daySelectedIndex].groups.forEach(gs => {
+    this.defaults.course_dates[daySelectedIndex].course_groups.forEach(gs => {
       if (!blocked) {
-        gs.subgroups.forEach(sbs => {
+        gs.course_subgroups.forEach(sbs => {
           if (sbs.monitor_id === monitor.id) {
             blocked = true;
           }
@@ -450,7 +450,7 @@ export class CourseDetailComponent implements OnInit {
     let hasBookings = false;
       const groupsToDelete = [];
       this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
+        element.course_groups.forEach(group => {
           if (group.degree_id === level.id) {
             groupsToDelete.push(group.id)
           }
@@ -460,11 +460,11 @@ export class CourseDetailComponent implements OnInit {
       groupsToDelete.forEach(element => {
         if (!hasBookings) {
           this.defaults.course_dates.forEach(cs => {
-            cs.groups.forEach(gs => {
+            cs.course_groups.forEach(gs => {
               if (gs.degree_id === level.id) {
 
                 if (groupsToDelete.find((g) => g === gs.id)) {
-                  gs.subgroups.forEach(sgs => {
+                  gs.course_subgroups.forEach(sgs => {
                     if (sgs.booking_users && sgs.booking_users.length > 0) {
                       hasBookings = true;
                     }
@@ -482,9 +482,9 @@ export class CourseDetailComponent implements OnInit {
 
   addSubGroup(level: any) {
     this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
+      element.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.subgroups.push({
+          group.course_subgroups.push({
             degree_id: level.id,
             monitor_id: null,
             max_participants:null
@@ -498,9 +498,9 @@ export class CourseDetailComponent implements OnInit {
   readSubGroups(levelId: number) {
 
     let ret = [];
-    this.defaults.course_dates[0].groups.forEach((group) => {
+    this.defaults.course_dates[0].course_groups.forEach((group) => {
       if (group.degree_id === levelId) {
-        ret = group.subgroups;
+        ret = group.course_subgroups;
       }
     });
 
@@ -510,7 +510,7 @@ export class CourseDetailComponent implements OnInit {
   setLevelTeacher(event: any, level: any) {
 
     this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
+      element.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
           group.teachers_min = event.value.id;
         }
@@ -523,7 +523,7 @@ export class CourseDetailComponent implements OnInit {
     if (+event.target.value > 3) {
 
       this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
+        element.course_groups.forEach(group => {
           if (level.id === group.degree_id) {
             group.age_min = +event.target.value;
           }
@@ -536,7 +536,7 @@ export class CourseDetailComponent implements OnInit {
   setMaxAge(event: any, level: any) {
     if (+event.target.value < 81) {
       this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
+        element.course_groups.forEach(group => {
           if (level.id === group.degree_id) {
             group.age_max = +event.target.value;
           }
@@ -553,18 +553,18 @@ export class CourseDetailComponent implements OnInit {
       this.defaults.course_dates.forEach(courseDate => {
 
           if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
-            courseDate.groups.forEach(group => {
+            courseDate.course_groups.forEach(group => {
               if (group.degree_id === level.id) {
-                  ret = group.subgroups[subGroupIndex]?.monitor;
+                  ret = group.course_subgroups[subGroupIndex]?.monitor;
               }
             });
           }
         });
 
         } else {
-          this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
+          this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
             if (group.degree_id === level.id) {
-              ret = group.subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.subgroups[subGroupIndex]?.monitor?.last_name;
+              ret = group.course_subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.course_subgroups[subGroupIndex]?.monitor?.last_name;
             }
 
           });
@@ -577,7 +577,7 @@ export class CourseDetailComponent implements OnInit {
     calculateMonitorLevel(level: any) {
       let ret = 0;
       this.defaults.course_dates.forEach(courseDate => {
-        courseDate.groups.forEach(group => {
+        courseDate.course_groups.forEach(group => {
           if (level.id === group.degree_id) {
             ret = this.levels.find((l) => l.id === group.teachers_min);
           }
@@ -590,9 +590,9 @@ export class CourseDetailComponent implements OnInit {
       let ret = 0;
 
       this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
+        element.course_groups.forEach(group => {
           if (level.id === group.degree_id) {
-            group.subgroups.forEach(subgroup => {
+            group.course_subgroups.forEach(subgroup => {
 
               ret = ret + subgroup.max_participants;
             });
@@ -612,21 +612,21 @@ export class CourseDetailComponent implements OnInit {
       if (!level.old) {
         this.defaults.course_dates.forEach(courseDate => {
           if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
-            courseDate.groups.forEach(group => {
+            courseDate.course_groups.forEach(group => {
               if(group.degree_id === level.id && !monitorSet) {
 
-                group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-                group.subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+                group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
                 monitorSet = true;
               }
             });
           }
         });
       } else {
-        this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
+        this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
           if (group.degree_id === level.id) {
-            group.subgroups[subGroupSelectedIndex].monitor = monitor;
-            group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+            group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
+            group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
           }
 
         });
@@ -643,9 +643,9 @@ export class CourseDetailComponent implements OnInit {
     level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
 
     this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
+      element.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
-          group.subgroups.forEach(subGroup => {
+          group.course_subgroups.forEach(subGroup => {
             subGroup.max_participants =level.max_participants;
           });
         }
@@ -665,7 +665,7 @@ export class CourseDetailComponent implements OnInit {
   calculateAgeMin(level: any) {
     let ret = 0;
     this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
+      courseDate.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
           ret = group.age_min;
         }
@@ -678,7 +678,7 @@ export class CourseDetailComponent implements OnInit {
   calculateAgeMax(level: any) {
     let ret = 0;
     this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
+      courseDate.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
           ret = group.age_max;
         }
@@ -691,9 +691,9 @@ export class CourseDetailComponent implements OnInit {
   calculateMaxGroup(level: any) {
     let ret = 0;
     this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
+      courseDate.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
-          ret = group.subgroups[0].max_participants;
+          ret = group.course_subgroups[0].max_participants;
         }
       });
     });
@@ -705,7 +705,7 @@ export class CourseDetailComponent implements OnInit {
     let ret = 0;
     let group = null;
     this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(gr => {
+      courseDate.course_groups.forEach(gr => {
         if (level.id === gr.degree_id) {
           group = gr;
         }
@@ -731,8 +731,8 @@ export class CourseDetailComponent implements OnInit {
     const courseUsers = this.courseUsers.filter((c) => c.client_id === courseUserId);
     if (course) {
       courseUsers.forEach(courseUser => {
-        course.groups.forEach(group => {
-          group.subgroups.forEach(element => {
+        course.course_groups.forEach(group => {
+          group.course_subgroups.forEach(element => {
             const exist = courseUser.course_date_id === element.course_date_id && courseUser.course_group_id === element.course_group_id && courseUser.course_subgroup_id === element.id
 
             if (exist) {
@@ -904,12 +904,12 @@ export class CourseDetailComponent implements OnInit {
     if (this.defaults.course_type === 1) {
       this.defaults.course_dates.forEach(dates => {
         const group = [];
-        dates.groups.forEach(dateGroup => {
-          if (dateGroup.subgroups.length > 0) {
+        dates.course_groups.forEach(dateGroup => {
+          if (dateGroup.course_subgroups.length > 0) {
             group.push(dateGroup);
           }
         });
-        dates.groups = group;
+        dates.course_groups = group;
       });
     }
 
@@ -993,7 +993,7 @@ export class CourseDetailComponent implements OnInit {
   checkAvailableMonitors(level: any) {
     this.loadingMonitors = true;
     let minDegree = 0;
-    this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
+    this.defaults.course_dates[this.daySelectedIndex].course_groups.forEach(element => {
       if (element.degree_id === level.id) {
         minDegree = element.teachers_min;
       }

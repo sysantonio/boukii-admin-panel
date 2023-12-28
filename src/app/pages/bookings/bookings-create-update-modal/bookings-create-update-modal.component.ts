@@ -1402,11 +1402,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
 
-        this.cancellationInsurance =  parseFloat(this.settings.taxes.cancellation_insurance_percent);
-        this.boukiiCarePrice = parseInt(this.settings.taxes.boukii_care_price);
-        this.tva = parseFloat(this.settings.taxes.tva);
+        this.cancellationInsurance =  parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
+        this.boukiiCarePrice = parseInt(this.settings?.taxes?.boukii_care_price);
+        this.tva = parseFloat(this.settings?.taxes?.tva);
       })
   }
+
 
   dateClass() {
 
@@ -1480,7 +1481,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
       const monitor = this.monitors.find((m) => m.id === id);
 
-      return monitor.first_name + ' ' + monitor.last_name;
+      return monitor?.first_name + ' ' + monitor?.last_name;
     }
   }
 
@@ -2210,5 +2211,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
         }
       })
+  }
+  isNanValue(value) {
+    return isNaN(value);
   }
 }
