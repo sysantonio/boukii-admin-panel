@@ -117,14 +117,16 @@ export class TimelineComponent {
     await this.getDegrees();
     this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
+        let hour_start = '08:00';
+        let hour_end = '18:00';
         if (season.data.length > 0) {
           this.vacationDays = JSON.parse(season.data[0].vacation_days);
-          const hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
-          const hour_end = season.data[0].hour_end ? season.data[0].hour_end.substring(0, 5) : '18:00';
-          this.hoursRange = this.generateHoursRange(hour_start, hour_end);
-          this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
-          this.hoursRangeMinutes = this.generateHoursRangeMinutes(hour_start, hour_end);
+          hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
+          hour_end = season.data[0].hour_end ? season.data[0].hour_end.substring(0, 5) : '18:00';
         }
+        this.hoursRange = this.generateHoursRange(hour_start, hour_end);
+        this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
+        this.hoursRangeMinutes = this.generateHoursRangeMinutes(hour_start, hour_end);
       })
 
     await this.calculateWeeksInMonth();
