@@ -117,7 +117,6 @@ export class TimelineComponent {
     await this.getDegrees();
     this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
-        console.log(season);
         if (season.data.length > 0) {
           this.vacationDays = JSON.parse(season.data[0].vacation_days);
           const hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
