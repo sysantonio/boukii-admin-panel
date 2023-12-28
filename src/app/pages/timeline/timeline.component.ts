@@ -30,12 +30,7 @@ export class TimelineComponent {
   hoursRangeMinusLast:string[];
   hoursRangeMinutes: string[];
 
-  monitors = [
-    { id: 1, name: 'David Wilson' },
-    { id: 2, name: 'John Smith' },
-    { id: 3, name: 'Michael Brown' },
-    { id: 4, name: 'Sarah Johnson' },
-  ];
+  monitorsForm:any[];
 
   loadingMonitors = true;
 
@@ -907,9 +902,42 @@ export class TimelineComponent {
     if (this.moveTask) {
       event.stopPropagation();
 
-      if(this.taskMoved != monitor_id){
-        this.moveTask = false;
-        this.taskMoved = null;
+      if(this.taskMoved && this.taskMoved.monitor_id != monitor_id){
+        let data:any;
+        let all_booking_users = [];
+        this.taskMoved.all_clients.forEach((client:any) => {
+          all_booking_users.push(client.id);
+        });
+        data = {
+          monitor_id: monitor_id,
+          booking_users: all_booking_users
+        };
+        
+        //console.log(data);
+
+        this.crudService.post('/admin/planner/monitors/transfer', data)
+          .subscribe((data) => {
+
+            //this.getData();
+            this.moveTask = false;
+            this.taskMoved = null;
+            this.hideDetail();
+            this.loadBookings(this.currentDate);
+            this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+          },
+          (error) => {
+            // Error handling code
+            this.moveTask = false;
+            this.taskMoved = null;
+            console.error('Error occurred:', error);
+            if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+              this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+            }
+            else{
+              this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+            }
+          })
+
       }
       else{
         this.moveTask = false;
@@ -988,6 +1016,7 @@ export class TimelineComponent {
     this.taskDetail.all_clients.forEach((client:any) => {
       all_booking_users.push(client.id);
     });
+    /*
     if(this.taskDetail.type == 'collective'){
       data = {
         type: 1,
@@ -1003,11 +1032,35 @@ export class TimelineComponent {
         course_id: this.taskDetail.course_id,
         booking_users: all_booking_users
       };
-    }
+    }*/
+    data = {
+      monitor_id: this.editedMonitor.id,
+      booking_users: all_booking_users
+    };
 
+    //console.log(data);
 
-    this.editedMonitor = null;
-    this.showEditMonitor = false;
+    this.crudService.post('/admin/planner/monitors/transfer', data)
+    .subscribe((data) => {
+
+      //this.getData();
+      this.editedMonitor = null;
+      this.showEditMonitor = false;
+      this.hideDetail();
+      this.loadBookings(this.currentDate);
+      this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+    },
+    (error) => {
+      // Error handling code
+      console.error('Error occurred:', error);
+      if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+        this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+      }
+      else{
+        this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+      }
+    })
+
   }
 
   goToEditCourse() {
@@ -1366,8 +1419,7 @@ export class TimelineComponent {
 
     this.crudService.post('/admin/monitors/available', data)
       .subscribe((response) => {
-        this.monitors = response.data;
-        this.filteredMonitors = response.data;
+        this.monitorsForm = response.data;
         this.loadingMonitors = false;
       })
   }
