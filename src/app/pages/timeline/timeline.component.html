@@ -108,8 +108,7 @@
                                     </div>
                                     <div class="monitor-right">
                                         <div *ngFor="let sport of monitor.sports" class="monitor-sport">
-                                            <img [src]="sport.icon_selected" style="background-color: #fe3085;border-radius: 5px;"/>
-                                            <div>{{sport.name}}</div>
+                                            <img [src]="sport.icon_selected" [title]="sport.name"/>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -227,13 +226,8 @@
                                             </div>
                                         </div>
                                         <div class="monitor-right">
-                                            <div class="monitor-sport">
-                                                <img src="assets/img/icons/icon-ski-box.png" />
-                                                <div>Ski</div>
-                                            </div>
-                                            <div class="monitor-sport">
-                                                <img src="assets/img/icons/icon-ski-box.png" />
-                                                <div>Snow</div>
+                                            <div *ngFor="let sport of monitor.sports" class="monitor-sport">
+                                                <img [src]="sport.icon_selected" [title]="sport.name"/>
                                             </div>
                                         </div>
                                     </ng-container>

@@ -26,9 +26,9 @@ moment.locale('fr');
 })
 export class TimelineComponent {
 
-  hoursRange: string[] = this.generateHoursRange('08:00', '20:00');
+  hoursRange: string[];
   hoursRangeMinusLast:string[];
-  hoursRangeMinutes: string[] = this.generateHoursRangeMinutes('08:00', '20:00');
+  hoursRangeMinutes: string[];
 
   monitors = [
     { id: 1, name: 'David Wilson' },
@@ -107,8 +107,6 @@ export class TimelineComponent {
     });
 
     this.colorKeys = Object.keys(this.groupedByColor);
-
-    this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
   }
 
   async ngOnInit() {
@@ -119,8 +117,14 @@ export class TimelineComponent {
     await this.getDegrees();
     this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
+        console.log(season);
         if (season.data.length > 0) {
           this.vacationDays = JSON.parse(season.data[0].vacation_days);
+          const hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
+          const hour_end = season.data[0].hour_end ? season.data[0].hour_end.substring(0, 5) : '18:00';
+          this.hoursRange = this.generateHoursRange(hour_start, hour_end);
+          this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
+          this.hoursRangeMinutes = this.generateHoursRangeMinutes(hour_start, hour_end);
         }
       })
 
@@ -447,7 +451,7 @@ export class TimelineComponent {
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
           date_end: moment(booking.course.date_end).format('DD/MM/YYYY'),
           hour_start: booking.hour_start.substring(0, 5),
-          hour_end: booking.hour_end ? booking.hour_end.substring(0, 5) : '20:00',
+          hour_end: booking.hour_end ? booking.hour_end.substring(0, 5) : this.hoursRange[this.hoursRange.length-1],
           type: type,
           name: booking.course.name,
           sport_id: booking.course.sport_id,
@@ -607,14 +611,27 @@ export class TimelineComponent {
     const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
     let plannerTasks = tasks.map((task:any) => {
       //Style for days
+
+      //Check start time is inside hours range
+      const firstTimeRange = this.parseTime(this.hoursRange[0]);
       const startTime = this.parseTime(task.hour_start);
+      if (startTime < firstTimeRange) {
+        startTime.setHours(firstTimeRange.getHours(), firstTimeRange.getMinutes(), 0, 0);
+      }
+      
       const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
       const rangeStart = this.parseTime(this.hoursRange[0]);
       const rangeStartMinutes = rangeStart.getHours() * 60 + rangeStart.getMinutes();
       const leftMinutes = startMinutes - rangeStartMinutes;
       const leftPixels = leftMinutes * pixelsPerMinute;
 
+      //Check end time is inside hours range
+      const lastTimeRange = this.parseTime(this.hoursRange[this.hoursRange.length - 1]);
       const endTime = this.parseTime(task.hour_end);
+      if (endTime > lastTimeRange) {
+        endTime.setHours(lastTimeRange.getHours(), lastTimeRange.getMinutes(), 0, 0);
+      }
+
       const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
       const durationMinutes = endMinutes - startMinutes;
       const widthPixels = durationMinutes * pixelsPerMinute;
@@ -634,13 +651,21 @@ export class TimelineComponent {
       const initialLeftOffset = (dayOfWeek === 0 ? 6 : dayOfWeek - 1) * 300;
 
       const startTimeWeek = this.parseTime(task.hour_start);
+      if (startTimeWeek < firstTimeRange) {
+        startTimeWeek.setHours(firstTimeRange.getHours(), firstTimeRange.getMinutes(), 0, 0);
+      }
+      
       const rangeStartWeek = this.parseTime(this.hoursRange[0]);
       const startMinutesWeek = startTimeWeek.getHours() * 60 + startTimeWeek.getMinutes();
       const rangeStartMinutesWeek = rangeStartWeek.getHours() * 60 + rangeStartWeek.getMinutes();
       const leftMinutesWeek = startMinutesWeek - rangeStartMinutesWeek;
       const additionalLeftPixels = leftMinutesWeek * pixelsPerMinuteWeek;
 
+      //Check end time is inside hours range
       const endTimeWeek = this.parseTime(task.hour_end);
+      if (endTimeWeek > lastTimeRange) {
+        endTimeWeek.setHours(lastTimeRange.getHours(), lastTimeRange.getMinutes(), 0, 0);
+      }
       const endMinutesWeek = endTimeWeek.getHours() * 60 + endTimeWeek.getMinutes();
       const durationMinutesWeek = endMinutesWeek - startMinutesWeek;
       const widthPixelsWeek = durationMinutesWeek * pixelsPerMinuteWeek;

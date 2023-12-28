@@ -36,7 +36,7 @@
     flex-shrink: 0;width: 270px;display: flex;flex-direction: column;padding-top:40px;
 }
 .monitor {
-    height: 100px;border-top: 1px solid #bbb;display: flex;align-items: center;justify-content: space-between;gap:8px;padding:0px 28px 0px 2px;position:relative;
+    height: 100px;border-top: 1px solid #bbb;display: flex;align-items: center;justify-content: space-between;gap:8px;padding:0px 24px 0px 2px;position:relative;
 }
 .monitor-left {
     display:flex;align-items:center;gap:6px;
@@ -63,13 +63,13 @@
     height:14px;
 }
 .monitor-right {
-    display:flex;flex-direction:column;gap:8px;align-items:flex-start;
+    display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start;flex-wrap:wrap;height:100px;padding: 6px 0;
 }
 .monitor-sport {
     display:flex;align-items:center;gap:6px;
 }
 .monitor-sport img {
-    width:24px;
+    width:24px;background-color: #fe3085;border-radius: 5px;
 }
 .monitor-sport div {
     font-size:9px;color:#666;
