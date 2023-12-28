@@ -807,15 +807,15 @@
                 </mat-card-subtitle>
               </mat-card-header>
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-              <button mat-raised-button color="accent" *ngIf="cancellationInsurance" (click)="addReduction()">{{'apply_reduction' | translate}}</button>
+              <button mat-raised-button color="accent" (click)="addReduction()">{{'apply_reduction' | translate}}</button>
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-              <button mat-raised-button color="accent" *ngIf="boukiiCarePrice" (click)="addBonus()">{{'apply_bonus' | translate}}</button>
+              <button mat-raised-button color="accent" (click)="addBonus()">{{'apply_bonus' | translate}}</button>
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-              <div style="float: left;width: 100%;">
+              <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.cancellationInsurance)">
                 <p style="float: left;">{{'op_rem' | translate}}</p>
                 <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" (change)="calculateRem($event)" style="float: right;"></mat-slide-toggle>
               </div>
-              <div style="float: left;width: 100%;">
+              <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice)">
                 <p style="float: left;">Boukii Care</p>
                 <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care" (change)="calculateBoukiiCare($event)" style="float: right;"></mat-slide-toggle>
               </div>

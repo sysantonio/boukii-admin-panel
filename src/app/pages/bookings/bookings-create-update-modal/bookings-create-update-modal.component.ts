@@ -2212,4 +2212,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
       })
   }
+  isNanValue(value) {
+    return isNaN(value);
+  }
 }
