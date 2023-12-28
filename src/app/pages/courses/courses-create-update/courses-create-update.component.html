@@ -779,7 +779,7 @@
               <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-collectif]="defaults.course_type === 1" (click)="setCourseType('collectif', 1)" >
                   <mat-card-content>
-                    <p>{{'colective_course' | translate}}</p>
+                    <p>{{'course_colective' | translate}}</p>
                   </mat-card-content>
                 </mat-card>
                 <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;"[disabled]="defaults.course_type === null ||defaults.course_type === 2" (click)="setFlexibility($event)">
@@ -794,7 +794,7 @@
               <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-prive]="defaults.course_type === 2" (click)="setCourseType('privee', 2)">
                   <mat-card-content>
-                    <p>{{'private_course' | translate}}</p>
+                    <p>{{'course_private' | translate}}</p>
                   </mat-card-content>
                 </mat-card>
                 <mat-checkbox [checked]="false" style="margin: 10px 0 0 0;float: left;" [disabled]="defaults.course_type === null || defaults.course_type === 1" (click)="setFlexibility($event)">
