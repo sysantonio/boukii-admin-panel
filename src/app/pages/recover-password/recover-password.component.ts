@@ -66,7 +66,7 @@ export class RecoverPasswordComponent implements OnInit {
 
   send() {
     //this.authService.login(this.form.value.email, this.form.value.password);
-    this.crudService.recoverPassword('/users', this.id, {token: this.token, password: this.form.value.password, type: 'client', active: true})
+    this.crudService.recoverPassword('/users', {token: this.token, password: this.form.value.password, type: 'client', active: true}, this.id)
       .subscribe(() => {
         this.snackbar.open(this.translateService.instant('snackbar.password_updated') , 'OK', {duration: 3000});
         this.updated = true;
