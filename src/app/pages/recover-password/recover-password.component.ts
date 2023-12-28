@@ -26,6 +26,7 @@ export class RecoverPasswordComponent implements OnInit {
   loading = true;
   updated = false;
   token: any;
+  id: any;
 
   constructor(private router: Router,
               private fb: UntypedFormBuilder,
@@ -38,6 +39,7 @@ export class RecoverPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.token = this.activatedRoute.snapshot.params.token;
+    this.id = this.activatedRoute.snapshot.queryParams.user;
 
 
     this.form = this.fb.group({
@@ -64,7 +66,7 @@ export class RecoverPasswordComponent implements OnInit {
 
   send() {
     //this.authService.login(this.form.value.email, this.form.value.password);
-    this.crudService.recoverPassword('/users', {token: this.token, password: this.form.value.password, type: 'client', active: true})
+    this.crudService.recoverPassword('/users', this.id, {token: this.token, password: this.form.value.password, type: 'client', active: true})
       .subscribe(() => {
         this.snackbar.open(this.translateService.instant('snackbar.password_updated') , 'OK', {duration: 3000});
         this.updated = true;

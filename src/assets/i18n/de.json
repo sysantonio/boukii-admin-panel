@@ -428,5 +428,12 @@
   "snackbar.settings.auths": "Sperren wurden erfolgreich aktualisiert",
   "snackbar.settings.extras": "Korrekt geänderte Extras",
   "snackbar.settings.levels": "Level erfolgreich aktualisiert",
-  "snackbar.credential_error": "Fehler bei den Anmeldeinformationen"
+  "snackbar.credential_error": "Fehler bei den Anmeldeinformationen",
+  "table.filter.booking": "Reservierungstyp",
+  "table.filter.course": "Art natürlich",
+  "table.filter.single": "Individuell",
+  "table.filter.multiple": "Mehrere",
+  "inactive": "Leerlauf",
+  "finished": "Abgeschlossen",
+  "all": "Alle"
 }

@@ -18,25 +18,25 @@
       <div style="float:left; width: 100%; padding:2%" *ngIf="openFilters">
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
-          <span style="float:left; width: 100%; font-size:16px">TYPE DE RÉSERVATION</span>
-          <mat-checkbox color="primary" [checked]="reservationTypeSingle">Single</mat-checkbox>
-          <mat-checkbox color="primary" [checked]="reservationTypeMultiple">Multiple</mat-checkbox>
+          <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.booking' | translate}}</span>
+          <mat-checkbox color="primary" [checked]="reservationTypeSingle">{{'table.filter.single' | translate}}</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="reservationTypeMultiple">{{'table.filter.multiple' | translate}}</mat-checkbox>
         </div>
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings') || entity.includes('courses')">
-          <span style="float:left; width: 100%; font-size:16px">TYPE D'ÉVÉNEMENT</span>
-          <mat-checkbox color="primary" [checked]="courseColective" (change)="courseColective = !courseColective; filterData()"><span style="color:#fac710">Cours collectif</span></mat-checkbox>
-          <mat-checkbox color="primary" [checked]="coursePrivate" (change)="coursePrivate = !coursePrivate;filterData()"><span style="color:#2fca45">Cours privés</span></mat-checkbox>
+          <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.course' | translate}}</span>
+          <mat-checkbox color="primary" [checked]="courseColective" (change)="courseColective = !courseColective; filterData()"><span style="color:#fac710">{{'course_colective' | translate }}</span></mat-checkbox>
+          <mat-checkbox color="primary" [checked]="coursePrivate" (change)="coursePrivate = !coursePrivate;filterData()"><span style="color:#2fca45">{{'course_private' | translate }}</span></mat-checkbox>
         </div>
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
-          <span style="float:left; width: 100%; font-size:16px">TYPE DE RÉSERVATION</span>
+          <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.booking' | translate}}</span>
           <mat-checkbox color="primary" [checked]="bookingPayed" (change)="bookingPayed = !bookingPayed; filterData()">Paye</mat-checkbox>
           <mat-checkbox color="primary" [checked]="bookingNoPayed" (change)="bookingNoPayed = !bookingNoPayed;filterData()">Non Paye</mat-checkbox>
         </div>
 
         <div style="float:left; width: 70%" *ngIf="entity.includes('courses') || entity.includes('monitors')">
-          <span style="float:left; width: 100%; font-size:16px">SPORT</span>
+          <span style="float:left; width: 100%; font-size:16px">{{ 'sport' | translate}}</span>
           <mat-form-field style="float:left; width: 100%;" class="flex-auto" appearance="fill">
 
             <mat-select [formControl]="sportsControl" multiple (selectionChange)="filterData()">
@@ -85,55 +85,55 @@
 
         <div style="margin: 0 0 0 15%" *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="activeCourse = true;inActiveCourse=false;finishedCourse = false; allCourse = false;filterData('&active=1')">
-            <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">Active</span>
+            <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="inActiveCourse = true;activeCourse=false;finishedCourse = false; allCourse = false;filterData('&active=0')">
-            <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'black'}">Inactif</span>
+            <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'black'}">{{'inactive' | translate}}</span>
 
           </button>
         </div>
         <div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">Terminé</span>
+            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'finished' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="allCourse = true;activeCourse=false;inActiveCourse = false; finishedCourse = false; filterData()">
-            <span [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">Tout</span>
+            <span [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
           </button>
         </div>
 
         <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="activeBooking = true; finishedBooking=false; allBookings=false; filterData()">
-            <span [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">Active</span>
+            <span [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('bookings')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
-            <span [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">Terminé</span>
+            <span [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">{{'finished' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('bookings')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData()">
-            <span [ngStyle]="{'color': allBookings ? '#fe3085' : 'black'}">Tout</span>
+            <span [ngStyle]="{'color': allBookings ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
           </button>
         </div>
 
         <div style="margin: 0 0 0 15%" *ngIf="entity.includes('monitor')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="activeMonitor = true; inactiveMonitor=false; allMonitors=false; filterData()">
-            <span [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'black'}">Active</span>
+            <span [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('monitor')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData()">
-            <span [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">Inactif</span>
+            <span [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">{{'inactive' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('monitor')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="allMonitors = true; activeMonitor=false; inactiveMonitor=false; filterData()">
-            <span [ngStyle]="{'color': allMonitors ? '#fe3085' : 'black'}">Tout</span>
+            <span [ngStyle]="{'color': allMonitors ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
           </button>
         </div>
 

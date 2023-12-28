@@ -427,5 +427,12 @@
   "snackbar.settings.auths": "Locks have been updated successfully",
   "snackbar.settings.extras": "Correctly modified extras",
   "snackbar.settings.levels": "Successfully updated levels",
-  "snackbar.credential_error": "Error with credentials"
+  "snackbar.credential_error": "Error with credentials",
+  "table.filter.booking": "Reservation type",
+  "table.filter.course": "Type of course",
+  "table.filter.single": "Individual",
+  "table.filter.multiple": "Multiple",
+  "inactive": "Idle",
+  "finished": "Finished",
+  "all": "All"
 }
