@@ -272,7 +272,7 @@ export class SettingsComponent implements OnInit {
   }
 
   generateHours() {
-    for (let i = 8; i <= 17; i++) {
+    for (let i = 0; i <= 23; i++) {
       for (let j = 0; j < 60; j += 60) {
         const formattedHour = `${i.toString().padStart(2, '0')}:${j.toString().padStart(2, '0')}`;
         this.hours.push(formattedHour);
