@@ -205,6 +205,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         filter = filter + '&isMultiple=1';
       }
 
+      if (this.finishedBooking) {
+        filter = filter + '&finished=1';
+      } else {
+        filter = filter + '&finished=0';
+      }
+
     }
 
     if(this.entity.includes('courses')) {
@@ -213,6 +219,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         filter = filter + '&course_type=1';
       } else if (!this.courseColective && this.coursePrivate) {
         filter = filter + '&course_type=2';
+      }
+
+      if (this.finishedCourse) {
+        filter = filter + '&finished=1';
+      } else {
+        filter = filter + '&finished=0';
       }
 
       if(this.sportsControl.value.length !== this.sports.length) {

@@ -435,5 +435,6 @@
   "table.filter.multiple": "Mehrere",
   "inactive": "Leerlauf",
   "finished": "Abgeschlossen",
-  "all": "Alle"
+  "all": "Alle",
+  "current": "Im Gange"
 }

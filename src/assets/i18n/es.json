@@ -438,5 +438,6 @@
   "table.filter.multiple": "Múltiple",
   "inactive": "Inactivo",
   "finished": "Finalizado",
-  "all": "Todos"
+  "all": "Todos",
+  "current": "En curso"
 }
