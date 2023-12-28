@@ -37,7 +37,7 @@ export class RecoverPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.token = this.activatedRoute.snapshot.params.id;
+    this.token = this.activatedRoute.snapshot.params.token;
 
 
     this.form = this.fb.group({
