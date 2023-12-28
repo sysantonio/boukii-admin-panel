@@ -436,5 +436,10 @@
   "inactive": "Leerlauf",
   "finished": "Abgeschlossen",
   "all": "Alle",
-  "current": "Im Gange"
+  "current": "Im Gange",
+  "monitor_busy": "Der Monitor ist beschäftigt",
+  "error": "Fehler",
+  "event_created": "Veranstaltung erstellt",
+  "event_edited": "Ereignis bearbeitet",
+  "event_deleted": "Ereignis gelöscht"
 }

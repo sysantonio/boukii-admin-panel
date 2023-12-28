@@ -30,12 +30,7 @@ export class TimelineComponent {
   hoursRangeMinusLast:string[];
   hoursRangeMinutes: string[];
 
-  monitors = [
-    { id: 1, name: 'David Wilson' },
-    { id: 2, name: 'John Smith' },
-    { id: 3, name: 'Michael Brown' },
-    { id: 4, name: 'Sarah Johnson' },
-  ];
+  monitorsForm:any[];
 
   loadingMonitors = true;
 
@@ -907,9 +902,42 @@ export class TimelineComponent {
     if (this.moveTask) {
       event.stopPropagation();
 
-      if(this.taskMoved != monitor_id){
-        this.moveTask = false;
-        this.taskMoved = null;
+      if(this.taskMoved && this.taskMoved.monitor_id != monitor_id){
+        let data:any;
+        let all_booking_users = [];
+        this.taskMoved.all_clients.forEach((client:any) => {
+          all_booking_users.push(client.id);
+        });
+        data = {
+          monitor_id: monitor_id,
+          booking_users: all_booking_users
+        };
+        
+        //console.log(data);
+
+        this.crudService.post('/admin/planner/monitors/transfer', data)
+          .subscribe((data) => {
+
+            //this.getData();
+            this.moveTask = false;
+            this.taskMoved = null;
+            this.hideDetail();
+            this.loadBookings(this.currentDate);
+            this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+          },
+          (error) => {
+            // Error handling code
+            this.moveTask = false;
+            this.taskMoved = null;
+            console.error('Error occurred:', error);
+            if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+              this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+            }
+            else{
+              this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+            }
+          })
+
       }
       else{
         this.moveTask = false;
@@ -988,6 +1016,7 @@ export class TimelineComponent {
     this.taskDetail.all_clients.forEach((client:any) => {
       all_booking_users.push(client.id);
     });
+    /*
     if(this.taskDetail.type == 'collective'){
       data = {
         type: 1,
@@ -1003,11 +1032,35 @@ export class TimelineComponent {
         course_id: this.taskDetail.course_id,
         booking_users: all_booking_users
       };
-    }
+    }*/
+    data = {
+      monitor_id: this.editedMonitor.id,
+      booking_users: all_booking_users
+    };
 
+    //console.log(data);
 
-    this.editedMonitor = null;
-    this.showEditMonitor = false;
+    this.crudService.post('/admin/planner/monitors/transfer', data)
+    .subscribe((data) => {
+
+      //this.getData();
+      this.editedMonitor = null;
+      this.showEditMonitor = false;
+      this.hideDetail();
+      this.loadBookings(this.currentDate);
+      this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+    },
+    (error) => {
+      // Error handling code
+      console.error('Error occurred:', error);
+      if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+        this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+      }
+      else{
+        this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+      }
+    })
+
   }
 
   goToEditCourse() {
@@ -1085,7 +1138,6 @@ export class TimelineComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
 
-
         const data = {
           user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
         }
@@ -1094,7 +1146,17 @@ export class TimelineComponent {
 
             //this.getData();
             this.loadBookings(this.currentDate);
-            this.snackbar.open('Event created');
+            this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
+          },
+          (error) => {
+            // Error handling code
+            console.error('Error occurred:', error);
+            if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd"){
+              this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+            }
+            else{
+              this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+            }
           })
           //CHANGE
         /*let id = 1
@@ -1252,34 +1314,64 @@ export class TimelineComponent {
       firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
       firstBlockData.full_day = this.allHoursDay && !this.divideDay;
 
+
       // Function update first block -> CALL LATER
       const updateFirstBlock = () => {
-          this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetail.block_id).subscribe(
-              response => {
-                  this.hideEditBlock();
-                  this.hideBlock();
-                  this.loadBookings(this.currentDate);
+        this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetail.block_id).subscribe(
+            response => {
+                if (this.divideDay) {
+                    createSecondBlock();
+                } else {
+                    finalizeUpdate();
+                }
+            },
+            error => {
+                handleErrorUpdatingBlock(error);
+            }
+        );
+      };
+
+      const createSecondBlock = () => {
+          secondBlockData = { ...commonData, start_date: this.blockDetail.start_date, end_date: this.blockDetail.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
+          this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
+              secondResponse => {
+                  finalizeUpdate();
               },
               error => {
+                  handleErrorCreatingBlock(error);
               }
           );
       };
 
-          if (this.divideDay) {
-              secondBlockData = { ...commonData, start_date: this.blockDetail.start_date, end_date: this.blockDetail.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
+      const finalizeUpdate = () => {
+          this.hideEditBlock();
+          this.hideBlock();
+          this.loadBookings(this.currentDate);
+          this.snackbar.open(this.translateService.instant('event_edited'), 'OK', {duration: 3000});
+      };
 
-                  this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
-                      secondResponse => {
-                          updateFirstBlock();
-                      },
-                      error => {
-                      }
-                  );
-
-          } else {
-              // Update FIRST
-              updateFirstBlock();
+      const handleErrorUpdatingBlock = (error:any) => {
+          console.error('Error occurred:', error);
+          if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede actualizar el MonitorNwd"){
+            this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
           }
+          else{
+            this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+          }
+      };
+
+      const handleErrorCreatingBlock = (error:any) => {
+          console.error('Error occurred:', error);
+          if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede actualizar el MonitorNwd"){
+            this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+          }
+          else{
+            this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+          }
+      };
+
+      // Start Update Process
+      updateFirstBlock();
   }
 
   deleteEditedBlock() {
@@ -1327,8 +1419,7 @@ export class TimelineComponent {
 
     this.crudService.post('/admin/monitors/available', data)
       .subscribe((response) => {
-        this.monitors = response.data;
-        this.filteredMonitors = response.data;
+        this.monitorsForm = response.data;
         this.loadingMonitors = false;
       })
   }

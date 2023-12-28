@@ -502,7 +502,7 @@
                     </div>
                     <mat-form-field class="flex-auto" style="width: 100%;">
                         <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor"  *ngIf="!loadingMonitors">
-                        <ng-container *ngFor="let monitor of filteredMonitors" >
+                        <ng-container *ngFor="let monitor of monitorsForm" >
                             <mat-option *ngIf="monitor.id != taskDetail.monitor_id" [value]="monitor">
                                 {{ monitor.first_name }} {{ monitor.last_name }}
                             </mat-option>

@@ -435,5 +435,10 @@
   "inactive": "Idle",
   "finished": "Finished",
   "all": "All",
-  "current": "In progress"
+  "current": "In progress",
+  "monitor_busy": "The monitor is busy",
+  "error": "Error",
+  "event_created": "Event created",
+  "event_edited": "Event edited",
+  "event_deleted": "Event deleted"
 }
