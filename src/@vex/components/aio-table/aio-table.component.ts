@@ -223,6 +223,14 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         filter = filter + '&sport_id='+ids.toString();
       }
     }
+
+    if(this.entity.includes('monitor')) {
+      if (this.activeMonitor && !this.inactiveMonitor) {
+        filter = filter + '&school_active=1';
+      } else if (!this.activeMonitor && this.inactiveMonitor) {
+        filter = filter + '&school_active=0';
+      }
+    }
     this.getFilteredData(1, 10, incFilter + filter);
   }
 
