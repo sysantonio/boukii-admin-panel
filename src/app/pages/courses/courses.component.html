@@ -52,7 +52,9 @@
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
         <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type === 1">
           <ul>
-            <li *ngFor="let item of detailData.course_dates; let i = index">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+            <ng-container *ngFor="let item of detailData.course_dates; let i = index">
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+            </ng-container>
           </ul>
         </div>
         <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type ===2">

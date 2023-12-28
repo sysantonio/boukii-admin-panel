@@ -25,8 +25,7 @@
           </mat-form-field>
 
           <div class="flex-auto">
-            <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()"> Nuevo cliente </button>
-            <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()"> Nuevo cliente </button>
+            <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()"> {{'new_client' | translate }} </button>
           </div>
        </div>
 
@@ -580,7 +579,7 @@
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
       <div class="card-container">
         <!-- Nuevo contenedor para las cards -->
-        <div @fadeInUp class="card flex-auto" style="padding: 1px;">
+        <div @fadeInUp class="card flex-auto" style="height: 100%; padding: 1px">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate }}</h2>
             <div style="width: 50%">
@@ -656,7 +655,7 @@
 
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
-                      <li *ngFor="let forfait of settings.extras.forfait">
+                      <li *ngFor="let forfait of settings?.extras?.forfait">
                           <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)" [checked]="item?.forfait?.id === forfait.id">
                             <span>{{forfait.id}}</span>
                           </mat-checkbox>
@@ -805,11 +804,11 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;">
               <p style="float: left;">{{'op_rem' | translate}}</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" (change)="calculateRem($event)" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance" (change)="calculateRem($event)" [disabled]="isNanValue(this.cancellationInsurance)" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care" (change)="calculateBoukiiCare($event)" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care" (change)="calculateBoukiiCare($event)" [disabled]="isNanValue(this.boukiiCarePrice)" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>

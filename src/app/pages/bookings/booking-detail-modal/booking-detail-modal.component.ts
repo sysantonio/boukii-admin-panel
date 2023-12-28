@@ -465,7 +465,8 @@ export class BookingDetailModalComponent implements OnInit {
 
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.mandatory'), 'OK', {duration:3000});      return;
+      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.mandatory'), 'OK', {duration:3000});
+      return;
     }
 
     let data: any = {};
@@ -1203,9 +1204,28 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getBasePrice() {
-    return parseFloat(this.booking.price_total);
-  }
+    let ret = 0;
 
+    if (this.courses.length > 0) {
+      this.bookingsToCreate.forEach((b, idx) => {
+        if (this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
+          ret = ret + this.getPrivateFlexPrice(b.courseDates);
+          b.price_total = this.getPrivateFlexPrice(b.courseDates);
+        } else if (!this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
+          ret = ret + parseFloat(this.courses[idx]?.price)* b.courseDates.length;
+          b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
+        } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
+          ret = ret + b?.courseDates[0].price * b.courseDates.length;
+          b.price_total = b?.courseDates[0].price * b.courseDates.length;
+        } else {
+          ret = ret + b?.price_total
+        }
+      });
+
+      return ret;
+    }
+
+  }
 
   setForfait(event:any, forfait: any) {
 
@@ -1641,6 +1661,18 @@ export class BookingDetailModalComponent implements OnInit {
     }
   }
 
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
+  getLanguages() {
+    this.crudService.list('/languages', 1, 1000)
+      .subscribe((data) => {
+        this.languages = data.data.reverse();
+
+      })
+  }
 
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id == id);
@@ -1693,21 +1725,12 @@ export class BookingDetailModalComponent implements OnInit {
     }
 
     // añadir desde reglajes el tva
-    this.finalPrice = price + (price * this.tva);
+    if (this.tva && !isNaN(this.tva)) {
+      this.finalPrice = price + (price * this.tva);
+    } else {
+      this.finalPrice = price;
+    }
     this.finalPriceNoTaxes = price;
-  }
-
-  getLanguage(id: any) {
-    const lang = this.languages.find((c) => c.id == +id);
-    return lang ? lang.code.toUpperCase() : 'NDF';
-  }
-
-  getLanguages() {
-    this.crudService.list('/languages', 1, 1000)
-      .subscribe((data) => {
-        this.languages = data.data.reverse();
-
-      })
   }
 
   getMonitorLang(id: number) {
@@ -1718,7 +1741,6 @@ export class BookingDetailModalComponent implements OnInit {
       return +monitor?.language1_id;
     }
   }
-
 
   getMonitorProvince(id: number) {
     if (id && id !== null) {
@@ -1774,5 +1796,22 @@ export class BookingDetailModalComponent implements OnInit {
     });
 
     return ret;
+  }
+
+  isNanValue(value) {
+    return isNaN(value);
+  }
+
+  getPrivateFlexPrice(courseDates) {
+    let ret = 0;
+    courseDates.forEach(element => {
+      ret = ret + parseFloat(element.price);
+    });
+
+    return ret;
+  }
+
+  parseFloatValue(value) {
+    return parseFloat(value);
   }
 }

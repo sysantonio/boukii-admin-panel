@@ -1401,9 +1401,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
 
-        this.cancellationInsurance =  parseFloat(this.settings.taxes.cancellation_insurance_percent);
-        this.boukiiCarePrice = parseInt(this.settings.taxes.boukii_care_price);
-        this.tva = parseFloat(this.settings.taxes.tva);
+        this.cancellationInsurance =  parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
+        this.boukiiCarePrice = parseInt(this.settings?.taxes?.boukii_care_price);
+        this.tva = parseFloat(this.settings?.taxes?.tva);
       })
   }
 
@@ -1479,7 +1479,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       const monitor = this.monitors.find((m) => m.id === id);
 
-      return monitor.first_name + ' ' + monitor.last_name;
+      return monitor?.first_name + ' ' + monitor?.last_name;
     }
   }
 
@@ -1987,7 +1987,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
 
     // añadir desde reglajes el tva
-    this.finalPrice = price + (price * this.tva);
+    if (this.tva && !isNaN(this.tva)) {
+      this.finalPrice = price + (price * this.tva);
+    } else {
+      this.finalPrice = price;
+    }
     this.finalPriceNoTaxes = price;
   }
 
@@ -2209,5 +2213,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
         }
       })
+  }
+
+  isNanValue(value) {
+    return isNaN(value);
   }
 }

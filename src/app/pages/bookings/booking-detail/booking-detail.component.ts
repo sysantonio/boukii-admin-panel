@@ -1215,8 +1215,18 @@ export class BookingDetailComponent implements OnInit {
 
     if (this.courses.length > 0) {
       this.bookingsToCreate.forEach((b, idx) => {
-        ret = ret + parseFloat((!this.courses[idx].is_flexible && this.courses[idx].course_type === 2)
-        ? b.price_total : b.courseDates[0].price);
+        if (this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
+          ret = ret + this.getPrivateFlexPrice(b.courseDates);
+          b.price_total = this.getPrivateFlexPrice(b.courseDates);
+        } else if (!this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
+          ret = ret + parseFloat(this.courses[idx]?.price)* b.courseDates.length;
+          b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
+        } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
+          ret = ret + b?.courseDates[0].price * b.courseDates.length;
+          b.price_total = b?.courseDates[0].price * b.courseDates.length;
+        } else {
+          ret = ret + b?.price_total
+        }
       });
 
       return ret;
@@ -1722,7 +1732,11 @@ export class BookingDetailComponent implements OnInit {
     }
 
     // añadir desde reglajes el tva
-    this.finalPrice = price + (price * this.tva);
+    if (this.tva && !isNaN(this.tva)) {
+      this.finalPrice = price + (price * this.tva);
+    } else {
+      this.finalPrice = price;
+    }
     this.finalPriceNoTaxes = price;
   }
 
@@ -1789,5 +1803,22 @@ export class BookingDetailComponent implements OnInit {
     });
 
     return ret;
+  }
+
+  isNanValue(value) {
+    return isNaN(value);
+  }
+
+  getPrivateFlexPrice(courseDates) {
+    let ret = 0;
+    courseDates.forEach(element => {
+      ret = ret + parseFloat(element.price);
+    });
+
+    return ret;
+  }
+
+  parseFloatValue(value) {
+    return parseFloat(value);
   }
 }

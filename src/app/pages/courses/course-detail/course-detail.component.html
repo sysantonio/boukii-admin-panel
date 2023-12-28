@@ -201,7 +201,7 @@
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
-                                  {{'groups' | translate}} {{defaults?.course_dates[0]?.groups[groupIndex]?.subgroups.length}}g
+                                  {{'groups' | translate}} {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
                                 </div>
                                 <div style="width: 100%; margin-top: 10%;height: 60px">
                                   <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
