@@ -435,5 +435,10 @@
   "inactive": "Oziare",
   "finished": "Finalizzato",
   "all": "Tutto",
-  "current": "In corso"
+  "current": "In corso",
+  "monitor_busy": "Il monitor è occupato",
+  "error": "Errore",
+  "event_created": "Evento creato",
+  "event_edited": "Evento modificato",
+  "event_deleted": "Evento eliminato"
 }
