@@ -614,7 +614,7 @@ export class TimelineComponent {
       if (startTime < firstTimeRange) {
         startTime.setHours(firstTimeRange.getHours(), firstTimeRange.getMinutes(), 0, 0);
       }
-      
+
       const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
       const rangeStart = this.parseTime(this.hoursRange[0]);
       const rangeStartMinutes = rangeStart.getHours() * 60 + rangeStart.getMinutes();
@@ -650,7 +650,7 @@ export class TimelineComponent {
       if (startTimeWeek < firstTimeRange) {
         startTimeWeek.setHours(firstTimeRange.getHours(), firstTimeRange.getMinutes(), 0, 0);
       }
-      
+
       const rangeStartWeek = this.parseTime(this.hoursRange[0]);
       const startMinutesWeek = startTimeWeek.getHours() * 60 + startTimeWeek.getMinutes();
       const rangeStartMinutesWeek = rangeStartWeek.getHours() * 60 + rangeStartWeek.getMinutes();
@@ -912,7 +912,7 @@ export class TimelineComponent {
           monitor_id: monitor_id,
           booking_users: all_booking_users
         };
-        
+
         //console.log(data);
 
         this.crudService.post('/admin/planner/monitors/transfer', data)

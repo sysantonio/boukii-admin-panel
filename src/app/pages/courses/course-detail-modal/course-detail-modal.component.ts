@@ -14,6 +14,7 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { CoursesCreateUpdateComponent } from '../courses-create-update/courses-create-update.component';
 
 @Component({
   selector: 'vex-course-detail-modal',
@@ -214,6 +215,22 @@ export class CourseDetailModalComponent implements OnInit {
 
   parseDateToDay(date:any, inFormat: string, format: string) {
     return moment(date, inFormat).format(format);
+  }
+
+  openUpdateCourse() {
+    const dialogRef = this.dialog.open(CoursesCreateUpdateComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: {id: this.id}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+      }
+    });
   }
 
   goTo(route: string) {
