@@ -431,5 +431,12 @@
   "snackbar.settings.auths": "Los bloqueos se han actualizado correctamente",
   "snackbar.settings.extras": "Extras modificados correctamente",
   "snackbar.settings.levels": "Niveles actualizados correctamente",
-  "snackbar.credential_error": "Error con las credenciales"
+  "snackbar.credential_error": "Error con las credenciales",
+  "table.filter.booking": "Tipo de reserva",
+  "table.filter.course": "Tipo de curso",
+  "table.filter.single": "Individual",
+  "table.filter.multiple": "Múltiple",
+  "inactive": "Inactivo",
+  "finished": "Finalizado",
+  "all": "Todos"
 }

@@ -426,5 +426,12 @@
   "snackbar.settings.auths": "Les verrous ont été mis à jour avec succès",
   "snackbar.settings.extras": "Extras correctement modifiés",
   "snackbar.settings.levels": "Niveaux mis à jour avec succès",
-  "snackbar.credential_error": "Erreur avec les informations d'identification"
+  "snackbar.credential_error": "Erreur avec les informations d'identification",
+  "table.filter.booking": "Type de réservation",
+  "table.filter.course": "Type de cours",
+  "table.filter.single": "Individuel",
+  "table.filter.multiple": "Plusieurs",
+  "inactive": "Inactif",
+  "finished": "Finalisé",
+  "all": "Tous"
 }
