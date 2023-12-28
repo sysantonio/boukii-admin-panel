@@ -109,7 +109,7 @@ export class ClientCreateUpdateComponent implements OnInit {
     private crudService: ApiCrudService, private router: Router, private snackbar: MatSnackBar) {
     this.today = new Date();
     this.minDate = new Date(this.today);
-    this.minDate.setFullYear(this.today.getFullYear() - 18);
+    this.minDate.setFullYear(this.today.getFullYear() - 3);
   }
 
   ngOnInit(): void {
