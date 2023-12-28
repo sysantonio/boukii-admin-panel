@@ -92,7 +92,9 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   with: any = '';
   @Output()
   showDetailEvent = new EventEmitter<any>();
+  pageIndex = 1;
   pageSize = 10;
+  filter = '';
   totalRecords = 1000;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   dataSource: MatTableDataSource<any> | null;
@@ -243,6 +245,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         filter = filter + '&school_active=0';
       }
     }
+
+    this.filter = filter;
     this.getFilteredData(1, 10, incFilter + filter);
   }
 
@@ -255,16 +259,17 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', filter + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', '', this.with)
+    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', filter + this.searchCtrl.value + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', this.searchCtrl.value, this.with)
       .subscribe((response: any) => {
+        this.pageIndex = pageIndex;
+        this.pageSize = pageSize;
         this.data = response.data;
         this.dataSource.data = response.data;
-        this.totalRecords = response.total; // Total de registros disponibles.
-        console.log(`Data received for page: ${pageIndex}`);
-
+        this.totalRecords = response.total;
         this.loading = false;
       });
   }
+
 
 
   /**
@@ -281,11 +286,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         this.data = response.data;
         this.dataSource.data = response.data;
         this.totalRecords = response.total; // Total de registros disponibles.
-        console.log(`Data received for page: ${pageIndex}`);
 
-        this.searchCtrl.valueChanges
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe((value) => this.onFilterChange(value));
         this.loading = false;
       });
   }

@@ -80,7 +80,8 @@
           <input [formControl]="searchCtrl"
                  class="px-4 py-2 border-0 outline-none w-full bg-transparent"
                  placeholder="Buscar..."
-                 type="search">
+                 type="search"
+                 (input)="getFilteredData(pageIndex, pageSize, filter)">
         </div>
 
         <div style="margin: 0 0 0 15%" *ngIf="entity.includes('courses')">
@@ -100,7 +101,7 @@
         </div>
         <div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = false;activeCourse=true;inActiveCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
+            <span [ngStyle]="{'color': !finishedCourse ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('courses')">
@@ -110,7 +111,7 @@
         </div>
 
         <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="activeBooking = true; finishedBooking=false; allBookings=false; filterData()">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="activeBooking = true; finishedBooking=false; allBookings=false;finishedBooking=false; filterData()">
             <span [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
         </div>
@@ -121,7 +122,7 @@
         </div>
         <div *ngIf="entity.includes('bookings')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = false; activeBooking=false; allBookings=true; filterData()">
-            <span [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
+            <span [ngStyle]="{'color': !finishedBooking ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('bookings')">
@@ -174,7 +175,7 @@
       </div>
 
 
-      <table @stagger [dataSource]="dataSource" class="w-full" mat-table matSort *ngIf="!loading">
+      <table @stagger #dataTable [dataSource]="dataSource" class="w-full" mat-table matSort *ngIf="!loading">
 
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
