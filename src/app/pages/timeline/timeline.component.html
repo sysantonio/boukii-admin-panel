@@ -20,9 +20,14 @@
                     <button (click)="goToNext()">&gt;</button>
                     <button (click)="showFilter = !showFilter" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
 
-
                     <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()">{{'timeline.reset_filters' | translate}}</button>
                     <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()">{{'timeline.apply_filters' | translate}}</button>
+
+                    <mat-form-field class="flex-auto">
+                        <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (ngModelChange)="onDateChange()">
+                        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom></mat-datepicker>
+                    </mat-form-field>
                     </div>
 
                     <div class="view-selection">
@@ -151,7 +156,7 @@
                         <ng-container *ngFor="let task of plannerTasks">
                             <!--DAY-->
                             <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" class="task-wrapper cursor-pointer" [ngClass]="[
-                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ?
+                                (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                                 '',
                                 task.class,
@@ -174,13 +179,13 @@
                             </div>
                             <!--WEEK-->
                             <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
-                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ?
+                                (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                                 '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleWeek">
-                                <img class="sport-img-week" *ngIf="(task.type=='collective' || task.type=='private') && task.sport" [src]="task.sport.icon_selected" />
+                                <img class="sport-img-week" *ngIf="(!task.styleWeek.height || (task.styleWeek.height && task.styleWeek.height == '100px')) && ((task.type=='collective' || task.type=='private') && task.sport)" [src]="task.sport.icon_selected" />
                                 <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks-week">
                                     <!-- PENDING LEVEL -->
                                     <ng-container *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
@@ -272,13 +277,13 @@
                         <ng-container *ngFor="let task of plannerTasks">
                             <!--MONTH-->
                             <div class="task-wrapper-week cursor-pointer" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" [ngClass]="[
-                                (task.booking_id && (idDetail == task.booking_id || idGroupedTasks == task.booking_id)) ?
+                                (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                                 '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleMonth">
-                                <img class="sport-img-week" *ngIf="(task.type=='collective' || task.type=='private') && task.sport" [src]="task.sport.icon_selected" />
+                                <img class="sport-img-week" *ngIf="(!task.styleMonth.height || (task.styleMonth.height && task.styleMonth.height == '100px')) && ((task.type=='collective' || task.type=='private') && task.sport)" [src]="task.sport.icon_selected" />
                                 <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks-week">
                                     <!-- PENDING LEVEL -->
                                     <ng-container *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
@@ -304,7 +309,7 @@
                     <mat-icon class="cursor-pointer" svgIcon="mat:close" (click)="hideGrouped()"></mat-icon>
                 </div>
                 <div *ngFor="let task of groupedTasks" (click)="toggleDetail(task)" class="modal-grouped-task-wrapper cursor-pointer" (contextmenu)="toggleDetailMove(task, $event)" [ngClass]="[
-                    (task.booking_id && (idDetail == task.booking_id)) ?
+                    (task.booking_id && (idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id && subgroupDetail == task.course_subgroup_id)) ?
                     (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                     '',
                     task.class

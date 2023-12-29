@@ -57,8 +57,14 @@ export class TimelineComponent {
   showGrouped:boolean=false;
   groupedTasks:any[] = [];
   idGroupedTasks:any;
+  hourGrouped:any;
+  dateGrouped:any;
   showDetail:boolean=false;
   idDetail:any;
+  hourDetail:any;
+  dateDetail:any;
+  monitorDetail:any;
+  subgroupDetail:any;
   taskDetail:any;
   showBlock:boolean=false;
   idBlock:any;
@@ -92,6 +98,7 @@ export class TimelineComponent {
   divideDay:boolean=false;
   startTimeDivision:string;
   endTimeDivision:string;
+  searchDate:any;
 
   constructor(private crudService: ApiCrudService,private dialog: MatDialog,private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.mockLevels.forEach(level => {
@@ -127,6 +134,12 @@ export class TimelineComponent {
     await this.calculateWeeksInMonth();
     //await this.calculateTaskPositions();
     this.loadBookings(this.currentDate);
+  }
+
+  onDateChange() {
+    this.currentDate = this.searchDate;
+    this.timelineView === 'day';
+    this.updateView();
   }
 
   async getUser() {
@@ -273,7 +286,6 @@ export class TimelineComponent {
   searchBookings(firstDate:string,lastDate:string){
     this.crudService.get('/admin/getPlanner?date_start='+firstDate+'&date_end='+lastDate+'&school_id='+this.activeSchool+'&perPage='+99999).subscribe(
       (data:any) => {
-
         this.processData(data.data);
       },
       error => {
@@ -514,7 +526,6 @@ export class TimelineComponent {
         };
       })
     ];
-
 
     this.calculateTaskPositions(tasksCalendar);
   }
@@ -786,8 +797,11 @@ export class TimelineComponent {
       groupedByDate[date] = overlappingGroups.flat();
     });
 
-    // Remove the original tasks that were grouped
-    const filteredPlannerTasks = plannerTasks.filter(task => !groupedTaskIds.has(task.booking_id));
+    // Remove the original tasks that were grouped -> NOT THE ONES THAT ALREADY HAVE MONITOR
+    const filteredPlannerTasks = plannerTasks.filter(task => 
+      !groupedTaskIds.has(task.booking_id) || 
+      (groupedTaskIds.has(task.booking_id) && task.monitor_id)
+    );  
 
     // Combine adjusted tasks with the rest
     this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
@@ -833,16 +847,23 @@ export class TimelineComponent {
   // LOGIC
 
   toggleDetail(task:any){
+    //console.log(task);
     if(task.booking_id){
       if(task.grouped_tasks && task.grouped_tasks.length > 1){
         //Open Modal grouped courses
         this.groupedTasks = task.grouped_tasks;
         this.idGroupedTasks = task.booking_id;
+        this.hourGrouped = task.hour_start;
+        this.dateGrouped = task.date;
         this.showGrouped = true;
       }
       else{
         //Load course
         this.idDetail = task.booking_id;
+        this.hourDetail = task.hour_start;
+        this.dateDetail = task.date;
+        this.monitorDetail = task.monitor_id;
+        this.subgroupDetail = task.course_subgroup_id;
         this.taskDetail = task;
         this.showDetail = true;
       }
@@ -861,6 +882,10 @@ export class TimelineComponent {
 
   hideDetail() {
     this.idDetail = null;
+    this.hourDetail = null;
+    this.dateDetail = null;
+    this.monitorDetail = null;
+    this.subgroupDetail = null;
     this.taskDetail = null;
     this.showDetail = false;
     this.editedMonitor = null;
@@ -876,6 +901,8 @@ export class TimelineComponent {
   hideGrouped() {
     this.groupedTasks = [];
     this.idGroupedTasks = null;
+    this.hourGrouped = null;
+    this.dateGrouped = null;
     this.showGrouped = false;
   }
 

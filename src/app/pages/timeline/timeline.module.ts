@@ -30,6 +30,7 @@ import { ComponentsCustomModule } from '../../components/components-custom.modul
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BookingDetailModalModule } from '../bookings/booking-detail-modal/booking-detail-modal.module';
 import { CourseUserTransferTimelineModalModule } from './course-user-transfer-timeline/course-user-transfer-timeline.module';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -66,7 +67,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatProgressSpinnerModule,
     BookingDetailModalModule,
     CourseUserTransferTimelineModalModule,
-    TranslateModule
+    TranslateModule,
+    MatDatepickerModule
   ]
 })
 export class TimelineModule {
