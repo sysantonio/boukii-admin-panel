@@ -841,7 +841,7 @@ export class CourseDetailComponent implements OnInit {
           return acc;
         }, [0, 0]);
 
-        this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', '')});
+        this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
         if (this.defaults.course_type === 2) {
 
           this.defaults.course_dates.push({
@@ -859,7 +859,7 @@ export class CourseDetailComponent implements OnInit {
           })
         }
       } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', '')});
+        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
       }
 
     });

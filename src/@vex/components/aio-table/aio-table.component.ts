@@ -1,27 +1,24 @@
 import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { filter, map, startWith, tap } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { MatSelectChange } from '@angular/material/select';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { Router } from '@angular/router';
-import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { FormControl, UntypedFormControl } from '@angular/forms';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import moment from 'moment';
 import { ConfirmModalComponent } from 'src/app/pages/monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
 
 @UntilDestroy()
 @Component({

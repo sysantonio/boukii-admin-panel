@@ -303,10 +303,12 @@
                                               <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
                                             </mat-form-field>
                                           </li>
-                                          <li style="float: left; width: 13%;margin: 3% 0 0 0;" *ngFor="let item of daysDatesLevels">
-                                            <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                            [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel)? '#CEE741': 'red'}"></div>
-                                          </li>
+                                          <ng-container *ngFor="let item of daysDatesLevels">
+                                            <li style="float: left; width: 13%;margin: 3% 0 0 0;">
+                                              <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel)? '#CEE741': 'red'}"></div>
+                                            </li>
+                                          </ng-container>
                                         </ul>
                                       </div>
                                     </div>
