@@ -309,7 +309,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
           startWith(''),
           map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filter(full_name) : this.clients.slice())
+          map(full_name => full_name ? this._filter(full_name) : this.clients.slice(0, 50))
         );
 
         this.filteredSports = this.sportForm.valueChanges.pipe(
@@ -1136,7 +1136,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
+    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;

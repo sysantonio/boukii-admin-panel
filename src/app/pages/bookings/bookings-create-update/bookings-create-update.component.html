@@ -16,7 +16,7 @@
           <mat-form-field class="client-search-container">
             <mat-label>{{'client' | translate}}</mat-label>
             <input type="text" placeholder="{{'choose_client' | translate}}" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
               <mat-option *ngFor="let filteredClient of filteredOptions | async" [value]="filteredClient" (onSelectionChange)="getUtilzers(filteredClient)">
                 {{filteredClient.first_name}} {{filteredClient.last_name}}
               </mat-option>

@@ -904,6 +904,7 @@ export class CourseDetailComponent implements OnInit {
     if (this.defaults.course_type === 1) {
       this.defaults.course_dates.forEach(dates => {
         const group = [];
+        delete dates.course_subgroups;
         dates.course_groups.forEach(dateGroup => {
           if (dateGroup.course_subgroups.length > 0) {
             group.push(dateGroup);
@@ -947,10 +948,10 @@ export class CourseDetailComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: 'CHF',//poner currency de reglajes
-        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end).format('YYYY-MM-DD'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
