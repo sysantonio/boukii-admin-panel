@@ -42,7 +42,7 @@ export class MonitorsComponent {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
 
-    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
     .subscribe((sport) => {
       this.sports = sport.data;
     })
@@ -55,6 +55,7 @@ export class MonitorsComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'surname', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'age', property: 'birth_date', type: 'birth', visible: true },
     { label: 'Email', property: 'email', type: 'text', visible: true },
     { label: 'mobile', property: 'phone', type: 'text', visible: true },
@@ -71,12 +72,12 @@ export class MonitorsComponent {
       .subscribe((data) => {
         this.detailData = data.data;
 
-        this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+event.item.id)
+        this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+event.item.id)
           .subscribe((mn) => {
             this.monitorSport = mn.data;
 
             this.monitorSport.forEach(element => {
-              this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_sport_id=' + element.id)
+              this.crudService.list('/monitor-sport-authorized-degrees', 1, 10000, 'desc', 'id', '&monitor_sport_id=' + element.id)
                 .subscribe((msad) => {
                   element.authorized = msad.data;
                 });

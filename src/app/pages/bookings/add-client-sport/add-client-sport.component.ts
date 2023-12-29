@@ -113,11 +113,11 @@ export class AddClientSportModalComponent implements OnInit {
 
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
           .subscribe((data) => {
             this.schoolSports[idx].degrees = data.data
           });

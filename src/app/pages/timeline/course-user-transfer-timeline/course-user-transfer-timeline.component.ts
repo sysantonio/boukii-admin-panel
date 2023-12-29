@@ -70,7 +70,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
           }
         });
 
-        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&course_id='+this.defaults.id)
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&course_id='+this.defaults.id)
             .subscribe((result) => {
               if (result.data.length > 0) {
                 result.data.forEach(element => {

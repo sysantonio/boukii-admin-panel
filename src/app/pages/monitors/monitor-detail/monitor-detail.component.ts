@@ -569,7 +569,7 @@ export class MonitorDetailComponent {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -583,7 +583,7 @@ export class MonitorDetailComponent {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.station_id)
@@ -596,11 +596,11 @@ export class MonitorDetailComponent {
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
             this.schoolSports[idx].degrees = data.data
           });
@@ -609,7 +609,7 @@ export class MonitorDetailComponent {
   }
 
   getMonitorSportsDegree() {
-    this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+this.id)
+    this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+this.id)
       .subscribe((monitorDegree) => {
         let selectedSports = []; // Obtén los deportes actualmente seleccionados o inicializa un arreglo vacío
         const level = [];
@@ -659,7 +659,7 @@ export class MonitorDetailComponent {
 
         monitorDegree.data.forEach(mDG => {
 
-          this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_sport_id=' + mDG.id)
+          this.crudService.list('/monitor-sport-authorized-degrees', 1, 10000, 'desc', 'id', '&monitor_sport_id=' + mDG.id)
             .subscribe((data) => {
 
               selectedSports.forEach(element => {
@@ -852,7 +852,7 @@ export class MonitorDetailComponent {
   }
 
   getSalarySchoolData() {
-    this.crudService.list('/school-salary-levels', 1, 1000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.salaryData = data.data;
       })
@@ -1043,7 +1043,7 @@ export class MonitorDetailComponent {
 
       })
 
-      this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
         .subscribe((booking) => {
           this.detailData.users = [];
 
@@ -1051,7 +1051,7 @@ export class MonitorDetailComponent {
             if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
-                this.crudService.list('/client-sports', 1, 1000, 'desc', 'id', '&client_id='+element.client_id)
+                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id)
                 .subscribe((cd) => {
 
                   if (cd.data.length > 0) {
@@ -1103,7 +1103,7 @@ export class MonitorDetailComponent {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((client) => {
         this.clients = client.data;
       })

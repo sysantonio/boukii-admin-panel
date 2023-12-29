@@ -236,7 +236,7 @@ export class BookingDetailModalComponent implements OnInit {
       .subscribe((data) => {
         this.booking = data.data;
 
-        this.crudService.list('/vouchers-logs', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
+        this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((vl) => {
             if(vl.data.length > 0) {
               this.bonusLog = vl.data;
@@ -252,7 +252,7 @@ export class BookingDetailModalComponent implements OnInit {
             }
           })
 
-        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.id)
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((bookingUser) => {
             this.bookingUsers = bookingUser.data;
 
@@ -297,7 +297,7 @@ export class BookingDetailModalComponent implements OnInit {
 
 
             this.bookingUsers.forEach((bu ,idx) => {
-              this.crudService.list('/booking-user-extras', 1, 1000, 'desc', 'id', '&booking_user_id='+bu.id)
+              this.crudService.list('/booking-user-extras', 1, 10000, 'desc', 'id', '&booking_user_id='+bu.id)
                 .subscribe((bue) =>{
                   if (bue.data.length > 0) {
                     this.bookingExtras.push(bue.data[0]);
@@ -771,7 +771,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
+    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -787,7 +787,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 1000, 'asc', 'sport_id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'asc', 'sport_id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data.reverse();
         this.sportData.forEach(element => {
@@ -811,7 +811,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getDegrees(sportId: number, onLoad:boolean = false) {
-   this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
+   this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
 
@@ -928,7 +928,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
       })
@@ -952,7 +952,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getSeason() {
-    this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
         this.season = season.data[0];
       })

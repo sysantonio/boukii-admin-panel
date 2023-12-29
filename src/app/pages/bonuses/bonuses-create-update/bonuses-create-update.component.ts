@@ -124,7 +124,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    this.crudService.list('/clients', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
         this.filteredOptions = this.clientsForm.valueChanges.pipe(

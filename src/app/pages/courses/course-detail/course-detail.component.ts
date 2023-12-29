@@ -171,7 +171,7 @@ export class CourseDetailComponent implements OnInit {
 
         this.getSeparatedDates(this.defaults.course_dates, true);
 
-        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&course_id='+this.defaults.id)
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&course_id='+this.defaults.id)
             .subscribe((result) => {
               this.courseUsers = result.data;
               this.loading = false;
@@ -183,7 +183,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations', 1, 1000,  'desc', 'id', '&school_id=' + this.user.schools[0].id)
+    this.crudService.list('/stations', 1, 10000,  'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((st) => {
         st.data.forEach(element => {
           if (element.id === this.defaults.station_id) {
@@ -264,7 +264,7 @@ export class CourseDetailComponent implements OnInit {
   getDegrees() {
     this.groupedByColor = {};
     this.colorKeys= [];
-    this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
+    this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
       .subscribe((data) => {
 
         if (this.defaults.course_type === 1) {
@@ -868,7 +868,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
 

@@ -383,7 +383,7 @@ export class SettingsComponent implements OnInit {
     this.holidaysSelected.push(moment(selectedDate).format('YYYY-MM-DD'));
   }
   getSchoolSeason() {
-    return this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id);
+    return this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id);
   }
 
   deleteHoliday(index: any) {
@@ -510,12 +510,12 @@ export class SettingsComponent implements OnInit {
   }
 
   getSchoolSports() {
-    return this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.school.id);
+    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.school.id);
   }
 
   getSchoolSportDegrees() {
     this.sportsList.forEach((element, idx) => {
-      this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.school.id + '&sport_id='+element)
+      this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.school.id + '&sport_id='+element)
         .subscribe((data) => {
           this.schoolSports[idx].degrees = data.data;
           this.selectedSport = this.schoolSports[0].id;

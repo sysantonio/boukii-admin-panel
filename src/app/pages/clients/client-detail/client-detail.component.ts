@@ -308,11 +308,11 @@ export class ClientDetailComponent {
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
             this.schoolSports[idx].degrees = data.data;
           });
@@ -322,7 +322,7 @@ export class ClientDetailComponent {
 
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -373,7 +373,7 @@ export class ClientDetailComponent {
   }
 
   getClientObservations() {
-    this.crudService.list('/client-observations', 1, 1000, 'desc', 'id', '&client_id='+this.id)
+    this.crudService.list('/client-observations', 1, 10000, 'desc', 'id', '&client_id='+this.id)
       .subscribe((data) => {
         if(data.data.length > 0) {
 
@@ -383,7 +383,7 @@ export class ClientDetailComponent {
   }
 
   getClientSchool() {
-    this.crudService.list('/clients-schools', 1, 1000, 'desc', 'id', '&client_id='+this.id)
+    this.crudService.list('/clients-schools', 1, 10000, 'desc', 'id', '&client_id='+this.id)
     .subscribe((data) => {
       this.clientSchool = data.data;
 
@@ -391,7 +391,7 @@ export class ClientDetailComponent {
   }
 
   getClientSport() {
-    this.crudService.list('/client-sports', 1, 1000, 'desc', 'id', '&client_id='+this.id)
+    this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+this.id)
       .subscribe((data) => {
         this.clientSport = data.data;
         this.selectedSport = this.clientSport[0];
@@ -430,7 +430,7 @@ export class ClientDetailComponent {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.station_id)
@@ -546,10 +546,10 @@ export class ClientDetailComponent {
   }
 
   getClientUtilisateurs() {
-    this.crudService.list('/admin/clients/' + this.id +'/utilizers', 1, 1000, 'desc', 'id','&client_id='+this.id)
+    this.crudService.list('/admin/clients/' + this.id +'/utilizers', 1, 10000, 'desc', 'id','&client_id='+this.id)
       .subscribe((data) => {
         this.clientUsers = data.data;
-        this.crudService.list('/clients-utilizers', 1, 1000, 'desc', 'id','&main_id='+this.id)
+        this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id','&main_id='+this.id)
         .subscribe((data) => {
           data.data.forEach(element => {
             this.clientUsers.forEach(cl => {
@@ -877,11 +877,11 @@ export class ClientDetailComponent {
   getGoals() {
     this.clientSport.forEach(cs => {
 
-      this.crudService.list('/degrees-school-sport-goals', 1, 1000, 'desc', 'id', '&degree_id='+cs.degree_id)
+      this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id='+cs.degree_id)
         .subscribe((data) => {
           data.data.forEach(goal => {
 
-          this.crudService.list('/evaluation-fulfilled-goals', 1, 1000, 'desc', 'id', '&degrees_school_sport_goals_id='+goal.id)
+          this.crudService.list('/evaluation-fulfilled-goals', 1, 10000, 'desc', 'id', '&degrees_school_sport_goals_id='+goal.id)
             .subscribe((ev: any) => {
               if (ev.data.length > 0) {
                 goal.score = ev.data[0].score;
@@ -1002,7 +1002,7 @@ export class ClientDetailComponent {
 
       })
 
-      this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
         .subscribe((booking) => {
           this.detailData.users = [];
 
@@ -1010,7 +1010,7 @@ export class ClientDetailComponent {
             if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
-                this.crudService.list('/client-sports', 1, 1000, 'desc', 'id', '&client_id='+element.client_id)
+                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id)
                 .subscribe((cd) => {
 
                   if (cd.data.length > 0) {
@@ -1063,7 +1063,7 @@ export class ClientDetailComponent {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((client) => {
         this.clients = client.data;
       })

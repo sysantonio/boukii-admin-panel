@@ -57,7 +57,7 @@ export class CoursesComponent {
 
       this.groupedByColor = {};
       this.colorKeys= [];
-      this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id='+ this.detailData.sport_id)
+      this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id='+ this.detailData.sport_id)
         .subscribe((data) => {
           this.detailData.degrees = [];
           data.data.forEach(element => {
@@ -89,7 +89,7 @@ export class CoursesComponent {
           this.colorKeys = Object.keys(this.groupedByColor);
         });
 
-        this.crudService.list('/stations', 1, 1000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
+        this.crudService.list('/stations', 1, 10000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
           .subscribe((st) => {
             st.data.forEach(element => {
               if (element.id === this.detailData.station_id) {
@@ -97,7 +97,7 @@ export class CoursesComponent {
               }
             });
           })
-        this.crudService.list('/booking-users', 1, 1000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id='+ this.detailData.id)
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id='+ this.detailData.id)
           .subscribe((bookingUser) => {
             this.detailData.users = [];
             this.detailData.users = bookingUser.data;
@@ -131,7 +131,7 @@ export class CoursesComponent {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((monitor) => {
         this.monitors = monitor.data;
       })
@@ -225,7 +225,7 @@ export class CoursesComponent {
     });
 
     this.selectedGroup.course_subgroups.forEach(element => {
-      this.crudService.list('/booking-users', 1, 1000, 'asc', 'id', '&course_subgroup_id=' + element.id)
+      this.crudService.list('/booking-users', 1, 10000, 'asc', 'id', '&course_subgroup_id=' + element.id)
         .subscribe((data) => {
           element.totalUsers = data.data.length;
         })

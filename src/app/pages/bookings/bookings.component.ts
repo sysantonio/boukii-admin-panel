@@ -36,6 +36,7 @@ export class BookingsComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'type', type: 'booking_users_image', visible: true },
     { label: 'course', property: 'bookingusers', type: 'booking_users', visible: true},
+    { label: 'client', property: 'client_main_id', type: 'client', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     { label: 'options', property: 'options', type: 'text', visible: true },
@@ -67,7 +68,7 @@ export class BookingsComponent {
       this.bonus = [];
       this.detailData = event.item;
       this.getSchoolSportDegrees();
-      this.crudService.list('/vouchers-logs', 1, 1000, 'desc', 'id', '&booking_id='+this.detailData.id)
+      this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.id)
           .subscribe((vl) => {
             if(vl.data.length > 0) {
               vl.data.forEach(voucherLog => {
@@ -82,7 +83,7 @@ export class BookingsComponent {
 
           this.detailData.bookingusers.forEach(book => {
             book.courseExtras = [];
-            this.crudService.list('/booking-user-extras', 1, 1000, 'desc', 'id', '&booking_user_id='+book.id)
+            this.crudService.list('/booking-user-extras', 1, 10000, 'desc', 'id', '&booking_user_id='+book.id)
             .subscribe((be) => {
               this.detailData.courseExtras = [];
               be.data.forEach(element => {
@@ -174,14 +175,14 @@ export class BookingsComponent {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((client) => {
         this.clients = client.data;
       })
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((monitor) => {
         this.monitors = monitor.data;
       })
@@ -189,18 +190,18 @@ export class BookingsComponent {
 
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.sports = sport.data;
       })
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.detailData.sports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
           .subscribe((data) => {
             this.detailData.sports[idx].degrees = data.data.reverse();
           });

@@ -38,7 +38,7 @@ export class AddClientUserModalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.crudService.list('/clients', 1, 1000, 'asc', 'first_name', '&school_id='+this.defaults.id)
+    this.crudService.list('/clients', 1, 10000, 'asc', 'first_name', '&school_id='+this.defaults.id)
       .subscribe((data) => {
         this.clients = data.data;
         this.getLanguages()

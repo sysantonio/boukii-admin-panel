@@ -1151,7 +1151,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data.reverse();
         this.sportData.forEach(element => {
@@ -1180,7 +1180,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getDegrees(sportId: number) {
-   this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
+   this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
 
@@ -1233,7 +1233,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.crudService.create('/client-sports', {client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
             .subscribe(() => {
               console.log('client sport created');
-              this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+              this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
                 .subscribe((cl) => {
                   this.clients = cl.data;
                   const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
@@ -1365,7 +1365,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
       })
@@ -1389,7 +1389,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSeason() {
-    this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
         this.season = season.data[0];
       })
@@ -1813,7 +1813,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.list('/admin/clients/mains', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
           .subscribe((cl: any) => {
             const newClient = cl.data.find((c) => c.id = data.data.id);
             this.clientsForm.patchValue(newClient);

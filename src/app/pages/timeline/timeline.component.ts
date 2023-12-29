@@ -110,7 +110,7 @@ export class TimelineComponent {
     await this.getSports();
     await this.getSchoolSports();
     await this.getDegrees();
-    this.crudService.list('/seasons', 1, 1000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
         let hour_start = '08:00';
         let hour_end = '18:00';
@@ -321,12 +321,12 @@ export class TimelineComponent {
 
         // Process 'monitor' field
         if(this.filterMonitor){
-          if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne) {
+          if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
             this.filteredMonitors.push(item.monitor);
           }
         }
         else{
-          if (item.monitor && hasAtLeastOne) {
+          if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
             this.filteredMonitors.push(item.monitor);
           }
         }

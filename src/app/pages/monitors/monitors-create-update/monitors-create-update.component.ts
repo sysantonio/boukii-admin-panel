@@ -444,7 +444,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
@@ -508,7 +508,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.station_id)
@@ -521,11 +521,11 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 1000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {
             this.schoolSports[idx].degrees = data.data;
           });
@@ -560,7 +560,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSalarySchoolData() {
-    this.crudService.list('/school-salary-levels', 1, 1000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.salaryData = data.data;
       })

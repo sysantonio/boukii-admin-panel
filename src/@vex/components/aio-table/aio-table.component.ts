@@ -674,8 +674,10 @@ ngAfterViewInit() {
 
       })
   }
+
+
   getSports() {
-    this.crudService.list('/sports', 1, 1000, 'asc', 'name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'asc', 'name', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.sports = data.data;
         this.sportsControl.patchValue(data.data);

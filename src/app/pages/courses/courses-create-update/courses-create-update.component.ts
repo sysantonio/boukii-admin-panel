@@ -295,7 +295,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.schoolData = data.data;
-        this.crudService.list('/seasons', 1, 1000, 'desc', 'id', '&school_id='+data.data.id + '&is_active=1')
+        this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id='+data.data.id + '&is_active=1')
           .subscribe((season) => {
             this.season = season.data[0];
              // Extrae las horas de inicio y fin
@@ -1151,7 +1151,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 1000, 'desc', 'id','&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id','&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data;
         this.sportData.forEach(element => {
@@ -1170,7 +1170,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
           this.crudService.get('/stations/'+element.station_id)
@@ -1183,7 +1183,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 1000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
       })
@@ -1192,7 +1192,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   getDegrees() {
     this.groupedByColor = {};
     this.colorKeys= [];
-    this.crudService.list('/degrees', 1, 1000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
+    this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
       .subscribe((data) => {
         data.data.forEach(element => {
           if(element.active) {
