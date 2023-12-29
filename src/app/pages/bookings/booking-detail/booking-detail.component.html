@@ -51,7 +51,8 @@
               <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
-              <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>
+              <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport" [selectLevel]="getClientDegree(booking?.client_main_id,item.sport_id)" [size]="40" [userImage]="getClientAvatar(booking.client_main_id)"></app-level-user>
+              <!--<div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>-->
               <mat-card-subtitle>{{getClientName(booking?.client_main_id)}}</mat-card-subtitle>
               <mat-card-subtitle>{{ getLanguage(getClient(booking?.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking?.client_main_id)?.country) }} · {{calculateAge(getClient(booking?.client_main_id)?.birth_date) }} {{'years' |translate}}</mat-card-subtitle>
             </mat-card-header>
@@ -229,7 +230,7 @@
           <mat-card style="width: 100%;padding:1%">
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'" style="width:100px; height: 60px;"></div>
-              <mat-card-subtitle>{{getClientName(booking.client_main_id)}}</mat-card-subtitle>
+              <mat-card-subtitle>{{getClientName(booking.client_main_id)}}123123123</mat-card-subtitle>
               <mat-card-subtitle>
                 {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} {{'years' | translate}}
               </mat-card-subtitle>
