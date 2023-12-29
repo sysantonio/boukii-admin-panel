@@ -188,6 +188,8 @@ export class BookingDetailComponent implements OnInit {
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
 
+  degreesClient:any[]=[];
+
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
@@ -199,16 +201,47 @@ export class BookingDetailComponent implements OnInit {
                 });
               }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.getMonitors();
     this.getLanguages();
-    this.schoolService.getSchoolData()
-      .subscribe((data) => {
-        this.schoolSettings = data.data;
-      })
+    
+    await this.schoolService.getSchoolData().toPromise().then(data => {
+      this.schoolSettings = data.data;
+    });
+    await this.getDegreesClient();
     this.getData();
+  }
+
+  async getDegreesClient(){
+    try {
+      const data: any = await this.crudService.get('/degrees?perPage='+99999+'&school_id='+this.schoolSettings.id).toPromise();
+      this.degreesClient = data.data.sort((a, b) => a.degree_order - b.degree_order);
+      this.degreesClient.forEach((degree: any) => {
+        degree.inactive_color = this.lightenColor(degree.color, 30);
+      });
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  }
+
+  private lightenColor(hexColor: string, percent: number): string {
+    let r:any = parseInt(hexColor.substring(1, 3), 16);
+    let g:any = parseInt(hexColor.substring(3, 5), 16);
+    let b:any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + (255 - r) * percent / 100);
+    g = Math.round(g + (255 - g) * percent / 100);
+    b = Math.round(b + (255 - b) * percent / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, '0');
+    g = g.toString(16).padStart(2, '0');
+    b = b.toString(16).padStart(2, '0');
+
+    return '#'+r+g+b;
   }
 
 
@@ -286,7 +319,9 @@ export class BookingDetailComponent implements OnInit {
                   .subscribe((course) => {
                     this.courses.push(course.data);
 
-                    const data = {price_total: 0, courseDates: []}
+                    const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
+                    data.sport_id = course.data?.sport_id;
+                    data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
                       groupedByCourseId[courseId].forEach((element, idx) => {
 
                         if (course.data.course_type === 1 && !course.data.is_flexible) {
@@ -298,6 +333,7 @@ export class BookingDetailComponent implements OnInit {
                       });
 
                       this.bookingsToCreate.push(data);
+                      console.log(this.bookingsToCreate);
                   })
               }
             }
@@ -822,12 +858,15 @@ export class BookingDetailComponent implements OnInit {
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
 
+        console.log(this.levels);
+        console.log(sportId);
 
         this.filteredLevel = this.levelForm.valueChanges.pipe(
           startWith(''),
           map((value: any) => typeof value === 'string' ? value : value?.annotation),
           map(annotation => annotation ? this._filterLevel(annotation) : this.levels.slice())
         );
+        console.log(this.filteredLevel);
 
         if (onLoad) {
           this.clients[0].sports.forEach(sport => {
@@ -1065,6 +1104,18 @@ export class BookingDetailComponent implements OnInit {
       const client = this.clients.find((m) => m.id === id);
 
       return client?.first_name + ' ' + client?.last_name;
+    }
+  }
+
+  getClientDegree(id: number,sport_id: number) {
+    if (id && id !== null && sport_id && sport_id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+      const sportObject = client?.client_sports.find(obj => obj.sport_id === sport_id);
+
+      console.log(sportObject);
+
+      return sportObject?.degree_id;
     }
   }
 
