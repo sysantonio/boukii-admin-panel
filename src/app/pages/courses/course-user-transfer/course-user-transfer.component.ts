@@ -50,8 +50,8 @@ export class CourseUserTransferComponent implements OnInit {
 
         this.course.course_dates.forEach(element => {
           if (moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD')) {
-            element.groups.forEach(group => {
-              group.subgroups.forEach(subgroup => {
+            element.course_groups.forEach(group => {
+              group.course_subgroups.forEach(subgroup => {
                 this.courseSubGroups.push(subgroup);
               });
             });
@@ -67,7 +67,7 @@ export class CourseUserTransferComponent implements OnInit {
                   if (!exists) {
                     const course = this.course.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD'));
                     if (course) {
-                      const group = course.groups.find((g) => g.course_date_id === element.course_date_id);
+                      const group = course.course_groups.find((g) => g.course_date_id === element.course_date_id);
 
                       if (group) {
 

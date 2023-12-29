@@ -798,10 +798,10 @@ export class TimelineComponent {
     });
 
     // Remove the original tasks that were grouped -> NOT THE ONES THAT ALREADY HAVE MONITOR
-    const filteredPlannerTasks = plannerTasks.filter(task => 
-      !groupedTaskIds.has(task.booking_id) || 
+    const filteredPlannerTasks = plannerTasks.filter(task =>
+      !groupedTaskIds.has(task.booking_id) ||
       (groupedTaskIds.has(task.booking_id) && task.monitor_id)
-    );  
+    );
 
     // Combine adjusted tasks with the rest
     this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
@@ -1476,7 +1476,7 @@ export class TimelineComponent {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
       data: {degree: this.taskDetail.degree, subgroup: this.taskDetail.course_subgroup_id, id: this.taskDetail.course_id,
-        subgroupNumber: this.taskDetail.subgroup_number, currentDate: moment(this.taskDetail.date), degrees: this.taskDetail.degrees_sport}
+        subgroupNumber: this.taskDetail.subgroup_number, currentDate: moment(this.taskDetail.date), degrees: this.taskDetail.degrees_sport, currentStudents: this.taskDetail.all_clients}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

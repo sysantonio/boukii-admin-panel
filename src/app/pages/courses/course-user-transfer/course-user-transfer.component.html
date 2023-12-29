@@ -30,7 +30,7 @@
           </div>
           <div style="float: left;width: 65%;margin:0 0 0 3%">
             <p>{{getClient(item.client_id)?.first_name}} {{getClient(item.client_id)?.last_name}}</p>
-            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}}{{'years' | translate }}</p>
+            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}} {{'years' | translate }}</p>
           </div>
 
         </div>
@@ -46,7 +46,7 @@
         <ng-container *ngFor="let colorKey of this.defaults.colorKeys">
           <ng-container *ngFor="let groupLevel of this.defaults.groupedByColor[colorKey]; let groupIndex = index" >
 
-            <mat-expansion-panel *ngIf="groupLevel.active" style="margin-bottom: 3%;">
+            <mat-expansion-panel *ngIf="groupLevel.active && getCourseSubgroups(groupLevel).length > 0" style="margin-bottom: 3%;">
               <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
                 <mat-panel-description style="color: #fff">
                   {{ groupLevel.league }} - {{groupLevel.annotation}} {{groupLevel.name}}

@@ -55,58 +55,38 @@ export class CourseUserTransferTimelineComponent implements OnInit {
 
   getData() {
     this.courseSubGroups = [];
-    this.currentStudents = [];
+    this.currentStudents = this.defaults.currentStudents;
     this.crudService.get('/admin/courses/'+this.defaults.id)
       .subscribe((data) => {
         this.course = data.data;
 
         this.course.course_dates.forEach(element => {
           if (moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD')) {
-            element.groups.forEach(group => {
-              group.subgroups.forEach(subgroup => {
+            element.course_groups.forEach(group => {
+              group.course_subgroups.forEach(subgroup => {
                 this.courseSubGroups.push(subgroup);
               });
             });
           }
+
         });
-
-        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&course_id='+this.defaults.id)
-            .subscribe((result) => {
-              if (result.data.length > 0) {
-                result.data.forEach(element => {
-                  const exists = this.currentStudents.some(student => student.client_id === element.client_id);
-
-                  if (!exists) {
-                    const course = this.course.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD'));
-                    if (course) {
-                      const group = course.groups.find((g) => g.course_date_id === element.course_date_id);
-
-                      if (group) {
-
-                        this.currentStudents.push(element);
-                      }
-                    }
-                  }
-                });
-              }
-              this.loading = false;
-            });
-
 
       })
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
+        this.loading = false;
 
       })
   }
 
   getClient(id: any) {
     if (id && id !== null) {
-      return this.clients.find((c) => c.id === id);
+      const client = this.clients.find((c) => c.id === id);
+      return client;
     }
   }
 

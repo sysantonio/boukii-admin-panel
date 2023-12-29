@@ -202,22 +202,22 @@ export class AppComponent {
             icon_active: '../assets/img/icons/bonos.svg',
             routerLinkActiveOptions: { exact: true }
           },
-          {
+          /*{
             type: 'link',
             label: 'menu.communication',
             route: '/messages',
             icon: '../assets/img/icons/comunicacion-2.svg',
             icon_active: '../assets/img/icons/comunicacion.svg',
             routerLinkActiveOptions: { exact: true }
-          },
-          {
+          },*/
+          /*{
             type: 'link',
             label: 'menu.stats',
             route: '/stats',
             icon: '../assets/img/icons/stats-2.svg',
             icon_active: '../assets/img/icons/stats.svg',
             routerLinkActiveOptions: { exact: true }
-          }
+          }*/
         ]
       },
       // Otra seccion

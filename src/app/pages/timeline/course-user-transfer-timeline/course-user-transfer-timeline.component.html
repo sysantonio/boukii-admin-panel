@@ -46,7 +46,7 @@
         <ng-container *ngFor="let colorKey of this.colorKeys">
           <ng-container *ngFor="let groupLevel of this.groupedByColor[colorKey]; let groupIndex = index" >
 
-            <mat-expansion-panel *ngIf="groupLevel.active" style="margin-bottom: 3%;">
+            <mat-expansion-panel *ngIf="groupLevel.active && getCourseSubgroups(groupLevel).length > 0" style="margin-bottom: 3%;">
               <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
                 <mat-panel-description style="color: #fff">
                   {{ groupLevel.league }} - {{groupLevel.annotation}} {{groupLevel.name}}
