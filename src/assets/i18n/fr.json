@@ -439,5 +439,21 @@
   "error": "Erreur",
   "event_created": "Événement créé",
   "event_edited": "Événement modifié",
-  "event_deleted": "Événement supprimé"
+  "event_deleted": "Événement supprimé",
+  "mails.title": "E-mails généraux",
+  "mails.type": "Type d'e-mail",
+  "mails.dates": "Par dates",
+  "mails.course": "Par cours",
+  "mails.search": "Rechercher des cours",
+  "before": "Ancien",
+  "send": "Envoyer",
+  "mails.type1": "Confirmation de réservation",
+  "mails.type2": "Annulation de réservation",
+  "mails.type3": "Modification de réserve",
+  "mails.type4": "lien de paiement",
+  "mails.type5": "Confirmation de payement",
+  "mails.type6": "Confirmation d'achat du chèque cadeau",
+  "mails.type7": "Confirmation de création du bon d'achat",
+  "mails.type8": "Rappel de cours à venir",
+  "subject": "Sujet"
 }

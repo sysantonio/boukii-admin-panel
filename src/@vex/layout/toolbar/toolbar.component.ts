@@ -68,6 +68,7 @@ export class ToolbarComponent {
   changeLang(flag: string, lang: string) {
     this.flag = flag;
     this.translateService.setDefaultLang(lang);
+    this.translateService.currentLang = lang;
   }
 
   openMegaMenu(origin: ElementRef | HTMLElement): void {

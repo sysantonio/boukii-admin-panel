@@ -440,5 +440,21 @@
   "error": "Error",
   "event_created": "Event created",
   "event_edited": "Event edited",
-  "event_deleted": "Event deleted"
+  "event_deleted": "Event deleted",
+  "mails.title": "General emails",
+  "mails.type": "Email type",
+  "mails.dates": "By dates",
+  "mails.course": "By course",
+  "mails.search": "Search courses",
+  "before": "Former",
+  "send": "Send",
+  "mails.type1": "Booking confirmation",
+  "mails.type2": "Reservation cancellation",
+  "mails.type3": "Reserve modification",
+  "mails.type4": "payment link",
+  "mails.type5": "Payment confirmation",
+  "mails.type6": "Gift voucher purchase confirmation",
+  "mails.type7": "Confirmationb of creation of purchase voucher",
+  "mails.type8": "Upcoming course reminder",
+  "subject": "Subject"
 }

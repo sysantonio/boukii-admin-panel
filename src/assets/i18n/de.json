@@ -441,5 +441,21 @@
   "error": "Fehler",
   "event_created": "Veranstaltung erstellt",
   "event_edited": "Ereignis bearbeitet",
-  "event_deleted": "Ereignis gelöscht"
+  "event_deleted": "Ereignis gelöscht",
+  "mails.title": "Allgemeine E-Mails",
+  "mails.type": "E-Mail-Typ",
+  "mails.dates": "Nach Datum",
+  "mails.course": "Natürlich",
+  "mails.search": "Kurse suchen",
+  "before": "Ehemalig",
+  "send": "Schicken",
+  "mails.type1": "Buchungsbestätigung",
+  "mails.type2": "Stornierung der Reservierung",
+  "mails.type3": "Änderung vorbehalten",
+  "mails.type4": "Zahlungslink",
+  "mails.type5": "Zahlungsbestätigung",
+  "mails.type6": "Kaufbestätigung des Geschenkgutscheins",
+  "mails.type7": "Bestätigung der Erstellung des Kaufbelegs",
+  "mails.type8": "Bevorstehende Kurserinnerung",
+  "subject": "Betreff"
 }

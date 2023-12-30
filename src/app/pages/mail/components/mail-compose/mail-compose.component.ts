@@ -1,0 +1,262 @@
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import moment from 'moment';
+import { dropdownAnimation } from 'src/@vex/animations/dropdown.animation';
+import { ApiCrudService } from 'src/service/crud.service';
+import { SchoolService } from 'src/service/school.service';
+
+@Component({
+  selector: 'vex-mail-compose',
+  templateUrl: './mail-compose.component.html',
+  styleUrls: [
+    '../../../../../../node_modules/quill/dist/quill.snow.css',
+    './mail-compose.component.scss'
+  ],
+  animations: [
+    dropdownAnimation
+  ],
+  encapsulation: ViewEncapsulation.None
+})
+export class MailComposeComponent implements OnInit {
+
+  currentPage = 1;
+  pageSize = 5;
+
+  coursesToSend: any = [];
+  dropdownOpen = false;
+  emailType: number = 1;
+  emailSend: number = 1;
+  selectedDateFrom: any = null;
+  selectedDateTo: any = null;
+  courses: any = [];
+  mailType: any = 'booking_confirm';
+  subjectFr: any = '';
+  subjectEn: any = '';
+  subjectEs: any = '';
+  subjectIt: any = '';
+  subjectDe: any = '';
+  bodyFr: any = '';
+  bodyEn: any = '';
+  bodyEs: any = '';
+  bodyIt: any = '';
+  bodyDe: any = '';
+  selectedIndex = 0;
+  generalSubjet: any = '';
+  generalBody: any = '';
+  today = new Date();
+  school: any;
+  currentMails: any = [];
+  sendClients = false;
+  sendMonitors = false;
+  loading = true;
+  loadingCourses = false;
+
+  constructor(private cd: ChangeDetectorRef, private crudService: ApiCrudService, private schoolService: SchoolService,
+              private dialogRef: MatDialogRef<MailComposeComponent>, private snackbar: MatSnackBar) { }
+
+  ngOnInit(): void {
+    this.schoolService.getSchoolData()
+      .subscribe((data) => {
+        this.school = data.data;
+        this.crudService.list('/mails', 1, 1000, 'desc', 'id', '&school_id='+this.school.id)
+          .subscribe((mails) => {
+            this.currentMails = mails.data;
+
+            const mailFr = this.currentMails.find((m) => m.type === this.mailType && m.lang === 'fr');
+            const mailEn = this.currentMails.find((m) => m.type === this.mailType && m.lang === 'en');
+            const mailEs = this.currentMails.find((m) => m.type === this.mailType && m.lang === 'es');
+            const mailDe = this.currentMails.find((m) => m.type === this.mailType && m.lang === 'de');
+            const mailIt = this.currentMails.find((m) => m.type === this.mailType && m.lang === 'it');
+
+            this.subjectFr = mailFr?.subject;
+            this.bodyFr = mailFr?.body;
+
+            this.subjectEn = mailEn?.subject;
+            this.bodyEn = mailEn?.body;
+
+            this.subjectEs = mailEs?.subject;
+            this.bodyEs = mailEs?.body;
+
+            this.subjectDe = mailDe?.subject;
+            this.bodyDe = mailDe?.body;
+
+            this.subjectIt = mailIt?.subject;
+            this.bodyIt = mailIt?.body;
+
+            this.loading = false;
+          })
+      })
+  }
+
+  get paginatedCourses() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.courses.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  nextPage() {
+    this.currentPage++;
+  }
+
+  previousPage() {
+    this.currentPage--;
+  }
+
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+    this.cd.markForCheck();
+  }
+
+  addToCourses(id: number) {
+    if (this.coursesToSend.length == 0) {
+      this.coursesToSend.push(id);
+    } else {
+      const index = this.coursesToSend.findIndex((c) => c === id);
+      if (index > -1) {
+        this.coursesToSend.splice(index, 1);
+      } else {
+        this.coursesToSend.push(id);
+      }
+    }
+  }
+
+  isSelected(id: number) {
+    return this.coursesToSend.findIndex((c) => c === id) !== -1;
+  }
+
+  sendMail() {
+    const data = {
+      start_date: this.selectedDateFrom,
+      end_date: this.selectedDateTo,
+      course_ids: this.emailType === 2 ? this.coursesToSend : [],
+      subject: this.generalSubjet,
+      body: this.generalBody,
+      monitors: this.sendMonitors,
+      clients: this.sendClients
+    };
+    this.crudService.post('/admin/mails/send', data)
+      .subscribe((res) => {
+        this.dialogRef.close();
+
+      })
+  }
+
+  saveDefaultMail() {
+    const data = [
+      [{
+        type: this.mailType,
+        subject: this.subjectFr,
+        body: this.bodyFr,
+        school_id: this.school.id,
+        lang:'fr'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectEn,
+        body: this.bodyEn,
+        school_id: this.school.id,
+        lang:'en'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectEs,
+        body: this.bodyEs,
+        school_id: this.school.id,
+        lang:'es'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectDe,
+        body: this.bodyDe,
+        school_id: this.school.id,
+        lang:'de'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectIt,
+        body: this.bodyIt,
+        school_id: this.school.id,
+        lang:'it'
+      }]
+    ];
+
+    for (let i = 0; i<5; i++) {
+      this.crudService.post('/mails', data[i][0])
+      .subscribe((res) => {
+
+        if (i === 4) {
+
+          this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+          this.dialogRef.close();
+        }
+
+      })
+    }
+
+  }
+
+  setCurrentMailType(event: any) {
+    const mail = this.currentMails.find((m) => m.type === event.value);
+
+    if (this.selectedIndex === 0) {
+      if (mail) {
+        const frMail = this.currentMails.find((m) => m.lang === 'fr');
+
+        this.bodyFr = frMail?.body;
+        this.subjectFr = frMail?.subject;
+      } else {
+        this.bodyFr = '';
+        this.subjectFr = '';
+      }
+    } else if (this.selectedIndex === 1) {
+      if (mail) {
+        const enMail = this.currentMails.find((m) => m.lang === 'en');
+
+        this.bodyEn = enMail?.body;
+        this.subjectEn = enMail?.subject;
+      } else {
+        this.bodyEn = '';
+        this.subjectEn = '';
+      }
+    } else if (this.selectedIndex === 2) {
+      if (mail) {
+        const esMail = this.currentMails.find((m) => m.lang === 'es');
+
+        this.bodyEs = esMail?.body;
+        this.subjectEs = esMail?.subject;
+      } else {
+        this.bodyEs = '';
+        this.subjectEs = '';
+      }
+    } else if (this.selectedIndex === 3) {
+      if (mail) {
+        const deMail = this.currentMails.find((m) => m.lang === 'de');
+        this.bodyDe = deMail?.body;
+        this.subjectDe = deMail?.subject;
+      } else {
+        this.bodyDe = '';
+        this.subjectDe = '';
+      }
+    } else if (this.selectedIndex === 4) {
+      if (mail) {
+        const itMail = this.currentMails.find((m) => m.lang === 'it');
+
+        this.bodyIt = itMail?.body;
+        this.subjectIt = itMail?.subject;
+      } else {
+        this.bodyIt = '';
+        this.subjectIt = '';
+      }
+    }
+
+  }
+
+  searchCourses() {
+    this.loadingCourses = true;
+    this.crudService.list('/admin/courses', 1, 1000, 'desc', 'id', '&school_id='+this.school.id + '&start_date='+ moment(this.selectedDateFrom).format('YYYY-MM-DD') + '&end_date='+moment(this.selectedDateTo).format('YYYY-MM-DD'))
+      .subscribe((data) =>{
+        this.courses = data.data;
+        this.loadingCourses = false;
+      })
+  }
+}

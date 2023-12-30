@@ -93,10 +93,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   pageSize = 10;
   filter = '';
   totalRecords = 1000;
-  pageSizeOptions: number[] = [5, 10, 20, 50];
+  pageSizeOptions: number[] = [5, 10];
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
-  searchCtrl = new UntypedFormControl();
+  searchCtrl = new UntypedFormControl('');
 
   loading = true;
   user: any;
@@ -278,7 +278,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', '', this.with)
+    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', this.filter + this.searchCtrl.value + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', this.searchCtrl.value, this.with)
       .subscribe((response: any) => {
         this.data = response.data;
         this.dataSource.data = response.data;

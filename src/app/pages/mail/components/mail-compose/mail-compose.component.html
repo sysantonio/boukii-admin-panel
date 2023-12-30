@@ -1,0 +1,280 @@
+<div class="flex items-center" mat-dialog-title>
+  <p class="flex-auto text-lg font-medium">{{'mails.title' | translate}}</p>
+  <button mat-dialog-close mat-icon-button type="button">
+    <mat-icon svgIcon="mat:close"></mat-icon>
+  </button>
+</div>
+
+<mat-tab-group *ngIf="!loading">
+  <mat-tab label="General">
+    <mat-dialog-content>
+      <div class="block w-full">
+        <mat-label>{{'mails.type' | translate }}</mat-label><br>
+        <mat-radio-group [(ngModel)]="emailType">
+          <mat-radio-button class="radio" [value]="1">
+            {{'mails.dates' | translate}}
+          </mat-radio-button>
+          <mat-radio-button class="radio" [value]="2">
+            {{'mails.course' | translate}}
+          </mat-radio-button>
+        </mat-radio-group>
+        <!--<input cdkFocusInitial matInput type="text"/>
+
+        <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>-->
+      </div>
+
+      <div class="block w-full">
+        <mat-label>A quién se envía</mat-label><br>
+        <mat-radio-group [(ngModel)]="emailSend">
+          <mat-checkbox [(ngModel)]="sendClients">{{'clients' | translate}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="sendMonitors">{{'settings.monitors' | translate}}</mat-checkbox>
+        </mat-radio-group>
+        <!--<input cdkFocusInitial matInput type="text"/>
+
+        <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>-->
+      </div>
+
+      <div class="block w-full">
+
+        <mat-form-field>
+          <input id="date" matInput [matDatepicker]="pickerFrom" placeholder="{{'from' | translate}}" [(ngModel)]="selectedDateFrom" [min]="today">
+          <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field style="margin: 0 0 0 8%;">
+          <input id="date" matInput [matDatepicker]="pickerTo" placeholder="{{'to' | translate}}" [(ngModel)]="selectedDateTo" [disabled]="selectedDateFrom === null" [min]="selectedDateFrom">
+          <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+          <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <!--<div [@dropdown]="dropdownOpen" class="overflow-hidden">
+        <mat-form-field class="block w-full">
+          <mat-label>Cc</mat-label>
+          <input matInput type="text"/>
+        </mat-form-field>
+
+        <mat-form-field class="block w-full">
+          <mat-label>Bcc</mat-label>
+          <input matInput type="text"/>
+        </mat-form-field>
+      </div>-->
+      <div class="block w-full" style="margin: 0 0 10% 0;"  *ngIf="emailType === 2" >
+
+        <button (click)="searchCourses()" color="primary" mat-flat-button type="button" style="float:right"[disabled]="selectedDateTo === null">
+          <span>{{'mails.search' | translate}}</span>
+        </button>
+
+      </div>
+      <mat-spinner *ngIf="loadingCourses" style="margin:0 auto"></mat-spinner>
+      <div class="block w-full" style="margin: 0 0 5% 0;width: 100%; float:left"  *ngIf="emailType === 2" >
+        <div style="cursor:pointer" *ngFor="let item of paginatedCourses" (click)="addToCourses(item.id)">
+          <div style="float: left; width: 100%; margin-bottom: 2%;" [ngClass]="{'selected-item': isSelected(item.id)}">
+            <div style="float: left;width: 100%;padding: 3%;">
+              <div style="float: left; width: 20%;">
+                <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ item.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
+              </div>
+              <div style="float: left; width: 75%;margin:6% 0 0 2%">
+                <p><strong>{{item.name}}</strong></p>
+                <p> {{item.course_type === 1 ? 'colective' : 'private' | translate}} {{ item.sport.name}}</p>
+                <p>{{item.station.name}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button *ngIf="paginatedCourses.length > 0" (click)="nextPage()" color="primary" mat-flat-button type="button" style="float:right;margin: 2% 0 0 0;" [disabled]="currentPage * pageSize >= courses.length">
+          <span>{{'next' | translate}}</span>
+        </button>
+        <button *ngIf="paginatedCourses.length > 0" (click)="previousPage()" color="primary" mat-flat-button type="button" style="float:left;margin: 2% 0 0 0;" [disabled]="currentPage === 1">
+          <span>{{'before' | translate}}</span>
+        </button>
+      </div>
+
+      <div class="block w-full" style="margin: 5% 0 0 0">
+
+        <mat-form-field class="block w-full">
+          <mat-label>{{'subject' | translate}}</mat-label>
+          <input matInput type="text" [(ngModel)]="generalSubjet" [value]="generalSubjet"/>
+        </mat-form-field>
+      </div>
+
+      <div class="vex-mail-compose-editor flex flex-col">
+        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                      class="flex-auto flex flex-col" [(ngModel)]="generalBody"></quill-editor>
+      </div>
+
+      <!--<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+           matRipple>
+        <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:picture_as_pdf"></mat-icon>
+        <p class="flex-auto ml-4 text-sm">super-secret-design-document.pdf</p>
+
+        <p class="text-sm text-secondary mr-2 flex-none">54kb</p>
+        <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
+          <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
+        </button>
+      </div>
+
+      <div class="vex-mail-compose-attachment my-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+           matRipple>
+        <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:image"></mat-icon>
+        <p class="flex-auto ml-4 text-sm">cute-cat-picture.jpg</p>
+
+        <p class="text-sm text-secondary mr-2 flex-none">16kb</p>
+        <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
+          <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
+        </button>
+      </div>-->
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+      <button color="warn" mat-dialog-close mat-icon-button matTooltip="Discard Draft" type="button">
+        <mat-icon svgIcon="mat:delete"></mat-icon>
+      </button>
+
+      <span class="flex-1"></span>
+
+      <!--<button mat-icon-button matTooltip="Attach File" type="button">
+        <mat-icon svgIcon="mat:attach_file"></mat-icon>
+      </button>-->
+
+      <button (click)="sendMail()" color="primary" mat-flat-button type="button">
+        <span>{{'send' | translate}}</span>
+        <mat-icon class="ml-2 icon-sm" svgIcon="mat:send"></mat-icon>
+      </button>
+    </mat-dialog-actions>
+
+  </mat-tab>
+  <mat-tab label="Automático">
+    <mat-dialog-content>
+      <div class="block w-full">
+        <mat-form-field style="width: 100%">
+          <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType($event)">
+            <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
+            <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
+            <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
+            <mat-option value="payment_link">{{'mails.type4' | translate}}</mat-option>
+            <mat-option value="payment_confirm">{{'mails.type5' | translate}}</mat-option>
+            <mat-option value="payment_reminder">Recordatorio de pago pendiente</mat-option>
+            <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
+            <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>
+            <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!--<input cdkFocusInitial matInput type="text"/>
+
+        <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>-->
+      </div>
+
+      <!--<div [@dropdown]="dropdownOpen" class="overflow-hidden">
+        <mat-form-field class="block w-full">
+          <mat-label>Cc</mat-label>
+          <input matInput type="text"/>
+        </mat-form-field>
+
+        <mat-form-field class="block w-full">
+          <mat-label>Bcc</mat-label>
+          <input matInput type="text"/>
+        </mat-form-field>
+      </div>-->
+
+      <mat-tab-group (selectedIndexChange)="selectedIndex">
+        <mat-tab label="{{'france' | translate }}">
+          <mat-form-field class="block w-full">
+            <mat-label>{{'subject' | translate}}</mat-label>
+            <input matInput type="text" [(ngModel)]="subjectFr" [value]="subjectFr"/>
+          </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="bodyFr"></quill-editor>
+          </div>
+        </mat-tab>
+        <mat-tab label="{{'english' | translate }}">
+          <mat-form-field class="block w-full">
+            <mat-label>{{'subject' | translate}}</mat-label>
+            <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
+          </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="bodyEn"></quill-editor>
+          </div>
+        </mat-tab>
+        <mat-tab label="{{'spanish' | translate }}" >
+          <mat-form-field class="block w-full">
+            <mat-label>{{'subject' | translate}}</mat-label>
+            <input matInput type="text" [(ngModel)]="subjectEs" [value]="subjectEs"/>
+          </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="bodyEs"></quill-editor>
+          </div>
+        </mat-tab>
+        <mat-tab label="{{'germany' | translate }}">
+          <mat-form-field class="block w-full">
+            <mat-label>{{'subject' | translate}}</mat-label>
+            <input matInput type="text" [(ngModel)]="subjectIt" [value]="subjectIt"/>
+          </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="bodyIt"></quill-editor>
+          </div>
+        </mat-tab>
+        <mat-tab label="{{'italian' | translate }}">
+          <mat-form-field class="block w-full">
+            <mat-label>{{'subject' | translate}}</mat-label>
+            <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
+          </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="bodyDe"></quill-editor>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <!--<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+           matRipple>
+        <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:picture_as_pdf"></mat-icon>
+        <p class="flex-auto ml-4 text-sm">super-secret-design-document.pdf</p>
+
+        <p class="text-sm text-secondary mr-2 flex-none">54kb</p>
+        <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
+          <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
+        </button>
+      </div>
+
+      <div class="vex-mail-compose-attachment my-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+           matRipple>
+        <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:image"></mat-icon>
+        <p class="flex-auto ml-4 text-sm">cute-cat-picture.jpg</p>
+
+        <p class="text-sm text-secondary mr-2 flex-none">16kb</p>
+        <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
+          <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
+        </button>
+      </div>-->
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+      <button color="warn" mat-dialog-close mat-icon-button matTooltip="Discard Draft" type="button">
+        <mat-icon svgIcon="mat:delete"></mat-icon>
+      </button>
+
+      <span class="flex-1"></span>
+
+      <!--<button mat-icon-button matTooltip="Attach File" type="button">
+        <mat-icon svgIcon="mat:attach_file"></mat-icon>
+      </button>-->
+
+      <button (click)="saveDefaultMail()" color="primary" mat-flat-button type="button">
+        <span>{{'save' | translate}}</span>
+        <mat-icon class="ml-2 icon-sm" svgIcon="mat:send"></mat-icon>
+      </button>
+    </mat-dialog-actions>
+
+
+  </mat-tab>
+</mat-tab-group>

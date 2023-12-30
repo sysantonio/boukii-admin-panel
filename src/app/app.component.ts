@@ -41,6 +41,7 @@ export class AppComponent {
     Settings.defaultLocale = this.localeId;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.translateService.setDefaultLang(navigator.language.split('-')[0]);
+    this.translateService.currentLang = navigator.language.split('-')[0];
     if (this.user) {
       this.schoolService.getSchoolData()
       .subscribe((data) => {
@@ -202,14 +203,14 @@ export class AppComponent {
             icon_active: '../assets/img/icons/bonos.svg',
             routerLinkActiveOptions: { exact: true }
           },
-          /*{
+          {
             type: 'link',
             label: 'menu.communication',
-            route: '/messages',
+            route: '/mail',
             icon: '../assets/img/icons/comunicacion-2.svg',
             icon_active: '../assets/img/icons/comunicacion.svg',
             routerLinkActiveOptions: { exact: true }
-          },*/
+          },
           /*{
             type: 'link',
             label: 'menu.stats',

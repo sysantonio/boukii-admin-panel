@@ -440,5 +440,21 @@
   "error": "Errore",
   "event_created": "Evento creato",
   "event_edited": "Evento modificato",
-  "event_deleted": "Evento eliminato"
+  "event_deleted": "Evento eliminato",
+  "mails.title": "E-mail generali",
+  "mails.type": "Tipo di posta elettronica",
+  "mails.dates": "Per date",
+  "mails.course": "Naturalmente",
+  "mails.search": "Cerca corsi",
+  "before": "Ex",
+  "send": "Inviare",
+  "mails.type1": "Conferma della prenotazione",
+  "mails.type2": "Cancellazione della prenotazione",
+  "mails.type3": "Modifica della riserva",
+  "mails.type4": "collegamento di pagamento",
+  "mails.type5": "Conferma di pagamento",
+  "mails.type6": "Conferma acquisto buono regalo",
+  "mails.type7": "Conferma della creazione del buono d'acquisto",
+  "mails.type8": "Prossimo promemoria del corso",
+  "subject": "Oggetto"
 }
