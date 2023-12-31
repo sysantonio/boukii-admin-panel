@@ -64,9 +64,13 @@ export class MailComponent implements OnInit {
   }
 
   openCompose() {
-    this.dialog.open(MailComposeComponent, {
+    const dialog = this.dialog.open(MailComposeComponent, {
       width: '100%',
       maxWidth: 600
     });
+
+    dialog.afterClosed().subscribe((data) => {
+      this.mailService.getData();
+    })
   }
 }

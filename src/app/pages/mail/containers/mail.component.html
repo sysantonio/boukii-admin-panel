@@ -10,7 +10,7 @@
         <div *ngIf="isDesktop$ | async" class="flex-1 flex items-center">
           <p class="text-2xl font-medium flex items-center">
             <mat-icon @scaleIn class="ltr:mr-4 rtl:ml-4 block icon-2xl" svgIcon="mat:mail"></mat-icon>
-            <span @fadeInRight class="block">Mailbox</span>
+            <span @fadeInRight class="block">{{'mailbox' | translate}}</span>
           </p>
         </div>
 
@@ -29,7 +29,7 @@
           <button (click)="drawer.open()" *ngIf="ltLg$ | async" class="mx-gutter" mat-icon-button type="button">
             <mat-icon class="text-contrast-white" svgIcon="mat:menu"></mat-icon>
           </button>
-          <div class="bg-foreground shadow rounded-full w-full flex items-center ltr:mr-gutter rtl:ml-gutter">
+          <!--<div class="bg-foreground shadow rounded-full w-full flex items-center ltr:mr-gutter rtl:ml-gutter">
             <mat-icon [class.p-2]="ltLg$ | async"
                       [class.px-5]="isDesktop$ | async"
                       [class.py-4]="isDesktop$ | async"
@@ -41,7 +41,7 @@
                    class="w-full outline-none placeholder-black bg-transparent"
                    placeholder="Search mails..."
                    type="text"/>
-          </div>
+          </div>-->
         </div>
 
         <div class="vex-mail-header-overflow flex-none"></div>

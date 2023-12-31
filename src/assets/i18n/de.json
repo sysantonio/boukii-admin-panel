@@ -457,5 +457,8 @@
   "mails.type6": "Kaufbestätigung des Geschenkgutscheins",
   "mails.type7": "Bestätigung der Erstellung des Kaufbelegs",
   "mails.type8": "Bevorstehende Kurserinnerung",
-  "subject": "Betreff"
+  "subject": "Betreff",
+  "browse": "Durchsuche",
+  "all_mails": "Alle E-Mails",
+  "mailbox": "Briefkasten"
 }

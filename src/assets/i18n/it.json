@@ -456,5 +456,8 @@
   "mails.type6": "Conferma acquisto buono regalo",
   "mails.type7": "Conferma della creazione del buono d'acquisto",
   "mails.type8": "Prossimo promemoria del corso",
-  "subject": "Oggetto"
+  "subject": "Oggetto",
+  "browse": "Navigare",
+  "all_mails": "Tutte le e-mail",
+  "mailbox": "cassetta postale"
 }

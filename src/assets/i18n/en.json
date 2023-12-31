@@ -456,5 +456,8 @@
   "mails.type6": "Gift voucher purchase confirmation",
   "mails.type7": "Confirmationb of creation of purchase voucher",
   "mails.type8": "Upcoming course reminder",
-  "subject": "Subject"
+  "subject": "Subject",
+  "browse": "Browse",
+  "all_mails": "All emails",
+  "mailbox": "mailbox"
 }

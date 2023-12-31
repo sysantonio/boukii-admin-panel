@@ -460,5 +460,8 @@
   "mails.type6": "Confirmación de compra de bono regalo",
   "mails.type7": "Confirmaciónb de creación de bono de compra",
   "mails.type8": "Recordatorío de curso próximo",
-  "subject": "Asunto"
+  "subject": "Asunto",
+  "browse": "Navegar",
+  "all_mails": "Todos los mails",
+  "mailbox": "Buzón"
 }

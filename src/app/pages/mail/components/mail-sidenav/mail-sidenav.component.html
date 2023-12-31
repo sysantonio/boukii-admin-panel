@@ -1,5 +1,5 @@
 <div @stagger class="py-4">
-  <p @fadeInUp class="text-secondary text-xs font-medium px-gutter mb-2">Browse</p>
+  <p @fadeInUp class="text-secondary text-xs font-medium px-gutter mb-2">{{'browse' | translate}}</p>
   <vex-mail-sidenav-link (click)="closeDrawer()"
                          *ngFor="let link of links"
                          @fadeInUp

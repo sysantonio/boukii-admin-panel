@@ -181,74 +181,93 @@ export class MailComposeComponent implements OnInit {
     ];
 
     for (let i = 0; i<5; i++) {
-      this.crudService.post('/mails', data[i][0])
-      .subscribe((res) => {
 
-        if (i === 4) {
+      const existMail = this.currentMails.find((c) => c.lang === data[i][0].lang && c.type === data[i][0].type);
 
-          this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
-          this.dialogRef.close();
+      if (existMail) {
+
+        const updateData = {
+          type: this.mailType,
+          subject: data[i][0].subject,
+          body: data[i][0].body,
+          school_id: this.school.id,
+          lang: data[i][0].lang
         }
 
-      })
+        this.crudService.update('/mails', updateData, existMail.id)
+          .subscribe((res) => {
+
+            if (i === 4) {
+
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+              this.dialogRef.close();
+            }
+
+          })
+      } else {
+        this.crudService.post('/mails', data[i][0])
+        .subscribe((res) => {
+
+          if (i === 4) {
+
+            this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+            this.dialogRef.close();
+          }
+
+        })
+      }
+
     }
 
   }
 
-  setCurrentMailType(event: any) {
-    const mail = this.currentMails.find((m) => m.type === event.value);
+  setCurrentMailType() {
+    const mail = this.currentMails.find((m) => m.type === this.mailType);
 
-    if (this.selectedIndex === 0) {
-      if (mail) {
-        const frMail = this.currentMails.find((m) => m.lang === 'fr');
+    if (mail) {
+      const frMail = this.currentMails.find((m) => m.lang === 'fr');
 
-        this.bodyFr = frMail?.body;
-        this.subjectFr = frMail?.subject;
-      } else {
-        this.bodyFr = '';
-        this.subjectFr = '';
-      }
-    } else if (this.selectedIndex === 1) {
-      if (mail) {
-        const enMail = this.currentMails.find((m) => m.lang === 'en');
-
-        this.bodyEn = enMail?.body;
-        this.subjectEn = enMail?.subject;
-      } else {
-        this.bodyEn = '';
-        this.subjectEn = '';
-      }
-    } else if (this.selectedIndex === 2) {
-      if (mail) {
-        const esMail = this.currentMails.find((m) => m.lang === 'es');
-
-        this.bodyEs = esMail?.body;
-        this.subjectEs = esMail?.subject;
-      } else {
-        this.bodyEs = '';
-        this.subjectEs = '';
-      }
-    } else if (this.selectedIndex === 3) {
-      if (mail) {
-        const deMail = this.currentMails.find((m) => m.lang === 'de');
-        this.bodyDe = deMail?.body;
-        this.subjectDe = deMail?.subject;
-      } else {
-        this.bodyDe = '';
-        this.subjectDe = '';
-      }
-    } else if (this.selectedIndex === 4) {
-      if (mail) {
-        const itMail = this.currentMails.find((m) => m.lang === 'it');
-
-        this.bodyIt = itMail?.body;
-        this.subjectIt = itMail?.subject;
-      } else {
-        this.bodyIt = '';
-        this.subjectIt = '';
-      }
+      this.bodyFr = frMail?.body;
+      this.subjectFr = frMail?.subject;
+    } else {
+      this.bodyFr = '';
+      this.subjectFr = '';
     }
+    if (mail) {
+      const enMail = this.currentMails.find((m) => m.lang === 'en');
 
+      this.bodyEn = enMail?.body;
+      this.subjectEn = enMail?.subject;
+    } else {
+      this.bodyEn = '';
+      this.subjectEn = '';
+    }
+    if (mail) {
+      const esMail = this.currentMails.find((m) => m.lang === 'es');
+
+      this.bodyEs = esMail?.body;
+      this.subjectEs = esMail?.subject;
+    } else {
+      this.bodyEs = '';
+      this.subjectEs = '';
+    }
+    if (mail) {
+      const deMail = this.currentMails.find((m) => m.lang === 'de');
+      this.bodyDe = deMail?.body;
+      this.subjectDe = deMail?.subject;
+    } else {
+      this.bodyDe = '';
+      this.subjectDe = '';
+    }
+    if (mail) {
+      const itMail = this.currentMails.find((m) => m.lang === 'it');
+
+      this.bodyIt = itMail?.body;
+      this.subjectIt = itMail?.subject;
+    } else {
+      this.bodyIt = '';
+      this.subjectIt = '';
+    }
   }
 
   searchCourses() {
@@ -258,5 +277,10 @@ export class MailComposeComponent implements OnInit {
         this.courses = data.data;
         this.loadingCourses = false;
       })
+  }
+
+  onTabChange(event: any) {
+    this.selectedIndex = event.index;
+    this.setCurrentMailType();
   }
 }

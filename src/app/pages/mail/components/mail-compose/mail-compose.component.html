@@ -148,7 +148,7 @@
     <mat-dialog-content>
       <div class="block w-full">
         <mat-form-field style="width: 100%">
-          <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType($event)">
+          <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
             <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
             <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
             <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
@@ -177,7 +177,7 @@
         </mat-form-field>
       </div>-->
 
-      <mat-tab-group (selectedIndexChange)="selectedIndex">
+      <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="{{'france' | translate }}">
           <mat-form-field class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>

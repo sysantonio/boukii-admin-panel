@@ -455,5 +455,8 @@
   "mails.type6": "Confirmation d'achat du chèque cadeau",
   "mails.type7": "Confirmation de création du bon d'achat",
   "mails.type8": "Rappel de cours à venir",
-  "subject": "Sujet"
+  "subject": "Sujet",
+  "browse": "Parcourir",
+  "all_mails": "Tous les e-mails",
+  "mailbox": "boites aux lettres"
 }

@@ -21,6 +21,10 @@ export class MailService {
 
   constructor(private crudService: ApiCrudService, private schoolService: SchoolService, private translateService: TranslateService) {
 
+    this.getData();
+  }
+
+  getData() {
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.school = data.data;
