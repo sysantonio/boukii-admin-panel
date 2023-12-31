@@ -794,6 +794,13 @@
 
                 </mat-form-field>
               </div>
+
+
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <div style="float:right">
+                  {{'active' |translate}} <mat-slide-toggle [checked]="defaultsUser.active" (change)="setActive($event)"></mat-slide-toggle>
+                </div>
+              </div>
               <div class="actions flex items-center justify-end gap-2">
                 <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>

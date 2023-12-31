@@ -648,6 +648,10 @@ export class ClientDetailComponent {
       })
   }
 
+  setActive(event) {
+    this.defaultsUser.active = event.checked;
+  }
+
   save() {
     this.setLanguages();
 

@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Clients">
   <vex-breadcrumbs
-    [crumbs]="['Clients', 'Nouvelle Client']"
+    [crumbs]="['clients', 'Nouvelle new_client']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -17,7 +17,7 @@
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
         <div style="float: left;width: 50%;">
-          <h2 class="title m-0">Nouvelle client</h2>
+          <h2 class="title m-0">{{'new_client' | translate }}</h2>
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
@@ -93,7 +93,7 @@
 
               <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
-                Next
+                {{'next' | translate }}
               </button>
             </div>
           </form>

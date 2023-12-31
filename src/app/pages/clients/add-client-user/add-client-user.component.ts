@@ -45,7 +45,7 @@ export class AddClientUserModalComponent implements OnInit {
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
           startWith(''),
           map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filter(full_name) : this.clients.slice())
+          map(full_name => full_name ? this._filter(full_name) : this.clients.slice(0, 50))
         );
 
         this.form = this.fb.group({
