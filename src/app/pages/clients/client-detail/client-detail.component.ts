@@ -378,6 +378,15 @@ export class ClientDetailComponent {
         if(data.data.length > 0) {
 
           this.defaultsObservations = data.data[0];
+        } else {
+          this.defaultsObservations = {
+            id: null,
+            general: '',
+            notes: '',
+            historical: '',
+            client_id: null,
+            school_id: null
+          }
         }
       })
   }
