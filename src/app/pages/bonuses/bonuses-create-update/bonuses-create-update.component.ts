@@ -3,7 +3,6 @@ import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { Observable, map, of, startWith } from 'rxjs';
-import { CLIENTS } from 'src/app/static-data/clients-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -130,7 +129,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
           startWith(''),
           map((value: any) => typeof value === 'string' ? value : value?.name),
-          map(full_name => full_name ? this._filter(full_name) : this.clients.slice())
+          map(full_name => full_name ? this._filter(full_name) : this.clients.slice(0, 50))
         );
 
         if (this.mode === 'update') {
