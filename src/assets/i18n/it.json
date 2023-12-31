@@ -459,5 +459,8 @@
   "subject": "Oggetto",
   "browse": "Navigare",
   "all_mails": "Tutte le e-mail",
-  "mailbox": "cassetta postale"
+  "mailbox": "cassetta postale",
+  "compose": "Comporre",
+  "mails.empty": "Seleziona un'e-mail da visualizzare"
+
 }

@@ -6,16 +6,16 @@
                 [disableClose]="isDesktop$ | async"
                 class="vex-mail-drawer max-w-3xs w-full bg-base"
                 position="start">
-      <div class="vex-mail-header bg-primary/10 px-gutter relative flex flex-col">
+      <div class="vex-mail-header bg-primary/10 px-gutter relative flex flex-col" style="background:#ECECEC !important">
         <div *ngIf="isDesktop$ | async" class="flex-1 flex items-center">
           <p class="text-2xl font-medium flex items-center">
-            <mat-icon @scaleIn class="ltr:mr-4 rtl:ml-4 block icon-2xl" svgIcon="mat:mail"></mat-icon>
+            <mat-icon @scaleIn class="ltr:mr-4 rtl:ml-4 block icon-2xl" svgIcon="mat:mail" style="color:#FF3085"></mat-icon>
             <span @fadeInRight class="block">{{'mailbox' | translate}}</span>
           </p>
         </div>
 
         <div [class.h-full]="ltLg$ | async" class="vex-mail-header-overflow flex-none flex items-center">
-          <button (click)="openCompose()" class="w-full" color="primary" mat-raised-button type="button">Compose
+          <button (click)="openCompose()" class="w-full" color="primary" mat-raised-button type="button">{{'compose' | translate}}
           </button>
         </div>
       </div>
@@ -25,7 +25,7 @@
 
     <mat-drawer-content class="bg-base flex flex-col overflow-hidden">
       <div class="vex-mail-header flex-none bg-primary/10 flex flex-col">
-        <div class="flex-auto flex items-center">
+        <div class="flex-auto flex items-center" style="background:#ECECEC !important">
           <button (click)="drawer.open()" *ngIf="ltLg$ | async" class="mx-gutter" mat-icon-button type="button">
             <mat-icon class="text-contrast-white" svgIcon="mat:menu"></mat-icon>
           </button>

@@ -8,7 +8,7 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
-      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'courses'" [route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'courses.title'" [route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
       [ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"

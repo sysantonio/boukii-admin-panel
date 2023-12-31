@@ -459,5 +459,7 @@
   "subject": "Subject",
   "browse": "Browse",
   "all_mails": "All emails",
-  "mailbox": "mailbox"
+  "mailbox": "mailbox",
+  "compose": "Compose",
+  "mails.empty": "Select a mail to visualize"
 }

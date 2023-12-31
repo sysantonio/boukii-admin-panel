@@ -460,5 +460,7 @@
   "subject": "Betreff",
   "browse": "Durchsuche",
   "all_mails": "Alle E-Mails",
-  "mailbox": "Briefkasten"
+  "mailbox": "Briefkasten",
+  "compose": "Komponieren",
+  "mails.empty": "Wählen Sie eine E-Mail zur Visualisierung aus"
 }

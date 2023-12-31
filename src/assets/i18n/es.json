@@ -463,5 +463,8 @@
   "subject": "Asunto",
   "browse": "Navegar",
   "all_mails": "Todos los mails",
-  "mailbox": "Buzón"
+  "mailbox": "Buzón",
+  "compose": "Componer",
+  "mails.empty": "Seleccione un correo para visualizar"
+
 }
