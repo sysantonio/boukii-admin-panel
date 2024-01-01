@@ -83,7 +83,7 @@
                 </div>
                 <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
                   <span style="float: left;width: 100%;">{{ item?.courseDates[0]?.monitor_id !== null ? getMonitorName(item?.courseDates[0]?.monitor_id) : 'No monitor asigned'}}</span><br>
-                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} {{'years' | translate}}</span>
+                  <span style="float: left;width: 100%;">{{ getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0]?.monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0]?.monitor_id)) }} &ensp;{{'years' | translate}}</span>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -232,7 +232,7 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(booking.client_main_id)}}123123123</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} {{'years' | translate}}
+                {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} &ensp;{{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
