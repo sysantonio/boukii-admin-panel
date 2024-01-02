@@ -2072,12 +2072,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   generateCourseDurations(startTime: any, endTime: any, interval: any) {
 
-    const timeToMinutes = (time: string) => {
+    const timeToMinutes = (time) => {
       const [hours, minutes] = time.split(':').map(Number);
       return hours * 60 + minutes;
     };
 
-    const formatMinutes = (totalMinutes: number) => {
+    const formatMinutes = (totalMinutes) => {
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
       return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`.trim();
@@ -2086,7 +2086,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const startMinutes = timeToMinutes(startTime);
     const endMinutes = timeToMinutes(endTime);
 
-    // Expresión regular para capturar horas y/o minutos
     const intervalMatch = interval.match(/(\d+)(h|min)/g);
     let intervalTotalMinutes = 0;
 
@@ -2099,13 +2098,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
       });
     } else {
-      // Si el intervalo no coincide con el formato esperado, manejar el error o asignar un valor por defecto
       console.error("Interval format is not correct.");
       return [];
     }
 
     const durations = [];
-    for (let minutes = startMinutes + intervalTotalMinutes; minutes <= endMinutes; minutes += intervalTotalMinutes) {
+    for (let minutes = startMinutes + intervalTotalMinutes; minutes <= endMinutes; minutes += 5) {
       durations.push(formatMinutes(minutes - startMinutes));
     }
 
