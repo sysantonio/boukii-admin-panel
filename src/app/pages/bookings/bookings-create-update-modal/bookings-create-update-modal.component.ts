@@ -398,16 +398,25 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
     let hasSport = false;
-    client.client_sports.forEach(sport => {
 
-      if (sport.sport_id === this.defaults.sport_id) {
-        const level = this.levels.find((l) => l.id === sport.degree_id);
-        this.levelForm.patchValue(level);
-        this.defaultsBookingUser.degree_id = level.id;
-        hasSport = true;
-        this.getCourses(level, this.monthAndYear);
-      }
-    });
+    if (client) {
+      client.client_sports.forEach(sport => {
+
+        if (sport.sport_id === this.defaults.sport_id) {
+          const level = this.levels.find((l) => l.id === sport.degree_id);
+          this.levelForm.patchValue(level);
+          this.defaultsBookingUser.degree_id = level.id;
+          hasSport = true;
+          this.getCourses(level, this.monthAndYear);
+        }
+      });
+    } else {
+      const level = this.levelForm.value.id;
+      this.levelForm.patchValue(level);
+      this.defaultsBookingUser.degree_id = level.id;
+      this.getCourses(level, this.monthAndYear);
+    }
+
 
     if (!hasSport) {
       this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:3000});
@@ -1123,6 +1132,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           });
       }
     } else {
+      const level = this.levelForm.value.id;
+      this.levelForm.patchValue(level);
+      this.defaultsBookingUser.degree_id = level.id;
+      this.getCourses(level, this.monthAndYear);
+
       this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
       this.snackBarRef.onAction().subscribe(() => {
         this.addSportToUser(this.selectedSport.sport_id);
