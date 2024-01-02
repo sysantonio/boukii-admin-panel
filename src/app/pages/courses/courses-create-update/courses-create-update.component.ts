@@ -2168,6 +2168,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.snackbar.open(this.translateService.instant('snackbar.course.date_res_to'), 'OK', {duration: 3000});
       return;
     }
+    if (!this.periodeMultiple && this.defaults.date_start === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
+      return;
+    }
+
+    if (!this.periodeMultiple && this.defaults.date_end === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
+      return;
+    }
+
 
     if (this.defaults.duration === null) {
       this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
