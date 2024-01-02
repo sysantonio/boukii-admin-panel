@@ -343,7 +343,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.clientId));
               this.loadingCalendar = false;
               this.loading = false;
-            }, 500);
+            }, 800);
           }, 500);
       })
   }

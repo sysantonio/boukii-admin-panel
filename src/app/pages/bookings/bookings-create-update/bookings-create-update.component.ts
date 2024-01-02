@@ -342,7 +342,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               this.clientsForm.patchValue(this.clients[0]);
               this.loadingCalendar = false;
               this.loading = false;
-            }, 500);
+            }, 800);
           }, 500);
       })
   }
@@ -956,9 +956,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
               .subscribe((result: any) => {
                 console.log((result));
                 window.open(result.payrexx_link, "_self");
+                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
               })
           } else {
-            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
+            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
             this.goTo('/bookings');
           }
         }, 1000);
