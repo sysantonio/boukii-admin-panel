@@ -298,13 +298,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id='+data.data.id + '&is_active=1')
           .subscribe((season) => {
             this.season = season.data[0];
-             // Extrae las horas de inicio y fin
-            const hourStart = this.season.hour_start.substr(0, 5); // '08:00'
-            const hourEnd = this.season.hour_end.substr(0, 5); // '17:00'
-
-            // Filtra el array de horas
-            this.hours = this.hours.filter(hour => hour >= hourStart && hour <= hourEnd);
-
             this.minDate = moment(this.season.start_date, 'YYYY-MM-DD').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'YYYY-MM-DD').toDate() : this.minDate;
             this.maxDate = moment(this.season.end_date).toDate();
 
@@ -313,6 +306,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
             this.holidays.forEach(element => {
               this.myHolidayDates.push(moment(element).toDate());
             });
+
+             // Extrae las horas de inicio y fin
+             const hourStart = this.season?.hour_start.substr(0, 5); // '08:00'
+             const hourEnd = this.season?.hour_end.substr(0, 5); // '17:00'
+
+             // Filtra el array de horas
+             this.hours = this.hours?.filter(hour => hour >= hourStart && hour <= hourEnd);
+
           });
         this.schoolPriceRanges = JSON.parse(data.data.settings)?.prices_range;
         this.people = this.schoolPriceRanges?.people ? this.schoolPriceRanges.people : 6;
