@@ -410,7 +410,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         }
       });
     } else {
-      const level = this.levelForm.value.id;
+      const level = this.levelForm.value;
       this.levelForm.patchValue(level);
       this.defaultsBookingUser.degree_id = level.id;
       this.getCourses(level, this.monthAndYear);
@@ -846,11 +846,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const clientsWithoutSelectedSport = [];
     this.bookingsToCreate.forEach(element => {
       const client = this.clients.find((c) => c.id === element.courseDates[0].client_id);
-      const bookSport = client.client_sports.find((c) => c.sport_id === element.courseDates[0].course.sport_id);
+      const bookSport = client?.client_sports?.find((c) => c.sport_id === element.courseDates[0].course.sport_id);
       if (!bookSport || bookSport === null) {
 
         clientsWithoutSelectedSport.push({
-          client_id: client.id,
+          client_id: element.courseDates[0].client_id,
           sport_id: element.courseDates[0].course.sport_id,
           degree_id: element.courseDates[0].degree_id,
           school_id: this.user.schools[0].id

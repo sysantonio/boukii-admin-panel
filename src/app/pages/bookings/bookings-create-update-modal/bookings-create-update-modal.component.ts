@@ -411,7 +411,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
       });
     } else {
-      const level = this.levelForm.value.id;
+      const level = this.levelForm.value;
       this.levelForm.patchValue(level);
       this.defaultsBookingUser.degree_id = level.id;
       this.getCourses(level, this.monthAndYear);
