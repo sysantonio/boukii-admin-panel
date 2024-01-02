@@ -46,7 +46,7 @@ export class ClientsComponent {
   }
 
   columns: TableColumn<any>[] = [
-    { label: 'Coronita', property: 'a', type: 'coronita', visible: true, cssClasses: ['font-medium'] },
+    { label: 'type', property: 'a', type: 'coronita', visible: true, cssClasses: ['font-medium'] },
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'surname', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },

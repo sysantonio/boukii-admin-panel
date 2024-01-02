@@ -961,7 +961,7 @@ export class TimelineComponent {
               this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
             }
             else{
-              this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
             }
           })
 

@@ -467,5 +467,6 @@
   "task_created": "Aufgabe erfolgreich erstellt",
   "today": "Heute",
   "upcoming_events": "Kommende Veranstaltungen",
-  "today_task_list": "Aufgaben für heute"
+  "today_task_list": "Aufgaben für heute",
+  "event_overlap": "Es liegt ein Ereignis vor, das verhindert, dass der Monitor vollständig gesperrt wird"
 }

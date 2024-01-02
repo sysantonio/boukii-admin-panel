@@ -466,5 +466,7 @@
   "task_created": "Task created successfully",
   "today": "Today",
   "upcoming_events": "Upcoming events",
-  "today_task_list": "Tasks for today"
+  "today_task_list": "Tasks for today",
+  "event_overlap": "There is an event that prevents the monitor from being completely locked"
+
 }

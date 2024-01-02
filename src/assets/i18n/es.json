@@ -470,5 +470,6 @@
   "task_created": "Tarea creada con éxito",
   "today": "Hoy",
   "upcoming_events": "Próximos eventos",
-  "today_task_list": "Tareas para hoy"
+  "today_task_list": "Tareas para hoy",
+  "event_overlap": "Hay un evento que impide el bloqueo total del monitor"
 }

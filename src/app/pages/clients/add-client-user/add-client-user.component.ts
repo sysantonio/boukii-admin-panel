@@ -33,7 +33,6 @@ export class AddClientUserModalComponent implements OnInit {
 
     this.today = new Date();
     this.minDate = new Date(this.today);
-    this.minDate.setFullYear(this.today.getFullYear() - 3);
   }
 
   ngOnInit(): void {

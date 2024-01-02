@@ -176,7 +176,6 @@ export class ClientDetailComponent {
      private translateService: TranslateService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
-    this.minDate.setFullYear(this.today.getFullYear() - 3);
 
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {

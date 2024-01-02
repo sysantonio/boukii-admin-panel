@@ -466,5 +466,7 @@
   "task_created": "Attività creata con successo",
   "today": "Oggi",
   "upcoming_events": "Prossimi eventi",
-  "today_task_list": "Compiti per oggi"
+  "today_task_list": "Compiti per oggi",
+  "event_overlap": "Si è verificato un evento che impedisce il blocco completo del monitor"
+
 }

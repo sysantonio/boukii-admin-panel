@@ -465,5 +465,7 @@
   "task_created": "Tâche créée avec succès",
   "today": "Aujourd'hui",
   "upcoming_events": "Prochains événements",
-  "today_task_list": "Tâches pour aujourd'hui"
+  "today_task_list": "Tâches pour aujourd'hui",
+  "event_overlap": "Il y a un événement qui empêche le verrouillage complet du moniteur"
+
 }
