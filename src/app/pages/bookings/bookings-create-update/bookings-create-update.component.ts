@@ -1468,7 +1468,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     if (id && id !== null) {
 
       const level = this.levels.find((l) => l.id === id);
-      return level.annotation + ' - ' + level.name;
+      return level?.annotation + ' - ' + level?.name;
     }
   }
 
@@ -1526,7 +1526,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     } else {
 
       const client = this.clients.find((m) => m.id === id);
-      return client.image;
+      return client?.image;
     }
   }
 
@@ -1535,7 +1535,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       const client = this.clients.find((m) => m.id === id);
 
-      return client.first_name + ' ' + client.last_name;
+      return client?.first_name + ' ' + client?.last_name;
     }
   }
 
