@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { NavigationItemModule } from '../../components/navigation-item/navigation-item.module';
 import { MegaMenuModule } from '../../components/mega-menu/mega-menu.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { AddTaskModule } from './add-task/add-task.module';
 
 @NgModule({
   declarations: [ToolbarComponent],
@@ -29,7 +30,8 @@ import { TranslateModule } from '@ngx-translate/core';
     NavigationModule,
     RouterModule,
     NavigationItemModule,
-    MegaMenuModule
+    MegaMenuModule,
+    AddTaskModule
   ],
   exports: [ToolbarComponent]
 })

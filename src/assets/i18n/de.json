@@ -462,5 +462,10 @@
   "all_mails": "Alle E-Mails",
   "mailbox": "Briefkasten",
   "compose": "Komponieren",
-  "mails.empty": "Wählen Sie eine E-Mail zur Visualisierung aus"
+  "mails.empty": "Wählen Sie eine E-Mail zur Visualisierung aus",
+  "mails.type9": "Ausstehende Zahlungserinnerung",
+  "task_created": "Aufgabe erfolgreich erstellt",
+  "today": "Heute",
+  "upcoming_events": "Kommende Veranstaltungen",
+  "today_task_list": "Aufgaben für heute"
 }

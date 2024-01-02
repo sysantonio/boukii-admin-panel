@@ -8,6 +8,10 @@ import { MegaMenuComponent } from '../../components/mega-menu/mega-menu.componen
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddTaskComponent } from './add-task/add-task.component';
+import { duration } from 'moment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'vex-toolbar',
   templateUrl: './toolbar.component.html',
@@ -36,6 +40,8 @@ export class ToolbarComponent {
               private navigationService: NavigationService,
               private popoverService: PopoverService,
               private router: Router,
+              private dialog: MatDialog,
+              private snackbar: MatSnackBar,
               private translateService: TranslateService) {
 
                 switch(translateService.getDefaultLang()) {
@@ -104,5 +110,16 @@ export class ToolbarComponent {
 
   goTo(route: string) {
     this.router.navigate([route]);
+  }
+
+  addTask() {
+    const dialog = this.dialog.open(AddTaskComponent, {
+    });
+
+    dialog.afterClosed().subscribe((data) => {
+      if (data) {
+        this.snackbar.open(this.translateService.instant('task_created'), 'OK', {duration: 3000})
+      }
+    })
   }
 }

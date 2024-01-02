@@ -29,4 +29,13 @@ p {
   margin-top: 8px;
 }
 
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+.navigation-buttons {
+  display: flex;
+  align-items: center;
+}

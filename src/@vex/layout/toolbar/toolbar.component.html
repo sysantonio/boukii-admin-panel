@@ -21,17 +21,17 @@
   <mat-menu #addNewMenu="matMenu" [overlapTrigger]="false" xPosition="after" yPosition="below">
     <button mat-menu-item (click)="goTo('/clients/create')">
       <mat-icon svgIcon="mat:person_add"></mat-icon>
-      <span>Añadir Cliente {{'add_client' | translate }}</span>
+      <span>{{'add_client' | translate }}</span>
     </button>
 
-    <button mat-menu-item (click)="goTo('/tasks/create')" *ngIf="false">
+    <button mat-menu-item (click)="addTask()">
       <mat-icon svgIcon="mat:done_all"></mat-icon>
-      <span>Añadir tarea {{'add_task' | translate }}</span>
+      <span>{{'add_task' | translate }}</span>
     </button>
 
     <button mat-menu-item (click)="goTo('/bookings/create')">
       <mat-icon svgIcon="mat:assignment_turned_in"></mat-icon>
-      <span>Añadir reserva {{'add_booking' | translate }}</span>
+      <span>{{'add_booking' | translate }}</span>
     </button>
   </mat-menu>
 

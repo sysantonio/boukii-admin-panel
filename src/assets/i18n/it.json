@@ -461,6 +461,10 @@
   "all_mails": "Tutte le e-mail",
   "mailbox": "cassetta postale",
   "compose": "Comporre",
-  "mails.empty": "Seleziona un'e-mail da visualizzare"
-
+  "mails.empty": "Seleziona un'e-mail da visualizzare",
+  "mails.type9": "Promemoria di pagamento in sospeso",
+  "task_created": "Attività creata con successo",
+  "today": "Oggi",
+  "upcoming_events": "Prossimi eventi",
+  "today_task_list": "Compiti per oggi"
 }

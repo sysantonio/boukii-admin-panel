@@ -461,5 +461,10 @@
   "all_mails": "All emails",
   "mailbox": "mailbox",
   "compose": "Compose",
-  "mails.empty": "Select a mail to visualize"
+  "mails.empty": "Select a mail to visualize",
+  "mails.type9": "Pending payment reminder",
+  "task_created": "Task created successfully",
+  "today": "Today",
+  "upcoming_events": "Upcoming events",
+  "today_task_list": "Tasks for today"
 }

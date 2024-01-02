@@ -465,6 +465,10 @@
   "all_mails": "Todos los mails",
   "mailbox": "Buzón",
   "compose": "Componer",
-  "mails.empty": "Seleccione un correo para visualizar"
-
+  "mails.empty": "Seleccione un correo para visualizar",
+  "mails.type9": "Recordatorio de pago pendiente",
+  "task_created": "Tarea creada con éxito",
+  "today": "Hoy",
+  "upcoming_events": "Próximos eventos",
+  "today_task_list": "Tareas para hoy"
 }
