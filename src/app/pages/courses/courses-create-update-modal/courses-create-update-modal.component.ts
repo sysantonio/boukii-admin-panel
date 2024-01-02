@@ -1483,10 +1483,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
             group.teachers_min = level.id;
+            group.age_min = 5;
+            group.age_max = 50;
             group.subgroups.push({
               degree_id: level.id,
               monitor_id: null,
-              max_participants:null
+              max_participants: this.defaults.max_participants
             })
           }
 
@@ -2165,6 +2167,16 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
     if (this.defaults.date_end_res === null) {
       this.snackbar.open(this.translateService.instant('snackbar.course.date_res_to'), 'OK', {duration: 3000});
+      return;
+    }
+
+    if (!this.periodeMultiple && this.defaults.date_start === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
+      return;
+    }
+
+    if (!this.periodeMultiple && this.defaults.date_end === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
       return;
     }
 

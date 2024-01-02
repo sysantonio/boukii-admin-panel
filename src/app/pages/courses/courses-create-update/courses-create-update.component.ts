@@ -1484,10 +1484,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
             group.teachers_min = level.id;
+            group.age_min = 5;
+            group.age_max = 50;
             group.subgroups.push({
               degree_id: level.id,
               monitor_id: null,
-              max_participants:null
+              max_participants: this.defaults.max_participants
             })
           }
 
@@ -1705,10 +1707,32 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
+  calculateMaxGroup(level: any) {
+    let ret = 0;
+    this.defaults.course_dates.forEach(courseDate => {
+      courseDate.course_groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          ret = group.course_subgroups[0].max_participants;
+        }
+      });
+    });
+
+    return ret;
+  }
+
   setSubGroupPax(event: any, level: any) {
 
     if (+event.target.value > this.defaults.max_participants) {
       this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', {duration: 3000});
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (level.id === group.degree_id) {
+            group.subgroups.forEach(subGroup => {
+              subGroup.max_participants = this.defaults.max_participants;
+            });
+          }
+        });
+      });
     }
 
     level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
@@ -1766,7 +1790,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   create() {
 
-    if (this.defaults.course_type  === 2 ) {
+    if (this.defaults.course_type  === 2) {
       this.checkStep3PrivateNoFlex();
       this.setDebut(this.defaults.hour_min);
       this.setHourEnd(this.defaults.hour_max);

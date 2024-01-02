@@ -992,7 +992,14 @@
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button color="primary" mat-raised-button (click)="checkStep2ColectiveNoFlex(stepper)">
-              {{mode === 'create' ? 'next' : 'save' | translate}}
+              <span *ngIf="mode === 'create'">
+                {{ 'next'| translate}}
+
+              </span>
+              <span *ngIf="mode !== 'create'">
+                {{ 'save'| translate}}
+
+              </span>
             </button>
           </div>
         </mat-step>
@@ -1280,7 +1287,7 @@
                             {{'students' | translate}} <strong>0/{{defaults.max_participants}}</strong>
                           </div>
                           <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
-                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" />
+                            <input type="number" placeholder="Max per Group" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)"/>
                             <mat-error *ngIf="groupLevel.max_participants > this.defaults.max_participants">
                               {{'courses.errors.students'  | translate}}
                             </mat-error>
