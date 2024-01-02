@@ -1101,7 +1101,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const client = this.clients.find((c) => c.id === utilizer.id);
 
 
-    if (client.client_sports.length > 0) {
+    if (client && client?.client_sports?.length > 0) {
       let hasSport = false;
       client.client_sports.forEach(sport => {
 
