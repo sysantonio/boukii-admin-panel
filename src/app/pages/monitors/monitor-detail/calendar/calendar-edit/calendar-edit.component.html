@@ -25,14 +25,14 @@
 
           <mat-form-field>
             <mat-label>Hora Inicio</mat-label>
-            <mat-select [value]="defaults.start_time" (selectionChange)="onStartTimeChange()">
+            <mat-select [(value)]="defaults.start_time" (selectionChange)="onStartTimeChange()">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Hora Fin</mat-label>
-            <mat-select [value]="defaults.end_time" [disabled]="defaults.start_time === null">
+            <mat-select [(value)]="defaults.end_time" [disabled]="defaults.start_time === null">
               <mat-option *ngFor="let time of filteredTimes" [value]="time"  (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -60,14 +60,14 @@
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field>
               <mat-label>Hora Inicio</mat-label>
-              <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
+              <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Hora Fin</mat-label>
-              <mat-select [value]="defaults.end_time">
+              <mat-select [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -112,14 +112,14 @@
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field>
               <mat-label>Hora Inicio</mat-label>
-              <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
+              <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Hora Fin</mat-label>
-              <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
+              <mat-select [disabled]="defaults.start_time === null" [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -166,14 +166,14 @@
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field>
               <mat-label>Hora Inicio</mat-label>
-              <mat-select (selectionChange)="onStartTimeChange()" [value]="defaults.start_time">
+              <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Hora Fin</mat-label>
-              <mat-select [disabled]="defaults.start_time === null" [value]="defaults.end_time">
+              <mat-select [disabled]="defaults.start_time === null" [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>

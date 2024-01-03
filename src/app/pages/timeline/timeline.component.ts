@@ -1164,6 +1164,7 @@ export class TimelineComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        console.log(result);
 
         const data = {
           user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description

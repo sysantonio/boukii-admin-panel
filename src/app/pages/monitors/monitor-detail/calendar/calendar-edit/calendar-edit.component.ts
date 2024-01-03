@@ -109,6 +109,7 @@ export class CalendarEditComponent implements OnInit {
   }
 
   onStartTimeChange() {
+    console.log(this.defaults.start_time);
     const index = this.times.indexOf(this.defaults.start_time);
     if (index !== -1 && index < this.times.length - 1) {
       this.filteredTimes = this.times.slice(index + 1);
