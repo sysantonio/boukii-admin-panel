@@ -466,6 +466,8 @@
   "today": "Aujourd'hui",
   "upcoming_events": "Prochains événements",
   "today_task_list": "Tâches pour aujourd'hui",
-  "event_overlap": "Il y a un événement qui empêche le verrouillage complet du moniteur"
-
+  "event_overlap": "Il y a un événement qui empêche le verrouillage complet du moniteur",
+  "range_of_dates": "Plage de dates",
+  "all_events_created": "Tous les événements ont été créés",
+  "some_dates_overlap": "Aux dates suivantes, le moniteur était occupé : "
 }

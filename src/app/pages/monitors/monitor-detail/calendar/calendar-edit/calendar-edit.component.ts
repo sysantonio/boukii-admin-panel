@@ -62,6 +62,7 @@ export class CalendarEditComponent implements OnInit {
     school_id: null,
     station_id: null,
     full_day: false,
+    range_dates: false,
     description: null,
     color: null,
     user_nwd_subtype_id: null,
@@ -83,9 +84,6 @@ export class CalendarEditComponent implements OnInit {
     this.defaults.start_time = this.event.hour_start;
     this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
 
-    console.log(this.event.date_param);
-    console.log(this.defaults.start_date);
-
     this.form = this.fb.group({
       startAvailable: this.defaults.start_date,
       endAvailable: null,
@@ -98,7 +96,8 @@ export class CalendarEditComponent implements OnInit {
       description: null,
       station: null,
       blockage: null,
-      full_day:false
+      full_day:false,
+      range_dates:false
     });
 
 
@@ -109,7 +108,6 @@ export class CalendarEditComponent implements OnInit {
   }
 
   onStartTimeChange() {
-    console.log(this.defaults.start_time);
     const index = this.times.indexOf(this.defaults.start_time);
     if (index !== -1 && index < this.times.length - 1) {
       this.filteredTimes = this.times.slice(index + 1);
@@ -128,12 +126,22 @@ export class CalendarEditComponent implements OnInit {
     this.defaults.user_nwd_subtype_id = this.type + 1;
     this.defaults.school_id = this.user.schools[0].id;
     this.defaults.start_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
-    this.defaults.end_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
+    if (this.defaults.end_date && moment(this.defaults.end_date).isAfter(this.defaults.start_date)) {
+      this.defaults.end_date = moment(this.defaults.end_date).format('YYYY-MM-DD');
+  } else {
+      this.defaults.end_date = this.defaults.start_date;
+    }
     if(this.form.get('full_day').value){
       this.defaults.full_day = this.form.get('full_day').value;
     }
     else{
       this.defaults.full_day = false;
+    }
+    if(this.form.get('range_dates').value){
+      this.defaults.range_dates = this.form.get('range_dates').value;
+    }
+    else{
+      this.defaults.range_dates = false;
     }
 
     this.dialogRef.close({
@@ -165,7 +173,6 @@ export class CalendarEditComponent implements OnInit {
   getBlockages() {
     this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
-        console.log(data.data);
         this.blockages = data.data;
 
         if(this.event && this.event.start) {
@@ -237,6 +244,7 @@ export class CalendarEditComponent implements OnInit {
           school_id: null,
           station_id: null,
           full_day: false,
+          range_dates: false,
           description: null,
           color: null,
           user_nwd_subtype_id: this.type,

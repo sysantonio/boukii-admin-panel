@@ -467,6 +467,8 @@
   "today": "Oggi",
   "upcoming_events": "Prossimi eventi",
   "today_task_list": "Compiti per oggi",
-  "event_overlap": "Si è verificato un evento che impedisce il blocco completo del monitor"
-
+  "event_overlap": "Si è verificato un evento che impedisce il blocco completo del monitor",
+  "range_of_dates": "Gamma di date",
+  "all_events_created": "Tutti gli eventi sono stati creati",
+  "some_dates_overlap": "Nelle seguenti date il monitor era occupato: "
 }

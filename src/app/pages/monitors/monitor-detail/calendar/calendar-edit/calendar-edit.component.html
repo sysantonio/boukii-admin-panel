@@ -42,17 +42,32 @@
 
         <div class="flex flex-col">
 
+          <mat-checkbox formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
+
           <mat-form-field>
             <mat-label>Start Date</mat-label>
-            <input [readonly]="true"
+            <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerNonAvailable"
               formControlName="startNonAvailable"
               matInput />
-            <mat-datepicker-toggle [disabled]="true"
+            <mat-datepicker-toggle
               [for]="startDatepickerNonAvailable"
               matSuffix></mat-datepicker-toggle>
             <mat-datepicker #startDatepickerNonAvailable></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="form.get('range_dates').value">
+            <mat-label>End Date</mat-label>
+            <input
+              [(ngModel)]="defaults.end_date"
+              [matDatepicker]="endDatepickerNonAvailable"
+              formControlName="endNonAvailable"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="endDatepickerNonAvailable"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #endDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
           <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
@@ -92,19 +107,32 @@
             </mat-select>
           </mat-form-field>
 
+          <mat-checkbox formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
+
           <mat-form-field>
             <mat-label>Start Date</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
-              [readonly]="true"
               [matDatepicker]="startDatepickerPayedBlock"
               formControlName="startPayedBlock"
               matInput />
             <mat-datepicker-toggle
-              [disabled]="true"
               [for]="startDatepickerPayedBlock"
               matSuffix></mat-datepicker-toggle>
             <mat-datepicker #startDatepickerPayedBlock></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="form.get('range_dates').value">
+            <mat-label>End Date</mat-label>
+            <input
+              [(ngModel)]="defaults.end_date"
+              [matDatepicker]="endDatepickerNonAvailable"
+              formControlName="endNonAvailable"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="endDatepickerNonAvailable"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #endDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
           <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
@@ -146,19 +174,32 @@
 
         <div class="flex flex-col">
 
+          <mat-checkbox formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
+
           <mat-form-field>
             <mat-label>Start Date</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
-              [readonly]="true"
-
               [matDatepicker]="startDatepickerNonPayedBlock"
               formControlName="startNonPayedBlock"
               matInput />
-            <mat-datepicker-toggle [disabled]="true"
+            <mat-datepicker-toggle
               [for]="startDatepickerNonPayedBlock"
               matSuffix></mat-datepicker-toggle>
             <mat-datepicker #startDatepickerNonPayedBlock></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="form.get('range_dates').value">
+            <mat-label>End Date</mat-label>
+            <input 
+              [(ngModel)]="defaults.end_date"
+              [matDatepicker]="endDatepickerNonAvailable"
+              formControlName="endNonAvailable"
+              matInput />
+            <mat-datepicker-toggle
+              [for]="endDatepickerNonAvailable"
+              matSuffix></mat-datepicker-toggle>
+            <mat-datepicker #endDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
           <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>

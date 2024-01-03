@@ -468,5 +468,8 @@
   "today": "Heute",
   "upcoming_events": "Kommende Veranstaltungen",
   "today_task_list": "Aufgaben für heute",
-  "event_overlap": "Es liegt ein Ereignis vor, das verhindert, dass der Monitor vollständig gesperrt wird"
+  "event_overlap": "Es liegt ein Ereignis vor, das verhindert, dass der Monitor vollständig gesperrt wird",
+  "range_of_dates": "Datumsbereich",
+  "all_events_created": "Alle Ereignisse wurden erstellt",
+  "some_dates_overlap": "An den folgenden Daten war der Monitor beschäftigt: "
 }

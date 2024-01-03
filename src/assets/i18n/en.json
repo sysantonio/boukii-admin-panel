@@ -467,6 +467,8 @@
   "today": "Today",
   "upcoming_events": "Upcoming events",
   "today_task_list": "Tasks for today",
-  "event_overlap": "There is an event that prevents the monitor from being completely locked"
-
+  "event_overlap": "There is an event that prevents the monitor from being completely locked",
+  "range_of_dates": "Range of dates",
+  "all_events_created": "All events have been created",
+  "some_dates_overlap": "On the following dates the monitor was busy: "
 }

@@ -471,5 +471,8 @@
   "today": "Hoy",
   "upcoming_events": "Próximos eventos",
   "today_task_list": "Tareas para hoy",
-  "event_overlap": "Hay un evento que impide el bloqueo total del monitor"
+  "event_overlap": "Hay un evento que impide el bloqueo total del monitor",
+  "range_of_dates": "Rango de fechas",
+  "all_events_created": "Todos los eventos han sido creados",
+  "some_dates_overlap": "En las siguientes fechas el monitor estaba ocupado: "
 }

@@ -1165,27 +1165,71 @@ export class TimelineComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log(result);
+        
+        if (result.end_date && moment(result.end_date).isAfter(result.start_date)) {
+          //RANGE OF DATES
+          const dates = [];
+          let currentDate = moment(result.start_date);
+          const endDate = moment(result.end_date);
 
-        const data = {
-          user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
-        }
-        this.crudService.create('/monitor-nwds', data)
-          .subscribe((data) => {
+          while (currentDate <= endDate) {
+              dates.push(currentDate.format('YYYY-MM-DD'));
+              currentDate = currentDate.add(1, 'days');
+          }
 
-            //this.getData();
+          //Promise for each date
+          const promises = dates.map(date => {
+              const data = {
+                user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: date, end_date: date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
+              };
+              return this.crudService.create('/monitor-nwds', data).toPromise();
+          });
+
+          Promise.allSettled(promises).then(results => {
+            const failedDates = [];
+            const successCount = results.reduce((count, result, index) => {
+                if (result.status === 'rejected') {
+                    failedDates.push(dates[index]);
+                } else {
+                    return count + 1;
+                }
+                return count;
+            }, 0);
+
             this.loadBookings(this.currentDate);
-            this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
-          },
-          (error) => {
-            // Error handling code
-            console.error('Error occurred:', error);
-            if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd"){
-              this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+            if (failedDates.length === 0) {
+                this.snackbar.open(this.translateService.instant('all_events_created'), 'OK', { duration: 3000 });
+            } else {
+                this.snackbar.open(`${this.translateService.instant('some_dates_overlap')} : ${failedDates.join(', ')}`, 'OK', { duration: 4000 });
             }
-            else{
-              this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
-            }
-          })
+          });
+
+        }
+        else{
+          //ONLY 1 DAY
+          const data = {
+            user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
+          }
+          this.crudService.create('/monitor-nwds', data)
+            .subscribe((data) => {
+  
+              //this.getData();
+              this.loadBookings(this.currentDate);
+              this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
+            },
+            (error) => {
+              // Error handling code
+              console.error('Error occurred:', error);
+              if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd"){
+                this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+              }
+              else{
+                this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+              }
+            })
+        }
+
+        
           //CHANGE
         /*let id = 1
         result.monitor_id = id;
