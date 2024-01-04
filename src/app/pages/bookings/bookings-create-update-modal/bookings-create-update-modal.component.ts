@@ -1333,7 +1333,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
       degree_id: level.id,
-      get_lower_degrees: false
+      get_lower_degrees: false,
+      school_id: this.user.schools[0].id
     };
 
     this.crudService.post('/availability', rq)
