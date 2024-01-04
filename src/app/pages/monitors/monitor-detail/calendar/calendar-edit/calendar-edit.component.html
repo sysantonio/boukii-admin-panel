@@ -42,7 +42,7 @@
 
         <div class="flex flex-col">
 
-          <mat-checkbox formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
+          <mat-checkbox *ngIf="!event.block_general" formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
 
           <mat-form-field>
             <mat-label>Start Date</mat-label>
@@ -57,7 +57,7 @@
             <mat-datepicker #startDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field *ngIf="form.get('range_dates').value">
+          <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
@@ -107,7 +107,7 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-checkbox formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
+          <mat-checkbox *ngIf="!event.block_general" formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
 
           <mat-form-field>
             <mat-label>Start Date</mat-label>
@@ -122,7 +122,7 @@
             <mat-datepicker #startDatepickerPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field *ngIf="form.get('range_dates').value">
+          <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
@@ -174,7 +174,7 @@
 
         <div class="flex flex-col">
 
-          <mat-checkbox formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
+          <mat-checkbox *ngIf="!event.block_general" formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
 
           <mat-form-field>
             <mat-label>Start Date</mat-label>
@@ -189,7 +189,7 @@
             <mat-datepicker #startDatepickerNonPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field *ngIf="form.get('range_dates').value">
+          <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
             <input 
               [(ngModel)]="defaults.end_date"
@@ -236,7 +236,7 @@
           </mat-form-field>
         </div>
       </mat-tab>
-      <mat-tab label="Crear Reserva" >
+      <mat-tab label="Crear Reserva" *ngIf="!event.block_general" >
 
       </mat-tab>
     </mat-tab-group>
