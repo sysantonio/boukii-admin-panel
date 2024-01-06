@@ -44,6 +44,7 @@ export class TimelineComponent {
   weeksInMonth: any[] = [];
 
   allMonitors:any[] =[];
+  allMonitorsTimeline:any[] =[];
   filteredMonitors:any[] =[];
   plannerTasks:any[] =[];
   vacationDays:any[];
@@ -99,6 +100,8 @@ export class TimelineComponent {
   startTimeDivision:string;
   endTimeDivision:string;
   searchDate:any;
+
+  nullMonitor:any = {id:null};
 
   constructor(private crudService: ApiCrudService,private dialog: MatDialog,private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.mockLevels.forEach(level => {
@@ -336,10 +339,14 @@ export class TimelineComponent {
           if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
             this.filteredMonitors.push(item.monitor);
           }
+          if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
+            this.allMonitorsTimeline.push(item.monitor);
+          }
         }
         else{
           if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
             this.filteredMonitors.push(item.monitor);
+            this.allMonitorsTimeline.push(item.monitor);
           }
         }
 
@@ -912,7 +919,7 @@ export class TimelineComponent {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         maxWidth: '100vw',
         panelClass: 'full-screen-dialog',
-        data: { message: "Are you sure you want to move this task?", title: "Confirm Move" }
+        data: { message: this.translateService.instant('move_task'), title: this.translateService.instant('confirm_move') }
       });
 
       dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
@@ -1164,7 +1171,6 @@ export class TimelineComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log(result);
         
         if (result.end_date && moment(result.end_date).isAfter(result.start_date)) {
           //RANGE OF DATES
@@ -1187,14 +1193,11 @@ export class TimelineComponent {
 
           Promise.allSettled(promises).then(results => {
             const failedDates = [];
-            const successCount = results.reduce((count, result, index) => {
+            results.forEach((result, index) => {
                 if (result.status === 'rejected') {
                     failedDates.push(dates[index]);
-                } else {
-                    return count + 1;
                 }
-                return count;
-            }, 0);
+            });
 
             this.loadBookings(this.currentDate);
             if (failedDates.length === 0) {
@@ -1202,6 +1205,9 @@ export class TimelineComponent {
             } else {
                 this.snackbar.open(`${this.translateService.instant('some_dates_overlap')} : ${failedDates.join(', ')}`, 'OK', { duration: 4000 });
             }
+          }).catch(error => {
+            console.error('Error in range dates:', error);
+            this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
           });
 
         }
@@ -1228,6 +1234,111 @@ export class TimelineComponent {
               }
             })
         }
+
+        
+          //CHANGE
+        /*let id = 1
+        result.monitor_id = id;
+
+        const isOverlap = this.eventService.isOverlap(this.events, result);
+        if (isOverlap.length === 0) {
+          if (result.user_nwd_subtype_id !== 0) {
+
+            this.crudService.create('/monitor-nwds', result)
+            .subscribe((data) => {
+
+              this.getData();
+              this.snackbar.open('Event created');
+            })
+          }
+        } else {
+
+          const updateEdit = this.events[isOverlap[0].overlapedId].id;
+          this.crudService.update('/monitor-nwds', isOverlap[0].dates[0], updateEdit)
+            .subscribe((data) => {
+              isOverlap[0].dates[1].start_time = data.data.end_time;
+              this.crudService.create('/monitor-nwds', isOverlap[0].dates[1])
+              .subscribe((data) => {
+
+                this.getData();
+                this.snackbar.open('Event created');
+              })
+            })
+          // hacer el update y el create
+          this.snackbar.open('Existe un solapamiento', 'OK', {duration: 3000});
+        }*/
+
+      }
+    });
+  }
+
+  toggleBlockGeneral() {
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        maxWidth: '100vw',
+        panelClass: 'full-screen-dialog',
+        data: { message: this.translateService.instant('create_general_blockage'), title: this.translateService.instant('general_blockage') }
+      });
+
+      dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
+        if (userConfirmed) {
+          this.createBlockGeneral();
+        } 
+      });
+  }
+
+  createBlockGeneral(): void {
+
+    let currentDateFormat = moment(this.currentDate).format('DD-MM-YYYY');
+    const dialogRef = this.dialog.open(CalendarEditComponent, {
+      data: {
+        block_general: true,
+        date_param: currentDateFormat,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+
+          //ONLY 1 DAY
+          const promises = this.allMonitorsTimeline.map(monitor => {
+            const data = {
+              user_nwd_subtype_id: result.user_nwd_subtype_id,
+              color: result.color,
+              monitor_id: monitor.id,
+              start_date: result.start_date,
+              end_date: result.end_date,
+              start_time: result.full_day ? null : `${result.start_time}:00`,
+              end_time: result.full_day ? null : `${result.end_time}:00`,
+              full_day: result.full_day,
+              station_id: result.station_id,
+              school_id: result.school_id,
+              description: result.description
+            };
+          
+            return this.crudService.create('/monitor-nwds', data).toPromise();
+          });
+          
+          const failedMonitors = [];
+          
+          Promise.allSettled(promises).then(results => {
+            results.forEach((result, index) => {
+              if (result.status === 'rejected') {
+                const monitor = this.allMonitorsTimeline[index];
+                failedMonitors.push(`${monitor.first_name} ${monitor.last_name}`);
+              }
+            });
+          
+            this.loadBookings(this.currentDate);
+            if (failedMonitors.length === 0) {
+              this.snackbar.open(this.translateService.instant('all_events_created'), 'OK', { duration: 3000 });
+            } else {
+              this.snackbar.open(`${this.translateService.instant('some_monitors_overlap')} : ${failedMonitors.join(', ')}`, 'OK', { duration: 4000 });
+            }
+          }).catch(error => {
+            console.error('Error in block general:', error);
+            this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+          });
+        
 
         
           //CHANGE

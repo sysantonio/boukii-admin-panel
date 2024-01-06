@@ -28,6 +28,8 @@
                         <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                         <mat-datepicker #pickerFrom></mat-datepicker>
                     </mat-form-field>
+
+                    <button (click)="toggleBlockGeneral()" class="filter-button"><mat-icon svgIcon="mat:block"></mat-icon></button>
                     </div>
 
                     <div class="view-selection">
@@ -507,11 +509,14 @@
                     </div>
                     <mat-form-field class="flex-auto" style="width: 100%;">
                         <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor"  *ngIf="!loadingMonitors">
-                        <ng-container *ngFor="let monitor of monitorsForm" >
-                            <mat-option *ngIf="monitor.id != taskDetail.monitor_id" [value]="monitor">
-                                {{ monitor.first_name }} {{ monitor.last_name }}
+                            <mat-option *ngIf="taskDetail.monitor_id" [value]="nullMonitor">
+                                {{'no_monitor_choose' | translate}}
                             </mat-option>
-                        </ng-container>
+                            <ng-container *ngFor="let monitor of monitorsForm" >
+                                <mat-option *ngIf="monitor.id != taskDetail.monitor_id" [value]="monitor">
+                                    {{ monitor.first_name }} {{ monitor.last_name }}
+                                </mat-option>
+                            </ng-container>
                         </mat-select>
                     </mat-form-field>
 
