@@ -28,6 +28,7 @@ export class ClientsComponent {
   detailData: any;
   utilizers: any;
   clientSport: any;
+  clientSportUtilizer: any;
   imageAvatar = '../../../assets/img/avatar.png';
   skiImage = 'https://school.boukii.com/assets/apps/sports/Ski.png';
   groupedByColor = {};
@@ -37,7 +38,9 @@ export class ClientsComponent {
   provinces = MOCK_PROVINCES;
   languages = [];
   mainIdSelected = true;
+  utilizer: any = [];
   borderActive = -1;
+  utilizerSportLoaded = false;
 
   constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService,
     private dialog: MatDialog, private snackbar: MatSnackBar) {
@@ -163,7 +166,32 @@ export class ClientsComponent {
 
   toggleBorder(index: number, utilizer: any) {
     this.mainIdSelected = false;
+    this.utilizer = utilizer;
     this.borderActive = index;
+    this.getUtilizerSports();
+  }
 
+  getUtilizerSports() {
+    this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+this.utilizer.id)
+    .subscribe((cl) => {
+      this.clientSportUtilizer = cl.data;
+
+      this.clientSportUtilizer.forEach(element => {
+        this.crudService.get('/sports/'+element.sport_id)
+          .subscribe((sport) => {
+            element.name = sport.data.name;
+            element.icon_selected = sport.data.icon_selected;
+            element.icon_unselected = sport.data.icon_unselected;
+          });
+
+          this.crudService.get('/degrees/'+element.degree_id)
+          .subscribe((level) => {
+            element.level = level.data;
+          });
+
+      });
+
+      this.utilizerSportLoaded = true;
+    })
   }
 }
