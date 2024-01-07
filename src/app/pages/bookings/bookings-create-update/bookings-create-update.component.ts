@@ -1503,6 +1503,24 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  getClientLang(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return +client?.language1_id;
+    }
+  }
+
+  getClientProvince(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return +client?.province;
+    }
+  }
+
   getMonitorProvince(id: number) {
     if (id && id !== null) {
 
@@ -1529,6 +1547,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       const client = this.clients.find((m) => m.id === id);
       return client?.image;
+    }
+  }
+
+  getUtilizer(id: any) {
+    if (id!==null) {
+
+      return this.utilizers.find((u) => u.id === id);
     }
   }
 

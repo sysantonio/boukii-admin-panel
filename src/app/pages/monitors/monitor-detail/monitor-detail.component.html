@@ -1133,7 +1133,7 @@
           </div>
           <div style="float: left;width: 50%;">
             <div style="float:right">
-              {{'active' | translate}} <mat-slide-toggle [(ngModel)]="defaultsUser.active"></mat-slide-toggle>
+              {{'active' | translate}} <mat-slide-toggle [checked]="defaultsUser.active" (change)="setActive($event)"></mat-slide-toggle>
             </div>
           </div>
         </div>

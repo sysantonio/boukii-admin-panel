@@ -2062,4 +2062,8 @@ export class MonitorDetailComponent {
       }
     });
   }
+
+  setActive(event) {
+    this.defaultsUser.active = event.checked;
+  }
 }

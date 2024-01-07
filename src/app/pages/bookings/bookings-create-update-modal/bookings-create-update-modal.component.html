@@ -439,14 +439,26 @@
           </div>
           <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
           <div style="float: left; width: 100%;" *ngFor="let courseDate of item.courseDates; let courseDateIndex = index" [ngStyle]="{'margin-top': courseDateIndex > 0 ? '5%' : '0'}">
-            <div style="float: left; width: 100%;;height: 40px">
+            <div style="float: left; width: 100%;;height: 40px" *ngIf="courseDate.client_id === defaults.client_main_id.id">
               <div style="float: left; width: 20%;">
                 <img [src]="getClientAvatar(courseDate.client_id)" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
               </div>
               <div style="float: left; width: 80%;">
-                <p>{{getClientName(courseDate.client_id) || 'no monitor asigned'}}</p>
+                <p>{{getClientName(courseDate.client_id)}}</p>
                 <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                  {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} &ensp;{{'years' | translate}}</i></p>
+                  {{ getLanguage(getClientLang(courseDate.monitor_id)) }} · {{ getCountry(getClientProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} &ensp;{{'years' | translate}}</i></p>
+              </div>
+
+            </div>
+
+            <div style="float: left; width: 100%;;height: 40px" *ngIf="courseDate.client_id !== defaults.client_main_id.id">
+              <div style="float: left; width: 20%;">
+                <img [src]="getUtilizer(courseDate.client_id)?.image" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+              </div>
+              <div style="float: left; width: 80%;">
+                <p>{{getUtilizer(courseDate.client_id)?.first_name}} {{getUtilizer(courseDate.client_id)?.last_name}}</p>
+                <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
+                  {{ getLanguage(getUtilizer(courseDate.client_id)?.language1_id) }} · {{ getCountry(getUtilizer(courseDate.client_id)?.province) }} · {{calculateAge(getUtilizer(courseDate.client_id)?.birth_date) }} &ensp;{{'years' | translate}}</i></p>
               </div>
 
             </div>

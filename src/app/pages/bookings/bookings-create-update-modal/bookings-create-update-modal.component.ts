@@ -1527,6 +1527,31 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     }
   }
 
+  getUtilizer(id: any) {
+    if (id!==null) {
+
+      return this.utilizers.find((u) => u.id === id);
+    }
+  }
+
+  getClientLang(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return +client?.language1_id;
+    }
+  }
+
+  getClientProvince(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return +client?.province;
+    }
+  }
+
   getClientAvatar(id: number) {
 
     if (id === null) {
