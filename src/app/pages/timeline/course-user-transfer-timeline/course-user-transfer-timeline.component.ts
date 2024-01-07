@@ -154,7 +154,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
     this.crudService.post('/clients/transfer', data)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.course.trasnfer_user'), 'OK', {duration: 3000});
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       })
   }
 

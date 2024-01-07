@@ -1638,6 +1638,9 @@ export class TimelineComponent {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         dialogRef.close();
+        this.hideDetail();
+        this.hideGrouped();
+        this.loadBookings(this.currentDate);
       }
     });
   }
