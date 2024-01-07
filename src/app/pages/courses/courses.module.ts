@@ -28,6 +28,7 @@ import { CourseUserTransferComponent } from './course-user-transfer/course-user-
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
 import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { CoursesCreateUpdateModalModule } from './courses-create-update-modal/courses-create-update-modal.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -51,6 +52,7 @@ import { TranslateModule } from '@ngx-translate/core';
     CoursesCreateUpdateModule,
     CoursesDetailModule,
     CoursesDetailModalModule,
+    CoursesCreateUpdateModalModule,
     MatDialogModule,
     ComponentsModule,
     MatSlideToggleModule,

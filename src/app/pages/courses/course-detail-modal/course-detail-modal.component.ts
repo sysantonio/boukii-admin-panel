@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { CoursesCreateUpdateComponent } from '../courses-create-update/courses-create-update.component';
+import { CoursesCreateUpdateModalComponent } from '../courses-create-update-modal/courses-create-update-modal.component';
 
 @Component({
   selector: 'vex-course-detail-modal',
@@ -218,7 +219,7 @@ export class CourseDetailModalComponent implements OnInit {
   }
 
   openUpdateCourse() {
-    const dialogRef = this.dialog.open(CoursesCreateUpdateComponent, {
+    const dialogRef = this.dialog.open(CoursesCreateUpdateModalComponent, {
       width: '100%',
       height: '1200px',
       maxWidth: '90vw',  // Asegurarse de que no haya un ancho máximo

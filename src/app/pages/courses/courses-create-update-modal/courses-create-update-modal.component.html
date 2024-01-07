@@ -1,12 +1,3 @@
-<vex-secondary-toolbar current="Courses">
-  <vex-breadcrumbs
-    [crumbs]="['courses.title', 'courses.new']"
-    class="flex-auto"
-  ></vex-breadcrumbs>
-  <button class="ml-2" color="primary" mat-icon-button type="button">
-    <mat-icon svgIcon="mat:more_vert"></mat-icon>
-  </button>
-</vex-secondary-toolbar>
 <div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading && ((defaults.course_type === null || defaults.course_type === 2 && mode === 'create') || (defaults.course_type === 2 && mode === 'update'))">
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto" style="width: 100%;">
