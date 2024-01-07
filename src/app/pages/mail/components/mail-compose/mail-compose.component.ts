@@ -124,6 +124,18 @@ export class MailComposeComponent implements OnInit {
     return this.coursesToSend.findIndex((c) => c === id) !== -1;
   }
 
+  selectAll(event: any) {
+    if (event.checked) {
+      this.coursesToSend = [];
+
+      this.courses.forEach(element => {
+        this.coursesToSend.push(element.id);
+      });
+    } else {
+      this.coursesToSend = [];
+    }
+  }
+
   sendMail() {
     const data = {
       start_date: this.selectedDateFrom,

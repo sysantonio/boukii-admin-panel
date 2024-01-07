@@ -67,7 +67,8 @@
 
       </div>
       <mat-spinner *ngIf="loadingCourses" style="margin:0 auto"></mat-spinner>
-      <div class="block w-full" style="margin: 0 0 5% 0;width: 100%; float:left"  *ngIf="emailType === 2" >
+      <div class="block w-full" style="margin: 0 0 5% 0;width: 100%; float:left" *ngIf="emailType === 2" >
+        <mat-checkbox (change)="selectAll($event)" *ngIf="paginatedCourses.length > 0">{{'choose_all' | translate }}</mat-checkbox>
         <div style="cursor:pointer" *ngFor="let item of paginatedCourses" (click)="addToCourses(item.id)">
           <div style="float: left; width: 100%; margin-bottom: 2%;" [ngClass]="{'selected-item': isSelected(item.id)}">
             <div style="float: left;width: 100%;padding: 3%;">
