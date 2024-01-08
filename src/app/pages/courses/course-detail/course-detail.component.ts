@@ -31,16 +31,6 @@ export class CourseDetailComponent implements OnInit {
   form: UntypedFormGroup;
   monitorsForm = new FormControl();
 
-  filteredMonitors: Observable<any[]>;
-
-  durations: string[] = [];
-
-  groupedByColor = {};
-  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
-
-  user: any;
-  id: any;
-
   loadingMonitors = true;
 
   defaults: any = {
@@ -116,6 +106,15 @@ export class CourseDetailComponent implements OnInit {
   loading: boolean = true;
 
   //NIVELES
+  user: any;
+  id: any;
+
+  filteredMonitors: Observable<any[]>;
+  durations: string[] = [];
+
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+
   daySelectedIndex: any = 0;
   subGroupSelectedItemDate: any;
   subGroupSelectedIndex: any = 0;
@@ -160,6 +159,33 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit() {
 
+    this.getData();
+
+  }
+
+  reset() {
+    this.filteredMonitors;
+    this.durations = [];
+
+    this.groupedByColor = {};
+    this.colorKeys = []; // Aquí almacenaremos las claves de colores
+
+    this.daySelectedIndex = 0;
+    this.subGroupSelectedItemDate;
+    this.subGroupSelectedIndex = 0;
+    this.selectedDate;
+    this.selectedItem;
+    this.daysDates = [];
+    this.daysDatesLevels = [];
+    this.monitors = [];
+    this.levels = [];
+    this.courseUsers = [];
+    this.clients = [];
+    this.languages = [];
+    this.schoolSports = [];
+  }
+
+  getData() {
     this.getLanguages();
     this.getClients();
     this.getMonitors();
@@ -179,7 +205,6 @@ export class CourseDetailComponent implements OnInit {
             })
 
       })
-
   }
 
   getStations() {
@@ -233,6 +258,10 @@ export class CourseDetailComponent implements OnInit {
       if (data) {
         dialogRef.close();
       }
+
+      this.reset();
+      this.getData();
+
     });
   }
 

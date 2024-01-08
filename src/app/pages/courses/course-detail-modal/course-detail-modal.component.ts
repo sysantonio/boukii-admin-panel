@@ -161,7 +161,10 @@ export class CourseDetailModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getData();
+  }
 
+  getData() {
     this.getLanguages();
     this.getClients();
     this.getMonitors();
@@ -181,7 +184,6 @@ export class CourseDetailModalComponent implements OnInit {
             })
 
       })
-
   }
 
   getStations() {
@@ -218,6 +220,28 @@ export class CourseDetailModalComponent implements OnInit {
     return moment(date, inFormat).format(format);
   }
 
+  reset() {
+    this.filteredMonitors;
+    this.durations = [];
+
+    this.groupedByColor = {};
+    this.colorKeys = []; // Aquí almacenaremos las claves de colores
+
+    this.daySelectedIndex = 0;
+    this.subGroupSelectedItemDate;
+    this.subGroupSelectedIndex = 0;
+    this.selectedDate;
+    this.selectedItem;
+    this.daysDates = [];
+    this.daysDatesLevels = [];
+    this.monitors = [];
+    this.levels = [];
+    this.courseUsers = [];
+    this.clients = [];
+    this.languages = [];
+    this.schoolSports = [];
+  }
+
   openUpdateCourse() {
     const dialogRef = this.dialog.open(CoursesCreateUpdateModalComponent, {
       width: '100%',
@@ -251,6 +275,8 @@ export class CourseDetailModalComponent implements OnInit {
       if (data) {
 
       }
+      this.reset();
+      this.getData();
     });
   }
 

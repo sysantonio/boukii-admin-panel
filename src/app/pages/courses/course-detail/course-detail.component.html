@@ -7,12 +7,14 @@
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
 </vex-secondary-toolbar>
-<div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading">
+<div [@stagger]="true"class="p-gutter container"style="max-width: none" >
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;padding: 2%">
     <div @fadeInUp class="card flex-auto">
       <mat-tab-group>
         <mat-tab label="Cours">
-          <mat-card style="padding: 3% 5% 0 5%;">
+          <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
+
+          <mat-card style="padding: 3% 5% 0 5%;" *ngIf="!loading">
             <mat-card-header style="display:block">
               <div style="float: left; width: 100%;">
                 <div style="float: left;width: 50%;">
@@ -141,8 +143,9 @@
         </mat-tab>
 
         <mat-tab label="{{'level' | translate }}" *ngIf="defaults.course_type === 1">
+          <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
-          <mat-card style="padding: 0 3%;">
+          <mat-card style="padding: 0 3%;"*ngIf="!loading">
             <mat-card-header style="display:block">
               <div style="width: 100%;float:left;">
                 <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate }}</mat-card-title>
@@ -330,7 +333,7 @@
                                                 </div>
                                                 <div style="float: left; width: 75%;">
                                                   <p style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}} {{getClient(courseUser.client_id)?.last_name}}</p>
-                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id).language1_id)}} · {{ getCountry(getClient(courseUser.client_id).country) }} · {{calculateAge(getClient(courseUser.client_id).birth_date)}}{{'years' | translate }}</p>
+                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id)?.language1_id)}} · {{ getCountry(getClient(courseUser.client_id)?.country) }} · {{calculateAge(getClient(courseUser.client_id)?.birth_date)}} {{'years' | translate }}</p>
                                                 </div>
                                               </div>
                                             </li>
