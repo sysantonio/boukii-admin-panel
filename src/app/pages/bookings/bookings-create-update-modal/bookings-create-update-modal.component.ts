@@ -335,12 +335,18 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
             this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
             this.selectSport(this.sportDataList[0]);
-            this.getUtilzers(this.clients[0], true);
+
+            if (this.externalData && this.externalData.client) {
+              this.getUtilzers(this.externalData.client, true);
+            } else {
+
+              this.getUtilzers(this.clients[0], true);
+            }
             //this.getDegrees(this.defaults.sport_id);
 
 
             setTimeout(() => {
-              this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.clientId));
+              this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.client.id));
               this.loadingCalendar = false;
               this.loading = false;
             }, 800);

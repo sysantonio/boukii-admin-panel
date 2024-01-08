@@ -63,13 +63,14 @@ export class ClientsComponent {
 
 
   createBooking() {
+    this.detailData.client_sport = this.clientSport;
     const dialogRef = this.dialog.open(BookingsCreateUpdateModalComponent, {
       width: '100%',
       height: '1200px',
       maxWidth: '90vw',
       panelClass: 'full-screen-dialog',
       data: {
-        clientId: this.detailData.id
+        client: this.detailData
       }
     });
 
