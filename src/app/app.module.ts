@@ -11,6 +11,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { AuthService } from 'src/service/auth.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,7 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CustomLayoutModule,
     ComponentsModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
