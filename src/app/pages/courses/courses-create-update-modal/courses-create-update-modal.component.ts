@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, map, of, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -236,7 +236,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
   myHolidayDates = [];
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,private dialogRef: MatDialogRef<any>,
       private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.externalData && this.externalData.id ? this.externalData.id : this.activatedRoute.snapshot.params.id;
@@ -1919,7 +1919,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
     this.crudService.create('/admin/courses', data)
       .subscribe((res) => {
         console.log(res);
-        this.goTo('/courses');
+        this.dialogRef.close();
       })
 
   }
@@ -2081,7 +2081,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
     this.crudService.update('/admin/courses', data, this.id)
       .subscribe((res) => {
         console.log(res);
-        this.goTo('/courses');
+        this.dialogRef.close();
       })
   }
 

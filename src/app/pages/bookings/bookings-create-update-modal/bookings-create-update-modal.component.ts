@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Platform } from '@angular/cdk/platform';
@@ -261,7 +261,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private dialogRef: MatDialogRef<any>,
     private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
@@ -1002,10 +1002,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               .subscribe((result: any) => {
                 console.log((result));
                 window.open(result.payrexx_link, "_self");
+                this.dialogRef.close();
               })
           } else {
             this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-            this.goTo('/bookings');
+            this.dialogRef.close();
           }
         }, 1000);
       })
