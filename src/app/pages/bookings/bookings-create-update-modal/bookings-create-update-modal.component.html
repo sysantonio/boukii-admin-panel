@@ -114,7 +114,7 @@
 
           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-            <div class="flex-auto" style="width:20%">
+            <div class="flex-auto" style="width:20%" *ngIf="externalData && !externalData.onlyPrivate">
               <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'" (click)="this.selectedItem = null;setCourseType('collectif', 1)">
                 <mat-card-content>
                   <p>{{'course_colective' | translate }}</p>
@@ -201,7 +201,7 @@
                     <mat-checkbox color="accent" [(ngModel)]="periodMultiple" formControlName="periodMultiple" (change)="periodMultiple = true; periodUnique =false">Varias fechas</mat-checkbox>
                   </div>
                   <div class="flex-auto">
-                    <mat-checkbox color="accent" [(ngModel)]="sameMonitor" formControlName="sameMonitor">Mismo profesor</mat-checkbox>
+                    <mat-checkbox color="accent" [(ngModel)]="sameMonitor" formControlName="sameMonitor" [checked]="externalData && externalData.onlyPrivate" [disabled]="externalData && externalData.onlyPrivate">Mismo profesor</mat-checkbox>
                   </div>
                 </div>
 
@@ -210,8 +210,8 @@
                     <mat-form-field class="flex-auto" style="width: 50%;">
                       <mat-label>{{'date' | translate}}</mat-label>
 
-                      <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" [matDatepickerFilter]="inUseDatesFilter"
-                          (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate">
+                      <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" [matDatepickerFilter]="inUseDatesFilter" [value]="externalData && externalData.date ? externalData.date: ''"
+                          (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate" [disabled]="externalData && externalData.onlyPrivate">
                         <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
                         <mat-datepicker #pickerDateFrom [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
 
@@ -228,7 +228,8 @@
 
                     <mat-form-field class="flex-auto" style="width: 50%;">
                       <mat-label>{{'hour' | translate}}</mat-label>
-                      <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)">
+                      <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
+                        [disabled]="externalData && externalData.onlyPrivate" [value]="externalData && externalData.hour ? externalData.hour: ''">
                         <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':')
                         ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min')"
                         [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
@@ -263,8 +264,10 @@
 
                     <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
                       <mat-label>{{'choose_monitor' | translate }}</mat-label>
-                      <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes))
-                      || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"/>
+                      <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur"
+                      [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes)) || externalData && externalData.onlyPrivate
+                      || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"
+                       [value]="externalData && externalData.monitorId ? externalData?.monitor?.first_name + ' ' + externalData?.monitor?.last_name : ''"/>
                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
                         <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="courseDate.monitor_id = monitor.id">
                           {{monitor.first_name}} {{monitor.last_name}}

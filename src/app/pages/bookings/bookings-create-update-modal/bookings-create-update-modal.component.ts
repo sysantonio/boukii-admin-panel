@@ -282,7 +282,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.form = this.fb.group({
       sportType: [1], // Posiblemente establezcas un valor predeterminado aquí
       sportForm: [null],
-      courseType: ['collectif'],
+      courseType: [this.externalData && this.externalData.onlyPrivate ? 'privee' : 'collectif'],
       sport: [null],
       observations: [null],
       observations_school: [null],
@@ -291,6 +291,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       periodMultiple: [false],
       sameMonitor: [false]
     });
+
+    if (this.externalData && this.externalData.onlyPrivate) {
+      this.courseTypeId = 2;
+      this.courseType = 'privee';
+    }
 
     this.getLanguages();
     this.getSports();
@@ -346,7 +351,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
             setTimeout(() => {
-              this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.client.id));
+              if (this.externalData && this.externalData.client) {
+
+                this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.client.id));
+              } else {
+                this.clientsForm.patchValue(this.clients[0]);
+              }
               this.loadingCalendar = false;
               this.loading = false;
             }, 800);
@@ -483,6 +493,20 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       if (item.is_flexible) {
         this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 9 ? this.transformTime(item.duration) : item.duration);
       }
+
+      if (this.externalData && this.externalData.onlyPrivate) {
+
+        this.selectedItem.course_dates.forEach(element => {
+          const dateLoop = moment(element.date).startOf('day').format('YYYY-MM-DD')
+          if (dateLoop === this.externalData.date) {
+
+            item.course_date_id = element.id;
+            item.date = element.date;
+          }
+        });
+
+
+      }
     }
   }
 
@@ -567,7 +591,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     let paxes = 0;
 
-    if (this.courseTypeId === 2 && this.checkAllFields()) {
+    if (this.courseTypeId === 2 && this.checkAllFields() && !this.externalData && !this.externalData.onlyPrivate) {
 
       this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});
       return;
@@ -581,10 +605,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     const checkAval = {bookingUsers: []};
 
-    if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
+    if (!this.externalData && !this.externalData.onlyPrivate) {
 
-      this.selectedItem.course_dates.forEach(element => {
-        checkAval.bookingUsers.push({
+
+      if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
+
+        this.selectedItem.course_dates.forEach(element => {
+          checkAval.bookingUsers.push({
           client_id: this.defaultsBookingUser.client_id,
           hour_start: element.hour_start.replace(': 00'),
           hour_end: element.hour_end.replace(': 00'),
@@ -620,6 +647,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         })
       });
     }
+  }
 
     this.crudService.post('/admin/bookings/checkbooking', checkAval)
       .subscribe((response) => {
@@ -750,8 +778,14 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           });
         } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
           const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
+          let monitorId = null;
+            if (this.externalData && this.externalData.onlyPrivate) {
+              monitorId = this.externalData.monitorId;
+            }
+
           this.courseDates.forEach(item => {
             const price = data.price_total + (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[item.paxes]));
+
             data.price_total = data.price_total + price;
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
@@ -759,8 +793,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 client_id: item.client_id,
                 course_id: item.course_id,
                 course_date_id: item.course_date_id,
-                monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
-                hour_start: item.hour_start,
+                monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : this.externalData && this.externalData.onlyPrivate ? monitorId : item.monitor_id,
+                hour_start: this.externalData && this.externalData.onlyPrivate ? this.externalData.hour : item.hour_start,
                 hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
                 price: parseFloat(price),
                 currency: item.currency,
@@ -770,6 +804,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             });
           });
         } else if (this.courseTypeId === 2 && !this.selectedItem.is_flexible) {
+          let monitorId = null;
+          if (this.externalData && this.externalData.onlyPrivate) {
+            monitorId = this.externalData.monitorId;
+          }
+
           this.courseDates.forEach(item => {
             data.courseDates.push({
               school_id: this.user.schools[0].id,
@@ -777,8 +816,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               client_id: item.client_id,
               course_id: item.course_id,
               course_date_id: item.course_date_id,
-              monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
-              hour_start: item.hour_start,
+              monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : this.externalData && this.externalData.onlyPrivate ? monitorId : item.monitor_id,
+              hour_start: this.externalData && this.externalData.onlyPrivate ? this.externalData.hour : item.hour_start,
               hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
               price: parseFloat(item.price),
               currency: item.currency,

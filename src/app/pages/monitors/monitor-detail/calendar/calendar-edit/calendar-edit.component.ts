@@ -261,6 +261,13 @@ export class CalendarEditComponent implements OnInit {
       height: '1200px',
       maxWidth: '90vw',
       panelClass: 'full-screen-dialog',
+      data: {
+        onlyPrivate: true,
+        monitorId: this.event.monitor_id,
+        monitor: this.event.monitor,
+        hour: this.event.hour_start,
+        date: moment(this.event.date_param, 'DD-MM-YYYY').format('YYYY-MM-DD')
+      }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

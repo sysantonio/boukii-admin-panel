@@ -1165,13 +1165,14 @@ export class TimelineComponent {
         event,
         monitor_id: dateInfo.monitor_id,
         date_param: dateInfo.date_format,
-        hour_start: dateInfo.hour
+        hour_start: dateInfo.hour,
+        monitor: this.allMonitorsTimeline.find((m) => m.id === monitor_id)
       }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        
+
         if (result.end_date && moment(result.end_date).isAfter(result.start_date)) {
           //RANGE OF DATES
           const dates = [];
@@ -1218,7 +1219,7 @@ export class TimelineComponent {
           }
           this.crudService.create('/monitor-nwds', data)
             .subscribe((data) => {
-  
+
               //this.getData();
               this.loadBookings(this.currentDate);
               this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
@@ -1235,7 +1236,7 @@ export class TimelineComponent {
             })
         }
 
-        
+
           //CHANGE
         /*let id = 1
         result.monitor_id = id;
@@ -1282,7 +1283,7 @@ export class TimelineComponent {
       dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
         if (userConfirmed) {
           this.createBlockGeneral();
-        } 
+        }
       });
   }
 
@@ -1314,12 +1315,12 @@ export class TimelineComponent {
               school_id: result.school_id,
               description: result.description
             };
-          
+
             return this.crudService.create('/monitor-nwds', data).toPromise();
           });
-          
+
           const failedMonitors = [];
-          
+
           Promise.allSettled(promises).then(results => {
             results.forEach((result, index) => {
               if (result.status === 'rejected') {
@@ -1327,7 +1328,7 @@ export class TimelineComponent {
                 failedMonitors.push(`${monitor.first_name} ${monitor.last_name}`);
               }
             });
-          
+
             this.loadBookings(this.currentDate);
             if (failedMonitors.length === 0) {
               this.snackbar.open(this.translateService.instant('all_events_created'), 'OK', { duration: 3000 });
@@ -1338,9 +1339,9 @@ export class TimelineComponent {
             console.error('Error in block general:', error);
             this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
           });
-        
 
-        
+
+
           //CHANGE
         /*let id = 1
         result.monitor_id = id;
