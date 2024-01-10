@@ -8,8 +8,8 @@
       </button>
     </vex-secondary-toolbar>
     <vex-page-layout-content class="-mt-6 fullwidth">
-
-        <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetail || showBlock}">
+      <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
+        <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetail || showBlock}" *ngIf="!loading">
             <div class="header-navigation">
                 <div class="header-navigation-flex">
                     <div class="date-navigation">

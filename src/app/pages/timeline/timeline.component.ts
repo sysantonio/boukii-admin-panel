@@ -33,6 +33,7 @@ export class TimelineComponent {
   monitorsForm:any[];
 
   loadingMonitors = true;
+  loading = true;
 
   tasksCalendarStyle: any[];
   filteredTasks: any[];
@@ -284,6 +285,8 @@ export class TimelineComponent {
       this.searchBookings(firstDate,lastDate);
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => task.date === dateStr);*/
     }
+
+    this.loading = false;
   }
 
   searchBookings(firstDate:string,lastDate:string){
