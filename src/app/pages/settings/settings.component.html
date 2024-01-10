@@ -7,6 +7,7 @@
     </div>
   </vex-page-layout-header>
 
+  <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
   <vex-page-layout-content class="container" style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
       <mat-tab-group>

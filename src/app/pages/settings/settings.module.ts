@@ -37,6 +37,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ExtraCreateUpdateModalModule } from './extra-create-update-modal/extra-create-update-modal.module';
 import { LevelGoalsModalModule } from './level-goals-modal/level-goals-modal.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [SettingsComponent],
   imports: [
@@ -51,6 +52,7 @@ import { TranslateModule } from '@ngx-translate/core';
     SecondaryToolbarModule,
     MatIconModule,
     ChartModule,
+    MatProgressSpinnerModule,
     WidgetQuickLineChartModule,
     WidgetQuickValueCenterModule,
     WidgetQuickValueStartModule,
