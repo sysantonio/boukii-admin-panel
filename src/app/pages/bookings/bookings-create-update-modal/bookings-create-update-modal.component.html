@@ -195,13 +195,13 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                   <div class="flex-auto">
-                    <mat-checkbox color="accent" [(ngModel)]="periodUnique" formControlName="periodUnique" (change)="periodMultiple = false; periodUnique =true; resetCourseDates()">Fecha única</mat-checkbox>
+                    <mat-checkbox color="accent" [(ngModel)]="periodUnique" formControlName="periodUnique" (change)="periodMultiple = false; periodUnique =true; resetCourseDates()">{{'bookings_page.same_date' | translate}}</mat-checkbox>
                   </div>
                   <div class="flex-auto" >
-                    <mat-checkbox color="accent" [(ngModel)]="periodMultiple" formControlName="periodMultiple" (change)="periodMultiple = true; periodUnique =false">Varias fechas</mat-checkbox>
+                    <mat-checkbox color="accent" [(ngModel)]="periodMultiple" formControlName="periodMultiple" (change)="periodMultiple = true; periodUnique =false">{{'bookings_page.multiple_date' | translate}}</mat-checkbox>
                   </div>
                   <div class="flex-auto">
-                    <mat-checkbox color="accent" [(ngModel)]="sameMonitor" formControlName="sameMonitor" [checked]="externalData && externalData.onlyPrivate" [disabled]="externalData && externalData.onlyPrivate">Mismo profesor</mat-checkbox>
+                    <mat-checkbox color="accent" [(ngModel)]="sameMonitor" formControlName="sameMonitor" [checked]="externalData && externalData.onlyPrivate" [disabled]="externalData && externalData.onlyPrivate">{{'bookings_page.same_monitor' | translate}}</mat-checkbox>
                   </div>
                 </div>
 
