@@ -79,6 +79,7 @@ export class TimelineComponent {
   showEditMonitor:boolean = false;
   editedMonitor:any;
   moveTask:boolean=false;
+  moving:boolean=false;
   taskMoved:any;
   showEditBlock:boolean = false;
 
@@ -917,6 +918,7 @@ export class TimelineComponent {
   }
 
   toggleDetailMove(task: any, event: any) {
+    this.moving = true;
     event.preventDefault();
     if (task.booking_id) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -931,22 +933,37 @@ export class TimelineComponent {
           this.taskMoved = task;
         } else {
         }
+        this.moving = false;
       });
     }
   }
 
-  moveMonitor(monitor_id:any,event: MouseEvent): void {
-    if (this.moveTask) {
+  checkMonitorSport(monitor) {
+    let ret = false;
+    if (this.taskMoved && monitor && monitor.id) {
+
+      monitor.sports.forEach(element => {
+        if (element.id === this.taskMoved.sport_id) {
+          ret = true;
+        }
+      });
+
+    }
+    return ret;
+  }
+
+  moveMonitor(monitor:any,event: MouseEvent): void {
+    if (this.moveTask && this.checkMonitorSport(monitor)) {
       event.stopPropagation();
 
-      if(this.taskMoved && this.taskMoved.monitor_id != monitor_id){
+      if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
         let data:any;
         let all_booking_users = [];
         this.taskMoved.all_clients.forEach((client:any) => {
           all_booking_users.push(client.id);
         });
         data = {
-          monitor_id: monitor_id,
+          monitor_id: monitor.id,
           booking_users: all_booking_users
         };
 
@@ -980,6 +997,8 @@ export class TimelineComponent {
         this.moveTask = false;
         this.taskMoved = null;
       }
+    } else {
+      this.snackbar.open('Este monitor no tiene los requisitos necesarios para impartir este curso, seleccione otro', 'OK', {duration: 3000});
     }
   }
 
