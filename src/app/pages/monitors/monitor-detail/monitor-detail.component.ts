@@ -252,6 +252,7 @@ export class MonitorDetailComponent {
           .subscribe((user)=> {
             this.defaultsUser = user.data;
 
+            this.getSchoolRel();
             this.getSchoolSportDegrees();
             this.getStations();
             this.getLanguages();
@@ -610,7 +611,7 @@ export class MonitorDetailComponent {
   }
 
   getSchoolRel() {
-    this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id+'&station_id='+this.defaults.active_station)
       .subscribe((data) => {
         this.monitorSchoolRel = data.data;
       })
@@ -951,7 +952,7 @@ export class MonitorDetailComponent {
               station_id: this.defaults.active_station,
               active_school: this.defaultsUser.active
             }
-            this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel.id)
+            this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel[0].id)
               .subscribe((a) => {
                 console.log(a)
               })
