@@ -998,7 +998,9 @@ export class TimelineComponent {
         this.taskMoved = null;
       }
     } else {
-      this.snackbar.open('Este monitor no tiene los requisitos necesarios para impartir este curso, seleccione otro', 'OK', {duration: 3000});
+      if (this.moveTask) {
+        this.snackbar.open('Este monitor no tiene los requisitos necesarios para impartir este curso, seleccione otro', 'OK', {duration: 3000});
+      }
     }
   }
 
