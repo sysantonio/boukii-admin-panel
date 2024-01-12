@@ -208,6 +208,7 @@ export class MonitorDetailComponent {
   startTimeDivision:string;
   endTimeDivision:string;
 
+  monitorSchoolRel:any;
   plannerTasks:any[] =[];
   vacationDays:any[];
   tasksCalendarStyle: any[];
@@ -608,6 +609,13 @@ export class MonitorDetailComponent {
       })
   }
 
+  getSchoolRel() {
+    this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        this.monitorSchoolRel = data.data;
+      })
+  }
+
   getMonitorSportsDegree() {
     this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+this.id)
       .subscribe((monitorDegree) => {
@@ -937,6 +945,16 @@ export class MonitorDetailComponent {
           .subscribe((monitor) => {
             this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
 
+            const schoolRel = {
+              monitor_id: monitor.data.id,
+              school_id: this.user.schools[0].id,
+              station_id: this.defaults.active_station,
+              active_school: this.defaultsUser.active
+            }
+            this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel.id)
+              .subscribe((a) => {
+                console.log(a)
+              })
             // revisar a partir de aqui
               this.sportsData.data.forEach(element => {
                 this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})

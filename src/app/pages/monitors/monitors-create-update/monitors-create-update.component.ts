@@ -480,6 +480,18 @@ export class MonitorsCreateUpdateComponent implements OnInit {
           .subscribe((monitor) => {
             this.snackbar.open(this.translateService.instant('snackbar.monitor.create'), 'OK', {duration: 3000});
 
+            const schoolRel = {
+              monitor_id: monitor.data.id,
+              school_id: this.user.schools[0].id,
+              station_id: this.defaults.active_station,
+              active_school: this.defaultsUser.active
+            }
+
+            this.crudService.create('/monitors-schools', schoolRel)
+              .subscribe((a) => {
+                console.log(a)
+              })
+
             this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
               .subscribe((monitorSchool) => {
                 this.sportsData.data.forEach(element => {
