@@ -20,7 +20,7 @@
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
         <div class="h-16 items-end">
-          <p @fadeInRight class="headline text-white" style="font-size: 12px;">{{getLanguage(defaults.language1_id)}} · {{getCountry(defaults.country)}} · {{calculateAge(defaults.birth_date)}}{{'years' | translate }}</p>
+          <p @fadeInRight class="headline text-white" style="font-size: 12px;">{{getLanguage(defaults.language1_id)}} · {{getCountry(defaults.country)}} · {{calculateAge(defaults.birth_date)}} {{'years' | translate }}</p>
 
           <h1 @fadeInRight class="headline text-white">{{defaults.first_name}} {{defaults.last_name}}</h1>
 
@@ -599,7 +599,7 @@
                                       <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                           {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
+                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
                                       · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                                   </span>
                                   <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
@@ -627,7 +627,7 @@
                               <ng-container *ngIf="defaults.language1_id">
                                   {{getLanguageById(defaults.language1_id)}} ·
                               </ng-container>
-                              {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}}{{'years' | translate }}
+                              {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}} {{'years' | translate }}
                               · {{defaults.phone}} · {{defaults.email}}
                           </span>
                       </div>
@@ -655,7 +655,7 @@
                                       <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                           {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
+                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
                                       · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                                   </span>
                               </div>
@@ -1305,7 +1305,7 @@
                                       <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                           {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
+                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
                                       · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                                   </span>
                                   <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
@@ -1333,7 +1333,7 @@
                               <ng-container *ngIf="defaults.language1_id">
                                   {{getLanguageById(defaults.language1_id)}} ·
                               </ng-container>
-                              {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}}{{'years' | translate }}
+                              {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}} {{'years' | translate }}
                               · {{defaults.phone}} · {{defaults.email}}
                           </span>
                       </div>
@@ -1361,7 +1361,7 @@
                                       <ng-container *ngIf="getClient(client.client_id)?.language3_id">
                                           {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
+                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
                                       · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
                                   </span>
                               </div>

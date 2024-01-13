@@ -488,7 +488,7 @@
               <div style="float: left; width: 70%;">
                 <p>{{getMonitorName(courseDate.monitor_id) || 'no monitor asigned'}}</p>
                 <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                  {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }}{{'years' | translate }}</i></p>
+                  {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} {{'years' | translate }}</i></p>
               </div>
 
             </div>

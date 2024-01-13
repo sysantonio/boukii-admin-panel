@@ -103,7 +103,7 @@
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="getMonitor(item.monitor_id)">
                   <p>{{getMonitor(item?.monitor_id)?.first_name}} {{getMonitor(item?.monitor_id)?.last_name}}</p>
-                  <p style="font-size:8px"><i>{{getLanguage(getMonitor(item?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(item?.monitor_id)?.country) }} · {{calculateAge(getMonitor(item?.monitor_id)?.birth_date)}}{{'years' | translate }}</i></p>
+                  <p style="font-size:8px"><i>{{getLanguage(getMonitor(item?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(item?.monitor_id)?.country) }} · {{calculateAge(getMonitor(item?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="!getMonitor(item?.monitor_id)">
                   <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
