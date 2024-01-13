@@ -919,6 +919,7 @@ export class TimelineComponent {
 
   toggleDetailMove(task: any, event: any) {
     this.moving = true;
+    this.taskDetail = task;
     event.preventDefault();
     if (task.booking_id) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -953,55 +954,77 @@ export class TimelineComponent {
   }
 
   moveMonitor(monitor:any,event: MouseEvent): void {
-    if (this.moveTask && this.checkMonitorSport(monitor)) {
-      event.stopPropagation();
 
-      if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
-        let data:any;
-        let all_booking_users = [];
-        this.taskMoved.all_clients.forEach((client:any) => {
-          all_booking_users.push(client.id);
-        });
-        data = {
-          monitor_id: monitor.id,
-          booking_users: all_booking_users
-        };
+    let ret = this.checkMonitorSport(monitor);
+    const clientIds = this.taskDetail.all_clients.map((client) => client.id);
 
-        //console.log(data);
+    const data = {
+      sportId: this.taskDetail.sport_id,
+      minimumDegreeId: this.taskDetail.degree_id || this.taskDetail.degree.id,
+      startTime: this.taskDetail.hour_start,
+      endTime: this.taskDetail.hour_end,
+      date: this.taskDetail.date,
+      clientIds: clientIds
+    };
 
-        this.crudService.post('/admin/planner/monitors/transfer', data)
-          .subscribe((data) => {
+    this.crudService.post('/admin/monitors/available', data)
+      .subscribe((response) => {
+        this.monitorsForm = response.data;
 
-            //this.getData();
+        ret = this.monitorsForm.find((m) => m.id === monitor.id);
+
+        if (this.moveTask && ret) {
+          event.stopPropagation();
+
+          if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
+            let data:any;
+            let all_booking_users = [];
+            this.taskMoved.all_clients.forEach((client:any) => {
+              all_booking_users.push(client.id);
+            });
+            data = {
+              monitor_id: monitor.id,
+              booking_users: all_booking_users
+            };
+
+            //console.log(data);
+
+            this.crudService.post('/admin/planner/monitors/transfer', data)
+              .subscribe((data) => {
+
+                //this.getData();
+                this.moveTask = false;
+                this.taskMoved = null;
+                this.hideDetail();
+                this.loadBookings(this.currentDate);
+                this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+              },
+              (error) => {
+                // Error handling code
+                this.moveTask = false;
+                this.taskMoved = null;
+                console.error('Error occurred:', error);
+                if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+                  this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+                }
+                else{
+                  this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
+                }
+              })
+
+          }
+          else{
             this.moveTask = false;
             this.taskMoved = null;
-            this.hideDetail();
-            this.loadBookings(this.currentDate);
-            this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
-          },
-          (error) => {
-            // Error handling code
-            this.moveTask = false;
-            this.taskMoved = null;
-            console.error('Error occurred:', error);
-            if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
-              this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
-            }
-            else{
-              this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
-            }
-          })
+          }
+        } else {
+          if (this.moveTask) {
+            this.snackbar.open('Este monitor no tiene los requisitos necesarios para impartir este curso, seleccione otro', 'OK', {duration: 3000});
+          }
+        }
+      })
 
-      }
-      else{
-        this.moveTask = false;
-        this.taskMoved = null;
-      }
-    } else {
-      if (this.moveTask) {
-        this.snackbar.open('Este monitor no tiene los requisitos necesarios para impartir este curso, seleccione otro', 'OK', {duration: 3000});
-      }
-    }
+
   }
 
   getDateFormatLong(date:string) {
@@ -1617,12 +1640,15 @@ export class TimelineComponent {
   checkAvailableMonitors() {
 
     this.loadingMonitors = true;
+
+    const clientIds = this.taskDetail.all_clients.map((client) => client.id);
     const data = {
       sportId: this.taskDetail.sport_id,
       minimumDegreeId: this.taskDetail.degree_id || this.taskDetail.degree.id,
       startTime: this.taskDetail.hour_start,
       endTime: this.taskDetail.hour_end,
-      date: this.taskDetail.date
+      date: this.taskDetail.date,
+      clientId: clientIds
     };
 
     this.crudService.post('/admin/monitors/available', data)

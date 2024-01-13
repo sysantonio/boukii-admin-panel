@@ -161,7 +161,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   timeControl = new FormControl();
   durationControl = new FormControl();
   personsControl = new FormControl();
-  clientsForm = new FormControl('');
+  clientsForm = new FormControl();
   subClientForm = new FormControl();
   sportForm = new FormControl();
   levelForm = new FormControl();
@@ -2221,7 +2221,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
         minimumDegreeId: this.levelForm.value.id,
         startTime: start,
         endTime: this.calculateHourEnd(start, duration),
-        date: moment(date).format('YYYY-MM-DD')
+        date: moment(date).format('YYYY-MM-DD'),
+        clientIds: [this.clientsForm.value.id]
       };
     } else{
       data = {
@@ -2229,7 +2230,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
         minimumDegreeId: this.levelForm.value.id,
         startTime: start,
         endTime: this.calculateHourEnd(start, this.selectedItem.duration),
-        date: moment(date).format('YYYY-MM-DD')
+        date: moment(date).format('YYYY-MM-DD'),
+        clientIds: [this.clientsForm.value.id]
       };
     }
 

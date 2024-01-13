@@ -507,8 +507,8 @@
                     <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
                         <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'new_monitor' | translate}}</mat-card-title>
                     </div>
-                    <mat-form-field class="flex-auto" style="width: 100%;">
-                        <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor"  *ngIf="!loadingMonitors">
+                    <mat-form-field class="flex-auto" style="width: 100%;" *ngIf="!loadingMonitors">
+                        <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor">
                             <mat-option *ngIf="taskDetail.monitor_id" [value]="nullMonitor">
                                 {{'no_monitor_choose' | translate}}
                             </mat-option>
