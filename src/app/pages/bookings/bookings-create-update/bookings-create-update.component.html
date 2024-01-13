@@ -120,7 +120,7 @@
             </mat-card>
           </div>
           <mat-form-field class="flex-auto" style="width: 48%">
-            <input type="text" placeholder="{{'choose_level' | translate}}" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel"  />
+            <input type="text" placeholder="{{'choose_level' | translate}}" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" (click)="clearInput()" />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
               <mat-option *ngFor="let level of filteredLevel | async" [value]="level" (onSelectionChange)="getCourses(level, monthAndYear)">
                 {{level.annotation}} - {{level.name}}

@@ -2212,6 +2212,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return this.reservableCourseDate.find((r) => r.id === item.id);
   }
 
+  clearInput() {
+    this.levelForm.setValue('');
+  }
+
   checkAvailableMonitors(start: any, duration: any, date) {
 
     let data: any;

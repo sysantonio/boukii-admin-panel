@@ -364,6 +364,10 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       })
   }
 
+  clearInput() {
+    this.levelForm.setValue('');
+  }
+
   generateArray(paxes: number) {
     this.persons = [];
     for (let i = 1; i <= paxes; i++) {
