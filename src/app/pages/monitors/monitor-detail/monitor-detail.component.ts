@@ -829,6 +829,7 @@ export class MonitorDetailComponent {
 
   authoriseAudlts(element) {
     element.authorisedLevels.forEach(auLevel => {
+      const authorize = this.monitorSportsDegree[0].allow_adults ? false : true;
       const data = {
         is_default: false,
         sport_id: element.sport_id,
@@ -836,7 +837,7 @@ export class MonitorDetailComponent {
         degree_id: auLevel.degree_id,
         monitor_id: this.id,
         salary_level: element.salary_level,
-        allow_adults: element.allowAdults
+        allow_adults: authorize
       }
 
       this.crudService.update('/monitor-sports-degrees', data, auLevel.monitor_sport_id)
