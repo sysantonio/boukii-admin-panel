@@ -38,7 +38,6 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    MatDialogModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
@@ -68,7 +67,6 @@ import { TranslateModule } from '@ngx-translate/core';
     MatProgressBarModule,
     ComponentsCustomModule,
     PageLayoutModule,
-    ComponentsCustomModule,
     ComponentsModule,
     TranslateModule
   ],

@@ -91,10 +91,9 @@
           <div class="card">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'personal_data' | translate }}
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:remove_red_eye" style="float:right;cursor:pointer" *ngIf="editInfo" (click)="showInfoEditEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" *ngIf="!editInfo" (click)="showInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"(click)="showInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
@@ -103,7 +102,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:format_align_justify"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -117,7 +116,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:format_align_justify"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -130,7 +129,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -144,7 +143,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:smartphone"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -158,7 +157,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:email"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -172,7 +171,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:translate"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -187,7 +186,7 @@
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'sports' | translate }}
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
               </h2>
@@ -231,7 +230,7 @@
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'address' | translate}}
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showAddressInfoEditEvent(true)"></mat-icon>
               </h2>
@@ -242,7 +241,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -256,7 +255,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:lock"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:location_on"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -269,7 +268,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -283,7 +282,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:business"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:language"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -298,7 +297,7 @@
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'other_info' | translate }}
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
                 <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
               </h2>
@@ -309,7 +308,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:verified_user"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -336,7 +335,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:notes"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -350,7 +349,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+                  <mat-icon class="icon-sm" svgIcon="mat:notes"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
