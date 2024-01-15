@@ -484,5 +484,7 @@
   "match_error": "Questo monitor non ha i requisiti necessari per insegnare questo corso",
   "timeline.assign_unmatch": "Vuoi comunque assegnare il corso a questo monitor?",
   "timeline.degree_match": "L'istruttore non ha il livello consigliato per questo corso",
-  "timeline.language_match": "Il monitor non è conforme alla lingua dei partecipanti al corso"
+  "timeline.language_match": "Il monitor non è conforme alla lingua dei partecipanti al corso",
+  "pax_limit_reached": "Il corso è a numero chiuso: "
+
 }

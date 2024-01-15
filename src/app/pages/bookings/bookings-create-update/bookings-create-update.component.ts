@@ -25,6 +25,7 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { AddClientSportModalComponent } from '../add-client-sport/add-client-sport.component';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'custom-header',
@@ -119,7 +120,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
   duration = '3 horas';
   dates = ['03/11/2023', '04/11/2023', '05/11/2023']; // Ejemplo de fechas
   durations = null; // Ejemplo de duraciones
-  persons = []; // Ejemplo de número de personas
+  persons:any = []; // Ejemplo de número de personas
+  personsToBook = []; // Ejemplo de número de personas
+  personsSelected = []; // Ejemplo de número de personas
 
   reservedDates = [
     new Date(),
@@ -639,20 +642,20 @@ export class BookingsCreateUpdateComponent implements OnInit {
       }
 
       let data: any = {};
-        data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
-        data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
-        data.price_cancellation_insurance = 0;
-        data.has_boukii_care = this.defaults.has_boukii_care;
-        data.price_boukii_care = 0;
-        data.payment_method_id = this.defaults.payment_method_id;
-        data.paid = this.defaults.paid;
-        data.currency = this.selectedItem.currency;
-        data.school_id = this.user.schools[0].id;
-        data.client_main_id = this.defaults.client_main_id.id;
-        data.notes = this.defaults.notes;
-        data.notes_school = this.defaults.notes_school;
-        data.paxes = paxes;
-        data.courseDates = [];
+      data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
+      data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
+      data.price_cancellation_insurance = 0;
+      data.has_boukii_care = this.defaults.has_boukii_care;
+      data.price_boukii_care = 0;
+      data.payment_method_id = this.defaults.payment_method_id;
+      data.paid = this.defaults.paid;
+      data.currency = this.selectedItem.currency;
+      data.school_id = this.user.schools[0].id;
+      data.client_main_id = this.defaults.client_main_id.id;
+      data.notes = this.defaults.notes;
+      data.notes_school = this.defaults.notes_school;
+      data.paxes = paxes;
+      data.courseDates = [];
 
         if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
           this.selectedItem.course_dates.forEach(item => {
@@ -743,8 +746,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
           });
         } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
           const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
+
           this.courseDates.forEach(item => {
-            const price = data.price_total + (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[item.paxes]));
+            const price = data.price_total + (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[this.personsSelected.length + 1]));
             data.price_total = data.price_total + price;
               data.courseDates.push({
                 school_id: this.user.schools[0].id,
@@ -757,10 +761,48 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
                 price: parseFloat(price),
                 currency: item.currency,
-                paxes: item.paxes,
+                paxes: this.personsSelected.length + 1,
                 course: this.selectedItem,
                 date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
+          });
+
+          this.personsSelected.forEach(person => {
+            let extraData: any = {};
+            extraData.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
+            extraData.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
+            extraData.price_cancellation_insurance = 0;
+            extraData.has_boukii_care = this.defaults.has_boukii_care;
+            extraData.price_boukii_care = 0;
+            extraData.payment_method_id = this.defaults.payment_method_id;
+            extraData.paid = this.defaults.paid;
+            extraData.currency = this.selectedItem.currency;
+            extraData.school_id = this.user.schools[0].id;
+            extraData.client_main_id = this.defaults.client_main_id.id;
+            extraData.notes = this.defaults.notes;
+            extraData.notes_school = this.defaults.notes_school;
+            extraData.paxes = paxes;
+            extraData.courseDates = [];
+
+            this.courseDates.forEach(item => {
+                extraData.courseDates.push({
+                  school_id: this.user.schools[0].id,
+                  booking_id: null,
+                  client_id: person.id,
+                  course_id: item.course_id,
+                  course_date_id: item.course_date_id,
+                  monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
+                  hour_start: item.hour_start,
+                  hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
+                  price: 0,
+                  currency: item.currency,
+                  paxes: this.personsSelected.length + 1,
+                  course: this.selectedItem,
+                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              });
+            });
+
+            this.bookingsToCreate.push(extraData);
           });
         } else if (this.courseTypeId === 2 && !this.selectedItem.is_flexible) {
           this.courseDates.forEach(item => {
@@ -781,7 +823,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           });
         }
 
-        this.bookingsToCreate.push(data);
+        this.bookingsToCreate.unshift(data);
         this.showDetail = this.bookingsToCreate.length - 1;
 
         this.selectedItem = null;
@@ -1351,24 +1393,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
       })
   }
 
-  calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
-      const today = new Date();
-      const birthDate = new Date(birthDateString);
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
-      }
-
-      return age;
-    } else {
-      return 0;
-    }
-
-  }
-
   emitDateChange(event: any, fromPrivate = false): void {
     this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(event.value)) ? this.minDate : event.value;
@@ -1546,7 +1570,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     } else {
 
       const client = this.clients.find((m) => m.id === id);
-      return client?.image;
+      if (client) {
+
+        return client?.image;
+      } else {
+        const utilizer = this.getUtilizer(id);
+        return utilizer?.image;
+
+      }
     }
   }
 
@@ -1557,12 +1588,98 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  getLanguage(id: any) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      if (client) {
+        const lang = this.languages.find((c) => c.id == client?.language1_id);
+        return lang ? lang.code.toUpperCase() : 'NDF';
+      } else {
+        const utilizer = this.getUtilizer(id);
+
+        const lang = this.languages.find((c) => c.id == utilizer?.language1_id);
+        return lang ? lang.code.toUpperCase() : 'NDF';
+      }
+    }
+  }
+
+  getCountry(id: any) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      if (client) {
+        const country = this.countries.find((c) => c.id == client?.country);
+        return country ? country.name : 'NDF';
+      } else {
+        const utilizer = this.getUtilizer(id);
+
+        const country = this.countries.find((c) => c.id == utilizer?.country);
+        return country ? country.name : 'NDF';
+      }
+    }
+  }
+
+  calculateAge(id) {
+
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      if (client) {
+        if(client?.birth_date && client?.birth_date !== null) {
+          const today = new Date();
+          const birthDate = new Date(client?.birth_date);
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+              age--;
+          }
+
+          return age;
+        } else {
+          return 0;
+        }
+      } else {
+        const utilizer = this.getUtilizer(id);
+
+        if(utilizer?.birth_date && utilizer?.birth_date !== null) {
+          const today = new Date();
+          const birthDate = new Date(utilizer.birth_date);
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+              age--;
+          }
+
+          return age;
+        } else {
+          return 0;
+        }
+      }
+    }
+
+
+  }
+
   getClientName(id: number) {
     if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
 
-      return client?.first_name + ' ' + client?.last_name;
+      if (client) {
+
+        return client?.first_name + ' ' + client?.last_name;
+      } else {
+        const utilizer = this.getUtilizer(id);
+        return utilizer?.first_name + ' ' + utilizer?.last_name;
+
+      }
+
     }
   }
 
@@ -1962,22 +2079,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
-  getLanguage(id: any) {
-    const lang = this.languages.find((c) => c.id == +id);
-    return lang ? lang.code.toUpperCase() : 'NDF';
-  }
-
   getLanguages() {
     this.crudService.list('/languages', 1, 1000)
       .subscribe((data) => {
         this.languages = data.data.reverse();
 
       })
-  }
-
-  getCountry(id: any) {
-    const country = this.countries.find((c) => c.id == id);
-    return country ? country.name : 'NDF';
   }
 
   calculateFinalPrice() {
@@ -2175,7 +2282,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
 
     this.persons = paxes;
+    this.personsToBook = [];
+    if (this.mainIdSelected) {
+      this.personsToBook = this.utilizers;
 
+    } else {
+      const data = this.utilizers.filter((u) => u.id !== this.clientsForm.value.id);
+      data.push(this.defaults.client_main_id);
+
+      this.personsToBook = data;
+    }
+  }
+
+  onSelectionChangePaxes(event: any, courseDate: any) {
+    const value = event.source.value;
+    const index = this.personsSelected.findIndex((p) => p.id === value.id);
+
+    if (this.personsSelected.length >= this.persons.length) {
+      this.snackbar.open(this.translateService.instant('pax_limit_reached') + this.personsSelected, 'OK', {duration: 3000});
+      return;
+    } else {
+      if (this.personsSelected.length === 0 || index === -1) {
+        this.personsSelected.push(value);
+      } else {
+        this.personsSelected.splice(index, 1);
+      }
+    }
+
+    // Ahora puedes hacer lo que necesites con las personas seleccionadas
+    courseDate.paxes = this.personsSelected.length;
+    this.checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);
   }
 
   extractValues(data: any): { key: string, value: string, interval: string }[] {

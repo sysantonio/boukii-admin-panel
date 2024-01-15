@@ -242,9 +242,9 @@
 
                   <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
                     <mat-label>{{'paxes' |translate}}</mat-label>
-                    <mat-select [disabled]="!courseDate.duration">
-                      <mat-option *ngFor="let person of persons" [value]="person" (onSelectionChange)="courseDate.paxes = person; checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date)">
-                        {{ person }}
+                    <mat-select [disabled]="!courseDate.duration" multiple>
+                      <mat-option *ngFor="let person of personsToBook" [value]="person" (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
+                        {{ person?.first_name }} {{ person?.last_name }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -614,12 +614,12 @@
               <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
               <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(defaults.client_main_id.language1_id) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} &ensp;{{'years' | translate}}
+                {{ getLanguage(item.courseDates[0].client_id) }} · {{ getCountry(item.courseDates[0].client_id) }} · {{calculateAge(item.courseDates[0].client_id) }} &ensp;{{'years' | translate}}
               </mat-card-subtitle>
             </mat-card-header>
 
             <mat-divider class="text-border"></mat-divider>
-            <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">Actividad</p>
+            <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'activity' | translate }}</p>
 
             <mat-card-header>
               <div mat-card-avatar [style.background-image]="'url(' + (item.courseDates[0].course?.course_type === 1 ? collectifIcon : privateIcon) + ')'" style="border-radius: 5px"></div>

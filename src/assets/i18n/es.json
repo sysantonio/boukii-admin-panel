@@ -488,5 +488,6 @@
   "match_error": "Este monitor no tiene los requisitos necesarios para impartir este curso",
   "timeline.assign_unmatch": "¿Quiere asignar el curso a este monitor de todas formas?",
   "timeline.degree_match": "El monitor no tiene el nivel recomendado para este curso",
-  "timeline.language_match": "El monitor no cumple con el idioma de los participantes del curso"
+  "timeline.language_match": "El monitor no cumple con el idioma de los participantes del curso",
+  "pax_limit_reached": "Este curso tiene un número limitado de personas: "
 }

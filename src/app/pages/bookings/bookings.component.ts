@@ -171,7 +171,7 @@ export class BookingsComponent {
   }
 
   getSportName(id) {
-    return this.sports.find((s) => s.id = id).name
+    return this.sports.find((s) => s.id === id).name
   }
 
   getClients() {
