@@ -6,7 +6,7 @@
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;padding: 2%">
     <div @fadeInUp class="card flex-auto">
       <mat-tab-group>
-        <mat-tab label="Cours">
+        <mat-tab label="{{'course' | translate }}">
           <mat-card style="padding: 3% 5% 0 5%;">
             <mat-card-header style="display:block">
               <div style="float: left; width: 100%;">
@@ -186,7 +186,7 @@
                                 <div style="width:100%;text-align: center;border-radius:10px;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
                                   {{groupLevel.annotation}} - {{groupLevel.name}}
                                 </div>
-                                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active && groupLevel.visible">
+                                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active">
                                   <mat-select placeholder="Nivel minimo del profesor" (selectionChange)="setLevelTeacher($event, groupLevel)" [value]="calculateMonitorLevel(groupLevel)">
                                     <mat-option *ngFor="let item of levels" [value]="item">
                                       {{ item.league }} - {{ item.name }}
@@ -194,7 +194,7 @@
                                   </mat-select>
                                 </mat-form-field>
                               </div>
-                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
                                   {{'groups' | translate}} {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
                                 </div>
@@ -203,7 +203,7 @@
                                 </div>
                               </div>
 
-                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
                                   {{'age' | translate}}
                                 </div>
@@ -233,7 +233,7 @@
                                   </mat-form-field>
                                 </form>
                               </div>
-                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
                                   Duracion<br>
                                   {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
@@ -243,7 +243,7 @@
                                     [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
                                 </mat-form-field>
                               </div>
-                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active && groupLevel.visible">
+                              <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                                 <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
                                   {{'students' | translate}} <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
