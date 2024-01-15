@@ -480,5 +480,10 @@
   "confirm_move": "Verschiebung bestätigen",
   "create_general_blockage": "Sind Sie sicher, dass Sie eine Blockierung für ALLE Monitore erstellen möchten?",
   "general_blockage": "Allgemeine Blockierung",
-  "no_monitor_choose": "Kein Monitor"
+  "no_monitor_choose": "Kein Monitor",
+  "match_error_sport": "Dieser Monitor kann keine Kurse zu Folgendem unterrichten: ",
+  "match_error": "Dieser Monitor verfügt nicht über die notwendigen Voraussetzungen, um diesen Kurs zu unterrichten",
+  "timeline.assign_unmatch": "Möchten Sie den Kurs trotzdem diesem Monitor zuweisen?",
+  "timeline.degree_match": "Der Dozent verfügt nicht über das empfohlene Niveau für diesen Kurs",
+  "timeline.language_match": "Der Monitor entspricht nicht der Sprache der Kursteilnehmer"
 }

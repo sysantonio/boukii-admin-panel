@@ -9,7 +9,7 @@
 }
 .header-navigation {
     position: sticky;top: 118px;width: 100%;z-index: 1000;background: var(--background-base);padding: 16px;margin-top: 24px;font-size:15px;
-}  
+}
 .header-navigation-flex {
     width:100%;display: flex;justify-content: space-between;align-items: center;
 }
@@ -21,20 +21,20 @@
 }
 .date-navigation button {
     font-size:20px;margin-right:12px;
-}  
+}
 .view-selection {
     text-align: right;
-}  
+}
 .view-option {
     margin-left: 16px;cursor: pointer;
-}  
+}
 .view-option.selected {
     text-decoration: underline;color:rgb(233, 30, 99);
-}  
+}
 
 .schedule-container {
     display: flex;
-}  
+}
 .monitors-column {
     flex-shrink: 0;width: 270px;display: flex;flex-direction: column;padding-top:40px;
 }
@@ -88,7 +88,7 @@
 }
 .hours-row {
     display: flex;
-}  
+}
 .hour {
     min-width: 150px;width: 150px;height: 40px;display: flex;align-items: center;justify-content:flex-start;
 }
@@ -100,7 +100,7 @@
 }
 .grid-row {
     display: flex;width: fit-content;
-}  
+}
 .grid-cell {
     border-left: 1px solid #bbb;border-top: 1px solid #bbb;min-width: 150px;width: 150px;height: 100px;position:relative;
 }
@@ -112,7 +112,7 @@
 }
 .grid-row:last-child .grid-cell {
     border-bottom: none;
-}  
+}
 .grid-cell:last-child {
     border-right: none;
 }
@@ -259,4 +259,8 @@
 }
 .filter-container-column span {
     margin-bottom:8px;
+}
+
+.bg-linear-no-match {
+  background: repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 0) 40px, #E5E5E5 40px, #e5e5e5 60px );
 }

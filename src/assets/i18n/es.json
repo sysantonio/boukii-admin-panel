@@ -483,5 +483,10 @@
   "confirm_move": "Confirmar movimiento",
   "create_general_blockage": "¿Estás seguro de que deseas crear un bloqueo para TODOS los monitores?",
   "general_blockage": "Bloqueo general",
-  "no_monitor_choose": "Sin monitor"
+  "no_monitor_choose": "Sin monitor",
+  "match_error_sport": "Este monitor no puede impartir cursos de: ",
+  "match_error": "Este monitor no tiene los requisitos necesarios para impartir este curso",
+  "timeline.assign_unmatch": "¿Quiere asignar el curso a este monitor de todas formas?",
+  "timeline.degree_match": "El monitor no tiene el nivel recomendado para este curso",
+  "timeline.language_match": "El monitor no cumple con el idioma de los participantes del curso"
 }

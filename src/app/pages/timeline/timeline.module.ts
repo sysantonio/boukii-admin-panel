@@ -32,6 +32,7 @@ import { BookingDetailModalModule } from '../bookings/booking-detail-modal/booki
 import { CourseUserTransferTimelineModalModule } from './course-user-transfer-timeline/course-user-transfer-timeline.module';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-unmatch-monitor.module';
 
 @NgModule({
   declarations: [TimelineComponent],
@@ -68,7 +69,8 @@ import { TranslateModule } from '@ngx-translate/core';
     BookingDetailModalModule,
     CourseUserTransferTimelineModalModule,
     TranslateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    ConfirmUnmatchMonitorModule
   ]
 })
 export class TimelineModule {

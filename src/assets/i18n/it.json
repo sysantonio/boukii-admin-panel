@@ -479,5 +479,10 @@
   "confirm_move": "Conferma spostamento",
   "create_general_blockage": "Sei sicuro di voler creare un blocco per TUTTI i monitor?",
   "general_blockage": "Blocco generale",
-  "no_monitor_choose": "Nessun monitor"
+  "no_monitor_choose": "Nessun monitor",
+  "match_error_sport": "Questo monitor non può insegnare corsi su: ",
+  "match_error": "Questo monitor non ha i requisiti necessari per insegnare questo corso",
+  "timeline.assign_unmatch": "Vuoi comunque assegnare il corso a questo monitor?",
+  "timeline.degree_match": "L'istruttore non ha il livello consigliato per questo corso",
+  "timeline.language_match": "Il monitor non è conforme alla lingua dei partecipanti al corso"
 }
