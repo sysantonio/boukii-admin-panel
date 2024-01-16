@@ -623,10 +623,10 @@
                 <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI)">
                   <mat-icon svgIcon="mat:delete"></mat-icon>
                 </button>
-                <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
-                <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
+                <div mat-card-avatar [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"></div>
+                <mat-card-subtitle>{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle>
                 <mat-card-subtitle>
-                  {{ getLanguage(item.courseDates[0].client_id) }} · {{ getCountry(item.courseDates[0].client_id) }} · {{calculateAge(item.courseDates[0].client_id) }} &ensp;{{'years' | translate}}
+                  {{ getLanguageUtilizer(item.courseDates[0].client_id) }} · {{ getCountryUtilizer(item.courseDates[0].client_id) }} · {{calculateAgeUtilizer(item.courseDates[0].client_id) }} &ensp;{{'years' | translate}}
                 </mat-card-subtitle>
               </mat-card-header>
 

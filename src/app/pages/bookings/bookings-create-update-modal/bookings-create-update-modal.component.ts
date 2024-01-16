@@ -1427,6 +1427,24 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       })
   }
 
+  calculateAge(birthDateString) {
+    if(birthDateString && birthDateString !== null) {
+      const today = new Date();
+      const birthDate = new Date(birthDateString);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+      }
+
+      return age;
+    } else {
+      return 0;
+    }
+
+  }
+
   emitDateChange(event: any, fromPrivate = false): void {
     this.selectedItem = null;
     this.monthAndYear = moment(this.minDate).isAfter(moment(event.value)) ? this.minDate : event.value;
@@ -1604,6 +1622,45 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     } else {
 
       const client = this.clients.find((m) => m.id === id);
+      return client?.image;
+    }
+  }
+
+  getUtilizer(id: any) {
+    if (id!==null) {
+
+      return this.utilizers.find((u) => u.id === id);
+    }
+  }
+
+  getClientName(id: number) {
+    if (id && id !== null) {
+
+      const client = this.clients.find((m) => m.id === id);
+
+      return client?.first_name + ' ' + client?.last_name;
+    }
+  }
+
+
+  getCourse(id: number) {
+
+    if (id && id !== null) {
+      const course = this.courses.find((m) => m.id === id);
+
+      return course;
+    }
+
+  }
+
+
+  getClientAvatarUtilizer(id: number) {
+
+    if (id === null) {
+      return this.userAvatar;
+    } else {
+
+      const client = this.clients.find((m) => m.id === id);
       if (client) {
 
         return client?.image;
@@ -1615,14 +1672,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     }
   }
 
-  getUtilizer(id: any) {
-    if (id!==null) {
-
-      return this.utilizers.find((u) => u.id === id);
-    }
-  }
-
-  getLanguage(id: any) {
+  getLanguageUtilizer(id: any) {
     if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
@@ -1639,7 +1689,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     }
   }
 
-  getCountry(id: any) {
+  getCountryUtilizer(id: any) {
     if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
@@ -1656,7 +1706,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     }
   }
 
-  calculateAge(id) {
+  calculateAgeUtilizer(id) {
 
     if (id && id !== null) {
 
@@ -1682,7 +1732,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
         if(utilizer?.birth_date && utilizer?.birth_date !== null) {
           const today = new Date();
-          const birthDate = new Date(utilizer?.birth_date);
+          const birthDate = new Date(utilizer.birth_date);
           let age = today.getFullYear() - birthDate.getFullYear();
           const m = today.getMonth() - birthDate.getMonth();
 
@@ -1700,7 +1750,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   }
 
-  getClientName(id: number) {
+  getClientNameUtilizer(id: number) {
     if (id && id !== null) {
 
       const client = this.clients.find((m) => m.id === id);
@@ -1715,17 +1765,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       }
 
     }
-  }
-
-
-  getCourse(id: number) {
-
-    if (id && id !== null) {
-      const course = this.courses.find((m) => m.id === id);
-
-      return course;
-    }
-
   }
 
   compareCourseDates() {
@@ -2113,12 +2152,22 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     }
   }
 
+  getLanguage(id: any) {
+    const lang = this.languages.find((c) => c.id == +id);
+    return lang ? lang.code.toUpperCase() : 'NDF';
+  }
+
   getLanguages() {
     this.crudService.list('/languages', 1, 1000)
       .subscribe((data) => {
         this.languages = data.data.reverse();
 
       })
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id == id);
+    return country ? country.name : 'NDF';
   }
 
   calculateFinalPrice() {

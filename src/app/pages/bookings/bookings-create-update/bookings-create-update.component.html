@@ -420,6 +420,7 @@
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p>{{ getLanguage(getClientLang(defaults.client_main_id.id)) }} · {{ getCountry(getClientProvince(defaults.client_main_id.id)) }} · {{calculateAge(defaults.client_main_id.birth_date) }}&ensp;{{'years' | translate}}</p>
               <p><strong>{{ getClientName(defaults.client_main_id.id)}}</strong></p>
+
               <div>
                 <mat-icon svgIcon="mat:chat"></mat-icon>
                 <mat-icon svgIcon="mat:mail_outline"></mat-icon>
@@ -611,10 +612,10 @@
               <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI)">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
-              <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(item.courseDates[0].client_id) + ')'"></div>
-              <mat-card-subtitle>{{getClientName(item.courseDates[0].client_id)}}</mat-card-subtitle>
+              <div mat-card-avatar [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"></div>
+              <mat-card-subtitle>{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
-                {{ getLanguage(item.courseDates[0].client_id) }} · {{ getCountry(item.courseDates[0].client_id) }} · {{calculateAge(item.courseDates[0].client_id) }} &ensp;{{'years' | translate}}
+                {{ getLanguageUtilizer(item.courseDates[0].client_id) }} · {{ getCountryUtilizer(item.courseDates[0].client_id) }} · {{calculateAgeUtilizer(item.courseDates[0].client_id) }} &ensp;{{'years' | translate}}
               </mat-card-subtitle>
             </mat-card-header>
 
