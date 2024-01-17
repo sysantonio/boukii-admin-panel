@@ -35,10 +35,8 @@ export class ApiCrudService extends ApiService {
   list(model: string, numPage: number = 1, perPage: number = 10, order: string = 'desc', orderColumn: string = 'id',
        search: string = '', exclude: string = '', user: any = null, filter: string = ''): Observable < ApiResponse > {
 
-    const filterUser = user === null ? this.user.id : user;
 
-    const url = this.baseUrl + model + '?perPage=' + perPage + '&page=' + numPage +
-      '&user=' + filterUser + '&order=' + order + '&orderColumn=' + orderColumn + '&search=' +search +'&exclude=' + exclude + filter;
+    const url = this.baseUrl + model + '?perPage=' + perPage + '&page=' + numPage + '&order=' + order + '&orderColumn=' + orderColumn + '&search=' +search +'&exclude=' + exclude + filter;
 
     return this.http.get<ApiResponse>(url,
       { headers: this.getHeaders() });

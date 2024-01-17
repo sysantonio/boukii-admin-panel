@@ -16,6 +16,8 @@ import { SchoolService } from 'src/service/school.service';
 import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
+import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -60,7 +62,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   availableEndDays: string[] = [];
 
   separatedDates = false;
-  displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
+  displayedColumns: string[] = ['date', 'duration', 'hour', 'edit', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage', 'delete'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
   dataSource: any = new MatTableDataSource([]);
@@ -418,12 +420,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
             fromHour: [this.defaults.course_dates[0].hour_start.replace(': 00', ''), Validators.required],
             toHour: [this.defaults.course_dates[0].hour_end.replace(': 00', '') , Validators.required],
             participants: [this.defaults.max_participants, Validators.required],
-            fromDate: [this.toDate(this.defaults.date_start)],
-            toDate: [this.toDate(this.defaults.date_end)],
+            fromDate: [this.defaults.date_start],
+            toDate: [this.defaults.date_end],
             fromDateUnique: [null],
             toDateUnique: [null],
-            from: [this.toDate(this.defaults.date_start) ],
-            to: [this.toDate(this.defaults.date_end)],
+            from: [this.defaults.date_start],
+            to: [this.defaults.date_end],
             image: [null],
             periodeUnique: [this.defaults.unique],
             periodeMultiple: [!this.defaults.unique]
@@ -903,6 +905,49 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
   }
 
+  editDate(index: any, item: any) {
+    let blockedDays = this.myHolidayDates;
+    if (this.mode === 'update') {
+
+      this.dataSource.data.forEach(element => {
+        if (element.active || element.active === 1) {
+          blockedDays.push(moment(element.date).toDate())
+        }
+      });
+    }
+
+    const dialogRef = this.dialog.open(DateTimeDialogEditComponent, {
+      width: '300px',
+      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, selectedDate: item.date, selectedHour: item.hour.replace(' ', '').split('-')[0], selectedDuration: item.duration},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+          maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+          panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+          data: {message: this.translateService.instant('update_date_warning'), title: this.translateService.instant('update_date_warning_title')}
+        });
+
+        dialogRef.afterClosed().subscribe((data: any) => {
+          if (data) {
+
+            this.defaults.course_dates[index].date = result.date;
+            this.defaults.course_dates[index].hour_start = result.hour;
+            this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
+            this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
+            this.dataSource.data[index].hour = result.hour;
+            this.dataSource.data[index].duration = result.duration;
+            this.dateTable?.renderRows();
+          }
+        });
+
+      }
+    });
+
+  }
+
   openDialogReductions(): void {
     const dialogRef = this.dialog.open(ReductionDialogComponent, {
       width: '300px',
@@ -1216,7 +1261,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 }
               });
             });
-            this.selectedItem = this.daysDatesLevels[0].dateString;
+            this.selectedItem = this.daysDatesLevels[0]?.dateString;
           }
           this.groupedByColor[level.color].push(level);
         });

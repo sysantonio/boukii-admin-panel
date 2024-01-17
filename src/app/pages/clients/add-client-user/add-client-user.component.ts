@@ -27,9 +27,11 @@ export class AddClientUserModalComponent implements OnInit {
   clients = [];
   today: Date;
   minDate: Date;
+  user:any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar,
     private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>, private translateService: TranslateService) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.today = new Date();
     this.minDate = new Date(this.today);
@@ -37,7 +39,7 @@ export class AddClientUserModalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.crudService.list('/clients', 1, 10000, 'asc', 'first_name', '&school_id='+this.defaults.id)
+    this.crudService.list('/clients', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.clients = data.data;
         this.getLanguages()

@@ -1880,7 +1880,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

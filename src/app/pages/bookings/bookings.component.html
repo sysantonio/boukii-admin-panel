@@ -50,11 +50,15 @@
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p>{{getLanguage(getClient(detailData?.client_main_id)?.language1_id)}} · {{ getCountry(getClient(detailData?.client_main_id)?.country) }} · {{calculateAge(getClient(detailData?.client_main_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
-              <p><strong>{{getClient(detailData?.client_main_id)?.first_name}} {{getClient(detailData?.client_main_id)?.last_name}} (+3)</strong></p>
+              <p><strong>{{getClient(detailData?.client_main_id)?.first_name}} {{getClient(detailData?.client_main_id)?.last_name}} </strong></p>
               <div>
-                <mat-icon svgIcon="mat:chat"></mat-icon>
-                <mat-icon svgIcon="mat:mail_outline"></mat-icon>
-                <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+                <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
+                <a href="mailto:{{getClient(detailData?.client_main_id)?.email}}" style="cursor:pointer">
+                  <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+                </a>
+                <a href="tel:{{getClient(detailData?.client_main_id)?.phone}}">
+                  <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+                </a>
               </div>
             </div>
           </div>
@@ -67,7 +71,7 @@
             </div>
             <div style="float: left; width: 65%;">
               <p>{{getLanguage(getClient(item?.client_id)?.language1_id)}} · {{ getCountry(getClient(item?.client_id)?.country) }} · {{calculateAge(getClient(item?.client_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
-                <p>{{getClient(item?.client_id)?.first_name}} {{getClient(item?.client_id)?.last_name}} (+3)</p>
+                <p>{{getClient(item?.client_id)?.first_name}} {{getClient(item?.client_id)?.last_name}} </p>
             </div>
             <div style="float: left; width: 20%;">
               <p style="text-align: right;color:#5ade47" *ngIf="item?.status === 1 && detailData.paid">{{'payed' | translate}}</p>

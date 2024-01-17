@@ -176,6 +176,7 @@ export class ClientDetailComponent {
      private translateService: TranslateService) {
     this.today = new Date();
     this.minDate = new Date(this.today);
+    this.minDate.setFullYear(this.today.getFullYear() - 18);
 
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
@@ -199,6 +200,11 @@ export class ClientDetailComponent {
   changeClientData(id: any) {
     this.loading = true;
     this.id = id;
+    if (id === this.mainId) {
+      this.minDate.setFullYear(this.today.getFullYear() - 18);
+    } else {
+      this.minDate.setFullYear(this.today.getFullYear());
+    }
     this.getData(id, true);
   }
 
@@ -612,7 +618,7 @@ export class ClientDetailComponent {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -633,7 +639,7 @@ export class ClientDetailComponent {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
     });
 
 

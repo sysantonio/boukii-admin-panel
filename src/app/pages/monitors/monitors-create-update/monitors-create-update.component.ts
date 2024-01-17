@@ -130,7 +130,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDateChild = new Date(this.today);
-    this.minDate.setFullYear(this.today.getFullYear() - 10);
+    this.minDate.setFullYear(this.today.getFullYear() - 13);
     this.minDateChild.setFullYear(this.today.getFullYear() - 0);
   }
 

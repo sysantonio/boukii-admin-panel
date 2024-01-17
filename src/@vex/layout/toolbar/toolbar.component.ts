@@ -72,9 +72,18 @@ export class ToolbarComponent {
   }
 
   changeLang(flag: string, lang: string) {
+
     this.flag = flag;
-    this.translateService.setDefaultLang(lang);
-    this.translateService.currentLang = lang;
+
+    if (this.translateService.getLangs().indexOf(lang) !== -1) {
+
+      this.translateService.use(lang);
+      this.translateService.currentLang = lang;
+    } else {
+
+      this.translateService.setDefaultLang(lang);
+      this.translateService.currentLang = lang;
+    }
   }
 
   openMegaMenu(origin: ElementRef | HTMLElement): void {

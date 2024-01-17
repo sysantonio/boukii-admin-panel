@@ -228,6 +228,7 @@
   "courses.title": "Courses",
   "courses.levels_and_groups": "Levels / Groups",
   "courses.new": "New course",
+  "courses.update": "Course editing",
   "courses.coursename": "Course name",
   "courses.min_age": "Minimum age",
   "courses.max_age": "Maximum Age",
@@ -487,6 +488,9 @@
   "timeline.assign_unmatch": "Do you want to assign the course to this monitor anyway?",
   "timeline.degree_match": "The instructor does not have the recommended level for this course",
   "timeline.language_match": "The monitor does not comply with the language of the course participants",
-  "pax_limit_reached": "This course has a limited number of people: "
-
+  "pax_limit_reached": "This course has a limited number of people: ",
+  "delete_text": "Do you want to remove this item? This action will be permanetly",
+  "delete_title": "Delete",
+  "update_date_warning": "This action could affect one or more reservations. ",
+  "update_date_warning_title": "Course date modification"
 }

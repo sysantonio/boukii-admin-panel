@@ -258,8 +258,12 @@ export class AdminCreateUpdateComponent implements OnInit {
 
     this.crudService.create('/users', this.defaults)
       .subscribe((user) => {
-        this.snackbar.open(this.translateService.instant('snackbar.admin.create'), 'OK', {duration: 3000});
-        this.router.navigate(['/admins']);
+        this.crudService.create('/school-users', {user_id: user.data.id, school_id: this.user.schools[0].id})
+          .subscribe(() => {
+
+            this.snackbar.open(this.translateService.instant('snackbar.admin.create'), 'OK', {duration: 3000});
+            this.router.navigate(['/admins']);
+          })
       })
   }
 

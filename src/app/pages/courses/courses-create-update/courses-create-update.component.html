@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Courses">
   <vex-breadcrumbs
-    [crumbs]="['courses.title', 'courses.new']"
+    [crumbs]="['courses.title', (mode === 'update' ? 'courses.new' : 'courses.update')]"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -13,7 +13,7 @@
     <div @fadeInUp class="card flex-auto" style="width: 100%;">
       <div class="px-6 py-4 border-b flex items-center">
         <div style="float: left;width: 50%;">
-          <h2 class="title m-0">{{'courses.new' |translate }}</h2>
+          <h2 class="title m-0">{{(mode === 'update' ? 'courses.new' : 'courses.update') |translate }}</h2>
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
@@ -328,7 +328,7 @@
                 <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">{{'from' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" [matDatepickerFilter]="myHolidayFilter" formControlName="fromDate" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFrom" [matDatepickerFilter]="myHolidayFilter" formControlName="fromDate" [min]="mode !== 'update' ? minDate : ''" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
 
@@ -449,7 +449,7 @@
                 <label for="dateFromPrivate" *ngIf="defaults.is_flexible">{{'from' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="minDate" [max]="maxDate" [(ngModel)]="defaults.date_start">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="mode !== 'update' ? minDate : ''" [max]="maxDate" [(ngModel)]="defaults.date_start">
                   <mat-datepicker-toggle matSuffix [for]="pickerFromUnique"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFromUnique [startAt]="minDate"></mat-datepicker>
 
@@ -818,7 +818,7 @@
 
 
         <mat-step [stepControl]="courseInfoFormGroup">
-          <ng-template matStepLabel>Données générales</ng-template>
+          <ng-template matStepLabel>{{'general_data' | translate }}</ng-template>
 
           <div class="px-6 py-4 flex flex-col" [formGroup]="courseInfoFormGroup">
 
@@ -1084,6 +1084,13 @@
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let i = index">
                       <mat-icon svgIcon="mat:delete" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="removeteDate(i)"></mat-icon>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                      <mat-icon svgIcon="mat:edit" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="editDate(i, element)"></mat-icon>
                     </td>
                   </ng-container>
 

@@ -422,9 +422,13 @@
               <p><strong>{{ getClientName(defaults.client_main_id.id)}}</strong></p>
 
               <div>
-                <mat-icon svgIcon="mat:chat"></mat-icon>
-                <mat-icon svgIcon="mat:mail_outline"></mat-icon>
-                <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+                <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
+                <a href="mailto:{{defaults.email}}" style="cursor:pointer">
+                  <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+                </a>
+                <a href="tel:{{defaults.phone}}">
+                  <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+                </a>
               </div>
             </div>
           </div>

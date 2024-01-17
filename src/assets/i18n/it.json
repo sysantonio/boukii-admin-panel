@@ -230,6 +230,7 @@
   "courses.title": "corsi",
   "courses.levels_and_groups": "Livelli/Gruppi",
   "courses.new": "Nuovo corso",
+  "courses.update": "Modifica del corso",
   "courses.coursename": "Nome del corso",
   "courses.min_age": "Età minima",
   "courses.max_age": "Età massima",
@@ -487,6 +488,9 @@
   "timeline.assign_unmatch": "Vuoi comunque assegnare il corso a questo monitor?",
   "timeline.degree_match": "L'istruttore non ha il livello consigliato per questo corso",
   "timeline.language_match": "Il monitor non è conforme alla lingua dei partecipanti al corso",
-  "pax_limit_reached": "Il corso è a numero chiuso: "
-
+  "pax_limit_reached": "Il corso è a numero chiuso: ",
+  "delete_text": "Vuoi rimuovere questo elemento?",
+  "delete_title": "Eliminare",
+  "update_date_warning": "Questa azione potrebbe influenzare una o più prenotazioni. ",
+  "update_date_warning_title": "Modifica data corso"
 }

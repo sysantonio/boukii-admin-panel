@@ -229,6 +229,7 @@
   "courses.title": "Kurse",
   "courses.levels_and_groups": "Ebenen / Gruppen",
   "courses.new": "Neuer Kurs",
+  "courses.update": "Kursbearbeitung",
   "courses.coursename": "Kursname",
   "courses.min_age": "Mindestalter",
   "courses.max_age": "Höchstalter",
@@ -488,6 +489,9 @@
   "timeline.assign_unmatch": "Möchten Sie den Kurs trotzdem diesem Monitor zuweisen?",
   "timeline.degree_match": "Der Dozent verfügt nicht über das empfohlene Niveau für diesen Kurs",
   "timeline.language_match": "Der Monitor entspricht nicht der Sprache der Kursteilnehmer",
-  "pax_limit_reached": "Für diesen Kurs ist die Teilnehmerzahl begrenzt: "
-
+  "pax_limit_reached": "Für diesen Kurs ist die Teilnehmerzahl begrenzt: ",
+  "delete_text": "Möchten Sie diesen Artikel entfernen?",
+  "delete_title": "Löschen",
+  "update_date_warning": "Diese Aktion könnte sich auf eine oder mehrere Reservierungen auswirken. ",
+  "update_date_warning_title": "Änderung des Kurstermins"
 }

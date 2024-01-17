@@ -19,6 +19,7 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import moment from 'moment';
 import { ConfirmModalComponent } from 'src/app/pages/monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
@@ -136,7 +137,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   inactiveMonitor = false;
   allMonitors = true;
 
-  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService, private cdr: ChangeDetectorRef) {
+  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService, private cdr: ChangeDetectorRef, private translateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.schoolId = this.user.schools[0].id;
   }
@@ -293,15 +294,15 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     this.getData(event.pageIndex +1, event.pageSize);
   }
 
-ngAfterViewInit() {
-  this.dataSource = new MatTableDataSource();
-  this.dataSource.sort = this.sort;
+  ngAfterViewInit() {
+    this.dataSource = new MatTableDataSource();
+    this.dataSource.sort = this.sort;
 
-  // Llama a getData con la primera página. Asegúrate de que este valor coincida con cómo tu API espera la primera página.
-  this.getData(1, 10); // Si tu API espera que la primera página sea 1 en lugar de 0.
+    // Llama a getData con la primera página. Asegúrate de que este valor coincida con cómo tu API espera la primera página.
+    this.getData(1, 10); // Si tu API espera que la primera página sea 1 en lugar de 0.
 
-  // ... otros inicializadores
-}
+    // ... otros inicializadores
+  }
 
   create() {
     if (!this.createOnModal) {
@@ -363,7 +364,7 @@ ngAfterViewInit() {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -382,7 +383,7 @@ ngAfterViewInit() {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: 'Do you want to remove this item? This action will be permanetly', title: 'Delete monitor course'}
+      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

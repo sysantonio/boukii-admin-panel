@@ -108,8 +108,9 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
     private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>, private translateService: TranslateService) {
-    this.today = new Date();
+    this.today = new Date()
     this.minDate = new Date(this.today);
+    this.minDate.setFullYear(this.today.getFullYear() - 18);
   }
 
   ngOnInit(): void {

@@ -29,6 +29,7 @@ import { ReductionDialogComponent } from './reduction-dialog/reduction-dialog.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrivateDatesDialogComponent } from './private-dates-dialog/private-dates-dialog.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { DateTimeDialogEditComponent } from './date-time-dialog-edit/date-time-dialog-edit.component';
 
 @NgModule({
     imports: [
@@ -59,7 +60,7 @@ import { TranslateModule } from '@ngx-translate/core';
       MatInputModule,
       TranslateModule
     ],
-  declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent, PrivateDatesDialogComponent],
+  declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent, PrivateDatesDialogComponent, DateTimeDialogEditComponent],
   exports: [AioTableComponent]
 })
 

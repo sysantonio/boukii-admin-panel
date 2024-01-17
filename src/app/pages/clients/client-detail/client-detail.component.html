@@ -24,14 +24,18 @@
 
           <h1 @fadeInRight class="headline text-white">{{defaults.first_name}} {{defaults.last_name}}</h1>
 
-          <mat-icon svgIcon="mat:chat"></mat-icon>
-          <mat-icon svgIcon="mat:mail_outline"></mat-icon>
-          <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+          <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
+          <a href="mailto:{{defaults.email}}" style="cursor:pointer">
+            <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+          </a>
+          <a href="tel:{{defaults.phone}}">
+            <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+          </a>
         </div>
-
       </div>
     </div>
   </div>
+  <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
   <div class="mt-6 flex flex-col md:flex-row md:items-start" [formGroup]="formInfoAccount" *ngIf="!loading && !editing">
     <div style="margin-left:0; margin-right: 1.5rem" class="card max-w-unset md:max-w-xs w-full flex-none md:ltr:ml-6 md:rtl:mr-6 mt-6 md:mt-0">
@@ -64,7 +68,7 @@
             alt="Profile Picture"
             class="avatar ltr:mr-3 rtl:ml-3 flex-none"
             [ngStyle]="{
-              'border': +id === defaults.id && this.id !== mainId ? '#FF3085 1px solid' : 'none'
+              'border': +id === user.id && this.id !== mainId ? '#FF3085 1px solid' : 'none'
             }"
             />
           <div @fadeInRight class="flex-auto">
