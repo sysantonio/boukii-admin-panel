@@ -334,7 +334,10 @@
                                                 </div>
                                                 <div style="float: left; width: 75%;">
                                                   <p style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}} {{getClient(courseUser.client_id)?.last_name}}</p>
-                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id)?.language1_id)}} · {{ getCountry(getClient(courseUser.client_id)?.country) }} · {{calculateAge(getClient(courseUser.client_id)?.birth_date)}} {{'years' | translate }}</p>
+                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id)?.language1_id)}}
+                                                    · {{ getCountry(getClient(courseUser.client_id)?.country) }}
+                                                    · {{ calculateAge(getClient(courseUser.client_id)?.birth_date) }}
+                                                    {{'years' | translate }}</p>
                                                 </div>
                                               </div>
                                             </li>

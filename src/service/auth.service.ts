@@ -74,6 +74,7 @@ export class AuthService extends ApiService {
   async logout() {
     this.user = null;
     localStorage.removeItem('boukiiUser');
+    localStorage.removeItem('boukiiUserToken');
   }
 
   isLoggedIn() {

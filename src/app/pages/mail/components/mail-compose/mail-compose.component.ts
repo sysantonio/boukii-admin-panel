@@ -41,6 +41,11 @@ export class MailComposeComponent implements OnInit {
   bodyEs: any = '';
   bodyIt: any = '';
   bodyDe: any = '';
+  titleFr: any = '';
+  titleEn: any = '';
+  titleEs: any = '';
+  titleIt: any = '';
+  titleDe: any = '';
   selectedIndex = 0;
   generalSubjet: any = '';
   generalBody: any = '';
@@ -71,18 +76,23 @@ export class MailComposeComponent implements OnInit {
 
             this.subjectFr = mailFr?.subject;
             this.bodyFr = mailFr?.body;
+            this.titleFr = mailFr?.title;
 
             this.subjectEn = mailEn?.subject;
             this.bodyEn = mailEn?.body;
+            this.titleEn = mailEn?.title;
 
             this.subjectEs = mailEs?.subject;
             this.bodyEs = mailEs?.body;
+            this.titleEs = mailEs?.title;
 
             this.subjectDe = mailDe?.subject;
             this.bodyDe = mailDe?.body;
+            this.titleIt = mailDe?.title;
 
             this.subjectIt = mailIt?.subject;
             this.bodyIt = mailIt?.body;
+            this.titleDe = mailIt?.title;
 
             this.loading = false;
           })
@@ -159,6 +169,7 @@ export class MailComposeComponent implements OnInit {
         type: this.mailType,
         subject: this.subjectFr,
         body: this.bodyFr,
+        title: this.titleFr,
         school_id: this.school.id,
         lang:'fr'
       }],
@@ -166,6 +177,7 @@ export class MailComposeComponent implements OnInit {
         type: this.mailType,
         subject: this.subjectEn,
         body: this.bodyEn,
+        title: this.titleEn,
         school_id: this.school.id,
         lang:'en'
       }],
@@ -173,6 +185,7 @@ export class MailComposeComponent implements OnInit {
         type: this.mailType,
         subject: this.subjectEs,
         body: this.bodyEs,
+        title: this.titleEs,
         school_id: this.school.id,
         lang:'es'
       }],
@@ -180,6 +193,7 @@ export class MailComposeComponent implements OnInit {
         type: this.mailType,
         subject: this.subjectDe,
         body: this.bodyDe,
+        title: this.titleIt,
         school_id: this.school.id,
         lang:'de'
       }],
@@ -187,6 +201,7 @@ export class MailComposeComponent implements OnInit {
         type: this.mailType,
         subject: this.subjectIt,
         body: this.bodyIt,
+        title: this.titleDe,
         school_id: this.school.id,
         lang:'it'
       }]

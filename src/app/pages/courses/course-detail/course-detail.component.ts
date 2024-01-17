@@ -800,7 +800,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients/', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 

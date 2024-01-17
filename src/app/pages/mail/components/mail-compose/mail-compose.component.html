@@ -24,7 +24,7 @@
       </div>
 
       <div class="block w-full">
-        <mat-label>A quién se envía</mat-label><br>
+        <mat-label>{{'mails.who' | translate }}</mat-label><br>
         <mat-radio-group [(ngModel)]="emailSend">
           <mat-checkbox [(ngModel)]="sendClients">{{'clients' | translate}}</mat-checkbox>
           <mat-checkbox [(ngModel)]="sendMonitors">{{'settings.monitors' | translate}}</mat-checkbox>
@@ -100,6 +100,7 @@
       </div>
 
       <div class="vex-mail-compose-editor flex flex-col">
+        <p>Mesnaje</p>
         <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                       class="flex-auto flex flex-col" [(ngModel)]="generalBody"></quill-editor>
       </div>
@@ -186,15 +187,30 @@
           </mat-form-field>
 
           <div class="vex-mail-compose-editor flex flex-col">
+            <p>Título</p>
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="titleFr"></quill-editor>
+          </div>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <p>Mensaje</p>
             <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                           class="flex-auto flex flex-col" [(ngModel)]="bodyFr"></quill-editor>
           </div>
+
         </mat-tab>
         <mat-tab label="{{'english' | translate }}">
           <mat-form-field class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
           </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <p>Título</p>
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="titleEn"></quill-editor>
+          </div>
+
 
           <div class="vex-mail-compose-editor flex flex-col">
             <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
@@ -208,6 +224,13 @@
           </mat-form-field>
 
           <div class="vex-mail-compose-editor flex flex-col">
+            <p>Título</p>
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="titleEs"></quill-editor>
+          </div>
+
+
+          <div class="vex-mail-compose-editor flex flex-col">
             <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                           class="flex-auto flex flex-col" [(ngModel)]="bodyEs"></quill-editor>
           </div>
@@ -219,6 +242,13 @@
           </mat-form-field>
 
           <div class="vex-mail-compose-editor flex flex-col">
+            <p>Título</p>
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="titleIt"></quill-editor>
+          </div>
+
+
+          <div class="vex-mail-compose-editor flex flex-col">
             <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                           class="flex-auto flex flex-col" [(ngModel)]="bodyIt"></quill-editor>
           </div>
@@ -228,6 +258,13 @@
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
           </mat-form-field>
+
+          <div class="vex-mail-compose-editor flex flex-col">
+            <p>Título</p>
+            <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col" [(ngModel)]="titleDe"></quill-editor>
+          </div>
+
 
           <div class="vex-mail-compose-editor flex flex-col">
             <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"

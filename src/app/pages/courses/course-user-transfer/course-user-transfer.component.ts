@@ -67,12 +67,21 @@ export class CourseUserTransferComponent implements OnInit {
                   if (!exists) {
                     const course = this.course.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD'));
                     if (course) {
-                      const group = course.course_groups.find((g) => g.course_date_id === element.course_date_id);
+
+                      if (element.course_subgroup_id === this.defaults.subgroup.id) {
+                        this.currentStudents.push(element);
+                      }
+                      /*const group = course.course_groups.find((g) => g.course_date_id === element.course_date_id);
 
                       if (group) {
 
-                        this.currentStudents.push(element);
-                      }
+                        group.course_subgroups.forEach(sb => {
+                          if (sb.id === this.defaults.subgroup.id) {
+
+                            this.currentStudents.push(element);
+                          }
+                        });
+                      }*/
                     }
                   }
                 });
@@ -85,7 +94,7 @@ export class CourseUserTransferComponent implements OnInit {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 
