@@ -20,8 +20,8 @@ export class SchoolService {
       })
   }
 
-  getSchoolData(user = null) {
-    if (this.user) {
+  getSchoolData(user = null, forceParam = false) {
+    if (this.user && !forceParam) {
 
       return this.crudService.get('/schools/'+this.user.schools[0].id);
     } else {

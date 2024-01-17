@@ -43,13 +43,14 @@ export class AuthService extends ApiService {
     try {
 
       this.crudService.login('/admin/login', {email: email, password: password})
-        .subscribe((data: any) => {
+        .subscribe((user: any) => {
 
-          localStorage.setItem('boukiiUser', JSON.stringify(data.data.user));
-          localStorage.setItem('boukiiUserToken', JSON.stringify(data.data.token));
-          this.user = data.data.user;
+          localStorage.setItem('boukiiUser', JSON.stringify(user.data.user));
+          localStorage.setItem('boukiiUserToken', JSON.stringify(user.data.token));
+          this.user = user.data.user;
 
-          this.schoolService.getSchoolData(this.user)
+          setTimeout(() => {
+            this.schoolService.getSchoolData(this.user, true)
             .subscribe((data) => {
               defaultConfig.imgSrc = data.data.logo;
               this.configService.updateConfig({
@@ -62,6 +63,8 @@ export class AuthService extends ApiService {
               this.router.navigate(['/home']);
 
             })
+          }, 150);
+
 
         }, (error) => {
           this.snackbar.open(this.translateService.instant('snackbar.credential_error'), 'OK', {duration: 3000});
@@ -75,6 +78,13 @@ export class AuthService extends ApiService {
     this.user = null;
     localStorage.removeItem('boukiiUser');
     localStorage.removeItem('boukiiUserToken');
+    this.configService.updateConfig({
+      sidenav: {
+        imageUrl: '',
+        title: '',
+        showCollapsePin: false
+      }
+    });
   }
 
   isLoggedIn() {
