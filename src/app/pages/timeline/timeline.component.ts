@@ -1474,7 +1474,8 @@ export class TimelineComponent {
             if (failedMonitors.length === 0) {
               this.snackbar.open(this.translateService.instant('all_events_created'), 'OK', { duration: 3000 });
             } else {
-              this.snackbar.open(`${this.translateService.instant('some_monitors_overlap')} : ${failedMonitors.join(', ')}`, 'OK', { duration: 4000 });
+              //this.snackbar.open(`${this.translateService.instant('some_monitors_overlap')} : ${failedMonitors.join(', ')}`, 'OK', { duration: 4000 });
+              this.snackbar.open(this.translateService.instant('some_monitors_overlap'), 'OK', { duration: 4000 });
             }
           }).catch(error => {
             console.error('Error in block general:', error);

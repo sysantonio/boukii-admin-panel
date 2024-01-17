@@ -42,20 +42,22 @@ export class AppComponent {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.translateService.setDefaultLang(navigator.language.split('-')[0]);
     this.translateService.currentLang = navigator.language.split('-')[0];
-    if (this.user) {
-      this.schoolService.getSchoolData()
-      .subscribe((data) => {
-        defaultConfig.imgSrc = data.data.logo;
-        this.configService.updateConfig({
-          sidenav: {
-            imageUrl: data.data.logo,
-            title: data.data.name,
-            showCollapsePin: false
-          }
-        });
-      })
-    }
 
+    setTimeout(() => {
+      if (this.user) {
+        this.schoolService.getSchoolData()
+        .subscribe((data) => {
+          defaultConfig.imgSrc = data.data.logo;
+          this.configService.updateConfig({
+            sidenav: {
+              imageUrl: data.data.logo,
+              title: data.data.name,
+              showCollapsePin: false
+            }
+          });
+        })
+      }
+    }, 150);
 
     if (this.platform.BLINK) {
       this.renderer.addClass(this.document.body, 'is-blink');

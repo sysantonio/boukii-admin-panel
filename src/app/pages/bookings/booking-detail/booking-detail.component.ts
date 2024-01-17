@@ -262,35 +262,35 @@ export class BookingDetailComponent implements OnInit {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
         this.detailClient = this.clients[0];
-
         this.crudService.get('/bookings/'+this.id)
-      .subscribe((data) => {
-        this.booking = data.data;
+        .subscribe((data) => {
+          this.booking = data.data;
+          this.getClientUtilisateurs(this.booking.client_main_id);
 
-        this.crudService.list('/vouchers-logs', 1, 10000, 'asc', 'id', '&booking_id='+this.id)
-          .subscribe((vl) => {
-            if(vl.data.length > 0) {
-              this.bonusLog = vl.data;
-              vl.data.forEach(voucherLog => {
-                this.crudService.get('/vouchers/'+voucherLog.voucher_id)
-                  .subscribe((v) => {
-                    v.data.currentPay = parseFloat(voucherLog.amount);
-                    v.data.before = true;
+          this.crudService.list('/vouchers-logs', 1, 10000, 'asc', 'id', '&booking_id='+this.id)
+            .subscribe((vl) => {
+              if(vl.data.length > 0) {
+                this.bonusLog = vl.data;
+                vl.data.forEach(voucherLog => {
+                  this.crudService.get('/vouchers/'+voucherLog.voucher_id)
+                    .subscribe((v) => {
+                      v.data.currentPay = parseFloat(voucherLog.amount);
+                      v.data.before = true;
 
-                    if (parseFloat(voucherLog.amount) < 0) {
-                      const idx = this.bonus.findIndex((b) => b.bonus.id === voucherLog.voucher_id);
+                      if (parseFloat(voucherLog.amount) < 0) {
+                        const idx = this.bonus.findIndex((b) => b.bonus.id === voucherLog.voucher_id);
 
-                      this.bonus.splice(idx, 1);
-                      this.currentBonus.splice(idx, 1);
-                    } else {
+                        this.bonus.splice(idx, 1);
+                        this.currentBonus.splice(idx, 1);
+                      } else {
 
-                      this.bonus.push({bonus: v.data});
-                      this.currentBonus.push({bonus: v.data});
-                    }
-                  })
-              });
-            }
-          })
+                        this.bonus.push({bonus: v.data});
+                        this.currentBonus.push({bonus: v.data});
+                      }
+                    })
+                });
+              }
+            })
 
         this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((bookingUser) => {
@@ -317,23 +317,39 @@ export class BookingDetailComponent implements OnInit {
 
                 this.crudService.get('/admin/courses/' + courseId)
                   .subscribe((course) => {
-                    this.courses.push(course.data);
 
-                    const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
-                    data.sport_id = course.data?.sport_id;
-                    data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
-                      groupedByCourseId[courseId].forEach((element, idx) => {
+                    if (course.data.course_type === 2 && this.booking.old_id === null) {
 
-                        if (course.data.course_type === 1 && !course.data.is_flexible) {
-                          if (idx === 0) {
-                            data.price_total = parseFloat(element.price);
+
+                        groupedByCourseId[courseId].forEach((element, idx) => {
+                          const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
+                          data.sport_id = course.data?.sport_id;
+                          data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
+                          this.courses.push(course.data);
+                          data.courseDates.push(element);
+                          this.bookingsToCreate.unshift(data);
+
+                        });
+
+                    } else {
+                      this.courses.push(course.data);
+
+                      const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
+                      data.sport_id = course.data?.sport_id;
+                      data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
+                        groupedByCourseId[courseId].forEach((element, idx) => {
+
+                          if (course.data.course_type === 1 && !course.data.is_flexible) {
+                            if (idx === 0) {
+                              data.price_total = parseFloat(element.price);
+                            }
                           }
-                        }
-                        data.courseDates.push(element);
-                      });
+                          data.courseDates.push(element);
+                        });
 
-                      this.bookingsToCreate.push(data);
-                      console.log(this.bookingsToCreate);
+                        this.bookingsToCreate.push(data);
+                    }
+
                   })
               }
             }
@@ -822,6 +838,27 @@ export class BookingDetailComponent implements OnInit {
       })*/
   }
 
+  getClientUtilisateurs(id: any) {
+    let clientUsers = [];
+    this.crudService.list('/admin/clients/' + id +'/utilizers', 1, 10000, 'desc', 'id','&client_id='+id)
+      .subscribe((data) => {
+        clientUsers = data.data;
+        this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id','&main_id='+id)
+        .subscribe((data) => {
+          data.data.forEach(element => {
+            clientUsers.forEach(cl => {
+              if (element.client_id === cl.id) {
+                cl.utilizer_id = element.id;
+              }
+            });
+          });
+
+          this.clients = this.clients.concat(clientUsers);
+        })
+
+      })
+  }
+
   getSportsType() {
     return this.crudService.list('/sport-types', 1, 1000);/*
       .subscribe((data) => {
@@ -1113,8 +1150,6 @@ export class BookingDetailComponent implements OnInit {
 
       const client = this.clients.find((m) => m.id === id);
       const sportObject = client?.client_sports.find(obj => obj.sport_id === sport_id);
-
-      console.log(sportObject);
 
       return sportObject?.degree_id;
     }

@@ -23,7 +23,7 @@
           <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate}}</mat-card-title>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0;" [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"></div>
           <div style="float: left;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
-          <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>`
+          <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>
           <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>
           <mat-icon style="float: right;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/courses/detail/'+detailData.id)"></mat-icon>
         </div>

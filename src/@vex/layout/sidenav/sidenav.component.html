@@ -56,8 +56,8 @@
          matRippleColor="var(--sidenav-item-ripple-color)">
       <img alt="User Avatar" class="vex-sidenav-user__image flex-none" src="assets/img/avatar.png"/>
       <div class="vex-sidenav-user__content flex-auto" *ngIf="user !== null">
-        <div class="vex-sidenav-user__title">{{ user.username }}</div>
-        <div class="vex-sidenav-user__subtitle">{{ user.type }}</div>
+        <div class="vex-sidenav-user__title">{{ user.first_name }} {{ user.last_name }}</div>
+        <!--<div class="vex-sidenav-user__subtitle">{{ user.type }}</div>-->
       </div>
       <mat-icon class="vex-sidenav-user__dropdown-icon flex-none" svgIcon="mat:arrow_drop_down"></mat-icon>
     </div>
