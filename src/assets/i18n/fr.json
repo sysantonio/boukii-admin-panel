@@ -502,5 +502,7 @@
   "update_objectives": "Modifier les objectifs",
   "objectives": "Objectifs",
   "add_goal": "Objectif supplémentaire",
-  "card": "Fiche technique"
+  "card": "Fiche technique",
+  "op_rem_added": "Option de remboursement modifiée pour la réservation",
+  "b_care_added": "Boukii Care modifié en précommande"
 }

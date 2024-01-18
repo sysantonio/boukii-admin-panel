@@ -48,7 +48,7 @@
             </div>
 
             <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2">
-              <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1">
+              <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
               <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
@@ -59,7 +59,7 @@
             </mat-card-header>
 
             <mat-card-header *ngIf="(booking.old_id === null || booking.old_id !== null) && courses[bI].course_type === 1">
-              <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1">
+              <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
               <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
@@ -303,17 +303,17 @@
               </ng-container>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_cancellation_insurance">
-                <p style="float:left">{{'op_rem' | uppercase | translate}}</p>
+                <p style="float:left">{{'op_rem' |  translate | uppercase}}</p>
                 <p style="float:right">{{booking.price_cancellation_insurance}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_boukii_care">
                 <p style="float:left">Boukii Care</p>
-                <p style="float:right">{{booking.price_boukii_care}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{booking.price_boukii_care}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency  : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
-                <p style="float:left">{{'tva' | uppercase | translate}}</p>
+                <p style="float:left">{{'tva' |  translate | uppercase }}</p>
                 <p style="float:right">{{ (finalPrice * this.tva).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
@@ -323,7 +323,7 @@
               </span>
             </div>
 
-            <ng-container *ngIf="!booking.paid">
+            <ng-container *ngIf="!booking.paid && booking.status !== 2">
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">{{'payment_direct' | translate}}</button>

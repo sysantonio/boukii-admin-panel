@@ -507,5 +507,7 @@
   "update_objectives": "Modificar objetivos",
   "objectives": "Objetivos",
   "add_goal": "Ajouter goal",
-  "card": "Ficha técnica"
+  "card": "Ficha técnica",
+  "op_rem_added": "Opción de reemboloso modificada para la reserva",
+  "b_care_added": "Boukii Care modificado para la reserva"
 }

@@ -503,6 +503,7 @@
   "update_objectives": "Modificare gli obiettivi",
   "objectives": "Obiettivi",
   "add_goal": "Obiettivo somma",
-  "card": "Scheda dati"
-
+  "card": "Scheda dati",
+  "op_rem_added": "Opzione di rimborso modificata per la prenotazione",
+  "b_care_added": "Boukii Care modificato per il preordine"
 }

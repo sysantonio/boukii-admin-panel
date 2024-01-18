@@ -503,5 +503,7 @@
   "update_objectives": "Modify objectives",
   "objectives": "Goals",
   "add_goal": "Adder goal",
-  "card": "Data sheet"
+  "card": "Data sheet",
+  "op_rem_added": "Modified refund option for reservation",
+  "b_care_added": "Boukii Care modified for pre-order"
 }

@@ -1269,24 +1269,28 @@ export class BookingDetailModalComponent implements OnInit {
 
     if (this.courses.length > 0) {
       this.bookingsToCreate.forEach((b, idx) => {
-        if (this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
-          ret = ret + this.getPrivateFlexPrice(b.courseDates);
-          b.price_total = this.getPrivateFlexPrice(b.courseDates);
-        } else if (!this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
-          ret = ret + parseFloat(this.courses[idx]?.price)* b.courseDates.length;
-          b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
-        } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
-          ret = ret + b?.courseDates[0].price * b.courseDates.length;
-          b.price_total = b?.courseDates[0].price * b.courseDates.length;
-        } else {
-          ret = ret + b?.price_total
+        if (b.courseDates[0].status === 1) {
+          if (this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
+            ret = ret + this.getPrivateFlexPrice(b.courseDates);
+            b.price_total = this.getPrivateFlexPrice(b.courseDates);
+          } else if (!this.courses[idx].is_flexible && this.courses[idx].course_type === 2) {
+            ret = ret + parseFloat(this.courses[idx]?.price)* b.courseDates.length;
+            b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
+          } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
+            ret = ret + b?.courseDates[0].price * b.courseDates.length;
+            b.price_total = b?.courseDates[0].price * b.courseDates.length;
+          } else {
+            ret = ret + b?.price_total
+          }
         }
+
       });
 
       return ret;
     }
 
   }
+
 
   setForfait(event:any, forfait: any) {
 
@@ -1602,7 +1606,7 @@ export class BookingDetailModalComponent implements OnInit {
 
         setTimeout(() => {
           if (this.bookingsToCreate.length === 0){
-            /*this.crudService.update('/bookings', {status: 2}, this.id)
+            this.crudService.update('/bookings', {status: 2}, this.id)
             .subscribe(() => {
               this.getData();
 
@@ -1625,14 +1629,14 @@ export class BookingDetailModalComponent implements OnInit {
               this.bookingsToCreate.splice(index, 1);
               this.getData();
 
-            })*/
+            })
 
-            this.crudService.update('/bookings', {status: 3}, this.id)
+            /*this.crudService.update('/bookings', {status: 3}, this.id)
             .subscribe(() => {
               this.bookingsToCreate.splice(index, 1);
               this.getData();
 
-            })
+            })*/
           }
         }, 1000);
       }
@@ -1712,12 +1716,24 @@ export class BookingDetailModalComponent implements OnInit {
       this.opRem = this.getBasePrice() * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
       this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
+      this.booking.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
       this.calculateFinalPrice();
+      this.crudService.update('/bookings', {price_cancellation_insurance: this.booking.price_cancellation_insurance, has_cancellation_insurance: true}, this.id)
+        .subscribe(() => {
+          this.snackbar.open(this.translateService.instant('op_rem_added'), 'OK', {duration: 3000});
+        })
       return this.getBasePrice() *this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
       this.defaults.price_cancellation_insurance = 0;
+      this.booking.price_cancellation_insurance = 0;
+
+      this.crudService.update('/bookings', {price_cancellation_insurance: 0, has_cancellation_insurance: false}, this.id)
+        .subscribe(() => {
+          this.snackbar.open(this.translateService.instant('op_rem_added'), 'OK', {duration: 3000});
+
+        })
       this.calculateFinalPrice();
       return 0;
     }
@@ -1729,12 +1745,26 @@ export class BookingDetailModalComponent implements OnInit {
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
       this.defaults.price_boukii_care = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
+      this.booking.price_boukii_care = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
+
+      this.crudService.update('/bookings', {price_boukii_care: this.booking.price_boukii_care, has_boukii_care: true}, this.id)
+        .subscribe(() => {
+          this.snackbar.open(this.translateService.instant('b_care_added'), 'OK', {duration: 3000});
+
+        })
       return this.getBasePrice() + this.boukiiCarePrice;
     } else {
       this.boukiiCare = 0;
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
       this.defaults.price_boukii_care = 0;
+      this.booking.price_boukii_care = 0;
+
+      this.crudService.update('/bookings', {price_boukii_care: 0, has_boukii_care: false}, this.id)
+        .subscribe(() => {
+          this.snackbar.open(this.translateService.instant('b_care_added'), 'OK', {duration: 3000});
+
+        })
       return 0;
     }
   }
