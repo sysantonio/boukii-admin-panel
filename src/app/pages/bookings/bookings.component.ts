@@ -39,7 +39,7 @@ export class BookingsComponent {
     { label: 'client', property: 'client_main_id', type: 'client', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
-    { label: 'options', property: 'options', type: 'text', visible: true },
+    //{ label: 'options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
     { label: 'op_rem', property: 'has_cancellation_insurance', type: 'light', visible: true },
     { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },

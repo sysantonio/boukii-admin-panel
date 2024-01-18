@@ -1602,7 +1602,7 @@ export class BookingDetailModalComponent implements OnInit {
 
         setTimeout(() => {
           if (this.bookingsToCreate.length === 0){
-            this.crudService.update('/bookings', {status: 2}, this.id)
+            /*this.crudService.update('/bookings', {status: 2}, this.id)
             .subscribe(() => {
               this.getData();
 
@@ -1621,6 +1621,13 @@ export class BookingDetailModalComponent implements OnInit {
             }
 
             this.crudService.update('/bookings', {status: 3, price_total: price - this.bookingsToCreate[index].price_total}, this.id)
+            .subscribe(() => {
+              this.bookingsToCreate.splice(index, 1);
+              this.getData();
+
+            })*/
+
+            this.crudService.update('/bookings', {status: 3}, this.id)
             .subscribe(() => {
               this.bookingsToCreate.splice(index, 1);
               this.getData();
