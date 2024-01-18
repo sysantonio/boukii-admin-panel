@@ -1442,7 +1442,11 @@ export class BookingDetailModalComponent implements OnInit {
             }
           }
         }
-
+        this.bookingUsers.forEach(element => {
+          this.crudService.update('/booking-users', {status: 2}, element.id)
+          .subscribe(() => {
+          })
+        });
       }
     });
   }

@@ -1454,6 +1454,11 @@ export class BookingDetailComponent implements OnInit {
           }
         }
 
+        this.bookingUsers.forEach(element => {
+          this.crudService.update('/booking-users', {status: 2}, element.id)
+          .subscribe(() => {
+          })
+        });
       }
     });
   }
@@ -1625,7 +1630,7 @@ export class BookingDetailComponent implements OnInit {
 
             if(this.booking.has_boukii_care) {
               // coger valores de reglajes
-              price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
+              price = price + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
             }
 
             this.crudService.update('/bookings', {status: 3, price_total: price - this.bookingsToCreate[index].price_total}, this.id)
