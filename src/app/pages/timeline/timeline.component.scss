@@ -262,5 +262,5 @@
 }
 
 .bg-linear-no-match {
-  background: repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 0) 40px, #E5E5E5 40px, #e5e5e5 60px );
+  background: repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 0) 40px, #E5E5E5 40px, #e5e5e5 60px ); z-index: 0;
 }

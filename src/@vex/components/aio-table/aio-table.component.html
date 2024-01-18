@@ -210,7 +210,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'payment_method_id'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ getPaymentMethod(row[column.property]) }}</td>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ getPaymentMethod(row[column.property]) | translate }}</td>
           </ng-container>
         </ng-container>
 

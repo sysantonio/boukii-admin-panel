@@ -176,8 +176,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   filteredLevel: Observable<any[]>;
   filteredMonitors: Observable<any[]>;
 
-  courseType: any = 'collectif';
-  courseTypeId: any = 1;
+  courseType: any = '';
+  courseTypeId: any = null;
   opRem = 0;
   boukiiCare = 0;
   form: UntypedFormGroup;
@@ -285,7 +285,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.form = this.fb.group({
       sportType: [1], // Posiblemente establezcas un valor predeterminado aquí
       sportForm: [null],
-      courseType: ['collectif'],
+      courseType: [''],
       sport: [null],
       observations: [null],
       observations_school: [null],
@@ -338,13 +338,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
             this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
-            this.selectSport(this.sportDataList[0]);
-            this.getUtilzers(this.clients[0], true);
+            //this.selectSport(this.sportDataList[0]);
+            //this.getUtilzers(this.clients[0], true);
             //this.getDegrees(this.defaults.sport_id);
 
 
             setTimeout(() => {
-              this.clientsForm.patchValue(this.clients[0]);
+              //this.clientsForm.patchValue(this.clients[0]);
               this.loadingCalendar = false;
               this.loading = false;
             }, 800);
@@ -650,7 +650,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       data.has_boukii_care = this.defaults.has_boukii_care;
       data.price_boukii_care = 0;
       data.payment_method_id = this.defaults.payment_method_id;
-      data.paid = this.defaults.paid;
+      data.paid = this.defaults.payment_method_id === 1 ? true : this.defaults.paid;
       data.currency = this.selectedItem.currency;
       data.school_id = this.user.schools[0].id;
       data.client_main_id = this.defaults.client_main_id.id;

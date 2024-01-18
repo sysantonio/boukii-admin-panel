@@ -739,10 +739,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
       case 4:
         return 'AUTRE';
       case 5:
-        return 'NO PAID';
+        return 'payment_no_payment';
 
       default:
-        return 'NO PAID'
+        return 'payment_no_payment'
     }
   }
 

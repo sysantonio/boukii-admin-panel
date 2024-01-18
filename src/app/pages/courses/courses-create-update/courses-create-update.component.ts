@@ -933,7 +933,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         dialogRef.afterClosed().subscribe((data: any) => {
           if (data) {
 
-            this.defaults.course_dates[index].date = result.date;
+            this.defaults.course_dates[index].date = moment(result.date).format('YYYY-MM-DD');
             this.defaults.course_dates[index].hour_start = result.hour;
             this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
             this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
