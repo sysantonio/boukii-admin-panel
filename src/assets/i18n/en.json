@@ -431,6 +431,7 @@
   "snackbar.settings.blocks": "Locks have been updated successfully",
   "snackbar.settings.auths": "Locks have been updated successfully",
   "snackbar.settings.extras": "Correctly modified extras",
+  "snackbar.settings.taxes": "Rates changed correctly",
   "snackbar.settings.levels": "Successfully updated levels",
   "snackbar.credential_error": "Error with credentials",
   "table.filter.booking": "Reservation type",
@@ -498,5 +499,9 @@
   "today_bookings": "Reservations for today",
   "welcome": "Welcome",
   "available": "Available",
-  "available_places": "Places available"
+  "available_places": "Places available",
+  "update_objectives": "Modify objectives",
+  "objectives": "Goals",
+  "add_goal": "Adder goal",
+  "card": "Data sheet"
 }

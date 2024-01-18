@@ -90,7 +90,7 @@
     </div>
 
     <mat-tab-group style="width: 100%" [selectedIndex]="selectedTabPreviewIndex" (selectedTabChange)="onTabChange($event)">
-      <mat-tab label="About">
+      <mat-tab label="{{'card' | translate}}">
         <div class="flex-auto">
           <div class="card">
             <div class="px-6 py-4 border-b">
@@ -1044,7 +1044,7 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field class="flex-auto">
-                  <mat-label>{{'general' |translate}}</mat-label>
+                  <mat-label>{{'observation_general' |translate}}</mat-label>
                   <textarea formControlName="summary" matInput [(ngModel)]="defaultsObservations.general"></textarea>
                 </mat-form-field>
               </div>

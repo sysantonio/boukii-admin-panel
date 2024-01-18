@@ -432,6 +432,7 @@
   "snackbar.settings.blocks": "Sperren wurden erfolgreich aktualisiert",
   "snackbar.settings.auths": "Sperren wurden erfolgreich aktualisiert",
   "snackbar.settings.extras": "Korrekt geänderte Extras",
+  "snackbar.settings.taxes": "Tarife wurden korrekt geändert",
   "snackbar.settings.levels": "Level erfolgreich aktualisiert",
   "snackbar.credential_error": "Fehler bei den Anmeldeinformationen",
   "table.filter.booking": "Reservierungstyp",
@@ -499,5 +500,9 @@
   "today_bookings": "Reservierungen für heute",
   "welcome": "Willkommen",
   "available": "Verfügbar",
-  "available_places": "Verfügbare Plätze"
+  "available_places": "Verfügbare Plätze",
+  "update_objectives": "Ziele ändern",
+  "objectives": "Ziele",
+  "add_goal": "Adder-Ziel",
+  "card": "Datenblatt"
 }

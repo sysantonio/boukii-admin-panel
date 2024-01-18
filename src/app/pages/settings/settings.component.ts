@@ -445,7 +445,7 @@ export class SettingsComponent implements OnInit {
       contact_province: this.defaultsSchoolData.contact_province,
     }
 
-    this.crudService.update('/schools', 1, data)
+    this.crudService.update('/schools', data, this.school.id)
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open(this.translateSerivce.instant('snackbar.settings.save'), this.translateSerivce.instant('cancel'), {duration: 3000});
@@ -744,7 +744,7 @@ export class SettingsComponent implements OnInit {
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
 
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.extras'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.taxes'), 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
         this.getData();
 

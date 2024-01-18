@@ -513,7 +513,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
                 setTimeout(() => {
                   this.router.navigate(['/monitors']);
 
-                }, 3000);
+                }, 1200);
               })
           })
       })

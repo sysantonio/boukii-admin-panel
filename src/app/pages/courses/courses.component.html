@@ -22,7 +22,7 @@
         <div style="width: 100%;float:left;">
           <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate}}</mat-card-title>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0;" [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"></div>
-          <div style="float: left;background-color: #e6e6e6;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;"></div>
+          <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;" [ngStyle]="{'background-color': detailData.options ? '#CEE741' : '#e6e6e6'}"></div>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>
           <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>
           <mat-icon style="float: right;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/courses/detail/'+detailData.id)"></mat-icon>
@@ -127,10 +127,10 @@
                 </div>
                 <div *ngFor="let item of selectedGroup.course_subgroups; let i = index">
                   <div *ngIf="level.id === item.degree_id" style="float: left; width: 100%; padding: 5%;">
-                    <p style="float: left; width: 100%;">Group {{i+1}}</p>
+                    <p style="float: left; width: 100%;">{{'groups' | translate}} {{i+1}}</p>
                     <div style="float: left;width: 70%;">
-                      <img [src]="getMonitor(item.id)?.image ? getMonitor(item.id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0;">
-                      <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.id)?.first_name ? getMonitor(item.id)?.first_name + ' ' + getMonitor(item.id)?.last_name : 'No monitor asigned'}}</span>
+                      <img [src]="getMonitor(item.monitor_id)?.image ? getMonitor(item.monitor_id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0; border-radius: 100%">
+                      <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.monitor_id)?.first_name ? getMonitor(item.monitor_id)?.first_name + ' ' + getMonitor(item.monitor_id)?.last_name : 'No monitor asigned'}}</span>
                     </div>
                     <div style="float: left;width: 30%;margin: 6% 0 0 0;">
                       <strong style="text-align: right;float: right;">{{item.totalUsers}}/{{item.max_participants}} {{'users' | translate}}</strong>

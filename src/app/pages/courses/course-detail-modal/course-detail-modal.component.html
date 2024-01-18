@@ -29,17 +29,17 @@
                   <div style="float:right;width: 100%">
 
                     <div style="float: right;margin: 0 0 0 25px;">
-                      <mat-slide-toggle [checked]="true">
+                      <mat-slide-toggle [checked]="defaults?.options" [disabled]="true">
                         {{'options' | translate}}
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0;">
-                      <mat-slide-toggle [checked]="true">
+                      <mat-slide-toggle [checked]="defaults?.online" [disabled]="true">
                         Online
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0 25px 0 0;">
-                      <mat-slide-toggle [checked]="true">
+                      <mat-slide-toggle [checked]="defaults?.active" [disabled]="true">
                         {{'status' | translate}}
                       </mat-slide-toggle>
                     </div>
@@ -81,7 +81,7 @@
               </div>
               <div style="width:50%; margin-top:2%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>{{'desc' | translate}}</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'course.desc' | translate}}</b></p>
                   <p style="float: left;width: 20%;text-align: right;"><b>{{'age' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">

@@ -354,7 +354,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   getLanguages() {
     this.crudService.list('/languages', 1, 1000)
       .subscribe((data) => {
-        this.languages = data.data;
+        this.languages = data.data.reverse();
       })
   }
 

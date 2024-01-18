@@ -27,7 +27,7 @@ export class LevelGoalsModalComponent implements OnInit {
 
     if(this.defaults !== null && this.defaults.id) {
       this.mode = 'update';
-      this.crudService.list('/degrees-school-sport-goals/', 1, 10000, 'id', 'desc', '&degree_id='+this.defaults.id)
+      this.crudService.list('/degrees-school-sport-goals/', 1, 10000, 'desc', 'id', '&degree_id='+this.defaults.id)
         .subscribe((data: any)=> {
           if (data.data.length === 0) {
             this.mode = 'create';

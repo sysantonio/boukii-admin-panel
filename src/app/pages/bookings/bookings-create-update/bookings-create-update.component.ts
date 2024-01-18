@@ -234,6 +234,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   bookings = [];
   bookingsToCreate = [];
   clients = [];
+  allClients = [];
   sportData = [];
   sportDataList = [];
   sportTypeData = [];
@@ -300,10 +301,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.getSeason();
     this.getSchool();
 
-    forkJoin([this.getSportsType(), this.getClients()])
+    forkJoin([this.getSportsType(), this.getClients(), this.getClientsAll()])
       .subscribe((data: any) => {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
+        this.allClients = data[2].data;
 
 
         this.filterSportsByType(true);
@@ -398,7 +400,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.courseTypeId = id;
     this.form.get("courseType").patchValue(id);
 
-    const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+    const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
     let hasSport = false;
 
     if (client) {
@@ -684,7 +686,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 data.courseDates.push({
                   school_id: this.user.schools[0].id,
                   booking_id: null,
-                  client_id: this.courseDates[0].client_id,
+                  client_id: this.defaultsBookingUser.client_id,
                   course_id: item.course_id,
                   course_date_id: courseDateId,
                   degree_id: degreeId,
@@ -728,7 +730,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 data.courseDates.push({
                   school_id: this.user.schools[0].id,
                   booking_id: null,
-                  client_id: this.courseDates[0].client_id,
+                  client_id: this.defaultsBookingUser.client_id,
                   course_id: item.course_id,
                   course_date_id: courseDateId,
                   degree_id: degreeId,
@@ -887,7 +889,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     const clientsWithoutSelectedSport = [];
     this.bookingsToCreate.forEach(element => {
-      const client = this.clients.find((c) => c.id === element.courseDates[0].client_id);
+      const client = this.allClients.find((c) => c.id === element.courseDates[0].client_id);
       const bookSport = client?.client_sports?.find((c) => c.sport_id === element.courseDates[0].course.sport_id);
       if (!bookSport || bookSport === null) {
 
@@ -1150,7 +1152,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.mainIdSelected = false;
     this.borderActive = index;
     this.defaultsBookingUser.client_id = utilizer.id;
-    const client = this.clients.find((c) => c.id === utilizer.id);
+    const client = this.allClients.find((c) => c.id === utilizer.id);
 
 
     if (client && client?.client_sports?.length > 0) {
@@ -1188,6 +1190,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   getClients() {
     return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
+      .subscribe((data: any) => {
+        this.clients = data.data;
+        this.loading = false;
+
+      })*/
+  }
+
+  getClientsAll() {
+    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -1241,8 +1252,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
           map((value: any) => typeof value === 'string' ? value : value?.annotation),
           map(annotation => annotation ? this._filterLevel(annotation) : this.levels.slice())
         );
+
         let hasSport = false;
-        const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+        const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
         client.client_sports.forEach(sport => {
           if (sport.sport_id === this.defaults.sport_id) {
             const level = this.levels.find((l) => l.id === sport.degree_id);
@@ -1288,7 +1300,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
                 .subscribe((cl) => {
                   this.clients = cl.data;
-                  const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
+                  const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
                   client.client_sports.forEach(sport => {
                     if (sport.sport_id === this.defaults.sport_id) {
                       const level = this.levels.find((l) => l.id === sport.degree_id);
@@ -1548,7 +1560,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getClientLang(id: number) {
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       return +client?.language1_id;
     }
@@ -1557,7 +1569,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getClientProvince(id: number) {
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       return +client?.province;
     }
@@ -1587,7 +1599,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return this.userAvatar;
     } else {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
       return client?.image;
     }
   }
@@ -1602,7 +1614,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getClientName(id: number) {
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       return client?.first_name + ' ' + client?.last_name;
     }
@@ -1626,7 +1638,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return this.userAvatar;
     } else {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
       if (client) {
 
         return client?.image;
@@ -1641,7 +1653,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getLanguageUtilizer(id: any) {
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       if (client) {
         const lang = this.languages.find((c) => c.id == client?.language1_id);
@@ -1658,7 +1670,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getCountryUtilizer(id: any) {
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       if (client) {
         const country = this.countries.find((c) => c.id == client?.country);
@@ -1676,7 +1688,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       if (client) {
         if(client?.birth_date && client?.birth_date !== null) {
@@ -1719,7 +1731,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getClientNameUtilizer(id: number) {
     if (id && id !== null) {
 
-      const client = this.clients.find((m) => m.id === id);
+      const client = this.allClients.find((m) => m.id === id);
 
       if (client) {
 

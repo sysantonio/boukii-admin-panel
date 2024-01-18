@@ -14,14 +14,4 @@
   </div>
 
   <vex-chart [options]="options" [series]="series"></vex-chart>
-
-  <button (click)="openSheet()"
-          *ngIf="showButton"
-          @scaleInOut
-          class="absolute -top-3 -right-3 bg-foreground shadow-xl"
-          color="primary"
-          mat-icon-button
-          type="button">
-    <mat-icon svgIcon="mat:share"></mat-icon>
-  </button>
 </div>

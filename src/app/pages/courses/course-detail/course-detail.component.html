@@ -1,4 +1,4 @@
-<vex-secondary-toolbar current="Courses">
+<vex-secondary-toolbar current="{{'courses' | translate}}">
   <vex-breadcrumbs
     [crumbs]="['course_detail']"
     class="flex-auto"
@@ -11,7 +11,7 @@
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;padding: 2%">
     <div @fadeInUp class="card flex-auto">
       <mat-tab-group>
-        <mat-tab label="Cours">
+        <mat-tab label="{{'course' | translate }}">
           <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
           <mat-card style="padding: 3% 5% 0 5%;" *ngIf="!loading">
@@ -36,17 +36,17 @@
                   <div style="float:right;width: 100%">
 
                     <div style="float: right;margin: 0 0 0 25px;">
-                      <mat-slide-toggle [checked]="true">
+                      <mat-slide-toggle [checked]="defaults?.options" [disabled]="true">
                         {{'options' | translate}}
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0;">
-                      <mat-slide-toggle [checked]="true">
+                      <mat-slide-toggle [checked]="defaults?.online" [disabled]="true">
                         Online
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0 25px 0 0;">
-                      <mat-slide-toggle [checked]="true">
+                      <mat-slide-toggle [checked]="defaults?.active" [disabled]="true">
                         {{'status' | translate}}
                       </mat-slide-toggle>
                     </div>
@@ -88,7 +88,7 @@
               </div>
               <div style="width:50%; margin-top:2%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>{{'desc' | translate}}</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'course.desc' | translate}}</b></p>
                   <p style="float: left;width: 20%;text-align: right;"><b>{{'age' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">

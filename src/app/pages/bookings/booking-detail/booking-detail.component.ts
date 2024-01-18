@@ -265,7 +265,6 @@ export class BookingDetailComponent implements OnInit {
         this.crudService.get('/bookings/'+this.id)
         .subscribe((data) => {
           this.booking = data.data;
-          this.getClientUtilisateurs(this.booking.client_main_id);
 
           this.crudService.list('/vouchers-logs', 1, 10000, 'asc', 'id', '&booking_id='+this.id)
             .subscribe((vl) => {
@@ -298,7 +297,7 @@ export class BookingDetailComponent implements OnInit {
 
             const groupedByCourseId = bookingUser.data.reduce((accumulator, currentValue) => {
               // Obtiene el course_id del objeto actual
-              const key = currentValue.course_id;
+              const key = currentValue.client_id;
 
               // Si el acumulador ya no tiene este course_id como clave, inicialízalo
               if (!accumulator[key]) {
@@ -311,17 +310,17 @@ export class BookingDetailComponent implements OnInit {
               return accumulator;
             }, {});
 
-            for (const courseId in groupedByCourseId) {
-              if (groupedByCourseId.hasOwnProperty(courseId)) {
+            for (const clientId in groupedByCourseId) {
+              if (groupedByCourseId.hasOwnProperty(clientId)) {
 
 
-                this.crudService.get('/admin/courses/' + courseId)
+                this.crudService.get('/admin/courses/' + groupedByCourseId[clientId][0].course_id)
                   .subscribe((course) => {
 
                     if (course.data.course_type === 2 && this.booking.old_id === null) {
 
 
-                        groupedByCourseId[courseId].forEach((element, idx) => {
+                        groupedByCourseId[clientId].forEach((element, idx) => {
                           const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
                           data.sport_id = course.data?.sport_id;
                           data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
@@ -337,7 +336,7 @@ export class BookingDetailComponent implements OnInit {
                       const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
                       data.sport_id = course.data?.sport_id;
                       data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
-                        groupedByCourseId[courseId].forEach((element, idx) => {
+                        groupedByCourseId[clientId].forEach((element, idx) => {
 
                           if (course.data.course_type === 1 && !course.data.is_flexible) {
                             if (idx === 0) {
@@ -830,33 +829,12 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
+    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
 
       })*/
-  }
-
-  getClientUtilisateurs(id: any) {
-    let clientUsers = [];
-    this.crudService.list('/admin/clients/' + id +'/utilizers', 1, 10000, 'desc', 'id','&client_id='+id)
-      .subscribe((data) => {
-        clientUsers = data.data;
-        this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id','&main_id='+id)
-        .subscribe((data) => {
-          data.data.forEach(element => {
-            clientUsers.forEach(cl => {
-              if (element.client_id === cl.id) {
-                cl.utilizer_id = element.id;
-              }
-            });
-          });
-
-          this.clients = this.clients.concat(clientUsers);
-        })
-
-      })
   }
 
   getSportsType() {

@@ -435,6 +435,7 @@
   "snackbar.settings.blocks": "Los bloqueos se han actualizado correctamente",
   "snackbar.settings.auths": "Los bloqueos se han actualizado correctamente",
   "snackbar.settings.extras": "Extras modificados correctamente",
+  "snackbar.settings.taxes": "Tasas modificadas correctamente",
   "snackbar.settings.levels": "Niveles actualizados correctamente",
   "snackbar.credential_error": "Error con las credenciales",
   "table.filter.booking": "Tipo de reserva",
@@ -502,5 +503,9 @@
   "today_bookings": "Reservas para hoy",
   "welcome": "Bienvenido",
   "available": "Disponible",
-  "available_places": "Plazas disponibles"
+  "available_places": "Plazas disponibles",
+  "update_objectives": "Modificar objetivos",
+  "objectives": "Objetivos",
+  "add_goal": "Ajouter goal",
+  "card": "Ficha técnica"
 }

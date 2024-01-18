@@ -426,10 +426,11 @@
   "snackbar.settings.season_updated": "Saison modifiée avec succès",
   "snackbar.settings.save": "Données enregistrées avec succès",
   "snackbar.settings.sports": "Sports correctement modifiés",
-  "snackbar.settings.prices": "Prix ​​enregistrés correctement",
+  "snackbar.settings.prices": "Prix enregistrés correctement",
   "snackbar.settings.blocks": "Les verrous ont été mis à jour avec succès",
   "snackbar.settings.auths": "Les verrous ont été mis à jour avec succès",
   "snackbar.settings.extras": "Extras correctement modifiés",
+  "snackbar.settings.taxes": "Les tarifs ont changé correctement",
   "snackbar.settings.levels": "Niveaux mis à jour avec succès",
   "snackbar.credential_error": "Erreur avec les informations d'identification",
   "table.filter.booking": "Type de réservation",
@@ -497,5 +498,9 @@
   "today_bookings": "Réservations pour aujourd'hui",
   "welcome": "Accueillir",
   "available": "Disponible",
-  "available_places": "Places disponibles"
+  "available_places": "Places disponibles",
+  "update_objectives": "Modifier les objectifs",
+  "objectives": "Objectifs",
+  "add_goal": "Objectif supplémentaire",
+  "card": "Fiche technique"
 }
