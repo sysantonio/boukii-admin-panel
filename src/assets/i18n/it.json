@@ -505,5 +505,7 @@
   "add_goal": "Obiettivo somma",
   "card": "Scheda dati",
   "op_rem_added": "Opzione di rimborso modificata per la prenotazione",
-  "b_care_added": "Boukii Care modificato per il preordine"
+  "b_care_added": "Boukii Care modificato per il preordine",
+  "price_per_day": "Prezzo al giorno"
+
 }

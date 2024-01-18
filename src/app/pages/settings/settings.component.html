@@ -88,7 +88,7 @@
                         <label for="holiday-{{i}}">{{'settings.new_season.holiday' | translate }}</label>
 
                         <mat-form-field style="width: 100%">
-                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event)"  [value]="holiday">
+                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event, i)" [value]="holiday">
                           <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
                           <mat-datepicker #picker [startAt]="today"></mat-datepicker>
                         </mat-form-field>
@@ -823,7 +823,7 @@
                     <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
-                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                  <div class="flex-auto" style="margin: 1% 0 0 0" *ngIf="dataSourceForfait.data.length < 2">
                     <button class="add-date" mat-fab (click)="createExtra('Forfait', false, null, null)" [disabled]="dataSourceForfait.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>

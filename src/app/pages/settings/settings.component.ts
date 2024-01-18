@@ -378,10 +378,21 @@ export class SettingsComponent implements OnInit {
     this.filteredHours = selectedIndex >= 0 ? this.hours.slice(selectedIndex) : this.hours;
   }
 
-  onDateSelect(event: MatDatepickerInputEvent<Date>) {
+  onDateSelect(event: MatDatepickerInputEvent<Date>, index: any) {
     const selectedDate = event.value;
-    this.holidaysSelected.push(moment(selectedDate).format('YYYY-MM-DD'));
+    const selectedDateFormat = moment(selectedDate).format('YYYY-MM-DD');
+
+    if (index <= this.holidays.length && this.season && this.season !== null) {
+      this.holidays[index] = selectedDateFormat;
+    } else {
+      this.holidays.push(selectedDateFormat);
+    }
+
+    if (!this.season || this.season === null) {
+      this.holidaysSelected.push(selectedDateFormat);
+    }
   }
+
   getSchoolSeason() {
     return this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id);
   }

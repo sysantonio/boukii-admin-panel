@@ -504,5 +504,7 @@
   "add_goal": "Objectif supplémentaire",
   "card": "Fiche technique",
   "op_rem_added": "Option de remboursement modifiée pour la réservation",
-  "b_care_added": "Boukii Care modifié en précommande"
+  "b_care_added": "Boukii Care modifié en précommande",
+  "price_per_day": "Prix ​​par jour"
+
 }

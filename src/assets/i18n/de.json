@@ -506,5 +506,7 @@
   "add_goal": "Adder-Ziel",
   "card": "Datenblatt",
   "op_rem_added": "Geänderte Rückerstattungsoption für die Reservierung",
-  "b_care_added": "Boukii Care wurde zur Vorbestellung geändert"
+  "b_care_added": "Boukii Care wurde zur Vorbestellung geändert",
+  "price_per_day": "Preis pro Tag"
+
 }

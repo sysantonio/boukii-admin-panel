@@ -505,5 +505,7 @@
   "add_goal": "Adder goal",
   "card": "Data sheet",
   "op_rem_added": "Modified refund option for reservation",
-  "b_care_added": "Boukii Care modified for pre-order"
+  "b_care_added": "Boukii Care modified for pre-order",
+  "price_per_day": "Price per day"
+
 }

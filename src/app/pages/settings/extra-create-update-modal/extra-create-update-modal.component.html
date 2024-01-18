@@ -16,7 +16,7 @@
   <mat-dialog-content class="flex flex-col">
     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
       <mat-form-field class="flex-auto">
-        <mat-label>Product</mat-label>
+        <mat-label>{{'product' | translate}}</mat-label>
         <input formControlName="product" matInput required type="text" [readonly]="true" [(ngModel)]="defaults.product">
 
       </mat-form-field>
@@ -28,13 +28,13 @@
     </div>
     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
       <mat-form-field class="flex-auto">
-        <mat-label>Price per day</mat-label>
+        <mat-label>{{'price_per_day' | translate }}</mat-label>
         <input formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
 
       </mat-form-field>
 
       <mat-form-field class="flex-auto">
-        <mat-label>TVA</mat-label>
+        <mat-label>{{'tva' | translate}}</mat-label>
         <input formControlName="tva" matInput required type="number" [(ngModel)]="defaults.tva">
       </mat-form-field>
     </div>
@@ -48,8 +48,8 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close type="button">Cancel</button>
-    <button *ngIf="isCreateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">Confirmer</button>
-    <button *ngIf="isUpdateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">Update</button>
+    <button mat-button mat-dialog-close type="button">{{'cancel' | translate}}</button>
+    <button *ngIf="isCreateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">{{'confirm' | translate }}</button>
+    <button *ngIf="isUpdateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">{{'update' | translate }}</button>
   </mat-dialog-actions>
 </form>
