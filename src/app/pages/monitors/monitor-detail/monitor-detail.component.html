@@ -662,6 +662,12 @@
               <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
               <button (click)="goToPrevious()">&lt;</button>
               <button (click)="goToNext()">&gt;</button>
+
+              <mat-form-field class="flex-auto">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (dateChange)="onDateChange($event)">
+                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom></mat-datepicker>
+              </mat-form-field>
               </div>
 
               <div class="view-selection">
