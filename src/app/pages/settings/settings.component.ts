@@ -537,7 +537,7 @@ export class SettingsComponent implements OnInit {
   }
 
   getBlockages() {
-    return this.crudService.list('/school-colors', 1, 1000);
+    return this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&default=1');
   }
 
   saveBlockages() {

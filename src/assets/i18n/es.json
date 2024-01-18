@@ -496,5 +496,11 @@
   "delete_text": "¿Quieres eliminar este elemento?",
   "delete_title": "Eliminar",
   "update_date_warning": "Esta acción podría afectar a una o varias reservas. ¿Desea continuar?",
-  "update_date_warning_title": "Modificación de fecha de curso"
+  "update_date_warning_title": "Modificación de fecha de curso",
+  "work_day": "La jornada",
+  "available_monitors": "Monitores disponibles / semana",
+  "today_bookings": "Reservas para hoy",
+  "welcome": "Bienvenido",
+  "available": "Disponible",
+  "available_places": "Plazas disponibles"
 }

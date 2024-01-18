@@ -1,66 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import moment from 'moment';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { defaultChartOptions } from 'src/@vex/utils/default-chart-options';
-import { tableSalesData } from 'src/app/static-data/table-sales-data';
-import { BookingsCreateUpdateComponent } from '../../bookings/bookings-create-update/bookings-create-update.component';
+import { Order, tableSalesData } from 'src/app/static-data/table-sales-data';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-dashboard-analytics',
   templateUrl: './dashboard-analytics.component.html',
   styleUrls: ['./dashboard-analytics.component.scss']
 })
-export class DashboardAnalyticsComponent {
+export class DashboardAnalyticsComponent implements OnInit {
 
-  entity = '/bookings';
-  createComponent = BookingsCreateUpdateComponent;
-  deleteEntity = '/bookings';
-  columns: TableColumn<any>[] = [
-    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Type', property: 'type', type: 'booking_users_image', visible: true },
-    { label: 'Course', property: 'bookingusers', type: 'booking_users', visible: true},
-    { label: 'Client', property: 'client_main_id', type: 'client', visible: true },
-    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
-    { label: 'Options', property: 'options', type: 'text', visible: true },
-    { label: 'Bons', property: 'bonus', type: 'light', visible: true },
-    { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light', visible: true },
-    { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
-    { label: 'Prix', property: 'price_total', type: 'price', visible: true },
-    { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
-    { label: 'Status', property: 'paid', type: 'payment_status', visible: true },
-    { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true }
-  ];
-
-  /*tableColumns: TableColumn<any>[] = [
+  tableColumns: TableColumn<any>[] = [
     {
-      label: '',
-      property: 'status',
-      type: 'badge'
-    },
-    {
-      label: 'PRODUCT',
-      property: 'name',
+      label: 'ID',
+      property: 'id',
       type: 'text'
     },
-    {
-      label: '$ PRICE',
-      property: 'price',
-      type: 'text',
-      cssClasses: ['font-medium']
-    },
-    {
-      label: 'DATE',
-      property: 'timestamp',
-      type: 'text',
-      cssClasses: ['text-secondary']
-    }
-  ];
-  tableData = tableSalesData;
 
-  series: ApexAxisChartSeries = [{
-    name: 'Subscribers',
-    data: [28, 40, 36, 0, 52, 38, 60, 55, 67, 33, 89, 44]
-  }];
+    {
+      label: 'type',
+      property: 'type',
+      type: 'booking_users_image'
+    },
+    { label: 'course', property: 'bookingusers', type: 'booking_users'},
+    { label: 'client', property: 'client_main_id', type: 'client' },
+
+  ];
 
   userSessionsSeries: ApexAxisChartSeries = [
     {
@@ -70,23 +37,29 @@ export class DashboardAnalyticsComponent {
     {
       name: 'Sessions',
       data: [5, 21, 42, 70, 41, 20, 35, 50, 10, 15, 30, 50]
-    },
+    }
   ];
 
-  salesSeries: ApexAxisChartSeries = [{
-    name: 'Sales',
-    data: [28, 40, 36, 0, 52, 38, 60, 55, 99, 54, 38, 87]
-  }];
+  salesSeries: ApexAxisChartSeries = [
+    {
+      name: 'Sales',
+      data: [28, 40, 36, 0, 52, 38, 60, 55, 99, 54, 38, 87]
+    }
+  ];
 
-  pageViewsSeries: ApexAxisChartSeries = [{
-    name: 'Page Views',
-    data: [405, 800, 200, 600, 105, 788, 600, 204]
-  }];
+  pageViewsSeries: ApexAxisChartSeries = [
+    {
+      name: 'Page Views',
+      data: [405, 800, 200, 600, 105, 788, 600, 204]
+    }
+  ];
 
-  uniqueUsersSeries: ApexAxisChartSeries = [{
-    name: 'Unique Users',
-    data: [356, 806, 600, 754, 432, 854, 555, 1004]
-  }];
+  uniqueUsersSeries: ApexAxisChartSeries = [
+    {
+      name: 'Unique Users',
+      data: [356, 806, 600, 754, 432, 854, 555, 1004]
+    }
+  ];
 
   uniqueUsersOptions = defaultChartOptions({
     chart: {
@@ -94,5 +67,70 @@ export class DashboardAnalyticsComponent {
       height: 100
     },
     colors: ['#ff9800']
-  });*/
+  });
+
+  user: any;
+  blockages = [];
+  dispoPrivate = 0;
+  dispoCol = 0;
+  bookings = 0;
+  bookingList = [];
+  constructor(private crudService: ApiCrudService) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
+  }
+
+  ngOnInit(): void {
+    this.getBlockages();
+    this.getCourses();
+    this.getBookings();
+  }
+
+  getBlockages() {
+    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        this.blockages = data.data.length;
+      })
+  }
+
+  getCourses() {
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+moment().format('YYYY-MM-DD') + '&course_type=1')
+      .subscribe((data) => {
+        this.dispoCol = data.data.reduce((accumulator, currentObject) => {
+          return accumulator + currentObject.total_available_places;
+      }, 0);
+
+    })
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+moment().format('YYYY-MM-DD') + '&course_type=2')
+      .subscribe((data) => {
+        this.dispoPrivate = data.data.reduce((accumulator, currentObject) => {
+          return accumulator + currentObject.total_available_places;
+      }, 0);
+
+    })
+  }
+
+  getBookings() {
+    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&date='+moment().format('YYYY-MM-DD'))
+      .subscribe((data) => {
+        this.bookings = data.data.length;
+
+      let bookingIds = new Set();
+      data.data.forEach(item => {
+          if (item.booking_id !== undefined && item.booking_id !== null) {
+              bookingIds.add(item.booking_id);
+          }
+      });
+
+      // Si necesitas el resultado como un array
+      let uniqueBookingIds = Array.from(bookingIds);
+
+      uniqueBookingIds.forEach(element => {
+        this.crudService.list('/bookings', 1, 10000, 'desc', 'id', '&id='+element, '&with[]=bookingusers.course')
+          .subscribe((bo) => {
+            this.bookingList = this.bookingList.concat(bo.data);
+          })
+      });
+    })
+  }
 }

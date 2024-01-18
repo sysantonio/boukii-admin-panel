@@ -492,5 +492,11 @@
   "delete_text": "Do you want to remove this item? This action will be permanetly",
   "delete_title": "Delete",
   "update_date_warning": "This action could affect one or more reservations. ",
-  "update_date_warning_title": "Course date modification"
+  "update_date_warning_title": "Course date modification",
+  "work_day": "The day",
+  "available_monitors": "Monitors available / week",
+  "today_bookings": "Reservations for today",
+  "welcome": "Welcome",
+  "available": "Available",
+  "available_places": "Places available"
 }

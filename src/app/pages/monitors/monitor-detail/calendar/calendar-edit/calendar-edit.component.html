@@ -5,12 +5,12 @@
 <mat-dialog-content>
   <form [formGroup]="form" *ngIf="!loading">
     <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChanged($event);" [selectedIndex]="selectedIndex">
-      <mat-tab label="Disponible" *ngIf="false">
+      <mat-tab label="{{'available' | translate}}" *ngIf="false">
 
         <div class="flex flex-col">
 
           <mat-form-field>
-            <mat-label>Start Date</mat-label>
+            <mat-label>{{'courses.date_start' | translate }}</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
               [value]="defaults.start_date"
@@ -24,21 +24,21 @@
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Hora Inicio</mat-label>
+            <mat-label>{{'start_hour' | translate }}</mat-label>
             <mat-select [(value)]="defaults.start_time" (selectionChange)="onStartTimeChange()">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Hora Fin</mat-label>
+            <mat-label>{{'end_hour' | translate }}</mat-label>
             <mat-select [(value)]="defaults.end_time" [disabled]="defaults.start_time === null">
               <mat-option *ngFor="let time of filteredTimes" [value]="time"  (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </mat-tab>
-      <mat-tab label="Non Dispoible">
+      <mat-tab label="{{'no_disponible' | translate }}">
 
         <div class="flex flex-col">
 
@@ -93,7 +93,7 @@
           </mat-form-field>
         </div>
       </mat-tab>
-      <mat-tab label="Blocage Payant">
+      <mat-tab label="{{'paid_block' | translate }}">
 
         <div class="flex flex-col">
 
@@ -170,7 +170,7 @@
           </mat-form-field>
         </div>
       </mat-tab>
-      <mat-tab label="Blocage Non Paye">
+      <mat-tab label="{{'no_paid_block' | translate}}">
 
         <div class="flex flex-col">
 
@@ -191,7 +191,7 @@
 
           <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
-            <input 
+            <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
               formControlName="endNonAvailable"
@@ -236,7 +236,7 @@
           </mat-form-field>
         </div>
       </mat-tab>
-      <mat-tab label="Crear Reserva" *ngIf="!event.block_general" >
+      <mat-tab label="{{'bookings_page.creation.title' | translate}}" *ngIf="!event.block_general" >
 
       </mat-tab>
     </mat-tab-group>
@@ -246,6 +246,6 @@
 <mat-dialog-actions class="flex justify-end">
   <button mat-button mat-dialog-close>Cancel</button>
   <button (click)="save()" class="save" color="primary" mat-raised-button>
-    Save
+    {{'save' | translate }}
   </button>
 </mat-dialog-actions>

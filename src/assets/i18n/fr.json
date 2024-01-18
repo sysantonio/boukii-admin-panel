@@ -491,5 +491,11 @@
   "delete_text": "Voulez-vous supprimer cet élément?",
   "delete_title": "Supprimer",
   "update_date_warning": "Cette action pourrait affecter une ou plusieurs réservations. ",
-  "update_date_warning_title": "Modification de la date du cours"
+  "update_date_warning_title": "Modification de la date du cours",
+  "work_day": "La journée",
+  "available_monitors": "Moniteurs disponibles / semaine",
+  "today_bookings": "Réservations pour aujourd'hui",
+  "welcome": "Accueillir",
+  "available": "Disponible",
+  "available_places": "Places disponibles"
 }

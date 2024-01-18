@@ -493,5 +493,11 @@
   "delete_text": "Möchten Sie diesen Artikel entfernen?",
   "delete_title": "Löschen",
   "update_date_warning": "Diese Aktion könnte sich auf eine oder mehrere Reservierungen auswirken. ",
-  "update_date_warning_title": "Änderung des Kurstermins"
+  "update_date_warning_title": "Änderung des Kurstermins",
+  "work_day": "Der Tag",
+  "available_monitors": "Monitore verfügbar / Woche",
+  "today_bookings": "Reservierungen für heute",
+  "welcome": "Willkommen",
+  "available": "Verfügbar",
+  "available_places": "Verfügbare Plätze"
 }

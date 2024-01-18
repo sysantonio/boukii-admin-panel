@@ -1,19 +1,22 @@
 <div (mouseenter)="showButton = true"
      (mouseleave)="showButton = false"
-     class="card p-6 relative flex flex-col items-center" style="border-radius: 0;box-shadow: none;">
+     class="card p-6 relative flex flex-col items-center" style="border-radius: 50px;box-shadow: none;" [ngStyle]="{'background-color': bg}">
   <div [ngClass]="iconClass" class="rounded-full w-12 h-12 flex items-center justify-center">
-    <mat-icon [svgIcon]="icon"></mat-icon>
+    <mat-icon *ngIf="!noIcon" style="color:white" [svgIcon]="icon"></mat-icon>
+    <img [src]="icon" *ngIf="noIcon" style="color:white">
   </div>
 
-  <h2 class="display-2 font-bold mt-4 mb-2">{{ value }}</h2>
-  <h3 class="subheading-2 font-medium text-secondary m-0">{{ label }}</h3>
+
+  <h3 class="subheading-2 font-medium text-secondary m-0" style="color: white">{{ label | translate }}</h3>
+  <h4 class="subheading-2 font-medium text-secondary m-0" style="color: white">{{ label_secondary | translate }}</h4>
+  <br *ngIf="label_secondary === ''">
+  <h2 class="display-2 font-bold mt-4 mb-2" [ngStyle]="{'color': valueColor}">{{ value }}</h2>
 
   <h4 [class.text-green]="change > 0"
       [class.text-red]="change <= 0"
       class="subheading-1 font-medium mt-4 mb-0 flex items-center">
-    <mat-icon *ngIf="change > 0" class="icon-sm" svgIcon="mat:arrow_drop_up"></mat-icon>
-    <mat-icon *ngIf="change <= 0" class="icon-sm" svgIcon="mat:arrow_drop_down"></mat-icon>
     <span *ngIf="withPercent">{{ change }}%</span>
+    <span *ngIf="onlyValue">{{ change }}</span>
   </h4>
 
   <button *ngIf="helpText"

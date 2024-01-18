@@ -8,43 +8,75 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
-    <div class="container p-gutter grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" style="max-width: none !important;">
-
-      <vex-widget-summary class="sm:col-span-4"></vex-widget-summary>
-      <vex-widget-summary-charts class="sm:col-span-4"></vex-widget-summary-charts>
-      <vex-widget-summary-monitors class="sm:col-span-4"></vex-widget-summary-monitors>
-      <vex-widget-summary-tasks class="sm:col-span-4"></vex-widget-summary-tasks>
-
-      <!-- Sample
-
+    <div class="container p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <vex-widget-assistant class="sm:col-span-2"></vex-widget-assistant>
 
-      <vex-widget-quick-line-chart icon="mat:pageview"
-                                   [series]="pageViewsSeries"
-                                   iconClass="text-primary bg-primary/10"
-                                   label="Page Views"
-                                   value="92.4k"></vex-widget-quick-line-chart>
+      <vex-widget-quick-line-chart
+        [series]="pageViewsSeries"
+        icon="mat:pageview"
+        iconClass="text-primary-600 bg-primary-600/10"
+        label="Page Views"
+        value="92.4k"></vex-widget-quick-line-chart>
 
-      <vex-widget-quick-line-chart icon="mat:group"
-                                   [options]="uniqueUsersOptions"
-                                   [series]="uniqueUsersSeries"
-                                   iconClass="text-orange bg-orange/10"
-                                   label="Unique Users"
-                                   value="67.2k"></vex-widget-quick-line-chart>
+      <vex-widget-quick-line-chart
+        [options]="uniqueUsersOptions"
+        [series]="uniqueUsersSeries"
+        icon="mat:group"
+        iconClass="text-orange-600 bg-orange-600/10"
+        label="Unique Users"
+        value="67.2k"></vex-widget-quick-line-chart>
 
-      <vex-widget-large-chart [series]="userSessionsSeries"
-                              class="sm:col-span-2"></vex-widget-large-chart>
+      <vex-widget-large-goal-chart
+        [series]="salesSeries"
+        class="sm:col-span-full"
+        total="4,374"></vex-widget-large-goal-chart>
 
-      <vex-widget-table [columns]="tableColumns"
-                        [data]="tableData"
-                        class="sm:col-span-2"></vex-widget-table>
+      <vex-widget-quick-value-center
+        [change]="''"
+        [bg]="'#31794B'"
+        [valueColor]="'#29C840'"
+        icon="mat:person"
+        iconClass="text-primary-600 bg-primary-600/10"
+        label="course_private"
+        label_secondary="available_places"
+        [value]="dispoPrivate.toString()"></vex-widget-quick-value-center>
+      <vex-widget-quick-value-center
+        [change]="''"
+        [bg]="'#806B20'"
+        [valueColor]="'#FAC710'"
+        icon="mat:group"
+        iconClass="text-primary-600 bg-primary-600/10"
+        label="course_colective"
+        label_secondary="available_places"
+        [value]="dispoCol.toString()"></vex-widget-quick-value-center>
+      <vex-widget-quick-value-center
+        [change]="''"
+        [bg]="'#2D9BF0'"
+        [valueColor]="'#414BB2'"
+        icon="../../../../assets/img/icons/reservas-white.svg"
+        [noIcon]="true"
+        iconClass="text-primary-600 bg-primary-600/10"
+        label="today_bookings"
+        label_secondary="available_places"
+        [value]="bookings.toString()"></vex-widget-quick-value-center>
+      <vex-widget-quick-value-center
+        [change]="''"
+        [bg]="'#A479DF'"
+        [valueColor]="'#652CB3'"
+        icon="mat:block"
+        iconClass="text-primary-600 bg-primary-600/10"
+        label="paid_blocks"
+        label_secondary=""
+        [value]="blockages.toString()"></vex-widget-quick-value-center>
 
+      <vex-widget-large-chart
+        [series]="userSessionsSeries"
+        class="sm:col-span-2"></vex-widget-large-chart>
 
-
-      <vex-widget-large-goal-chart [series]="salesSeries"
-                                   class="sm:col-span-full"
-                                   total="4,374"></vex-widget-large-goal-chart>-->
-
+      <vex-widget-table
+        [columns]="tableColumns"
+        [data]="bookingList"
+        class="sm:col-span-2"></vex-widget-table>
     </div>
 
   </vex-page-layout-content>

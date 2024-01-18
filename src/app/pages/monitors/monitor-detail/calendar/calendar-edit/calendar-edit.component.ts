@@ -66,6 +66,7 @@ export class CalendarEditComponent implements OnInit {
     description: null,
     color: null,
     user_nwd_subtype_id: null,
+    default: false
   };
   filteredTimes: any = [];
   blockages: any = [];
@@ -124,6 +125,7 @@ export class CalendarEditComponent implements OnInit {
     }
 
     this.defaults.user_nwd_subtype_id = this.type + 1;
+    this.defaults.default = false;
     this.defaults.school_id = this.user.schools[0].id;
     this.defaults.start_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
     if (this.defaults.end_date && moment(this.defaults.end_date).isAfter(this.defaults.start_date)) {
@@ -171,7 +173,7 @@ export class CalendarEditComponent implements OnInit {
 
 
   getBlockages() {
-    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&default=1&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.blockages = data.data;
 
@@ -230,6 +232,7 @@ export class CalendarEditComponent implements OnInit {
         //this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
         this.defaults.color = this.event.color;
         this.defaults.full_day = this.event.allDay;
+        this.defaults.default = false;
         this.defaults.user_nwd_subtype_id = this.event.user_nwd_subtype_id;
         this.blockageSelected = this.blockages.find((b) => b.color === this.event.color);
 
@@ -247,6 +250,7 @@ export class CalendarEditComponent implements OnInit {
           range_dates: false,
           description: null,
           color: null,
+          default: false,
           user_nwd_subtype_id: this.type,
         };
       }

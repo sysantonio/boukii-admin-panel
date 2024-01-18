@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 
 @Component({
   selector: 'vex-widget-assistant',
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WidgetAssistantComponent implements OnInit {
 
-  constructor() { }
+  user: any;
+  today;
+  constructor(private translateService: TranslateService) { }
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.today = moment().locale(this.translateService.currentLang).format('LLLL');
   }
 
 }

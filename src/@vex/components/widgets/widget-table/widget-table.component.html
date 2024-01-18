@@ -1,6 +1,6 @@
 <div class="card overflow-hidden w-full flex flex-col">
   <div class="border-b py-4 px-6 flex items-center">
-    <h2 class="m-0 title flex-auto">Recent Sales</h2>
+    <h2 class="m-0 title flex-auto">{{'bookings' | translate }}</h2>
 
     <button mat-icon-button type="button">
       <mat-icon class="text-secondary" svgIcon="mat:cloud_download"></mat-icon>
@@ -20,7 +20,7 @@
       <!-- Model Properties Column -->
       <ng-container *ngFor="let column of columns">
         <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.label }}</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
           <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}</td>
         </ng-container>
 
@@ -38,8 +38,30 @@
                  matTooltip="Missing Payment"></div>
           </td>
         </ng-container>
-      </ng-container>
+        <ng-container *ngIf="column.type === 'booking_users_image'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+          <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
+            <img [src]="'https://school.boukii.com/assets/icons/'+ getBookingType(data[i].bookingusers[0])+'_' + getBookingImage(data[i].bookingusers[0]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 40px; width: 40px;">
+            <!--<ng-container *ngIf="data[i].bookingusers > 1" >
+              <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
+            </ng-container>-->
+          </td>
+        </ng-container>
+        <ng-container *ngIf="column.type === 'booking_users'" [matColumnDef]="column.property">
+          <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+          <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ getBookingCourse(row[column.property]) }}</td>
+        </ng-container>
 
+        <!-- Client Columns -->
+          <ng-container *ngIf="column.type === 'client'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <span style="float: left; width: 100%;font-size:10px">{{getLanguage(getClient(row[column.property])?.language1_id)}} · {{getCountry(getClient(row[column.property])?.country)}} ·
+                {{calculateAge(getClient(row[column.property])?.birth_date)}} {{'years' | translate }}</span>
+              <span style="float: left; width: 100%;">{{ getClient(row[column.property])?.first_name }} {{ getClient(row[column.property])?.last_name }}</span>
+            </td>
+          </ng-container>
+      </ng-container>
 
       <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: visibleColumns;" mat-row></tr>
