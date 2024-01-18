@@ -1718,7 +1718,8 @@ export class BookingDetailModalComponent implements OnInit {
       this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
       this.booking.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
       this.calculateFinalPrice();
-      this.crudService.update('/bookings', {price_cancellation_insurance: this.booking.price_cancellation_insurance, has_cancellation_insurance: true}, this.id)
+      this.crudService.update('/bookings', {price_cancellation_insurance: this.booking.price_cancellation_insurance, has_cancellation_insurance: true,
+        price_total: this.booking.price_total + this.booking.price_cancellation_insurance}, this.id)
         .subscribe(() => {
           this.snackbar.open(this.translateService.instant('op_rem_added'), 'OK', {duration: 3000});
         })
@@ -1729,7 +1730,7 @@ export class BookingDetailModalComponent implements OnInit {
       this.defaults.price_cancellation_insurance = 0;
       this.booking.price_cancellation_insurance = 0;
 
-      this.crudService.update('/bookings', {price_cancellation_insurance: 0, has_cancellation_insurance: false}, this.id)
+      this.crudService.update('/bookings', {price_cancellation_insurance: 0, has_cancellation_insurance: false, price_total: this.booking.price_total - this.booking.price_cancellation_insurance}, this.id)
         .subscribe(() => {
           this.snackbar.open(this.translateService.instant('op_rem_added'), 'OK', {duration: 3000});
 
@@ -1747,7 +1748,7 @@ export class BookingDetailModalComponent implements OnInit {
       this.defaults.price_boukii_care = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
       this.booking.price_boukii_care = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
 
-      this.crudService.update('/bookings', {price_boukii_care: this.booking.price_boukii_care, has_boukii_care: true}, this.id)
+      this.crudService.update('/bookings', {price_boukii_care: this.booking.price_boukii_care, has_boukii_care: true, price_total: this.booking.price_total + this.booking.price_boukii_care}, this.id)
         .subscribe(() => {
           this.snackbar.open(this.translateService.instant('b_care_added'), 'OK', {duration: 3000});
 
@@ -1760,7 +1761,7 @@ export class BookingDetailModalComponent implements OnInit {
       this.defaults.price_boukii_care = 0;
       this.booking.price_boukii_care = 0;
 
-      this.crudService.update('/bookings', {price_boukii_care: 0, has_boukii_care: false}, this.id)
+      this.crudService.update('/bookings', {price_boukii_care: 0, has_boukii_care: false,  price_total: this.booking.price_total - this.booking.price_boukii_care}, this.id)
         .subscribe(() => {
           this.snackbar.open(this.translateService.instant('b_care_added'), 'OK', {duration: 3000});
 
