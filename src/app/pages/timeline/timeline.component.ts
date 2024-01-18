@@ -628,7 +628,15 @@ export class TimelineComponent {
  async calculateTaskPositions(tasks:any) {
     const pixelsPerMinute = 150 / 60;
     const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
-    let plannerTasks = tasks.map((task:any) => {
+    let plannerTasks = tasks
+    .filter(task => {
+      const monitorIndex = this.filteredMonitors.findIndex(m => m.id === task.monitor_id);
+      if(!(monitorIndex >= 0)){
+        console.log(task);
+      }
+      return monitorIndex >= 0;
+    })
+    .map((task:any) => {
       //Style for days
 
       //Check start time is inside hours range

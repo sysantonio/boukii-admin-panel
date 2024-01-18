@@ -220,6 +220,8 @@ export class MonitorDetailComponent {
   currentMonth: string = '';
   weeksInMonth: any[] = [];
 
+  searchDate:any;
+
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
     private activatedRoute: ActivatedRoute, private dialog: MatDialog, private translateService: TranslateService) {
     this.mockLevelData.forEach(level => {
@@ -381,6 +383,11 @@ export class MonitorDetailComponent {
       this.loadBookings(this.currentDate);
   }
 
+  onDateChange(event:any) {
+    this.currentDate = event.value;
+    this.timelineView = 'day';
+    this.updateView();
+  }
 
   showInfoEvent(event: boolean) {
     this.showInfo = event;
