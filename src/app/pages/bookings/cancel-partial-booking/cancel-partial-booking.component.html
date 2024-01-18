@@ -16,7 +16,7 @@
   <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
 
     <mat-step [stepControl]="noRefundForm" >
-      <ng-template matStepLabel>{{'bookings_page.cancelations.no_refund'}}</ng-template>
+      <ng-template matStepLabel>{{'bookings_page.cancelations.no_refund' | translate}}</ng-template>
 
       <mat-dialog-content class="flex flex-col" *ngIf="!loading">
         <div style="width: 100%;">

@@ -291,7 +291,7 @@ export class BookingDetailComponent implements OnInit {
               }
             })
 
-        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.id)
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&status=1&booking_id='+this.id)
           .subscribe((bookingUser) => {
             this.bookingUsers = bookingUser.data;
 
@@ -1477,7 +1477,6 @@ export class BookingDetailComponent implements OnInit {
             book.courseDates.forEach(element => {
               this.crudService.update('/booking-users', {status: 2}, element.id)
               .subscribe(() => {
-                this.bookingsToCreate.splice(index, 1);
               })
             });
           });
@@ -1498,10 +1497,10 @@ export class BookingDetailComponent implements OnInit {
         } else if(data.type === 'refund_gift') {
           const vData = {
             code: "BOU-"+this.generateRandomNumber(),
-            quantity: data[index].price_total,
-            remaining_balance: data[index].price_total,
+            quantity: this.bookingsToCreate[index].price_total,
+            remaining_balance: this.bookingsToCreate[index].price_total,
             payed: false,
-            client_id: data.client_main_id,
+            client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id
           };
           this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
@@ -1509,7 +1508,6 @@ export class BookingDetailComponent implements OnInit {
             book.courseDates.forEach(element => {
               this.crudService.update('/booking-users', {status:2}, element.id)
               .subscribe(() => {
-                this.bookingsToCreate.splice(index, 1);
               })
             })
           })
@@ -1533,7 +1531,6 @@ export class BookingDetailComponent implements OnInit {
               book.courseDates.forEach(element => {
                 this.crudService.update('/booking-users', {status: 2}, element.id)
                 .subscribe(() => {
-                  this.bookingsToCreate.splice(index, 1);
                 })
               })
             })
@@ -1561,7 +1558,6 @@ export class BookingDetailComponent implements OnInit {
 
                     })
 
-              this.bookingsToCreate.splice(index, 1);
             })
 
           } else {
@@ -1572,7 +1568,6 @@ export class BookingDetailComponent implements OnInit {
                 book.courseDates.forEach(element => {
                   this.crudService.update('/booking-users', {status: 2}, element.id)
                   .subscribe(() => {
-                    this.bookingsToCreate.splice(index, 1);
                   })
                 })
               })
@@ -1604,7 +1599,7 @@ export class BookingDetailComponent implements OnInit {
                 book.courseDates.forEach(element => {
                   this.crudService.update('/booking-users', {status: 2}, element.id)
                   .subscribe(() => {
-                    this.bookingsToCreate.splice(index, 1);
+
                   })
                 })
               })
@@ -1615,15 +1610,27 @@ export class BookingDetailComponent implements OnInit {
 
         setTimeout(() => {
           if (this.bookingsToCreate.length === 0){
-            this.crudService.update('/booking', {status: 2}, this.id)
+            this.crudService.update('/bookings', {status: 2}, this.id)
             .subscribe(() => {
               this.getData();
 
             })
 
           } else {
-            this.crudService.update('/booking', {status: 3}, this.id)
+            let price = parseFloat(this.booking.price_total);
+
+            if (this.tva && !isNaN(this.tva)) {
+              price = price + (price * this.tva);
+            }
+
+            if(this.booking.has_boukii_care) {
+              // coger valores de reglajes
+              price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
+            }
+
+            this.crudService.update('/bookings', {status: 3, price_total: price - this.bookingsToCreate[index].price_total}, this.id)
             .subscribe(() => {
+              this.bookingsToCreate.splice(index, 1);
               this.getData();
 
             })

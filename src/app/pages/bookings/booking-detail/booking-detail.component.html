@@ -22,7 +22,7 @@
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f" *ngIf="booking.status === 1 && booking.paid && item.courseDates[0].status === 1">
                 {{'paid' | translate | uppercase }}
               </p>
-              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="booking.status === 1  && item.courseDates[0].status === 2">
+              <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="item.courseDates[0].status === 2">
                 {{'cancelled' | translate | uppercase }}
               </p>
 
