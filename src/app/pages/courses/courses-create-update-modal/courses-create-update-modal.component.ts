@@ -1336,7 +1336,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
             date: moment(element.date).format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: this.calculateHourEnd(element.hour, element.duration),
-            groups: []
+            course_groups: []
           }
 
           this.defaults.course_dates[0].course_groups.forEach(element => {
@@ -1395,7 +1395,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
   generateGroupForNewDate(date: any, group: any) {
 
-    date.groups.push({
+    date.course_groups.push({
       course_id: group.course_id,
       course_date_id: null,
       degree_id: group.degree_id,
@@ -1407,16 +1407,18 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
       teachers_max: null,
       observations: null,
       auto: true,
-      subgroups: []
+      course_subgroups: []
     });
 
 
     group.course_subgroups.forEach(element => {
-      date.groups.forEach(group => {
+      date.course_groups.forEach(group => {
         if (group.degree_id === element.degree_id) {
           group.active = true;
           group.teachers_min = group.teacher_min_degree;
-          group.subgroups.push({
+          group.ge_min = group.age_min;
+          group.age_max = group.age_max;
+          group.course_subgroups.push({
             degree_id: element.degree_id,
             max_participants: element.max_participants
           })

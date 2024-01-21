@@ -266,12 +266,14 @@
 
                                             <span [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong> - {{groupLevel.name}} - {{ subGroupIndex + 1 }}</span>
                                           </li>
-                                          <li *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;"
-                                              (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
-                                              [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
-                                              style="float: left; width: 13%; text-align: center; cursor: pointer;">
-                                            {{ dayLevel.dateString }}
-                                          </li>
+                                          <ng-container *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;">
+                                            <li *ngIf="dayLevel.active === 1"
+                                                (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
+                                                [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
+                                                style="float: left; width: 13%; text-align: center; cursor: pointer;">
+                                              {{ dayLevel.dateString }}
+                                            </li>
+                                          </ng-container>
 
                                         </ul>
                                       </div>
@@ -298,10 +300,13 @@
                                               <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
                                             </mat-form-field>
                                           </li>
-                                          <li style="float: left; width: 13%;margin: 3% 0 0 0;" *ngFor="let item of daysDatesLevels">
-                                            <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                            [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel)? '#CEE741': 'red'}"></div>
-                                          </li>
+                                          <ng-container *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+
+                                            <li style="float: left; width: 13%;margin: 3% 0 0 0;" *ngIf="item.active === 1">
+                                              <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel)? '#CEE741': 'red'}"></div>
+                                            </li>
+                                          </ng-container>
                                         </ul>
                                       </div>
                                     </div>
@@ -328,11 +333,14 @@
                                               </div>
                                             </li>
 
-                                            <li style="float: left; width: 13%;" *ngFor="let item of daysDatesLevels">
-                                              <div style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                              [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741': 'red'}">
-                                            </div>
-                                            </li>
+                                            <ng-container *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+
+                                              <li style="float: left; width: 13%;" *ngIf="item.active === 1">
+                                                <div style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                                [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741': 'red'}">
+                                              </div>
+                                              </li>
+                                            </ng-container>
                                           </ul>
                                         </div>
                                       </ng-container>

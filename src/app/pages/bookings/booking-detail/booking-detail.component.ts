@@ -18,6 +18,7 @@ import { SchoolService } from 'src/service/school.service';
 import { CancelBookingModalComponent } from '../cancel-booking/cancel-booking.component';
 import { CancelPartialBookingModalComponent } from '../cancel-partial-booking/cancel-partial-booking.component';
 import { TranslateService } from '@ngx-translate/core';
+import { BookingService } from 'src/service/bookings.service';
 
 @Component({
   selector: 'vex-booking-detail',
@@ -192,7 +193,7 @@ export class BookingDetailComponent implements OnInit {
 
   private subscription: Subscription;
 
-  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
+  constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private bookingService: BookingService,
     private snackbar: MatSnackBar, private activatedRoute: ActivatedRoute, private schoolService: SchoolService, private router: Router, private translateService: TranslateService) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
@@ -1933,5 +1934,33 @@ export class BookingDetailComponent implements OnInit {
 
   parseFloatValue(value) {
     return parseFloat(value);
+  }
+
+  goToEdit(index: any, item: any) {
+
+    let price = parseFloat(item.price_total);
+
+    if (this.tva && !isNaN(this.tva)) {
+      price = price + (price * this.tva);
+    }
+
+    if(this.booking.has_boukii_care) {
+      // coger valores de reglajes
+      price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
+    }
+
+
+    this.bookingService.editData.price = price;
+    this.bookingService.editData.client_main_id = this.booking.client_main_id;
+    this.bookingService.editData.course_id = this.courses[index].id;
+    this.bookingService.editData.sport_id = this.courses[index].sport_id;
+    this.bookingService.editData.course_type = this.courses[index].course_type;
+    this.bookingService.editData.course_is_flexible = this.courses[index].is_flexible;
+    this.bookingService.editData.client_id = this.bookingsToCreate[index].courseDates[0].client_id;
+    this.bookingService.editData.degree_id = this.bookingsToCreate[index].courseDates[0].degree_id;
+    this.bookingService.editData.booking_users = this.bookingsToCreate[index].courseDates;
+    this.bookingService.editData.is_main = this.bookingService.editData.client_main_id === this.bookingService.editData.client_id;
+
+    this.router.navigate(['bookings/edit/'+this.id]);
   }
 }

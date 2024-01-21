@@ -51,6 +51,9 @@
               <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
+              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)" >
+                <mat-icon svgIcon="mat:edit" style="color:green"></mat-icon>
+              </button>
               <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
               [selectLevel]="getClientDegree(item?.courseDates[0]?.client_id,item.sport_id)" [size]="40" [userImage]="getClientAvatar(item?.courseDates[0]?.client_id)"></app-level-user>
               <!--<div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>-->
@@ -61,6 +64,9 @@
             <mat-card-header *ngIf="(booking.old_id === null || booking.old_id !== null) && courses[bI].course_type === 1">
               <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
+              </button>
+              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)">
+                <mat-icon svgIcon="mat:edit" style="color:green"></mat-icon>
               </button>
               <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
               [selectLevel]="getClientDegree(item?.courseDates[0]?.client_id,item.sport_id)" [size]="40" [userImage]="getClientAvatar(item?.courseDates[0]?.client_id)"></app-level-user>
@@ -267,7 +273,7 @@
               <p style="float: left;">{{'op_rem' | translate}}</p>
               <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="calculateRem($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
-            <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice)">
+            <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice) && boukiiCarePrice > 0">
               <p style="float: left;">Boukii Care</p>
               <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>

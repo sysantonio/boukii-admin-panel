@@ -29,6 +29,16 @@ export class MailSidenavComponent implements OnInit {
       route: ['./all'],
       icon: 'mat:all_inbox'
     },
+    {
+      label: 'general_mails',
+      route: ['./general'],
+      icon: 'mat:all_inbox'
+    },
+    {
+      label: 'automatic_mails',
+      route: ['./auto'],
+      icon: 'mat:all_inbox'
+    },
     /*{
       label: 'Starred',
       route: ['./starred'],

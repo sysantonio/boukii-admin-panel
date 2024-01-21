@@ -281,7 +281,7 @@ export class CourseDetailModalComponent implements OnInit {
   }
 
   deleteSubGroup(subgroup) {
-    if (subgroup.booking_users.length < 0) {
+    if (subgroup.booking_users.length === 0) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
         panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
@@ -297,7 +297,7 @@ export class CourseDetailModalComponent implements OnInit {
         }
       });
     } else {
-      this.snackbar.open(this.translateService.instant('snackbar.course.snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
     }
 
   }
@@ -469,7 +469,7 @@ export class CourseDetailModalComponent implements OnInit {
           }
         });
       } else {
-        this.snackbar.open(this.translateService.instant('snackbar.course.snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
       }
     }
 

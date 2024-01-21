@@ -901,8 +901,77 @@ export class CoursesCreateUpdateComponent implements OnInit {
       if (result) {
         this.dataSource.data.push({date: moment(result.date).format('YYYY-MM-DD'), duration: result.duration, hour: result.hour, active: true});
         this.dateTable?.renderRows();
+
+        /*if (this.mode === 'update') {
+          this.defaults.course_dates.push({date: moment(result.date).format('YYYY-MM-DD'), hour_start: result.hour, hour_end: this.calculateHourEnd(result.hour, result.duration)});
+          this.activeGroupWhenEdit(this.defaults.course_dates[this.defaults.course_dates.length - 1]);
+        }*/
       }
     });
+  }
+
+  activeGroupWhenEdit(courseDate: any) {
+    courseDate.active = true;
+    courseDate.course_groups = [];
+    courseDate.course_id = this.id
+    this.defaults.course_dates[0].course_groups.forEach(group => {
+      //courseDate.groups.push(this.generateGroups({id: element.degree_id}));
+      courseDate.course_groups.push(
+        {
+          active: true,
+          teachers_min: group.teachers_min,
+          age_min: group.age_min,
+          age_max: group.age_max,
+          course_subgroups: group.course_subgroups
+        }
+      )
+    });
+  }
+
+  activeGroup(event: any, level: any) {
+
+    this.selectedItem = this.daysDatesLevels[0].dateString;
+    this.selectedDate = this.defaults.course_dates[0]?.date;
+    level.active = event.source.checked;
+
+    if(event.source.checked) {
+      this.defaults.course_dates.forEach(element => {
+        element.groups.push(this.generateGroups(level));
+      });
+
+      this.defaults.course_dates.forEach(element => {
+        element.groups.forEach(group => {
+          if (group.degree_id === level.id) {
+            group.active = event.source.checked;
+            group.teachers_min = level.id;
+            group.age_min = 5;
+            group.age_max = 50;
+            group.subgroups.push({
+              degree_id: level.id,
+              monitor_id: null,
+              max_participants: this.defaults.max_participants
+            })
+          }
+
+        });
+      });
+
+      this.checkAvailableMonitors(level);
+    } else {
+      // eliminar el curso o desactivarlo
+
+      this.defaults.course_dates.forEach((element) => {
+        element.groups.forEach((group, idx) => {
+          if (group.degree_id === level.id) {
+            element.groups.splice(idx, 1);
+
+          }
+        });
+      });
+
+
+    }
+
   }
 
   editDate(index: any, item: any) {
@@ -1382,7 +1451,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
             date: moment(element.date).format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: this.calculateHourEnd(element.hour, element.duration),
-            groups: []
+            course_groups: []
           }
 
           this.defaults.course_dates[0].course_groups.forEach(element => {
@@ -1441,7 +1510,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   generateGroupForNewDate(date: any, group: any) {
 
-    date.groups.push({
+    date.course_groups.push({
       course_id: group.course_id,
       course_date_id: null,
       degree_id: group.degree_id,
@@ -1453,16 +1522,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
       teachers_max: null,
       observations: null,
       auto: true,
-      subgroups: []
+      course_subgroups: []
     });
 
 
     group.course_subgroups.forEach(element => {
-      date.groups.forEach(group => {
+      date.course_groups.forEach(group => {
         if (group.degree_id === element.degree_id) {
           group.active = true;
           group.teachers_min = group.teacher_min_degree;
-          group.subgroups.push({
+          group.ge_min = group.age_min;
+          group.age_max = group.age_max;
+          group.course_subgroups.push({
             degree_id: element.degree_id,
             max_participants: element.max_participants
           })
@@ -1511,52 +1582,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
 
     return ret;
-  }
-
-  activeGroup(event: any, level: any) {
-
-    this.selectedItem = this.daysDatesLevels[0].dateString;
-    this.selectedDate = this.defaults.course_dates[0]?.date;
-    level.active = event.source.checked;
-
-    if(event.source.checked) {
-      this.defaults.course_dates.forEach(element => {
-        element.groups.push(this.generateGroups(level));
-      });
-
-      this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
-          if (group.degree_id === level.id) {
-            group.active = event.source.checked;
-            group.teachers_min = level.id;
-            group.age_min = 5;
-            group.age_max = 50;
-            group.subgroups.push({
-              degree_id: level.id,
-              monitor_id: null,
-              max_participants: this.defaults.max_participants
-            })
-          }
-
-        });
-      });
-
-      this.checkAvailableMonitors(level);
-    } else {
-      // eliminar el curso o desactivarlo
-
-      this.defaults.course_dates.forEach((element) => {
-        element.groups.forEach((group, idx) => {
-          if (group.degree_id === level.id) {
-            element.groups.splice(idx, 1);
-
-          }
-        });
-      });
-
-
-    }
-
   }
 
   addSubGroup(level: any) {

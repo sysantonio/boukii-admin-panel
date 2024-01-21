@@ -4,6 +4,7 @@ import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { BookingsComponent } from './bookings.component';
 import { BookingsCreateUpdateComponent } from './bookings-create-update/bookings-create-update.component';
 import { BookingDetailComponent } from './booking-detail/booking-detail.component';
+import { BookingsCreateUpdateEditComponent } from './bookings-create-update-edit/bookings-create-update-edit.component';
 
 
 const routes: VexRoutes = [
@@ -24,6 +25,13 @@ const routes: VexRoutes = [
   {
     path: 'update/:id',
     component: BookingDetailComponent,
+    data: {
+      toolbarShadowEnabled: true
+    }
+  },
+  {
+    path: 'edit/:id',
+    component: BookingsCreateUpdateEditComponent,
     data: {
       toolbarShadowEnabled: true
     }
