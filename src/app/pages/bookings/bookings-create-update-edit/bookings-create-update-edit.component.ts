@@ -385,7 +385,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       client.client_sports.forEach(sport => {
 
         if (sport.sport_id === this.defaults.sport_id) {
-          const level = this.levels.find((l) => l.id === sport.degree_id);
+          const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
           this.getCourses(level, this.monthAndYear);
@@ -412,7 +412,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       client.client_sports.forEach(sport => {
 
         if (sport.sport_id === this.defaults.sport_id) {
-          const level = this.levels.find((l) => l.id === sport.degree_id);
+          const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
           hasSport = true;
@@ -888,8 +888,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         paxes: paxes,
         payment_method_id: this.defaults.payment_method_id
       }
-
-
     });
 
     const clientsWithoutSelectedSport = [];
@@ -914,106 +912,131 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         })
     });
 
+    this.processBonus(this.bookingService.editData.id);
+    let rqs = [];
 
-    this.crudService.create('/bookings', data)
-    .subscribe((booking) => {
-      console.log('booking, created', booking);
-      this.processBonus(booking.data.id);
-      let rqs = [];
+      courseDates.forEach(item => {
+        if (item.course.course_type === 1) {
 
-        courseDates.forEach(item => {
-          if (item.course.course_type === 1) {
-
-            if (this.canBook(item.date)) {
-              rqs.push({
-                school_id: item.school_id,
-                booking_id: booking.data.id,
-                client_id: item.client_id,
-                course_id: item.course_id,
-                course_subgroup_id: item.subgroup_id,
-                course_group_id: item.group_id,
-                course_date_id: item.course_date_id,
-                degree_id: item.degree_id,
-                monitor_id: item.monitor_id,
-                hour_start: item.hour_start,
-                hour_end: item.hour_end,
-                price: item.price,
-                currency: item.currency,
-                date: item.date,
-                notes: item.notes,
-                school_notes: item.school_notes,
-                attended: false
-              });
-            }
-          }
-
-          if (item.course.course_type === 2) {
+          if (this.canBook(item.date)) {
             rqs.push({
               school_id: item.school_id,
-              booking_id: booking.data.id,
+              booking_id: this.bookingService.editData.id,
               client_id: item.client_id,
               course_id: item.course_id,
+              course_subgroup_id: item.subgroup_id,
+              course_group_id: item.group_id,
               course_date_id: item.course_date_id,
+              degree_id: item.degree_id,
               monitor_id: item.monitor_id,
               hour_start: item.hour_start,
-              hour_end: item.hour_end, //calcular en base a la duracion del curso
+              hour_end: item.hour_end,
               price: item.price,
               currency: item.currency,
-              paxes: item.paxes,
+              date: item.date,
               notes: item.notes,
               school_notes: item.school_notes,
-              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              attended: false
             });
           }
-        });
+        }
 
-        rqs.forEach((rq, idx) => {
-          const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
-
-          this.crudService.create('/booking-users', rq)
-          .subscribe((bookingUser) => {
-            if (bExtra) {
-              const bookingUserExtra = {
-                booking_user_id: bookingUser.data.id,
-                course_extra_id: null,
-              }
-              const courseExtra = {
-                course_id: rq.course_id,
-                name: bExtra.forfait.id,
-                description: bExtra.forfait.name,
-                price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
-              }
-              this.crudService.create('/course-extras', courseExtra)
-                .subscribe((responseCourseExtra) => {
-
-                  bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                  this.crudService.create('/booking-user-extras', bookingUserExtra)
-                  .subscribe((bookExtra) => {
-                    console.log("b.extra created", bookExtra, idx);
-                  })
-                })
-            }
-
-
+        if (item.course.course_type === 2) {
+          rqs.push({
+            school_id: item.school_id,
+            booking_id: this.bookingService.editData.id,
+            client_id: item.client_id,
+            course_id: item.course_id,
+            course_date_id: item.course_date_id,
+            monitor_id: item.monitor_id,
+            hour_start: item.hour_start,
+            hour_end: item.hour_end, //calcular en base a la duracion del curso
+            price: item.price,
+            currency: item.currency,
+            paxes: item.paxes,
+            notes: item.notes,
+            school_notes: item.school_notes,
+            date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
           });
-        });
-        setTimeout(() => {
+        }
+      });
 
-          if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
-            this.crudService.post('/admin/bookings/payments/' + booking.data.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
-               reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
-              .subscribe((result: any) => {
-                console.log((result));
-                window.open(result.payrexx_link, "_self");
-                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+      rqs.forEach((rq, idx) => {
+        const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
+
+        this.crudService.create('/booking-users', rq)
+        .subscribe((bookingUser) => {
+          if (bExtra) {
+            const bookingUserExtra = {
+              booking_user_id: bookingUser.data.id,
+              course_extra_id: null,
+            }
+            const courseExtra = {
+              course_id: rq.course_id,
+              name: bExtra.forfait.id,
+              description: bExtra.forfait.name,
+              price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
+            }
+            this.crudService.create('/course-extras', courseExtra)
+              .subscribe((responseCourseExtra) => {
+
+                bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                this.crudService.create('/booking-user-extras', bookingUserExtra)
+                .subscribe((bookExtra) => {
+                  console.log("b.extra created", bookExtra, idx);
+                })
               })
-          } else {
-            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
-            this.goTo('/bookings');
           }
-        }, 1000);
-      })
 
+
+        });
+      });
+
+      this.bookingService.editData.booking_users.forEach(element => {
+        this.crudService.delete('/booking-users', element.id)
+          .subscribe(() => {
+
+          })
+      });
+
+      this.bookingService.editData.booking_extras.forEach(element => {
+        this.crudService.delete('/booking-user-extras', element.id)
+          .subscribe(() => {
+
+          })
+      });
+
+      setTimeout(() => {
+
+        if (this.finalPrice < this.bookingService.editData.price) {
+          const data = {
+            code: "BOU-"+this.generateRandomNumber().toString(),
+            quantity: this.bookingService.editData.price - this.finalPrice,
+            remaining_balance: this.bookingService.editData.price - this.finalPrice,
+            payed: false,
+            client_id: this.bookingService.editData.client_main_id,
+            school_id: this.user.schools[0].id
+          };
+          this.crudService.create('/vouchers', data)
+          .subscribe((result) => {
+
+            //metodo de envio de email
+            this.router.navigate(['/bookings/update/'+this.bookingService.editData.id]);
+          })
+        } else if (this.finalPrice === this.bookingService.editData.price) {
+          // metodo de envio de email
+          this.router.navigate(['/bookings/update/'+this.bookingService.editData.id]);
+        } else if (this.finalPrice < this.bookingService.editData.price) {
+          //metodo envio de email
+        }
+      }, 1000);
+
+  }
+
+  generateRandomNumber() {
+    const min = 10000000; // límite inferior para un número de 5 cifras
+    const max = 99999999; // límite superior para un número de 5 cifras
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   processBonus(bookingId: any) {
@@ -1262,7 +1285,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
         client.client_sports.forEach(sport => {
           if (sport.sport_id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === sport.degree_id);
+            const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
             this.levelForm.patchValue(level);
             this.defaultsBookingUser.degree_id = level.id;
             hasSport = true;
@@ -1338,7 +1361,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         if (!onLoad) {
           client.client_sports.forEach(sport => {
             if (sport.sport_id === this.defaults.sport_id) {
-              const level = this.levels.find((l) => l.id === sport.degree_id);
+              const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
 
               if (level) {
                 this.levelForm.patchValue(level);
@@ -1401,13 +1424,13 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         console.log(data);
 
         this.defaultsBookingUser.degree_id = level.id;
-        this.courses = data.data;
+        this.courses = data.data.filter((c) => c.is_flexible === this.bookingService.editData.course_is_flexible && c.course_type === this.bookingService.editData.course_type);
         if (!fromPrivate) {
 
           this.coursesMonth = data.data;
         }
 
-        if (data.data.length === 0) {
+        if (this.courses.length === 0) {
           this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
         }
         this.loading = false;

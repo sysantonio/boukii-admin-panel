@@ -1950,8 +1950,10 @@ export class BookingDetailComponent implements OnInit {
     }
 
 
+    this.bookingService.editData.id = this.id;
     this.bookingService.editData.price = price;
     this.bookingService.editData.client_main_id = this.booking.client_main_id;
+    this.bookingService.editData.booking_extras = this.bookingExtras;
     this.bookingService.editData.course_id = this.courses[index].id;
     this.bookingService.editData.sport_id = this.courses[index].sport_id;
     this.bookingService.editData.course_type = this.courses[index].course_type;
