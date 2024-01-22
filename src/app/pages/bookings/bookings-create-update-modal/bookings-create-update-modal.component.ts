@@ -441,7 +441,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
     if (!hasSport) {
-      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
     }
   }
 
@@ -1200,18 +1200,18 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
       });
 
-      if (!hasSport) {
+      /*if (!hasSport) {
         this.courses = [];
           this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_1') + this.selectedSport.name + this.translateService.instant('snackbar.booking.no_sport_2'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
-      }
+      }*/
     } else {
-      this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
+      /*this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
       this.snackBarRef.onAction().subscribe(() => {
         this.addSportToUser(this.selectedSport.sport_id);
-      });
+      });*/
     }
 
   }
@@ -1287,7 +1287,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           }
         });
 
-        if (!hasSport && client.client_sports.length === 0) {
+        /*if (!hasSport && client.client_sports.length === 0) {
           this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
@@ -1298,7 +1298,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           this.snackBarRef.onAction().subscribe(() => {
             this.addSportToUser(this.selectedSport.sport_id);
           });
-        }
+        }*/
       })
   }
 

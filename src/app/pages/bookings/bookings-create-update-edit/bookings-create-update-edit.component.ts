@@ -441,7 +441,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
 
     if (!hasSport) {
-      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
     }
   }
 
