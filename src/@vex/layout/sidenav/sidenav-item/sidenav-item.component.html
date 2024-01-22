@@ -1,6 +1,6 @@
 <a *ngIf="isLink(item) && !isFunction(item.route) && !isExternalLink(item.route)"
    [fragment]="item.fragment"
-   [routerLinkActiveOptions]="item.routerLinkActiveOptions || { exact: false }"
+   [routerLinkActiveOptions]="{ exact: false }"
    [routerLink]="item.route"
    class="vex-sidenav-item"
    matRipple
