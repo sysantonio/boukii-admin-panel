@@ -33,6 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BookingsCreateUpdateEditComponent, CustomDateAdapter } from './bookings-create-update-edit.component';
 import { AddReductionModalModule } from '../bookings-create-update/add-reduction/add-reduction.module';
 import { AddDiscountBonusModalModule } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.module';
+import { ConfirmModalEditBookingModule } from './confirm-dialog-edit-booking/confirm-dialog-edit-booking.component.module';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -82,7 +83,8 @@ export const MY_DATE_FORMATS = {
     AddDiscountBonusModalModule,
     ClientsCreateUpdateModalModule,
     AddClientSportModalModule,
-    TranslateModule
+    TranslateModule,
+    ConfirmModalEditBookingModule
   ],
   declarations: [BookingsCreateUpdateEditComponent],
   exports: [BookingsCreateUpdateEditComponent],

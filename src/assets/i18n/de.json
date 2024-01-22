@@ -507,6 +507,8 @@
   "card": "Datenblatt",
   "op_rem_added": "Geänderte Rückerstattungsoption für die Reservierung",
   "b_care_added": "Boukii Care wurde zur Vorbestellung geändert",
-  "price_per_day": "Preis pro Tag"
-
+  "price_per_day": "Preis pro Tag",
+  "back_to_booking": "Zurück zur Reservierung",
+  "update_booking_title": "Reservierung ändern",
+  "update_booking_message": "Sie sind dabei, den von Ihnen gewählten Kurs durch einen anderen zu ersetzen. "
 }

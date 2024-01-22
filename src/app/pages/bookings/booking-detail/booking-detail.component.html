@@ -275,7 +275,7 @@
             </div>
             <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice) && boukiiCarePrice > 0">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)"  [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="calculateBoukiiCare($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>

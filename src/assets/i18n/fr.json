@@ -505,6 +505,8 @@
   "card": "Fiche technique",
   "op_rem_added": "Option de remboursement modifiée pour la réservation",
   "b_care_added": "Boukii Care modifié en précommande",
-  "price_per_day": "Prix ​​par jour"
-
+  "price_per_day": "Prix ​​par jour",
+  "back_to_booking": "Retour à la réservation",
+  "update_booking_title": "Modifier la réservation",
+  "update_booking_message": "Vous êtes sur le point de remplacer le cours que vous avez sélectionné par un autre. "
 }

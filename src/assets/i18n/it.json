@@ -506,6 +506,8 @@
   "card": "Scheda dati",
   "op_rem_added": "Opzione di rimborso modificata per la prenotazione",
   "b_care_added": "Boukii Care modificato per il preordine",
-  "price_per_day": "Prezzo al giorno"
-
+  "price_per_day": "Prezzo al giorno",
+  "back_to_booking": "Ritorno alla prenotazione",
+  "update_booking_title": "Modifica prenotazione",
+  "update_booking_message": "Stai per sostituire il corso che hai selezionato con un altro. "
 }

@@ -512,5 +512,9 @@
   "card": "Ficha técnica",
   "op_rem_added": "Opción de reemboloso modificada para la reserva",
   "b_care_added": "Boukii Care modificado para la reserva",
-  "price_per_day": "Precio por día"
+  "price_per_day": "Precio por día",
+  "bookings_page.edit.title": "Modifcar curso de reserva",
+  "back_to_booking": "Volver a la reserva",
+  "update_booking_title": "Modiicar reserva",
+  "update_booking_message": "Esta a punto de sustituir el curso que ha seleccionado por otro. ¿Está seguro de que quiere continuar?"
 }

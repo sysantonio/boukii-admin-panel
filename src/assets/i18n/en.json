@@ -506,6 +506,8 @@
   "card": "Data sheet",
   "op_rem_added": "Modified refund option for reservation",
   "b_care_added": "Boukii Care modified for pre-order",
-  "price_per_day": "Price per day"
-
+  "price_per_day": "Price per day",
+  "back_to_booking": "Return to reservation",
+  "update_booking_title": "Modify reservation",
+  "update_booking_message": "You are about to replace the course you have selected with another. "
 }

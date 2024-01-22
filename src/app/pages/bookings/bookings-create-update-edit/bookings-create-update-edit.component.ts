@@ -27,6 +27,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
 import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
 import { BookingService } from 'src/service/bookings.service';
+import { ConfirmModalEditBookingComponent } from './confirm-dialog-edit-booking/confirm-dialog-edit-booking.component';
 
 @Component({
   selector: 'custom-header',
@@ -277,7 +278,16 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.getData();
+    const dialogRef = this.dialog.open(ConfirmModalEditBookingComponent, {
+      data: {title: this.translateService.instant('update_booking_title'), message: this.translateService.instant('update_booking_message'), route:('/bookings/update/'+this.bookingService.editData.id)}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        this.getData();
+
+      }
+    });
   }
 
   getData() {
@@ -343,17 +353,20 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
             this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
             this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
             this.selectSport(this.sportDataList.find((s) => s.sport_id === this.bookingService.editData.sport_id));
-            this.getUtilzers(client, true);
             this.getDegrees(this.bookingService.editData.sport_id);
+            this.getUtilzers(client, true);
 
             setTimeout(() => {
               this.clientsForm.patchValue(client);
               this.clientsForm.disable();
-              this.levelForm.disable();
+
+              if (this.bookingService.editData.course_type === 1) {
+                this.levelForm.disable();
+              }
               this.loadingCalendar = false;
               this.loading = false;
-            }, 800);
-          }, 500);
+            }, 500);
+          }, 1000);
       })
   }
 
@@ -992,6 +1005,12 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         });
       });
 
+      const priceUpdated = this.bookingService.editData.booking.price_total - (this.bookingService.editData.price) + (this.finalPrice);
+      this.crudService.update('/bookings', {price_total: priceUpdated}, this.bookingService.editData.booking.id)
+        .subscribe(() => {
+
+        })
+
       this.bookingService.editData.booking_users.forEach(element => {
         this.crudService.delete('/booking-users', element.id)
           .subscribe(() => {
@@ -1025,9 +1044,18 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
           })
         } else if (this.finalPrice === this.bookingService.editData.price) {
           // metodo de envio de email
-          this.router.navigate(['/bookings/update/'+this.bookingService.editData.id]);
+
         } else if (this.finalPrice < this.bookingService.editData.price) {
           //metodo envio de email
+          this.crudService.post('/admin/bookings/payments/' + this.bookingService.editData.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
+            reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
+           .subscribe((result: any) => {
+             console.log((result));
+             window.open(result.payrexx_link, "_self");
+             this.router.navigate(['/bookings/update/'+this.bookingService.editData.id]);
+
+             this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+           })
         }
       }, 1000);
 
@@ -1187,13 +1215,24 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       let hasSport = false;
       client.client_sports.forEach(sport => {
 
-        if (sport.sport_id === this.defaults.sport_id) {
-          const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
-          this.levelForm.patchValue(level);
-          this.defaultsBookingUser.degree_id = level.id;
-          hasSport = true;
-          this.getCourses(level, this.monthAndYear);
+        if (this.bookingService.editData.course_type === 1) {
+          if (sport.sport_id === this.defaults.sport_id) {
+            const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
+            this.levelForm.patchValue(level);
+            this.defaultsBookingUser.degree_id = level.id;
+            hasSport = true;
+            this.getCourses(level, this.monthAndYear);
+          }
+        } else {
+          if (sport.sport_id === this.defaults.sport_id) {
+            this.levelForm.patchValue(this.levels[0]);
+
+            this.defaultsBookingUser.degree_id = this.levels[0].id;
+            hasSport = true;
+            this.getCourses(this.levels[0], this.monthAndYear);
+          }
         }
+
       });
 
       if (!hasSport) {
@@ -1267,7 +1306,10 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     this.defaults.sport_id = this.bookingService.editData.sport_id;
     this.form.get("sport").patchValue(sport.sport_id);
     this.selectedSport = sport;
-    this.getDegrees(sport.sport_id);
+    if (this.bookingService.editData.course_type === 1) {
+
+      this.getDegrees(sport.sport_id);
+    }
   }
 
   getDegrees(sportId: number) {
@@ -1284,12 +1326,21 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         let hasSport = false;
         const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
         client.client_sports.forEach(sport => {
-          if (sport.sport_id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
-            this.levelForm.patchValue(level);
-            this.defaultsBookingUser.degree_id = level.id;
-            hasSport = true;
-            this.getCourses(level, this.monthAndYear);
+          if (this.bookingService.editData.course_type === 1) {
+            if (sport.sport_id === this.defaults.sport_id) {
+              const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
+              this.levelForm.patchValue(level);
+              this.defaultsBookingUser.degree_id = level.id;
+              hasSport = true;
+              this.getCourses(level, this.monthAndYear);
+            }
+          } else {
+            if (sport.sport_id === this.defaults.sport_id) {
+              this.levelForm.patchValue(this.levels[0]);
+              this.defaultsBookingUser.degree_id = this.levels[0].id;
+              hasSport = true;
+              this.getCourses(this.levels[0], this.monthAndYear);
+            }
           }
         });
 

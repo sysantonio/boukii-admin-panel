@@ -245,9 +245,9 @@ export class SettingsComponent implements OnInit {
             });
 
 
-            this.hasCancellationInsurance = parseFloat(settings?.taxes?.cancellation_insurance_percent) !== 0;
-            this.hasBoukiiCare = parseInt(settings?.taxes?.boukii_care_price) !== 0;
-            this.hasTVA = parseFloat(settings?.taxes?.tva) !== 0;
+            this.hasCancellationInsurance = parseFloat(settings?.taxes?.cancellation_insurance_percent) !== 0 && !isNaN(settings?.taxes?.cancellation_insurance_percent);
+            this.hasBoukiiCare = parseInt(settings?.taxes?.boukii_care_price) !== 0 && !isNaN(settings?.taxes?.boukii_care_price);
+            this.hasTVA = parseFloat(settings?.taxes?.tva) !== 0 && !isNaN(settings?.taxes?.tva);
 
             this.cancellationInsurancePercent = parseFloat(settings?.taxes?.cancellation_insurance_percent);
             this.boukiiCarePrice = parseInt(settings?.taxes?.boukii_care_price);
