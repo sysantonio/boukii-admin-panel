@@ -1500,6 +1500,20 @@ export class BookingDetailComponent implements OnInit {
         this.bookingUsers.forEach(element => {
           this.crudService.update('/booking-users', {status: 2}, element.id)
           .subscribe(() => {
+
+            this.bookingExtras.forEach(element => {
+              this.crudService.delete('/booking-user-extras', element.id)
+                .subscribe(() => {
+
+                })
+            });
+
+            this.courseExtra.forEach(element => {
+              this.crudService.delete('/course-extras', element.id)
+                .subscribe(() => {
+
+                })
+            });
           })
         });
       }
