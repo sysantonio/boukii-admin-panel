@@ -516,5 +516,6 @@
   "bookings_page.edit.title": "Modifcar curso de reserva",
   "back_to_booking": "Volver a la reserva",
   "update_booking_title": "Modiicar reserva",
-  "update_booking_message": "Esta a punto de sustituir el curso que ha seleccionado por otro. ¿Está seguro de que quiere continuar?"
+  "update_booking_message": "Esta a punto de sustituir el curso que ha seleccionado por otro. ¿Está seguro de que quiere continuar?",
+  "bookings_page.edit_dates.title": "Modificar fechas de la reserva"
 }

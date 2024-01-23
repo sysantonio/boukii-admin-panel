@@ -509,5 +509,7 @@
   "price_per_day": "Prezzo al giorno",
   "back_to_booking": "Ritorno alla prenotazione",
   "update_booking_title": "Modifica prenotazione",
-  "update_booking_message": "Stai per sostituire il corso che hai selezionato con un altro. "
+  "update_booking_message": "Stai per sostituire il corso che hai selezionato con un altro. ",
+  "bookings_page.edit_dates.title": "Modifica le date di prenotazione"
+
 }

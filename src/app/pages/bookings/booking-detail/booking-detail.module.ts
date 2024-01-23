@@ -36,6 +36,7 @@ import { CancelBookginModalModule } from '../cancel-booking/cancel-booking.modul
 import { CancelPartialBookginModalModule } from '../cancel-partial-booking/cancel-partial-booking.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
+import { UpdateCourseModalModule } from './update-course/update-course.module';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -87,7 +88,8 @@ export const MY_DATE_FORMATS = {
     CancelBookginModalModule,
     CancelPartialBookginModalModule,
     TranslateModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    UpdateCourseModalModule
   ],
   declarations: [BookingDetailComponent],
   exports: [BookingDetailComponent],
