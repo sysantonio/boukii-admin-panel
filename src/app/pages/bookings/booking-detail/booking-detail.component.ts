@@ -2009,6 +2009,21 @@ export class BookingDetailComponent implements OnInit {
             this.getData();
           }
         });
+      } else {
+        const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
+          width: '60vw',
+          maxWidth: '100vw',
+          panelClass: 'full-screen-dialog',
+          data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
+            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: [item.courseDates[0].client_id]}
+        });
+
+        dialogRef.afterClosed().subscribe((data: any) => {
+          if (data) {
+            this.getData();
+          }
+        });
+
       }
 
     }
