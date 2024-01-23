@@ -62,28 +62,34 @@ export class UpdateCourseModalComponent implements OnInit {
 
 
     let price = this.defaults.mainBooking.price * this.datesControl.value.length;
+    let boukiiCarePrice = 0;
+    let canInsurance = 0;
+    let tva = 0;
 
     if (this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0) {
       price = price + (this.defaults.boukiiCarePrice * this.defaults.clientIds * this.datesControl.value.length);
+      boukiiCarePrice = (this.defaults.boukiiCarePrice * this.defaults.clientIds * this.datesControl.value.length);
     }
 
     if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
       price = price + (this.defaults.cancellationInsurance * (this.defaults.mainBooking.price * this.datesControl.value.length))
+      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.mainBooking.price * this.datesControl.value.length))
     }
 
     if (this.defaults.tva && this.defaults.tva > 0) {
-      price = price + (price * this.defaults.tva)
+      price = price + (price * this.defaults.tva);
+      tva = (price * this.defaults.tva);
     }
 
     const bookingData = {
       has_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0,
       has_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0,
-      price_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0 ? this.defaults.boukiiCarePrice : 0,
-      price_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0 ? this.defaults.cancellationInsurance : 0,
+      price_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0 ? boukiiCarePrice : 0,
+      price_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0 ? canInsurance : 0,
       price_total: price
     };
 
-    this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.id)
+    this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.booking_id)
       .subscribe(() => {})
 
     const rqs = [];
@@ -101,6 +107,28 @@ export class UpdateCourseModalComponent implements OnInit {
             this.crudService.create('/booking-users', bu)
               .subscribe((bookingUser) => {
 
+                  const bookingUserExtra = {
+                    booking_user_id: bookingUser.data.id,
+                    course_extra_id: null,
+                  };
+
+                  const courseExtra = {
+                    course_id: this.defaults.course.id,
+                    name: this.defaults.courseExtra[0].name,
+                    description: this.defaults.courseExtra[0].description,
+                    price: this.defaults.courseExtra[0].price
+                  };
+
+                  this.crudService.create('/course-extras', courseExtra)
+                    .subscribe((responseCourseExtra) => {
+
+                      bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                      this.crudService.create('/booking-user-extras', bookingUserExtra)
+                      .subscribe((bookExtra) => {
+
+                      })
+
+                    })
               })
           });
         });

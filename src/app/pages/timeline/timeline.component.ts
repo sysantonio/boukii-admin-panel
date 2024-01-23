@@ -432,7 +432,7 @@ export class TimelineComponent {
       if (!booking.booking) {
         // Construct the booking object
         const courseDate = booking.course.course_dates.find(date => date.id === booking.course_date_id);
-        
+
         booking.booking = {
           id: booking.id
         };
@@ -443,7 +443,7 @@ export class TimelineComponent {
         booking.bookings_clients = booking.booking_users;
       }
     });
-    
+
     let tasksCalendar:any = [
       //BOOKINGS
       ...allBookings.map(booking => {
@@ -1131,7 +1131,10 @@ export class TimelineComponent {
             });
             //
           } else {
-            this.snackbar.open(this.translateService.instant('match_error_sport') + this.taskDetail.sport.name, 'OK', {duration: 3000});
+            if (this.moveTask) {
+
+              this.snackbar.open(this.translateService.instant('match_error_sport') + this.taskDetail.sport.name, 'OK', {duration: 3000});
+            }
           }
         }
       })

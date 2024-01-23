@@ -251,6 +251,11 @@ export class BookingDetailComponent implements OnInit {
 
 
   getData() {
+    this.bookingsToCreate = [];
+    this.courseExtra = [];
+    this.bookingExtras = [];
+    this.bookingUsers = [];
+    this.currentBonus = [];
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -1318,7 +1323,7 @@ export class BookingDetailComponent implements OnInit {
             b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
           } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
             const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
-            ret = ret + b?.courseDates[0].price * b.courseDates.length;
+            ret = ret + (b?.courseDates[0].price * b.courseDates.length);
             discounts.forEach(element => {
               if (element.date === b.courseDates.length) {
                 ret = ret - (ret * (element.percentage / 100));
@@ -1353,7 +1358,7 @@ export class BookingDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(CancelBookingModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: this.booking.price_total, booking: this.booking}
+      data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: this.finalPrice, booking: this.booking}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -2008,7 +2013,7 @@ export class BookingDetailComponent implements OnInit {
           panelClass: 'full-screen-dialog',
           data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id),
             mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: this.clientsIds,
-            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance}
+            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
@@ -2023,12 +2028,26 @@ export class BookingDetailComponent implements OnInit {
           panelClass: 'full-screen-dialog',
           data: {course: this.courses[index], dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
             mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: [item.courseDates[0].client_id],
-            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance}
+            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
           if (data) {
-            this.getData();
+            this.bookingExtras.forEach(element => {
+              this.crudService.delete('/booking-user-extras', element.id)
+              .subscribe(() => {})
+            });
+
+            this.courseExtra.forEach(element => {
+              this.crudService.delete('/course-extras', element.id)
+                .subscribe(() => {})
+
+            });
+
+            setTimeout(() => {
+              this.getData();
+
+            }, 500);
           }
         });
 
