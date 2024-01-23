@@ -10,6 +10,7 @@ import { RelativeDateTimeModule } from '../../../pipes/relative-date-time/relati
 import { RouterModule } from '@angular/router';
 import { MatRippleModule } from '@angular/material/core';
 import { ToolbarNotificationsDropdownComponent } from './toolbar-notifications-dropdown/toolbar-notifications-dropdown.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { ToolbarNotificationsDropdownComponent } from './toolbar-notifications-d
     RelativeDateTimeModule,
     RouterModule,
     MatRippleModule,
+    TranslateModule
   ],
   exports: [ToolbarNotificationsComponent]
 })

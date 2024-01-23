@@ -1655,7 +1655,22 @@ export class BookingDetailModalComponent implements OnInit {
 
           } else {
             let price = parseFloat(this.booking.price_total);
+            const bookingExtras = this.bookingExtras.filter((b) => b.booking_user_id === book.courseDates.id);
+            const courseExtras = this.courseExtra.filter((b) => b.booking_user_id === book.courseDates.id);
 
+            bookingExtras.forEach(element => {
+              this.crudService.delete('/booking-user-extras', element.id)
+                .subscribe(() => {
+
+                })
+            });
+
+            courseExtras.forEach(element => {
+              this.crudService.delete('/course-extras', element.id)
+                .subscribe(() => {
+
+                })
+            });
             if (this.tva && !isNaN(this.tva)) {
               price = price + (price * this.tva);
             }

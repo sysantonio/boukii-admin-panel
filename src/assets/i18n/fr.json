@@ -512,5 +512,10 @@
   "bookings_page.edit_dates.title": "Modifier les dates de réservation",
   "monitors": "Moniteurs",
   "free": "Libre",
-  "occupied": "Ocupé"
+  "occupied": "Ocupé",
+  "default_noti": "Cette section sera bientôt activée",
+  "notis": "Notifications",
+  "notis_1": "Tu as ",
+  "notis_2": " nouvelles notifications",
+  "mark_all_as_read": "tout marquer comme lu"
 }

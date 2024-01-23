@@ -1,8 +1,8 @@
 <div class="dropdown">
   <div class="dropdown-header flex items-center justify-between">
     <div>
-      <div class="dropdown-heading">Notifications</div>
-      <div class="dropdown-subheading">You have {{ notifications.length }} new notifications.</div>
+      <div class="dropdown-heading">{{'notis' | translate}}</div>
+      <div class="dropdown-subheading">{{'notis_1' | translate}} {{ notifications.length }} {{'notis_2' | translate}}.</div>
     </div>
 
     <button [matMenuTriggerFor]="settingsMenu" mat-icon-button type="button">
@@ -20,7 +20,7 @@
                 [svgIcon]="notification.icon"
                 class="notification-icon flex-none"></mat-icon>
       <div class="flex-auto">
-        <div class="notification-label">{{ notification.label }}</div>
+        <div class="notification-label">{{ notification.label | translate }}</div>
         <div class="notification-description">{{ notification.datetime | relativeDateTime }}</div>
       </div>
       <mat-icon class="notification-chevron flex-none" svgIcon="mat:chevron_right"></mat-icon>
@@ -28,18 +28,18 @@
   </div>
 
   <div class="dropdown-footer flex items-center justify-center">
-    <button color="primary" mat-button type="button">MARK ALL AS READ</button>
+    <button color="primary" mat-button type="button">{{'mark_all_as_read' |translate | uppercase}}</button>
   </div>
 </div>
 
 <mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
   <button mat-menu-item>
     <mat-icon svgIcon="mat:clear_all"></mat-icon>
-    <span>Mark all as read</span>
+    <span>{{'mark_all_as_read' |translate }}</span>
   </button>
 
-  <button mat-menu-item>
+  <!--<button mat-menu-item>
     <mat-icon svgIcon="mat:notifications_off"></mat-icon>
     <span>Disable Notifications</span>
-  </button>
+  </button>-->
 </mat-menu>

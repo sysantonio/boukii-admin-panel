@@ -514,5 +514,10 @@
   "bookings_page.edit_dates.title": "Reservierungsdaten ändern",
   "monitors": "Monitore",
   "free": "Frei",
-  "occupied": "Besetzt"
+  "occupied": "Besetzt",
+  "default_noti": "Dieser Abschnitt wird bald aktiviert",
+  "notis": "Benachrichtigungen",
+  "notis_1": "Haben ",
+  "notis_2": " neue Benachrichtigungen",
+  "mark_all_as_read": "Alles als gelesen markieren"
 }
