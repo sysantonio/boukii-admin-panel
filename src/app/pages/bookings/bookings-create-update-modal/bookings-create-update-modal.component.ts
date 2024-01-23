@@ -341,7 +341,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
             this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
             this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
-            //this.selectSport(this.sportDataList[0]);
+            this.selectSport(this.sportDataList[0]);
 
             if (this.externalData && this.externalData.client) {
               this.getUtilzers(this.externalData.client, true);

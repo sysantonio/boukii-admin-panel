@@ -47,7 +47,7 @@
               </div>
             </div>
 
-            <ng-container *ngFor="let bu of bookingUsers">
+            <ng-container *ngFor="let bu of bookingUsersUnique">
               <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2">
 
                 <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"

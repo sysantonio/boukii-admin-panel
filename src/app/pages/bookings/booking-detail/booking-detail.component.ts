@@ -184,8 +184,10 @@ export class BookingDetailComponent implements OnInit {
   totalPrice: any = 0;
   booking: any;
   bookingUsers: any;
+  bookingUsersUnique: any;
   countries = MOCK_COUNTRIES;
   schoolSettings: any = [];
+  clientsIds = [];
 
   tva = 0;
   cancellationInsurance = 0;
@@ -297,6 +299,7 @@ export class BookingDetailComponent implements OnInit {
         this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.id)
           .subscribe((bookingUser) => {
             this.bookingUsers = bookingUser.data;
+            this.getUniqueBookingUsers();
 
             const groupedByCourseId = bookingUser.data.reduce((accumulator, currentValue) => {
               // Obtiene el course_id del objeto actual
@@ -331,9 +334,13 @@ export class BookingDetailComponent implements OnInit {
                             data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
                             this.courses.push(course.data);
                             data.courseDates.push(element);
+                            this.clientsIds.push(clientId);
+
 
                           } else {
                             data.clients.push(clientId);
+                            this.clientsIds.push(clientId);
+
                           }
 
                         });
@@ -396,6 +403,16 @@ export class BookingDetailComponent implements OnInit {
     });
   }
 
+  getUniqueBookingUsers() {
+    const clientIds = new Set();
+    this.bookingUsersUnique = this.bookingUsers.filter(item => {
+      if (!clientIds.has(item.client_id)) {
+        clientIds.add(item.client_id);
+        return true;
+      }
+      return false;
+    });
+  }
 
   generateArray(paxes: number) {
     this.persons = [];
@@ -1918,7 +1935,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getBookingPaxes(){
-    return this.bookingUsers.length;
+    return this.bookingUsersUnique.length;
   }
 
   getBookingDates(){
@@ -1983,13 +2000,13 @@ export class BookingDetailComponent implements OnInit {
           width: '60vw',
           maxWidth: '100vw',
           panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index], dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id),
-            mainBooking: this.bookingUsers[0]}
+          data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id),
+            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: this.clientsIds}
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
           if (data) {
-
+            this.getData();
           }
         });
       }

@@ -19,7 +19,7 @@
       <mat-form-field class="flex-auto" style="width: 100%">
         <mat-label>{{'dates' | translate}}</mat-label>
         <mat-select multiple [formControl]="datesControl">
-          <mat-option *ngFor="let date of selectedDates" [value]="date.id">
+          <mat-option *ngFor="let date of selectedDates" [value]="date.id" [disabled]="!isAfter(date)">
             {{ date.date | date: 'dd/MM/YYYY' }}
           </mat-option>
         </mat-select>
