@@ -342,7 +342,7 @@ export class TimelineComponent {
 
         // Process 'monitor' field
         // Filter by free +/ occupied
-        if ((this.timelineView === 'day' && ((this.filterFree && !item.monitor.hasFullDayNwd) || (this.filterOccupied && item.monitor.hasFullDayNwd))) || this.timelineView !== 'day') {
+        if (item.monitor && (this.filterFree && !item.monitor.hasFullDayNwd) || (this.filterOccupied && item.monitor.hasFullDayNwd)) {
           if(this.filterMonitor){
             if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
               this.filteredMonitors.push(item.monitor);
@@ -395,7 +395,10 @@ export class TimelineComponent {
         /*allBookings.push(...item.bookings);*/
         if (item.bookings && typeof item.bookings === 'object') {
             for (const bookingKey in item.bookings) {
-                const bookingArray = item.bookings[bookingKey];
+                let bookingArray = item.bookings[bookingKey];
+                if (!Array.isArray(bookingArray)) {
+                  bookingArray = [bookingArray];
+                }
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
                   if(!this.areAllChecked()){
                     hasAtLeastOneBooking = this.checkedSports.has(bookingArray[0].course.sport_id);
@@ -425,6 +428,22 @@ export class TimelineComponent {
 
     //Convert them into TASKS
 
+    allBookings.forEach(booking => {
+      if (!booking.booking) {
+        // Construct the booking object
+        const courseDate = booking.course.course_dates.find(date => date.id === booking.course_date_id);
+        
+        booking.booking = {
+          id: booking.id
+        };
+        booking.date = courseDate ? courseDate.date : null;
+        booking.hour_start = courseDate ? courseDate.hour_start : null;
+        booking.hour_end = courseDate ? courseDate.hour_end : null;
+        booking.bookings_number = booking.booking_users.length;
+        booking.bookings_clients = booking.booking_users;
+      }
+    });
+    
     let tasksCalendar:any = [
       //BOOKINGS
       ...allBookings.map(booking => {
@@ -469,7 +488,7 @@ export class TimelineComponent {
         }
 
         return {
-          booking_id: booking?.booking.id,
+          booking_id: booking?.booking?.id,
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
