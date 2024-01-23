@@ -57,11 +57,34 @@ export class UpdateCourseModalComponent implements OnInit {
         notes: this.defaults.mainBooking.notes,
         school_notes: this.defaults.mainBooking.school_notes,
         date: moment(date[0].date).format('YYYY-MM-DD')
-      })
+      });
     });
 
-    console.log(data);
 
+    let price = this.defaults.mainBooking.price * this.datesControl.value.length;
+
+    if (this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0) {
+      price = price + (this.defaults.boukiiCarePrice * this.defaults.clientIds * this.datesControl.value.length);
+    }
+
+    if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
+      price = price + (this.defaults.cancellationInsurance * (this.defaults.mainBooking.price * this.datesControl.value.length))
+    }
+
+    if (this.defaults.tva && this.defaults.tva > 0) {
+      price = price + (price * this.defaults.tva)
+    }
+
+    const bookingData = {
+      has_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0,
+      has_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0,
+      price_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0 ? this.defaults.boukiiCarePrice : 0,
+      price_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0 ? this.defaults.cancellationInsurance : 0,
+      price_total: price
+    };
+
+    this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.id)
+      .subscribe(() => {})
 
     const rqs = [];
     this.defaults.dates.forEach(element => {

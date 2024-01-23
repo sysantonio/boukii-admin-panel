@@ -1317,8 +1317,14 @@ export class BookingDetailComponent implements OnInit {
             ret = ret + parseFloat(this.courses[idx]?.price)* b.courseDates.length;
             b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
           } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
+            const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
             ret = ret + b?.courseDates[0].price * b.courseDates.length;
-            b.price_total = b?.courseDates[0].price * b.courseDates.length;
+            discounts.forEach(element => {
+              if (element.date === b.courseDates.length) {
+                ret = ret - (ret * (element.percentage / 100));
+              }
+            });
+            b.price_total = ret;
           } else {
             ret = ret + b?.price_total
           }
@@ -2001,7 +2007,8 @@ export class BookingDetailComponent implements OnInit {
           maxWidth: '100vw',
           panelClass: 'full-screen-dialog',
           data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id),
-            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: this.clientsIds}
+            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: this.clientsIds,
+            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance}
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
@@ -2014,8 +2021,9 @@ export class BookingDetailComponent implements OnInit {
           width: '60vw',
           maxWidth: '100vw',
           panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
-            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: [item.courseDates[0].client_id]}
+          data: {course: this.courses[index], dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
+            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: [item.courseDates[0].client_id],
+            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance}
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
