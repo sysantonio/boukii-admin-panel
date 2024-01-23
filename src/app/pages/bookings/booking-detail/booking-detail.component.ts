@@ -322,16 +322,25 @@ export class BookingDetailComponent implements OnInit {
 
                     if (course.data.course_type === 2 && this.booking.old_id === null) {
 
+                      const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null, clients: []}
 
                         groupedByCourseId[clientId].forEach((element, idx) => {
-                          const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
-                          data.sport_id = course.data?.sport_id;
-                          data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
-                          this.courses.push(course.data);
-                          data.courseDates.push(element);
-                          this.bookingsToCreate.unshift(data);
+
+                          if(parseFloat(element.price) !== 0) {
+                            data.sport_id = course.data?.sport_id;
+                            data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
+                            this.courses.push(course.data);
+                            data.courseDates.push(element);
+
+                          } else {
+                            data.clients.push(clientId);
+                          }
 
                         });
+
+                        if(data.courseDates.length > 0) {
+                          this.bookingsToCreate.unshift(data);
+                        }
 
                     } else {
                       this.courses.push(course.data);
