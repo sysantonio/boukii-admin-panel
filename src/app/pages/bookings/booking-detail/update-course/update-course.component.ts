@@ -61,19 +61,19 @@ export class UpdateCourseModalComponent implements OnInit {
     });
 
 
-    let price = this.defaults.mainBooking.price * this.datesControl.value.length;
+    let price = this.defaults.mainPrice * this.datesControl.value.length;
     let boukiiCarePrice = 0;
     let canInsurance = 0;
     let tva = 0;
 
     if (this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0) {
-      price = price + (this.defaults.boukiiCarePrice * this.defaults.clientIds * this.datesControl.value.length);
-      boukiiCarePrice = (this.defaults.boukiiCarePrice * this.defaults.clientIds * this.datesControl.value.length);
+      price = price + (this.defaults.boukiiCarePrice * this.defaults.clientIds.length * this.datesControl.value.length);
+      boukiiCarePrice = (this.defaults.boukiiCarePrice * this.defaults.clientIds.length * this.datesControl.value.length);
     }
 
     if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
-      price = price + (this.defaults.cancellationInsurance * (this.defaults.mainBooking.price * this.datesControl.value.length))
-      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.mainBooking.price * this.datesControl.value.length))
+      price = price + (this.defaults.cancellationInsurance * (this.defaults.mainPrice * this.datesControl.value.length))
+      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.mainPrice * this.datesControl.value.length))
     }
 
     if (this.defaults.tva && this.defaults.tva > 0) {
@@ -103,7 +103,7 @@ export class UpdateCourseModalComponent implements OnInit {
         this.defaults.clientIds.forEach(client => {
           data.forEach(bu => {
             bu.client_id = parseInt(client);
-            bu.price = parseInt(client) == this.defaults.mainBooking.client_id ? this.defaults.mainBooking.price : 0;
+            bu.price = parseInt(client) == this.defaults.mainBooking.client_id ? this.defaults.mainPrice : 0;
             this.crudService.create('/booking-users', bu)
               .subscribe((bookingUser) => {
 

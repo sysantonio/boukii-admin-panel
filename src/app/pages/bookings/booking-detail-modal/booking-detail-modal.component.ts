@@ -2016,9 +2016,13 @@ export class BookingDetailModalComponent implements OnInit {
           width: '60vw',
           maxWidth: '100vw',
           panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index], dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
-            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: [item.courseDates[0].client_id],
-            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
+          data: {course: this.courses[index],
+            dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
+            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0),
+            mainPrice: this.getBasePrice(),
+            clientIds: [item.courseDates[0].client_id],
+            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice,
+            cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
