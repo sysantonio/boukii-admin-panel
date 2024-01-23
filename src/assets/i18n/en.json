@@ -510,6 +510,8 @@
   "back_to_booking": "Return to reservation",
   "update_booking_title": "Modify reservation",
   "update_booking_message": "You are about to replace the course you have selected with another. ",
-  "bookings_page.edit_dates.title": "Modify reservation dates"
-
+  "bookings_page.edit_dates.title": "Modify reservation dates",
+  "monitors": "Monitors",
+  "free": "Free",
+  "occupied": "Occupied"
 }

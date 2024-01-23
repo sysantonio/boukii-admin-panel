@@ -51,13 +51,11 @@
                         </mat-form-field>
                     </div>
 
-                    <!--
                     <div class="filter-container-column">
-                      <span>MONITEURS</span>
-                      <mat-checkbox color="primary" [(ngModel)]="filterFree">Libre</mat-checkbox>
-                      <mat-checkbox color="primary" [(ngModel)]="filterOccupied">Ocupé</mat-checkbox>
+                      <span>{{ 'monitors' | translate | uppercase }}</span>
+                      <mat-checkbox color="primary" [(ngModel)]="filterFree">{{ 'free' | translate }}</mat-checkbox>
+                      <mat-checkbox color="primary" [(ngModel)]="filterOccupied">{{ 'occupied' | translate }}</mat-checkbox>
                     </div>
-                    -->
 
                     <div class="filter-container-column">
                       <span>{{"timeline.event_type" | translate | uppercase }}</span>

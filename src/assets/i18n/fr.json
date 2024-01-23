@@ -509,6 +509,8 @@
   "back_to_booking": "Retour à la réservation",
   "update_booking_title": "Modifier la réservation",
   "update_booking_message": "Vous êtes sur le point de remplacer le cours que vous avez sélectionné par un autre. ",
-  "bookings_page.edit_dates.title": "Modifier les dates de réservation"
-
+  "bookings_page.edit_dates.title": "Modifier les dates de réservation",
+  "monitors": "Moniteurs",
+  "free": "Libre",
+  "occupied": "Ocupé"
 }
