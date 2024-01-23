@@ -88,7 +88,7 @@ export class TimelineComponent {
   checkedSports = new Set();
   filterMonitor:any=null;
   filterFree:boolean=true;
-  filterOccupied:boolean=true;
+  filterOccupied:boolean=false;
   filterCollective:boolean=true;
   filterPrivate:boolean=true;
   filterNwd:boolean=true;
@@ -294,6 +294,7 @@ export class TimelineComponent {
   searchBookings(firstDate:string,lastDate:string){
     this.crudService.get('/admin/getPlanner?date_start='+firstDate+'&date_end='+lastDate+'&school_id='+this.activeSchool+'&perPage='+99999).subscribe(
       (data:any) => {
+        //console.log(data.data);
         this.processData(data.data);
       },
       error => {
@@ -340,18 +341,21 @@ export class TimelineComponent {
         }
 
         // Process 'monitor' field
-        if(this.filterMonitor){
-          if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
-            this.filteredMonitors.push(item.monitor);
+        // Filter by free +/ occupied
+        if ((this.timelineView === 'day' && ((this.filterFree && !item.monitor.hasFullDayNwd) || (this.filterOccupied && item.monitor.hasFullDayNwd))) || this.timelineView !== 'day') {
+          if(this.filterMonitor){
+            if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
+              this.filteredMonitors.push(item.monitor);
+            }
+            if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
+              this.allMonitorsTimeline.push(item.monitor);
+            }
           }
-          if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
-            this.allMonitorsTimeline.push(item.monitor);
-          }
-        }
-        else{
-          if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
-            this.filteredMonitors.push(item.monitor);
-            this.allMonitorsTimeline.push(item.monitor);
+          else{
+            if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
+              this.filteredMonitors.push(item.monitor);
+              this.allMonitorsTimeline.push(item.monitor);
+            }
           }
         }
 
@@ -632,7 +636,7 @@ export class TimelineComponent {
     .filter(task => {
       const monitorIndex = this.filteredMonitors.findIndex(m => m.id === task.monitor_id);
       if(!(monitorIndex >= 0)){
-        console.log(task);
+        //console.log(task);
       }
       return monitorIndex >= 0;
     })
@@ -1543,7 +1547,7 @@ export class TimelineComponent {
 
   showResetFilters() {
     return !(this.areAllChecked() && this.filterMonitor == null &&
-             this.filterFree && this.filterOccupied &&
+             this.filterFree && !this.filterOccupied &&
              this.filterCollective && this.filterPrivate && this.filterNwd &&
              this.filterBlockPayed && this.filterBlockNotPayed);
   }
@@ -1558,7 +1562,7 @@ export class TimelineComponent {
     this.sports.forEach(sport => this.checkedSports.add(sport.id));
     this.filterMonitor=null;
     this.filterFree=true;
-    this.filterOccupied=true;
+    this.filterOccupied=false;
     this.filterCollective=true;
     this.filterPrivate=true;
     this.filterNwd=true;

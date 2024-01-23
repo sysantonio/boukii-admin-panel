@@ -511,6 +511,8 @@
   "back_to_booking": "Zurück zur Reservierung",
   "update_booking_title": "Reservierung ändern",
   "update_booking_message": "Sie sind dabei, den von Ihnen gewählten Kurs durch einen anderen zu ersetzen. ",
-  "bookings_page.edit_dates.title": "Reservierungsdaten ändern"
-
+  "bookings_page.edit_dates.title": "Reservierungsdaten ändern",
+  "monitors": "Monitore",
+  "free": "Frei",
+  "occupied": "Besetzt"
 }
