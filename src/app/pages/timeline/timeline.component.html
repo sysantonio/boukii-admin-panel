@@ -157,7 +157,7 @@
                         <!--TASKS-->
                         <ng-container *ngFor="let task of plannerTasks">
                             <!--DAY-->
-                            <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" class="task-wrapper cursor-pointer" [ngClass]="[
+                            <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                                 '',
@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                             <!--WEEK-->
-                            <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
+                            <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                                 '',
@@ -279,7 +279,7 @@
                         <!--TASKS-->
                         <ng-container *ngFor="let task of plannerTasks">
                             <!--MONTH-->
-                            <div class="task-wrapper-week cursor-pointer" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="toggleDetailMove(task, $event)" [ngClass]="[
+                            <div class="task-wrapper-week cursor-pointer" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
                                 '',

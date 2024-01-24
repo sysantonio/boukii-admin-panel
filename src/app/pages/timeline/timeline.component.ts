@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { addDays, getDay, startOfWeek, endOfWeek, addWeeks, subWeeks, format, isSameMonth, startOfMonth, endOfMonth, addMonths, subMonths, max, min } from 'date-fns';
 import { ApiCrudService } from 'src/service/crud.service';
 import { LEVELS } from 'src/app/static-data/level-data';
@@ -18,6 +18,9 @@ import { CourseUserTransferComponent } from '../courses/course-user-transfer/cou
 import { CourseUserTransferTimelineComponent } from './course-user-transfer-timeline/course-user-transfer-timeline.component';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorComponent } from './confirm-unmatch-monitor/confirm-unmatch-monitor.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 moment.locale('fr');
 
 @Component({
@@ -25,7 +28,9 @@ moment.locale('fr');
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss']
 })
-export class TimelineComponent {
+export class TimelineComponent implements OnInit, OnDestroy {
+
+  private destroy$ = new Subject<void>();
 
   hoursRange: string[];
   hoursRangeMinusLast:string[];
@@ -118,6 +123,13 @@ export class TimelineComponent {
   }
 
   async ngOnInit() {
+    //ESC to close moveMonitor
+    document.addEventListener('keydown', this.handleKeydownEvent.bind(this));
+    this.destroy$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      document.removeEventListener('keydown', this.handleKeydownEvent.bind(this));
+    });
+    //ESC to close moveMonitor
+
     this.activeSchool = await this.getUser();
     await this.getLanguages();
     await this.getSports();
@@ -886,7 +898,6 @@ export class TimelineComponent {
     return date.toTimeString().substring(0, 5);
   }
 
-
   // LOGIC
 
   toggleDetail(task:any){
@@ -986,6 +997,19 @@ export class TimelineComponent {
     }
   }
 
+  handleKeydownEvent(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.hideDetailMove();
+    }
+  }
+
+  hideDetailMove() {
+    if(this.moveTask){
+      this.moveTask = false;
+      this.taskMoved = null;
+    }
+  }
+
   checkMonitorSport(monitor) {
     let ret = false;
     if (this.taskMoved && monitor && monitor.id) {
@@ -1005,6 +1029,11 @@ export class TimelineComponent {
     let ret = this.checkMonitorSport(monitor);
     const clientIds = this.taskDetail.all_clients.map((client) => client.id);
 
+    let subgroup_id = null;
+    if(!this.taskDetail.all_clients.length){
+      subgroup_id = this.taskDetail.booking_id;
+    }
+
     const data = {
       sportId: this.taskDetail.sport_id,
       minimumDegreeId: this.taskDetail.degree_id || this.taskDetail.degree.id,
@@ -1014,8 +1043,11 @@ export class TimelineComponent {
       clientIds: clientIds
     };
 
+    //console.log(data);
+
     this.crudService.post('/admin/monitors/available', data)
       .subscribe((response) => {
+        //console.log(response);
         this.monitorsForm = response.data;
 
         ret = this.monitorsForm.find((m) => m.id === monitor.id);
@@ -1031,18 +1063,20 @@ export class TimelineComponent {
             });
             data = {
               monitor_id: monitor.id,
-              booking_users: all_booking_users
+              booking_users: all_booking_users,
+              subgroup_id: subgroup_id
             };
 
             //console.log(data);
 
             this.crudService.post('/admin/planner/monitors/transfer', data)
               .subscribe((data) => {
-
+                //console.log(data);
                 //this.getData();
                 this.moveTask = false;
                 this.taskMoved = null;
                 this.hideDetail();
+                this.hideGrouped();
                 this.loadBookings(this.currentDate);
                 this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
               },
@@ -1067,11 +1101,18 @@ export class TimelineComponent {
         } else {
           let sameSport = false;
 
-          monitor.sports.forEach(element => {
-            if (element.id === this.taskDetail.sport_id) {
-              sameSport = true;
-            }
-          });
+          if(monitor.sports && monitor.sports.length){
+            monitor.sports.forEach(element => {
+              if (element.id === this.taskDetail.sport_id) {
+                sameSport = true;
+              }
+            });
+          }
+
+          if(!monitor.id){
+            sameSport = true;
+          }
+
           if (this.moveTask && sameSport) {
 
             const dialogRef = this.dialog.open(ConfirmUnmatchMonitorComponent, {
@@ -1094,7 +1135,8 @@ export class TimelineComponent {
                   });
                   data = {
                     monitor_id: monitor.id,
-                    booking_users: all_booking_users
+                    booking_users: all_booking_users,
+                    subgroup_id: subgroup_id
                   };
 
                   //console.log(data);
@@ -1106,6 +1148,7 @@ export class TimelineComponent {
                       this.moveTask = false;
                       this.taskMoved = null;
                       this.hideDetail();
+                      this.hideGrouped();
                       this.loadBookings(this.currentDate);
                       this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
                     },
@@ -1823,5 +1866,11 @@ export class TimelineComponent {
         this.loadBookings(this.currentDate);
       }
     });
+  }
+
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
