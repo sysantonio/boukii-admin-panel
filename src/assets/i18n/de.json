@@ -530,5 +530,7 @@
   "add_boukii_care": "Tragen Sie Boukii-Pflege auf",
   "add_boukii_care_message": "Möchten Sie der Reservierung Boukii-Pflege hinzufügen?",
   "add_insurance": "Schließen Sie eine Reiserücktrittsversicherung ab",
-  "add_insurance_message": "Möchten Sie Ihrer Reservierung eine Reiserücktrittsversicherung hinzufügen?"
+  "add_insurance_message": "Möchten Sie Ihrer Reservierung eine Reiserücktrittsversicherung hinzufügen?",
+  "course_without_clients": "Mit diesem Kurs sind keine Reservierungen verbunden"
+
 }

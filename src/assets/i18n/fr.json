@@ -528,5 +528,7 @@
   "add_boukii_care": "Appliquer le soin boukii",
   "add_boukii_care_message": "Vous souhaitez ajouter boukii care à la réservation ?",
   "add_insurance": "Souscrire une assurance annulation",
-  "add_insurance_message": "Vous souhaitez ajouter une assurance annulation à votre réservation ?"
+  "add_insurance_message": "Vous souhaitez ajouter une assurance annulation à votre réservation ?",
+  "course_without_clients": "Ce cours n'a aucune réservation associée"
+
 }

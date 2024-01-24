@@ -536,5 +536,6 @@
   "add_boukii_care": "Aplicar boukii care",
   "add_boukii_care_message": "¿Quieres añadir boukii care a la reserva?",
   "add_insurance": "Aplicar seguro de cancelación",
-  "add_insurance_message": "¿Quiere añadir el seguro de cancelación a la reserva?"
+  "add_insurance_message": "¿Quiere añadir el seguro de cancelación a la reserva?",
+  "course_without_clients": "Este curso no tiene reservas asociadas"
 }

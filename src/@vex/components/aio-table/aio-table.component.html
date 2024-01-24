@@ -206,6 +206,16 @@
           </ng-container>
         </ng-container>
 
+        <!-- QR Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'qr'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell style="text-wrap: balance;">
+              <mat-icon svgIcon="mat:cloud_download" style="cursor: pointer" (click)="exportQR(data[i].id)"></mat-icon>
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Paiment method Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'payment_method_id'" [matColumnDef]="column.property">

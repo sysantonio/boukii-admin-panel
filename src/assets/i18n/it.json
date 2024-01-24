@@ -529,5 +529,7 @@
   "add_boukii_care": "Applicare la cura Boukii",
   "add_boukii_care_message": "Vuoi aggiungere Boukii Care alla prenotazione?",
   "add_insurance": "Applicare l'assicurazione annullamento",
-  "add_insurance_message": "Vuoi aggiungere un'assicurazione annullamento alla tua prenotazione?"
+  "add_insurance_message": "Vuoi aggiungere un'assicurazione annullamento alla tua prenotazione?",
+  "course_without_clients": "Questo corso non ha prenotazioni associate"
+
 }

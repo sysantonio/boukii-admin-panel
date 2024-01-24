@@ -529,5 +529,7 @@
   "add_boukii_care": "Apply boukii care",
   "add_boukii_care_message": "Do you want to add boukii care to the reservation?",
   "add_insurance": "Apply cancellation insurance",
-  "add_insurance_message": "Do you want to add cancellation insurance to your reservation?"
+  "add_insurance_message": "Do you want to add cancellation insurance to your reservation?",
+  "course_without_clients": "This course has no reservations associated"
+
 }
