@@ -374,7 +374,7 @@
   "snackbar.booking_detail.update": "Réservation mise à jour avec succès",
   "snackbar.booking_detail.notes_client": "Notes client mises à jour",
   "snackbar.booking_detail.notes_school": "Notes scolaires mises à jour",
-  "snackbar.booking_detail.delete": "Réservation supprimée",
+  "snackbar.booking_detail.delete": "Réservation annulée",
   "snackbar.booking.user_no_sport": "L'utilisateur n'a pas ce sport associé. ",
   "snackbar.booking.user_no_monitor": "Remplissez les champs instructeur, date et heure de la réservation du cours",
   "snackbar.booking.user_monitor": "Remplissez les champs date et heure de la réservation du cours",

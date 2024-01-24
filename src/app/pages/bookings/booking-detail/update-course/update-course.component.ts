@@ -61,7 +61,7 @@ export class UpdateCourseModalComponent implements OnInit {
     });
 
 
-    let price = this.defaults.mainPrice * this.datesControl.value.length;
+    let price = this.defaults.course.price * this.datesControl.value.length;
     let boukiiCarePrice = 0;
     let canInsurance = 0;
     let tva = 0;
@@ -72,8 +72,8 @@ export class UpdateCourseModalComponent implements OnInit {
     }
 
     if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
-      price = price + (this.defaults.cancellationInsurance * (this.defaults.mainPrice * this.datesControl.value.length))
-      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.mainPrice * this.datesControl.value.length))
+      price = price + (this.defaults.cancellationInsurance * (this.defaults.course.price * this.datesControl.value.length))
+      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.course.price * this.datesControl.value.length))
     }
 
     if (this.defaults.tva && this.defaults.tva > 0) {
@@ -103,7 +103,7 @@ export class UpdateCourseModalComponent implements OnInit {
         this.defaults.clientIds.forEach(client => {
           data.forEach(bu => {
             bu.client_id = parseInt(client);
-            bu.price = parseInt(client) == this.defaults.mainBooking.client_id ? this.defaults.mainPrice : 0;
+            bu.price = parseInt(client) == this.defaults.mainBooking.client_id ? parseFloat(this.defaults.course.price) : 0;
             this.crudService.create('/booking-users', bu)
               .subscribe((bookingUser) => {
 

@@ -376,7 +376,7 @@
   "snackbar.booking_detail.update": "Reservierung erfolgreich aktualisiert",
   "snackbar.booking_detail.notes_client": "Aktualisierte Kundennotizen",
   "snackbar.booking_detail.notes_school": "Aktualisierte Schulnotizen",
-  "snackbar.booking_detail.delete": "Reservierung entfernt",
+  "snackbar.booking_detail.delete": "Reservierung storniert",
   "snackbar.booking.user_no_sport": "Dem Benutzer ist diese Sportart nicht zugeordnet. ",
   "snackbar.booking.user_no_monitor": "Füllen Sie die Felder Dozent, Datum und Uhrzeit der Kursreservierung aus",
   "snackbar.booking.user_monitor": "Füllen Sie die Datums- und Uhrzeitfelder der Kursreservierung aus",

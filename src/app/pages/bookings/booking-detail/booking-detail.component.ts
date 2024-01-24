@@ -190,6 +190,7 @@ export class BookingDetailComponent implements OnInit {
   clientsIds = [];
 
   tva = 0;
+  tvaPrice = 0;
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
 
@@ -1916,6 +1917,7 @@ export class BookingDetailComponent implements OnInit {
 
     // añadir desde reglajes el tva
     if (this.tva && !isNaN(this.tva)) {
+      this.tvaPrice = price * this.tva;
       this.finalPrice = price + (price * this.tva);
     } else {
       this.finalPrice = price;

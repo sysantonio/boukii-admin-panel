@@ -375,7 +375,7 @@
   "snackbar.booking_detail.update": "Reservation successfully updated",
   "snackbar.booking_detail.notes_client": "Updated client notes",
   "snackbar.booking_detail.notes_school": "Updated school notes",
-  "snackbar.booking_detail.delete": "Reservation removed",
+  "snackbar.booking_detail.delete": "Reservation canceled",
   "snackbar.booking.user_no_sport": "The user does not have this sport associated. ",
   "snackbar.booking.user_no_monitor": "Complete the instructor, date and time fields of the course reservation",
   "snackbar.booking.user_monitor": "Complete the date and time fields of the course reservation",

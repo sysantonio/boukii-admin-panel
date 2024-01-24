@@ -379,7 +379,7 @@
   "snackbar.booking_detail.update": "Reserva actualizada correctamente",
   "snackbar.booking_detail.notes_client": "Notas del cliente actualizadas",
   "snackbar.booking_detail.notes_school": "Notas de la escuela actualizadas",
-  "snackbar.booking_detail.delete": "Reserva eliminada",
+  "snackbar.booking_detail.delete": "Reserva anulada",
   "snackbar.booking.user_no_sport": "El usuario no tiene este deporte asociado. Si se crea una reserva con este deporte, se le asignará automáticamente el nivel seleccionado",
   "snackbar.booking.user_no_monitor": "Complete los campos de monitor, fecha y hora de la reserva del curso",
   "snackbar.booking.user_monitor": "Complete los campos de fecha y hora de la reserva del curso",
