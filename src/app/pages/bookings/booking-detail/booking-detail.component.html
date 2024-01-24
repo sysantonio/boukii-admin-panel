@@ -86,7 +86,9 @@
             </mat-card-title>
               <mat-card-subtitle style="margin: 0;float: left;width: 100%;">
                 {{getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? 'colective' : 'private' | translate}}
-                {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}</mat-card-subtitle>
+                {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}
+              </mat-card-subtitle>
+              <div style="color: #EA0C60;">{{ bookingUsersUnique[bI].price}} CHF</div>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
