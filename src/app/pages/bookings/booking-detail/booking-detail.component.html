@@ -282,7 +282,7 @@
             <div class="opaque-box">
               <span style="width: 100%; float:left">
                 <p style="float:left">{{'base_price' | translate | uppercase}}</p>
-                <p style="float:right">{{getBasePrice()}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                <p style="float:right">{{getBasePrice(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="reduction !== null">
@@ -297,6 +297,14 @@
                   <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" *ngIf="!item?.bonus?.before"></mat-icon>
                   <p style="float:left">{{'bonus' | translate}} {{item?.bonus?.code}}</p>
                   <p style="float:right">-{{item?.bonus.before ? item?.bonus?.currentPay : item?.bonus?.reducePrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                </span>
+              </ng-container>
+
+              <ng-container *ngIf="discounts.length > 0">
+
+                <span style="width: 100%; float:left" *ngFor="let item of discounts; let i = index">
+                  <p style="float:left">{{'multidate_discount' | translate}} </p>
+                  <p style="float:right">-{{item}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </span>
               </ng-container>
 

@@ -519,5 +519,7 @@
   "notis": "Benachrichtigungen",
   "notis_1": "Haben ",
   "notis_2": " neue Benachrichtigungen",
-  "mark_all_as_read": "Alles als gelesen markieren"
+  "mark_all_as_read": "Alles als gelesen markieren",
+  "multidate_discount": "Rabatt für mehrere Termine"
+
 }

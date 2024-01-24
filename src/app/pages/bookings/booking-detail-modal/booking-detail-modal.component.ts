@@ -156,6 +156,7 @@ export class BookingDetailModalComponent implements OnInit {
 
   bookings = [];
   bookingsToCreate = [];
+  discounts = [];
   clients = [];
   sportData = [];
   sportDataList = [];
@@ -393,6 +394,7 @@ export class BookingDetailModalComponent implements OnInit {
             });
 
             setTimeout(() => {
+              this.calculateDiscounts();
               this.calculateFinalPrice();
               this.loading = false;
             }, 500);
@@ -1301,7 +1303,24 @@ export class BookingDetailModalComponent implements OnInit {
     return ret;
   }
 
-  getBasePrice() {
+  calculateDiscounts() {
+    if (this.courses.length > 0) {
+      this.bookingsToCreate.forEach((b, idx) => {
+        if (b.courseDates[0].status === 1) {if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
+            const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
+            discounts.forEach(element => {
+              if (element.date === b.courseDates.length) {
+                this.discounts.push(this.getBasePrice(true) * (element.percentage / 100));
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
+
+  getBasePrice(noDiscount = false) {
     let ret = 0;
 
     if (this.courses.length > 0) {
@@ -1315,12 +1334,15 @@ export class BookingDetailModalComponent implements OnInit {
             b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
           } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
             const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
-            ret = ret + b?.courseDates[0].price * b.courseDates.length;
-            discounts.forEach(element => {
-              if (element.date === b.courseDates.length) {
-                ret = ret - (ret * (element.percentage / 100));
-              }
-            });
+            ret = ret + (b?.courseDates[0].price * b.courseDates.length);
+            if (!noDiscount) {
+              discounts.forEach(element => {
+                if (element.date === b.courseDates.length) {
+                  ret = ret - (ret * (element.percentage / 100));
+                }
+              });
+            }
+
             b.price_total = ret;
           } else {
             ret = ret + b?.price_total

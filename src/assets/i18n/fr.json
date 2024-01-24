@@ -517,5 +517,7 @@
   "notis": "Notifications",
   "notis_1": "Tu as ",
   "notis_2": " nouvelles notifications",
-  "mark_all_as_read": "tout marquer comme lu"
+  "mark_all_as_read": "tout marquer comme lu",
+  "multidate_discount": "Remise multi-dates"
+
 }
