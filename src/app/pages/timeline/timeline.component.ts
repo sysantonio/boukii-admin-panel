@@ -1335,6 +1335,15 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   handleDbClickEvent(action: string, event: any, type:string, position:any, monitor_id:any, hourDay?:any, positionWeek?:any): void {
 
+    if(type == 'day' && !this.isDayVisibleDay()){
+      return;
+    }
+    if(type == 'week' && !this.isDayVisibleWeek(position)){
+      return;
+    }
+    if(type == 'month' && !this.isDayInMonth(position, positionWeek)){
+      return;
+    }
     /* GET DATE,HOUR,MONITOR -> DOUBLE CLICK */
 
     let dateInfo;
