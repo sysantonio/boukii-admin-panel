@@ -526,5 +526,9 @@
   "add_forfait": "Skipass hinzufügen",
   "add_forfait_message": "Sind Sie sicher, dass Sie diesen Skipass zu Ihrer Reservierung hinzufügen möchten?",
   "delete_forfait": "Skipass löschen",
-  "delete_forfait_message": "Möchten Sie diesen Skipass wirklich aus der Reservierung entfernen?"
+  "delete_forfait_message": "Möchten Sie diesen Skipass wirklich aus der Reservierung entfernen?",
+  "add_boukii_care": "Tragen Sie Boukii-Pflege auf",
+  "add_boukii_care_message": "Möchten Sie der Reservierung Boukii-Pflege hinzufügen?",
+  "add_insurance": "Schließen Sie eine Reiserücktrittsversicherung ab",
+  "add_insurance_message": "Möchten Sie Ihrer Reservierung eine Reiserücktrittsversicherung hinzufügen?"
 }

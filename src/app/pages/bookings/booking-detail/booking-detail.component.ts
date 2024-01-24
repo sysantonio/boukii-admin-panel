@@ -1941,6 +1941,61 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
+  addBoukiiCare(event: any) {
+
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      data: {title: this.translateService.instant('add_boukii_care'), message: this.translateService.instant('add_boukii_care_message')}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+
+      if (data) {
+        const price = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
+    if (event.checked) {
+      this.crudService.update('/bookings', {price_total: this.finalPrice + price, has_boukii_care: true, price_boukii_care: price}, this.id)
+      .subscribe(() => {
+        this.getData();
+      })
+    } else {
+      this.crudService.update('/bookings', {price_total: this.finalPrice - this.booking.price_boukii_care, has_boukii_care: false, price_boukii_care: 0}, this.id)
+      .subscribe(() => {
+        this.getData();
+      })
+
+    }
+      }
+    })
+
+
+  }
+
+  addCancellationInsurance(event: any) {
+
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      data: {title: this.translateService.instant('add_insurance'), message: this.translateService.instant('add_insurance_message')}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          const price = this.getBasePrice() * this.cancellationInsurance;
+          if (event.checked) {
+            this.crudService.update('/bookings', {price_total: this.finalPrice + price, has_cancellation_insurance: true, price_cancellation_insurance: price}, this.id)
+            .subscribe(() => {
+              this.getData();
+            })
+          } else {
+            this.crudService.update('/bookings', {price_total: this.finalPrice - this.booking.price_cancellation_insurance, has_cancellation_insurance: false, price_cancellation_insurance: 0}, this.id)
+            .subscribe(() => {
+              this.getData();
+            })
+
+          }
+        }
+    })
+
+  }
+
   calculateBoukiiCare(event: any) {
     if(event.source.checked) {
       this.boukiiCare = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
