@@ -589,23 +589,16 @@
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations' | translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.cancelations.text1' | translate}}</p>
+                  <p style="width:100%; float:left;color:#808080;" [innerHTML]="'settings.bookings.cancelations.text1' | translate"></p>
                   <mat-form-field class="flex-auto">
-                    <mat-select>
-                      <mat-option value="10">
-                        {{'settings.bookings.cancelations.text2' | translate}}
-                      </mat-option>
-                    </mat-select>
+                      <input matInput type="number" [value]="cancellationNoRem" (blur)="updateCancelationNoRem($event)">
+
                   </mat-form-field>
                 </div>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.cancelations.text3' | translate}}</p>
+                  <p style="width:100%; float:left;color:#808080;" [innerHTML]="'settings.bookings.cancelations.text3' | translate"></p>
                   <mat-form-field class="flex-auto">
-                    <mat-select>
-                      <mat-option value="10">
-                        {{'settings.bookings.cancelations.text4' | translate}}
-                      </mat-option>
-                    </mat-select>
+                    <input matInput type="number" [value]="cancellationRem" (blur)="updateCancelationRem($event)">
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">

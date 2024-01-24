@@ -71,6 +71,8 @@ export class SettingsComponent implements OnInit {
   tva = 0;
   boukiiCarePrice = 0;
   cancellationInsurancePercent = 0;
+  cancellationNoRem = 0;
+  cancellationRem = 0;
 
   today = new Date();
 
@@ -252,6 +254,8 @@ export class SettingsComponent implements OnInit {
             this.cancellationInsurancePercent = parseFloat(settings?.taxes?.cancellation_insurance_percent);
             this.boukiiCarePrice = parseInt(settings?.taxes?.boukii_care_price);
             this.tva = parseFloat(settings?.taxes?.tva);
+            this.cancellationNoRem = settings?.cancellations?.without_cancellation_insurance;
+            this.cancellationRem = settings?.cancellations?.with_cancellation_insurance;
 
             this.dataSourceForfait.data = settings?.extras.forfait;
             this.dataSourceFood.data = settings?.extras.food;
@@ -745,6 +749,7 @@ export class SettingsComponent implements OnInit {
       taxes: {cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
         boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0,
         tva: this.hasTVA ? this.tva : 0},
+      cancellations: {with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem},
       prices_range: {people: this.people, prices: this.dataSource},
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
@@ -770,6 +775,16 @@ export class SettingsComponent implements OnInit {
   updateBoukiiCareValue(event: any) {
 
     this.boukiiCarePrice = parseInt(event.target.value);
+  }
+
+  updateCancelationNoRem(event: any) {
+
+    this.cancellationNoRem = parseInt(event.target.value);
+  }
+
+  updateCancelationRem(event: any) {
+
+    this.cancellationRem = parseInt(event.target.value);
   }
 
   updateInsuranceValue(event: any) {
