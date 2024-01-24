@@ -258,6 +258,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   schoolSettings: any = [];
 
   tva = 0;
+  tvaPrice = 0;
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
 
@@ -2215,6 +2216,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     // añadir desde reglajes el tva
     if (this.tva && !isNaN(this.tva)) {
       this.finalPrice = price + (price * this.tva);
+      this.tvaPrice = (price * this.tva);
     } else {
       this.finalPrice = price;
     }
