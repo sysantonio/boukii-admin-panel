@@ -253,6 +253,8 @@ export class BookingDetailComponent implements OnInit {
 
 
   getData() {
+    this.loading = true;
+    this.discounts = [];
     this.bookingsToCreate = [];
     this.courseExtra = [];
     this.bookingExtras = [];

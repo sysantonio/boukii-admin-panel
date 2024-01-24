@@ -253,6 +253,8 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true;
+    this.discounts = [];
 
     this.bookingsToCreate = [];
     this.courseExtra = [];
