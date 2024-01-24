@@ -60,8 +60,17 @@ export class UpdateCourseModalComponent implements OnInit {
       });
     });
 
+    let discountReduction = 0;
+    const discounts = typeof this.defaults.course.discounts === 'string' ? JSON.parse(this.defaults.course.discounts) : this.defaults.course.discounts;
+      //ret = ret + (b?.courseDates[0].price * b.courseDates.length);
+      discounts.forEach(element => {
+        if (element.date === this.datesControl.value.length) {
+          discountReduction = -(this.defaults.course.price * this.datesControl.value.length * (element.percentage / 100));
+        }
+      });
 
-    let price = this.defaults.course.price * this.datesControl.value.length;
+
+    let price = (this.defaults.course.price * this.datesControl.value.length) + discountReduction;
     let boukiiCarePrice = 0;
     let canInsurance = 0;
     let tva = 0;
@@ -72,8 +81,8 @@ export class UpdateCourseModalComponent implements OnInit {
     }
 
     if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
-      price = price + (this.defaults.cancellationInsurance * (this.defaults.course.price * this.datesControl.value.length))
-      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.course.price * this.datesControl.value.length))
+      price = price + (this.defaults.cancellationInsurance * (this.defaults.course.price * this.datesControl.value.length + (discountReduction)))
+      canInsurance = (this.defaults.cancellationInsurance * (this.defaults.course.price * this.datesControl.value.length + (discountReduction)))
     }
 
     if (this.defaults.tva && this.defaults.tva > 0) {
