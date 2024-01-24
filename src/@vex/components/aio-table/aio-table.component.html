@@ -417,7 +417,7 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
               <div></div>
-              <img [src]="getClient(row[column.property])?.image" style="float: left;width: 50px;height: 50px;border-radius: 100%;margin: 0 5px 0 0;">
+              <img [src]="getClient(row[column.property])?.image" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
               <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getClient(row[column.property])?.language1_id)}} · {{getCountry(getClient(row[column.property])?.country)}} ·
                 {{calculateAge(getClient(row[column.property])?.birth_date)}} {{'years' | translate }}</span>
               <span style="float: left; width: 50%;">{{ getClient(row[column.property])?.first_name }} {{ getClient(row[column.property])?.last_name }}</span>
