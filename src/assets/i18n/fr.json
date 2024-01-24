@@ -519,5 +519,6 @@
   "notis_2": " nouvelles notifications",
   "mark_all_as_read": "tout marquer comme lu",
   "multidate_discount": "Remise multi-dates",
-  "update_booking_dates_message": "Vous êtes sur le point de remplacer les dates de cours que vous avez sélectionnées par d'autres. "
+  "update_booking_dates_message": "Vous êtes sur le point de remplacer les dates de cours que vous avez sélectionnées par d'autres. ",
+  "no_monitor_move": "Annuler l'attribution du moniteur"
 }

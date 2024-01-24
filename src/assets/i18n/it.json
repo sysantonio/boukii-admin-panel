@@ -520,6 +520,7 @@
   "notis_2": " nuove notifiche",
   "mark_all_as_read": "Segna tutti come letti",
   "multidate_discount": "Sconto multidata",
-  "update_booking_dates_message": "Stai per sostituire le date del corso che hai selezionato con altre. "
+  "update_booking_dates_message": "Stai per sostituire le date del corso che hai selezionato con altre. ",
+  "no_monitor_move": "Annulla assegnazione monitor"
 
 }

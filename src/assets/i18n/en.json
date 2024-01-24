@@ -520,6 +520,6 @@
   "notis_2": " new notifications",
   "mark_all_as_read": "Mark all as read",
   "multidate_discount": "Multi-date discount",
-  "update_booking_dates_message": "You are about to replace the course dates you have selected with others. "
-
+  "update_booking_dates_message": "You are about to replace the course dates you have selected with others. ",
+  "no_monitor_move": "Unassign monitor"
 }

@@ -521,6 +521,7 @@
   "notis_2": " neue Benachrichtigungen",
   "mark_all_as_read": "Alles als gelesen markieren",
   "multidate_discount": "Rabatt für mehrere Termine",
-  "update_booking_dates_message": "Sie sind dabei, die von Ihnen gewählten Kurstermine durch andere zu ersetzen. "
+  "update_booking_dates_message": "Sie sind dabei, die von Ihnen gewählten Kurstermine durch andere zu ersetzen. ",
+  "no_monitor_move": "Zuweisung des Monitors aufheben"
 
 }

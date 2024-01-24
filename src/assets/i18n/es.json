@@ -527,5 +527,6 @@
   "notis_1": "Tienes ",
   "notis_2": " nuevas notificaciones",
   "mark_all_as_read": "Marcar todas como leídas",
-  "multidate_discount": "Descuento multifecha"
+  "multidate_discount": "Descuento multifecha",
+  "no_monitor_move": "Desasignar monitor"
 }
