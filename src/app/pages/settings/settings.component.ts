@@ -92,6 +92,7 @@ export class SettingsComponent implements OnInit {
     contact_address_number: null,
     contact_cp: null,
     contact_city: null,
+    contact_country: null,
     contact_province: null,
   }
 
@@ -218,7 +219,11 @@ export class SettingsComponent implements OnInit {
             this.defaultsSchoolData.contact_cp = this.school.contact_cp;
             this.defaultsSchoolData.contact_city = this.school.contact_city;
             this.defaultsSchoolData.contact_province = this.school.contact_province;
+            this.defaultsSchoolData.contact_country = this.school.contact_country;
 
+
+            this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaultsSchoolData.contact_country));
+            this.myControlProvinces.setValue(this.mockProvincesData.find((c) => c.id === +this.defaultsSchoolData.contact_province));
             this.seasonForm.get('startHour').valueChanges.subscribe(selectedHour => {
               this.filterHours(selectedHour);
             });
@@ -454,9 +459,10 @@ export class SettingsComponent implements OnInit {
 
     const data = {
       contact_phone: this.defaultsSchoolData.contact_phone,
-      contact_address: this.defaultsSchoolData.contact_address + ', ' + this.defaultsSchoolData.contact_address_number,
+      contact_address: this.defaultsSchoolData.contact_address,
+      contact_address_number: this.defaultsSchoolData.contact_address_number,
       contact_cp: this.defaultsSchoolData.contact_cp,
-      contact_city: this.defaultsSchoolData.contact_city,
+      contact_country: this.defaultsSchoolData.contact_city,
       contact_province: this.defaultsSchoolData.contact_province,
     }
 
