@@ -28,12 +28,12 @@ export class ConfirmUnmatchMonitorComponent implements OnInit {
     if (this.defaults.booking.course.course_type === 2) {
       this.defaults.booking.all_clients.forEach(client => {
         const clientLanguages = {
-          "language1_id": client.language1_id,
-          "language2_id": client.language2_id,
-          "language3_id": client.language3_id,
-          "language4_id": client.language4_id,
-          "language5_id": client.language5_id,
-          "language6_id": client.language6_id
+          "language1_id": client.client.language1_id,
+          "language2_id": client.client.language2_id,
+          "language3_id": client.client.language3_id,
+          "language4_id": client.client.language4_id,
+          "language5_id": client.client.language5_id,
+          "language6_id": client.client.language6_id
         };
 
 
@@ -47,12 +47,12 @@ export class ConfirmUnmatchMonitorComponent implements OnInit {
 
       this.defaults.booking.all_clients.forEach(client => {
         const clientLanguages = {
-          "language1_id": client.language1_id,
-          "language2_id": client.language2_id,
-          "language3_id": client.language3_id,
-          "language4_id": client.language4_id,
-          "language5_id": client.language5_id,
-          "language6_id": client.language6_id
+          "language1_id": client.client.language1_id,
+          "language2_id": client.client.language2_id,
+          "language3_id": client.client.language3_id,
+          "language4_id": client.client.language4_id,
+          "language5_id": client.client.language5_id,
+          "language6_id": client.client.language6_id
         };
 
         if (this.langMatch(monitorLanguages, clientLanguages)) {
