@@ -522,6 +522,9 @@
   "mark_all_as_read": "Alles als gelesen markieren",
   "multidate_discount": "Rabatt für mehrere Termine",
   "update_booking_dates_message": "Sie sind dabei, die von Ihnen gewählten Kurstermine durch andere zu ersetzen. ",
-  "no_monitor_move": "Zuweisung des Monitors aufheben"
-
+  "no_monitor_move": "Zuweisung des Monitors aufheben",
+  "add_forfait": "Skipass hinzufügen",
+  "add_forfait_message": "Sind Sie sicher, dass Sie diesen Skipass zu Ihrer Reservierung hinzufügen möchten?",
+  "delete_forfait": "Skipass löschen",
+  "delete_forfait_message": "Möchten Sie diesen Skipass wirklich aus der Reservierung entfernen?"
 }

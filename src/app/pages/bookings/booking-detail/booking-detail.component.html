@@ -125,7 +125,7 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
                       <li *ngFor="let forfait of settings?.extras?.forfait">
-                          <mat-checkbox class="radio" [disabled]="true" [value]="forfait" (change)="setForfait($event, forfait)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
+                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
                             <span>{{forfait.id}}</span>
                           </mat-checkbox>
                       </li>
@@ -283,7 +283,7 @@
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
-                <p style="float:left">{{'base_price' | translate | uppercase}}</p>
+                <p style="float:left">{{'base_price' | translate }}</p>
                 <p style="float:right">{{getBasePrice(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
@@ -319,7 +319,7 @@
               </ng-container>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_cancellation_insurance">
-                <p style="float:left">{{'op_rem' |  translate | uppercase}}</p>
+                <p style="float:left">{{'op_rem' | translate }}</p>
                 <p style="float:right">{{booking.price_cancellation_insurance}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 

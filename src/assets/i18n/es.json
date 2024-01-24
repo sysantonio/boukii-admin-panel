@@ -528,5 +528,9 @@
   "notis_2": " nuevas notificaciones",
   "mark_all_as_read": "Marcar todas como leídas",
   "multidate_discount": "Descuento multifecha",
-  "no_monitor_move": "Desasignar monitor"
+  "no_monitor_move": "Desasignar monitor",
+  "add_forfait": "Añadir forfait",
+  "add_forfait_message": "¿Está seguro de que quiere añadir este forfait a la reserva?",
+  "delete_forfait": "Eliminar forfait",
+  "delete_forfait_message": "¿Está seguro de que quiere eliminar este forfait a la reserva?"
 }
