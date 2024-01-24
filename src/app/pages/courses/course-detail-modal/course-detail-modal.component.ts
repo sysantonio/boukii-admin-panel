@@ -739,7 +739,7 @@ export class CourseDetailModalComponent implements OnInit {
     this.defaults.course_dates.forEach(courseDate => {
       courseDate.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
-          ret = group.course_subgroups[0].max_participants;
+          ret = group.course_subgroups[0]?.max_participants;
         }
       });
     });
