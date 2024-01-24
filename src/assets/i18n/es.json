@@ -517,6 +517,7 @@
   "back_to_booking": "Volver a la reserva",
   "update_booking_title": "Modiicar reserva",
   "update_booking_message": "Esta a punto de sustituir el curso que ha seleccionado por otro. ¿Está seguro de que quiere continuar?",
+  "update_booking_dates_message": "Esta a punto de sustituir las fechas del curso que ha seleccionado por otras. ¿Está seguro de que quiere continuar?",
   "bookings_page.edit_dates.title": "Modificar fechas de la reserva",
   "monitors": "Monitores",
   "free": "Libre",
@@ -525,5 +526,11 @@
   "notis": "Notificaciones",
   "notis_1": "Tienes ",
   "notis_2": " nuevas notificaciones",
-  "mark_all_as_read": "Marcar todas como leídas"
+  "mark_all_as_read": "Marcar todas como leídas",
+  "multidate_discount": "Descuento multifecha",
+  "no_monitor_move": "Desasignar monitor",
+  "add_forfait": "Añadir forfait",
+  "add_forfait_message": "¿Está seguro de que quiere añadir este forfait a la reserva?",
+  "delete_forfait": "Eliminar forfait",
+  "delete_forfait_message": "¿Está seguro de que quiere eliminar este forfait a la reserva?"
 }

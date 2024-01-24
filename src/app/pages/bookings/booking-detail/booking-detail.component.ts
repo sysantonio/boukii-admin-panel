@@ -21,6 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BookingService } from 'src/service/bookings.service';
 import { UpdateCourseModalModule } from './update-course/update-course.module';
 import { UpdateCourseModalComponent } from './update-course/update-course.component';
+import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'vex-booking-detail',
@@ -156,6 +157,7 @@ export class BookingDetailComponent implements OnInit {
 
   bookings = [];
   bookingsToCreate = [];
+  discounts = [];
   clients = [];
   sportData = [];
   sportDataList = [];
@@ -252,6 +254,8 @@ export class BookingDetailComponent implements OnInit {
 
 
   getData() {
+    this.loading = true;
+    this.discounts = [];
     this.bookingsToCreate = [];
     this.courseExtra = [];
     this.bookingExtras = [];
@@ -399,6 +403,7 @@ export class BookingDetailComponent implements OnInit {
             });
 
             setTimeout(() => {
+              this.calculateDiscounts();
               this.calculateFinalPrice();
               this.loading = false;
             }, 500);
@@ -1310,7 +1315,24 @@ export class BookingDetailComponent implements OnInit {
     return ret;
   }
 
-  getBasePrice() {
+  calculateDiscounts() {
+    if (this.courses.length > 0) {
+      this.bookingsToCreate.forEach((b, idx) => {
+        if (b.courseDates[0].status === 1) {if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
+            const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
+            discounts.forEach(element => {
+              if (element.date === b.courseDates.length) {
+                this.discounts.push(this.getBasePrice(true) * (element.percentage / 100));
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
+
+  getBasePrice(noDiscount = false) {
     let ret = 0;
 
     if (this.courses.length > 0) {
@@ -1325,11 +1347,14 @@ export class BookingDetailComponent implements OnInit {
           } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
             const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
             ret = ret + (b?.courseDates[0].price * b.courseDates.length);
-            discounts.forEach(element => {
-              if (element.date === b.courseDates.length) {
-                ret = ret - (ret * (element.percentage / 100));
-              }
-            });
+            if (!noDiscount) {
+              discounts.forEach(element => {
+                if (element.date === b.courseDates.length) {
+                  ret = ret - (ret * (element.percentage / 100));
+                }
+              });
+            }
+
             b.price_total = ret;
           } else {
             ret = ret + b?.price_total
@@ -1343,14 +1368,108 @@ export class BookingDetailComponent implements OnInit {
 
   }
 
-  setForfait(event:any, forfait: any) {
+  setForfait(event:any, forfait: any, booking: any, bookingIndex: number) {
+    const courseExtra = [];
+    const bookingExtra = [];
+    const courseId = booking.courseDates[0].course_id;
+
+    this.courseExtra.forEach(element => {
+      if (booking.courseDates.find((c) => element.course_date_id === c.course_date_id)) {
+        courseExtra.push(element);
+      }
+    });
+
+    this.bookingExtras.forEach(element => {
+      if (courseExtra.find((b)=> b.booking_user_id === element.booking_user_id) ) {
+        bookingExtra.push(element);
+      }
+    });
+
 
     if (event.source.checked) {
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        data: {title: this.translateService.instant('add_forfait'), message: this.translateService.instant('add_forfait_message')}
+      });
 
-      this.selectedForfait = forfait;
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+
+          this.loading = true;
+
+          booking.courseDates.forEach(element => {
+            const bookingUserExtra = {
+              booking_user_id: element.id,
+              course_extra_id: null,
+            };
+
+            const courseExtra = {
+              course_id: courseId,
+              name: forfait.id,
+              description: forfait.name,
+              price: forfait.price * this.bookingUsersUnique.length + ((forfait.price * forfait.tva) / 100)
+            };
+
+            this.crudService.create('/course-extras', courseExtra)
+              .subscribe((responseCourseExtra) => {
+
+                bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                this.crudService.create('/booking-user-extras', bookingUserExtra)
+                .subscribe((bookExtra) => {
+
+                })
+
+              })
+          });
+
+
+          courseExtra.forEach(element => {
+            this.crudService.delete('/course-extras', element.id)
+              .subscribe(() => {})
+
+          });
+
+          bookingExtra.forEach(element => {
+            this.crudService.delete('/booking-user-extras', element.id)
+                .subscribe(() => {
+
+                })
+          });
+
+          setTimeout(() => {
+            this.getData();
+          }, 1000);
+        } else {}
+      })
     } else {
-      this.selectedForfait = null;
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        data: {title: this.translateService.instant('delete_forfait'), message: this.translateService.instant('delete_forfait_message')}
+      });
+
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+
+          this.loading = true;
+
+          courseExtra.forEach(element => {
+            this.crudService.delete('/course-extras', element.id)
+              .subscribe(() => {})
+
+          });
+
+          bookingExtra.forEach(element => {
+            this.crudService.delete('/booking-user-extras', element.id)
+                .subscribe(() => {
+
+                })
+          });
+
+          setTimeout(() => {
+            this.getData();
+          }, 1000);
+        }
+      })
     }
+
   }
 
   deleteBooking() {

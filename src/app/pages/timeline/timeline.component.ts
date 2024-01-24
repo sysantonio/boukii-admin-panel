@@ -1265,9 +1265,14 @@ export class TimelineComponent implements OnInit, OnDestroy {
   saveEditedMonitor() {
     let data:any;
     let all_booking_users = [];
+    let subgroup_id = [];
     this.taskDetail.all_clients.forEach((client:any) => {
       all_booking_users.push(client.id);
     });
+
+    if(!this.taskDetail.all_clients.length){
+      subgroup_id = this.taskDetail.booking_id;
+    }
     /*
     if(this.taskDetail.type == 'collective'){
       data = {
@@ -1285,9 +1290,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
         booking_users: all_booking_users
       };
     }*/
+
     data = {
       monitor_id: this.editedMonitor.id,
-      booking_users: all_booking_users
+      booking_users: all_booking_users,
+      subgroup_id: subgroup_id
     };
 
     //console.log(data);

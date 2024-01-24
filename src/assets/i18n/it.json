@@ -518,5 +518,12 @@
   "notis": "Notifiche",
   "notis_1": "Avere ",
   "notis_2": " nuove notifiche",
-  "mark_all_as_read": "Segna tutti come letti"
+  "mark_all_as_read": "Segna tutti come letti",
+  "multidate_discount": "Sconto multidata",
+  "update_booking_dates_message": "Stai per sostituire le date del corso che hai selezionato con altre. ",
+  "no_monitor_move": "Annulla assegnazione monitor",
+  "add_forfait": "Aggiungi lo skipass",
+  "add_forfait_message": "Sei sicuro di voler aggiungere questo skipass alla tua prenotazione?",
+  "delete_forfait": "Elimina lo skipass",
+  "delete_forfait_message": "Sei sicuro di voler rimuovere questo skipass dalla prenotazione?"
 }

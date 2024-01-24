@@ -86,7 +86,9 @@
             </mat-card-title>
               <mat-card-subtitle style="margin: 0;float: left;width: 100%;">
                 {{getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 ? 'colective' : 'private' | translate}}
-                {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}</mat-card-subtitle>
+                {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}
+              </mat-card-subtitle>
+              <div style="color: #EA0C60;">{{ bookingUsersUnique[bI].price}} CHF</div>
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
@@ -123,7 +125,7 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
                       <li *ngFor="let forfait of settings?.extras?.forfait">
-                          <mat-checkbox class="radio" [disabled]="true" [value]="forfait" (change)="setForfait($event, forfait)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
+                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
                             <span>{{forfait.id}}</span>
                           </mat-checkbox>
                       </li>
@@ -281,8 +283,8 @@
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
               <span style="width: 100%; float:left">
-                <p style="float:left">{{'base_price' | translate | uppercase}}</p>
-                <p style="float:right">{{getBasePrice()}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                <p style="float:left">{{'base_price' | translate }}</p>
+                <p style="float:right">{{getBasePrice(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="reduction !== null">
@@ -300,6 +302,14 @@
                 </span>
               </ng-container>
 
+              <ng-container *ngIf="discounts.length > 0">
+
+                <span style="width: 100%; float:left" *ngFor="let item of discounts; let i = index">
+                  <p style="float:left">{{'multidate_discount' | translate}} </p>
+                  <p style="float:right">-{{item}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                </span>
+              </ng-container>
+
 
               <ng-container *ngFor="let item of courseExtra; let i = index">
                 <span style="width: 100%; float:left" *ngIf="item">
@@ -309,7 +319,7 @@
               </ng-container>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_cancellation_insurance">
-                <p style="float:left">{{'op_rem' |  translate | uppercase}}</p>
+                <p style="float:left">{{'op_rem' | translate }}</p>
                 <p style="float:right">{{booking.price_cancellation_insurance}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 

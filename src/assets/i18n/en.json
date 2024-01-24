@@ -518,6 +518,12 @@
   "notis": "Notifications",
   "notis_1": "Have ",
   "notis_2": " new notifications",
-  "mark_all_as_read": "Mark all as read"
-
+  "mark_all_as_read": "Mark all as read",
+  "multidate_discount": "Multi-date discount",
+  "update_booking_dates_message": "You are about to replace the course dates you have selected with others. ",
+  "no_monitor_move": "Unassign monitor",
+  "add_forfait": "Add ski pass",
+  "add_forfait_message": "Are you sure you want to add this ski pass to your reservation?",
+  "delete_forfait": "Delete ski pass",
+  "delete_forfait_message": "Are you sure you want to remove this ski pass from the reservation?"
 }
