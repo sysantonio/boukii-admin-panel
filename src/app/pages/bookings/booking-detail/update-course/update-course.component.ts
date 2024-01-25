@@ -61,13 +61,17 @@ export class UpdateCourseModalComponent implements OnInit {
             client_id: this.defaults.mainBooking.client_id,
             course_id: this.defaults.mainBooking.course_id,
             course_date_id: element,
+            course_subgroup_id: this.defaults.mainBooking.course_subgroup_id,
+            course_group_id: this.defaults.mainBooking.course_group_id,
+            degree_id: this.defaults.mainBooking.degree_id,
             monitor_id: this.defaults.mainBooking.monitor_id,
             hour_start: this.defaults.mainBooking.hour_start,
             hour_end: this.defaults.mainBooking.hour_end, //calcular en base a la duracion del curso
             currency: this.defaults.mainBooking.currency,
             notes: this.defaults.mainBooking.notes,
             school_notes: this.defaults.mainBooking.school_notes,
-            date: moment(date[0].date).format('YYYY-MM-DD')
+            date: moment(date[0].date).format('YYYY-MM-DD'),
+            attended: this.defaults.mainBooking.attended
           });
         });
 

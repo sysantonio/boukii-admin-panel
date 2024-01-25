@@ -98,7 +98,7 @@
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
         <div style="float: left; width: 100%;">
-          <p><strong>{{'courses.levels_and_groups' | translate }}</strong></p>
+          <p><strong>{{'courses.levels_and_groups' | translate }}</strong> <mat-icon svgIcon="mat:cloud_download" style="cursor: pointer;float:right" (click)="exportQR(detailData.id)"></mat-icon></p>
 
           <ng-container *ngFor="let colorKey of colorKeys">
             <ng-container *ngFor="let level of groupedByColor[colorKey]">
@@ -133,7 +133,7 @@
                       <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.monitor_id)?.first_name ? getMonitor(item.monitor_id)?.first_name + ' ' + getMonitor(item.monitor_id)?.last_name : 'No monitor asigned'}}</span>
                     </div>
                     <div style="float: left;width: 30%;margin: 6% 0 0 0;">
-                      <strong style="text-align: right;float: right;">{{item.booking_users.length}}/{{item.max_participants}} {{'users' | translate}}</strong>
+                      <strong style="text-align: right;float: right;">{{getActiveBookingUsers(item.booking_users)}}/{{item.max_participants}} {{'users' | translate}}</strong>
                     </div>
                   </div>
                 </div>

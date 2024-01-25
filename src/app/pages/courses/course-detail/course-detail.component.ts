@@ -920,7 +920,7 @@ export class CourseDetailComponent implements OnInit {
     let ret = [];
 
     this.courseUsers.forEach(courseUser => {
-      if(courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id) {
+      if(courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id && courseUser.status === 1) {
         ret.push(courseUser);
       }
     });

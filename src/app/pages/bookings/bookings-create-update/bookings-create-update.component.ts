@@ -1283,15 +1283,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         let hasSport = false;
         const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
-        client.client_sports.forEach(sport => {
-          if (sport.sport_id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === sport.degree_id);
-            this.levelForm.patchValue(level);
-            this.defaultsBookingUser.degree_id = level.id;
-            hasSport = true;
-            this.getCourses(level, this.monthAndYear);
-          }
-        });
+        if (client) {
+          client.client_sports.forEach(sport => {
+            if (sport.sport_id === this.defaults.sport_id) {
+              const level = this.levels.find((l) => l.id === sport.degree_id);
+              this.levelForm.patchValue(level);
+              this.defaultsBookingUser.degree_id = level.id;
+              hasSport = true;
+              this.getCourses(level, this.monthAndYear);
+            }
+          });
+        }
+
 
         /*if (!hasSport && client.client_sports.length === 0) {
           this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
