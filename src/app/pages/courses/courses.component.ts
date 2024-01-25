@@ -220,9 +220,10 @@ export class CoursesComponent {
 
   selectGroup(level: any) {
     this.selectedLevel = level;
-    this.detailData.course_dates[0].course_groups.forEach(group => {
-      if (group.degree_id === level.id) {
-        this.selectedGroup = group;
+    this.detailData.course_dates.forEach(group => {
+      const item = group.course_subgroups.find((g) => g.degree_id === level.id);
+      if (item) {
+        this.selectedGroup.push(item);
       }
     });
 
