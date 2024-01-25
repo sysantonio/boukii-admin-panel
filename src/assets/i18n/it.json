@@ -172,7 +172,7 @@
   "by": "Di",
   "by_default": "Predefinito",
   "children": "Bambini",
-  "Reduction": "Riduzione",
+  "reduction": "Riduzione",
   "apply_reduction": "Applicare una riduzione",
   "apply_bonus": "Applica un bonus",
   "summary": "Guasto",

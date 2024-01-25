@@ -172,7 +172,7 @@
   "by": "Von",
   "by_default": "Standard",
   "children": "Kinder",
-  "Reduction": "Die Ermäßigung",
+  "reduction": "Die Ermäßigung",
   "apply_reduction": "Wenden Sie eine Reduzierung an",
   "apply_bonus": "Wenden Sie einen Bonus an",
   "summary": "Abbauen",

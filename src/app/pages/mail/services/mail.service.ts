@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DateTime } from 'luxon';
-import { BehaviorSubject, Observable, ObservedValueOf, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, ObservedValueOf, combineLatest, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiCrudService } from 'src/service/crud.service';
 import { SchoolService } from 'src/service/school.service';
@@ -28,12 +28,23 @@ export class MailService {
     this.schoolService.getSchoolData()
       .subscribe((data) => {
         this.school = data.data;
-        this.crudService.list('/mails', 1, 1000, 'desc', 'id', '&school_id='+this.school.id)
+        const rqs = [];
+        rqs.push(this.crudService.list('/mails', 1, 1000, 'desc', 'id', '&school_id='+this.school.id));
+        rqs.push(this.crudService.list('/email-logs', 1, 10000, 'desc', 'id', '&school_id='+this.school.id));
+
+        forkJoin(rqs)
           .subscribe((mails) => {
-            const currentMails = mails.data;
+            const currentMails = [];
+
+            mails.forEach(element => {
+              element.data.forEach(mail => {
+
+                currentMails.push(mail);
+              });
+            });
 
             if(currentMails.length > 0) {
-              const mails = currentMails.filter((c) => c.lang === this.translateService.currentLang);
+              const mails = currentMails.filter((c) => c.lang === this.translateService.currentLang || !c.lang);
 
               if (mails) {
                 this.mails.next(mails)

@@ -92,7 +92,7 @@ export class ClientsComponent {
           .subscribe((uti) => {
             this.utilizers = uti.data;
           })
-        this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+event.item.id)
+        this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+event.item.id+"&school_id="+this.user.schools[0].id)
           .subscribe((cl) => {
             this.clientSport = cl.data;
 
@@ -173,7 +173,7 @@ export class ClientsComponent {
   }
 
   getUtilizerSports() {
-    this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+this.utilizer.id)
+    this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+this.utilizer.id+"&school_id="+this.user.schools[0].id)
     .subscribe((cl) => {
       this.clientSportUtilizer = cl.data;
 

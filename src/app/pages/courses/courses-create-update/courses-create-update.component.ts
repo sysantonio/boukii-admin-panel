@@ -374,8 +374,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.people = this.defaults.max_participants;
           this.defaults.course_dates = this.sortEventsByDate();
           this.defaults.settings = typeof course.data.settings === 'string' ? JSON.parse(course.data.settings) : course.data.settings;
-          /*this.dataSourceFlexiblePrices = this.defaults.price_range;
-          this.updateTable(null);*/
+
+          if (this.defaults.price_range === null) {
+            this.dataSourceFlexiblePrices =
+            this.intervalos.map(intervalo => {
+              const fila: any = { intervalo: this.formatIntervalo(intervalo) };
+              for (let i = 1; i <= this.people; i++) {
+                fila[`${i}`] = '';
+              }
+              return fila;
+            });
+          } else {
+
+            this.dataSourceFlexiblePrices = this.defaults.price_range;
+            this.updateTable(null);
+          }
           this.getSeparatedDates(this.defaults.course_dates, true);
           this.getDegrees();
 

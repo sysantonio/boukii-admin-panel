@@ -636,7 +636,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   getBookingType(data: any) {
     //if (data.length === 1) {
-      return data.course.course_type === 1 ? 'collectif' : 'prive'
+      return data?.course?.course_type === 1 ? 'collectif' : 'prive'
     /*} else {
       return 'MULTIPLE';
     }*/

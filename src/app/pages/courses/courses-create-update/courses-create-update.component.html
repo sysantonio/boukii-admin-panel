@@ -13,7 +13,7 @@
     <div @fadeInUp class="card flex-auto" style="width: 100%;">
       <div class="px-6 py-4 border-b flex items-center">
         <div style="float: left;width: 50%;">
-          <h2 class="title m-0">{{(mode === 'update' ? 'courses.new' : 'courses.update') |translate }}</h2>
+          <h2 class="title m-0">{{(mode === 'update' ? 'courses.update' : 'courses.new') |translate }}</h2>
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
@@ -449,7 +449,8 @@
                 <label for="dateFromPrivate" *ngIf="defaults.is_flexible">{{'from' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
 
-                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="mode !== 'update' ? minDate : ''" [max]="maxDate" [(ngModel)]="defaults.date_start">
+                  <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="mode !== 'update' ? minDate : ''"
+                  [max]="maxDate" [(ngModel)]="defaults.date_start">
                   <mat-datepicker-toggle matSuffix [for]="pickerFromUnique"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFromUnique [startAt]="minDate"></mat-datepicker>
 

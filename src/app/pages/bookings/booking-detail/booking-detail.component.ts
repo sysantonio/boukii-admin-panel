@@ -256,6 +256,7 @@ export class BookingDetailComponent implements OnInit {
   getData() {
     this.loading = true;
     this.discounts = [];
+    this.bonus = [];
     this.bookingsToCreate = [];
     this.courseExtra = [];
     this.bookingExtras = [];
@@ -759,12 +760,41 @@ export class BookingDetailComponent implements OnInit {
 
       setTimeout(() => {
 
-        if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
-          this.crudService.post('/admin/bookings/payments/' + this.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
-             reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
+        if (this.defaults.payment_method_id === 2) {
+
+          const bonuses = [];
+          const extras = [];
+          this.bonus.forEach(element => {
+            bonuses.push(
+              {
+                name: element.bonus.code,
+                quantity: 1,
+                price: -(element.bonus.quantity)
+              }
+            )
+          });
+
+          this.courseExtra.forEach(element => {
+            extras.push({name: element.name, quantity: 1, price: parseFloat(element.price)});
+          });
+
+          const basket = {
+            payment_method_id: this.defaults.payment_method_id,
+            price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice()},
+            bonus: {total: this.bonus.length, bonuses: bonuses},
+            reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
+            boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},
+            cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.booking.price_cancellation_insurance)},
+            extras: {total: this.courseExtra.length, extras: extras},
+            price_total: parseFloat(this.booking.price_total)
+          }
+
+
+          this.crudService.post('/admin/bookings/payments/' + this.id, basket)
+
             .subscribe((result: any) => {
               console.log((result));
-              window.open(result.payrexx_link, "_self");
+              window.open(result.data, "_self");
             })
         } else {
           this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
@@ -772,11 +802,11 @@ export class BookingDetailComponent implements OnInit {
         }
       }, 1000);
 
-      this.crudService.update('/bookings', {paid: this.defaults.paid, payment_method_id: this.defaults.payment_method_id}, this.id)
+      /*this.crudService.update('/bookings', {paid: this.defaults.paid, payment_method_id: this.defaults.payment_method_id}, this.id)
         .subscribe((res) => {
           this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 3000});
           this.getData();
-        })
+        })*/
   }
 
   update() {
@@ -1826,7 +1856,7 @@ export class BookingDetailComponent implements OnInit {
               price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
             }
 
-            this.crudService.update('/bookings', {status: 3, price_total: price - this.bookingsToCreate[index].price_total}, this.id)
+            this.crudService.update('/bookings', {status: 3}, this.id)
             .subscribe(() => {
               this.bookingsToCreate.splice(index, 1);
               this.getData();

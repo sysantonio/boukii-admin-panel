@@ -171,7 +171,7 @@
   "by": "By",
   "by_default": "Default",
   "children": "Children",
-  "Reduction": "Reduction",
+  "reduction": "Reduction",
   "apply_reduction": "Apply a reduction",
   "apply_bonus": "Apply a bonus",
   "summary": "Breakdown",

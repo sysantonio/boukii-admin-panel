@@ -1028,11 +1028,38 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         setTimeout(() => {
 
           if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
-            this.crudService.post('/admin/bookings/payments/' + booking.data.id, {bookingCourses: this.bookingsToCreate, bonus: this.bonus.length > 0 ? this.bonus : null,
-               reduction:this.reduction, boukiiCare: this.boukiiCare, cancellationInsurance: this.opRem})
+
+            const bonuses = [];
+            const extras = [];
+            this.bonus.forEach(element => {
+              bonuses.push(
+                {
+                  name: element.bonus.code,
+                  quantity: 1,
+                  price: -(element.bonus.quantity)
+                }
+              )
+            });
+
+            bookingExtras.forEach(element => {
+              extras.push({name: element.name, quantity: 1, price: parseFloat(element.price)});
+            });
+
+            const basket = {
+              payment_method_id: this.defaults.payment_method_id,
+              price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice()},
+              bonus: {total: this.bonus.length, bonuses: bonuses},
+              reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
+              boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
+              cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
+              extras: {total: bookingExtras.length, extras: extras},
+              price_total: parseFloat(this.finalPrice)
+            }
+
+            this.crudService.post('/admin/bookings/payments/' + booking.data.id, basket)
               .subscribe((result: any) => {
                 console.log((result));
-                window.open(result.payrexx_link, "_self");
+                window.open(result.data, "_self");
                 this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
               })
           } else {

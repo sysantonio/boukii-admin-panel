@@ -171,7 +171,7 @@
   "by": "Pour",
   "by_default": "Par défaut",
   "children": "Enfants",
-  "Reduction": "Réduction",
+  "reduction": "Réduction",
   "apply_reduction": "Appliquer une réduction",
   "apply_bonus": "Appliquer un bonus",
   "summary": "Panne",
