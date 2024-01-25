@@ -75,7 +75,7 @@
               <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" style="float: right;" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
-              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)" style="float: right;" *ngIf="!booking.paid">
+              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)" style="float: right;" *ngIf="!booking.paid && item?.courseDates[0]?.status === 1">
                 <mat-icon svgIcon="mat:edit" style="color:green"></mat-icon>
               </button>
             </div>
@@ -115,7 +115,7 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <ul>
                       <li *ngFor="let forfait of settings?.extras?.forfait">
-                        <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
+                        <mat-checkbox class="radio" [value]="forfait"  [disabled]="booking.paid || item?.courseDates[0]?.status === 2" (change)="setForfait($event, forfait, item, bI)" [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
                           <span>{{forfait.id}}</span>
                         </mat-checkbox>
                     </li>
@@ -257,17 +257,17 @@
               </mat-card-subtitle>
             </mat-card-header>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addReduction()" [disabled]="booking.paid">{{'apply_reduction' | translate}}</button>
+            <button mat-raised-button color="accent" (click)="addReduction()" [disabled]="booking.paid || booking.status === 2">{{'apply_reduction' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-            <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid">{{'apply_bonus' | translate}}</button>
+            <button mat-raised-button color="accent" (click)="addBonus()" [disabled]="booking.paid || booking.status === 2">{{'apply_bonus' | translate}}</button>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.cancellationInsurance)">
               <p style="float: left;">{{'op_rem' | translate}}</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="addCancellationInsurance($event)" [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="addCancellationInsurance($event)" [disabled]="booking.paid || booking.status === 2" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice) && boukiiCarePrice > 0">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="addBoukiiCare($event)"  [disabled]="booking.paid" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="addBoukiiCare($event)"  [disabled]="booking.paid || booking.status === 2" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>

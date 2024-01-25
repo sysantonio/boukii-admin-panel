@@ -397,204 +397,208 @@
     <!-- Ventanas actividades -->
     <ng-container *ngFor="let item of bookingsToCreate; let bookI = index">
 
-    <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}" *ngIf="!loading && !bookingComplete">
-      <mat-card-header style="display:block">
-        <div style="width: 100%;float: left;">
-          <mat-icon svgIcon="mat:close" (click)="deleteBooking(bookI)" style="color:red; cursor:pointer"></mat-icon>
-          <mat-icon svgIcon="mat:expand_more" *ngIf="showDetail !== bookI" style="float:right" (click)="showDetailFn(bookI)"></mat-icon>
-          <mat-icon svgIcon="mat:expand_less" *ngIf="showDetail === bookI" style="float:right" (click)="showDetailFn(null)"></mat-icon>
+      <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;" [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}" *ngIf="!loading && !bookingComplete">
+        <mat-card-header style="display:block">
+          <div style="width: 100%;float: left;">
+            <mat-icon svgIcon="mat:close" (click)="deleteBooking(bookI)" style="color:red; cursor:pointer"></mat-icon>
+            <mat-icon svgIcon="mat:expand_more" *ngIf="showDetail !== bookI" style="float:right" (click)="showDetailFn(bookI)"></mat-icon>
+            <mat-icon svgIcon="mat:expand_less" *ngIf="showDetail === bookI" style="float:right" (click)="showDetailFn(null)"></mat-icon>
 
-        </div>
-        <div style="width: 100%;float:left;">
-          <mat-card-title style="float: left;width: 90%;">{{'activity' | translate}} #{{bookI + 1 }}</mat-card-title>
-        </div>
-        <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
-          <div style="width: 100%;">
-            <p style="float: left;width: 80%;text-align: left;"><b>{{'register' | translate}}</b></p>
-            <p style="float: left;width: 20%;text-align: right;"><b>{{'status' | translate}}</b></p>
           </div>
-          <div style="width: 100%;">
-            <p style="float: left;width: 60%;text-align: left;"><b>{{ minDate | date: 'dd/MM/YYYY'}}</b> {{ minDate | date: 'HH:mm'}}</p>
-            <p style="float: left;width: 40%;text-align: right;color:#FAC710">{{'non payé' | uppercase }}</p>
+          <div style="width: 100%;float:left;">
+            <mat-card-title style="float: left;width: 90%;">{{'activity' | translate}} #{{bookI + 1 }}</mat-card-title>
           </div>
-        </div>
-        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;" *ngIf="showDetail === bookI"></mat-divider>
-      </mat-card-header>
-        <mat-card-content *ngIf="showDetail === bookI">
-          <div style="float: left; width: 100%;">
-            <div style="float: left; width: 100%;">
-              <p style="font-size: 20px;">{{'client' | translate}}</p>
+          <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
+            <div style="width: 100%;">
+              <p style="float: left;width: 80%;text-align: left;"><b>{{'register' | translate}}</b></p>
+              <p style="float: left;width: 20%;text-align: right;"><b>{{'status' | translate}}</b></p>
             </div>
-            <div style="float: left;width: 100%;">
-              <div style="float: left; width: 20%; margin-top: 5%;height: 80px;">
-                <img [src]="getClientAvatar(defaults.client_main_id.id)" width="100" height="100" style="border-radius: 100%;height:100%">
+            <div style="width: 100%;">
+              <p style="float: left;width: 60%;text-align: left;"><b>{{ minDate | date: 'dd/MM/YYYY'}}</b> {{ minDate | date: 'HH:mm'}}</p>
+              <p style="float: left;width: 40%;text-align: right;color:#FAC710">{{'non payé' | uppercase }}</p>
+            </div>
+          </div>
+          <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;" *ngIf="showDetail === bookI"></mat-divider>
+        </mat-card-header>
+          <mat-card-content *ngIf="showDetail === bookI">
+            <div style="float: left; width: 100%;">
+              <div style="float: left; width: 100%;">
+                <p style="font-size: 20px;">{{'client' | translate}}</p>
               </div>
-              <div style="float: left; width: 75%;margin:6% 0 0 2%">
-                <p>{{ getLanguage(getMonitorLang(defaults.client_main_id.id)) }} · {{ getCountry(getMonitorProvince(defaults.client_main_id.id)) }} · {{calculateAge(defaults.client_main_id.birth_date) }}&ensp;{{'years' | translate}}</p>
-                <p><strong>{{ getClientName(defaults.client_main_id.id)}}</strong></p>
-                <div>
-                  <mat-icon svgIcon="mat:chat"></mat-icon>
-                  <mat-icon svgIcon="mat:mail_outline"></mat-icon>
-                  <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+              <div style="float: left;width: 100%;">
+                <div style="float: left; width: 20%; margin-top: 5%;height: 80px;">
+                  <img [src]="getClientAvatar(defaults.client_main_id.id)" width="100" height="100" style="border-radius: 100%;height:100%">
+                </div>
+                <div style="float: left; width: 75%;margin:6% 0 0 2%">
+                  <p>{{ getLanguage(getClientLang(defaults.client_main_id.id)) }} · {{ getCountry(getClientProvince(defaults.client_main_id.id)) }} · {{calculateAge(defaults.client_main_id.birth_date) }}&ensp;{{'years' | translate}}</p>
+                  <p><strong>{{ getClientName(defaults.client_main_id.id)}}</strong></p>
+
+                  <div>
+                    <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
+                    <a href="mailto:{{defaults.email}}" style="cursor:pointer">
+                      <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+                    </a>
+                    <a href="tel:{{defaults.phone}}">
+                      <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-          <div style="float: left; width: 100%;" *ngFor="let courseDate of item.courseDates; let courseDateIndex = index" [ngStyle]="{'margin-top': courseDateIndex > 0 ? '5%' : '0'}">
-            <div style="float: left; width: 100%;;height: 40px" *ngIf="courseDate.client_id === defaults.client_main_id.id">
-              <div style="float: left; width: 20%;">
-                <img [src]="getClientAvatar(courseDate.client_id)" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+            <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <div style="float: left; width: 100%;;height: 40px" *ngIf="item.courseDates[0].client_id === defaults.client_main_id.id">
+                <div style="float: left; width: 20%;">
+                  <img [src]="getClientAvatar(item.courseDates[0].client_id)" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+                </div>
+                <div style="float: left; width: 80%;">
+                  <p>{{getClientName(item.courseDates[0].client_id)}}</p>
+                  <p style="font-size:8px" *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"><i>
+                    {{ getLanguage(getClientLang(item.courseDates[0].monitor_id)) }} · {{ getCountry(getClientProvince(item.courseDates[0].monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }} &ensp;{{'years' | translate}}</i></p>
+                </div>
+
               </div>
-              <div style="float: left; width: 80%;">
-                <p>{{getClientName(courseDate.client_id)}}</p>
-                <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                  {{ getLanguage(getClientLang(courseDate.monitor_id)) }} · {{ getCountry(getClientProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} &ensp;{{'years' | translate}}</i></p>
+
+              <div style="float: left; width: 100%;;height: 40px" *ngIf="item.courseDates[0].client_id !== defaults.client_main_id.id">
+                <div style="float: left; width: 20%;">
+                  <img [src]="getUtilizer(item.courseDates[0].client_id)?.image" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+                </div>
+                <div style="float: left; width: 80%;">
+                  <p>{{getUtilizer(item.courseDates[0].client_id)?.first_name}} {{getUtilizer(item.courseDates[0].client_id)?.last_name}}</p>
+                  <p style="font-size:8px" *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"><i>
+                    {{ getLanguage(getUtilizer(item.courseDates[0].client_id)?.language1_id) }} · {{ getCountry(getUtilizer(item.courseDates[0].client_id)?.province) }} · {{calculateAge(getUtilizer(item.courseDates[0].client_id)?.birth_date) }} &ensp;{{'years' | translate}}</i></p>
+                </div>
+
+              </div>
+              <div style="float: left; width: 100%;margin-top: 10%;">
+                <div style="float: left; width: 100%;">
+                  <div *ngIf="item.courseDates[0].course.course_type === 2" style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+                  <div *ngIf="item.courseDates[0].course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+
+                  <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
+                    <strong>{{ item.courseDates[0].course?.name}}</strong>
+                  </p>
+                  <!--<p style="float: left; width: 100%;">
+                    {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{!courseDate.course?.is_flexible ? courseDate.course?.price : courseDate.price}} {{courseDate.course?.currency}}
+                  </p>-->
+                </div>
+
+                <div style="float: left; width: 100%;margin-top: 5%;">
+                  <ul>
+                    <ng-container *ngIf="item.courseDates[0].course?.is_flexible">
+                      <li *ngFor="let courseDateDate of item.courseDates">
+                        {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDateDate?.course?.course_type === 1 ? courseDateDate?.hour_end : calculateHourEnd(courseDateDate?.hour_start, courseDateDate?.course?.duration)}}</i>
+                      </li>
+                    </ng-container>
+                    <ng-container *ngIf="!item.courseDates[0].course?.is_flexible">
+                      <li *ngFor="let courseDateDate of item.courseDates">
+                        {{ courseDateDate?.date | date: 'dd/MM/YYYY'}}<i style="float: right;">
+                          {{courseDateDate?.hour_start}} - {{courseDateDate?.course?.course_type === 1 ? courseDateDate?.hour_end : calculateHourEnd(courseDateDate?.hour_start, courseDateDate?.course?.duration)}}h</i>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </div>
+                <div style="float: left; width: 100%;margin-top: 5%;">
+                  <div style="float: left; width: 15%;">
+                    <img [src]="item.courseDates[0].monitor_id !== null ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar" style="width: 50px;height: 50px;object-fit: contain;border-radius:50%">
+                  </div>
+                  <div style="float: left; width: 70%;">
+                    <p>{{getMonitorName(item.courseDates[0].monitor_id) || 'no monitor asigned'}}</p>
+                    <p style="font-size:8px" *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"><i>
+                      {{ getLanguage(getMonitorLang(item.courseDates[0].monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0].monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }} {{'years' | translate }}</i></p>
+                  </div>
+
+                </div>
+                <div style="float: left; width: 100%;" *ngIf="item.courseDates[0].course?.course_type === 1">
+                  <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;" [ngStyle]="{'background': getLevelColor(item.courseDates[0].degree_id)}">
+                    {{getLevelName(item.courseDates[0].degree_id)}}
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!--
+              <div style="float: left; width: 100%;margin: 5% 0 0 0;">
+                <div style="float: left; width: 50%;">
+                  <mat-slide-toggle [(ngModel)]="item.has_cancellation_insurance" (change)="setReemToItem($event, item)"></mat-slide-toggle> Op. Rem (10%)
+                </div>
+                <div style="float: left; width: 50%;">
+                  <mat-slide-toggle [(ngModel)]="item.has_boukii_care" (change)="setBoukiiCareToItem($event, item)"></mat-slide-toggle> Boukii Care
+                </div>
+              </div>-->
+              <div style="float: left; width: 50%;" *ngIf="false">
+                <div style="float: left; width: 100%;">
+                  <mat-slide-toggle></mat-slide-toggle> Alquiler material
+
+                </div>
+                <div style="float: left; width: 100%;margin-top: 5%;">
+                  <mat-slide-toggle></mat-slide-toggle> Fortrait Ski
+
+                </div>
+                <div style="float: left; width: 100%;margin-top: 5%;">
+                  <mat-slide-toggle></mat-slide-toggle> Comida
+
+                </div>
+                <div style="float: left; width: 100%;margin-top: 5%;">
+                  <mat-slide-toggle></mat-slide-toggle> Transporte
+
+                </div>
               </div>
 
             </div>
+            <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
 
-            <div style="float: left; width: 100%;;height: 40px" *ngIf="courseDate.client_id !== defaults.client_main_id.id">
-              <div style="float: left; width: 20%;">
-                <img [src]="getUtilizer(courseDate.client_id)?.image" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+              <!--<div style="float: left; width: 25%;">
+                <p><strong>{{item.price_cancellation_insurance}}{{item.currency}}</strong></p>
               </div>
-              <div style="float: left; width: 80%;">
-                <p>{{getUtilizer(courseDate.client_id)?.first_name}} {{getUtilizer(courseDate.client_id)?.last_name}}</p>
-                <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                  {{ getLanguage(getUtilizer(courseDate.client_id)?.language1_id) }} · {{ getCountry(getUtilizer(courseDate.client_id)?.province) }} · {{calculateAge(getUtilizer(courseDate.client_id)?.birth_date) }} &ensp;{{'years' | translate}}</i></p>
+              <div style="float: left; width: 25%;">
+                <p>{{item.price_boukii_care}}{{item.currency}}</p>
+              </div>-->
+              <div style="float: left; width: 50%;">
+                <p>{{'course_price' | translate }}</p>
               </div>
+              <div style="float: right; width: 50%;">
+                <p><strong>{{
 
+                  (item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible || item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
+                  ? item.courseDates[0].course?.price * item.courseDates.length : item.price_total}}{{item.currency}}</strong></p>
+              </div>
             </div>
-            <div style="float: left; width: 100%;margin-top: 10%;">
-              <div style="float: left; width: 100%;">
-                <div *ngIf="courseDate.course.course_type === 2" style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
-                <div *ngIf="courseDate.course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+            <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF" *ngIf="false">
 
-                <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
-                  <strong>{{ courseDate.course?.name}}</strong>
-                </p>
-                <!--<p style="float: left; width: 100%;">
-                  {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{!courseDate.course?.is_flexible ? courseDate.course?.price : courseDate.price}} {{courseDate.course?.currency}}
-                </p>-->
-              </div>
-
-              <div style="float: left; width: 100%;margin-top: 5%;">
+              <div style="text-align: left;width: 50%;float:left">
                 <ul>
-                  <ng-container *ngIf="courseDate.course?.is_flexible">
-                    <li *ngFor="let courseDateDate of item.courseDates">
-                      {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDate?.course?.course_type === 1 ? courseDate?.hour_end : calculateHourEnd(courseDate?.hour_start, courseDate?.course?.duration)}}</i>
-                    </li>
-                  </ng-container>
-                  <ng-container *ngIf="!courseDate.course?.is_flexible">
-                    <li>
-                      {{ courseDate?.date | date: 'dd/MM/YYYY'}}<i style="float: right;">
-                        {{courseDate?.hour_start}} - {{courseDate?.course?.course_type === 1 ? courseDate?.hour_end : calculateHourEnd(courseDate?.hour_start, courseDate?.course?.duration)}}h</i>
-                    </li>
-                  </ng-container>
+                  <li>{{'base_price' | translate | uppercase}}</li>
+                  <!--<li>{{'Option Rembousement (10%)'}}</li>
+                  <li>{{'Boukii Care'}}</li>-->
+                  <li>{{'tva' | translate | uppercase}}</li>
+                  <li><strong>{{'total' | translate | uppercase}}</strong></li>
                 </ul>
               </div>
-              <div style="float: left; width: 100%;margin-top: 5%;">
-                <div style="float: left; width: 15%;">
-                  <img [src]="courseDate.monitor_id !== null ? getMonitorAvatar(courseDate.monitor_id) : userAvatar" style="width: 50px;height: 50px;object-fit: contain;border-radius:50%">
-                </div>
-                <div style="float: left; width: 70%;">
-                  <p>{{getMonitorName(courseDate.monitor_id) || 'no monitor asigned'}}</p>
-                  <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                    {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} {{'years' | translate }}</i></p>
-                </div>
-
-              </div>
-              <div style="float: left; width: 100%;" *ngIf="courseDate.course?.course_type === 1">
-                <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;" [ngStyle]="{'background': getLevelColor(courseDate.degree_id)}">
-                  {{getLevelName(courseDate.degree_id)}}
-                </div>
-
-              </div>
-
-            </div>
-
-            <!--
-            <div style="float: left; width: 100%;margin: 5% 0 0 0;">
-              <div style="float: left; width: 50%;">
-                <mat-slide-toggle [(ngModel)]="item.has_cancellation_insurance" (change)="setReemToItem($event, item)"></mat-slide-toggle> Op. Rem (10%)
-              </div>
-              <div style="float: left; width: 50%;">
-                <mat-slide-toggle [(ngModel)]="item.has_boukii_care" (change)="setBoukiiCareToItem($event, item)"></mat-slide-toggle> Boukii Care
-              </div>
-            </div>-->
-            <div style="float: left; width: 50%;" *ngIf="false">
-              <div style="float: left; width: 100%;">
-                <mat-slide-toggle></mat-slide-toggle> Alquiler material
-
-              </div>
-              <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle></mat-slide-toggle> Fortrait Ski
-
-              </div>
-              <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle></mat-slide-toggle> Comida
-
-              </div>
-              <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle></mat-slide-toggle> Transporte
-
+              <div style="text-align: right;width: 50%;float:left">
+                <ul>
+                  <li>{{item.price_total}}{{item.currency}}</li>
+                 <!-- <li>{{item.price_cancellation_insurance}}{{item.currency}}</li>
+                  <li>{{item.price_boukii_care}}{{item.currency}}</li>-->
+                  <li>{{item.price_total* tva}} {{item.currency}}</li>
+                  <li><strong>{{item.price_total + (item.price_total + item.price_cancellation_insurance + item.price_boukii_care) * (tva)}} {{item.currency}}</strong></li>
+                </ul>
               </div>
             </div>
 
-          </div>
-          <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+            <div style="float: left;margin: 5% 0 0 0;width: 50%;">
+              <button color="primary" mat-raised-button type="button" style="border-radius: 0;" [disabled]="bookingsToCreate.length === 0" (click)="addAnotherCourse()"> + {{'add_another_course' | translate}} </button>
 
-            <!--<div style="float: left; width: 25%;">
-              <p><strong>{{item.price_cancellation_insurance}}{{item.currency}}</strong></p>
             </div>
-            <div style="float: left; width: 25%;">
-              <p>{{item.price_boukii_care}}{{item.currency}}</p>
-            </div>-->
-            <div style="float: left; width: 50%;">
-              <p>{{'course_price' | translate }}</p>
+
+            <div style="float: right;margin: 5% 0 0 0;width: 50%;">
+              <button color="primary" mat-raised-button type="button" style="border-radius: 0;float:right" (click)="save()" [disabled]="bookingsToCreate.length === 0"> {{'end_booking' | translate}} </button>
+
             </div>
-            <div style="float: right; width: 50%;">
-              <p><strong>{{
-
-                (item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible || item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
-                ? item.courseDates[0].course?.price * item.courseDates.length : item.price_total}}{{item.currency}}</strong></p>
-            </div>
-          </div>
-          <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF" *ngIf="false">
-
-            <div style="text-align: left;width: 50%;float:left">
-              <ul>
-                <li>{{'base_price' | translate | uppercase}}</li>
-                <!--<li>{{'Option Rembousement (10%)'}}</li>
-                <li>{{'Boukii Care'}}</li>-->
-                <li>{{'tva' | translate | uppercase}}</li>
-                <li><strong>{{'total' | translate | uppercase}}</strong></li>
-              </ul>
-            </div>
-            <div style="text-align: right;width: 50%;float:left">
-              <ul>
-                <li>{{item.price_total}}{{item.currency}}</li>
-               <!-- <li>{{item.price_cancellation_insurance}}{{item.currency}}</li>
-                <li>{{item.price_boukii_care}}{{item.currency}}</li>-->
-                <li>{{item.price_total* tva}} {{item.currency}}</li>
-                <li><strong>{{item.price_total + (item.price_total + item.price_cancellation_insurance + item.price_boukii_care) * (tva)}} {{item.currency}}</strong></li>
-              </ul>
-            </div>
-          </div>
-
-          <div style="float: left;margin: 5% 0 0 0;width: 50%;">
-            <button color="primary" mat-raised-button type="button" style="border-radius: 0;" [disabled]="bookingsToCreate.length === 0" (click)="addAnotherCourse()"> + {{'add_another_course' | translate}} </button>
-
-          </div>
-
-          <div style="float: right;margin: 5% 0 0 0;width: 50%;">
-            <button color="primary" mat-raised-button type="button" style="border-radius: 0;float:right" (click)="save()" [disabled]="bookingsToCreate.length === 0"> {{'end_booking' | translate}} </button>
-
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </ng-container>
-
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
   </div>
 
   <div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete">

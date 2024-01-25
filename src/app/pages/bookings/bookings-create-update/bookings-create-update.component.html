@@ -434,37 +434,37 @@
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-        <div style="float: left; width: 100%;" *ngFor="let courseDate of item.courseDates; let courseDateIndex = index" [ngStyle]="{'margin-top': courseDateIndex > 0 ? '5%' : '0'}">
-          <div style="float: left; width: 100%;;height: 40px" *ngIf="courseDate.client_id === defaults.client_main_id.id">
+        <div style="float: left; width: 100%;margin-top: 5%;">
+          <div style="float: left; width: 100%;;height: 40px" *ngIf="item.courseDates[0].client_id === defaults.client_main_id.id">
             <div style="float: left; width: 20%;">
-              <img [src]="getClientAvatar(courseDate.client_id)" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+              <img [src]="getClientAvatar(item.courseDates[0].client_id)" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
             </div>
             <div style="float: left; width: 80%;">
-              <p>{{getClientName(courseDate.client_id)}}</p>
-              <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                {{ getLanguage(getClientLang(courseDate.monitor_id)) }} · {{ getCountry(getClientProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} &ensp;{{'years' | translate}}</i></p>
+              <p>{{getClientName(item.courseDates[0].client_id)}}</p>
+              <p style="font-size:8px" *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"><i>
+                {{ getLanguage(getClientLang(item.courseDates[0].monitor_id)) }} · {{ getCountry(getClientProvince(item.courseDates[0].monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }} &ensp;{{'years' | translate}}</i></p>
             </div>
 
           </div>
 
-          <div style="float: left; width: 100%;;height: 40px" *ngIf="courseDate.client_id !== defaults.client_main_id.id">
+          <div style="float: left; width: 100%;;height: 40px" *ngIf="item.courseDates[0].client_id !== defaults.client_main_id.id">
             <div style="float: left; width: 20%;">
-              <img [src]="getUtilizer(courseDate.client_id)?.image" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+              <img [src]="getUtilizer(item.courseDates[0].client_id)?.image" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
             </div>
             <div style="float: left; width: 80%;">
-              <p>{{getUtilizer(courseDate.client_id)?.first_name}} {{getUtilizer(courseDate.client_id)?.last_name}}</p>
-              <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                {{ getLanguage(getUtilizer(courseDate.client_id)?.language1_id) }} · {{ getCountry(getUtilizer(courseDate.client_id)?.province) }} · {{calculateAge(getUtilizer(courseDate.client_id)?.birth_date) }} &ensp;{{'years' | translate}}</i></p>
+              <p>{{getUtilizer(item.courseDates[0].client_id)?.first_name}} {{getUtilizer(item.courseDates[0].client_id)?.last_name}}</p>
+              <p style="font-size:8px" *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"><i>
+                {{ getLanguage(getUtilizer(item.courseDates[0].client_id)?.language1_id) }} · {{ getCountry(getUtilizer(item.courseDates[0].client_id)?.province) }} · {{calculateAge(getUtilizer(item.courseDates[0].client_id)?.birth_date) }} &ensp;{{'years' | translate}}</i></p>
             </div>
 
           </div>
           <div style="float: left; width: 100%;margin-top: 10%;">
             <div style="float: left; width: 100%;">
-              <div *ngIf="courseDate.course.course_type === 2" style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
-              <div *ngIf="courseDate.course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+              <div *ngIf="item.courseDates[0].course.course_type === 2" style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
+              <div *ngIf="item.courseDates[0].course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
 
               <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
-                <strong>{{ courseDate.course?.name}}</strong>
+                <strong>{{ item.courseDates[0].course?.name}}</strong>
               </p>
               <!--<p style="float: left; width: 100%;">
                 {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{!courseDate.course?.is_flexible ? courseDate.course?.price : courseDate.price}} {{courseDate.course?.currency}}
@@ -473,33 +473,33 @@
 
             <div style="float: left; width: 100%;margin-top: 5%;">
               <ul>
-                <ng-container *ngIf="courseDate.course?.is_flexible">
+                <ng-container *ngIf="item.courseDates[0].course?.is_flexible">
                   <li *ngFor="let courseDateDate of item.courseDates">
-                    {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDate?.course?.course_type === 1 ? courseDate?.hour_end : calculateHourEnd(courseDate?.hour_start, courseDate?.course?.duration)}}</i>
+                    {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDateDate?.course?.course_type === 1 ? courseDateDate?.hour_end : calculateHourEnd(courseDateDate?.hour_start, courseDateDate?.course?.duration)}}</i>
                   </li>
                 </ng-container>
-                <ng-container *ngIf="!courseDate.course?.is_flexible">
-                  <li>
-                    {{ courseDate?.date | date: 'dd/MM/YYYY'}}<i style="float: right;">
-                      {{courseDate?.hour_start}} - {{courseDate?.course?.course_type === 1 ? courseDate?.hour_end : calculateHourEnd(courseDate?.hour_start, courseDate?.course?.duration)}}h</i>
+                <ng-container *ngIf="!item.courseDates[0].course?.is_flexible">
+                  <li *ngFor="let courseDateDate of item.courseDates">
+                    {{ courseDateDate?.date | date: 'dd/MM/YYYY'}}<i style="float: right;">
+                      {{courseDateDate?.hour_start}} - {{courseDateDate?.course?.course_type === 1 ? courseDateDate?.hour_end : calculateHourEnd(courseDateDate?.hour_start, courseDateDate?.course?.duration)}}h</i>
                   </li>
                 </ng-container>
               </ul>
             </div>
             <div style="float: left; width: 100%;margin-top: 5%;">
               <div style="float: left; width: 15%;">
-                <img [src]="courseDate.monitor_id !== null ? getMonitorAvatar(courseDate.monitor_id) : userAvatar" style="width: 50px;height: 50px;object-fit: contain;border-radius:50%">
+                <img [src]="item.courseDates[0].monitor_id !== null ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar" style="width: 50px;height: 50px;object-fit: contain;border-radius:50%">
               </div>
               <div style="float: left; width: 70%;">
-                <p>{{getMonitorName(courseDate.monitor_id) || 'no monitor asigned'}}</p>
-                <p style="font-size:8px" *ngIf="courseDate.monitor_id && courseDate.monitor_id !== null"><i>
-                  {{ getLanguage(getMonitorLang(courseDate.monitor_id)) }} · {{ getCountry(getMonitorProvince(courseDate.monitor_id)) }} · {{calculateAge(getMonitorBirth(courseDate.monitor_id)) }} {{'years' | translate }}</i></p>
+                <p>{{getMonitorName(item.courseDates[0].monitor_id) || 'no monitor asigned'}}</p>
+                <p style="font-size:8px" *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"><i>
+                  {{ getLanguage(getMonitorLang(item.courseDates[0].monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0].monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }} {{'years' | translate }}</i></p>
               </div>
 
             </div>
-            <div style="float: left; width: 100%;" *ngIf="courseDate.course?.course_type === 1">
-              <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;" [ngStyle]="{'background': getLevelColor(courseDate.degree_id)}">
-                {{getLevelName(courseDate.degree_id)}}
+            <div style="float: left; width: 100%;" *ngIf="item.courseDates[0].course?.course_type === 1">
+              <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;" [ngStyle]="{'background': getLevelColor(item.courseDates[0].degree_id)}">
+                {{getLevelName(item.courseDates[0].degree_id)}}
               </div>
 
             </div>
@@ -870,7 +870,7 @@
 
               <span style="width: 100%; float:left" *ngIf="this.tva">
                 <p style="float:left">{{'tva' | translate | uppercase}}</p>
-                <p style="float:right">{{ (finalPrice * this.tvaPrice).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                <p style="float:right">{{ (this.tvaPrice).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left">

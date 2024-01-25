@@ -342,7 +342,7 @@
           <ng-container *ngIf="column.type === 'payment_status'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
-              {{ row[column.property] ? 'PAYÉ' : 'NON PAYE' | uppercase }}
+              {{ row[column.property] ? 'payed' : 'cancelled' | translate | uppercase }}
             </td>
           </ng-container>
         </ng-container>
@@ -352,7 +352,7 @@
           <ng-container *ngIf="column.type === 'payment_status_data'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
-              {{ data[i].booking[column.property] ? 'PAYÉ' : 'NON PAYE' | uppercase }}
+              {{ data[i].booking[column.property] ? 'payed' : 'cancelled' | translate | uppercase }}
             </td>
           </ng-container>
         </ng-container>
@@ -362,7 +362,7 @@
           <ng-container *ngIf="column.type === 'cancelation_status'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] === 1 ? '#CEE741' : '#fac710'">
-              {{ row[column.property] === 1 ? 'ACTIVE' : row[column.property] === 2 ? 'ANNULÉ' : 'PARTIALLY ANNULÉ' | uppercase }}
+              {{ (row[column.property] === 1 ? 'active' : row[column.property] === 2 ? 'cancelled' : 'partial_cancelled') | translate | uppercase }}
             </td>
           </ng-container>
         </ng-container>
