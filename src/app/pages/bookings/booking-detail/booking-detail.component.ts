@@ -760,7 +760,7 @@ export class BookingDetailComponent implements OnInit {
 
       setTimeout(() => {
 
-        if (this.defaults.payment_method_id === 2) {
+        if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
 
           const bonuses = [];
           const extras = [];
