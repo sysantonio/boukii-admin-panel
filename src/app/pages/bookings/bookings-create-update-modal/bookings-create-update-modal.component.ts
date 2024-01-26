@@ -898,7 +898,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
       });
 
-      let paxes = 0;
+      let paxes = 1;
 
       if (element.paxes && !isNaN(element.paxes)) {
 
