@@ -867,7 +867,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
       });
 
       let paxes = 0;
-      paxes = paxes + element.paxes;
+
+      if (element.paxes && !isNaN(element.paxes)) {
+
+        paxes = paxes + element.paxes;
+      }
       data = {
         price_total: this.finalPrice,
         has_cancellation_insurance: this.defaults.has_cancellation_insurance,

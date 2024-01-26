@@ -265,7 +265,7 @@
                     <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
                       <mat-label>{{'choose_monitor' | translate }}</mat-label>
                       <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur"
-                      [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes)) || externalData && externalData.onlyPrivate
+                      [disabled]="(selectedItem.is_flexible && (!courseDate.duration )) || externalData && externalData.onlyPrivate
                       || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"
                        [value]="externalData && externalData.monitorId ? externalData?.monitor?.first_name + ' ' + externalData?.monitor?.last_name : ''"/>
                       <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">

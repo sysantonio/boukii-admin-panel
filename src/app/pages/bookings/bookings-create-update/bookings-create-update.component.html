@@ -254,7 +254,7 @@
 
                   <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
                     <mat-label>{{'choose_monitor' | translate }}</mat-label>
-                    <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration || !courseDate.paxes))
+                    <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration))
                     || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"/>
                     <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
                       <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor" (onSelectionChange)="courseDate.monitor_id = monitor.id">
