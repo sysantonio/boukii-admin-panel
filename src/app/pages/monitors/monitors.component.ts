@@ -72,7 +72,7 @@ export class MonitorsComponent {
       .subscribe((data) => {
         this.detailData = data.data;
 
-        this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+event.item.id)
+        this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+event.item.id+'&school_id='+this.user.schools[0].id)
           .subscribe((mn) => {
             this.monitorSport = mn.data;
 

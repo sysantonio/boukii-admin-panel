@@ -625,7 +625,7 @@ export class MonitorDetailComponent {
   }
 
   getMonitorSportsDegree() {
-    this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+this.id)
+    this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+this.id+'&school_id='+this.user.schools[0].id)
       .subscribe((monitorDegree) => {
         let selectedSports = []; // Obtén los deportes actualmente seleccionados o inicializa un arreglo vacío
         const level = [];
