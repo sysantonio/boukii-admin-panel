@@ -253,7 +253,7 @@ export class BookingDetailModalComponent implements OnInit {
     return '#'+r+g+b;
   }
 
-  getData() {
+  getData(updateBooking = false) {
     this.loading = true;
     this.discounts = [];
 
@@ -399,6 +399,12 @@ export class BookingDetailModalComponent implements OnInit {
             setTimeout(() => {
               this.calculateDiscounts();
               this.calculateFinalPrice();
+              if (updateBooking) {
+                this.booking.price_total = this.finalPrice;
+                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice)}, this.id)
+                  .subscribe(() => {
+                  })
+              }
               this.loading = false;
             }, 500);
           })
@@ -1392,6 +1398,7 @@ export class BookingDetailModalComponent implements OnInit {
     const courseExtra = [];
     const bookingExtra = [];
     const courseId = booking.courseDates[0].course_id;
+    let finalPrice = 0;
 
     this.courseExtra.forEach(element => {
       if (booking.courseDates.find((c) => element.course_date_id === c.course_date_id)) {
@@ -1404,7 +1411,6 @@ export class BookingDetailModalComponent implements OnInit {
         bookingExtra.push(element);
       }
     });
-
 
     if (event.source.checked) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -1428,6 +1434,8 @@ export class BookingDetailModalComponent implements OnInit {
               description: forfait.name,
               price: forfait.price * this.bookingUsersUnique.length + ((forfait.price * forfait.tva) / 100)
             };
+
+            finalPrice = finalPrice + courseExtra.price;
 
             this.crudService.create('/course-extras', courseExtra)
               .subscribe((responseCourseExtra) => {
@@ -1456,7 +1464,7 @@ export class BookingDetailModalComponent implements OnInit {
           });
 
           setTimeout(() => {
-            this.getData();
+            this.getData(true);
           }, 1000);
         } else {}
       })
@@ -1471,6 +1479,8 @@ export class BookingDetailModalComponent implements OnInit {
           this.loading = true;
 
           courseExtra.forEach(element => {
+            finalPrice = finalPrice + element.price;
+
             this.crudService.delete('/course-extras', element.id)
               .subscribe(() => {})
 
@@ -1484,7 +1494,7 @@ export class BookingDetailModalComponent implements OnInit {
           });
 
           setTimeout(() => {
-            this.getData();
+            this.getData(true);
           }, 1000);
         }
       })

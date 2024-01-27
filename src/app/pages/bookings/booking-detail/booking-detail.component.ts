@@ -253,7 +253,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
 
-  getData() {
+  getData(updateBooking = false) {
     this.loading = true;
     this.discounts = [];
     this.bonus = [];
@@ -406,6 +406,13 @@ export class BookingDetailComponent implements OnInit {
             setTimeout(() => {
               this.calculateDiscounts();
               this.calculateFinalPrice();
+
+              if (updateBooking) {
+                this.booking.price_total = this.finalPrice;
+                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice)}, this.id)
+                  .subscribe(() => {
+                  })
+              }
               this.loading = false;
             }, 500);
           })
@@ -1402,6 +1409,7 @@ export class BookingDetailComponent implements OnInit {
     const courseExtra = [];
     const bookingExtra = [];
     const courseId = booking.courseDates[0].course_id;
+    let finalPrice = 0;
 
     this.courseExtra.forEach(element => {
       if (booking.courseDates.find((c) => element.course_date_id === c.course_date_id)) {
@@ -1439,6 +1447,8 @@ export class BookingDetailComponent implements OnInit {
               price: forfait.price * this.bookingUsersUnique.length + ((forfait.price * forfait.tva) / 100)
             };
 
+            finalPrice = finalPrice + courseExtra.price;
+
             this.crudService.create('/course-extras', courseExtra)
               .subscribe((responseCourseExtra) => {
 
@@ -1466,7 +1476,8 @@ export class BookingDetailComponent implements OnInit {
           });
 
           setTimeout(() => {
-            this.getData();
+
+            this.getData(true);
           }, 1000);
         } else {}
       })
@@ -1481,6 +1492,8 @@ export class BookingDetailComponent implements OnInit {
           this.loading = true;
 
           courseExtra.forEach(element => {
+            finalPrice = finalPrice + element.price;
+
             this.crudService.delete('/course-extras', element.id)
               .subscribe(() => {})
 
@@ -1494,7 +1507,7 @@ export class BookingDetailComponent implements OnInit {
           });
 
           setTimeout(() => {
-            this.getData();
+            this.getData(true);
           }, 1000);
         }
       })
