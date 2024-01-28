@@ -400,6 +400,7 @@ export class CourseDetailModalComponent implements OnInit {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
             group.degree_id = level.id;
+            group.teachers_min = level.id;
             group.course_date_id = prevGroup.course_date_id;
             group.course_id = prevGroup.course_id;
             group.age_min = 5;

@@ -384,6 +384,7 @@ export class CourseDetailComponent implements OnInit {
         element.course_groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
+            group.teachers_min = level.id;
             group.degree_id = level.id;
             group.course_date_id = prevGroup.course_date_id;
             group.course_id = prevGroup.course_id;
