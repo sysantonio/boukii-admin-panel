@@ -25,11 +25,6 @@ export class MailSidenavComponent implements OnInit {
       icon: 'mat:inbox'
     },*/
     {
-      label: 'all_mails',
-      route: ['./all'],
-      icon: 'mat:all_inbox'
-    },
-    {
       label: 'general_mails',
       route: ['./general'],
       icon: 'mat:all_inbox'

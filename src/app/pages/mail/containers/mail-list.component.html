@@ -38,11 +38,12 @@
 <div class="flex-auto grid grid-cols-1 sm:grid-cols-2 overflow-hidden" style="height: 610px !important;">
   <ng-container *ngIf="gtSm$ | async">
     <vex-scrollbar @stagger class="flex-1 py-3" style="height: 100% !important;">
-      <vex-mail-list-entry
-                           *ngFor="let mail of mails | async; trackBy: trackById"
+      <ng-container *ngFor="let mail of mails | async; trackBy: trackById">
+        <vex-mail-list-entry
                            @fadeInUp
-                           [mail]="mail"
+                           *ngIf="checkMailType(mail)" [mail]="mail"
                            class="block"></vex-mail-list-entry>
+      </ng-container>
     </vex-scrollbar>
 
     <div class="flex flex-col ltr:border-l rtl:border-r">
@@ -52,11 +53,10 @@
 
   <ng-container *ngIf="!(gtSm$ | async)">
     <vex-scrollbar *ngIf="!(hasActiveMail$ | async)" @stagger class="flex-1 py-3">
-      <vex-mail-list-entry
-                           *ngFor="let mail of mails$ | async; trackBy: trackById"
-                           @fadeInUp
-                           [mail]="mail"
-                           class="block"></vex-mail-list-entry>
+      <ng-container *ngFor="let mail of mails$ | async; trackBy: trackById" @fadeInUp>
+
+        <vex-mail-list-entry *ngIf="checkMailType(mail)" [mail]="mail" class="block"></vex-mail-list-entry>
+      </ng-container>
     </vex-scrollbar>
 
     <div *ngIf="hasActiveMail$ | async" class="flex flex-col">

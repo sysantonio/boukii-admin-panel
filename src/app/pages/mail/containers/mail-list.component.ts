@@ -58,4 +58,8 @@ export class MailListComponent implements OnInit {
   isSomeButNotAllSelected(mails: any[]): boolean {
     return !this.isAllSelected(mails) && this.selection.hasValue();
   }
+
+  checkMailType(mail: any) {
+    return (location.pathname.includes('general') && mail.lang) || (location.pathname.includes('auto') && !mail.lang);
+  }
 }
