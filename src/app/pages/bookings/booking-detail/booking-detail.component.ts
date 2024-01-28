@@ -22,6 +22,7 @@ import { BookingService } from 'src/service/bookings.service';
 import { UpdateCourseModalModule } from './update-course/update-course.module';
 import { UpdateCourseModalComponent } from './update-course/update-course.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { RefundBookingModalComponent } from '../refund-booking/refund-booking.component';
 
 @Component({
   selector: 'vex-booking-detail',
@@ -220,7 +221,7 @@ export class BookingDetailComponent implements OnInit {
       this.schoolSettings = data.data;
     });
     await this.getDegreesClient();
-    this.getData(true);
+    this.getData(false);
   }
 
   async getDegreesClient(){
@@ -408,13 +409,25 @@ export class BookingDetailComponent implements OnInit {
               this.calculateDiscounts();
               this.calculateFinalPrice();
 
-              this.bookingPendingPrice = this.booking.price_total - this.booking.paid_total;
+              this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
               if (updateBooking) {
                 this.booking.price_total = this.finalPrice;
-                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: parseFloat(this.booking.paid_total) == parseFloat(this.finalPrice)}, this.id)
+                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: this.bookingPendingPrice <= 0}, this.id)
                   .subscribe(() => {
-                    this.bookingPendingPrice = this.booking.price_total - this.booking.paid_total;
+                    this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
                   })
+              }
+
+              if (this.bookingPendingPrice < 0) {
+                const dialogRef = this.dialog.open(ConfirmModalComponent, {
+                  data: {message: this.translateService.instant('refund_text'), title: this.translateService.instant('refund_title')}
+                });
+
+                dialogRef.afterClosed().subscribe((data: any) => {
+                  if (data) {
+                    this.refundBooking();
+                  }
+                })
               }
               this.loading = false;
             }, 500);
@@ -789,7 +802,8 @@ export class BookingDetailComponent implements OnInit {
             boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},
             cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.booking.price_cancellation_insurance)},
             extras: {total: this.courseExtra.length, extras: extras},
-            price_total: parseFloat(this.bookingPendingPrice)
+            price_total: parseFloat(this.booking.price_total),
+            pending_amount: parseFloat(this.bookingPendingPrice)
           }
 
 
@@ -1516,11 +1530,76 @@ export class BookingDetailComponent implements OnInit {
 
   }
 
+  refundBooking() {
+
+
+    const dialogRef = this.dialog.open(RefundBookingModalComponent, {
+      width: '1000px',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {itemPrice: this.bookingPendingPrice, booking: this.booking}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        if(data.type === 'no_refund') {
+          this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
+          .subscribe(() => {
+
+            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+            this.getData();
+
+          })
+
+        } else if(data.type === 'refund') {
+
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'refund', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+          .subscribe(() => {
+            this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
+            .subscribe(() => {
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+              this.getData();
+            })
+          })
+
+        } else if(data.type === 'refund_gift') {
+          const vData = {
+            code: "BOU-"+this.generateRandomNumber(),
+            quantity: -(this.bookingPendingPrice),
+            remaining_balance: -(this.bookingPendingPrice),
+            payed: false,
+            client_id: this.booking.client_main_id,
+            school_id: this.user.schools[0].id
+          };
+
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'voucher_refund', before_change: 'confirmed', user_id: this.user.id})
+          .subscribe(() => {
+            this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
+            .subscribe(() => {
+
+              this.crudService.create('/vouchers', vData)
+                .subscribe((result) => {
+
+                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
+                        .subscribe((vresult) => {
+                          console.log(vresult);
+
+                        })
+                        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+                        this.getData();
+                })
+            })
+          })
+        }
+      }
+    });
+  }
+
   deleteBooking() {
 
 
     const dialogRef = this.dialog.open(CancelBookingModalComponent, {
-      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      width: '1000px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
       data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: this.finalPrice, booking: this.booking}
     });
@@ -1531,11 +1610,8 @@ export class BookingDetailComponent implements OnInit {
         if(data.type === 'no_refund') {
           this.crudService.update('/bookings', {status: 2}, this.booking.id)
           .subscribe(() => {
-            this.crudService.update('/bookings', {status: 2}, this.booking.id)
-            .subscribe(() => {
               this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
               this.goTo('/bookings');
-            })
           })
 
         } else if(data.type === 'refund') {
@@ -1556,7 +1632,7 @@ export class BookingDetailComponent implements OnInit {
             quantity: this.booking.price_total,
             remaining_balance: this.booking.price_total,
             payed: false,
-            client_id: data.client_main_id,
+            client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id
           };
 
@@ -1687,7 +1763,7 @@ export class BookingDetailComponent implements OnInit {
   deletePartialBooking(index: number, book: any) {
 
     const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
-      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      width: '1000px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
       data: {currentBonus: this.currentBonus, currentBonusLog: this.bonusLog, itemPrice: book.price_total, booking: this.booking}
     });
@@ -2141,7 +2217,20 @@ export class BookingDetailComponent implements OnInit {
       this.finalPrice = price;
     }
     this.finalPriceNoTaxes = price;
+
+    if (this.booking.paid_total) {
+
+      this.bookingPendingPrice = this.finalPrice - this.booking.paid_total;
+    } else {
+      this.bookingPendingPrice = this.finalPrice;
+    }
   }
+
+  deleteBonus(index: number) {
+    this.bonus.splice(index, 1);
+    this.calculateFinalPrice();
+  }
+
 
   getMonitorLang(id: number) {
     if (id && id !== null) {
@@ -2228,21 +2317,10 @@ export class BookingDetailComponent implements OnInit {
   goToEdit(index: any, item: any) {
 
     if (!this.courses[index].is_flexible) {
-      let price = parseFloat(item.price_total);
-
-      if (this.tva && !isNaN(this.tva)) {
-        price = price + (price * this.tva);
-      }
-
-      if(this.booking.has_boukii_care) {
-        // coger valores de reglajes
-        price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
-      }
-
 
       this.bookingService.editData.id = this.id;
       this.bookingService.editData.booking = this.booking;
-      this.bookingService.editData.price = price;
+      this.bookingService.editData.price = this.finalPrice;
       this.bookingService.editData.client_main_id = this.booking.client_main_id;
       this.bookingService.editData.booking_extras = this.bookingExtras;
       this.bookingService.editData.course_id = this.courses[index].id;

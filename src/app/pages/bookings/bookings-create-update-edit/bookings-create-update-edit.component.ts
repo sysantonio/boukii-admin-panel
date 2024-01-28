@@ -900,10 +900,10 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         has_tva: this.tvaPrice > 0,
         price_tva: this.tvaPrice,
         has_reduction: this.reduction !== null,
-        price_reduction: this.reduction.appliedPrice,
+        price_reduction: this.reduction !== null ? this.reduction.appliedPrice : 0,
         currency: element.currency,
-        paid_total: this.defaults.paid || this.defaults.payment_method_id === 1 ? this.finalPrice : 0,
-        paid: element.paid,
+        paid_total: this.bookingService.editData.booking.paid_total !== null ? this.bookingService.editData.booking.paid_total : 0,
+        paid: this.bookingService.editData.booking.paid && this.finalPrice <= this.bookingService.editData.price,
         notes: element.notes,
         notes_school: element.notes_school,
         school_id: element.school_id,
@@ -984,41 +984,36 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         }
       });
 
-      rqs.forEach((rq, idx) => {
-        const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
-
-        this.crudService.create('/booking-users', rq)
-        .subscribe((bookingUser) => {
-          if (bExtra) {
-            const bookingUserExtra = {
-              booking_user_id: bookingUser.data.id,
-              course_extra_id: null,
-            }
-            const courseExtra = {
-              course_id: rq.course_id,
-              name: bExtra.forfait.id,
-              description: bExtra.forfait.name,
-              price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
-            }
-            this.crudService.create('/course-extras', courseExtra)
-              .subscribe((responseCourseExtra) => {
-
-                bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                this.crudService.create('/booking-user-extras', bookingUserExtra)
-                .subscribe((bookExtra) => {
-                  console.log("b.extra created", bookExtra, idx);
-                })
-              })
-          }
-
-
-        });
-      });
-
-      const priceUpdated = this.bookingService.editData.booking.price_total - (this.bookingService.editData.price) + (this.finalPrice);
-      this.crudService.update('/bookings', {price_total: priceUpdated}, this.bookingService.editData.booking.id)
+      this.crudService.update('/bookings', data, this.bookingService.editData.id)
         .subscribe(() => {
+          rqs.forEach((rq, idx) => {
+            const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
 
+            this.crudService.create('/booking-users', rq)
+            .subscribe((bookingUser) => {
+              if (bExtra) {
+                const bookingUserExtra = {
+                  booking_user_id: bookingUser.data.id,
+                  course_extra_id: null,
+                }
+                const courseExtra = {
+                  course_id: rq.course_id,
+                  name: bExtra.forfait.id,
+                  description: bExtra.forfait.name,
+                  price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
+                }
+                this.crudService.create('/course-extras', courseExtra)
+                  .subscribe((responseCourseExtra) => {
+
+                    bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                    this.crudService.create('/booking-user-extras', bookingUserExtra)
+                    .subscribe((bookExtra) => {
+                      console.log("b.extra created", bookExtra, idx);
+                    })
+                  })
+              }
+            });
+          });
         })
 
       this.bookingService.editData.booking_users.forEach(element => {
@@ -1037,60 +1032,72 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
       setTimeout(() => {
 
-        if (this.finalPrice < this.bookingService.editData.price) {
-          const data = {
-            code: "BOU-"+this.generateRandomNumber().toString(),
-            quantity: this.bookingService.editData.price - this.finalPrice,
-            remaining_balance: this.bookingService.editData.price - this.finalPrice,
-            payed: false,
-            client_id: this.bookingService.editData.client_main_id,
-            school_id: this.user.schools[0].id
-          };
-          this.crudService.create('/vouchers', data)
-          .subscribe((result) => {
+        if (this.bookingService.editData.booking.paid) {
+          if (this.finalPrice < this.bookingService.editData.price) {
+            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+            this.goTo('/bookings/update/'+this.bookingService.editData.id);
 
-            //metodo de envio de email
-            this.router.navigate(['/bookings/update/'+this.bookingService.editData.id]);
-          })
-        } else if (this.finalPrice === this.bookingService.editData.price) {
-          // metodo de envio de email
+          } else if (this.finalPrice === this.bookingService.editData.price) {
+            // metodo de envio de email
+            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+            this.goTo('/bookings/update/'+this.bookingService.editData.id);
 
-        } else if (this.finalPrice < this.bookingService.editData.price) {
-          //metodo envio de email
-          const bonuses = [];
-            const extras = [];
-            this.bonus.forEach(element => {
-              bonuses.push(
-                {
-                  name: element.bonus.code,
-                  quantity: 1,
-                  price: -(element.bonus.quantity)
-                }
-              )
-            });
+          } else if (this.finalPrice > this.bookingService.editData.price) {
 
-            bookingExtras.forEach(element => {
-              extras.push({name: element.name, quantity: 1, price: parseFloat(element.price)});
-            });
+            if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
+              //metodo envio de email
+              const bonuses = [];
+              const extras = [];
+              this.bonus.forEach(element => {
+                bonuses.push(
+                  {
+                    name: element.bonus.code,
+                    quantity: 1,
+                    price: -(element.bonus.quantity)
+                  }
+                )
+              });
 
-            const basket = {
-              payment_method_id: this.defaults.payment_method_id,
-              price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice()},
-              bonus: {total: this.bonus.length, bonuses: bonuses},
-              reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
-              boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
-              cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
-              extras: {total: bookingExtras.length, extras: extras},
-              price_total: parseFloat(this.finalPrice)
+              bookingExtras.forEach(element => {
+                extras.push({name: element.name, quantity: 1, price: parseFloat(element.price)});
+              });
+
+              const basket = {
+                payment_method_id: this.defaults.payment_method_id,
+                price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice()},
+                bonus: {total: this.bonus.length, bonuses: bonuses},
+                reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
+                boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
+                cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
+                extras: {total: bookingExtras.length, extras: extras},
+                price_total: parseFloat(this.finalPrice),
+                pending_amount: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price)
+              }
+
+              this.crudService.post('/admin/bookings/payments/' + this.bookingService.editData.id, basket)
+                .subscribe((result: any) => {
+                  console.log((result));
+                  window.open(result.data, "_self");
+                  this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+                })
+            } else if(this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
+
+              this.crudService.update('/bookings', {payment_method_id: this.defaults.payment_method_id,
+                paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : this.bookingService.editData.booking.paid_total}, this.bookingService.editData.id)
+                .subscribe(() => {
+                  this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+                  this.goTo('/bookings/update/'+this.bookingService.editData.id);
+                })
+            } else {
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+              this.goTo('/bookings/update/'+this.bookingService.editData.id);
             }
-
-            this.crudService.post('/admin/bookings/payments/' + this.bookingService.editData.id, basket)
-              .subscribe((result: any) => {
-                console.log((result));
-                window.open(result.data, "_self");
-                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
-              })
+          }
+        } else {
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+          this.goTo('/bookings/update/'+this.bookingService.editData.id);
         }
+
       }, 1000);
 
   }

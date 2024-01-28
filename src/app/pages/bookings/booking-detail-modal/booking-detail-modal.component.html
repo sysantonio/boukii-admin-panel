@@ -8,6 +8,7 @@
         <div style="height: 100%; padding: 1px" @fadeInUp class="card flex-auto">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
+            <button *ngIf="bookingPendingPrice < 0" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">{{'bookings_page.cancelations.refund' | translate }}</button>
             <button mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/bookings')">{{'back' | translate }}</button>
             <button mat-raised-button color="accent" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">{{'bookings_page.detail.full_cancel' | translate}}</button>
 
@@ -75,7 +76,7 @@
               <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" style="float: right;" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
-              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)" style="float: right;" *ngIf="!booking.paid && item?.courseDates[0]?.status === 1">
+              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1">
                 <mat-icon svgIcon="mat:edit" style="color:green"></mat-icon>
               </button>
             </div>
@@ -286,7 +287,7 @@
               <ng-container *ngIf="bonus.length > 0">
 
                 <span style="width: 100%; float:left" *ngFor="let item of bonus; let i = index">
-                  <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" *ngIf="!item?.bonus?.before"></mat-icon>
+                  <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer" *ngIf="!item?.bonus?.before" (click)="deleteBonus(i)"></mat-icon>
                   <p style="float:left">{{'bonus' | translate}} {{item?.bonus?.code}}</p>
                   <p style="float:right">-{{item?.bonus.before ? item?.bonus?.currentPay : item?.bonus?.reducePrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </span>
@@ -322,7 +323,7 @@
 
               <span style="width: 100%; float:left" *ngIf="bookingPendingPrice > 0">
                 <p style="float:left; color:#FB9B1B">{{'pending_payment' | translate | uppercase }}</p>
-                <p style="float:right; color:#FB9B1B">{{bookingPendingPrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                <p style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
             </div>
 

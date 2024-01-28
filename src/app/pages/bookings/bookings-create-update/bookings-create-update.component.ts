@@ -881,7 +881,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         has_tva: this.tvaPrice > 0,
         price_tva: this.tvaPrice,
         has_reduction: this.reduction !== null,
-        price_reduction: this.reduction.appliedPrice,
+        price_reduction: this.reduction !== null ? this.reduction.appliedPrice : 0,
         currency: element.currency,
         paid_total: this.defaults.paid || this.defaults.payment_method_id === 1 ? this.finalPrice : 0,
         paid: element.paid,
@@ -1029,7 +1029,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
               boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
               cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
               extras: {total: bookingExtras.length, extras: extras},
-              price_total: parseFloat(this.finalPrice)
+              price_total: parseFloat(this.finalPrice),
+              pending_amount: parseFloat(this.finalPrice)
             }
 
             this.crudService.post('/admin/bookings/payments/' + booking.data.id, basket)

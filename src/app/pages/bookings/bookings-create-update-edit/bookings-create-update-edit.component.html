@@ -304,7 +304,7 @@
                             <ng-container *ngIf="course.is_flexible">
                             <ng-container *ngFor="let item of course.course_dates">
                               <li *ngIf="canBook(item.date)">
-                               <mat-checkbox [checked]="itemExist(item)" (change)="addReservableCourseDate(item, $event)">  {{item.date | date: 'dd/MM/YYYY'}} - <i style="float: right;">{{item.hour_start}} - {{item.hour_end}}</i></mat-checkbox>
+                                <mat-checkbox [checked]="itemExist(item)" (change)="addReservableCourseDate(item, $event)">  {{item.date | date: 'dd/MM/YYYY'}} - <i style="float: right;">{{item.hour_start}} - {{item.hour_end}}</i></mat-checkbox>
                               </li>
                             </ng-container>
                             </ng-container>
@@ -873,14 +873,24 @@
                 <p style="float:right">{{ (tvaPrice).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
-              <span style="width: 100%; float:left">
-                <p style="float:left">{{'old_booking_price' | translate}}</p>
-                <p style="float:right">{{bookingService.editData.price}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+              <span style="width: 100%; float:left" *ngIf="bookingService.editData.booking.paid">
+                <p style="float:left; color:#FB9B1B">{{'old_booking_price' | translate}}</p>
+                <p style="float:right; color:#FB9B1B">{{bookingService.editData.price}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
 
-              <span style="width: 100%; float:left">
+              <span style="width: 100%; float:left" *ngIf="bookingService.editData.booking.paid">
+                <p style="float:left">{{'current_booking_price' | translate}}</p>
+                <p style="float:right">{{finalPrice}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="bookingService.editData.booking.paid">
                 <p style="float:left">{{'total' | translate | uppercase}}</p>
                 <p style="float:right">{{(finalPrice - bookingService.editData.price).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="!bookingService.editData.booking.paid">
+                <p style="float:left">{{'total' | translate | uppercase}}</p>
+                <p style="float:right">{{(finalPrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
               </span>
             </div>
 
@@ -888,7 +898,7 @@
             <div class="square-buttons-container">
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">{{'payment_direct' | translate}}</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">{{'payment_online' | translate}}</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">{{'payment_no_payment' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">{{'confirm' | translate}}</button>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">

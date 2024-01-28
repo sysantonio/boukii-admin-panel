@@ -529,6 +529,12 @@
   "add_boukii_care_message": "Vous souhaitez ajouter boukii care à la réservation ?",
   "add_insurance": "Souscrire une assurance annulation",
   "add_insurance_message": "Vous souhaitez ajouter une assurance annulation à votre réservation ?",
-  "course_without_clients": "Ce cours n'a aucune réservation associée"
-
+  "course_without_clients": "Ce cours n'a aucune réservation associée",
+  "pending_payment": "Remarquable",
+  "old_booking_price": "Prix ​​de réserve précédent",
+  "current_booking_price": "Prix ​​de réserve en cours",
+  "difference": "Différence",
+  "refund_text": "En attente de remboursement",
+  "refund_title": "Cette réservation a un remboursement en attente. ",
+  "bookings_page.refund.gift_voucher_text": "Vous êtes sur le point d'annuler une réservation. "
 }

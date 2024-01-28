@@ -530,6 +530,12 @@
   "add_boukii_care_message": "Do you want to add boukii care to the reservation?",
   "add_insurance": "Apply cancellation insurance",
   "add_insurance_message": "Do you want to add cancellation insurance to your reservation?",
-  "course_without_clients": "This course has no reservations associated"
-
+  "course_without_clients": "This course has no reservations associated",
+  "pending_payment": "Outstanding",
+  "old_booking_price": "Previous reserve price",
+  "current_booking_price": "Reserve price in progress",
+  "difference": "Difference",
+  "refund_text": "Pending refund",
+  "refund_title": "This reservation has a refund pending. ",
+  "bookings_page.refund.gift_voucher_text": "You are about to cancel a reservation. "
 }
