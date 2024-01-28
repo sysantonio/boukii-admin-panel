@@ -15,6 +15,11 @@
 
   <mat-dialog-content class="flex flex-col">
 
+    <mat-dialog-actions align="end">
+      <button color="primary" mat-flat-button (click)="closeModal()">{{'confirm' | translate}}</button>
+      <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
+    </mat-dialog-actions>
+
     <div style="width:100%">
       <mat-form-field class="flex-auto" style="width: 100%">
         <mat-label>{{'dates' | translate}}</mat-label>
@@ -27,8 +32,5 @@
     </div>
   </mat-dialog-content>
 
-  <mat-dialog-actions align="end">
-    <button color="primary" mat-flat-button (click)="closeModal()">{{'confirm' | translate}}</button>
-    <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
-  </mat-dialog-actions>
+
 </form>

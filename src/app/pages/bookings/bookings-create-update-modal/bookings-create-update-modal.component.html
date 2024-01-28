@@ -581,7 +581,7 @@
                   <li>{{item.price_total}}{{item.currency}}</li>
                  <!-- <li>{{item.price_cancellation_insurance}}{{item.currency}}</li>
                   <li>{{item.price_boukii_care}}{{item.currency}}</li>-->
-                  <li>{{item.price_total* tva}} {{item.currency}}</li>
+                  <li>{{tvaPrice}} {{item.currency}}</li>
                   <li><strong>{{item.price_total + (item.price_total + item.price_cancellation_insurance + item.price_boukii_care) * (tva)}} {{item.currency}}</strong></li>
                 </ul>
               </div>
@@ -881,7 +881,7 @@
 
                 <span style="width: 100%; float:left" *ngIf="this.tva">
                   <p style="float:left">{{'tva' | translate | uppercase}}</p>
-                  <p style="float:right">{{ (tvaPrice).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
+                  <p style="float:right">{{ tvaPrice }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}</p>
                 </span>
 
                 <span style="width: 100%; float:left">

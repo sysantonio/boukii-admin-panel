@@ -878,8 +878,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
         has_boukii_care: this.defaults.has_boukii_care,
         price_boukii_care: this.defaults.has_boukii_care ? this.defaults.price_boukii_care : 0,
         price_cancellation_insurance: this.defaults.has_cancellation_insurance ? this.defaults.price_cancellation_insurance : 0,
+        has_tva: this.tvaPrice > 0,
+        price_tva: this.tvaPrice,
+        has_reduction: this.reduction !== null,
+        price_reduction: this.reduction.appliedPrice,
         currency: element.currency,
-        paid_total: element.paid_total,
+        paid_total: this.defaults.paid || this.defaults.payment_method_id === 1 ? this.finalPrice : 0,
         paid: element.paid,
         notes: element.notes,
         notes_school: element.notes_school,
@@ -2197,9 +2201,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     if (this.reduction !== null) {
       if (this.reduction.type === 1) {
-        price = price - ((price * this.reduction.discount) / 100);
+        price = price - ((this.getBasePrice() * this.reduction.discount) / 100);
       } else {
-        price = price - (this.reduction.discount > price ? price : this.reduction.discount);
+        price = price - (this.reduction.discount > price ? this.getBasePrice() : this.reduction.discount);
       }
     }
 

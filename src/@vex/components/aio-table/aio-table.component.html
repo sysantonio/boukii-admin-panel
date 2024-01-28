@@ -342,7 +342,7 @@
           <ng-container *ngIf="column.type === 'payment_status'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
-              {{ row[column.property] ? 'payed' : 'cancelled' | translate | uppercase }}
+              {{ (row[column.property] ? 'yes' : 'no')| translate | uppercase }}
             </td>
           </ng-container>
         </ng-container>
@@ -352,7 +352,7 @@
           <ng-container *ngIf="column.type === 'payment_status_data'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
-              {{ data[i].booking[column.property] ? 'payed' : 'cancelled' | translate | uppercase }}
+              {{ (data[i].booking[column.property] ? 'payed' : 'cancelled') | translate | uppercase }}
             </td>
           </ng-container>
         </ng-container>
