@@ -536,5 +536,7 @@
   "difference": "Différence",
   "refund_text": "En attente de remboursement",
   "refund_title": "Cette réservation a un remboursement en attente. ",
-  "bookings_page.refund.gift_voucher_text": "Vous êtes sur le point d'annuler une réservation. "
+  "bookings_page.refund.gift_voucher_text": "Vous êtes sur le point d'annuler une réservation. ",
+  "update": "Modifier"
+
 }

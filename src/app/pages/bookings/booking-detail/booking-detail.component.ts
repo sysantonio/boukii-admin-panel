@@ -1608,8 +1608,8 @@ export class BookingDetailComponent implements OnInit {
       if (data) {
 
         if(data.type === 'no_refund') {
-          this.crudService.update('/bookings', {status: 2}, this.booking.id)
-          .subscribe(() => {
+            this.crudService.update('/bookings', {status: 2}, this.booking.id)
+            .subscribe(() => {
               this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
               this.goTo('/bookings');
           })
@@ -1632,7 +1632,7 @@ export class BookingDetailComponent implements OnInit {
             quantity: this.booking.price_total,
             remaining_balance: this.booking.price_total,
             payed: false,
-            client_id: this.booking.client_main_id,
+            client_id: data.client_main_id,
             school_id: this.user.schools[0].id
           };
 
@@ -1741,7 +1741,7 @@ export class BookingDetailComponent implements OnInit {
           this.crudService.update('/booking-users', {status: 2}, element.id)
           .subscribe(() => {
 
-            this.bookingExtras.forEach(element => {
+            /*this.bookingExtras.forEach(element => {
               this.crudService.delete('/booking-user-extras', element.id)
                 .subscribe(() => {
 
@@ -1753,7 +1753,7 @@ export class BookingDetailComponent implements OnInit {
                 .subscribe(() => {
 
                 })
-            });
+            });*/
           })
         });
       }
@@ -1901,7 +1901,6 @@ export class BookingDetailComponent implements OnInit {
                 book.courseDates.forEach(element => {
                   this.crudService.update('/booking-users', {status: 2}, element.id)
                   .subscribe(() => {
-
                   })
                 })
               })
@@ -1923,7 +1922,7 @@ export class BookingDetailComponent implements OnInit {
             const bookingExtras = this.bookingExtras.filter((b) => b.booking_user_id === book.courseDates.id);
             const courseExtras = this.courseExtra.filter((b) => b.booking_user_id === book.courseDates.id);
 
-            bookingExtras.forEach(element => {
+            /*bookingExtras.forEach(element => {
               this.crudService.delete('/booking-user-extras', element.id)
                 .subscribe(() => {
 
@@ -1935,8 +1934,7 @@ export class BookingDetailComponent implements OnInit {
                 .subscribe(() => {
 
                 })
-            });
-
+            });*/
             if (this.tva && !isNaN(this.tva)) {
               price = price + (price * this.tva);
             }
@@ -1946,7 +1944,7 @@ export class BookingDetailComponent implements OnInit {
               price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
             }
 
-            this.crudService.update('/bookings', {status: 3}, this.id)
+            this.crudService.update('/bookings', {status: 3, price_total: price - this.bookingsToCreate[index].price_total}, this.id)
             .subscribe(() => {
               this.bookingsToCreate.splice(index, 1);
               this.getData(true);

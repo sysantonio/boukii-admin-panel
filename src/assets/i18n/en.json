@@ -537,5 +537,7 @@
   "difference": "Difference",
   "refund_text": "Pending refund",
   "refund_title": "This reservation has a refund pending. ",
-  "bookings_page.refund.gift_voucher_text": "You are about to cancel a reservation. "
+  "bookings_page.refund.gift_voucher_text": "You are about to cancel a reservation.",
+  "update": "Update"
+
 }

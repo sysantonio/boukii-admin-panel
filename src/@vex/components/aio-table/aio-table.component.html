@@ -616,7 +616,7 @@
   <ng-template let-item="item" matMenuContent>
     <button (click)="update(item)" mat-menu-item>
       <mat-icon svgIcon="mat:edit"></mat-icon>
-      <span>Modify</span>
+      <span>{{'update' | translate}}</span>
     </button>
     <button (click)="delete(item)" mat-menu-item *ngIf="canDelete">
       <mat-icon svgIcon="mat:delete"></mat-icon>

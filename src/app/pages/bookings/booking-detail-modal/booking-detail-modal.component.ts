@@ -1792,7 +1792,7 @@ export class BookingDetailModalComponent implements OnInit {
           this.crudService.update('/booking-users', {status: 2}, element.id)
           .subscribe(() => {
 
-            this.bookingExtras.forEach(element => {
+            /*this.bookingExtras.forEach(element => {
               this.crudService.delete('/booking-user-extras', element.id)
                 .subscribe(() => {
 
@@ -1804,7 +1804,7 @@ export class BookingDetailModalComponent implements OnInit {
                 .subscribe(() => {
 
                 })
-            });
+            });*/
           })
         });
       }
@@ -1973,7 +1973,7 @@ export class BookingDetailModalComponent implements OnInit {
             const bookingExtras = this.bookingExtras.filter((b) => b.booking_user_id === book.courseDates.id);
             const courseExtras = this.courseExtra.filter((b) => b.booking_user_id === book.courseDates.id);
 
-            bookingExtras.forEach(element => {
+            /*bookingExtras.forEach(element => {
               this.crudService.delete('/booking-user-extras', element.id)
                 .subscribe(() => {
 
@@ -1985,7 +1985,7 @@ export class BookingDetailModalComponent implements OnInit {
                 .subscribe(() => {
 
                 })
-            });
+            });*/
             if (this.tva && !isNaN(this.tva)) {
               price = price + (price * this.tva);
             }
