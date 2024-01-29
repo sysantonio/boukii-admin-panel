@@ -2413,7 +2413,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       this.personsToBook = this.utilizers;
 
     } else {
-      const data = this.utilizers.filter((u) => u.id !== this.clientsForm.value.id);
+      const data = this.utilizers.filter((u) => u.id !== this.defaultsBookingUser.client_id);
       data.push(this.defaults.client_main_id);
 
       this.personsToBook = data;

@@ -394,7 +394,7 @@
 
       </div>
       <div style="width: 100%;float:left;">
-        <mat-card-title style="float: left;width: 90%;">{{'activity' | translate}} #{{bookI + 1 }}</mat-card-title>
+        <mat-card-title style="float: left;width: 90%;">{{'activity' | translate}} #{{bookI + 1 }} - {{item.courseDates[0].course?.name}}</mat-card-title>
       </div>
       <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
         <div style="width: 100%;">
@@ -585,7 +585,7 @@
 
         </div>
       </mat-card-content>
-    </mat-card>
+  </mat-card>
   </ng-container>
 
 </div>
