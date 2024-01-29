@@ -592,6 +592,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.periodMultiple = false;
     this.periodUnique = true;
     this.sameMonitor = false;
+    this.showDetail = null;
+    this.setCourseType(null, -1);
   }
 
   confirmBooking() {

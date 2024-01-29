@@ -415,7 +415,7 @@
             </div>
             <div style="width: 100%;">
               <p style="float: left;width: 60%;text-align: left;"><b>{{ minDate | date: 'dd/MM/YYYY'}}</b> {{ minDate | date: 'HH:mm'}}</p>
-              <p style="float: left;width: 40%;text-align: right;color:#FAC710">{{'non payé' | uppercase }}</p>
+              <p style="float: left;width: 40%;text-align: right;color:#FAC710">{{'no_paid' | translate | uppercase }}</p>
             </div>
           </div>
           <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;" *ngIf="showDetail === bookI"></mat-divider>
@@ -619,7 +619,7 @@
             <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
               <div>
                 <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">{{'participant' | translate }}</p>
-                <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'non payé' | uppercase }}</p>
+                <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f">{{'no_paid' | translate | uppercase }}</p>
               </div>
 
               <mat-card-header>
