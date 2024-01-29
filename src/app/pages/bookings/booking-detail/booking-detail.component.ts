@@ -359,7 +359,7 @@ export class BookingDetailComponent implements OnInit {
                         });
 
                         if(data.courseDates.length > 0) {
-                          this.bookingsToCreate.unshift(data);
+                          this.bookingsToCreate.push(data);
                         }
 
                     } else {
@@ -436,6 +436,17 @@ export class BookingDetailComponent implements OnInit {
       });
 
     });
+  }
+
+  getTotalBook(bI: number, item: any) {
+
+    if (this.courses[bI]?.course_type === 2 && this.courses[bI]?.is_flexible) {
+      return this.getPrivateFlexPrice(item.courseDates);
+    } else if (this.courses[bI]?.course_type === 1) {
+      return item?.price_total;
+    } else if (this.courses[bI]?.course_type === 2 && !this.courses[bI]?.is_flexible) {
+      return this.courses[bI]?.price * item.courseDates.length;
+    }
   }
 
   getUniqueBookingUsers() {

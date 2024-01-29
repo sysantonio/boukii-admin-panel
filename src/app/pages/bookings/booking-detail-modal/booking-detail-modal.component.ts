@@ -352,7 +352,7 @@ export class BookingDetailModalComponent implements OnInit {
                         });
 
                         if(data.courseDates.length > 0) {
-                          this.bookingsToCreate.unshift(data);
+                          this.bookingsToCreate.push(data);
                         }
 
                     } else {
