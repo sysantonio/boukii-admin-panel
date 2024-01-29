@@ -174,8 +174,6 @@
                         <ng-container *ngFor="let colorKey of colorKeys">
 
                           <div  *ngFor="let groupLevel of groupedByColor[colorKey]; let groupIndex = index">
-                            <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true; checkAvailableMonitors(groupLevel);"></i>
-                            <i class="fa fa-close" style="color: #ff3085;font-size: 30px;float:right;cursor:pointer" *ngIf="groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = false"></i>
 
                             <div style="float: left; width: 100%;margin-top:3%">
                               <div style="float: left;width: 10%;border-radius: 11%;height: 100px;padding: 2%;color: #fff;text-align: center;"
@@ -183,7 +181,12 @@
                                 <mat-slide-toggle (change)="activeGroup($event, groupLevel)" [disabled]="disableActive(groupLevel)" [checked]="groupLevel.active"></mat-slide-toggle>
                               </div>
                               <div style="float: left;width: 16%;">
-                                <div style="width:100%;text-align: center;border-radius:10px;height: 100px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
+                                <div style="width:100%;text-align: center;border-radius:10px;height: 100px;padding: 2%;color: #fff;cursor:pointer" [style.background-color]="colorKey"
+                                  *ngIf="!groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = true; checkAvailableMonitors(groupLevel);">
+                                  {{groupLevel.annotation}} - {{groupLevel.name}}
+                                </div>
+                                <div style="width:100%;text-align: center;border-radius:10px;height: 100px;padding: 2%;color: #fff;cursor:pointer" [style.background-color]="colorKey"
+                                *ngIf="groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = false">
                                   {{groupLevel.annotation}} - {{groupLevel.name}}
                                 </div>
                                 <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active">
