@@ -812,6 +812,7 @@ export class BookingDetailModalComponent implements OnInit {
             boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},
             cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.booking.price_cancellation_insurance)},
             extras: {total: this.courseExtra.length, extras: extras},
+            tva: this.tvaPrice,
             price_total: parseFloat(this.booking.price_total),
             pending_amount: parseFloat(this.bookingPendingPrice)
           }
