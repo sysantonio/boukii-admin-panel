@@ -18,7 +18,7 @@
     <div class="column left-column">
       <h3>{{'choose_students' | translate}}</h3>
       <div class="subgroup-title">
-        <p [style.color]="defaults.degree.color"><strong>{{defaults.degree.league}}</strong> {{defaults.degree.annotation}} {{defaults.degree.name}} - {{defaults.subgroupNumber}}</p>
+        <p [style.color]="defaults.degree.color"><strong>{{defaults.degree.annotation}}</strong> {{defaults.degree.name}} - {{defaults.subgroupNumber}}</p>
       </div>
       <div class="students-list">
         <mat-checkbox>{{'choose_all' | translate}}</mat-checkbox>
@@ -49,7 +49,7 @@
             <mat-expansion-panel *ngIf="groupLevel.active && getCourseSubgroups(groupLevel).length > 0" style="margin-bottom: 3%;">
               <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
                 <mat-panel-description style="color: #fff">
-                  {{ groupLevel.league }} - {{groupLevel.annotation}} {{groupLevel.name}}
+                  {{groupLevel.annotation}} - {{groupLevel.name}}
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
@@ -57,7 +57,7 @@
               <div class="list-group">
                 <ng-container *ngFor="let item of getCourseSubgroups(groupLevel); let itemIndex = index">
                   <div class="list-item" >
-                    <p [style.color]="colorKey"><strong>{{ groupLevel.league }} {{itemIndex+1}}</strong></p>
+                    <p [style.color]="colorKey"><strong>{{ groupLevel.annotation }} {{itemIndex+1}}</strong></p>
                     <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
                       [disabled]="getUserInSubGroup(item) === item.max_participants || ((itemIndex+1) === this.defaults.subgroupNumber && defaults.degree.id === item.degree_id)">
                       <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
