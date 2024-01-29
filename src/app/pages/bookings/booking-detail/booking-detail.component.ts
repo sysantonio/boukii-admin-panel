@@ -194,7 +194,7 @@ export class BookingDetailComponent implements OnInit {
   clientsIds = [];
 
   tva = 0;
-  tvaPrice = 0;
+  tvaPrice: any = 0;
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
 
@@ -813,7 +813,7 @@ export class BookingDetailComponent implements OnInit {
             boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},
             cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.booking.price_cancellation_insurance)},
             extras: {total: this.courseExtra.length, extras: extras},
-            tva: this.tvaPrice,
+            tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
             price_total: parseFloat(this.booking.price_total),
             pending_amount: parseFloat(this.bookingPendingPrice)
           }

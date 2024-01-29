@@ -1051,4 +1051,33 @@ export class CourseDetailComponent implements OnInit {
         this.loadingMonitors = false;
       })
   }
+
+  getShotrDescription(course: any) {
+
+    if (!course.translations || course.translations === null) {
+      return course.short_description;
+    } else {
+      const translations = JSON.parse(course.translations);
+      return translations[this.translateService.currentLang].short_description;
+    }
+  }
+
+  getDescription(course: any) {
+
+    if (!course.translations || course.translations === null) {
+      return course.description;
+    } else {
+      const translations = JSON.parse(course.translations);
+      return translations[this.translateService.currentLang].description;
+    }
+  }
+
+  getCourseName(course: any) {
+    if (!course.translations || course.translations === null) {
+      return course.name;
+    } else {
+      const translations = JSON.parse(course.translations);
+      return translations[this.translateService.currentLang].name;
+    }
+  }
 }

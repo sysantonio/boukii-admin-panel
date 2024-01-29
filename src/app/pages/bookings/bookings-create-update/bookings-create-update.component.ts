@@ -1029,7 +1029,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
               cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
               extras: {total: bookingExtras.length, extras: extras},
-              tva: this.tvaPrice,
+              tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
               price_total: parseFloat(this.finalPrice),
               pending_amount: parseFloat(this.finalPrice)
             }

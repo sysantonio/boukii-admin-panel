@@ -81,11 +81,11 @@
               </div>
               <div style="width:50%; margin-top:2%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 80%;text-align: left;"><b>{{'course.desc' | translate}}</b></p>
+                  <p style="float: left;width: 80%;text-align: left;"><b>{{'courses.desc' | translate}}</b></p>
                   <p style="float: left;width: 20%;text-align: right;"><b>{{'age' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
-                  <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.description">
+                  <p style="float: left;width: 50%;text-align: left;" [innerHTML]="getDescription(defaults)">
                   </p>
                   <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 2">{{'from' | translate}} {{defaults.age_min}} {{'to' | translate}} {{defaults.age_max}} años</p>
                   <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 1">FLEX</p>
