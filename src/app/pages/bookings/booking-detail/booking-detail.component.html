@@ -338,7 +338,12 @@
                 <p style="float:right">{{(finalPrice).toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
-              <span style="width: 100%; float:left" *ngIf="bookingPendingPrice">
+              <span style="width: 100%; float:left" *ngIf="bookingPendingPrice < 0">
+                <p style="float:left; color:#FB9B1B">{{'refund_text' | translate | uppercase }}</p>
+                <p style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+              </span>
+
+              <span style="width: 100%; float:left" *ngIf="bookingPendingPrice > 0">
                 <p style="float:left; color:#FB9B1B">{{'pending_payment' | translate | uppercase }}</p>
                 <p style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
