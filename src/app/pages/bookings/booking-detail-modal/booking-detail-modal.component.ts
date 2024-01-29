@@ -814,6 +814,7 @@ export class BookingDetailModalComponent implements OnInit {
             extras: {total: this.courseExtra.length, extras: extras},
             tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
             price_total: parseFloat(this.booking.price_total),
+            paid_total: parseFloat(this.booking.paid_total) + parseFloat(this.bookingPendingPrice),
             pending_amount: parseFloat(this.bookingPendingPrice)
           }
 

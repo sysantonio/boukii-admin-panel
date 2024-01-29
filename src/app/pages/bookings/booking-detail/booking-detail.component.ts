@@ -409,9 +409,10 @@ export class BookingDetailComponent implements OnInit {
               this.calculateDiscounts();
               this.calculateFinalPrice();
 
+              this.booking.price_total = this.finalPrice;
               this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
               if (updateBooking) {
-                this.booking.price_total = this.finalPrice;
+                this.booking.paid = this.bookingPendingPrice <= 0;
                 this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: this.bookingPendingPrice <= 0}, this.id)
                   .subscribe(() => {
                     this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
@@ -815,6 +816,7 @@ export class BookingDetailComponent implements OnInit {
             extras: {total: this.courseExtra.length, extras: extras},
             tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
             price_total: parseFloat(this.booking.price_total),
+            paid_total: parseFloat(this.booking.paid_total) + parseFloat(this.bookingPendingPrice),
             pending_amount: parseFloat(this.bookingPendingPrice)
           }
 
@@ -1738,12 +1740,13 @@ export class BookingDetailComponent implements OnInit {
             } else {
               this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
                 .subscribe(() => {
-                this.crudService.delete('/bookings', this.booking.id)
-                .subscribe(() => {
+
                   this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                   this.goTo('/bookings');
+                /*this.crudService.delete('/bookings', this.booking.id)
+                .subscribe(() => {
 
-                })
+                })*/
               })
             }
           }

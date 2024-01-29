@@ -898,5 +898,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
       })
   }
 
+  getActiveSchool(row: any) {
+    const school = row.find((s) => s.school_id === this.schoolId);
+    return school?.active_school;
+  }
+
   /* END EXPORT QR */
 }

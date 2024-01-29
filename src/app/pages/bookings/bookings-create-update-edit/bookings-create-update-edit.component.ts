@@ -1072,6 +1072,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
                 extras: {total: bookingExtras.length, extras: extras},
                 tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
                 price_total: parseFloat(this.finalPrice),
+                paid_total: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price),
                 pending_amount: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price)
               }
 

@@ -400,6 +400,16 @@
           </ng-container>
         </ng-container>
 
+        <!-- light_monitors_schools school Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'light_monitors_schools'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <div [ngStyle]="{'background': getActiveSchool(row[column.property]) ? '#CEE741' : '#E6E6E6'}" style="width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 20%;"></div>
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- Status Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'status'" [matColumnDef]="column.property">

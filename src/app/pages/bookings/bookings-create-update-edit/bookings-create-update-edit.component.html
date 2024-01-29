@@ -896,15 +896,15 @@
 
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">{{'payment_direct' | translate}}</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'">{{'payment_online' | translate}}</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'">{{'confirm' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'" *ngIf="(finalPrice - bookingService.editData.price) > 0">{{'payment_direct' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3" [class.selected]="selectedButton==='2'" *ngIf="(finalPrice - bookingService.editData.price) > 0">{{'payment_online' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5" [class.selected]="selectedButton==='3'" *ngIf="(finalPrice - bookingService.editData.price) > 0">{{'confirm' | translate}}</button>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div class="square-buttons-container" *ngIf="selectedButton==='1'">
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">{{'payment_cash' | translate}}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'" *ngIf="(finalPrice - bookingService.editData.price) > 0">{{'payment_cash' | translate}}</button>
               <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">{{'payment_other' | translate}}</button>
-              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'" *ngIf="(finalPrice - bookingService.editData.price) > 0">Boukii Pay</button>
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
