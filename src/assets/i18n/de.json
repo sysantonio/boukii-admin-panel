@@ -539,5 +539,7 @@
   "refund_text": "Ausstehende Rückerstattung",
   "refund_title": "Für diese Reservierung steht eine Rückerstattung aus. ",
   "bookings_page.refund.gift_voucher_text": "Sie sind im Begriff, eine Reservierung zu stornieren. ",
-  "update": "Ändern"
+  "update": "Ändern",
+  "bookings_page.cancelations.refund_boukiipay_text": "Der Wert der Reservierung wird über Boukii Pay erstattet.",
+  "bookings_page.cancelations.refund_no_boukiipay_text": "Diese Reservierung kann nicht über Boukii Pay zurückgegeben werden, da sie nicht über diese Plattform bezahlt wurde."
 }

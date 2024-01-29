@@ -34,7 +34,29 @@
       <ng-template matStepLabel>{{'bookings_page.cancelations.refund' | translate }}</ng-template>
 
       <mat-tab-group>
-        <mat-tab label="Boukii Pay"></mat-tab>
+        <mat-tab label="Boukii Pay">
+
+          <mat-dialog-content class="flex flex-col" *ngIf="!loading">
+            <div style="width: 100%;">
+              <p *ngIf="defaults.booking.payrexx_reference !== null">{{'bookings_page.cancelations.refund_boukiipay_text' | translate }}</p>
+              <p *ngIf="defaults.booking.payrexx_reference === null">{{'bookings_page.cancelations.refund_no_boukiipay_text' | translate }}</p>
+              <div style="float:left; width: 100%">
+                <mat-form-field class="flex-auto" style="float:left; width: 100%">
+                  <mat-label>{{'reason' | translate}}</mat-label>
+                  <input type="text" formControlName="reason" (blur)="setReason($event)" matInput required>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <mat-dialog-actions align="end" *ngIf="!loading && defaults.booking.payrexx_reference !== null">
+              <button color="primary" mat-flat-button (click)="closeAndSaveRefund('refund', refundForm.value.reason)">{{'confirm' | translate}}</button>
+              <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
+            </mat-dialog-actions>
+          </mat-dialog-content>
+
+        </mat-tab>
         <mat-tab label="{{'bookings_page.cancelations.cash' | translate}}">
 
           <mat-dialog-content class="flex flex-col" *ngIf="!loading">

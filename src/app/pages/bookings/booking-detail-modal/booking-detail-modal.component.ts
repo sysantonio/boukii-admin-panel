@@ -413,7 +413,7 @@ export class BookingDetailModalComponent implements OnInit {
 
               if (this.bookingPendingPrice < 0) {
                 const dialogRef = this.dialog.open(ConfirmModalComponent, {
-                  data: {message: this.translateService.instant('refund_text'), title: this.translateService.instant('refund_title')}
+                  data: {message: '', title: this.translateService.instant('refund_title')}
                 });
 
                 dialogRef.afterClosed().subscribe((data: any) => {
