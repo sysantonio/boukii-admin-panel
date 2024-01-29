@@ -37,7 +37,6 @@ import { CancelPartialBookginModalModule } from '../cancel-partial-booking/cance
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
 import { UpdateCourseModalModule } from './update-course/update-course.module';
-import { RefundBookingModalComponent } from '../refund-booking/refund-booking.component';
 import { RefundBookginModalModule } from '../refund-booking/refund-booking.module';
 
 export const MY_DATE_FORMATS = {

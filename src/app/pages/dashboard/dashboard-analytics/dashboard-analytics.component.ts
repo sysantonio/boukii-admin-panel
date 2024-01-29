@@ -71,6 +71,7 @@ export class DashboardAnalyticsComponent implements OnInit {
 
   user: any;
   blockages = [];
+  meteo = [];
   dispoPrivate = 0;
   dispoCol = 0;
   bookings = 0;

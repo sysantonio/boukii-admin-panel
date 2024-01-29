@@ -5,8 +5,19 @@
     <p class="caption m-0 opacity-50"><i class="fa fa-calendar" aria-hidden="true"></i> {{ today }}</p>
     <span class="body-2">{{'work_day' | translate }}</span>
 
-    <div class="mt-4 flex items-center">
-      <span class="body-2">Meteo</span>
+    <div class="mt-4 items-center">
+      <span class="body-2" style="width: 100%">Meteo</span>
+
+    </div>
+    <div class="mt-4 items-center">
+      <ng-container *ngFor="let item of weather; let i = index">
+
+        <div *ngIf="weather.length <= 6 || i % 2 === 0" style="float: left; width: 15%;">
+          <span style="float: left; width: 100%;"> {{ item.time }}</span>
+          <img [src]="'../../../../assets/icons/weather/' + item.icon + '.png'" style="float: left; width: 60%;">
+          <span style="float: left; width: 100%;margin: 0 0 0 8px;"> {{ item.temperature }}º</span>
+        </div>
+      </ng-container>
     </div>
   </div>
   <div class="p-4 ml-4 flex-none self-center hidden sm:block">
