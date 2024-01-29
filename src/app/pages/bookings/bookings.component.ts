@@ -27,6 +27,7 @@ export class BookingsComponent {
   bonus: any = [];
   user: any;
   school: any;
+  bookingUsersUnique = [];
 
   createComponent = BookingsCreateUpdateComponent;
   icon = '../../../assets/img/icons/reservas.svg';
@@ -67,6 +68,7 @@ export class BookingsComponent {
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.bonus = [];
       this.detailData = event.item;
+      this.getUniqueBookingUsers(this.detailData.bookingusers);
       this.getSchoolSportDegrees();
       this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.id)
           .subscribe((vl) => {
@@ -284,5 +286,17 @@ export class BookingsComponent {
     });
 
     return ret.toFixed(2);
+  }
+
+  getUniqueBookingUsers(data: any) {
+    const clientIds = new Set();
+    this.bookingUsersUnique = [];
+    this.bookingUsersUnique = data.filter(item => {
+      if (!clientIds.has(item.client_id)) {
+        clientIds.add(item.client_id);
+        return true;
+      }
+      return false;
+    });
   }
 }

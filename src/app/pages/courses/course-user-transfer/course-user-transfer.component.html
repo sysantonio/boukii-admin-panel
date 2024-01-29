@@ -59,8 +59,8 @@
                   <div class="list-item" >
                     <p [style.color]="colorKey"><strong>{{ groupLevel.annotation }} {{itemIndex+1}}</strong></p>
                     <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
-                      [disabled]="getUserInSubGroup(item) === item.max_participants">
-                      <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
+                    [disabled]="getUserInSubGroup(item) === item.max_participants || ((itemIndex+1) === this.defaults.subgroupNumber && defaults.degree.id === item.degree_id)">
+                    <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
                     </mat-checkbox>
                   </div>
                 </ng-container>

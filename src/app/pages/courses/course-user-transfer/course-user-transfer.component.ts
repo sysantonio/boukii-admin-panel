@@ -178,12 +178,16 @@ export class CourseUserTransferComponent implements OnInit {
   getUserInSubGroup(subgroup: any) {
     let ret = 0;
     this.course.booking_users.forEach(element => {
-      if (element.course_subgroup_id === subgroup.id) {
+      if (element.course_subgroup_id === subgroup.id && element.status === 1) {
         ret = ret + 1;
       }
     });
 
     return ret;
+  }
+
+  isSameGroup(subgroup: any) {
+
   }
 
   getCourseSubgroups(level: any) {

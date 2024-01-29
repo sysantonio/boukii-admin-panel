@@ -590,7 +590,7 @@
 
 </div>
 
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete">
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;" *ngIf="bookingComplete && !loading">
   <div class="flex flex-col sm:flex-row gap-4">
     <div class="column-container">
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
@@ -913,7 +913,8 @@
             </div>
             <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
-              <button mat-raised-button color="accent" class="square-button" (click)="create()">{{'confirm_booking' | translate }}</button>
+              <button mat-raised-button color="accent" class="square-button" (click)="create()"
+              [disabled]="(selectedSubButton==='1' || selectedSubButton==='2') && !defaults.paid">{{'confirm_booking' | translate }}</button>
             </div>
             <div class="square-buttons-container" *ngIf="selectedButton==='2'">
               <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">{{'confirm_email' |translate}}</button>

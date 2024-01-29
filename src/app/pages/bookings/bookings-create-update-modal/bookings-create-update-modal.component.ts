@@ -885,6 +885,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   create() {
 
+    this.loading = true;
     let data: any = {};
     const courseDates = [];
     const bookingExtras = [];
@@ -2427,8 +2428,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     } else {
       if (this.personsSelected.length === 0 || index === -1) {
         this.personsSelected.push(value);
-      } else {
-        this.personsSelected.splice(index, 1);
       }
     }
 

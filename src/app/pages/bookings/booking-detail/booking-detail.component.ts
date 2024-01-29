@@ -413,7 +413,7 @@ export class BookingDetailComponent implements OnInit {
               this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
               if (updateBooking) {
                 this.booking.paid = this.bookingPendingPrice <= 0;
-                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: this.bookingPendingPrice <= 0}, this.id)
+                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: this.bookingPendingPrice <= 0, send_mail: true}, this.id)
                   .subscribe(() => {
                     this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
                   })
@@ -437,6 +437,14 @@ export class BookingDetailComponent implements OnInit {
       });
 
     });
+  }
+
+  getAmountCourse(item: any, index: number) {
+    if (this.courses[index].course_type === 2 && this.courses[index].is_flexible) {
+      return item.find((a) => parseFloat(a.price) > 0).price;
+    } else {
+      return item[index].price;
+    }
   }
 
   getTotalBook(bI: number, item: any) {

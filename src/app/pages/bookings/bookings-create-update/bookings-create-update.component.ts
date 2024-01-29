@@ -853,6 +853,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   create() {
 
+    this.loading = true;
     let data: any = {};
     const courseDates = [];
     const bookingExtras = [];
@@ -884,7 +885,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         price_reduction: this.reduction !== null ? this.reduction.appliedPrice : 0,
         currency: element.currency,
         paid_total: this.defaults.paid || this.defaults.payment_method_id === 1 ? this.finalPrice : 0,
-        paid: element.paid,
+        paid: this.defaults.paid,
         notes: element.notes,
         notes_school: element.notes_school,
         school_id: element.school_id,
@@ -2408,8 +2409,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
     } else {
       if (this.personsSelected.length === 0 || index === -1) {
         this.personsSelected.push(value);
-      } else {
-        this.personsSelected.splice(index, 1);
       }
     }
 

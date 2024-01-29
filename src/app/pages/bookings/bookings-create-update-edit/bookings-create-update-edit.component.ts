@@ -362,7 +362,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               this.clientsForm.disable();
 
               if (this.bookingService.editData.course_type === 1) {
-                this.levelForm.disable();
+                //this.levelForm.disable();
               }
               this.loadingCalendar = false;
               this.loading = false;
@@ -870,7 +870,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   }
 
   create() {
-
+    this.loading = true;
     let data: any = {};
     const courseDates = [];
     const bookingExtras = [];
@@ -2493,8 +2493,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     } else {
       if (this.personsSelected.length === 0 || index === -1) {
         this.personsSelected.push(value);
-      } else {
-        this.personsSelected.splice(index, 1);
       }
     }
 

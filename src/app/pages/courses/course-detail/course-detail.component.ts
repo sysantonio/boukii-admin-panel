@@ -516,7 +516,7 @@ export class CourseDetailComponent implements OnInit {
     this.defaults.course_dates.forEach(element => {
       element.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
-          const maxPax = element.course_groups.course_subgroups.find((s) => s.degree_id === level.id);
+          const maxPax = element.course_subgroups.find((s) => s.degree_id === level.id);
           group.course_subgroups.push({
             degree_id: level.id,
             monitor_id: null,

@@ -521,7 +521,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           monitor: monitor,
           course_id: booking.course_id,
           course_date_id: booking.course_date_id,
-          course_subgroup_id: booking.course_subgroup_id,
+          course_subgroup_id: booking.booking_users && booking.booking_users.length > 0 ? booking.booking_users[0].course_subgroup_id : null,
           subgroup_number: booking.subgroup_number,
           total_subgroups: booking.total_subgroups,
           course: booking.course,

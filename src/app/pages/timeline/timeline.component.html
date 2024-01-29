@@ -13,10 +13,11 @@
             <div class="header-navigation">
                 <div class="header-navigation-flex">
                     <div class="date-navigation">
+
+                    <button (click)="goToPrevious()">&lt;</button>
                     <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
                     <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
                     <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
-                    <button (click)="goToPrevious()">&lt;</button>
                     <button (click)="goToNext()">&gt;</button>
                     <button (click)="showFilter = !showFilter" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
 

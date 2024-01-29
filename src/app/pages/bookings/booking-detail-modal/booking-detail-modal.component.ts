@@ -405,7 +405,7 @@ export class BookingDetailModalComponent implements OnInit {
               this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
               if (updateBooking) {
                 this.booking.price_total = this.finalPrice;
-                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: parseFloat(this.booking.paid_total) == parseFloat(this.finalPrice)}, this.id)
+                this.crudService.update('/bookings', {price_total: parseFloat(this.finalPrice), paid: parseFloat(this.booking.paid_total) == parseFloat(this.finalPrice), send_mail: true}, this.id)
                   .subscribe(() => {
                     this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
                   })
@@ -429,6 +429,14 @@ export class BookingDetailModalComponent implements OnInit {
       });
 
     });
+  }
+
+  getAmountCourse(item: any, index: number) {
+    if (this.courses[index].course_type === 2 && this.courses[index].is_flexible) {
+      return item.find((a) => parseFloat(a.price) > 0).price;
+    } else {
+      return item[index].price;
+    }
   }
 
   getUniqueBookingUsers() {
