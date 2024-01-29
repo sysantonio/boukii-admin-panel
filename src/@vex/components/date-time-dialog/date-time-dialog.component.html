@@ -14,7 +14,7 @@
     <label for="duration">Durée</label>
 
     <mat-form-field style="width: 100%">
-      <input id="duration" type="text" placeholder="DURÉE" matInput [matAutocomplete]="autoTimes"  [(ngModel)]="selectedDuration">
+      <input id="duration" type="text" placeholder="{{'duration' | translate}}" matInput [matAutocomplete]="autoTimes"  [(ngModel)]="selectedDuration">
       <mat-autocomplete #autoTimes="matAutocomplete">
         <mat-option *ngFor="let duration of durations" [value]="duration">
           {{duration}}
