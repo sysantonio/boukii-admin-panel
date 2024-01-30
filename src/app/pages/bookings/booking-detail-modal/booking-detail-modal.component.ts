@@ -1385,6 +1385,16 @@ export class BookingDetailModalComponent implements OnInit {
     }
   }
 
+  getTotalBook(bI: number, item: any) {
+
+    if (this.courses[bI]?.course_type === 2 && this.courses[bI]?.is_flexible) {
+      return this.getPrivateFlexPrice(item.courseDates);
+    } else if (this.courses[bI]?.course_type === 1) {
+      return item?.price_total;
+    } else if (this.courses[bI]?.course_type === 2 && !this.courses[bI]?.is_flexible) {
+      return this.courses[bI]?.price * item.courseDates.length;
+    }
+  }
 
   getBasePrice(noDiscount = false) {
     let ret = 0;
@@ -1400,16 +1410,19 @@ export class BookingDetailModalComponent implements OnInit {
             b.price_total = parseFloat(this.courses[idx]?.price)* b.courseDates.length;
           } else if (this.courses[idx].is_flexible && this.courses[idx].course_type === 1) {
             const discounts = typeof this.courses[idx].discounts === 'string' ? JSON.parse(this.courses[idx].discounts) : this.courses[idx].discounts;
+            let price = b?.courseDates[0].price * b.courseDates.length;
+            let discount = 0;
             ret = ret + (b?.courseDates[0].price * b.courseDates.length);
             if (!noDiscount) {
               discounts.forEach(element => {
                 if (element.date === b.courseDates.length) {
                   ret = ret - (ret * (element.percentage / 100));
+                  discount = price - (price * (element.percentage / 100));
                 }
               });
             }
-
-            b.price_total = ret;
+            ret = ret - discount;
+            b.price_total = price;
           } else {
             ret = ret + b?.price_total
           }

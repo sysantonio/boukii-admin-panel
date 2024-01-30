@@ -203,9 +203,7 @@
                   <p style="width: 60%;font-size: 21px;float:left">{{'booking_total' | translate }}</p>
                   <p style="color: #EA0C60;">{{
 
-                  parseFloatValue(((courses[bI]?.course_type === 2 && courses[bI]?.is_flexible ? getPrivateFlexPrice(item.courseDates)
-                    : ((courses[bI]?.course_type === 1 && courses[bI]?.is_flexible)
-                    ? item?.price_total : (courses[bI]?.course_type === 1 ? item?.price_total : courses[bI]?.price * item.courseDates.length)))))
+                  parseFloatValue(parseFloatValue(getTotalBook(bI, item)))
                   + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </div>
               </div>
