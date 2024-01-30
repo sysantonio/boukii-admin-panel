@@ -1554,7 +1554,6 @@ export class BookingDetailComponent implements OnInit {
 
   refundBooking() {
 
-
     const dialogRef = this.dialog.open(RefundBookingModalComponent, {
       width: '1000px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
@@ -1579,8 +1578,13 @@ export class BookingDetailComponent implements OnInit {
           .subscribe(() => {
             this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
             .subscribe(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
-              this.getData();
+
+              this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingPendingPrice, status: 'refund', notes: 'other'})
+              .subscribe(() => {
+
+                this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+                this.getData();
+              })
             })
           })
 
@@ -1599,6 +1603,10 @@ export class BookingDetailComponent implements OnInit {
             this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
             .subscribe(() => {
 
+              this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingPendingPrice, status: 'refund', notes: 'voucher'})
+              .subscribe(() => {
+
+              })
               this.crudService.create('/vouchers', vData)
                 .subscribe((result) => {
 
