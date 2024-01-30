@@ -8,7 +8,7 @@
         <div style="height: 100%; padding: 1px" @fadeInUp class="card flex-auto">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
-            <button *ngIf="bookingPendingPrice < 0" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">{{'bookings_page.cancelations.refund' | translate }}</button>
+            <button *ngIf="bookingPendingPrice < 0 && booking.paid" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">{{'bookings_page.cancelations.refund' | translate }}</button>
             <button mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/bookings')">{{'back' | translate }}</button>
             <button mat-raised-button color="accent" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">{{'bookings_page.detail.full_cancel' | translate}}</button>
 

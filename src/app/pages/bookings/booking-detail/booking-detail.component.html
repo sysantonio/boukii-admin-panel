@@ -8,7 +8,9 @@
         <div style="height: 100%; padding: 1px" @fadeInUp class="card flex-auto">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
-            <button *ngIf="bookingPendingPrice < 0" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">{{'bookings_page.cancelations.refund' | translate }}</button>
+            <button *ngIf="bookingPendingPrice < 0 && booking.paid" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">
+              {{'bookings_page.cancelations.refund' | translate }}
+            </button>
             <button mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/bookings')">{{'back' | translate }}</button>
             <button mat-raised-button color="accent" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"  (click)="deleteBooking()">{{'bookings_page.detail.full_cancel' | translate}}</button>
 
@@ -338,7 +340,7 @@
                 <p style="float:right">{{booking.price_boukii_care}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency  : ''}}</p>
               </span>
 
-              <span style="width: 100%; float:left" *ngIf="this.tva">
+              <span style="width: 100%; float:left" *ngIf="booking.has_tva">
                 <p style="float:left">{{'tva' | translate | uppercase }}</p>
                 <p style="float:right">{{ (tvaPrice).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>

@@ -2233,23 +2233,38 @@ export class BookingDetailModalComponent implements OnInit {
       });
     }
 
-    if(this.booking.has_cancellation_insurance) {
+    if(this.booking.has_cancellation_insurance && this.cancellationInsurance > 0) {
       price = price + (this.getBasePrice() * this.cancellationInsurance);
+    } else if (this.booking.has_cancellation_insurance) {
+      price = price + parseFloat(this.booking.price_cancellation_insurance);
     }
 
-    if(this.booking.has_boukii_care) {
+    if(this.booking.has_boukii_care && this.boukiiCarePrice > 0) {
       // coger valores de reglajes
       price = price  + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+    } else if (this.booking.has_boukii_care) {
+      price = price + parseFloat(this.booking.price_boukii_care);
     }
 
     // añadir desde reglajes el tva
-    if (this.tva && !isNaN(this.tva)) {
+    if ((this.tva && !isNaN(this.tva) || this.tva !== 0)) {
       this.finalPrice = price + (price * this.tva);
       this.tvaPrice = (price * this.tva);
+    } else if (this.booking.has_tva) {
+      this.tvaPrice = parseFloat(this.booking.price_tva);
+      this.finalPrice = price + this.tvaPrice;
+
     } else {
       this.finalPrice = price;
     }
     this.finalPriceNoTaxes = price;
+
+    if (this.booking.paid_total) {
+
+      this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total);
+    } else {
+      this.bookingPendingPrice = this.finalPrice;
+    }
   }
 
   getMonitorLang(id: number) {
