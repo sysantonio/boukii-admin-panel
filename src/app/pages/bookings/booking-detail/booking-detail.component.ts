@@ -1648,6 +1648,12 @@ export class BookingDetailComponent implements OnInit {
 
           this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
           .subscribe(() => {
+
+            this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'refund', notes: 'other'})
+            .subscribe(() => {
+
+            })
+
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
               this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
@@ -1671,6 +1677,10 @@ export class BookingDetailComponent implements OnInit {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
 
+              this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'refund', notes: 'voucher'})
+                .subscribe(() => {
+
+                })
               this.crudService.create('/vouchers', vData)
                 .subscribe((result) => {
 
@@ -1819,6 +1829,10 @@ export class BookingDetailComponent implements OnInit {
 
           this.crudService.create('/booking-logs', {booking_id: this.id, action:'partial cancelation', before_change: 'confirmed', user_id: this.user.id, description: data.reason})
           .subscribe(() => {
+            this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingsToCreate[index].price_total, status: 'refund', notes: 'other'})
+            .subscribe(() => {
+
+            })
             book.courseDates.forEach(element => {
               this.crudService.update('/booking-users', {status: 2}, element.id)
               .subscribe(() => {
@@ -1844,6 +1858,11 @@ export class BookingDetailComponent implements OnInit {
               })
             })
           })
+
+          this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingsToCreate[index].price_total, status: 'refund', notes: 'vouher'})
+            .subscribe(() => {
+
+            })
 
           this.crudService.create('/vouchers', vData)
             .subscribe((result) => {
