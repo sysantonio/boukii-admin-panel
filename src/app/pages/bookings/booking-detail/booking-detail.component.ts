@@ -816,7 +816,7 @@ export class BookingDetailComponent implements OnInit {
 
           const basket = {
             payment_method_id: this.defaults.payment_method_id,
-            price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice()},
+            price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice() - parseFloat(this.booking.paid_total)},
             bonus: {total: this.bonus.length, bonuses: bonuses},
             reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
             boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},
@@ -825,9 +825,8 @@ export class BookingDetailComponent implements OnInit {
             tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
             price_total: parseFloat(this.booking.price_total),
             paid_total: parseFloat(this.booking.paid_total) + parseFloat(this.bookingPendingPrice),
-            pending_amount: parseFloat(this.bookingPendingPrice)
+            pending_amount: parseFloat(this.bookingPendingPrice).toFixed(2)
           }
-
 
           this.crudService.post('/admin/bookings/payments/' + this.id, basket)
 
@@ -1611,7 +1610,7 @@ export class BookingDetailComponent implements OnInit {
           .subscribe(() => {
             this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
             .subscribe(() => {
-              this.crudService.post('/admin/bookings/refunds/'+this.id, {amount: this.bookingPendingPrice})
+              this.crudService.post('/admin/bookings/refunds/'+this.id, {amount: -(this.bookingPendingPrice)})
                 .subscribe(() => {
                   this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
                   this.getData();
@@ -1903,6 +1902,11 @@ export class BookingDetailComponent implements OnInit {
               if (this.booking.paid) {
                 this.crudService.post('/admin/bookings/refunds/'+this.id, {amount: this.bookingsToCreate[index].price_total})
                   .subscribe(() => {
+                    book.courseDates.forEach(element => {
+                      this.crudService.update('/booking-users', {status: 2}, element.id)
+                      .subscribe(() => {
+                      })
+                    })
                     this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
                     this.getData();
                 })
@@ -1962,93 +1966,10 @@ export class BookingDetailComponent implements OnInit {
           })
           this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
-        } else if(data.type === 'refund_bonus') {
-
-          if (data.unifyBonus) {
-
-            this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
-            .subscribe(() => {
-              book.courseDates.forEach(element => {
-                this.crudService.update('/booking-users', {status: 2}, element.id)
-                .subscribe(() => {
-                })
-              })
-            })
-
-            const vData = {
-              code: "BOU-"+this.generateRandomNumber(),
-              quantity: 0,
-              remaining_balance: 0,
-              payed: false,
-              client_id: this.booking.client_main_id,
-              school_id: this.user.schools[0].id
-            };
-            data.bonus.forEach(element => {
-              vData.quantity = vData.quantity + element.bonus.currentPay;
-              vData.remaining_balance = vData.remaining_balance + element.bonus.currentPay;
-            });
-
-              this.crudService.create('/vouchers', vData)
-                .subscribe((result) => {
-
-                  this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
-                    .subscribe((vresult) => {
-                      console.log(vresult);
-                      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-
-                    })
-
-            })
-
-          } else {
-            if (data.bonus.length > 0) {
-
-              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
-              .subscribe(() => {
-                book.courseDates.forEach(element => {
-                  this.crudService.update('/booking-users', {status: 2}, element.id)
-                  .subscribe(() => {
-                  })
-                })
-              })
-
-              data.bonus.forEach(element => {
-                const vData = {
-                  code: element.bonus.code,
-                  quantity: element.bonus.currentPay,
-                  remaining_balance: element.bonus.remaining_balance + element.bonus.currentPay,
-                  payed: false,
-                  client_id: element.bonus.client_id,
-                  school_id: this.user.schools[0].id
-                };
-                this.crudService.update('/vouchers', vData, element.bonus.id)
-                  .subscribe((result) => {
-
-                    this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -element.bonus.reducePrice})
-                      .subscribe((vresult) => {
-                        console.log(vresult);
-
-                      })
-                  })
-              });
-              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-
-            } else {
-              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
-              .subscribe(() => {
-                book.courseDates.forEach(element => {
-                  this.crudService.update('/booking-users', {status: 2}, element.id)
-                  .subscribe(() => {
-                  })
-                })
-              })
-              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-            }
-          }
         }
 
         setTimeout(() => {
-          if (this.bookingsToCreate.length === 0){
+          if (this.bookingsToCreate.length === 0) {
             this.crudService.update('/bookings', {status: 2}, this.id)
             .subscribe(() => {
               this.getData(true);
@@ -2056,8 +1977,8 @@ export class BookingDetailComponent implements OnInit {
             })
 
           } else {
-            /*let price = parseFloat(this.booking.price_total);
-            const bookingExtras = this.bookingExtras.filter((b) => b.booking_user_id === book.courseDates.id);
+            let price = parseFloat(this.booking.price_total);
+            /*const bookingExtras = this.bookingExtras.filter((b) => b.booking_user_id === book.courseDates.id);
             const courseExtras = this.courseExtra.filter((b) => b.booking_user_id === book.courseDates.id);
 
             bookingExtras.forEach(element => {
@@ -2072,7 +1993,7 @@ export class BookingDetailComponent implements OnInit {
                 .subscribe(() => {
 
                 })
-            });
+            });*/
             if (this.tva && !isNaN(this.tva)) {
               price = price + (price * this.tva);
             }
@@ -2080,9 +2001,9 @@ export class BookingDetailComponent implements OnInit {
             if(this.booking.has_boukii_care) {
               // coger valores de reglajes
               price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
-            }*/
+            }
 
-            this.crudService.update('/bookings', {status: 3}, this.id)
+            this.crudService.update('/bookings', {status: 3, paid_total: price}, this.id)
             .subscribe(() => {
               this.bookingsToCreate.splice(index, 1);
               this.getData(true);

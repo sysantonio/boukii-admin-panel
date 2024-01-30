@@ -76,7 +76,7 @@
 
           <mat-dialog-content class="flex flex-col" *ngIf="!loading">
             <div style="width: 100%;">
-              <p>{{'bookings_page.refunds.gift_voucher_text' | translate}}</p>
+              <p>{{'bookings_page.refund.gift_voucher_text' | translate}}</p>
               <div style="float:left; width: 100%">
                 <mat-checkbox *ngFor="let item of defaults.currentBonus" (change)="checkBonus($event, item)" [disabled]="calculateAllRemainingQuantity() && defaults.currentBonus.length > 1" [disabled]="true" [checked]="true"
                 style="float:left;width: 100%">{{item.bonus.code}}: <span style="color:#fe3085">{{getCurrentUse(item)}} {{defaults.booking.currency}} </span>
