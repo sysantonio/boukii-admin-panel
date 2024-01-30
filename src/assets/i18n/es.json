@@ -546,6 +546,6 @@
   "refund_title": "Esta reserva tiene un reembolso pendiente. ¿Quiere realizarlo ahora?",
   "bookings_page.refund.gift_voucher_text": "Está a punto de cancelar una reserva. Se generará un bono.",
   "update": "Modificar",
-  "bookings_page.cancelations.refund_boukiipay_text": "Se devolverá a través de Boukii Pay el valor de la reserva.",
+  "bookings_page.cancelations.refund_boukiipay_text": "Se devolverá a través de Boukii Pay el valor de la reserva",
   "bookings_page.cancelations.refund_no_boukiipay_text": "Esta reserva no puede devolververse a través de Boukii Pay ya que no se pago a través de esta plataforma."
 }

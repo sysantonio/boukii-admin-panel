@@ -296,6 +296,10 @@
                 <p style="float:left">{{'base_price' | translate }}</p>
                 <p style="float:right">{{getBasePrice(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
+              <span style="width: 100%; float:left" *ngIf="booking.status !== 1">
+                <p style="float:left">{{'base_price' | translate }}</p>
+                <p style="float:right">{{getBasePriceForAnulations(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+              </span>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_reduction">
                 <p style="float:left">{{'reduction' | translate}}</p>

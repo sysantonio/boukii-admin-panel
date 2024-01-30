@@ -295,9 +295,13 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
             <div class="opaque-box">
-              <span style="width: 100%; float:left">
+              <span style="width: 100%; float:left" *ngIf="booking.status === 1">
                 <p style="float:left">{{'base_price' | translate }}</p>
                 <p style="float:right">{{getBasePrice(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+              </span>
+              <span style="width: 100%; float:left" *ngIf="booking.status !== 1">
+                <p style="float:left">{{'base_price' | translate }}</p>
+                <p style="float:right">{{getBasePriceForAnulations(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left" *ngIf="booking.has_reduction">
