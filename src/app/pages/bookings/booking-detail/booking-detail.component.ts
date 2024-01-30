@@ -263,6 +263,7 @@ export class BookingDetailComponent implements OnInit {
     this.courseExtra = [];
     this.bookingExtras = [];
     this.bookingUsers = [];
+    this.bookingUsersUnique = [];
     this.currentBonus = [];
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
@@ -316,7 +317,7 @@ export class BookingDetailComponent implements OnInit {
 
             const groupedByCourseId = bookingUser.data.reduce((accumulator, currentValue) => {
               // Obtiene el course_id del objeto actual
-              const key = currentValue.client_id;
+              const key = currentValue.course_id;
 
               // Si el acumulador ya no tiene este course_id como clave, inicialízalo
               if (!accumulator[key]) {
@@ -329,31 +330,30 @@ export class BookingDetailComponent implements OnInit {
               return accumulator;
             }, {});
 
-            for (const clientId in groupedByCourseId) {
-              if (groupedByCourseId.hasOwnProperty(clientId)) {
+            for (const courseId in groupedByCourseId) {
+              if (groupedByCourseId.hasOwnProperty(courseId)) {
 
 
-                this.crudService.get('/admin/courses/' + groupedByCourseId[clientId][0].course_id)
+                this.crudService.get('/admin/courses/' + courseId)
                   .subscribe((course) => {
 
                     if (course.data.course_type === 2 && this.booking.old_id === null) {
 
                       const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null, clients: []}
 
-                        groupedByCourseId[clientId].forEach((element, idx) => {
+                        groupedByCourseId[courseId].forEach((element, idx) => {
 
                           if(parseFloat(element.price) !== 0) {
                             data.sport_id = course.data?.sport_id;
                             data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
                             this.courses.push(course.data);
                             data.courseDates.push(element);
-                            this.clientsIds.push(clientId);
+                            this.clientsIds.push(element.client_id);
 
 
                           } else {
-                            data.clients.push(clientId);
-                            this.clientsIds.push(clientId);
-
+                            data.clients.push(courseId);
+                            this.clientsIds.push(element.client_id);
                           }
 
                         });
@@ -368,7 +368,7 @@ export class BookingDetailComponent implements OnInit {
                       const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
                       data.sport_id = course.data?.sport_id;
                       data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
-                        groupedByCourseId[clientId].forEach((element, idx) => {
+                        groupedByCourseId[courseId].forEach((element, idx) => {
 
                           if (course.data.course_type === 1 && !course.data.is_flexible) {
                             if (idx === 0) {
@@ -441,9 +441,10 @@ export class BookingDetailComponent implements OnInit {
 
   getAmountCourse(item: any, index: number) {
     if (this.courses[index].course_type === 2 && this.courses[index].is_flexible) {
-      return item.find((a) => parseFloat(a.price) > 0).price;
+      const priceRange = this.courses[index].price_range.find((a) => a[1] !== null);
+      return priceRange[this.bookingUsers.filter((b) => b.course_id === this.courses[index].id).length];
     } else {
-      return item[index].price;
+      return this.courses[index].price;
     }
   }
 
@@ -1513,7 +1514,7 @@ export class BookingDetailComponent implements OnInit {
               course_id: courseId,
               name: forfait.id,
               description: forfait.name,
-              price: forfait.price * this.bookingUsersUnique.length + ((forfait.price * forfait.tva) / 100)
+              price: forfait.price * this.bookingUsers.filter((b) => b.course_id === courseId).length + ((forfait.price * forfait.tva) / 100)
             };
 
             finalPrice = finalPrice + courseExtra.price;
@@ -2429,7 +2430,8 @@ export class BookingDetailComponent implements OnInit {
           width: '60vw',
           maxWidth: '100vw',
           panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index],
+          data: {
+            course: this.courses[index],
             dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
             mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0),
             mainPrice: this.getBasePrice(),
