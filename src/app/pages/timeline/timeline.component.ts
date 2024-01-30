@@ -306,7 +306,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   searchBookings(firstDate:string,lastDate:string){
     this.crudService.get('/admin/getPlanner?date_start='+firstDate+'&date_end='+lastDate+'&school_id='+this.activeSchool+'&perPage='+99999).subscribe(
       (data:any) => {
-        //console.log(data.data);
+        console.log(data.data);
         this.processData(data.data);
       },
       error => {
