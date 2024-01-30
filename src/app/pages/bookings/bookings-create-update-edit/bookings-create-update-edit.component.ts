@@ -911,7 +911,8 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         school_id: element.school_id,
         client_main_id: element.client_main_id,
         paxes: paxes,
-        payment_method_id: this.defaults.payment_method_id
+        payment_method_id: this.defaults.payment_method_id,
+        source: 'admin'
       }
     });
 
@@ -1089,8 +1090,13 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               this.crudService.update('/bookings', {payment_method_id: this.defaults.payment_method_id,
                 paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : this.bookingService.editData.booking.paid_total}, this.bookingService.editData.id)
                 .subscribe(() => {
-                  this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
-                  this.goTo('/bookings/update/'+this.bookingService.editData.id);
+
+                  this.crudService.create('/payments', {booking_id: this.bookingService.editData.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'paid', notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'})
+                  .subscribe(() => {
+
+                    this.snackbar.open(this.translateService.instant('snackbar.booking_detail.create'), 'OK', {duration: 1000});
+                    this.goTo('/bookings/update/'+this.bookingService.editData.id);
+                  })
                 })
             } else {
               this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
