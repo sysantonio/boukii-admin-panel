@@ -672,7 +672,13 @@ export class ClientDetailComponent {
     if (this.currentImage === this.defaults.image) {
       delete this.defaults.image;
       delete this.defaultsUser.image;
+    } else {
+
+    this.defaultsUser.image = this.imagePreviewUrl;
+    this.defaults.image = this.imagePreviewUrl;
     }
+
+    this.defaultsUser.email = this.defaults.email;
 
     this.crudService.update('/users', this.defaultsUser, this.defaultsUser.id)
       .subscribe((user) => {

@@ -70,8 +70,8 @@ export class CourseDetailComponent implements OnInit {
     duration: null,
     hour_min: null,
     hour_max: null,
-    min_age: null,
-    max_age: null,
+    age_min: null,
+    age_max: null,
     course_dates: []
   };
 
@@ -645,7 +645,7 @@ export class CourseDetailComponent implements OnInit {
 
           if (!level.old) {
             this.defaults.course_dates.forEach(courseDate => {
-              if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+              if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
                 this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
                   .subscribe((result: any) => {
@@ -665,7 +665,7 @@ export class CourseDetailComponent implements OnInit {
             });
           } else {
             this.defaults.course_dates.forEach((courseDate, idx) => {
-              this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+              this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
                 .subscribe((result: any) => {
                   if (result.data.available) {
 
@@ -685,7 +685,7 @@ export class CourseDetailComponent implements OnInit {
 
           if (!level.old) {
             this.defaults.course_dates.forEach(courseDate => {
-              if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+              if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
                 courseDate.course_groups.forEach(group => {
                   if(group.degree_id === level.id && !monitorSet) {
 
@@ -1099,7 +1099,7 @@ export class CourseDetailComponent implements OnInit {
       return course.short_description;
     } else {
       const translations = JSON.parse(course.translations);
-      return translations[this.translateService.currentLang].short_description;
+      return translations[this.translateService.currentLang].short_description !== null && translations[this.translateService.currentLang].short_description !== '' ? translations[this.translateService.currentLang].short_description : course.short_description;
     }
   }
 
@@ -1109,7 +1109,7 @@ export class CourseDetailComponent implements OnInit {
       return course.description;
     } else {
       const translations = JSON.parse(course.translations);
-      return translations[this.translateService.currentLang].description;
+      return translations[this.translateService.currentLang].description !== null && translations[this.translateService.currentLang].description !== '' ? translations[this.translateService.currentLang].description : course.description;
     }
   }
 
@@ -1118,7 +1118,7 @@ export class CourseDetailComponent implements OnInit {
       return course.name;
     } else {
       const translations = JSON.parse(course.translations);
-      return translations[this.translateService.currentLang].name;
+      return translations[this.translateService.currentLang].name !== null && translations[this.translateService.currentLang].name !== '' ? translations[this.translateService.currentLang].name : course.name;
     }
   }
 }

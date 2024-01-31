@@ -443,8 +443,8 @@ export class BookingDetailModalComponent implements OnInit {
   getUniqueBookingUsers() {
     const clientIds = new Set();
     this.bookingUsersUnique = this.bookingUsers.filter(item => {
-      if (!clientIds.has(item.client_id)) {
-        clientIds.add(item.client_id);
+      if (!clientIds.has(item.course_id)) {
+        clientIds.add(item.course_id);
         return true;
       }
       return false;
@@ -2282,13 +2282,9 @@ export class BookingDetailModalComponent implements OnInit {
         this.tvaPrice = parseFloat(this.booking.price_tva);
       }
     } else {
-      if ((this.tva && !isNaN(this.tva) || this.tva !== 0)) {
-        this.finalPrice = price + (price * this.tva);
-        this.tvaPrice = (price * this.tva);
-      } else if (this.booking.has_tva) {
+      if (this.booking.has_tva) {
         this.tvaPrice = parseFloat(this.booking.price_tva);
         this.finalPrice = price + this.tvaPrice;
-
       } else {
         this.finalPrice = price;
       }

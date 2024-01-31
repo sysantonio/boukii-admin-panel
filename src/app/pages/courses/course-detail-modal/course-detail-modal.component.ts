@@ -80,8 +80,8 @@ export class CourseDetailModalComponent implements OnInit {
     duration: null,
     hour_min: null,
     hour_max: null,
-    min_age: null,
-    max_age: null,
+    age_min: null,
+    age_max: null,
     course_dates: []
   };
 

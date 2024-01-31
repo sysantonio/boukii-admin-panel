@@ -221,7 +221,7 @@
               <div class="flex-auto" style="width: 40%">
                 <label for="ageFrom">{{'courses.min_age' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
-                  <input id="ageFrom" type="number" placeholder="{{'courses.min_age' | translate}}" formControlName="ageFrom" aria-label="Number" matInput [(ngModel)]="defaults.min_age"/>
+                  <input id="ageFrom" type="number" placeholder="{{'courses.min_age' | translate}}" formControlName="ageFrom" aria-label="Number" matInput [(ngModel)]="defaults.age_min"/>
                   <mat-error *ngIf="courseInfoFormGroup?.controls?.ageFrom?.errors?.['required']">
                     {{'courses.errors.min_age' | translate}}
                   </mat-error>
@@ -231,7 +231,7 @@
               <div class="flex-auto" style="width: 40%">
                 <label for="ageTo">{{'courses.max_age' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field style="width: 100%">
-                  <input id="ageTo" type="number" placeholder="{{'courses.max_age' | translate}}" formControlName="ageTo" aria-label="Number" matInput [(ngModel)]="defaults.max_age"/>
+                  <input id="ageTo" type="number" placeholder="{{'courses.max_age' | translate}}" formControlName="ageTo" aria-label="Number" matInput [(ngModel)]="defaults.age_max"/>
                   <mat-error *ngIf="courseInfoFormGroup?.controls?.ageTo?.errors?.['required']">
                     {{'courses.errors.max_age' | translate}}
                   </mat-error>

@@ -173,8 +173,8 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
     duration: null,
     hour_min: null,
     hour_max: null,
-    min_age: null,
-    max_age: null,
+    age_min: null,
+    age_max: null,
     course_dates: []
   };
 
@@ -1876,8 +1876,8 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        age_min: this.defaults.min_age,
-        age_max: this.defaults.max_age,
+        age_min: this.defaults.age_min,
+        age_max: this.defaults.age_max,
         course_dates: this.defaults.course_dates,
         settings: JSON.stringify(this.defaults.settings),
         unique: this.periodeUnique
@@ -1908,8 +1908,8 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        age_min: this.defaults.min_age,
-        age_max: this.defaults.max_age,
+        age_min: this.defaults.age_min,
+        age_max: this.defaults.age_max,
         course_dates: this.defaults.course_dates,
         hour_min: this.defaults.hour_min,
         hour_max: this.defaults.hour_max,
@@ -2033,8 +2033,8 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        age_min: this.defaults.min_age,
-        age_max: this.defaults.max_age,
+        age_min: this.defaults.age_min,
+        age_max: this.defaults.age_max,
         course_dates: this.defaults.course_dates,
         settings: JSON.stringify(this.defaults.settings),
         unique: this.periodeUnique
@@ -2070,8 +2070,8 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         station_id: this.defaults.station_id.id,
         max_participants: this.defaults.max_participants,
         duration: this.defaults.duration,
-        age_min: this.defaults.min_age,
-        age_max: this.defaults.max_age,
+        age_min: this.defaults.age_min,
+        age_max: this.defaults.age_max,
         course_dates: this.defaults.course_dates,
         hour_min: this.defaults.hour_min,
         hour_max: this.defaults.hour_max,
@@ -2103,12 +2103,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
       return;
     }
 
-    if(this.defaults.min_age === null) {
+    if(this.defaults.age_min === null) {
       this.snackbar.open(this.translateService.instant('snackbar.course.min_age'), 'OK', {duration: 3000})
       return;
     }
 
-    if(this.defaults.max_age === null) {
+    if(this.defaults.age_max=== null) {
       this.snackbar.open(this.translateService.instant('snackbar.course.max_age'), 'OK', {duration: 3000})
       return;
     }
