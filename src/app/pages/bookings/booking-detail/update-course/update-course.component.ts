@@ -132,6 +132,7 @@ export class UpdateCourseModalComponent implements OnInit {
                 this.crudService.create('/booking-users', bu)
                   .subscribe((bookingUser) => {
 
+                    if (this.defaults.courseExtra.length > 0) {
                       const bookingUserExtra = {
                         booking_user_id: bookingUser.data.id,
                         course_extra_id: null,
@@ -154,6 +155,8 @@ export class UpdateCourseModalComponent implements OnInit {
                           })
 
                         })
+                    }
+
                   })
               });
             });

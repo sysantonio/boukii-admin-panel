@@ -99,7 +99,8 @@
 
               <div style="color: #EA0C60;" *ngIf="!getCourse(item?.courseDates[0]?.course_id)?.is_flexible">
                 {{ getAmountCourse(bookingUsersUnique, bI)}} CHF
-              </div>            </mat-card-header>
+              </div>
+            </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
                 <li *ngFor="let date of item?.courseDates">

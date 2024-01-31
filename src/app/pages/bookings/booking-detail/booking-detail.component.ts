@@ -442,7 +442,7 @@ export class BookingDetailComponent implements OnInit {
   getAmountCourse(item: any, index: number) {
     if (this.courses[index].course_type === 2 && this.courses[index].is_flexible) {
       const priceRange = this.courses[index].price_range.find((a) => a[1] !== null);
-      return priceRange[this.bookingUsers.filter((b) => b.course_id === this.courses[index].id).length];
+      return priceRange[this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id).length];
     } else {
       return this.courses[index].price;
     }
@@ -2225,12 +2225,16 @@ export class BookingDetailComponent implements OnInit {
       this.router.navigate(['bookings/edit/'+this.id]);
     } else {
       if (this.courses[index].course_type === 2) {
+
         const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
           width: '60vw',
           maxWidth: '100vw',
           panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id),
-            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: this.clientsIds,
+          data: {
+            course: this.courses[index],
+            dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id),
+            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0),
+            clientIds: [...new Set(this.clientsIds)],
             tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
         });
 
@@ -2277,5 +2281,17 @@ export class BookingDetailComponent implements OnInit {
       }
 
     }
+  }
+
+  removeDuplicates(array, key) {
+    const unique = array
+      .map(e => e[key])
+      // Almacena las claves y elimina los duplicados.
+      .map((e, i, final) => final.indexOf(e) === i && i)
+      // Elimina las claves duplicadas y mapea el array.
+      .filter(e => array[e]).map(e => array[e]);
+
+    console.log(unique);
+    // Aquí puedes usar 'unique', que es tu array sin duplicados.
   }
 }

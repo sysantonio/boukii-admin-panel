@@ -434,7 +434,7 @@ export class BookingDetailModalComponent implements OnInit {
   getAmountCourse(item: any, index: number) {
     if (this.courses[index].course_type === 2 && this.courses[index].is_flexible) {
       const priceRange = this.courses[index].price_range.find((a) => a[1] !== null);
-      return priceRange[this.bookingUsers.filter((b) => b.course_id === this.courses[index].id).length];
+      return priceRange[this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id).length];
     } else {
       return this.courses[index].price;
     }
