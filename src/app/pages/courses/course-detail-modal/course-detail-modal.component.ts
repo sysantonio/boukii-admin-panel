@@ -652,36 +652,77 @@ export class CourseDetailModalComponent implements OnInit {
       return ret;
     }
 
-  setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
+    setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
 
-    let monitorSet = false;
-    if (event.isUserInput) {
+      if (event.isUserInput) {
+        if (daySelectedIndex === 0) {
+          let monitorSet = false;
 
-      if (!level.old) {
-        this.defaults.course_dates.forEach(courseDate => {
-          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
-            courseDate.course_groups.forEach(group => {
-              if(group.degree_id === level.id && !monitorSet) {
+            if (!level.old) {
+              this.defaults.course_dates.forEach(courseDate => {
+                if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
-                group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-                group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
-                monitorSet = true;
-              }
-            });
-          }
-        });
-      } else {
-        this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
-          if (group.degree_id === level.id) {
-            group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
-            group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-          }
+                  this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                    .subscribe((result: any) => {
 
-        });
+                      if (result.data.available) {
+                        courseDate.course_groups.forEach(group => {
+                          if(group.degree_id === level.id && !monitorSet) {
+
+                            group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                            group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+                            monitorSet = true;
+                          }
+                        });
+                      }
+                    })
+                }
+              });
+            } else {
+              this.defaults.course_dates.forEach((courseDate, idx) => {
+                this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                  .subscribe((result: any) => {
+                    if (result.data.available) {
+
+                      this.defaults.course_dates[idx].course_groups.forEach(group => {
+                        if (group.degree_id === level.id) {
+                          group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
+                          group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                        }
+
+                      });
+                    }
+                  })
+              });
+            }
+        } else {
+          let monitorSet = false;
+
+            if (!level.old) {
+              this.defaults.course_dates.forEach(courseDate => {
+                if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
+                  courseDate.course_groups.forEach(group => {
+                    if(group.degree_id === level.id && !monitorSet) {
+
+                      group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                      group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+                      monitorSet = true;
+                    }
+                  });
+                }
+              });
+            } else {
+              this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
+                if (group.degree_id === level.id) {
+                  group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
+                  group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                }
+
+              });
+            }
+        }
       }
-
     }
-  }
 
   setSubGroupPax(event: any, level: any) {
     if (+event.target.value > this.defaults.max_participants) {
