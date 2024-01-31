@@ -1071,6 +1071,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               pending_amount: parseFloat(this.finalPrice)
             }
 
+            this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, booking.data.id)
+              .subscribe(() => {
+
+              })
+
             this.crudService.post('/admin/bookings/payments/' + booking.data.id, basket)
               .subscribe((result: any) => {
                 console.log((result));

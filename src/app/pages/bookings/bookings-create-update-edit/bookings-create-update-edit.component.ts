@@ -1079,6 +1079,12 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
                 pending_amount: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price)
               }
 
+              this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, this.bookingService.editData.id)
+              .subscribe(() => {
+
+              })
+
+
               this.crudService.post('/admin/bookings/payments/' + this.bookingService.editData.id, basket)
                 .subscribe((result: any) => {
                   console.log((result));
