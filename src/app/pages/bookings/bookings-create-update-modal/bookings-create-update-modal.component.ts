@@ -1350,15 +1350,19 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         );
         let hasSport = false;
         const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
-        client.client_sports.forEach(sport => {
-          if (sport.sport_id === this.defaults.sport_id) {
-            const level = this.levels.find((l) => l.id === sport.degree_id);
-            this.levelForm.patchValue(level);
-            this.defaultsBookingUser.degree_id = level.id;
-            hasSport = true;
-            this.getCourses(level, this.monthAndYear);
-          }
-        });
+
+        if (client) {
+          client.client_sports.forEach(sport => {
+            if (sport.sport_id === this.defaults.sport_id) {
+              const level = this.levels.find((l) => l.id === sport.degree_id);
+              this.levelForm.patchValue(level);
+              this.defaultsBookingUser.degree_id = level.id;
+              hasSport = true;
+              this.getCourses(level, this.monthAndYear);
+            }
+          });
+        }
+
 
         /*if (!hasSport && client.client_sports.length === 0) {
           this.snackBarRef = this.snackbar.open(this.translateService.instant('snackbar.booking.no_sport_3'), this.translateService.instant('yes'), {duration: 10000});
@@ -1483,16 +1487,22 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     this.crudService.post('/availability', rq)
       .subscribe((data) => {
-        console.log(data);
 
         this.defaultsBookingUser.degree_id = level.id;
-        this.courses = data.data;
+        this.courses = [];
+
+        data.data.forEach(element => {
+          if (this.filterByCourseHours(element.course_dates[0].hour_start, element.course_dates[0].hour_end,
+            element.duration.includes(':') ? this.transformTime(element.duration) : element.duration, '5min')) {
+            this.courses.push(element);
+          }
+        });
         if (!fromPrivate) {
 
           this.coursesMonth = data.data;
         }
 
-        if (data.data.length === 0) {
+        if (this.courses.length === 0) {
           this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
         }
         this.loading = false;
@@ -2300,6 +2310,62 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
+  filterByCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+    const intervalParts = interval.split(' ');
+    const mainDurationParts = mainDuration.split(' ');
+
+    let intervalHours = 0;
+    let intervalMinutes = 0;
+    let mainDurationHours = 0;
+    let mainDurationMinutes = 0;
+
+    intervalParts.forEach(part => {
+        if (part.includes('h')) {
+            intervalHours = parseInt(part, 10);
+        } else if (part.includes('min')) {
+            intervalMinutes = parseInt(part, 10);
+        }
+    });
+
+    mainDurationParts.forEach(part => {
+        if (part.includes('h')) {
+            mainDurationHours = parseInt(part, 10);
+        } else if (part.includes('min')) {
+            mainDurationMinutes = parseInt(part, 10);
+        }
+    });
+
+    let currentHours = startHours;
+    let currentMinutes = startMinutes;
+    const result = [];
+
+    while (true) {
+        let nextIntervalEndHours = currentHours + mainDurationHours;
+        let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
+
+        nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
+        nextIntervalEndMinutes %= 60;
+
+        if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
+            break;
+        }
+
+        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+
+        currentMinutes += intervalMinutes;
+        currentHours += intervalHours + Math.floor(currentMinutes / 60);
+        currentMinutes %= 60;
+
+        if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
+            break;
+        }
+    }
+
+    return result.find((r) => r === this.externalData.hour);
+  }
+
   generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
@@ -2355,8 +2421,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     return result;
   }
-
-
 
   generateCourseDurations(startTime: any, endTime: any, interval: any) {
 
