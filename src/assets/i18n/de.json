@@ -541,5 +541,8 @@
   "bookings_page.refund.gift_voucher_text": "Sie sind im Begriff, eine Reservierung zu stornieren. ",
   "update": "Ändern",
   "bookings_page.cancelations.refund_boukiipay_text": "Der Wert der Reservierung wird über Boukii Pay erstattet",
-  "bookings_page.cancelations.refund_no_boukiipay_text": "Diese Reservierung kann nicht über Boukii Pay zurückgegeben werden, da sie nicht über diese Plattform bezahlt wurde."
+  "bookings_page.cancelations.refund_no_boukiipay_text": "Diese Reservierung kann nicht über Boukii Pay zurückgegeben werden, da sie nicht über diese Plattform bezahlt wurde.",
+  "payment": "Zahlen",
+  "refund": "Zurückkehren",
+  "payment_history": "Zahlungshistorie"
 }

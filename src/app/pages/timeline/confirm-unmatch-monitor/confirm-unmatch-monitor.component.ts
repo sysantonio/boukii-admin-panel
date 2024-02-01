@@ -55,18 +55,23 @@ export class ConfirmUnmatchMonitorComponent implements OnInit {
           "language6_id": client.client.language6_id
         };
 
-        if (this.langMatch(monitorLanguages, clientLanguages)) {
-          this.problem = 'degree_match';
+        if (!this.langMatch(monitorLanguages, clientLanguages)) {
+          this.problem = 'language_match';
         } else {
           this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+this.defaults.monitor.id+'&school_id='+this.defaults.school_id+'&sport_id='+this.defaults.booking.sport_id)
           .subscribe((data) => {
             this.defaults.monitor.degrees = data.data;
+            this.problem = 'degree_match';
 
-            this.defaults.monitor.degrees.forEach(element => {
-              if (element.id !== this.defaults.booking.degree_id) {
-                this.problem = 'degree_match';
+            this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+this.defaults.monitor.id+'&school_id='+this.defaults.school_id+'&monitor_sport_id='+data.data[0].id)
+          .subscribe((authsD) => {
+            authsD.data.forEach(element => {
+              if (element.degree_id === this.defaults.booking.degree_id) {
+                this.problem = '';
               }
             });
+          });
+
           })
         }
       });

@@ -197,7 +197,7 @@ export class BookingDetailComponent implements OnInit {
   tvaPrice: any = 0;
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
-
+  payments = [];
   degreesClient:any[]=[];
 
   private subscription: Subscription;
@@ -213,9 +213,7 @@ export class BookingDetailComponent implements OnInit {
 
   async ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
-    this.getMonitors();
-    this.getLanguages();
+    this.id = this.activatedRoute.snapshot.params.id;
 
     await this.schoolService.getSchoolData().toPromise().then(data => {
       this.schoolSettings = data.data;
@@ -266,7 +264,10 @@ export class BookingDetailComponent implements OnInit {
     this.bookingUsersUnique = [];
     this.currentBonus = [];
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    this.id = this.activatedRoute.snapshot.params.id;
+
+    this.getMonitors();
+    this.getLanguages();
+    this.getPayments();
 
     this.crudService.get('/schools/'+this.user.schools[0].id)
     .subscribe((school) => {
@@ -2290,5 +2291,12 @@ export class BookingDetailComponent implements OnInit {
 
     console.log(unique);
     // Aquí puedes usar 'unique', que es tu array sin duplicados.
+  }
+
+  getPayments() {
+    this.crudService.list('/payments', 1, 10000, 'asc', 'id', '&booking_id='+this.id + '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        this.payments = data.data;
+      })
   }
 }

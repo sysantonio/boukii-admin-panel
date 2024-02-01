@@ -364,6 +364,21 @@
               </span>
             </div>
 
+
+            <h3 style="font-size: 1.5rem!important;" *ngIf="payments.length > 0">{{'payment_history' | translate}}</h3>
+            <div class="opaque-box" *ngIf="payments.length > 0">
+              <ng-container *ngFor="let item of payments">
+                <span style="width: 100%; float:left">
+                  <p style="float:left" *ngIf="item.status !== 'paid'">{{'refund' | translate }}</p>
+                  <p style="float:left" *ngIf="item.status == 'paid'">{{'payment' | translate }}</p>
+                  <p style="float:right" *ngIf="item.status !== 'paid'">{{item.created_at | date: 'dd/MM/YYYY'}}: -{{item.amount}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                  <p style="float:right" *ngIf="item.status == 'paid'">{{item.created_at | date: 'dd/MM/YYYY'}}: {{item.amount}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+                </span>
+              </ng-container>
+
+
+            </div>
+
             <ng-container *ngIf="!booking.paid && booking.status !== 2">
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div class="square-buttons-container">

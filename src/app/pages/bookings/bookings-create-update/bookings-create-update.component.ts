@@ -1058,12 +1058,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 this.crudService.create('/payments', {booking_id: booking.data.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'paid', notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'})
                   .subscribe(() => {
 
-                    this.snackbar.open(this.translateService.instant('snackbar.booking_detail.create'), 'OK', {duration: 1000});
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
                     this.goTo('/bookings/update/'+booking.data.id);
                   })
               })
           } else {
-            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.create'), 'OK', {duration: 1000});
+            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
             this.goTo('/bookings/update/'+booking.data.id);
           }
         }, 1000);
@@ -1378,6 +1378,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       }
     });
   }
+
   getUtilzers(client: any, onLoad = false) {
     if(this.snackBarRef!==null) {
 

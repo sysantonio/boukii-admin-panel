@@ -190,6 +190,7 @@ export class BookingDetailModalComponent implements OnInit {
   bookingUsers: any;
   bookingUsersUnique: any;
   clientsIds = [];
+  payments = [];
 
   countries = MOCK_COUNTRIES;
   schoolSettings: any = [];
@@ -268,6 +269,11 @@ export class BookingDetailModalComponent implements OnInit {
 
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.incData.id;
+
+    this.getMonitors();
+    this.getLanguages();
+    this.getPayments();
+
 
     this.crudService.get('/schools/'+this.user.schools[0].id)
     .subscribe((school) => {
@@ -2384,5 +2390,12 @@ export class BookingDetailModalComponent implements OnInit {
       }
 
     }
+  }
+
+  getPayments() {
+    this.crudService.list('/payments', 1, 10000, 'asc', 'id', '&booking_id='+this.id + '&school_id='+this.user.schools[0].id)
+      .subscribe((data) => {
+        this.payments = data.data;
+      })
   }
 }

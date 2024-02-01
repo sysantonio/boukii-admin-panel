@@ -1100,7 +1100,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
                   this.crudService.create('/payments', {booking_id: this.bookingService.editData.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'paid', notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'})
                   .subscribe(() => {
 
-                    this.snackbar.open(this.translateService.instant('snackbar.booking_detail.create'), 'OK', {duration: 1000});
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
                     this.goTo('/bookings/update/'+this.bookingService.editData.id);
                   })
                 })

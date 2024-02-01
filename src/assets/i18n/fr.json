@@ -539,5 +539,8 @@
   "bookings_page.refund.gift_voucher_text": "Vous êtes sur le point d'annuler une réservation. ",
   "update": "Modifier",
   "bookings_page.cancelations.refund_boukiipay_text": "La valeur de la réservation sera remboursée via Boukii Pay",
-  "bookings_page.cancelations.refund_no_boukiipay_text": "Cette réservation ne peut être restituée via Boukii Pay puisqu'elle n'a pas été payée via cette plateforme."
+  "bookings_page.cancelations.refund_no_boukiipay_text": "Cette réservation ne peut être restituée via Boukii Pay puisqu'elle n'a pas été payée via cette plateforme.",
+  "payment": "Payer",
+  "refund": "Retour",
+  "payment_history": "Historique de paiement"
 }
