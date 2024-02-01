@@ -125,14 +125,15 @@
 
                   {{'students' | translate}} <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
                 </div>
-                <div >
-                  <div *ngIf="level.id === selectedGroup[0]?.degree_id" style="float: left; width: 100%; padding: 5%;">
+                <div *ngFor="let item of selectedGroup; let i = index">
+                  <div *ngIf="level.id === item.degree_id" style="float: left; width: 100%; padding: 5%;">
+                    <p style="float: left; width: 100%;">{{'groups' | translate}} {{i+1}}</p>
                     <div style="float: left;width: 70%;">
-                      <img [src]="getMonitor(selectedGroup[0]?.monitor_id)?.image ? getMonitor(selectedGroup[0]?.monitor_id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0; border-radius: 100%">
-                      <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(selectedGroup[0]?.monitor_id)?.first_name ? getMonitor(selectedGroup[0]?.monitor_id)?.first_name + ' ' + getMonitor(selectedGroup[0]?.monitor_id)?.last_name : 'No monitor asigned'}}</span>
+                      <img [src]="getMonitor(item.monitor_id)?.image ? getMonitor(item.monitor_id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0; border-radius: 100%">
+                      <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.monitor_id)?.first_name ? getMonitor(item.monitor_id)?.first_name + ' ' + getMonitor(item.monitor_id)?.last_name : 'No monitor asigned'}}</span>
                     </div>
                     <div style="float: left;width: 30%;margin: 6% 0 0 0;">
-                      <strong style="text-align: right;float: right;">{{getActiveBookingUsers(selectedGroup[0]?.booking_users)}}/{{selectedGroup[0]?.max_participants}} {{'users' | translate}}</strong>
+                      <strong style="text-align: right;float: right;">{{getActiveBookingUsers(item.booking_users)}}/{{item.max_participants}} {{'users' | translate}}</strong>
                     </div>
                   </div>
                 </div>

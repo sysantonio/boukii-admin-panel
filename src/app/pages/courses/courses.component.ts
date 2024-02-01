@@ -225,14 +225,12 @@ export class CoursesComponent {
   selectGroup(level: any) {
     this.selectedGroup = [];
     this.selectedLevel = level;
-    this.detailData.course_dates.forEach(group => {
-      const item = group.course_subgroups.find((g) => g.degree_id === level.id);
-      if (item) {
-        this.selectedGroup.push(item);
-      }
-    });
+    const item = this.detailData.course_dates[0].course_groups.find((g) => g.degree_id === level.id);
+    if (item) {
+      this.selectedGroup = item.course_subgroups;
+    }
 
-    this.selectedGroup.course_subgroups.forEach(element => {
+    this.selectedGroup.forEach(element => {
       this.crudService.list('/booking-users', 1, 10000, 'asc', 'id', '&course_subgroup_id=' + element.id)
         .subscribe((data) => {
           element.totalUsers = data.data.length;
