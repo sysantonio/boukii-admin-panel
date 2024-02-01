@@ -167,6 +167,7 @@
                             ]" [ngStyle]="task.style">
                                 <div class="task-text">
                                     <img *ngIf="(task.type=='collective' || task.type=='private') && task.sport" [src]="task.sport.icon_selected" />
+                                    <div *ngIf="task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed'">{{ task.name }}</div>
                                     <div *ngIf="task.type === 'collective'">{{ task.name }}</div>
                                     <div *ngIf="task.type === 'private'">{{ task.all_clients[0].client.first_name}} {{ task.all_clients[0].client.last_name}}</div>
                                     <div *ngIf="task.type === 'private'">{{getLanguageById(task.all_clients[0].client.language1_id)}} ·{{getBirthYears(task.all_clients[0].client.birth_date)}} {{'years' |translate}}</div>

@@ -99,7 +99,7 @@
 
           <mat-form-field>
             <mat-label>Selecciona un bloqueo</mat-label>
-            <mat-select formControlName="blockage" [(ngModel)]="blockageSelected" [value]="blockageSelected">
+            <mat-select formControlName="blockage" [(ngModel)]="blockageSelected" [value]="blockageSelected" [style.background]="blockageSelected?.color">
               <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color;defaults.description = blockage.name" [style.background]="blockage.color"
               >
                 <span style="color: #fff">{{ blockage.name }}</span>
