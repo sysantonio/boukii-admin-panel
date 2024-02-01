@@ -187,7 +187,7 @@ export class CoursesComponent {
     this.detailData.course_dates.forEach(courseDate => {
       courseDate.course_groups.forEach(group => {
         if (group.degree_id === levelId) {
-          ret = ret + 1;
+          ret = group.course_subgroups.length;
         }
       });
 
