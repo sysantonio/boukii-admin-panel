@@ -228,6 +228,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   goToPrevious() {
+    this.loading = true;
     if (this.timelineView === 'day') {
       this.currentDate = new Date(this.currentDate.setDate(this.currentDate.getDate() - 1));
     } else if (this.timelineView === 'week') {
@@ -239,6 +240,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   goToNext() {
+    this.loading = true;
+
     if (this.timelineView === 'day') {
       this.currentDate = new Date(this.currentDate.setDate(this.currentDate.getDate() + 1));
     } else if (this.timelineView === 'week') {
@@ -250,6 +253,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   changeView(newView: string) {
+    this.loading = true;
     this.timelineView = newView;
     this.updateView();
   }
@@ -300,7 +304,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => task.date === dateStr);*/
     }
 
-    this.loading = false;
   }
 
   searchBookings(firstDate:string,lastDate:string){
@@ -860,7 +863,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
     // Combine adjusted tasks with the rest
     this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
-
+    this.loading = false;
   }
 
   getMonthWeekInfo(dateString:any) {

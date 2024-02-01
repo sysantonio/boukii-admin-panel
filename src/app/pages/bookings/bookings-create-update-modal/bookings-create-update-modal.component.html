@@ -337,7 +337,7 @@
 
                         <ng-container *ngFor="let group of getBookableCourses(course.course_dates)">
                         <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
-                          <ng-container  *ngIf="getLevelOrder(subgroup.degree_id) === levelForm.value.degree_order && subgroup.degree_id === levelForm.value.id && !subgroup.is_full">
+                          <ng-container  *ngIf="getLevelOrder(subgroup.degree_id) === levelForm?.value?.degree_order && subgroup?.degree_id === levelForm?.value?.id && !subgroup?.is_full">
 
 
                             <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;"

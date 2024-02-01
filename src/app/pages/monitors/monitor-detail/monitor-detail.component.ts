@@ -938,6 +938,7 @@ export class MonitorDetailComponent {
 
 
   save() {
+    this.loading = true;
     console.log(this.defaults);
     console.log(this.defaultsUser);
     this.defaultsUser.email = this.defaults.email;

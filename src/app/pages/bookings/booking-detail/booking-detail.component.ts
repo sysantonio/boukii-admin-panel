@@ -606,6 +606,7 @@ export class BookingDetailComponent implements OnInit {
 
 
   create() {
+    this.loading=true;
       setTimeout(() => {
 
         if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {

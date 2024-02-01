@@ -368,6 +368,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   create() {
+    this.loading = true;
     console.log(this.defaults);
     console.log(this.defaultsUser);
     this.defaultsUser.email = this.defaults.email;
