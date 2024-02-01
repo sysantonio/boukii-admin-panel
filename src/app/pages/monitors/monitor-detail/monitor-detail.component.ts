@@ -618,7 +618,7 @@ export class MonitorDetailComponent {
   }
 
   getSchoolRel() {
-    this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id+'&station_id='+this.defaults.active_station)
+    this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.monitorSchoolRel = data.data;
       })
