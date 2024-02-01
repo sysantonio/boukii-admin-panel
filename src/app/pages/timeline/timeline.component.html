@@ -139,8 +139,9 @@
                         <div class="day" *ngFor="let day of weekDays;let dayIndex = index">{{ day | translate }} {{ getDayOfWeek(dayIndex) }}</div>
                     </div>
                     <div class="grid-container">
+                      <!-- aplicar sombreado -->
                         <div class="grid-row" *ngFor="let monitor of filteredMonitors;let monitorIndex = index"
-                      [ngClass]="{'outside-month-day': !isDayVisibleDay() && timelineView == 'day', 'select-row': moveTask && monitor.id !== taskMoved.monitor_id, 'bg-linear-no-match': moveTask && monitor.id !== null && searchMonitorMatch(monitor.id)}"
+                      [ngClass]="{'outside-month-day': !isDayVisibleDay() && timelineView == 'day', 'select-row': moveTask && monitor.id !== taskMoved.monitor_id}"
                        (click)="moveMonitor(monitor,$event)">
                             <ng-container *ngIf="timelineView == 'day'">
                                 <div *ngFor="let hour of hoursRange;let last = last" [ngClass]="{'grid-cell-last': last, 'grid-cell': !last}" (dblclick)="handleDbClickEvent('Clicked', $event, 'day', hour, monitor.id)">
