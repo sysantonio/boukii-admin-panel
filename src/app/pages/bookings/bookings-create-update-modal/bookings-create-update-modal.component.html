@@ -144,11 +144,11 @@
             <mat-spinner *ngIf="loadingCalendar"></mat-spinner>
             <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
 
-              <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate"
+              <input matInput id="dateFromPrivate"  [readonly]="externalData && externalData.onlyPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate"
                 (dateChange)="emitDateChange($event)" (dateInput)="emitDateChange($event, true)">
               <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
               <mat-datepicker #pickerDateFrom [startAt]="selectedDatePrivate" [calendarHeaderComponent]="customHeader" (monthSelected)="monthChanged($event, pickerDateFrom)" [dateClass]="privateDateClass()"
-                ></mat-datepicker>
+              [disabled]="externalData && externalData.onlyPrivate"></mat-datepicker>
             </mat-form-field>
           </ng-container>
 
