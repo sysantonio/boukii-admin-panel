@@ -173,7 +173,7 @@
                                     <div *ngIf="task.type === 'private'">{{ task.all_clients[0].client.first_name}} {{ task.all_clients[0].client.last_name}}</div>
                                     <div *ngIf="task.type === 'private'">{{getLanguageById(task.all_clients[0].client.language1_id)}} ·{{getBirthYears(task.all_clients[0].client.birth_date)}} {{'years' |translate}}</div>
                                 </div>
-                                <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks" [ngStyle]="{'min-width': task.type === 'private' ? '34px' : '54px',
+                                <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks" [ngStyle]="{'min-width': task.type === 'private' ? '0px' : '54px',
                               'width': task.type === 'private' ? '34px' : '54px'}">
                                     <!-- PENDING LEVEL -->
                                     <ng-container *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">

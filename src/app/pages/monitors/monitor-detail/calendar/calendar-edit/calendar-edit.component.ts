@@ -276,8 +276,10 @@ export class CalendarEditComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
+        this.dialogRef.close();
+      } else {
+        this.selectedIndex = 0;
       }
-      this.selectedIndex = 0;
     });
   }
 }

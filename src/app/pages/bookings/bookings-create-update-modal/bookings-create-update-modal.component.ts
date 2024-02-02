@@ -510,8 +510,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           const dateLoop = moment(element.date).startOf('day').format('YYYY-MM-DD')
           if (dateLoop === this.externalData.date) {
 
-            item.course_date_id = element.id;
-            item.date = element.date;
+            this.courseDates[0].course_date_id = element.id;
+            this.courseDates[0].date = element.date;
           }
         });
 
@@ -796,7 +796,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 client_id: item.client_id,
                 course_id: item.course_id,
                 course_date_id: item.course_date_id,
-                monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
+                monitor_id: this.externalData.monitorId,
                 hour_start: item.hour_start,
                 hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
                 price: parseFloat(price),
@@ -831,7 +831,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                   client_id: person.id,
                   course_id: item.course_id,
                   course_date_id: item.course_date_id,
-                  monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
+                  monitor_id: this.externalData.monitorId,
                   hour_start: item.hour_start,
                   hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
                   price: 0,
@@ -852,7 +852,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               client_id: item.client_id,
               course_id: item.course_id,
               course_date_id: item.course_date_id,
-              monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
+              monitor_id: this.externalData.monitorId,
               hour_start: item.hour_start,
               hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
               price: parseFloat(item.price),
@@ -1095,13 +1095,17 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                   .subscribe(() => {
 
                     this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-                    this.goTo('/bookings/update/'+booking.data.id);
+                    this.dialogRef.close();
+                    //this.goTo('/bookings/update/'+booking.data.id);
                   })
               })
           } else {
             this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-            this.goTo('/bookings/update/'+booking.data.id);
+            this.dialogRef.close();
+            //this.goTo('/bookings/update/'+booking.data.id);
           }
+
+
         }, 1000);
       })
 
@@ -2424,6 +2428,10 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   generateCourseDurations(startTime: any, endTime: any, interval: any) {
 
+
+    if (interval.includes(':')) {
+      interval = this.transformTime(interval);
+    }
     const timeToMinutes = (time) => {
       const [hours, minutes] = time.split(':').map(Number);
       return hours * 60 + minutes;
