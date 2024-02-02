@@ -1418,7 +1418,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       }
     });
   }
-  getUtilzers(client: any, onLoad = false) {
+  getUtilzers(client: any, onLoad = false, event: any = {isUserInput: true}) {
+    if (event.isUserInput) {
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -1452,7 +1453,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         //this.getDegrees(this.defaults.sport_id);
         this.loadingUtilizers = false
       });
-
+    }
 
   }
 

@@ -1451,7 +1451,8 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       }
     });
   }
-  getUtilzers(client: any, onLoad = false) {
+  getUtilzers(client: any, onLoad = false, event: any = {isUserInput: true}) {
+    if (event.isUserInput) {
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -1469,7 +1470,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         if (!onLoad) {
           client.client_sports.forEach(sport => {
             if (sport.sport_id === this.defaults.sport_id) {
-              const level = this.levels.find((l) => l.id === this.bookingService.editData.degree_id);
+              const level = this.levels.find((l) => l.id === sport.degree_id);
 
               if (level) {
                 this.levelForm.patchValue(level);
@@ -1479,18 +1480,13 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               }
               ;
             }
-
-
           });
         }
 
         //this.getDegrees(this.defaults.sport_id);
-        if (!this.bookingService.editData.is_main) {
-          this.toggleBorder(this.utilizers.findIndex((u) => u.id === this.bookingService.editData.client_id), this.utilizers.find((u) => u.id === this.bookingService.editData.client_id))
-        }
         this.loadingUtilizers = false
       });
-
+    }
 
   }
 
