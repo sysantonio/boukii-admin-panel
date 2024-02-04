@@ -107,6 +107,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   user: any;
   schoolId: any;
   clients: any = [];
+  monitors: any = [];
   languages: any = [];
   sports: any = [];
   countries = MOCK_COUNTRIES;
@@ -151,6 +152,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.getMonitors();
     this.getClients();
     this.getSports();
     this.getLanguages();
@@ -667,6 +669,22 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
       return client;
     }
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
+    }
+  }
+
+  getMonitors() {
+    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+      .subscribe((monitor) => {
+        this.monitors = monitor.data;
+      })
   }
 
   getClients() {

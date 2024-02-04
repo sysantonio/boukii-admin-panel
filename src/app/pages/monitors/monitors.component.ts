@@ -54,10 +54,7 @@ export class MonitorsComponent {
 
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'name', property: 'first_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'surname', property: 'last_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'age', property: 'birth_date', type: 'birth', visible: true },
-    { label: 'Email', property: 'email', type: 'text', visible: true },
+    { label: 'monitor', property: 'first_name', type: 'monitor', visible: true, cssClasses: ['font-medium'] },
     { label: 'mobile', property: 'phone', type: 'text', visible: true },
     { label: 'sports', property: 'sports', type: 'sports_monitor', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
