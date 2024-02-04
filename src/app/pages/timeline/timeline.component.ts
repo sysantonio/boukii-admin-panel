@@ -753,9 +753,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
       //Background color of block tasks
       if (task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed') {
-        style['background-color'] = task.color;
-        styleWeek['background-color'] = task.color;
-        styleMonth['background-color'] = task.color;
+        style['background-color'] = this.hexToRgbA(task.color,0.4);
+        styleWeek['background-color'] = this.hexToRgbA(task.color,0.4);
+        styleMonth['background-color'] = this.hexToRgbA(task.color,0.4);
       }
 
       return {
@@ -864,6 +864,17 @@ export class TimelineComponent implements OnInit, OnDestroy {
     // Combine adjusted tasks with the rest
     this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
     this.loading = false;
+  }
+
+  hexToRgbA(hex:string, transparency = 1) {
+    const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!rgb) {
+        return null;
+    }
+    const r = parseInt(rgb[1], 16);
+    const g = parseInt(rgb[2], 16);
+    const b = parseInt(rgb[3], 16);
+    return `rgba(${r},${g},${b},${transparency})`;
   }
 
   getMonthWeekInfo(dateString:any) {
