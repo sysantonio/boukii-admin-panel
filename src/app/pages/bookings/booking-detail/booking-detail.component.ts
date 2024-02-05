@@ -160,6 +160,7 @@ export class BookingDetailComponent implements OnInit {
   bookingsToCreate = [];
   discounts = [];
   clients = [];
+  users = [];
   sportData = [];
   sportDataList = [];
   sportTypeData = [];
@@ -277,10 +278,11 @@ export class BookingDetailComponent implements OnInit {
       this.boukiiCarePrice = parseInt(this.settings?.taxes?.boukii_care_price);
       this.tva = parseFloat(this.settings?.taxes?.tva);
 
-      forkJoin([this.getSportsType(), this.getClients()])
+      forkJoin([this.getSportsType(), this.getClients(), this.getUsers()])
       .subscribe((data: any) => {
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
+        this.users = data[2].data;
         this.detailClient = this.clients[0];
         this.crudService.get('/bookings/'+this.id)
         .subscribe((data) => {
@@ -764,6 +766,15 @@ export class BookingDetailComponent implements OnInit {
       })*/
   }
 
+  getUsers() {
+    return this.crudService.list('/users', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id);/*
+      .subscribe((data: any) => {
+        this.clients = data.data;
+        this.loading = false;
+
+      })*/
+  }
+
   getSportsType() {
     return this.crudService.list('/sport-types', 1, 1000);/*
       .subscribe((data) => {
@@ -1066,6 +1077,15 @@ export class BookingDetailComponent implements OnInit {
       const client = this.clients.find((m) => m.id === id);
 
       return client;
+    }
+  }
+
+  getUser(id: number) {
+    if (id && id !== null) {
+
+      const user = this.users.find((m) => m.id === id);
+
+      return user;
     }
   }
 
