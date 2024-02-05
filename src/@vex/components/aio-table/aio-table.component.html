@@ -473,7 +473,7 @@
           <ng-container *ngIf="column.type === 'datesCourse'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row, let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <strong><span style="text-align:center">{{countActives(row[column.property])}} Jours</span></strong><br>
+              <strong><span style="text-align:center">{{countActives(row[column.property])}} {{'days' | translate}}</span></strong><br>
               <span style="text-align:center">{{findFirstActive(row[column.property]).min | date: 'dd/MM/YYYY'}} - {{findFirstActive(row[column.property]).max | date: 'dd/MM/YYYY'}}</span>
             </td>
           </ng-container>

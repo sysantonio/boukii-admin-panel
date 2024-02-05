@@ -2309,85 +2309,78 @@ export class BookingDetailModalComponent implements OnInit {
 
   goToEdit(index: any, item: any) {
 
-    if (!this.courses[index].is_flexible) {
-      let price = parseFloat(item.price_total);
+    this.bookingService.editData.id = this.id;
+    this.bookingService.editData.booking = this.booking;
+    this.bookingService.editData.price = this.finalPrice;
+    this.bookingService.editData.client_main_id = this.booking.client_main_id;
+    this.bookingService.editData.booking_extras = this.bookingExtras;
+    this.bookingService.editData.course_id = this.courses[index].id;
+    this.bookingService.editData.sport_id = this.courses[index].sport_id;
+    this.bookingService.editData.course_type = this.courses[index].course_type;
+    this.bookingService.editData.course_is_flexible = this.courses[index].is_flexible;
+    this.bookingService.editData.client_id = this.bookingsToCreate[index].courseDates[0].client_id;
+    this.bookingService.editData.degree_id = this.bookingsToCreate[index].courseDates[0].degree_id;
+    this.bookingService.editData.booking_users = this.bookingsToCreate[index].courseDates;
+    this.bookingService.editData.is_main = this.bookingService.editData.client_main_id === this.bookingService.editData.client_id;
 
-      if (this.tva && !isNaN(this.tva)) {
-        price = price + (price * this.tva);
-      }
+    this.router.navigate(['bookings/edit/'+this.id]);
 
-      if(this.booking.has_boukii_care) {
-        // coger valores de reglajes
-        price = price  + (this.boukiiCarePrice * 1 * this.bookingsToCreate[index].courseDates.length);
-      }
+  }
 
+  editDates(index: any, item: any) {
+    if (this.courses[index].course_type === 2) {
 
-      this.bookingService.editData.id = this.id;
-      this.bookingService.editData.booking = this.booking;
-      this.bookingService.editData.price = price;
-      this.bookingService.editData.client_main_id = this.booking.client_main_id;
-      this.bookingService.editData.booking_extras = this.bookingExtras;
-      this.bookingService.editData.course_id = this.courses[index].id;
-      this.bookingService.editData.sport_id = this.courses[index].sport_id;
-      this.bookingService.editData.course_type = this.courses[index].course_type;
-      this.bookingService.editData.course_is_flexible = this.courses[index].is_flexible;
-      this.bookingService.editData.client_id = this.bookingsToCreate[index].courseDates[0].client_id;
-      this.bookingService.editData.degree_id = this.bookingsToCreate[index].courseDates[0].degree_id;
-      this.bookingService.editData.booking_users = this.bookingsToCreate[index].courseDates;
-      this.bookingService.editData.is_main = this.bookingService.editData.client_main_id === this.bookingService.editData.client_id;
+      const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
+        width: '60vw',
+        maxWidth: '100vw',
+        panelClass: 'full-screen-dialog',
+        data: {
+          course: this.courses[index],
+          dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id),
+          mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0),
+          clientIds: [...new Set(this.clientsIds)],
+          tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
+      });
 
-      this.router.navigate(['bookings/edit/'+this.id]);
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          this.getData(true);
+        }
+      });
     } else {
-      if (this.courses[index].course_type === 2) {
-        const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
-          width: '60vw',
-          maxWidth: '100vw',
-          panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index], dates: this.bookingUsersUnique.filter((b) => b.course_id === this.courses[index].id),
-            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0), clientIds: this.clientsIds,
-            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice, cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
-        });
+      const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
+        width: '60vw',
+        maxWidth: '100vw',
+        panelClass: 'full-screen-dialog',
+        data: {
+          course: this.courses[index],
+          dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
+          mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0),
+          mainPrice: this.getBasePrice(),
+          clientIds: [item.courseDates[0].client_id],
+          tva: this.tva, boukiiCarePrice: this.boukiiCarePrice,
+          cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
+      });
 
-        dialogRef.afterClosed().subscribe((data: any) => {
-          if (data) {
-            this.getData(true);
-          }
-        });
-      } else {
-        const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
-          width: '60vw',
-          maxWidth: '100vw',
-          panelClass: 'full-screen-dialog',
-          data: {course: this.courses[index],
-            dates: this.bookingUsers.filter((b) => b.course_id === this.courses[index].id && b.client_id === item.courseDates[0].client_id),
-            mainBooking: this.bookingUsersUnique.find((b) => parseFloat(b.price) > 0),
-            mainPrice: this.getBasePrice(),
-            clientIds: [item.courseDates[0].client_id],
-            tva: this.tva, boukiiCarePrice: this.boukiiCarePrice,
-            cancellationInsurance: this.cancellationInsurance, bookingExtras: this.bookingExtras, courseExtra: this.courseExtra}
-        });
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          this.bookingExtras.forEach(element => {
+            this.crudService.delete('/booking-user-extras', element.id)
+            .subscribe(() => {})
+          });
 
-        dialogRef.afterClosed().subscribe((data: any) => {
-          if (data) {
-            this.bookingExtras.forEach(element => {
-              this.crudService.delete('/booking-user-extras', element.id)
+          this.courseExtra.forEach(element => {
+            this.crudService.delete('/course-extras', element.id)
               .subscribe(() => {})
-            });
 
-            this.courseExtra.forEach(element => {
-              this.crudService.delete('/course-extras', element.id)
-                .subscribe(() => {})
+          });
 
-            });
+          setTimeout(() => {
+            this.getData(true);
 
-            setTimeout(() => {
-              this.getData(true);
-
-            }, 500);
-          }
-        });
-
-      }
+          }, 500);
+        }
+      });
 
     }
   }
