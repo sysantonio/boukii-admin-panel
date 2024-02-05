@@ -894,7 +894,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
         client_main_id: element.client_main_id,
         paxes: paxes,
         payment_method_id: this.defaults.payment_method_id,
-        source: 'admin'
+        source: 'admin',
+        user_id: this.user.id
       }
     });
 
