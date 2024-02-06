@@ -131,9 +131,9 @@
         </div>
 
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
-        <ng-container>
+        <div style="width: 100%; float:left">
           <mat-spinner *ngIf="loadingCalendar"></mat-spinner>
-          <mat-form-field class="flex-auto" style="width: 50%"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
+          <mat-form-field class="flex-auto" style="width: 50%; float:left"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
 
             <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate"
               (dateChange)="emitDateChange($event)" (dateInput)="emitDateChange($event, true)">
@@ -141,47 +141,77 @@
             <mat-datepicker #pickerDateFrom [startAt]="selectedDatePrivate" [calendarHeaderComponent]="customHeader" (monthSelected)="monthChanged($event, pickerDateFrom)" [dateClass]="privateDateClass()"
               ></mat-datepicker>
           </mat-form-field>
-        </ng-container>
+
+          <mat-list-item class="custom-list-item" *ngIf="selectedItem !== null && courseType === 'privee'" style="width: 48%;float: left;background: #f5f5f5;border: 2px solid #E6E6E6;margin: 0 0 4% 2%;">
+            <div class="avatar-container">
+              <img mat-list-avatar class="custom-avatar" [src]="selectedItem.course_type === 1 ? collectifIcon : privateIcon" />
+            </div>
+            <div class="content-container">
+              <div class="title-container">
+                <h3 class="title" style="width: 70%;float: left; text-wrap:balance">{{ selectedItem.name | uppercase}}</h3>
+                <h3 class="price" *ngIf="!selectedItem.is_flexible">
+                  {{selectedItem.price}} {{ selectedItem.currency }}
+                </h3>
+                <h3 class="price" *ngIf="selectedItem.is_flexible">
+                  {{'flex' | uppercase |translate}}
+                </h3>
+              </div>
+              <p>{{(selectedItem.course_type === 1 ? 'colective' : 'private') | translate}} {{selectedItem.sport.name}}</p>
+              <p>
+                {{selectedItem.date_start | date: 'dd-MM-YYYY'}} - {{selectedItem.date_end | date: 'dd-MM-YYYY'}}
+              </p>
+              <p style="text-wrap: balance;">
+                {{getAvailableWeekDays(selectedItem.settings)}}
+              </p>
+              <p>
+                {{selectedItem.duration}}
+              </p>
+            </div>
+          </mat-list-item>
+          <mat-icon *ngIf="selectedItem !== null && courseType === 'privee'" svgIcon="mat:view_list" style="float: right;color: #E91E63;height: 40px;width: 40px;cursor: pointer;" (click)="backToList()"></mat-icon>
+
+        </div>
 
         <div class="columns-container" *ngIf="courseType !== null">
           <!-- Columna de la lista privados -->
-          <div class="list-column" *ngIf="courseType === 'privee'">
+          <div class="list-column" *ngIf="courseType === 'privee'" [ngStyle]="{'width': selectedItem === null && courseType === 'privee' ? '50%' : '0'}">
             <div class="list-overflow-container">
-              <mat-list class="list mat-elevation-z1">
-                <mat-list-item class="custom-list-item" *ngFor="let course of courses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
-                  <div class="avatar-container">
-                    <img mat-list-avatar class="custom-avatar" [src]="course.course_type === 1 ? collectifIcon : privateIcon" />
-                  </div>
-                  <div class="content-container">
-                    <div class="title-container">
-                      <h3 class="title" style="width: 70%;float: left; text-wrap:balance">{{ course.name | uppercase}}</h3>
-                      <h3 class="price" *ngIf="!course.is_flexible">
-                        {{course.price}} {{ course.currency }}
-                      </h3>
-                      <h3 class="price" *ngIf="course.is_flexible">
-                        {{'flex' | uppercase |translate}}
-                      </h3>
+              <ng-container *ngIf="selectedItem === null">
+                <mat-list class="list mat-elevation-z1">
+                  <mat-list-item class="custom-list-item" *ngFor="let course of courses" (click)="selectItem(course)" [ngClass]="{'selected-item': selectedItem === course}">
+                    <div class="avatar-container">
+                      <img mat-list-avatar class="custom-avatar" [src]="course.course_type === 1 ? collectifIcon : privateIcon" />
                     </div>
-                    <p>{{course.course_type === 1 ? 'collectif' : 'privee'}} {{course.sport.name}}</p>
-                    <p>
-                      {{course.date_start | date: 'dd-MM-YYYY'}} - {{course.date_end | date: 'dd-MM-YYYY'}}
-                    </p>
-                    <p style="text-wrap: balance;">
-                      {{getAvailableWeekDays(course.settings)}}
-                    </p>
-                    <p>
-                      {{course.duration}}
-                    </p>
-                  </div>
-                </mat-list-item>
-              </mat-list>
+                    <div class="content-container">
+                      <div class="title-container">
+                        <h3 class="title" style="width: 70%;float: left; text-wrap:balance">{{ course.name | uppercase}}</h3>
+                        <h3 class="price" *ngIf="!course.is_flexible">
+                          {{course.price}} {{ course.currency }}
+                        </h3>
+                        <h3 class="price" *ngIf="course.is_flexible">
+                          {{'flex' | uppercase |translate}}
+                        </h3>
+                      </div>
+                      <p>{{(course.course_type === 1 ? 'colective' : 'private') | translate}} {{course.sport.name}}</p>
+                      <p>
+                        {{course.date_start | date: 'dd-MM-YYYY'}} - {{course.date_end | date: 'dd-MM-YYYY'}}
+                      </p>
+                      <p style="text-wrap: balance;">
+                        {{getAvailableWeekDays(course.settings)}}
+                      </p>
+                      <p>
+                        {{course.duration}}
+                      </p>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </ng-container>
             </div>
           </div>
 
           <!-- Campos privados -->
 
-          <div class="calendar-column" *ngIf="courseType === 'privee' && selectedItem !== null">
-
+          <div class="calendar-column" *ngIf="courseType === 'privee' && selectedItem !== null" style="width: 100%">
             <ng-container>
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 

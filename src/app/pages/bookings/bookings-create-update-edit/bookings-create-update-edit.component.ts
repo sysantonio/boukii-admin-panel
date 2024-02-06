@@ -582,6 +582,18 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     this.setCourseType(null, -1);
   }
 
+  backToList() {
+    this.selectedItem = null;
+    this.selectedCourseDateItem = null;
+    this.selectedSubGroupItem = null;
+    this.selectedSubGroupItemIndex = null;
+    this.reservableCourseDate = [];
+    this.periodMultiple = false;
+    this.periodUnique = true;
+    this.sameMonitor = false;
+    this.showDetail = null;
+  }
+
   confirmBooking() {
 
     let paxes = 0;
