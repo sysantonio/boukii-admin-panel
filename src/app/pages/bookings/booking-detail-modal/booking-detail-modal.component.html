@@ -399,8 +399,7 @@
               <div class="square-buttons-container" *ngIf="selectedButton==='1'">
                 <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">{{'payment_cash' | translate}}</button>
                 <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">{{'payment_other' | translate}}</button>
-                <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'">Boukii Pay</button>
-              </div>
+                <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'" [disabled]="booking.payrexx_reference === null">Boukii Pay</button>              </div>
               <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
                 <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
