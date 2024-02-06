@@ -19,21 +19,21 @@
               <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">{{'participant' | translate}} | </p>
 
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="!booking.paid && item.courseDates[0].status === 1">
-                <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" style="float: right;">
+                <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)">
                   <mat-icon svgIcon="mat:delete"></mat-icon>
                 </button>
                 {{'no_paid' | translate | uppercase }}
 
               </p>
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#8fd14f" *ngIf="(booking.status === 1 || booking.status === 3) && booking.paid && item.courseDates[0].status === 1">
-                <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" style="float: right;" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
+                <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                   <mat-icon svgIcon="mat:delete"></mat-icon>
                 </button>
                 {{'ispaid' | translate | uppercase }}
 
               </p>
               <p style="padding: 5% 5% 0 0;width: 60%;float: left;font-size: 13px;text-align: right;font-weight: 500;color:#fac710" *ngIf="item.courseDates[0].status === 2">
-                <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" style="float: right;" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
+                <button mat-icon-button color="warn" class="delete-icon" (click)="deletePartialBooking(bI, item)" *ngIf="bookingsToCreate.length > 1 && item.courseDates[0].status === 1">
                   <mat-icon svgIcon="mat:delete"></mat-icon>
                 </button>
                 {{'cancelled' | translate | uppercase }}
