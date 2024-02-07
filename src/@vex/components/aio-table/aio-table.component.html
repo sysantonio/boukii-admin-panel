@@ -610,7 +610,7 @@
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
         <tr (click)="showDetailFn(row)"
-            [ngStyle]="{'background': entity === '/bookings' && row.price_total - row.paid_total < 0 ? '#ffdaa9' : ''}"
+            [ngStyle]="{'background': entity === '/bookings' && row.price_total - row.paid_total < 0 && row.paid ? '#ffdaa9' : ''}"
             *matRowDef="let row; columns: visibleColumns;"
             @fadeInUp
             class="hover:bg-hover trans-ease-out cursor-pointer"
