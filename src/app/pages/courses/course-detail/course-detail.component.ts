@@ -5,8 +5,6 @@ import moment from 'moment';
 import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
-import { LEVELS } from 'src/app/static-data/level-data';
-import { MOCK_MONITORS } from 'src/app/static-data/monitors-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -355,14 +353,14 @@ export class CourseDetailComponent implements OnInit {
     return ret;
   }
 
-  hasMonitorAssigned(date, level) {
+  hasMonitorAssigned(date, level, gIndex) {
 
     const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === date.date);
     const group = courseDate.course_groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
 
     if (group) {
-      const find = group.course_subgroups.find((c) => c.course_date_id === courseDate.id);
-      return find && find.monitor_id !== null;
+      const find = group.course_subgroups[gIndex].course_date_id === courseDate.id ? group.course_subgroups[gIndex] : null;
+      return find.monitor_id !== null;
 
     }
   }

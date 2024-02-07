@@ -2,12 +2,14 @@
   <button mat-button mat-dialog-close>X</button>
 </mat-dialog-actions>
 <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
-<div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading">
+<div [@stagger]="true"class="p-gutter container"style="max-width: none" >
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;padding: 2%">
     <div @fadeInUp class="card flex-auto">
       <mat-tab-group>
         <mat-tab label="{{'course' | translate }}">
-          <mat-card style="padding: 3% 5% 0 5%;">
+          <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
+
+          <mat-card style="padding: 3% 5% 0 5%;" *ngIf="!loading">
             <mat-card-header style="display:block">
               <div style="float: left; width: 100%;">
                 <div style="float: left;width: 50%;">
@@ -16,12 +18,12 @@
                     <img [src]="'https://school.boukii.com/assets/icons/prive_'+ defaults?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" *ngIf="defaults.course_type === 2">
                   </div>
                   <div style="float: left; width: 75%;">
-                    <p><strong>{{defaults.name}}</strong></p>
+                    <p><strong>{{getCourseName(defaults)}}</strong></p>
                     <p>{{defaults.course_type === 1 ? 'Collectif' : 'Privee'}}  {{defaults?.sport?.name}}</p>
                     <p>{{defaults?.station?.name}}</p>
                   </div>
 
-                  <div style="float: right;" style="float: right;cursor:pointer" (click)="openUpdateCourse()">
+                  <div style="float: right;" style="float: right;cursor:pointer" (click)="goTo('/courses/update/'+this.id)">
                     <i class="fa fa-edit" style="color: #ff3085;font-size: 30px;"></i>
                   </div>
                 </div>
@@ -73,7 +75,7 @@
                   <p style="float: left;width: 20%;text-align: right;"><b>{{'price' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
-                  <p style="float: left;width: 50%;text-align: left;" [innerHTML]="defaults.short_description">
+                  <p style="float: left;width: 50%;text-align: left;" [innerHTML]="getShotrDescription(defaults)">
 
                   </p>
                   <p style="float: left;width: 50%;text-align: right;color:#ff3085"><b>{{defaults.price}}</b> CHF</p>
@@ -136,8 +138,9 @@
         </mat-tab>
 
         <mat-tab label="{{'level' | translate }}" *ngIf="defaults.course_type === 1">
+          <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
-          <mat-card style="padding: 0 3%;">
+          <mat-card style="padding: 0 3%;"*ngIf="!loading">
             <mat-card-header style="display:block">
               <div style="width: 100%;float:left;">
                 <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate }}</mat-card-title>
@@ -189,7 +192,6 @@
                                 *ngIf="groupLevel.visible && groupLevel.active" (click)="groupLevel.visible = false">
                                   {{groupLevel.annotation}} - {{groupLevel.name}}
                                 </div>
-
                                 <div style="width:100%;text-align: center;border-radius:10px;height: 100px;padding: 2%;color: #fff;cursor:pointer" [style.background-color]="colorKey"
                                 *ngIf="!groupLevel.visible && !groupLevel.active">
                                   {{groupLevel.annotation}} - {{groupLevel.name}}
@@ -312,7 +314,7 @@
 
                                             <li style="float: left; width: 13%;margin: 3% 0 0 0;" *ngIf="item.active === 1">
                                               <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel)? '#CEE741': 'red'}"></div>
+                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex) ? '#CEE741': 'red'}"></div>
                                             </li>
                                           </ng-container>
                                         </ul>
@@ -336,7 +338,10 @@
                                                 </div>
                                                 <div style="float: left; width: 75%;">
                                                   <p style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}} {{getClient(courseUser.client_id)?.last_name}}</p>
-                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id)?.language1_id)}} · {{ getCountry(getClient(courseUser.client_id)?.country) }} · {{calculateAge(getClient(courseUser.client_id)?.birth_date)}} {{'years' | translate }}</p>
+                                                  <p style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id)?.language1_id)}}
+                                                    · {{ getCountry(getClient(courseUser.client_id)?.country) }}
+                                                    · {{ calculateAge(getClient(courseUser.client_id)?.birth_date) }}
+                                                    {{'years' | translate }}</p>
                                                 </div>
                                               </div>
                                             </li>
