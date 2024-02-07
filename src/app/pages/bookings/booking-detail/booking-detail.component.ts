@@ -465,8 +465,9 @@ export class BookingDetailComponent implements OnInit {
   getUniqueBookingUsers() {
     const clientIds = new Set();
     this.bookingUsersUnique = this.bookingUsers.filter(item => {
-      if (!clientIds.has(item.course_id)) {
+      if (!clientIds.has(item.course_id) || !clientIds.has(item.client_id)) {
         clientIds.add(item.course_id);
+        clientIds.add(item.client_id);
         return true;
       }
       return false;
