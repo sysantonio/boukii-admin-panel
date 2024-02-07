@@ -18,6 +18,7 @@ export class MailService {
   filterValue$ = this.filterValue.asObservable();
   filteredMails$:any = new Observable();
   school: any;
+  user: any;
 
   constructor(private crudService: ApiCrudService, private schoolService: SchoolService, private translateService: TranslateService) {
 
@@ -25,7 +26,9 @@ export class MailService {
   }
 
   getData() {
-    this.schoolService.getSchoolData()
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
+    this.schoolService.getSchoolData(this.user)
       .subscribe((data) => {
         this.school = data.data;
         const rqs = [];

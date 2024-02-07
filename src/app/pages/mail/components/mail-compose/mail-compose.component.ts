@@ -56,12 +56,15 @@ export class MailComposeComponent implements OnInit {
   sendMonitors = false;
   loading = true;
   loadingCourses = false;
+  user: any;
 
   constructor(private cd: ChangeDetectorRef, private crudService: ApiCrudService, private schoolService: SchoolService,
               private dialogRef: MatDialogRef<MailComposeComponent>, private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.schoolService.getSchoolData()
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+
+    this.schoolService.getSchoolData(this.user)
       .subscribe((data) => {
         this.school = data.data;
         this.crudService.list('/mails', 1, 1000, 'desc', 'id', '&school_id='+this.school.id)

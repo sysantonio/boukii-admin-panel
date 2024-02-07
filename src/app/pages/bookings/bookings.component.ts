@@ -54,7 +54,7 @@ export class BookingsComponent {
   constructor(private crudService: ApiCrudService, private router: Router, private schoolService: SchoolService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
-    this.schoolService.getSchoolData().subscribe((school) => {
+    this.schoolService.getSchoolData(this.user).subscribe((school) => {
       this.school = school.data;
     })
     this.getMonitors();
