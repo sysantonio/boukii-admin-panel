@@ -220,6 +220,7 @@ export class MailComposeComponent implements OnInit {
           type: this.mailType,
           subject: data[i][0].subject,
           body: data[i][0].body,
+          title: data[i][0].title,
           school_id: this.school.id,
           lang: data[i][0].lang
         }

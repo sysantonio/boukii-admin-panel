@@ -60,6 +60,6 @@ export class MailListComponent implements OnInit {
   }
 
   checkMailType(mail: any) {
-    return (location.pathname.includes('general') && mail.lang) || (location.pathname.includes('auto') && !mail.lang);
+    return (location.pathname.includes('auto') && mail.lang) || (location.pathname.includes('general') && !mail.lang);
   }
 }

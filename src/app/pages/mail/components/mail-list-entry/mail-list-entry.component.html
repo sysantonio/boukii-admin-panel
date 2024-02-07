@@ -39,6 +39,7 @@
     <p [ngClass]="{ 'font-semibold text-black': !mail?.read }"
        class="text-sm leading-normal truncate text-secondary">{{ mail?.subject }}</p>
     <div class="flex items-start">
+      <p class="text-xs text-secondary leading-tight truncate mt-1">{{ mail?.title | stripHtml }}</p>
       <p class="text-xs text-secondary leading-tight truncate mt-1">{{ mail?.body | stripHtml }}</p>
       <vex-mail-label *ngFor="let label of mail?.labels"
                       [label]="label?.label"
