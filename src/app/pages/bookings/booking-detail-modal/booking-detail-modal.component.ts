@@ -1683,8 +1683,13 @@ export class BookingDetailModalComponent implements OnInit {
         if(data.type === 'no_refund') {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-              this.goTo('/bookings');
+              this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+                .subscribe(() => {
+
+                  this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
+                  this.dialogRef.close();
+                  this.goTo('/bookings');
+                })
           })
 
         } else if(data.type === 'boukii_pay') {
@@ -1698,9 +1703,13 @@ export class BookingDetailModalComponent implements OnInit {
                   .subscribe(() => {
                     this.crudService.update('/bookings', {status: 2}, this.booking.id)
                       .subscribe(() => {
+                        this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+                        .subscribe(() => {
 
-                        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
-                        this.getData();
+                          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+                          this.getData();
+                        })
+
                       })
                 })
               } else {
@@ -1722,8 +1731,14 @@ export class BookingDetailModalComponent implements OnInit {
 
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-              this.goTo('/bookings');
+              this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+              .subscribe(() => {
+
+
+                this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
+                this.dialogRef.close();
+                this.goTo('/bookings');
+              })
 
             })
           })
@@ -1743,6 +1758,10 @@ export class BookingDetailModalComponent implements OnInit {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
 
+              this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+              .subscribe(() => {
+              })
+
               this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'refund', notes: 'voucher'})
                 .subscribe(() => {
 
@@ -1756,93 +1775,14 @@ export class BookingDetailModalComponent implements OnInit {
 
                         })
                   this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
+                  this.dialogRef.close();
                   this.goTo('/bookings');
 
                 })
             })
           })
-        } else if(data.type === 'refund_bonus') {
-
-          if (data.unifyBonus) {
-
-            this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
-            .subscribe(() => {
-              this.crudService.update('/bookings', {status: 2}, this.booking.id)
-              .subscribe(() => {
-
-                let vData = {
-                  code: "BOU-"+this.generateRandomNumber(),
-                  quantity: 0,
-                  remaining_balance: 0,
-                  payed: false,
-                  client_id: this.booking.client_main_id,
-                  school_id: this.user.schools[0].id
-                };
-                data.bonus.forEach(element => {
-                  vData.quantity = vData.quantity + element.bonus.currentPay;
-                  vData.remaining_balance = vData.remaining_balance + element.bonus.currentPay;
-                });
-
-                  this.crudService.create('/vouchers', vData)
-                    .subscribe((result) => {
-
-                      this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
-                        .subscribe((vresult) => {
-                          console.log(vresult);
-                          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-                          this.goTo('/bookings');
-
-                        })
-                    })
-
-              })
-            })
-
-          } else {
-            if (data.bonus.length > 0) {
-              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
-                .subscribe(() => {
-
-                this.crudService.update('/bookings', {status: 2}, this.booking.id)
-                .subscribe(() => {
-                  data.bonus.forEach(element => {
-                    const vData = {
-                      code: element.bonus.code,
-                      quantity: element.bonus.currentPay,
-                      remaining_balance: element.bonus.remaining_balance + element.bonus.currentPay,
-                      payed: false,
-                      client_id: element.bonus.client_id,
-                      school_id: this.user.schools[0].id
-                    };
-                    this.crudService.update('/vouchers', vData, element.bonus.id)
-                      .subscribe((result) => {
-
-                        this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -element.bonus.reducePrice})
-                          .subscribe((vresult) => {
-                            console.log(vresult);
-                            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-                            this.goTo('/bookings');
-
-                          })
-                      })
-                  });
-                })
-              })
-
-            } else {
-              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
-                .subscribe(() => {
-
-                  this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
-                  this.goTo('/bookings');
-                /*this.crudService.delete('/bookings', this.booking.id)
-                .subscribe(() => {
-
-                })*/
-              })
-            }
-          }
         }
+
 
         this.bookingUsers.forEach(element => {
           this.crudService.update('/booking-users', {status: 2}, element.id)
@@ -1888,6 +1828,10 @@ export class BookingDetailModalComponent implements OnInit {
               .subscribe(() => {
               })
             });
+
+            this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+              .subscribe(() => {
+              })
           });
           this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
@@ -1898,15 +1842,17 @@ export class BookingDetailModalComponent implements OnInit {
             this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
             .subscribe(() => {
               if (this.booking.paid) {
-
-                book.courseDates.forEach(element => {
-                  this.crudService.update('/booking-users', {status: 2}, element.id)
-                  .subscribe(() => {
-                  })
-                })
-
                 this.crudService.post('/admin/bookings/refunds/'+this.id, {amount: this.bookingsToCreate[index].price_total})
                   .subscribe(() => {
+                    book.courseDates.forEach(element => {
+                      this.crudService.update('/booking-users', {status: 2}, element.id)
+                      .subscribe(() => {
+                      })
+                    })
+
+                    this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+                      .subscribe(() => {
+                      })
                     this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
                     this.getData();
                 })
@@ -1930,6 +1876,10 @@ export class BookingDetailModalComponent implements OnInit {
               .subscribe(() => {
               })
             })
+
+            this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+              .subscribe(() => {
+              })
           })
           this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 
@@ -1949,8 +1899,12 @@ export class BookingDetailModalComponent implements OnInit {
               .subscribe(() => {
               })
             })
+
           })
 
+          this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
+          .subscribe(() => {
+          })
           this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingsToCreate[index].price_total, status: 'refund', notes: 'vouher'})
             .subscribe(() => {
 
@@ -1969,7 +1923,7 @@ export class BookingDetailModalComponent implements OnInit {
         }
 
         setTimeout(() => {
-          if (this.bookingsToCreate.length === 0){
+          if (this.bookingsToCreate.length === 0) {
             this.crudService.update('/bookings', {status: 2}, this.id)
             .subscribe(() => {
               this.getData(true);
@@ -2021,7 +1975,6 @@ export class BookingDetailModalComponent implements OnInit {
       }
     });
   }
-
 
   generateRandomNumber() {
     const min = 10000000; // límite inferior para un número de 5 cifras
