@@ -85,7 +85,7 @@
             <div style="float:left; width: 100%">
 
               <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'activity' | translate}}</p>
-              <button mat-icon-button color="success" class="delete-icon" (click)="editDates(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1 && item?.courseDates[0].is_flexible">
+              <button mat-icon-button color="success" class="delete-icon" (click)="editDates(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1 && !item?.courseDates[0].is_flexible">
                 <mat-icon svgIcon="mat:sync" style="color:#FF4081"></mat-icon>
               </button>
               <button mat-icon-button color="success" class="delete-icon" (click)="editDates(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1">
