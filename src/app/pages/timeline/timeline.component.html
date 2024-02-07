@@ -547,7 +547,7 @@
                             <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length" [allLevels]="taskDetail.degrees_sport" [selectLevel]="getClientDegree(taskDetail.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                             <div class="box-detail-user-block-text">
                                 <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
-                                <span>
+                                <span style="float:left;width:80%;">
                                     <ng-container *ngIf="client.client.language1_id">
                                         {{getLanguageById(client.client.language1_id)}} ·
                                     </ng-container>
@@ -559,6 +559,9 @@
                                     </ng-container>
                                     {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
                                     · {{client.client.phone}} · {{client.client.email}}
+                                </span>
+                                <span style="float:left;cursor:pointer" (click)="detailBooking(client.booking_id)">
+                                  <img src="../assets/img/icons/reservas-2.svg"/>
                                 </span>
                             </div>
                         </div>

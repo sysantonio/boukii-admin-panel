@@ -1860,14 +1860,14 @@ export class TimelineComponent implements OnInit, OnDestroy {
       })
   }
 
-  detailBooking() {
+  detailBooking(bookingId = null) {
     const dialogRef = this.dialog.open(BookingDetailModalComponent, {
       width: '100%',
       height: '1200px',
       maxWidth: '90vw',
       panelClass: 'full-screen-dialog',
       data: {
-        id: this.taskDetail.booking_id,
+        id: bookingId !== null ? bookingId : this.taskDetail.booking_id,
       }
     });
 
