@@ -1587,7 +1587,7 @@ export class BookingDetailComponent implements OnInit {
             quantity: this.booking.price_total,
             remaining_balance: this.booking.price_total,
             payed: false,
-            client_id: data.client_main_id,
+            client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id
           };
 
