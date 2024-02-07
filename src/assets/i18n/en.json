@@ -543,5 +543,6 @@
   "bookings_page.cancelations.refund_no_boukiipay_text": "This reservation cannot be returned through Boukii Pay since it was not paid through this platform.",
   "payment": "Pay",
   "refund": "Return",
+  "no_refund": "No Refund",
   "payment_history": "Payment history"
 }

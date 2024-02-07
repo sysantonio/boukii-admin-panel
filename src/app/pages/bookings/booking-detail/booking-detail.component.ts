@@ -1436,6 +1436,10 @@ export class BookingDetailComponent implements OnInit {
           this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
           .subscribe(() => {
 
+            this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingPendingPrice, status: 'no_refund', notes: 'no refund applied'})
+              .subscribe(() => {
+              })
+
             this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
             this.getData();
 
@@ -1523,6 +1527,9 @@ export class BookingDetailComponent implements OnInit {
         if(data.type === 'no_refund') {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
+              this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingPendingPrice, status: 'no_refund', notes: 'no refund applied'})
+              .subscribe(() => {
+              })
               this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
                 .subscribe(() => {
 
@@ -1659,7 +1666,9 @@ export class BookingDetailComponent implements OnInit {
 
           this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
           .subscribe(() => {
-
+            this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: book.price_total, status: 'no_refund', notes: 'no refund applied'})
+            .subscribe(() => {
+            })
             book.courseDates.forEach(element => {
               this.crudService.update('/booking-users', {status: 2}, element.id)
               .subscribe(() => {

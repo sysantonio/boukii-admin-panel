@@ -550,5 +550,6 @@
   "bookings_page.cancelations.refund_no_boukiipay_text": "Esta reserva no puede devolververse a través de Boukii Pay ya que no se pago a través de esta plataforma.",
   "payment": "Pago",
   "refund": "Devolución",
+  "no_refund": "Sin reembolso",
   "payment_history": "Histórico de pagos"
 }
