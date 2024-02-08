@@ -37,7 +37,9 @@ export class ConfirmUnmatchMonitorComponent implements OnInit {
         };
 
 
-        if (!this.langMatch(monitorLanguages, clientLanguages)) {
+        if (this.langMatch(monitorLanguages, clientLanguages)) {
+          this.problem = this.problem;
+        } else {
           this.problem = 'language_match';
         }
       });

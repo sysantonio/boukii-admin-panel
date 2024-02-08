@@ -1000,7 +1000,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
             date: this.taskDetail.date,
             clientIds: clientIds
     };
-    
+
           firstValueFrom(this.crudService.post('/admin/monitors/available', data))
             .then(response => {
               this.monitorsForm = response.data;
@@ -1070,86 +1070,29 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
     //console.log(data);
 
-    this.crudService.post('/admin/monitors/available', data)
-      .subscribe((response) => {
-        //console.log(response);
-        this.monitorsForm = response.data;
+    this.matchTeacher(monitor.id).then((res) => {
+      if (res) {
 
-        ret = this.monitorsForm.find((m) => m.id === monitor.id);
 
-        if (this.moveTask && ret) {
-          event.stopPropagation();
 
-          if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
-            let data:any;
-            let all_booking_users = [];
-            this.taskMoved.all_clients.forEach((client:any) => {
-              all_booking_users.push(client.id);
-            });
-            data = {
-              monitor_id: monitor.id,
-              booking_users: all_booking_users,
-              subgroup_id: subgroup_id
-            };
-
-            //console.log(data);
-
-            this.crudService.post('/admin/planner/monitors/transfer', data)
-              .subscribe((data) => {
-                //console.log(data);
-                //this.getData();
-                this.moveTask = false;
-                this.taskMoved = null;
-                this.hideDetail();
-                this.hideGrouped();
-                this.loadBookings(this.currentDate);
-                this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
-              },
-              (error) => {
-                // Error handling code
-                this.moveTask = false;
-                this.taskMoved = null;
-                console.error('Error occurred:', error);
-                if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
-                  this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
-                }
-                else{
-                  this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
-                }
-              })
-
+        const dialogRef = this.dialog.open(ConfirmUnmatchMonitorComponent, {
+          data: {
+            booking: this.taskDetail,
+            monitor: monitor,
+            school_id: this.activeSchool
           }
-          else{
-            this.moveTask = false;
-            this.taskMoved = null;
-          }
-        } else {
-          let sameSport = false;
+        });
 
-          if(monitor.sports && monitor.sports.length){
-            monitor.sports.forEach(element => {
-              if (element.id === this.taskDetail.sport_id) {
-                sameSport = true;
-              }
-            });
-          }
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.crudService.post('/admin/monitors/available', data)
+            .subscribe((response) => {
+              //console.log(response);
+              this.monitorsForm = response.data;
 
-          if(!monitor.id){
-            sameSport = true;
-          }
+              ret = this.monitorsForm.find((m) => m.id === monitor.id);
 
-          if (this.moveTask && sameSport) {
-
-            const dialogRef = this.dialog.open(ConfirmUnmatchMonitorComponent, {
-              data: {
-                booking: this.taskDetail,
-                monitor: monitor,
-                school_id: this.activeSchool
-              }
-            });
-
-            dialogRef.afterClosed().subscribe((result) => {
-              if (result) {
+              if (this.moveTask && ret) {
                 event.stopPropagation();
 
                 if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
@@ -1168,7 +1111,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
                   this.crudService.post('/admin/planner/monitors/transfer', data)
                     .subscribe((data) => {
-
+                      //console.log(data);
                       //this.getData();
                       this.moveTask = false;
                       this.taskMoved = null;
@@ -1195,17 +1138,206 @@ export class TimelineComponent implements OnInit, OnDestroy {
                   this.moveTask = false;
                   this.taskMoved = null;
                 }
-              }
-            });
-            //
-          } else {
-            if (this.moveTask) {
+              } else {
+                let sameSport = false;
 
-              this.snackbar.open(this.translateService.instant('match_error_sport') + this.taskDetail.sport.name, 'OK', {duration: 3000});
+                if(monitor.sports && monitor.sports.length){
+                  monitor.sports.forEach(element => {
+                    if (element.id === this.taskDetail.sport_id) {
+                      sameSport = true;
+                    }
+                  });
+                }
+
+                if(!monitor.id){
+                  sameSport = true;
+                }
+
+                if (this.moveTask && sameSport) {
+                  event.stopPropagation();
+
+                  if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
+                    let data:any;
+                    let all_booking_users = [];
+                    this.taskMoved.all_clients.forEach((client:any) => {
+                      all_booking_users.push(client.id);
+                    });
+                    data = {
+                      monitor_id: monitor.id,
+                      booking_users: all_booking_users,
+                      subgroup_id: subgroup_id
+                    };
+
+                    //console.log(data);
+
+                    this.crudService.post('/admin/planner/monitors/transfer', data)
+                      .subscribe((data) => {
+
+                        //this.getData();
+                        this.moveTask = false;
+                        this.taskMoved = null;
+                        this.hideDetail();
+                        this.hideGrouped();
+                        this.loadBookings(this.currentDate);
+                        this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+                      },
+                      (error) => {
+                        // Error handling code
+                        this.moveTask = false;
+                        this.taskMoved = null;
+                        console.error('Error occurred:', error);
+                        if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+                          this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+                        }
+                        else{
+                          this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
+                        }
+                      })
+
+                  }
+                  else{
+                    this.moveTask = false;
+                    this.taskMoved = null;
+                  }
+                  //
+                } else {
+                  if (this.moveTask) {
+
+                    this.snackbar.open(this.translateService.instant('match_error_sport') + this.taskDetail.sport.name, 'OK', {duration: 3000});
+                  }
+                }
+              }
+            })
+          }
+        })
+      } else {
+        this.crudService.post('/admin/monitors/available', data)
+        .subscribe((response) => {
+          //console.log(response);
+          this.monitorsForm = response.data;
+
+          ret = this.monitorsForm.find((m) => m.id === monitor.id);
+
+          if (this.moveTask && ret) {
+            event.stopPropagation();
+
+            if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
+              let data:any;
+              let all_booking_users = [];
+              this.taskMoved.all_clients.forEach((client:any) => {
+                all_booking_users.push(client.id);
+              });
+              data = {
+                monitor_id: monitor.id,
+                booking_users: all_booking_users,
+                subgroup_id: subgroup_id
+              };
+
+              //console.log(data);
+
+              this.crudService.post('/admin/planner/monitors/transfer', data)
+                .subscribe((data) => {
+                  //console.log(data);
+                  //this.getData();
+                  this.moveTask = false;
+                  this.taskMoved = null;
+                  this.hideDetail();
+                  this.hideGrouped();
+                  this.loadBookings(this.currentDate);
+                  this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+                },
+                (error) => {
+                  // Error handling code
+                  this.moveTask = false;
+                  this.taskMoved = null;
+                  console.error('Error occurred:', error);
+                  if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+                    this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+                  }
+                  else{
+                    this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
+                  }
+                })
+
+            }
+            else{
+              this.moveTask = false;
+              this.taskMoved = null;
+            }
+          } else {
+            let sameSport = false;
+
+            if(monitor.sports && monitor.sports.length){
+              monitor.sports.forEach(element => {
+                if (element.id === this.taskDetail.sport_id) {
+                  sameSport = true;
+                }
+              });
+            }
+
+            if(!monitor.id){
+              sameSport = true;
+            }
+
+            if (this.moveTask && sameSport) {
+              event.stopPropagation();
+
+              if(this.taskMoved && this.taskMoved.monitor_id != monitor.id){
+                let data:any;
+                let all_booking_users = [];
+                this.taskMoved.all_clients.forEach((client:any) => {
+                  all_booking_users.push(client.id);
+                });
+                data = {
+                  monitor_id: monitor.id,
+                  booking_users: all_booking_users,
+                  subgroup_id: subgroup_id
+                };
+
+                //console.log(data);
+
+                this.crudService.post('/admin/planner/monitors/transfer', data)
+                  .subscribe((data) => {
+
+                    //this.getData();
+                    this.moveTask = false;
+                    this.taskMoved = null;
+                    this.hideDetail();
+                    this.hideGrouped();
+                    this.loadBookings(this.currentDate);
+                    this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+                  },
+                  (error) => {
+                    // Error handling code
+                    this.moveTask = false;
+                    this.taskMoved = null;
+                    console.error('Error occurred:', error);
+                    if(error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred."){
+                      this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+                    }
+                    else{
+                      this.snackbar.open(this.translateService.instant('event_overlap'), 'OK', {duration: 3000});
+                    }
+                  })
+
+              }
+              else{
+                this.moveTask = false;
+                this.taskMoved = null;
+              }
+              //
+            } else {
+              if (this.moveTask) {
+
+                this.snackbar.open(this.translateService.instant('match_error_sport') + this.taskDetail.sport.name, 'OK', {duration: 3000});
+              }
             }
           }
-        }
-      })
+        })
+      }
+    })
+
+
 
 
   }
@@ -1924,12 +2056,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
       const match = await this.matchTeacher(monitor.id);
       this.matchResults[monitor.id] = match;
     });
-  
+
     await Promise.all(promises);
   }
 
   async matchTeacher(monitorId: any): Promise<boolean> {
     let ret = false;
+
     if (monitorId !== null && this.monitorsForm) {
       const monitor = this.allMonitors.find((m) => m.id === monitorId);
       const monitorLanguages = {
@@ -1940,34 +2073,43 @@ export class TimelineComponent implements OnInit, OnDestroy {
         "language5_id": monitor.language5_id,
         "language6_id": monitor.language6_id
       };
-  
-      for (const client of this.taskDetail.all_clients) {
-        const clientLanguages = {
-          "language1_id": client.client.language1_id,
-          "language2_id": client.client.language2_id,
-          "language3_id": client.client.language3_id,
-          "language4_id": client.client.language4_id,
-          "language5_id": client.client.language5_id,
-          "language6_id": client.client.language6_id
-        };
-  
-        if (!this.langMatch(monitorLanguages, clientLanguages)) {
-          ret = true;
-        } else if (this.taskDetail.course.course_type !== 2) {
-          const data = await firstValueFrom(this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id));
-          const authsD = await firstValueFrom(this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&monitor_sport_id='+data.data[0].id));
-          
-          for (const element of authsD.data) {
-            if (element.degree_id === this.taskDetail.degree.id) {
-              ret = true;
-              break;
+
+      const sport = monitor.sports.find((s) => s.id === this.taskDetail.sport_id);
+      if (!sport) {
+        ret = true;
+      } else {
+        for (const client of this.taskDetail.all_clients) {
+          const clientLanguages = {
+            "language1_id": client.client.language1_id,
+            "language2_id": client.client.language2_id,
+            "language3_id": client.client.language3_id,
+            "language4_id": client.client.language4_id,
+            "language5_id": client.client.language5_id,
+            "language6_id": client.client.language6_id
+          };
+
+          if (this.langMatch(monitorLanguages, clientLanguages)) {
+            ret = false;
+          } else if (this.taskDetail.course.course_type !== 2) {
+            const data = await firstValueFrom(this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id));
+
+            if (data.data.length > 0) {
+              const authsD = await firstValueFrom(this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&monitor_sport_id='+data.data[0].id));
+
+              for (const element of authsD.data) {
+                if (element.degree_id === this.taskDetail.degree.id) {
+                  ret = true;
+                  break;
+                }
+              }
             }
+
           }
         }
       }
     }
     return ret;
-  }  
+  }
 
   langMatch(objeto1, objeto2) {
     for (const key in objeto1) {
