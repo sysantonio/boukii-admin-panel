@@ -1903,4 +1903,78 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+
+  matchTeacher(monitorId: any) {
+    let ret = false;
+    if (monitorId !== null && this.monitorsForm) {
+      const monitor = this.allMonitors.find((m) => m.id === monitorId);
+      const monitorLanguages = {
+        "language1_id": monitor.language1_id,
+        "language2_id": monitor.language2_id,
+        "language3_id": monitor.language3_id,
+        "language4_id": monitor.language4_id,
+        "language5_id": monitor.language5_id,
+        "language6_id": monitor.language6_id
+      };
+
+      if (this.taskDetail.course.course_type === 2) {
+        this.taskDetail.all_clients.forEach(client => {
+          const clientLanguages = {
+            "language1_id": client.client.language1_id,
+            "language2_id": client.client.language2_id,
+            "language3_id": client.client.language3_id,
+            "language4_id": client.client.language4_id,
+            "language5_id": client.client.language5_id,
+            "language6_id": client.client.language6_id
+          };
+
+
+          if (!this.langMatch(monitorLanguages, clientLanguages)) {
+            ret = true;
+          }
+        });
+      } else {
+
+        this.taskDetail.all_clients.forEach(client => {
+          const clientLanguages = {
+            "language1_id": client.client.language1_id,
+            "language2_id": client.client.language2_id,
+            "language3_id": client.client.language3_id,
+            "language4_id": client.client.language4_id,
+            "language5_id": client.client.language5_id,
+            "language6_id": client.client.language6_id
+          };
+
+          if (!this.langMatch(monitorLanguages, clientLanguages)) {
+            ret =  true;
+          } else {
+            this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id)
+            .subscribe((data) => {
+
+              this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&monitor_sport_id='+data.data[0].id)
+              .subscribe((authsD) => {
+                authsD.data.forEach(element => {
+                  if (element.degree_id === this.taskDetail.degree.id) {
+                    ret =  true;
+                  }
+                });
+              });
+            })
+          }
+        });
+      }
+    } else {
+      ret =  false;
+    }
+  }
+
+  langMatch(objeto1, objeto2) {
+    for (const key in objeto1) {
+        if (objeto1[key] !== null && objeto1[key] === objeto2[key]) {
+            return true;
+        }
+    }
+    return false;
+  }
 }
