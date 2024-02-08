@@ -18,7 +18,7 @@ import { CourseUserTransferComponent } from '../courses/course-user-transfer/cou
 import { CourseUserTransferTimelineComponent } from './course-user-transfer-timeline/course-user-transfer-timeline.component';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorComponent } from './confirm-unmatch-monitor/confirm-unmatch-monitor.component';
-import { Subject } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 moment.locale('fr');
@@ -108,6 +108,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   startTimeDivision:string;
   endTimeDivision:string;
   searchDate:any;
+
+  matchResults: { [monitorId: string]: boolean } = {};
 
   nullMonitor:any = {id:null};
 
@@ -998,15 +1000,24 @@ export class TimelineComponent implements OnInit, OnDestroy {
             date: this.taskDetail.date,
             clientIds: clientIds
     };
-          this.crudService.post('/admin/monitors/available', data)
-            .subscribe((response) => {
+    
+          firstValueFrom(this.crudService.post('/admin/monitors/available', data))
+            .then(response => {
               this.monitorsForm = response.data;
+              return this.updateMatchResults();
+            })
+            .then(() => {
               this.moveTask = true;
               this.taskMoved = task;
+              this.moving = false;
             })
+            .catch(error => {
+              console.error('An error occurred:', error);
+              this.moving = false;
+            });
         } else {
+          this.moving = false;
         }
-        this.moving = false;
       });
     }
   }
@@ -1904,8 +1915,20 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  isMatch(monitorId: any): boolean {
+    return !!this.matchResults[monitorId];
+  }
 
-  matchTeacher(monitorId: any) {
+  async updateMatchResults() {
+    const promises = this.filteredMonitors.map(async (monitor) => {
+      const match = await this.matchTeacher(monitor.id);
+      this.matchResults[monitor.id] = match;
+    });
+  
+    await Promise.all(promises);
+  }
+
+  async matchTeacher(monitorId: any): Promise<boolean> {
     let ret = false;
     if (monitorId !== null && this.monitorsForm) {
       const monitor = this.allMonitors.find((m) => m.id === monitorId);
@@ -1917,57 +1940,34 @@ export class TimelineComponent implements OnInit, OnDestroy {
         "language5_id": monitor.language5_id,
         "language6_id": monitor.language6_id
       };
-
-      if (this.taskDetail.course.course_type === 2) {
-        this.taskDetail.all_clients.forEach(client => {
-          const clientLanguages = {
-            "language1_id": client.client.language1_id,
-            "language2_id": client.client.language2_id,
-            "language3_id": client.client.language3_id,
-            "language4_id": client.client.language4_id,
-            "language5_id": client.client.language5_id,
-            "language6_id": client.client.language6_id
-          };
-
-
-          if (!this.langMatch(monitorLanguages, clientLanguages)) {
-            ret = true;
+  
+      for (const client of this.taskDetail.all_clients) {
+        const clientLanguages = {
+          "language1_id": client.client.language1_id,
+          "language2_id": client.client.language2_id,
+          "language3_id": client.client.language3_id,
+          "language4_id": client.client.language4_id,
+          "language5_id": client.client.language5_id,
+          "language6_id": client.client.language6_id
+        };
+  
+        if (!this.langMatch(monitorLanguages, clientLanguages)) {
+          ret = true;
+        } else if (this.taskDetail.course.course_type !== 2) {
+          const data = await firstValueFrom(this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id));
+          const authsD = await firstValueFrom(this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&monitor_sport_id='+data.data[0].id));
+          
+          for (const element of authsD.data) {
+            if (element.degree_id === this.taskDetail.degree.id) {
+              ret = true;
+              break;
+            }
           }
-        });
-      } else {
-
-        this.taskDetail.all_clients.forEach(client => {
-          const clientLanguages = {
-            "language1_id": client.client.language1_id,
-            "language2_id": client.client.language2_id,
-            "language3_id": client.client.language3_id,
-            "language4_id": client.client.language4_id,
-            "language5_id": client.client.language5_id,
-            "language6_id": client.client.language6_id
-          };
-
-          if (!this.langMatch(monitorLanguages, clientLanguages)) {
-            ret =  true;
-          } else {
-            this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id)
-            .subscribe((data) => {
-
-              this.crudService.list('/monitor-sport-authorized-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&monitor_sport_id='+data.data[0].id)
-              .subscribe((authsD) => {
-                authsD.data.forEach(element => {
-                  if (element.degree_id === this.taskDetail.degree.id) {
-                    ret =  true;
-                  }
-                });
-              });
-            })
-          }
-        });
+        }
       }
-    } else {
-      ret =  false;
     }
-  }
+    return ret;
+  }  
 
   langMatch(objeto1, objeto2) {
     for (const key in objeto1) {
