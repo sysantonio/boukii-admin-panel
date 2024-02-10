@@ -361,9 +361,16 @@ export class MonitorDetailComponent {
               this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaults.country));
               this.myControlProvinces.setValue(this.mockProvincesData.find((c) => c.id === +this.defaults.province));
               this.myControlWorkCountries.setValue(this.mockWorkCountriesData.find((c) => c.id === +this.defaults.world_country));
-              this.languagesControl.setValue(this.languages.filter((l) => l.id === (this.defaults?.language1_id ||
-                this.defaults?.language2_id || this.defaults?.language3_id || this.defaults?.language4_id
-                || this.defaults?.language5_id || this.defaults?.language6_id)));
+
+              const langs = [];
+              this.languages.forEach(element => {
+                if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
+                  element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
+                    langs.push(element);
+                  }
+              });
+
+              this.languagesControl.setValue(langs);
 
               this.loading = false;
 

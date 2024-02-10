@@ -887,7 +887,7 @@
                       </div>
                       <ng-template #placeholderLangs>{{'choose_langs' | translate }}</ng-template>
                     </mat-select-trigger>
-                    <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages(language)">
+                    <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages($event, language)">
                       {{language.name}}
                     </mat-option>
                   </mat-select>

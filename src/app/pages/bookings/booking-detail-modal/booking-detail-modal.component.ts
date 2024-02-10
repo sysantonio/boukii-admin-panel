@@ -460,6 +460,13 @@ export class BookingDetailModalComponent implements OnInit {
     });
   }
 
+  getDegree(id: any) {
+    if (id && id !== null) {
+      return this.degreesClient.find((l) => l.id === id);
+
+    }
+  }
+
   generateArray(paxes: number) {
     this.persons = [];
     for (let i = 1; i <= paxes; i++) {

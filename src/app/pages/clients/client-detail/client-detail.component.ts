@@ -80,7 +80,7 @@ export class ClientDetailComponent {
   deletedItems = [];
   clientUsers = [];
   selectedGoal = [];
-
+  maxSelection = 6;
   today: Date;
   minDate: Date;
   loading = true;
@@ -300,9 +300,15 @@ export class ClientDetailComponent {
               this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
               this.myControlCountries.setValue(this.countries.find((c) => c.id === +this.defaults.country));
               this.myControlProvinces.setValue(this.provinces.find((c) => c.id === +this.defaults.province));
-              this.languagesControl.setValue(this.languages.filter((l) => l.id === (this.defaults?.language1_id ||
-              this.defaults?.language2_id || this.defaults?.language3_id || this.defaults?.language4_id
-              || this.defaults?.language5_id || this.defaults?.language6_id)));
+              const langs = [];
+              this.languages.forEach(element => {
+                if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
+                  element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
+                    langs.push(element);
+                  }
+              });
+
+              this.languagesControl.setValue(langs);
 
               this.loading = false;
 
@@ -545,14 +551,21 @@ export class ClientDetailComponent {
     return this.sportsControl.value?.map(sport => sport.name).join(', ') || '';
   }
 
-  toggleSelectionLanguages(language: any): void {
-    const index = this.selectedLanguages.findIndex(l => l.code === language.code);
-    if (index >= 0) {
-      this.selectedLanguages.splice(index, 1);
-    } else {
-      this.selectedLanguages.push({ name: language.name, code: language.code, id: language.id });
+  toggleSelectionLanguages(event: any, language: any): void {
+    if (event.isUserInput) {
+
+      if (this.selectedLanguages.length < this.maxSelection) {
+
+        const index = this.selectedLanguages.findIndex(l => l.id === language.id);
+        if (index >= 0) {
+          this.selectedLanguages.splice(index, 1);
+        } else {
+          this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
+        }
+      } else {
+        this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
+      }
     }
-    console.log(this.selectedLanguages);
   }
 
   getSelectedLanguageNames(): string {

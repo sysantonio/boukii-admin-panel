@@ -1014,6 +1014,13 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
+  getDegree(id: any) {
+    if (id && id !== null) {
+      return this.degreesClient.find((l) => l.id === id);
+
+    }
+  }
+
   getLevelName(id: any) {
     if (id && id !== null) {
 
