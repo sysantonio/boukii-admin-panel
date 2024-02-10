@@ -20,6 +20,7 @@ export class UpdateCourseModalComponent implements OnInit {
   dates: any = [];
   form: UntypedFormGroup;
   datesControl = new FormControl();
+  hourStart = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private dialogRef: MatDialogRef<any>, private translateService: TranslateService, private dialog: MatDialog) {
 
@@ -27,6 +28,8 @@ export class UpdateCourseModalComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.hourStart = this.defaults.mainBooking.hour_start;
+    this.hourStart = this.hourStart.replace(':00', '');
     const ids = [];
     this.defaults.dates.forEach(element => {
       ids.push(element.course_date_id);
@@ -37,8 +40,99 @@ export class UpdateCourseModalComponent implements OnInit {
     this.dates = this.defaults.dates;
   }
 
+  transformTime(time: string): string {
+    let duration = moment.duration(time);
+    let hours = duration.hours();
+    let minutes = duration.minutes();
+    return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
+  }
+
+  calculateAvailableHours(selectedCourseDateItem: any, time: any) {
+
+    const start = moment(selectedCourseDateItem.hour_start, 'HH:mm:ss');
+    const end = moment(selectedCourseDateItem.hour_end, 'HH:mm:ss');
+
+    const hour = moment(time, 'HH:mm')
+
+    return hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
+  }
+
+  generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+    const intervalParts = interval.split(' ');
+    const mainDurationParts = mainDuration.split(' ');
+
+    let intervalHours = 0;
+    let intervalMinutes = 0;
+    let mainDurationHours = 0;
+    let mainDurationMinutes = 0;
+
+    intervalParts.forEach(part => {
+        if (part.includes('h')) {
+            intervalHours = parseInt(part, 10);
+        } else if (part.includes('min')) {
+            intervalMinutes = parseInt(part, 10);
+        }
+    });
+
+    mainDurationParts.forEach(part => {
+        if (part.includes('h')) {
+            mainDurationHours = parseInt(part, 10);
+        } else if (part.includes('min')) {
+            mainDurationMinutes = parseInt(part, 10);
+        }
+    });
+
+    let currentHours = startHours;
+    let currentMinutes = startMinutes;
+    const result = [];
+
+    while (true) {
+        let nextIntervalEndHours = currentHours + mainDurationHours;
+        let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
+
+        nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
+        nextIntervalEndMinutes %= 60;
+
+        if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
+            break;
+        }
+
+        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+
+        currentMinutes += intervalMinutes;
+        currentHours += intervalHours + Math.floor(currentMinutes / 60);
+        currentMinutes %= 60;
+
+        if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
+            break;
+        }
+    }
+
+    return result;
+  }
+
+
   isAfter(date: any) {
     return moment(date.date).isSameOrAfter(moment());
+  }
+
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h') && duration.includes('min')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
   }
 
   closeModal() {
@@ -65,8 +159,8 @@ export class UpdateCourseModalComponent implements OnInit {
             course_group_id: this.defaults.mainBooking.course_group_id,
             degree_id: this.defaults.mainBooking.degree_id,
             monitor_id: this.defaults.mainBooking.monitor_id,
-            hour_start: this.defaults.mainBooking.hour_start,
-            hour_end: this.defaults.mainBooking.hour_end, //calcular en base a la duracion del curso
+            hour_start: this.defaults.course.course_type === 2 ? this.hourStart : this.defaults.mainBooking.hour_start,
+            hour_end: this.defaults.course.course_type === 2 ? this.calculateHourEnd(this.hourStart, this.defaults.course.duration) : this.defaults.mainBooking.hour_end,
             currency: this.defaults.mainBooking.currency,
             notes: this.defaults.mainBooking.notes,
             school_notes: this.defaults.mainBooking.school_notes,

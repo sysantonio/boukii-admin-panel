@@ -21,6 +21,16 @@
     </mat-dialog-actions>
 
     <div style="width:100%">
+      <mat-form-field class="flex-auto" style="width: 50%;" *ngIf="defaults.course.course_type === 2">
+        <mat-label>{{'hour' | translate}}</mat-label>
+        <mat-select [(ngModel)]="hourStart" [ngModelOptions]="{standalone: true}">
+          <mat-option *ngFor="let time of generateCourseHours(defaults.course.hour_min, defaults.course.hour_max, defaults.course.duration.includes(':')
+          ? this.transformTime(defaults.course.duration) : defaults.course.duration, '5min')"
+          [value]="time" [disabled]="calculateAvailableHours(defaults.course, time)"
+            (onSelectionChange)="hourStart = time;">{{ time }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <mat-form-field class="flex-auto" style="width: 100%">
         <mat-label>{{'dates' | translate}}</mat-label>
         <mat-select multiple [formControl]="datesControl">
