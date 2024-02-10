@@ -502,6 +502,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
       if (item.is_flexible) {
         this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 9 ? this.transformTime(item.duration) : item.duration);
+      } else {
+        this.calculatePaxesPrivateFix();
       }
 
       if (this.externalData && this.externalData.onlyPrivate) {
@@ -2526,6 +2528,18 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     this.persons = paxes;
     this.personsToBook = [];
+    if (this.mainIdSelected) {
+      this.personsToBook = this.utilizers;
+
+    } else {
+      const data = this.utilizers.filter((u) => u.id !== this.defaultsBookingUser.client_id);
+      data.push(this.defaults.client_main_id);
+
+      this.personsToBook = data;
+    }
+  }
+
+  calculatePaxesPrivateFix() {
     if (this.mainIdSelected) {
       this.personsToBook = this.utilizers;
 

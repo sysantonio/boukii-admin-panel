@@ -280,6 +280,18 @@
                   </mat-form-field>
                 </div>
 
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!selectedItem.is_flexible">
+
+                  <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
+                    <mat-label>{{'paxes' |translate}}</mat-label>
+                    <mat-select multiple>
+                      <mat-option *ngFor="let person of personsToBook" [value]="person" (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
+                        {{ person?.first_name }} {{ person?.last_name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="(sameMonitor && i === 0) || !sameMonitor">
 
                   <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
