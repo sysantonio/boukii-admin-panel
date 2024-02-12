@@ -1020,6 +1020,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
         setTimeout(() => {
 
+          const bookingLog = {
+            booking_id: booking.data.id,
+            action: 'create',
+            description: 'new booking from admin',
+            user_id: this.user.id,
+            before_change: '',
+            school_id: this.user.schools[0].id
+          }
+          this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+
           if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
 
             const bonuses = [];

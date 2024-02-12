@@ -1440,6 +1440,16 @@ export class BookingDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
+        const bookingLog = {
+          booking_id: this.id,
+          action: 'refund',
+          description: 'refund booking',
+          user_id: this.user.id,
+          before_change: 'confirmed',
+          school_id: this.user.schools[0].id
+        }
+        this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+
         if(data.type === 'no_refund') {
           this.crudService.update('/bookings', {paid_total: this.booking.price_total}, this.booking.id)
           .subscribe(() => {
@@ -1531,6 +1541,16 @@ export class BookingDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
+
+        const bookingLog = {
+          booking_id: this.id,
+          action: 'full cancel',
+          description: 'cancel full booking',
+          user_id: this.user.id,
+          before_change: 'confirmed',
+          school_id: this.user.schools[0].id
+        }
+        this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
 
         if(data.type === 'no_refund') {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
@@ -1669,6 +1689,16 @@ export class BookingDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
+
+        const bookingLog = {
+          booking_id: this.id,
+          action: 'partial cancel',
+          description: 'partial cancel booking',
+          user_id: this.user.id,
+          before_change: 'confirmed',
+          school_id: this.user.schools[0].id
+        }
+        this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
 
         if(data.type === 'no_refund') {
 
@@ -2230,6 +2260,18 @@ export class BookingDetailComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((data: any) => {
         if (data) {
+
+          const bookingLog = {
+            booking_id: this.id,
+            action: 'update booking',
+            description: 'update booking',
+            user_id: this.user.id,
+            before_change: 'confirmed',
+            school_id: this.user.schools[0].id
+          }
+
+          this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+
           this.getData(true);
         }
       });
@@ -2262,6 +2304,17 @@ export class BookingDetailComponent implements OnInit {
           });
 
           setTimeout(() => {
+            const bookingLog = {
+              booking_id: this.id,
+              action: 'update booking',
+              description: 'update booking',
+              user_id: this.user.id,
+              before_change: 'confirmed',
+              school_id: this.user.schools[0].id
+            }
+
+            this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+
             this.getData(true);
 
           }, 500);
