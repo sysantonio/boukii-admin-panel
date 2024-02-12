@@ -375,7 +375,7 @@ export class CourseDetailModalComponent implements OnInit {
 
     if (group) {
       const find = group.course_subgroups[gIndex].course_date_id === courseDate.id ? group.course_subgroups[gIndex] : null;
-      return find.monitor_id !== null;
+      return find && find?.monitor_id !== null;
 
     }
   }
