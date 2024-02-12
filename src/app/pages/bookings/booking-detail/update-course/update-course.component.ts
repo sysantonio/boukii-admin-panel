@@ -172,11 +172,14 @@ export class UpdateCourseModalComponent implements OnInit {
         let discountReduction = 0;
         const discounts = typeof this.defaults.course.discounts === 'string' ? JSON.parse(this.defaults.course.discounts) : this.defaults.course.discounts;
           //ret = ret + (b?.courseDates[0].price * b.courseDates.length);
-          discounts.forEach(element => {
-            if (element.date === this.datesControl.value.length) {
-              discountReduction = -(this.defaults.course.price * this.datesControl.value.length * (element.percentage / 100));
-            }
-          });
+          if (discounts !== null) {
+            discounts.forEach(element => {
+              if (element.date === this.datesControl.value.length) {
+                discountReduction = -(this.defaults.course.price * this.datesControl.value.length * (element.percentage / 100));
+              }
+            });
+          }
+
 
         const basePrice = this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : (this.defaults.course.price * this.datesControl.value.length);
         let price = basePrice + discountReduction;
