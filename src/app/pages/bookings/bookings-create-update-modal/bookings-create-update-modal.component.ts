@@ -1020,6 +1020,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               paxes: item.paxes,
               notes: item.notes,
               school_notes: item.school_notes,
+              degree_id: this.levelForm.value.id,
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }

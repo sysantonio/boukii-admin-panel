@@ -544,5 +544,8 @@
   "payment": "Paga",
   "refund": "Ritorno",
   "no_refund": "Nessun rimborso",
-  "payment_history": "Storico dei pagamenti"
+  "payment_history": "Storico dei pagamenti",
+  "monitor_no_available": "Monitor non disponibile",
+  "monitor_no_available_text": "I monitor delle prenotazioni non sono disponibili per le seguenti date: ",
+  "monitor_no_available_text2": "Vuoi continuare e lasciare la prenotazione senza un monitor assegnato?"
 }

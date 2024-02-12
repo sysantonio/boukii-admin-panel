@@ -544,5 +544,8 @@
   "payment": "Pay",
   "refund": "Return",
   "no_refund": "No Refund",
-  "payment_history": "Payment history"
+  "payment_history": "Payment history",
+  "monitor_no_available": "Monitor not available",
+  "monitor_no_available_text": "Reservation monitors are not available for the following dates: ",
+  "monitor_no_available_text2": "Do you want to continue and leave the reservation without an assigned monitor?"
 }

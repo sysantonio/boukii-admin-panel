@@ -759,7 +759,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports');/*
+    return this.crudService.list('/clients', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;

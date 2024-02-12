@@ -20,12 +20,11 @@ import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
-import { UpdateCourseModalComponent } from './update-course.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { NoMonitorDateModalModule } from 'src/app/pages/monitors/monitor-detail/no-monitor-date/no-monitor-date.component.module';
+import { NoMonitorDateModalComponent } from './no-monitor-date.component';
 
 @NgModule({
   imports: [
+    TranslateModule,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
@@ -47,13 +46,10 @@ import { NoMonitorDateModalModule } from 'src/app/pages/monitors/monitor-detail/
     MatListModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
-    MatSlideToggleModule,
-    TranslateModule,
-    MatCheckboxModule,
-    NoMonitorDateModalModule
+    MatSlideToggleModule
   ],
-  declarations: [UpdateCourseModalComponent],
-  exports: [UpdateCourseModalComponent]
+  declarations: [NoMonitorDateModalComponent],
+  exports: [NoMonitorDateModalComponent]
 })
-export class UpdateCourseModalModule {
+export class NoMonitorDateModalModule {
 }
