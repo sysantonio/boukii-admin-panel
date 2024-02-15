@@ -408,7 +408,6 @@ export class BookingDetailModalComponent implements OnInit {
 
             setTimeout(() => {
               this.calculateDiscounts();
-              this.calculateFinalPrice();
 
               this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
               if (updateBooking) {
@@ -430,8 +429,9 @@ export class BookingDetailModalComponent implements OnInit {
                   }
                 })
               }
+              this.calculateFinalPrice();
               this.loading = false;
-            }, 500);
+            }, 1000);
           })
         });
       });

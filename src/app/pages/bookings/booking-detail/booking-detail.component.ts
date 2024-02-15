@@ -410,7 +410,6 @@ export class BookingDetailComponent implements OnInit {
 
             setTimeout(() => {
               this.calculateDiscounts();
-              this.calculateFinalPrice();
 
               this.booking.price_total = this.finalPrice;
               this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
@@ -433,6 +432,8 @@ export class BookingDetailComponent implements OnInit {
                   }
                 })
               }
+              this.calculateFinalPrice();
+
               this.loading = false;
             }, 500);
           })
