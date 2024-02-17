@@ -547,5 +547,8 @@
   "payment_history": "Payment history",
   "monitor_no_available": "Monitor not available",
   "monitor_no_available_text": "Reservation monitors are not available for the following dates: ",
-  "monitor_no_available_text2": "Do you want to continue and leave the reservation without an assigned monitor?"
+  "monitor_no_available_text2": "Do you want to continue and leave the reservation without an assigned monitor?",
+  "color_1": "Free choice (default)",
+  "color_2": "Pay attention to the changes.",
+  "color_3": "Prohibited modifications"
 }

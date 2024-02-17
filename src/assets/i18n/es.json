@@ -554,5 +554,8 @@
   "payment_history": "Histórico de pagos",
   "monitor_no_available": "Monitor no disponible",
   "monitor_no_available_text": "Hay monitores de la reserva no disponibles para las siguientes fechas: ",
-  "monitor_no_available_text2": "¿Quiere continuar y dejar la reserva sin monitor asignado?"
+  "monitor_no_available_text2": "¿Quiere continuar y dejar la reserva sin monitor asignado?",
+  "color_1": "Libre elección (por defecto)",
+  "color_2": "Presta atención a los cambios.",
+  "color_3": "Modificaciones prohibidas"
 }

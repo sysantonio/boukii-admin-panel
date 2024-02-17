@@ -547,5 +547,8 @@
   "payment_history": "Storico dei pagamenti",
   "monitor_no_available": "Monitor non disponibile",
   "monitor_no_available_text": "I monitor delle prenotazioni non sono disponibili per le seguenti date: ",
-  "monitor_no_available_text2": "Vuoi continuare e lasciare la prenotazione senza un monitor assegnato?"
+  "monitor_no_available_text2": "Vuoi continuare e lasciare la prenotazione senza un monitor assegnato?",
+  "color_1": "Libera scelta (predefinita)",
+  "color_2": "Presta attenzione ai cambiamenti.",
+  "color_3": "Modifiche vietate"
 }

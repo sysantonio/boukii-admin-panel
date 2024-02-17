@@ -259,7 +259,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   countries = MOCK_COUNTRIES;
   snackBarRef: any = null;
   schoolSettings: any = [];
-
+  color = '';
   tva = 0;
   tvaPrice = 0;
   cancellationInsurance = 0;
@@ -455,6 +455,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   }
 
   selectItem(item: any) {
+    this.color = '';
 
     if(this.snackBarRef!==null) {
 
@@ -927,7 +928,8 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         paxes: paxes,
         payment_method_id: this.defaults.payment_method_id,
         source: 'admin',
-        user_id: this.user.id
+        user_id: this.user.id,
+        color: this.color
       }
     });
 

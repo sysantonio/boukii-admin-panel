@@ -123,7 +123,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   persons:any = []; // Ejemplo de número de personas
   personsToBook = []; // Ejemplo de número de personas
   personsSelected = []; // Ejemplo de número de personas
-
+  color = '';
   reservedDates = [
     new Date(),
     new Date(),
@@ -437,7 +437,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   selectItem(item: any) {
-
+    this.color = '';
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -909,7 +909,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
         paxes: paxes,
         payment_method_id: this.defaults.payment_method_id,
         source: 'admin',
-        user_id: this.user.id
+        user_id: this.user.id,
+        color: this.color
       }
     });
 

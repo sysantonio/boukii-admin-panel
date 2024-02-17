@@ -548,5 +548,8 @@
   "payment_history": "Zahlungshistorie",
   "monitor_no_available": "Monitor nicht verfügbar",
   "monitor_no_available_text": "Für folgende Termine sind keine Reservierungsmonitore verfügbar: ",
-  "monitor_no_available_text2": "Möchten Sie fortfahren und die Reservierung ohne zugewiesenen Monitor verlassen?"
+  "monitor_no_available_text2": "Möchten Sie fortfahren und die Reservierung ohne zugewiesenen Monitor verlassen?",
+  "color_1": "Freie Wahl (Standard)",
+  "color_2": "Achten Sie auf die Änderungen.",
+  "color_3": "Verbotene Änderungen"
 }
