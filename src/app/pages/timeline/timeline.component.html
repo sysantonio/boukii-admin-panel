@@ -173,6 +173,7 @@
                                     <div *ngIf="task.type === 'private'">{{ task.all_clients[0].client.first_name}} {{ task.all_clients[0].client.last_name}}</div>
                                     <div *ngIf="task.type === 'private'">{{getLanguageById(task.all_clients[0].client.language1_id)}} ·{{getBirthYears(task.all_clients[0].client.birth_date)}} {{'years' |translate}}</div>
                                 </div>
+
                                 <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks" [ngStyle]="{'min-width': task.type === 'private' ? '0px' : '54px',
                               'width': task.type === 'private' ? '34px' : '54px'}">
                                     <!-- PENDING LEVEL -->
@@ -184,6 +185,9 @@
                                         <div class="task-block-grouped">+ {{task.grouped_tasks.length}}</div>
                                     </ng-container>
                                 </div>
+                                <!--<div class="task-text" *ngIf="task.color !== ''">
+                                  <div class="task-block-level" [ngStyle]="{'background': task.color}"></div>
+                                </div>-->
                             </div>
                             <!--WEEK-->
                             <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
@@ -327,6 +331,7 @@
                         <img *ngIf="(task.type=='collective' || task.type=='private') && task.sport" [src]="task.sport.icon_selected" />
                         <div>{{ task.name }}</div>
                     </div>
+
                     <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks">
                         <!-- PENDING LEVEL -->
                         <div class="task-block-level" *ngIf="task.degree" [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}} {{task.subgroup_number}}</div>

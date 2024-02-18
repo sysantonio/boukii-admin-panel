@@ -506,6 +506,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
         return {
           booking_id: booking?.booking?.id,
+          //color: booking?.color,
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),

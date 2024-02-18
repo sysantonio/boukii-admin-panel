@@ -34,7 +34,7 @@ export class BookingsComponent {
   entity = '/bookings';
   deleteEntity = '/bookings';
   columns: TableColumn<any>[] = [
-    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'type', type: 'booking_users_image', visible: true },
     { label: 'course', property: 'bookingusers', type: 'booking_users', visible: true},
     { label: 'client', property: 'client_main_id', type: 'client', visible: true },

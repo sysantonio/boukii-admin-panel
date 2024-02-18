@@ -206,6 +206,17 @@
           </ng-container>
         </ng-container>
 
+        <!-- id Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'id'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell style="text-wrap: balance;">
+              <span *ngIf="data[i].color !== ''" class="dot" [ngStyle]="{'background': data[i].color}"></span>
+              <span style="float: right;width: 50%;">{{ row[column.property] }}</span>
+            </td>
+          </ng-container>
+        </ng-container>
+
         <!-- QR Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'qr'" [matColumnDef]="column.property">
