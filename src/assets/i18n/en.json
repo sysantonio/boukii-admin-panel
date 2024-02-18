@@ -550,5 +550,14 @@
   "monitor_no_available_text2": "Do you want to continue and leave the reservation without an assigned monitor?",
   "color_1": "Free choice (default)",
   "color_2": "Pay attention to the changes.",
-  "color_3": "Prohibited modifications"
+  "color_3": "Prohibited modifications",
+  "change_history": "Change history",
+  "api_created": "Reservation created from the panel",
+  "cancel_refund": "Reservation refunded",
+  "refund_boukii_pay": "Reservation refunded by Boukii Pay",
+  "full_cancel": "Total cancellation",
+  "partial_cancel": "Partial cancelation",
+  "cancel_no_refund": "Cancellation without refund",
+  "refund_cash": "Cash or other refund",
+  "voucher_refund": "Refund with bonus"
 }

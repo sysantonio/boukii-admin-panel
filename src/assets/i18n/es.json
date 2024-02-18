@@ -557,5 +557,14 @@
   "monitor_no_available_text2": "¿Quiere continuar y dejar la reserva sin monitor asignado?",
   "color_1": "Libre elección (por defecto)",
   "color_2": "Presta atención a los cambios.",
-  "color_3": "Modificaciones prohibidas"
+  "color_3": "Modificaciones prohibidas",
+  "change_history": "Histórico de cambios",
+  "api_created": "Reserva creada desde el panel",
+  "cancel_refund": "Reserva reembolsada",
+  "refund_boukii_pay": "Reserva reembolsada por Boukii Pay",
+  "full_cancel": "Cancelación totall",
+  "partial_cancel": "Cancelación parcial",
+  "cancel_no_refund": "Cancelación sin reembolso",
+  "refund_cash": "Reembolso en efectivo u otros",
+  "voucher_refund": "Reembolso con bono"
 }

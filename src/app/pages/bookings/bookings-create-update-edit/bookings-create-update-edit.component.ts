@@ -1053,15 +1053,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
       setTimeout(() => {
 
-        const bookingLog = {
-          booking_id: this.bookingService.editData.id,
-          action: 'update',
-          description: 'update booking from admin',
-          user_id: this.user.id,
-          before_change: 'update booking',
-          school_id: this.user.schools[0].id
-        }
-        this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+
 
         if (this.bookingService.editData.booking.paid) {
           if (this.finalPrice < this.bookingService.editData.price) {

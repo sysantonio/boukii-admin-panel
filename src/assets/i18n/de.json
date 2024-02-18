@@ -551,5 +551,14 @@
   "monitor_no_available_text2": "Möchten Sie fortfahren und die Reservierung ohne zugewiesenen Monitor verlassen?",
   "color_1": "Freie Wahl (Standard)",
   "color_2": "Achten Sie auf die Änderungen.",
-  "color_3": "Verbotene Änderungen"
+  "color_3": "Verbotene Änderungen",
+  "change_history": "Geschichte verändern",
+  "api_created": "Reservierung aus dem Panel erstellt",
+  "cancel_refund": "Reservierung erstattet",
+  "refund_boukii_pay": "Reservierung wird von Boukii Pay erstattet",
+  "full_cancel": "Totale Stornierung",
+  "partial_cancel": "Teilstornierung",
+  "cancel_no_refund": "Stornierung ohne Rückerstattung",
+  "refund_cash": "Barzahlung oder andere Rückerstattung",
+  "voucher_refund": "Rückerstattung mit Bonus"
 }

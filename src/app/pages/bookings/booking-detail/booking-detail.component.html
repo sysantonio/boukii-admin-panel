@@ -399,6 +399,24 @@
 
             </div>
 
+            <h3 style="font-size: 1.5rem!important;" *ngIf="bookingLog.length > 0">{{'change_history' | translate}}</h3>
+            <div class="opaque-box" *ngIf="bookingLog.length > 0">
+              <ng-container *ngFor="let item of bookingLog">
+                <span style="width: 100%; float:left">
+                  <p style="float:left" *ngIf="item.action == 'created by api'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'api_created' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'cancel_refund' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'refund_boukii_pay'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'refund_boukii_pay' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'full_cancel'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'full_cancel' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'partial_cancel'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'partial_cancel' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'no_refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'cancel_no_refund' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'refund_cash'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'refund_cash' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'voucher_refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'voucher_refund' | translate }}</p>
+                </span>
+              </ng-container>
+
+
+            </div>
+
             <ng-container *ngIf="!booking.paid && booking.status !== 2">
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div class="square-buttons-container">

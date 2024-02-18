@@ -550,5 +550,14 @@
   "monitor_no_available_text2": "Vuoi continuare e lasciare la prenotazione senza un monitor assegnato?",
   "color_1": "Libera scelta (predefinita)",
   "color_2": "Presta attenzione ai cambiamenti.",
-  "color_3": "Modifiche vietate"
+  "color_3": "Modifiche vietate",
+  "change_history": "Cambiare la storia",
+  "api_created": "Prenotazione creata dal pannello",
+  "cancel_refund": "Prenotazione rimborsata",
+  "refund_boukii_pay": "Prenotazione rimborsata da Boukii Pay",
+  "full_cancel": "Cancellazione totale",
+  "partial_cancel": "Cancellazione parziale",
+  "cancel_no_refund": "Cancellazione senza rimborso",
+  "refund_cash": "Rimborso in contanti o altro",
+  "voucher_refund": "Rimborso con bonus"
 }

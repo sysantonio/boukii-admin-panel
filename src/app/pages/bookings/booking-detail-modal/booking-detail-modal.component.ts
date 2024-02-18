@@ -192,6 +192,7 @@ export class BookingDetailModalComponent implements OnInit {
   bookingUsersUnique: any;
   clientsIds = [];
   payments = [];
+  bookingLog = [];
 
   countries = MOCK_COUNTRIES;
   schoolSettings: any = [];
@@ -274,6 +275,7 @@ export class BookingDetailModalComponent implements OnInit {
     this.getMonitors();
     this.getLanguages();
     this.getPayments();
+    this.getBookingsLogs();
 
 
     this.crudService.get('/schools/'+this.user.schools[0].id)
@@ -408,7 +410,7 @@ export class BookingDetailModalComponent implements OnInit {
 
             setTimeout(() => {
               this.calculateDiscounts();
-
+              this.calculateFinalPrice();
               this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
               if (updateBooking) {
                 this.booking.price_total = this.finalPrice;
@@ -429,7 +431,7 @@ export class BookingDetailModalComponent implements OnInit {
                   }
                 })
               }
-              this.calculateFinalPrice();
+
               this.loading = false;
             }, 1000);
           })
@@ -770,7 +772,7 @@ export class BookingDetailModalComponent implements OnInit {
           })
       } else {
         this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
-        this.goTo('/bookings');
+        this.dialogRef.close();
       }
     }, 1000);
 
@@ -1542,11 +1544,15 @@ export class BookingDetailModalComponent implements OnInit {
     if (event.checked) {
       this.crudService.update('/bookings', {price_total: this.finalPrice + price, has_boukii_care: true, price_boukii_care: price}, this.id)
       .subscribe(() => {
+        this.crudService.create('/booking-logs', {booking_id: this.id, action: 'add_boukii_care', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+              .subscribe(() => {})
         this.getData(true);
       })
     } else {
       this.crudService.update('/bookings', {price_total: this.finalPrice - this.booking.price_boukii_care, has_boukii_care: false, price_boukii_care: 0}, this.id)
       .subscribe(() => {
+        this.crudService.create('/booking-logs', {booking_id: this.id, action: 'delete_boukii_care', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+              .subscribe(() => {})
         this.getData(true);
       })
 
@@ -1569,11 +1575,15 @@ export class BookingDetailModalComponent implements OnInit {
           if (event.checked) {
             this.crudService.update('/bookings', {price_total: this.finalPrice + price, has_cancellation_insurance: true, price_cancellation_insurance: price}, this.id)
             .subscribe(() => {
+              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'add_cancellation_insurance', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+              .subscribe(() => {})
               this.getData(true);
             })
           } else {
             this.crudService.update('/bookings', {price_total: this.finalPrice - this.booking.price_cancellation_insurance, has_cancellation_insurance: false, price_cancellation_insurance: 0}, this.id)
             .subscribe(() => {
+              this.crudService.create('/booking-logs', {booking_id: this.id, action: 'delete_cancellation_insurance', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+              .subscribe(() => {})
               this.getData(true);
             })
 
@@ -1693,7 +1703,6 @@ export class BookingDetailModalComponent implements OnInit {
 
   deleteBooking() {
 
-
     const dialogRef = this.dialog.open(CancelBookingModalComponent, {
       width: '1000px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
@@ -1705,8 +1714,8 @@ export class BookingDetailModalComponent implements OnInit {
 
         const bookingLog = {
           booking_id: this.id,
-          action: 'full cancel',
-          description: 'full cancel booking',
+          action: 'full_cancel',
+          description: 'cancel full booking',
           user_id: this.user.id,
           before_change: 'confirmed',
           school_id: this.user.schools[0].id
@@ -1714,20 +1723,21 @@ export class BookingDetailModalComponent implements OnInit {
         this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
 
         if(data.type === 'no_refund') {
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'no_refund', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+          .subscribe(() => {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
-              this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount:this.finalPrice, status: 'no_refund', notes: 'no refund applied'})
-            .subscribe(() => {
-            })
+              this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingPendingPrice, status: 'no_refund', notes: 'no refund applied'})
+              .subscribe(() => {
+              })
               this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
                 .subscribe(() => {
 
                   this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                   this.dialogRef.close();
-                  this.goTo('/bookings');
                 })
+            })
           })
-
         } else if(data.type === 'boukii_pay') {
 
           this.crudService.create('/booking-logs', {booking_id: this.id, action: 'refund_boukii_pay', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
@@ -1757,7 +1767,7 @@ export class BookingDetailModalComponent implements OnInit {
 
         } else if(data.type === 'refund') {
 
-          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'refund_cash', before_change: 'confirmed', user_id: this.user.id, reason: data.reason})
           .subscribe(() => {
 
             this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'refund', notes: 'other'})
@@ -1773,7 +1783,6 @@ export class BookingDetailModalComponent implements OnInit {
 
                 this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                 this.dialogRef.close();
-                this.goTo('/bookings');
               })
 
             })
@@ -1785,11 +1794,11 @@ export class BookingDetailModalComponent implements OnInit {
             quantity: this.booking.price_total,
             remaining_balance: this.booking.price_total,
             payed: false,
-            client_id: data.client_main_id,
+            client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id
           };
 
-          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'cancelation', before_change: 'confirmed', user_id: this.user.id})
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'voucher_refund', before_change: 'confirmed', user_id: this.user.id})
           .subscribe(() => {
             this.crudService.update('/bookings', {status: 2}, this.booking.id)
             .subscribe(() => {
@@ -1812,7 +1821,6 @@ export class BookingDetailModalComponent implements OnInit {
                         })
                   this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                   this.dialogRef.close();
-                  this.goTo('/bookings');
 
                 })
             })
@@ -1856,18 +1864,17 @@ export class BookingDetailModalComponent implements OnInit {
 
         const bookingLog = {
           booking_id: this.id,
-          action: 'partial cancel',
+          action: 'partial_cancel',
           description: 'partial cancel booking',
           user_id: this.user.id,
           before_change: 'confirmed',
           school_id: this.user.schools[0].id
         }
-
         this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
 
         if(data.type === 'no_refund') {
 
-          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'no_refund', before_change: 'confirmed', user_id: this.user.id})
           .subscribe(() => {
             this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: book.price_total, status: 'no_refund', notes: 'no refund applied'})
             .subscribe(() => {
@@ -1914,7 +1921,7 @@ export class BookingDetailModalComponent implements OnInit {
 
         } else if(data.type === 'refund') {
 
-          this.crudService.create('/booking-logs', {booking_id: this.id, action:'partial cancelation', before_change: 'confirmed', user_id: this.user.id, description: data.reason})
+          this.crudService.create('/booking-logs', {booking_id: this.id, action:'refund_cash', before_change: 'confirmed', user_id: this.user.id, description: data.reason})
           .subscribe(() => {
             this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingsToCreate[index].price_total, status: 'refund', notes: 'other'})
             .subscribe(() => {
@@ -1941,7 +1948,7 @@ export class BookingDetailModalComponent implements OnInit {
             client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id
           };
-          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'partial cancelation', before_change: 'confirmed', user_id: this.user.id})
+          this.crudService.create('/booking-logs', {booking_id: this.id, action: 'voucher_refund', before_change: 'confirmed', user_id: this.user.id})
           .subscribe(() => {
             book.courseDates.forEach(element => {
               this.crudService.update('/booking-users', {status:2}, element.id)
@@ -2432,6 +2439,13 @@ export class BookingDetailModalComponent implements OnInit {
     this.crudService.list('/payments', 1, 10000, 'asc', 'id', '&booking_id='+this.id + '&school_id='+this.user.schools[0].id)
       .subscribe((data) => {
         this.payments = data.data;
+      })
+  }
+
+  getBookingsLogs() {
+    this.crudService.list('/booking-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.id)
+      .subscribe((data) => {
+        this.bookingLog = data.data;
       })
   }
 }
