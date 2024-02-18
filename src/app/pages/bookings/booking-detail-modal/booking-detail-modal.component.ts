@@ -771,8 +771,20 @@ export class BookingDetailModalComponent implements OnInit {
             window.open(result.data, "_self");
           })
       } else {
-        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
-        this.dialogRef.close();
+        //modal de confirmacion
+        this.crudService.update('/bookings', {paid: this.defaults.paid, paid_total: this.finalPrice, payment_method_id: this.defaults.payment_method_id}, this.id)
+        .subscribe(() => {
+          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
+
+          this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingPendingPrice, status: 'paid', notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'})
+              .subscribe(() => {
+
+                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
+                this.goTo('/bookings/update/'+this.id);
+              })
+
+          this.dialogRef.close();
+        })
       }
     }, 1000);
 
