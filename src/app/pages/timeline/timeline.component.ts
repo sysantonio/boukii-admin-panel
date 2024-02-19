@@ -485,6 +485,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         const sport = this.sports.find(s => s.id === booking.course.sport_id);
         const degrees_sport = this.degrees.filter(degree => degree.sport_id === booking.course.sport_id);
         let degree = {};
+        let booking_color = null;
         if(type == 'collective'){
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
         }
@@ -497,6 +498,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
             degree = degrees_sport[0];
           }
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
+
+          //Booking color
+          booking_color = booking.color;
         }
 
         let monitor = null;
@@ -506,6 +510,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
         return {
           booking_id: booking?.booking?.id,
+          booking_color: booking_color,
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),

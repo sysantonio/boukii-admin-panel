@@ -184,6 +184,16 @@
                                         <div class="task-block-grouped">+ {{task.grouped_tasks.length}}</div>
                                     </ng-container>
                                 </div>
+                                <!--PRIVATE BOOKING COLOR-->
+                                <ng-container *ngIf="task.type === 'private'">
+                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                        [ngClass]="{
+                                            'private-color-green': task.booking_color === 'green',
+                                            'private-color-yellow': task.booking_color === 'yellow',
+                                            'private-color-red': task.booking_color === 'red'
+                                        }">
+                                    </div>
+                                </ng-container>
                             </div>
                             <!--WEEK-->
                             <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
@@ -204,6 +214,16 @@
                                         <div class="task-block-grouped-week">+ {{task.grouped_tasks.length}}</div>
                                     </ng-container>
                                 </div>
+                                <!--PRIVATE BOOKING COLOR-->
+                                <ng-container *ngIf="task.type === 'private'">
+                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                        [ngClass]="{
+                                            'private-color-green': task.booking_color === 'green',
+                                            'private-color-yellow': task.booking_color === 'yellow',
+                                            'private-color-red': task.booking_color === 'red'
+                                        }">
+                                    </div>
+                                </ng-container>
                             </div>
                         </ng-container>
 
@@ -303,6 +323,16 @@
                                         <div class="task-block-grouped-week">+ {{task.grouped_tasks.length}}</div>
                                     </ng-container>
                                 </div>
+                                <!--PRIVATE BOOKING COLOR-->
+                                <ng-container *ngIf="task.type === 'private'">
+                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                        [ngClass]="{
+                                            'private-color-green': task.booking_color === 'green',
+                                            'private-color-yellow': task.booking_color === 'yellow',
+                                            'private-color-red': task.booking_color === 'red'
+                                        }">
+                                    </div>
+                                </ng-container>
                             </div>
                         </ng-container>
 
