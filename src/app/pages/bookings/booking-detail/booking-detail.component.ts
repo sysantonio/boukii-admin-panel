@@ -255,7 +255,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
 
-  getData(updateBooking = false) {
+  async getData(updateBooking = false) {
     this.loading = true;
     this.discounts = [];
     this.bonus = [];
@@ -438,7 +438,7 @@ export class BookingDetailComponent implements OnInit {
 
 
               this.loading = false;
-            }, 500);
+            }, 1000);
           })
         });
       });
