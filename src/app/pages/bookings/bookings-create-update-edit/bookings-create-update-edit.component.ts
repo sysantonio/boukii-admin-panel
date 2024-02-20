@@ -831,7 +831,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
                   course_date_id: item.course_date_id,
                   monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
                   hour_start: item.hour_start,
-                  hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
+                  hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
                   price: 0,
                   currency: item.currency,
                   paxes: this.personsSelected.length + 1,
@@ -858,6 +858,44 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               course: this.selectedItem,
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
+          });
+
+          this.personsSelected.forEach(person => {
+            let extraData: any = {};
+            extraData.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
+            extraData.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
+            extraData.price_cancellation_insurance = 0;
+            extraData.has_boukii_care = this.defaults.has_boukii_care;
+            extraData.price_boukii_care = 0;
+            extraData.payment_method_id = this.defaults.payment_method_id;
+            extraData.paid = this.defaults.paid;
+            extraData.currency = this.selectedItem.currency;
+            extraData.school_id = this.user.schools[0].id;
+            extraData.client_main_id = this.defaults.client_main_id.id;
+            extraData.notes = this.defaults.notes;
+            extraData.notes_school = this.defaults.notes_school;
+            extraData.paxes = paxes;
+            extraData.courseDates = [];
+
+            this.courseDates.forEach(item => {
+                extraData.courseDates.push({
+                  school_id: this.user.schools[0].id,
+                  booking_id: null,
+                  client_id: person.id,
+                  course_id: item.course_id,
+                  course_date_id: item.course_date_id,
+                  monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
+                  hour_start: item.hour_start,
+                  hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
+                  price: 0,
+                  currency: item.currency,
+                  paxes: this.personsSelected.length + 1,
+                  course: this.selectedItem,
+                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              });
+            });
+
+            this.bookingsToCreate.push(extraData);
           });
         }
 

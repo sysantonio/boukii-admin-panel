@@ -125,6 +125,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.getData();
+  }
+
+  async getData() {
+    this.loading = true;
     //ESC to close moveMonitor
     document.addEventListener('keydown', this.handleKeydownEvent.bind(this));
     this.destroy$.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -1664,7 +1669,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
           // hacer el update y el create
           this.snackbar.open('Existe un solapamiento', 'OK', {duration: 3000});
         }*/
-
+        this.getData();
+      } else {
+        this.getData();
       }
     });
   }
