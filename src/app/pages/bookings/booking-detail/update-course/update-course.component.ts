@@ -237,7 +237,7 @@ export class UpdateCourseModalComponent implements OnInit {
                       }
 
 
-                    const basePrice = this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : (this.defaults.course.price * this.datesControl.value.length);
+                    const basePrice = parseFloat(this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : (this.defaults.course.price * this.datesControl.value.length));
                     let price = basePrice + discountReduction;
                     let boukiiCarePrice = 0;
                     let canInsurance = 0;
@@ -370,7 +370,7 @@ export class UpdateCourseModalComponent implements OnInit {
                   }
 
 
-                const basePrice = this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : (this.defaults.course.price * this.datesControl.value.length);
+                const basePrice = parseFloat(this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : (this.defaults.course.price * this.datesControl.value.length));
                 let price = basePrice + discountReduction;
                 let boukiiCarePrice = 0;
                 let canInsurance = 0;

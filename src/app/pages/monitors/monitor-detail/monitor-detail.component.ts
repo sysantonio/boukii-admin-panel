@@ -709,21 +709,38 @@ export class MonitorDetailComponent {
     if (this.selectedLanguages.length >= 1) {
 
       this.defaults.language1_id = this.selectedLanguages[0].id;
-    } if (this.selectedLanguages.length >= 2) {
+    } else {
+      this.defaults.language1_id = null;
+    }
+    if (this.selectedLanguages.length >= 2) {
 
       this.defaults.language2_id = this.selectedLanguages[1].id;
-    } if (this.selectedLanguages.length >= 3) {
+    } else {
+      this.defaults.language2_id = null;
+    }
+    if (this.selectedLanguages.length >= 3) {
 
       this.defaults.language3_id = this.selectedLanguages[2].id;
-    } if (this.selectedLanguages.length >= 4) {
+    } else {
+      this.defaults.language3_id = null;
+    }
+    if (this.selectedLanguages.length >= 4) {
 
       this.defaults.language4_id = this.selectedLanguages[3].id;
-    } if (this.selectedLanguages.length >= 5) {
+    } else {
+      this.defaults.language4_id = null;
+    }
+    if (this.selectedLanguages.length >= 5) {
 
       this.defaults.language5_id = this.selectedLanguages[4].id;
-    } if (this.selectedLanguages.length === 6) {
+    } else {
+      this.defaults.language5_id = null;
+    }
+    if (this.selectedLanguages.length === 6) {
 
       this.defaults.language6_id = this.selectedLanguages[5].id;
+    } else {
+      this.defaults.language6_id = null;
     }
   }
 

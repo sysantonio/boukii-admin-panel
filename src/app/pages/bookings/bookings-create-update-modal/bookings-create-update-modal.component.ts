@@ -1509,22 +1509,16 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     this.crudService.post('/availability', rq)
       .subscribe((data) => {
+        console.log(data);
 
         this.defaultsBookingUser.degree_id = level.id;
-        this.courses = [];
-
-        data.data.forEach(element => {
-          if (this.filterByCourseHours(element.course_dates[0].hour_start, element.course_dates[0].hour_end,
-            element.duration.includes(':') ? this.transformTime(element.duration) : element.duration, '5min')) {
-            this.courses.push(element);
-          }
-        });
+        this.courses = data.data;
         if (!fromPrivate) {
 
           this.coursesMonth = data.data;
         }
 
-        if (this.courses.length === 0) {
+        if (data.data.length === 0) {
           this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
         }
         this.loading = false;
