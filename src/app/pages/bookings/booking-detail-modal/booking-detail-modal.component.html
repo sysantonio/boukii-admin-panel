@@ -8,11 +8,13 @@
         <div style="height: 100%; padding: 1px" @fadeInUp class="card flex-auto">
           <div class="px-6 py-4 border-b flex items-center">
             <h2 class="title m-0" style="width: 80%;">{{'booking_info' | translate}}</h2>
-            <button *ngIf="bookingPendingPrice < 0 && booking.paid" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">{{'bookings_page.cancelations.refund' | translate }}</button>
+            <button *ngIf="bookingPendingPrice < 0 && booking.paid" mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #fb9b1b;padding: 1%;width: 25%; border-radius: 0; margin: 0 2% 0 0;" (click)="refundBooking()">
+              {{'bookings_page.cancelations.refund' | translate }}
+            </button>
             <button mat-raised-button color="primary" class="button-cancel" style="color: #fff;background: #f53d7c;padding: 1%;width: 20%; border-radius: 0; " (click)="goTo('/bookings')">{{'back' | translate }}</button>
+
             <button mat-raised-button [disabled]="booking.status === 2" color="accent" [ngStyle]="{'background': booking.status === 2 ? '#ededed' : '#f53d7c'}"
             class="button-cancel" style="color: #fff;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;" (click)="deleteBooking()">{{'bookings_page.detail.full_cancel' | translate}}</button>
-
           </div>
           <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
             <div>
@@ -39,7 +41,6 @@
                 {{'cancelled' | translate | uppercase }}
 
               </p>
-
 
               <div class="qrcodeImage">
                 <qrcode
@@ -85,10 +86,11 @@
             <div style="float:left; width: 100%">
 
               <p style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'activity' | translate}}</p>
-              <button mat-icon-button color="success" class="delete-icon" (click)="editDates(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1 && !item?.courseDates[0].is_flexible">
+
+              <button mat-icon-button color="success" class="delete-icon" (click)="goToEdit(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1">
                 <mat-icon svgIcon="mat:sync" style="color:#FF4081"></mat-icon>
               </button>
-              <button mat-icon-button color="success" class="delete-icon" (click)="editDates(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1">
+              <button mat-icon-button color="success" class="delete-icon" (click)="editDates(bI, item)" style="float: right;" *ngIf="item?.courseDates[0]?.status === 1 && !item?.courseDates[0].is_flexible">
                 <mat-icon svgIcon="mat:edit" style="color:#FF4081"></mat-icon>
               </button>
             </div>
@@ -121,7 +123,6 @@
                   <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }} - {{date.hour_start}} / {{ date.hour_end }}
                 </li>
               </ul>
-
               <div style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
                   [ngStyle]="{'background': getDegree(item.courseDates[0].degree_id)?.color !== null ? getDegree(item.courseDates[0].degree_id)?.color : ''}">
                 {{getDegree(item.courseDates[0].degree_id)?.annotation}} {{getDegree(item.courseDates[0].degree_id)?.level}}
@@ -223,8 +224,9 @@
                   <p style="width: 60%;font-size: 21px;float:left">{{'booking_total' | translate }}</p>
                   <p style="color: #EA0C60;">{{
 
-                 parseFloatValue(getTotalBook(bI, item))
-                 + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}
+                  parseFloatValue(getTotalBook(bI, item))
+
+                  + getCourseExtraForfaitPrice(item.courseDates[0])}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
                 </div>
               </div>
               <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
@@ -319,7 +321,6 @@
                 <p style="float:right">{{getBasePriceForAnulations(true)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
-
               <span style="width: 100%; float:left" *ngIf="booking.has_reduction">
                 <p style="float:left">{{'reduction' | translate}}</p>
                 <p style="float:right">-{{booking.price_reduction}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
@@ -360,7 +361,7 @@
                 <p style="float:right">{{booking.price_boukii_care}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency  : ''}}</p>
               </span>
 
-              <span style="width: 100%; float:left" *ngIf="this.tva">
+              <span style="width: 100%; float:left" *ngIf="booking.has_tva">
                 <p style="float:left">{{'tva' | translate | uppercase }}</p>
                 <p style="float:right">{{ (tvaPrice).toFixed(2) }} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
@@ -379,11 +380,13 @@
                 <p style="float:left; color:#FB9B1B">{{'pending_payment' | translate | uppercase }}</p>
                 <p style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
+
               <span style="width: 100%; float:left" *ngIf="bookingPendingPrice === 0 && booking.paid && booking.status === 1">
                 <p style="float:left; color:#2fca45">{{'ispaid' | translate | uppercase }}</p>
                 <p style="float:right; color:#2fca45">{{booking.paid_total}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
             </div>
+
 
             <h3 style="font-size: 1.5rem!important;" *ngIf="payments.length > 0">{{'payment_history' | translate}}</h3>
             <div class="opaque-box" *ngIf="payments.length > 0">
@@ -418,6 +421,7 @@
 
 
             </div>
+
             <ng-container *ngIf="!booking.paid && booking.status !== 2">
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div class="square-buttons-container">
@@ -428,7 +432,8 @@
               <div class="square-buttons-container" *ngIf="selectedButton==='1'">
                 <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='1';defaults.payment_method_id = 1" [class.selected]="selectedSubButton==='1'">{{'payment_cash' | translate}}</button>
                 <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='2'; defaults.payment_method_id = 4" [class.selected]="selectedSubButton==='2'">{{'payment_other' | translate}}</button>
-                <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'" [disabled]="booking.payrexx_reference === null">Boukii Pay</button>              </div>
+                <button mat-raised-button color="accent" class="square-button" (click)="selectedSubButton='3'; defaults.payment_method_id = 2" [class.selected]="selectedSubButton==='3'" [disabled]="booking.payrexx_reference === null">Boukii Pay</button>
+              </div>
               <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
                 <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>

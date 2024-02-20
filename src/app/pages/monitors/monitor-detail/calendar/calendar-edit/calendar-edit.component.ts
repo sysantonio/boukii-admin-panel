@@ -280,6 +280,8 @@ export class CalendarEditComponent implements OnInit {
       } else {
         this.selectedIndex = 0;
       }
+
+      this.dialogRef.close();
     });
   }
 }

@@ -244,7 +244,9 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   courses = [];
   coursesMonth = [];
   monitors = [];
-  season = [];
+  season: any = [];
+  holidays: any = [];
+  myHolidayDates: any = [];
   school = [];
   settings: any = [];
   user: any;
@@ -453,7 +455,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     if (d !== null) {
 
       const time=moment(d).startOf('day').toDate().getTime();
-      return this.selectedPrivateDates.find(x=>x.getTime()==time);
+      return !this.myHolidayDates.find(x=>x.getTime()==time) || this.selectedPrivateDates.find(x=>x.getTime()==time) ;
     }
   }
 
@@ -1394,6 +1396,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.defaults.sport_id = sport.sport_id;
     this.form.get("sport").patchValue(sport.sport_id);
     this.selectedSport = sport;
+    this.courses = [];
     this.getDegrees(sport.sport_id);
   }
 
@@ -1622,6 +1625,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
         this.season = season.data[0];
+        this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
+
+        this.holidays.forEach(element => {
+          this.myHolidayDates.push(moment(element).toDate());
+        });
       })
   }
 

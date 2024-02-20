@@ -479,7 +479,7 @@
   "range_of_dates": "Datumsbereich",
   "all_events_created": "Alle Ereignisse wurden erstellt",
   "some_dates_overlap": "An den folgenden Daten war der Monitor beschäftigt: ",
-  "some_monitors_overlap": "Die folgenden Monitore waren beschäftigt: ",
+  "some_monitors_overlap": "Die folgenden Monitore waren beschäftigt",
   "move_task": "Sind Sie sicher, dass Sie diese Aufgabe verschieben möchten?",
   "confirm_move": "Verschiebung bestätigen",
   "create_general_blockage": "Sind Sie sicher, dass Sie eine Blockierung für ALLE Monitore erstellen möchten?",

@@ -233,8 +233,7 @@
                   <mat-form-field class="flex-auto" style="width: 50%;">
                     <mat-label>{{'date' | translate}}</mat-label>
 
-                    <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" [matDatepickerFilter]="inUseDatesFilter"
-                        (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate">
+                    <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate"  [matDatepickerFilter]="inUseDatesFilter">
                       <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
                       <mat-datepicker #pickerDateFrom [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
 

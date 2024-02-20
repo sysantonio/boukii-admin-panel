@@ -364,7 +364,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
         // Process 'monitor' field
         // Filter by free +/ occupied
-        if (item.monitor && (this.filterFree && !item.monitor.hasFullDayNwd) || (this.filterOccupied && item.monitor.hasFullDayNwd)) {
+        if (item.monitor && (this.filterFree && !item.monitor?.hasFullDayNwd) || (this.filterOccupied && item.monitor?.hasFullDayNwd)) {
           if(this.filterMonitor){
             if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
               this.filteredMonitors.push(item.monitor);
@@ -1504,6 +1504,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
       if (result) {
 
       }
+
+      this.getData();
     });
   }
 

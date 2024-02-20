@@ -2363,6 +2363,7 @@ export class BookingDetailModalComponent implements OnInit {
     this.bookingService.editData.booking_users = this.bookingsToCreate[index].courseDates;
     this.bookingService.editData.is_main = this.bookingService.editData.client_main_id === this.bookingService.editData.client_id;
 
+    this.dialogRef.close();
     this.router.navigate(['bookings/edit/'+this.id]);
 
   }
