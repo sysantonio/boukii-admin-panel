@@ -646,7 +646,8 @@ export class BookingDetailComponent implements OnInit {
             tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
             price_total: parseFloat(this.booking.price_total),
             paid_total: parseFloat(this.booking.paid_total) + parseFloat(this.bookingPendingPrice),
-            pending_amount: parseFloat(this.bookingPendingPrice).toFixed(2)
+            pending_amount: parseFloat(this.bookingPendingPrice).toFixed(2),
+            courseName: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name
           }
 
           this.crudService.post('/admin/bookings/payments/' + this.id, basket)

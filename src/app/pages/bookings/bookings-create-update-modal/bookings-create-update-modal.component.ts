@@ -1128,7 +1128,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
               price_total: parseFloat(this.finalPrice),
               paid_total: parseFloat(this.finalPrice),
-              pending_amount: parseFloat(this.finalPrice)
+              pending_amount: parseFloat(this.finalPrice),
+              courseName: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name
             }
 
             this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, booking.data.id)

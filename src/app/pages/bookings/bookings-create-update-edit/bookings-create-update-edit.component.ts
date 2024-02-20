@@ -1136,7 +1136,8 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
                 tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
                 price_total: parseFloat(this.finalPrice),
                 paid_total: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price),
-                pending_amount: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price)
+                pending_amount: parseFloat(this.finalPrice) - parseFloat(this.bookingService.editData.price),
+                courseName: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name
               }
 
               this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, this.bookingService.editData.id)
