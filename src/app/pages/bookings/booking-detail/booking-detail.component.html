@@ -416,6 +416,7 @@
                   <p style="float:left" *ngIf="item.action == 'no_refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'cancel_no_refund' | translate }}</p>
                   <p style="float:left" *ngIf="item.action == 'refund_cash'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'refund_cash' | translate }}</p>
                   <p style="float:left" *ngIf="item.action == 'voucher_refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'voucher_refund' | translate }}</p>
+                  <p style="float:left" *ngIf="item.action == 'update'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'mails.type3' | translate }}</p>
                 </span>
               </ng-container>
 

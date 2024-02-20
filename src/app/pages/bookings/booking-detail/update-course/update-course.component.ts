@@ -23,6 +23,7 @@ export class UpdateCourseModalComponent implements OnInit {
   datesControl = new FormControl();
   hourStart = '';
   noAvailableMonitorDate = [];
+  user: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private dialogRef: MatDialogRef<any>,
     private translateService: TranslateService, private dialog: MatDialog, private snackbar: MatSnackBar) {
@@ -30,6 +31,7 @@ export class UpdateCourseModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.hourStart = this.defaults.mainBooking.hour_start;
     this.hourStart = this.hourStart.replace(':00', '');
@@ -267,11 +269,24 @@ export class UpdateCourseModalComponent implements OnInit {
                     };
 
                     this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.booking_id)
-                      .subscribe(() => {})
+                      .subscribe(() => {
 
-                    const rqs = [];
-                    this.defaults.dates.forEach(element => {
-                      rqs.push(this.crudService.delete('/booking-users', element.id));
+                        const bookingLog = {
+                        booking_id: this.defaults.mainBooking.booking_id,
+                        action: 'update',
+                        description: 'update booking',
+                        user_id: this.user.id,
+                        before_change: 'confirmed',
+                        school_id: this.user.schools[0].id
+                      }
+
+                      this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});})
+
+
+
+                      const rqs = [];
+                      this.defaults.dates.forEach(element => {
+                        rqs.push(this.crudService.delete('/booking-users', element.id));
 
                     });
 
@@ -400,11 +415,23 @@ export class UpdateCourseModalComponent implements OnInit {
                 };
 
                 this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.booking_id)
-                  .subscribe(() => {})
+                  .subscribe(() => {
 
-                const rqs = [];
-                this.defaults.dates.forEach(element => {
-                  rqs.push(this.crudService.delete('/booking-users', element.id));
+                    const bookingLog = {
+                      booking_id: this.defaults.mainBooking.booking_id,
+                      action: 'update',
+                      description: 'update booking',
+                      user_id: this.user.id,
+                      before_change: 'confirmed',
+                      school_id: this.user.schools[0].id
+                    }
+
+                    this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+                  })
+
+                  const rqs = [];
+                  this.defaults.dates.forEach(element => {
+                    rqs.push(this.crudService.delete('/booking-users', element.id));
 
                 });
 
@@ -528,7 +555,18 @@ export class UpdateCourseModalComponent implements OnInit {
           };
 
           this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.booking_id)
-            .subscribe(() => {})
+            .subscribe(() => {
+              const bookingLog = {
+                booking_id: this.defaults.mainBooking.booking_id,
+                action: 'update',
+                description: 'update booking',
+                user_id: this.user.id,
+                before_change: 'confirmed',
+                school_id: this.user.schools[0].id
+              }
+
+              this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+            })
 
           const rqs = [];
           this.defaults.dates.forEach(element => {
