@@ -142,7 +142,7 @@
               <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">{{'options' | translate}}</p>
 
               <div style="width: 100%; float:left">
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" >
+                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="courses[bI].options">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 50%;">
                       <strong>Forfait</strong>

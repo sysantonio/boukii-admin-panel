@@ -106,13 +106,20 @@
                   <img [src]="getMonitor(detailData.bookingusers[0]?.monitor_id) ? getMonitor(detailData.bookingusers[0]?.monitor_id)?.image : imageAvatar" style="border-radius: 100%;">
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="getMonitor(detailData.bookingusers[0].monitor_id)">
-                  <p>{{getMonitor(detailData.bookingusers[0]?.monitor_id)?.first_name}} {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.last_name}}</p>
+
+
+                  <p>
+                    <span *ngIf="detailData.color !== ''" class="dot" [ngStyle]="{'background': detailData.color}"></span>
+                    {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.first_name}} {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.last_name}}</p>
                   <p style="font-size:8px"><i>{{getLanguage(getMonitor(detailData.bookingusers[0]?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(detailData.bookingusers[0]?.monitor_id)?.country) }} · {{calculateAge(getMonitor(detailData.bookingusers[0]?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="!getMonitor(detailData.bookingusers[0]?.monitor_id)">
                   <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
                 </div>
-
+                <div style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
+                    [ngStyle]="{'background': getDegree(detailData.bookingusers[0]?.degree_id)?.color !== null ? getDegree(detailData.bookingusers[0]?.degree_id)?.color : ''}">
+                  {{getDegree(detailData.bookingusers[0]?.degree_id)?.annotation}} {{getDegree(detailData.bookingusers[0]?.degree_id)?.level}}
+                </div>
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
                 <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_cancellation_insurance"></mat-slide-toggle> Op. Rem
