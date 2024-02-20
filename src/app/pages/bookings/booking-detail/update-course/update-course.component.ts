@@ -178,13 +178,25 @@ export class UpdateCourseModalComponent implements OnInit {
               this.datesControl.value.forEach((element, idx) => {
                 const date = this.defaults.dates.filter((d) => d.course_date_id === element);
 
-                if (date[0].monitor_id !== null) {
-                  const monitor = monitorsResponse[idx].data.find((m) => m.id === date[0].monitor_id);
+                if (data.length > 0) {
+                  if (date[0].monitor_id !== null) {
+                    const monitor = monitorsResponse[idx].data.find((m) => m.id === date[0].monitor_id);
 
-                  if (!monitor) {
-                    this.noAvailableMonitorDate.push(date[0]);
+                    if (!monitor) {
+                      this.noAvailableMonitorDate.push(date[0]);
+                    }
                   }
+                } else {
+                  if (this.defaults.dates[0].monitor_id !== null) {
+                    const monitor = monitorsResponse[idx].data.find((m) => m.id === this.defaults.dates[0].monitor_id);
+
+                    if (!monitor) {
+                      this.noAvailableMonitorDate.push(date[0]);
+                    }
+                  }
+
                 }
+
               });
 
               if (this.noAvailableMonitorDate.length > 0) {

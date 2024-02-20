@@ -268,7 +268,7 @@
           <ng-container *ngIf="column.type === 'course_image'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <img [src]="'https://school.boukii.com/assets/icons/'+ getCourseType(data[i])+'_' + getCourseImage(data[i]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
+              <img [src]="getCourseType(data[i]) === 'prive' ? data[i].sport.icon_prive : data[i].sport.icon_collective" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
               <!--<ng-container *ngIf="data[i].bookingusers > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
