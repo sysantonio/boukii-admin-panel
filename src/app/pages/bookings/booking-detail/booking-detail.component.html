@@ -380,6 +380,11 @@
                 <p style="float:left; color:#FB9B1B">{{'pending_payment' | translate | uppercase }}</p>
                 <p style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
+
+              <span style="width: 100%; float:left" *ngIf="bookingPendingPrice === 0 && booking.paid && booking.status === 1">
+                <p style="float:left; color:#2fca45">{{'ispaid' | translate | uppercase }}</p>
+                <p style="float:right; color:#2fca45">{{booking.paid_total}} {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}</p>
+              </span>
             </div>
 
 
