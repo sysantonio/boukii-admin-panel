@@ -477,7 +477,7 @@
   "range_of_dates": "Plage de dates",
   "all_events_created": "Tous les événements ont été créés",
   "some_dates_overlap": "Aux dates suivantes, le moniteur était occupé : ",
-  "some_monitors_overlap": "Les moniteurs suivants étaient occupés",
+  "some_monitors_overlap": "Certains moniteurs ne se servent pas du changement",
   "move_task": "Êtes-vous sûr de vouloir déplacer cette tâche ?",
   "confirm_move": "Confirmer le déplacement",
   "create_general_blockage": "Êtes-vous sûr de vouloir créer un blocage pour TOUS les moniteurs ?",

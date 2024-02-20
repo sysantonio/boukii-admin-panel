@@ -484,7 +484,7 @@
   "range_of_dates": "Rango de fechas",
   "all_events_created": "Todos los eventos han sido creados",
   "some_dates_overlap": "En las siguientes fechas el monitor estaba ocupado: ",
-  "some_monitors_overlap": "Los siguientes monitores estaban ocupados",
+  "some_monitors_overlap": "A algunos monitores no se le ha aplicado el cambio",
   "move_task": "¿Estás seguro de que quieres mover esta tarea?",
   "confirm_move": "Confirmar movimiento",
   "create_general_blockage": "¿Estás seguro de que deseas crear un bloqueo para TODOS los monitores?",

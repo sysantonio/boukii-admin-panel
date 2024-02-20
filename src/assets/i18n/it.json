@@ -478,7 +478,7 @@
   "range_of_dates": "Gamma di date",
   "all_events_created": "Tutti gli eventi sono stati creati",
   "some_dates_overlap": "Nelle seguenti date il monitor era occupato: ",
-  "some_monitors_overlap": "I seguenti monitor erano occupati",
+  "some_monitors_overlap": "Alcuni monitorati non hanno applicato il cambiamento",
   "move_task": "Sei sicuro di voler spostare questa attività?",
   "confirm_move": "Conferma spostamento",
   "create_general_blockage": "Sei sicuro di voler creare un blocco per TUTTI i monitor?",

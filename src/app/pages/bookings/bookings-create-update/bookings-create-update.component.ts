@@ -434,7 +434,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     if (d !== null) {
 
       const time=moment(d).startOf('day').toDate().getTime();
-      return !this.myHolidayDates.find(x=>x.getTime()==time) || this.selectedPrivateDates.find(x=>x.getTime()==time) ;
+      return !this.myHolidayDates.find(x=>x.getTime()==time);
     }
   }
 
