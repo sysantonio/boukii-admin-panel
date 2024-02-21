@@ -158,6 +158,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
     await this.calculateWeeksInMonth();
     //await this.calculateTaskPositions();
+
+    //BRING PREVIOUS FILTERS
+    this.loadSavedFilters();
     this.loadBookings(this.currentDate);
   }
 
@@ -1806,7 +1809,41 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   applyFilters() {
     this.showFilter=false;
+    this.saveFilters();
     this.loadBookings(this.currentDate);
+  }
+
+  saveFilters() {
+    const filterOptions = {
+      checkedSports: Array.from(this.checkedSports),
+      filterMonitor: this.filterMonitor,
+      filterFree: this.filterFree,
+      filterOccupied: this.filterOccupied,
+      filterCollective: this.filterCollective,
+      filterPrivate: this.filterPrivate,
+      filterNwd: this.filterNwd,
+      filterBlockPayed: this.filterBlockPayed,
+      filterBlockNotPayed: this.filterBlockNotPayed,
+    };
+  
+    localStorage.setItem('filterOptions', JSON.stringify(filterOptions));
+  }
+
+  loadSavedFilters() {
+    const filterOptions = localStorage.getItem('filterOptions');
+    if (filterOptions) {
+      const options = JSON.parse(filterOptions);
+  
+      this.checkedSports = new Set(options.checkedSports);
+      this.filterMonitor = options.filterMonitor;
+      this.filterFree = options.filterFree;
+      this.filterOccupied = options.filterOccupied;
+      this.filterCollective = options.filterCollective;
+      this.filterPrivate = options.filterPrivate;
+      this.filterNwd = options.filterNwd;
+      this.filterBlockPayed = options.filterBlockPayed;
+      this.filterBlockNotPayed = options.filterBlockNotPayed;
+    }
   }
 
   resetFilters() {
@@ -1821,7 +1858,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.filterBlockPayed=true;
     this.filterBlockNotPayed=true;
 
-    this.applyFilters();
+    //Remove saved filters
+    localStorage.removeItem('filterOptions');
+    this.showFilter=false;
+    this.loadBookings(this.currentDate);
   }
 
   /* Edit blocks */
@@ -2104,7 +2144,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
           if (this.langMatch(monitorLanguages, clientLanguages)) {
             ret = false;
-          } else if (this.taskDetail.course.course_type !== 2) {
+          } 
+          else {
+            ret = true;
+            break;
+          } 
+          
+          if (this.taskDetail.course.course_type !== 2) {
             const data = await firstValueFrom(this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id));
 
             if (data.data.length > 0) {

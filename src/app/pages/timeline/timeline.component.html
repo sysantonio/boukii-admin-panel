@@ -19,10 +19,13 @@
                     <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
                     <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
                     <button (click)="goToNext()">&gt;</button>
-                    <button (click)="showFilter = !showFilter" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
+                    <div class="filter-wrapper">
+                        <div class="filter-bullet" *ngIf="showResetFilters()"></div>
+                        <button (click)="showFilter = !showFilter" class="filter-button"><mat-icon svgIcon="mat:filter_list"></mat-icon></button>
+                    </div>
 
-                    <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()">{{'timeline.reset_filters' | translate}}</button>
-                    <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()">{{'timeline.apply_filters' | translate}}</button>
+                    <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()" style="font-size:14px;">{{'timeline.reset_filters' | translate}}</button>
+                    <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()" style="font-size:14px;">{{'timeline.apply_filters' | translate}}</button>
 
                     <mat-form-field class="flex-auto">
                         <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (ngModelChange)="onDateChange()">
@@ -168,7 +171,11 @@
                             ]" [ngStyle]="task.style">
                                 <div class="task-text">
                                     <img *ngIf="(task.type=='collective' || task.type=='private') && task.sport" [src]="task.sport.icon_selected" />
-                                    <div *ngIf="task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed'">{{ task.name }}</div>
+                                    <div *ngIf="task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed'">
+                                        <ng-container *ngIf="task.type === 'block_payed'">BP&nbsp;</ng-container>
+                                        <ng-container *ngIf="task.type === 'block_no_payed'">BNP&nbsp;</ng-container>
+                                        {{ task.name }}
+                                    </div>
                                     <div *ngIf="task.type === 'collective'">{{ task.name }}</div>
                                     <div *ngIf="task.type === 'private'">{{ task.all_clients[0].client.first_name}} {{ task.all_clients[0].client.last_name}}</div>
                                     <div *ngIf="task.type === 'private'">{{getLanguageById(task.all_clients[0].client.language1_id)}} ·{{getBirthYears(task.all_clients[0].client.birth_date)}} {{'years' |translate}}</div>
