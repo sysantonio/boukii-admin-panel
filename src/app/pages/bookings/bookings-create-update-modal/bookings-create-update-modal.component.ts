@@ -1119,7 +1119,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
             const basket = {
               payment_method_id: this.defaults.payment_method_id,
-              price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name, quantity: 1, price: this.getBasePrice()},
+              price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].course.name, quantity: 1, price: this.getBasePrice()},
               bonus: {total: this.bonus.length, bonuses: bonuses},
               reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
               boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
@@ -1128,8 +1128,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
               price_total: parseFloat(this.finalPrice),
               paid_total: parseFloat(this.finalPrice),
-              pending_amount: parseFloat(this.finalPrice),
-              courseName: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name
+              pending_amount: parseFloat(this.finalPrice)
             }
 
             this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, booking.data.id)
