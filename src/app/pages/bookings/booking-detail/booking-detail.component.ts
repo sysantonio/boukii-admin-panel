@@ -637,7 +637,7 @@ export class BookingDetailComponent implements OnInit {
 
           const basket = {
             payment_method_id: this.defaults.payment_method_id,
-            price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice() - parseFloat(this.booking.paid_total)},
+            price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name, quantity: 1, price: this.getBasePrice() - parseFloat(this.booking.paid_total)},
             bonus: {total: this.bonus.length, bonuses: bonuses},
             reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
             boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},
@@ -646,8 +646,7 @@ export class BookingDetailComponent implements OnInit {
             tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
             price_total: parseFloat(this.booking.price_total),
             paid_total: parseFloat(this.booking.paid_total) + parseFloat(this.bookingPendingPrice),
-            pending_amount: parseFloat(this.bookingPendingPrice).toFixed(2),
-            courseName: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name
+            pending_amount: parseFloat(this.bookingPendingPrice).toFixed(2)
           }
 
           this.crudService.post('/admin/bookings/payments/' + this.id, basket)

@@ -1127,7 +1127,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
               const basket = {
                 payment_method_id: this.defaults.payment_method_id,
-                price_base: {name: 'Price Base', quantity: 1, price: this.getBasePrice()},
+                price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].name, quantity: 1, price: this.getBasePrice()},
                 bonus: {total: this.bonus.length, bonuses: bonuses},
                 reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
                 boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
