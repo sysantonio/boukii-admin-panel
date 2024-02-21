@@ -655,7 +655,7 @@
       <mat-tab label="Planning">
 
         <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetailTimeline || showBlockTimeline}">
-          <div class="header-navigation">
+          <div class="header-navigation-monitor">
               <div class="date-navigation">
               <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
               <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
@@ -671,9 +671,9 @@
               </div>
 
               <div class="view-selection">
-                  <span class="view-option" [ngClass]="{'selected': timelineView == 'day'}" (click)="changeView('day')">Jour</span>
-                  <span class="view-option" [ngClass]="{'selected': timelineView == 'week'}" (click)="changeView('week')">Semaine</span>
-                  <span class="view-option" [ngClass]="{'selected': timelineView == 'month'}" (click)="changeView('month')">Mois</span>
+                  <span class="view-option" [ngClass]="{'selected': timelineView == 'day'}" (click)="changeView('day')">{{'day' | translate}}</span>
+                  <span class="view-option" [ngClass]="{'selected': timelineView == 'week'}" (click)="changeView('week')">{{'week' | translate}}</span>
+                  <span class="view-option" [ngClass]="{'selected': timelineView == 'month'}" (click)="changeView('month')">{{'month' | translate}}</span>
               </div>
           </div>
 
@@ -690,7 +690,7 @@
                   <div class="grid-container">
                       <div class="grid-row"  [ngClass]="{'outside-month-day': !isDayVisibleDay() && timelineView == 'day'}">
                           <ng-container *ngIf="timelineView == 'day'">
-                              <div class="grid-cell" *ngFor="let hour of hoursRange" (dblclick)="handleDbClickEvent('Clicked', $event, 'day', hour)">
+                              <div *ngFor="let hour of hoursRange;let last = last" [ngClass]="{'grid-cell-last': last, 'grid-cell': !last}" (dblclick)="handleDbClickEvent('Clicked', $event, 'day', hour)">
                               </div>
                           </ng-container>
                           <ng-container *ngIf="timelineView == 'week'">
@@ -712,13 +712,31 @@
                           ]" [ngStyle]="task.style">
                               <div class="task-text">
                                   <img *ngIf="(task.type=='collective' || task.type=='private') && task.sport" [src]="task.sport.icon_selected" />
-                                  <div>{{ task.name }}</div>
+                                  <div *ngIf="task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed'">
+                                      <ng-container *ngIf="task.type === 'block_payed'">BP&nbsp;</ng-container>
+                                      <ng-container *ngIf="task.type === 'block_no_payed'">BNP&nbsp;</ng-container>
+                                      {{ task.name }}
+                                  </div>
+                                  <div *ngIf="task.type === 'collective'">{{ task.name }}</div>
+                                  <div *ngIf="task.type === 'private'">{{ task.all_clients[0].client.first_name}} {{ task.all_clients[0].client.last_name}}</div>
+                                  <div *ngIf="task.type === 'private'">{{getLanguageById(task.all_clients[0].client.language1_id)}} ·{{getBirthYears(task.all_clients[0].client.birth_date)}} {{'years' |translate}}</div>
                               </div>
-                              <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks">
+                              <div *ngIf="task.type=='collective' || task.type=='private'" class="task-blocks" [ngStyle]="{'min-width': task.type === 'private' ? '0px' : '54px',
+                              'width': task.type === 'private' ? '34px' : '54px'}">
                                   <!-- PENDING LEVEL -->
                                   <div class="task-block-level" *ngIf="task.degree" [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}} {{task.subgroup_number}}</div>
                                   <div *ngIf="task.type=='collective'" class="task-block-people">{{task.clients_number}}/{{task.max_participants}}</div>
                               </div>
+                              <!--PRIVATE BOOKING COLOR-->
+                              <ng-container *ngIf="task.type === 'private'">
+                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                      [ngClass]="{
+                                          'private-color-green': task.booking_color === 'green',
+                                          'private-color-yellow': task.booking_color === 'yellow',
+                                          'private-color-red': task.booking_color === 'red'
+                                      }">
+                                  </div>
+                              </ng-container>
                           </div>
                           <!--WEEK-->
                           <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlockTimeline(task) : toggleDetailTimeline(task)" class="task-wrapper-week cursor-pointer" [ngClass]="[
@@ -734,6 +752,16 @@
                                   <div class="task-block-level-week" *ngIf="task.degree" [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}} {{task.subgroup_number}}</div>
                                   <div *ngIf="task.type=='collective'" class="task-block-people-week">{{task.clients_number}}/{{task.max_participants}}</div>
                               </div>
+                              <!--PRIVATE BOOKING COLOR-->
+                              <ng-container *ngIf="task.type === 'private'">
+                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                      [ngClass]="{
+                                          'private-color-green': task.booking_color === 'green',
+                                          'private-color-yellow': task.booking_color === 'yellow',
+                                          'private-color-red': task.booking_color === 'red'
+                                      }">
+                                  </div>
+                              </ng-container>
                           </div>
                       </ng-container>
 
@@ -770,6 +798,16 @@
                                   <div class="task-block-level-week" *ngIf="task.degree" [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}} {{task.subgroup_number}}</div>
                                   <div *ngIf="task.type=='collective'" class="task-block-people-week">{{task.clients_number}}/{{task.max_participants}}</div>
                               </div>
+                              <!--PRIVATE BOOKING COLOR-->
+                              <ng-container *ngIf="task.type === 'private'">
+                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                      [ngClass]="{
+                                          'private-color-green': task.booking_color === 'green',
+                                          'private-color-yellow': task.booking_color === 'yellow',
+                                          'private-color-red': task.booking_color === 'red'
+                                      }">
+                                  </div>
+                              </ng-container>
                           </div>
                       </ng-container>
 

@@ -186,9 +186,9 @@ export class MonitorDetailComponent {
   visible = false;
 
   //Planificador
-  hoursRange: string[] = this.generateHoursRange('08:00', '20:00');
+  hoursRange: string[];
   hoursRangeMinusLast:string[];
-  hoursRangeMinutes: string[] = this.generateHoursRangeMinutes('08:00', '20:00');
+  hoursRangeMinutes: string[];
   activeSchool:any=null;
   sports:any[] = [];
   degrees:any[] = [];
@@ -232,12 +232,9 @@ export class MonitorDetailComponent {
     });
 
     this.colorKeys = Object.keys(this.groupedByColor);
-
-    this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
   }
 
   async ngOnInit() {
-
     this.getData();
   }
 
@@ -383,8 +380,21 @@ export class MonitorDetailComponent {
 
       await this.getSportsTimeline();
       await this.getDegrees();
-      let vacationDaysString = "[\"2023-12-08\",\"2024-01-06\",\"2024-01-17\",\"2024-02-01\",\"2024-02-02\"]";
-      this.vacationDays = JSON.parse(vacationDaysString);
+      
+      this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+      .subscribe((season) => {
+        let hour_start = '08:00';
+        let hour_end = '18:00';
+        if (season.data.length > 0) {
+          this.vacationDays = JSON.parse(season.data[0].vacation_days);
+          hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
+          hour_end = season.data[0].hour_end ? season.data[0].hour_end.substring(0, 5) : '18:00';
+        }
+        this.hoursRange = this.generateHoursRange(hour_start, hour_end);
+        this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
+        this.hoursRangeMinutes = this.generateHoursRangeMinutes(hour_start, hour_end);
+      })
+
       await this.calculateWeeksInMonth();
       //await this.calculateTaskPositions();
       this.loadBookings(this.currentDate);
@@ -1423,7 +1433,10 @@ export class MonitorDetailComponent {
         /*allBookings.push(...item.bookings);*/
         if (item.bookings && typeof item.bookings === 'object') {
             for (const bookingKey in item.bookings) {
-                const bookingArray = item.bookings[bookingKey];
+                let bookingArray = item.bookings[bookingKey];
+                if (!Array.isArray(bookingArray)) {
+                  bookingArray = [bookingArray];
+                }
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
                     const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
                     allBookings.push(firstBooking);
@@ -1433,6 +1446,24 @@ export class MonitorDetailComponent {
     }
 
     //Convert them into TASKS
+
+    //Subgroups without bookings
+    allBookings.forEach(booking => {
+      if (!booking.booking) {
+        // Construct the booking object
+        const courseDate = booking.course.course_dates.find(date => date.id === booking.course_date_id);
+        
+        booking.booking = {
+          id: booking.id
+        };
+        booking.date = courseDate ? courseDate.date : null;
+        booking.hour_start = courseDate ? courseDate.hour_start : null;
+        booking.hour_end = courseDate ? courseDate.hour_end : null;
+        booking.bookings_number = booking.booking_users.length;
+        booking.bookings_clients = booking.booking_users;
+      }
+    });
+
 
     let tasksCalendar:any = [
       //BOOKINGS
@@ -1459,6 +1490,7 @@ export class MonitorDetailComponent {
         console.log(sport);
         const degrees_sport = this.degrees.filter(degree => degree.sport_id === booking.course.sport_id);
         let degree = {};
+        let booking_color = null;
         if(type == 'collective'){
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
         }
@@ -1471,10 +1503,14 @@ export class MonitorDetailComponent {
             degree = degrees_sport[0];
           }
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
+
+          //Booking color
+          booking_color = booking.color;
         }
 
         return {
-          booking_id: booking.id,
+          booking_id: booking?.booking?.id,
+          booking_color: booking_color,
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
@@ -1613,9 +1649,9 @@ export class MonitorDetailComponent {
 
        //Background color of block tasks
        if (task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed') {
-         style['background-color'] = task.color;
-         styleWeek['background-color'] = task.color;
-         styleMonth['background-color'] = task.color;
+        style['background-color'] = this.hexToRgbA(task.color,0.4);
+        styleWeek['background-color'] = this.hexToRgbA(task.color,0.4);
+        styleMonth['background-color'] = this.hexToRgbA(task.color,0.4);
        }
 
        return {
@@ -1630,6 +1666,17 @@ export class MonitorDetailComponent {
      this.plannerTasks = plannerTasks;
 
      console.log('Planner Tasks:', this.plannerTasks);
+   }
+
+   hexToRgbA(hex:string, transparency = 1) {
+     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+     if (!rgb) {
+         return null;
+     }
+     const r = parseInt(rgb[1], 16);
+     const g = parseInt(rgb[2], 16);
+     const b = parseInt(rgb[3], 16);
+     return `rgba(${r},${g},${b},${transparency})`;
    }
 
   getPositionDate(courseDates: any[], courseDateId: string): number {
@@ -1821,6 +1868,15 @@ export class MonitorDetailComponent {
 
   handleDbClickEvent(action: string, event: any, type:string, position:any, hourDay?:any, positionWeek?:any): void {
 
+    if(type == 'day' && !this.isDayVisibleDay()){
+      return;
+    }
+    if(type == 'week' && !this.isDayVisibleWeek(position)){
+      return;
+    }
+    if(type == 'month' && !this.isDayInMonth(position, positionWeek)){
+      return;
+    }
     /* GET DATE,HOUR,MONITOR -> DOUBLE CLICK */
 
     let dateInfo;
