@@ -1437,9 +1437,34 @@ export class MonitorDetailComponent {
                 if (!Array.isArray(bookingArray)) {
                   bookingArray = [bookingArray];
                 }
+
+                let bookingArrayComplete = [];
+                
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
-                    const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
+
+                  //Check if private bookings have the the same hours - and group them
+                  if (bookingArray[0].course.course_type === 2 && bookingArray.length > 1) {
+                    const groupedByTime = bookingArray.reduce((acc, curr) => {
+                        const timeKey = `${curr.hour_start}-${curr.hour_end}`;
+                        if (!acc[timeKey]) {
+                            acc[timeKey] = [];
+                        }
+                        acc[timeKey].push(curr);
+                        return acc;
+                    }, {});
+                    for (const group in groupedByTime) {
+                        bookingArrayComplete.push(groupedByTime[group]);
+                    }
+
+                  } else {
+                      bookingArrayComplete.push(bookingArray);
+                  }
+
+                  //Do the same but for each separate group
+                  for (const groupedBookingArray of bookingArrayComplete) {
+                    const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
                     allBookings.push(firstBooking);
+                  }
                 }
             }
         }
