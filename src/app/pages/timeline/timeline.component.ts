@@ -319,7 +319,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   searchBookings(firstDate:string,lastDate:string){
     this.crudService.get('/admin/getPlanner?date_start='+firstDate+'&date_end='+lastDate+'&school_id='+this.activeSchool+'&perPage='+99999).subscribe(
       (data:any) => {
-        console.log(data.data);
+        //console.log(data.data);
         this.processData(data.data);
       },
       error => {
@@ -424,27 +424,54 @@ export class TimelineComponent implements OnInit, OnDestroy {
                 if (!Array.isArray(bookingArray)) {
                   bookingArray = [bookingArray];
                 }
+
+                let bookingArrayComplete = [];
+
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
-                  if(!this.areAllChecked()){
-                    hasAtLeastOneBooking = this.checkedSports.has(bookingArray[0].course.sport_id);
+
+                    //Check if private bookings have the the same hours - and group them
+                    if (bookingArray[0].course.course_type === 2 && bookingArray.length > 1) {
+                      const groupedByTime = bookingArray.reduce((acc, curr) => {
+                          const timeKey = `${curr.hour_start}-${curr.hour_end}`;
+                          if (!acc[timeKey]) {
+                              acc[timeKey] = [];
+                          }
+                          acc[timeKey].push(curr);
+                          return acc;
+                      }, {});
+                      for (const group in groupedByTime) {
+                          bookingArrayComplete.push(groupedByTime[group]);
+                      }
+
+                  } else {
+                      bookingArrayComplete.push(bookingArray);
                   }
-                  if(this.filterMonitor && hasAtLeastOne && hasAtLeastOneBooking){
-                    if(bookingArray[0].monitor_id == this.filterMonitor){
-                      if ((this.filterCollective || bookingArray[0].course.course_type !== 1) &&
-                          (this.filterPrivate || bookingArray[0].course.course_type !== 2)) {
-                        const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
-                        allBookings.push(firstBooking);
+
+                  //Do the same but for each separate group
+                  for (const groupedBookingArray of bookingArrayComplete) {
+                    
+                    if(!this.areAllChecked()){
+                      hasAtLeastOneBooking = this.checkedSports.has(groupedBookingArray[0].course.sport_id);
+                    }
+                    if(this.filterMonitor && hasAtLeastOne && hasAtLeastOneBooking){
+                      if(groupedBookingArray[0].monitor_id == this.filterMonitor){
+                        if ((this.filterCollective || groupedBookingArray[0].course.course_type !== 1) &&
+                            (this.filterPrivate || groupedBookingArray[0].course.course_type !== 2)) {
+                          const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
+                          allBookings.push(firstBooking);
+                        }
                       }
                     }
-                  }
-                  else{
-                    if(hasAtLeastOne && hasAtLeastOneBooking){
-                      if ((this.filterCollective || bookingArray[0].course.course_type !== 1) &&
-                          (this.filterPrivate || bookingArray[0].course.course_type !== 2)) {
-                        const firstBooking = { ...bookingArray[0], bookings_number: bookingArray.length, bookings_clients: bookingArray };
-                        allBookings.push(firstBooking);
+                    else{
+                      if(hasAtLeastOne && hasAtLeastOneBooking){
+                        if ((this.filterCollective || groupedBookingArray[0].course.course_type !== 1) &&
+                            (this.filterPrivate || groupedBookingArray[0].course.course_type !== 2)) {
+                          const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
+                          allBookings.push(firstBooking);
+                        }
                       }
                     }
+
                   }
                 }
             }
