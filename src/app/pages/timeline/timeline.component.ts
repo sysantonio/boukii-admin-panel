@@ -1086,8 +1086,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.matchTeacher(monitor.id).then((res) => {
       if (res) {
 
-
-
         const dialogRef = this.dialog.open(ConfirmUnmatchMonitorComponent, {
           data: {
             booking: this.taskDetail,
@@ -1825,7 +1823,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       filterBlockPayed: this.filterBlockPayed,
       filterBlockNotPayed: this.filterBlockNotPayed,
     };
-  
+
     localStorage.setItem('filterOptions', JSON.stringify(filterOptions));
   }
 
@@ -1833,7 +1831,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const filterOptions = localStorage.getItem('filterOptions');
     if (filterOptions) {
       const options = JSON.parse(filterOptions);
-  
+
       this.checkedSports = new Set(options.checkedSports);
       this.filterMonitor = options.filterMonitor;
       this.filterFree = options.filterFree;
@@ -2144,12 +2142,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
           if (this.langMatch(monitorLanguages, clientLanguages)) {
             ret = false;
-          } 
-          else {
-            ret = true;
-            break;
-          } 
-          
+          }
+
           if (this.taskDetail.course.course_type !== 2) {
             const data = await firstValueFrom(this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id));
 
@@ -2172,11 +2166,15 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   langMatch(objeto1, objeto2) {
-    for (const key in objeto1) {
-        if (objeto1[key] !== null && objeto1[key] === objeto2[key]) {
-            return true;
+    for (const key1 in objeto1) {
+        if (objeto1[key1] !== null) {
+            for (const key2 in objeto2) {
+                if (objeto1[key1] === objeto2[key2]) {
+                    return true; // Retorna verdadero si encuentra una coincidencia
+                }
+            }
         }
     }
-    return false;
-  }
+    return false; // Retorna falso si no encuentra ninguna coincidencia
+}
 }
