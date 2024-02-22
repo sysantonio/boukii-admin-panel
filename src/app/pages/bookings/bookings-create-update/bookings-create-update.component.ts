@@ -1105,7 +1105,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
             this.crudService.post('/admin/bookings/payments/' + booking.data.id, basket)
               .subscribe((result: any) => {
                 console.log((result));
-                window.open(result.data, "_self");
+
+                if (this.defaults.payment_method_id === 2) {
+
+                  window.open(result.data, "_self");
+                } else {
+                  this.goTo('/bookings/update/'+booking.data.id);
+                }
                 this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
               })
           } else if(this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
