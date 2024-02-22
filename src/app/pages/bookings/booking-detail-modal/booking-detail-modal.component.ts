@@ -752,7 +752,7 @@ export class BookingDetailModalComponent implements OnInit {
 
         const basket = {
           payment_method_id: this.defaults.payment_method_id,
-          price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].course.name, quantity: 1, price: this.getBasePrice() - parseFloat(this.booking.paid_total)},
+          price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.courses[0].name, quantity: 1, price: this.getBasePrice() - parseFloat(this.booking.paid_total)},
           bonus: {total: this.bonus.length, bonuses: bonuses},
           reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
           boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care)},

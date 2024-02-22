@@ -490,6 +490,7 @@
   "timeline.assign_unmatch": "Möchten Sie den Kurs trotzdem diesem Monitor zuweisen?",
   "timeline.degree_match": "Der Dozent verfügt nicht über das empfohlene Niveau für diesen Kurs",
   "timeline.language_match": "Der Monitor entspricht nicht der Sprache der Kursteilnehmer",
+  "timeline.sport_match": "Der Monitor entspricht nicht der Sportart des Platzes",
   "pax_limit_reached": "Für diesen Kurs ist die Teilnehmerzahl begrenzt: ",
   "delete_text": "Möchten Sie diesen Artikel entfernen?",
   "delete_title": "Löschen",

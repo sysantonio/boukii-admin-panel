@@ -495,6 +495,7 @@
   "timeline.assign_unmatch": "¿Quiere asignar el curso a este monitor de todas formas?",
   "timeline.degree_match": "El monitor no tiene el nivel recomendado para este curso",
   "timeline.language_match": "El monitor no cumple con el idioma de los participantes del curso",
+  "timeline.sport_match": "El monitor no cumple con el deporte del curso",
   "pax_limit_reached": "Este curso tiene un número limitado de personas: ",
   "delete_text": "¿Quieres eliminar este elemento?",
   "delete_title": "Eliminar",
