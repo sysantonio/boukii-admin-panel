@@ -362,6 +362,27 @@ export class TimelineComponent implements OnInit, OnDestroy {
           if(!this.areAllChecked()){
             hasAtLeastOne = item.monitor.sports.length > 0 && item.monitor.sports.some(sport => this.checkedSports.has(sport.id));
           }
+
+          if (item.monitor.id && item.monitor.sports && Array.isArray(item.monitor.sports) && item.monitor.sports.length > 0) {
+            item.monitor.sports.forEach((sportObject:any, index:any) => {
+                const degrees_sport = this.degrees.filter(degree => degree.sport_id === sportObject.id);
+                sportObject.degrees_sport = degrees_sport;
+
+                let highestDegreeId = null;
+                if (sportObject.authorizedDegrees && Array.isArray(sportObject.authorizedDegrees) && sportObject.authorizedDegrees.length > 0) {
+                    const highestAuthorizedDegree = sportObject.authorizedDegrees.reduce((prev, current) => {
+                        return (prev.degree_id > current.degree_id) ? prev : current;
+                    });
+                    highestDegreeId = highestAuthorizedDegree.degree_id;
+                }
+                sportObject.authorized_degree_id = highestDegreeId;
+
+                //Check the first
+                if (index === 0) {
+                  item.monitor.sport_degrees_check = 0;
+                }
+            });
+          }
           this.allMonitors.push(item.monitor);
         }
 
@@ -2202,6 +2223,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
             }
         }
     }
-    return false; // Retorna falso si no encuentra ninguna coincidencia
-}
+    return false;
+  }
+
+  //Change degree wheel in monitor
+  changeMonitorDegree(monitor: any, index: number): void {
+    monitor.sport_degrees_check = index;
+  }
+  
 }

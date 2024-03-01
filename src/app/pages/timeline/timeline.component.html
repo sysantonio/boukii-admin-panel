@@ -89,9 +89,18 @@
                             <div class="monitor">
                                 <ng-container *ngIf="monitor.id">
                                     <div class="monitor-left">
-                                        <div class="monitor-img-wrapper">
-                                            <img [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
-                                        </div>
+
+                                        <ng-container *ngFor="let sport of monitor.sports; let i = index">
+                                            <ng-container *ngIf="monitor.sport_degrees_check === i">
+                                                <app-level-user *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length" [allLevels]="sport.degrees_sport"
+                                                [selectLevel]="sport.authorized_degree_id" [size]="56" [userImage]="monitor.image ? monitor.image : 'assets/img/avatar.png'"></app-level-user>
+
+                                                <div *ngIf="!sport.authorized_degree_id" class="monitor-img-wrapper">
+                                                    <img [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
+                                                </div>
+                                            </ng-container>
+                                        </ng-container>
+
                                         <div class="monitor-text">
                                             <div class="monitor-lang">
                                                 <ng-container *ngIf="monitor.language1_id">
@@ -116,8 +125,10 @@
                                         </div>
                                     </div>
                                     <div class="monitor-right">
-                                        <div *ngFor="let sport of monitor.sports" class="monitor-sport">
-                                            <img [src]="sport.icon_selected" [title]="sport.name"/>
+                                        <div *ngFor="let sport of monitor.sports; let i = index" class="monitor-sport"
+                                            [ngClass]="{'full-opacity': monitor.sport_degrees_check === i}"
+                                            (click)="monitor.sport_degrees_check !== i && changeMonitorDegree(monitor, i)">
+                                                <img [src]="sport.icon_selected" [title]="sport.name"/>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -247,9 +258,18 @@
                                 <ng-container *ngIf="weekIndex === 0">
                                     <ng-container *ngIf="monitor.id">
                                         <div class="monitor-left">
-                                            <div class="monitor-img-wrapper">
-                                                <img [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
-                                            </div>
+                                            
+                                            <ng-container *ngFor="let sport of monitor.sports; let i = index">
+                                                <ng-container *ngIf="monitor.sport_degrees_check === i">
+                                                    <app-level-user *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length" [allLevels]="sport.degrees_sport"
+                                                    [selectLevel]="sport.authorized_degree_id" [size]="56" [userImage]="monitor.image ? monitor.image : 'assets/img/avatar.png'"></app-level-user>
+
+                                                    <div *ngIf="!sport.authorized_degree_id" class="monitor-img-wrapper">
+                                                        <img [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
+                                                    </div>
+                                                </ng-container>
+                                            </ng-container>
+                                            
                                             <div class="monitor-text">
                                                 <div class="monitor-lang">
                                                     FR · EN · ES
@@ -266,8 +286,10 @@
                                             </div>
                                         </div>
                                         <div class="monitor-right">
-                                            <div *ngFor="let sport of monitor.sports" class="monitor-sport">
-                                                <img [src]="sport.icon_selected" [title]="sport.name"/>
+                                            <div *ngFor="let sport of monitor.sports; let i = index" class="monitor-sport"
+                                                [ngClass]="{'full-opacity': monitor.sport_degrees_check === i}"
+                                                (click)="monitor.sport_degrees_check !== i && changeMonitorDegree(monitor, i)">
+                                                    <img [src]="sport.icon_selected" [title]="sport.name"/>
                                             </div>
                                         </div>
                                     </ng-container>
