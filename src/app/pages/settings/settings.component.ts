@@ -209,8 +209,9 @@ export class SettingsComponent implements OnInit {
               contact_address: [this.school.contact_address],
               contact_address_number: [this.school.contact_address_number],
               contact_cp: [this.school.contact_cp],
-              contact_city: [this.school.contact_city],
-              contact_province: [this.school.contact_province]
+              contact_country: [this.school.contact_country],
+              contact_province: [this.school.contact_province],
+              contact_city: [this.school.contact_city]
 
             });
 
@@ -464,7 +465,8 @@ export class SettingsComponent implements OnInit {
       contact_address: this.defaultsSchoolData.contact_address,
       contact_address_number: this.defaultsSchoolData.contact_address_number,
       contact_cp: this.defaultsSchoolData.contact_cp,
-      contact_country: this.defaultsSchoolData.contact_city,
+      contact_city: this.defaultsSchoolData.contact_city,
+      contact_country: this.defaultsSchoolData.contact_country,
       contact_province: this.defaultsSchoolData.contact_province,
       contact_email: this.defaultsSchoolData.contact_email,
     }
@@ -473,8 +475,8 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.snackbar.open(this.translateSerivce.instant('snackbar.settings.save'), this.translateSerivce.instant('cancel'), {duration: 3000});
-        this.getData();
         this.schoolService.refreshSchoolData();
+        //this.getData();
       });
   }
 

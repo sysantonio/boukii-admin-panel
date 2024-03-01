@@ -149,9 +149,9 @@
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field class="vex-flex-form-field flex-auto">
                       <mat-label>{{'country' | translate }}</mat-label>
-                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="contact_city" >
+                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="contact_country" >
                       <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaultsSchoolData.contact_city = country.id">
+                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaultsSchoolData.contact_country = country.id">
                           {{country.name}}
                         </mat-option>
                       </mat-autocomplete>
@@ -165,6 +165,13 @@
                           {{province.name}}
                         </mat-option>
                       </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <mat-form-field class="flex-auto">
+                      <mat-label>{{'city' | translate}}</mat-label>
+
+                      <input formControlName="contact_city" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_city">
                     </mat-form-field>
                   </div>
                 </div>
