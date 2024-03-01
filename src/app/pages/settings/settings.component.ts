@@ -94,6 +94,7 @@ export class SettingsComponent implements OnInit {
     contact_city: null,
     contact_country: null,
     contact_province: null,
+    contact_email: null
   }
 
   defaultsCommonExtras = {
@@ -220,6 +221,7 @@ export class SettingsComponent implements OnInit {
             this.defaultsSchoolData.contact_city = this.school.contact_city;
             this.defaultsSchoolData.contact_province = this.school.contact_province;
             this.defaultsSchoolData.contact_country = this.school.contact_country;
+            this.defaultsSchoolData.contact_email = this.school.contact_email;
 
 
             this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaultsSchoolData.contact_country));
@@ -464,6 +466,7 @@ export class SettingsComponent implements OnInit {
       contact_cp: this.defaultsSchoolData.contact_cp,
       contact_country: this.defaultsSchoolData.contact_city,
       contact_province: this.defaultsSchoolData.contact_province,
+      contact_email: this.defaultsSchoolData.contact_email,
     }
 
     this.crudService.update('/schools', data, this.school.id)
