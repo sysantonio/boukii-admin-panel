@@ -382,7 +382,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const client = this.clients.find((c) => c.id === this.defaultsBookingUser.client_id);
       client.client_sports.forEach(sport => {
 
-        if (sport.sport_id === this.defaults.sport_id) {
+        if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
           const level = this.levels.find((l) => l.id === sport.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
@@ -409,7 +409,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     if (client) {
       client.client_sports.forEach(sport => {
 
-        if (sport.sport_id === this.defaults.sport_id) {
+        if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
           const level = this.levels.find((l) => l.id === sport.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
@@ -1264,7 +1264,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     client.client_sports.forEach(sport => {
 
-      if (sport.sport_id === this.defaults.sport_id) {
+      if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
         const level = this.levels.find((l) => l.id === sport.degree_id);
         this.levelForm.patchValue(level);
         this.defaultsBookingUser.degree_id = level.id;
@@ -1284,7 +1284,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       let hasSport = false;
       client.client_sports.forEach(sport => {
 
-        if (sport.sport_id === this.defaults.sport_id) {
+        if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
           const level = this.levels.find((l) => l.id === sport.degree_id);
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
@@ -1383,7 +1383,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
         if (client) {
           client.client_sports.forEach(sport => {
-            if (sport.sport_id === this.defaults.sport_id) {
+            if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
               const level = this.levels.find((l) => l.id === sport.degree_id);
               this.levelForm.patchValue(level);
               this.defaultsBookingUser.degree_id = level.id;
@@ -1431,7 +1431,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   this.clients = cl.data;
                   const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
                   client.client_sports.forEach(sport => {
-                    if (sport.sport_id === this.defaults.sport_id) {
+                    if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
                       const level = this.levels.find((l) => l.id === sport.degree_id);
                       this.levelForm.patchValue(level);
                       this.defaultsBookingUser.degree_id = level.id;
@@ -1463,7 +1463,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.utilizers = data.data;
         if (!onLoad) {
           client.client_sports.forEach(sport => {
-            if (sport.sport_id === this.defaults.sport_id) {
+            if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
               const level = this.levels.find((l) => l.id === sport.degree_id);
 
               if (level) {

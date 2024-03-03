@@ -42,14 +42,14 @@ export class MonitorDetailComponent {
     { label: 'Course', property: 'course', type: 'course_type_data', visible: true},
     { label: 'Client', property: 'client_id', type: 'client', visible: true },
     { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
-    { label: 'Options', property: 'options', type: 'text', visible: true },
+    //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'Bons', property: 'bonus', type: 'light', visible: true },
-    { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
-    { label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
+    //{ label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
+    //{ label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
     { label: 'Prix', property: 'price', type: 'price', visible: true },
-    { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
-    { label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
-    { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
+    //{ label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
+    //{ label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
+    //{ label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
@@ -380,7 +380,7 @@ export class MonitorDetailComponent {
 
       await this.getSportsTimeline();
       await this.getDegrees();
-      
+
       this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
       .subscribe((season) => {
         let hour_start = '08:00';
@@ -1439,7 +1439,7 @@ export class MonitorDetailComponent {
                 }
 
                 let bookingArrayComplete = [];
-                
+
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
 
                   //Check if private bookings have the the same hours - and group them
@@ -1477,7 +1477,7 @@ export class MonitorDetailComponent {
       if (!booking.booking) {
         // Construct the booking object
         const courseDate = booking.course.course_dates.find(date => date.id === booking.course_date_id);
-        
+
         booking.booking = {
           id: booking.id
         };
