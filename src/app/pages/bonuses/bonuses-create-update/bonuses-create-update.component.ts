@@ -25,7 +25,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
     client_id: null,
     school_id: null,
   };
-
+  logs: any = [];
   user: any;
 
   loading: boolean = true;
@@ -143,8 +143,18 @@ export class BonusesCreateUpdateComponent implements OnInit {
     this.crudService.get('/vouchers/'+this.id)
       .subscribe((data: any) => {
         this.defaults = data.data;
-        this.loading = false;
+
+        this.getVoucherLogs();
       })
+  }
+
+  getVoucherLogs() {
+    this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&voucher_id='+this.id)
+    .subscribe((vl) => {
+        this.logs = vl.data;
+        this.loading = false;
+      }
+    )
   }
 
   generateRandomNumber() {

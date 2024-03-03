@@ -94,5 +94,18 @@
       </div>
 
     </div>
+
+
+  </div>
+
+  <h3 style="font-size: 1.5rem!important;margin-top: 10px;" *ngIf="logs.length > 0">{{'change_history' | translate}}</h3>
+
+  <div class="opaque-box" *ngIf="logs.length > 0">
+    <ng-container *ngFor="let item of logs">
+      <span style="width: 100%; float:left">
+        <p style="float:left" *ngIf="item.amount > 0">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'ispaid' | translate }}: {{item.amount}}</p>
+        <p style="float:left" *ngIf="item.amount < 0">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'refund' | translate }}: {{item.amount}}</p>
+      </span>
+    </ng-container>
   </div>
 </div>

@@ -20,6 +20,7 @@ export class BonusesComponent {
     { label: 'quantity', property: 'quantity', type: 'text', visible: true },
     { label: 'remaining_balance', property: 'remaining_balance', type: 'text', visible: true },
     { label: 'ispaid', property: 'payed', type: 'status', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 }
