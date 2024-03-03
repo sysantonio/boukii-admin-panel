@@ -457,7 +457,7 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="Cours">
+      <mat-tab label="{{'course' | translate }}">
         <div class="card" style="margin: 3% 0 0 0;">
           <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-1 gap-4" style="border-bottom: 1px solid #ededed; padding:5%">
             <vex-page-layout style="margin: 2% 0 0 0;">
@@ -932,7 +932,7 @@
 
                 <!-- Añadir niños con modal -->
                 <mat-table #sportsCurrentTable [dataSource]="sportsCurrentData" >
-                  <caption style="width: 100px"> {{'current_sport' | translate }}</caption>
+                  <caption style="width: 100%;float: left;text-align: left;"> {{'current_sport' | translate }}</caption>
 
                   <!-- Otros contenedores según tu descripción -->
 
@@ -1165,7 +1165,7 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="Cours">
+      <mat-tab label="{{'course' | translate }}">
         <div class="card" style="margin: 3% 0 0 0;">
           <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-1 gap-4" style="border-bottom: 1px solid #ededed; padding:5%">
             <vex-page-layout style="margin: 2% 0 0 0;">

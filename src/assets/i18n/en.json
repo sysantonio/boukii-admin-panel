@@ -263,6 +263,8 @@
   "courses.errors.students": "Group capacity cannot exceed course capacity",
   "courses.transfer.title": "Transer student",
   "bonus.new_bonus": "New bonus",
+  "bonus.edit_bonus": "Edit bonus",
+
   "bonus.code": "Code",
   "bonus.generate": "Generate code automatically",
   "monitors.creation.title": "New monitor",

@@ -264,6 +264,7 @@
   "courses.errors.students": "Die Gruppenkapazität darf die Kurskapazität nicht überschreiten",
   "courses.transfer.title": "Transer-Student",
   "bonus.new_bonus": "Neuer Bonus",
+  "bonus.edit_bonus": "Bonus bearbeiten",
   "bonus.code": "Code",
   "bonus.generate": "Code automatisch generieren",
   "monitors.creation.title": "Neuer Monitor",

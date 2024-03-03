@@ -37,6 +37,7 @@
     </div>
   </div>
 
+  <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
   <div class="mt-6 flex flex-col md:flex-row md:items-start" [formGroup]="formInfoAccount" *ngIf="!loading && !editing">
 
     <mat-tab-group style="width: 100%" [selectedIndex]="selectedTabPreviewIndex">
@@ -439,11 +440,11 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="Cours">
+      <mat-tab label="{{'course' | translate }}">
         <vex-page-layout style="margin: 2% 0 0 0;">
 
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
-              <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Reservations'" [route]="'bookings'"
+              <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
               (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="'&with[]=booking&with[]=course.courseGroups.courseSubgroups'"
               [showDetail]="showDetail">
             </vex-aio-table>
@@ -652,7 +653,7 @@
 
 
       <!-- PLANIFICADOR-->
-      <mat-tab label="Planning">
+      <mat-tab label="{{'timeline.timeline' | translate }}">
 
         <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetailTimeline || showBlockTimeline}">
           <div class="header-navigation-monitor">
@@ -729,7 +730,7 @@
                               </div>
                               <!--PRIVATE BOOKING COLOR-->
                               <ng-container *ngIf="task.type === 'private'">
-                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
                                       [ngClass]="{
                                           'private-color-green': task.booking_color === 'green',
                                           'private-color-yellow': task.booking_color === 'yellow',
@@ -754,7 +755,7 @@
                               </div>
                               <!--PRIVATE BOOKING COLOR-->
                               <ng-container *ngIf="task.type === 'private'">
-                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
                                       [ngClass]="{
                                           'private-color-green': task.booking_color === 'green',
                                           'private-color-yellow': task.booking_color === 'yellow',
@@ -800,7 +801,7 @@
                               </div>
                               <!--PRIVATE BOOKING COLOR-->
                               <ng-container *ngIf="task.type === 'private'">
-                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                  <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
                                       [ngClass]="{
                                           'private-color-green': task.booking_color === 'green',
                                           'private-color-yellow': task.booking_color === 'yellow',
@@ -1491,7 +1492,7 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-table class="sports-table" #sportsCurrentTable [dataSource]="sportsCurrentData">
-                  <caption style="width: 100px"> {{'current_sport' | translate }}</caption>
+                  <caption style="width: 100%;float: left;text-align: left;"> {{'current_sport' | translate }}</caption>
                     <!-- Otros contenedores según tu descripción -->
                     <ng-container matColumnDef="delete">
                     <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">Eliminar</mat-header-cell>
@@ -1525,7 +1526,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="salary">
-                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">Salary</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef style="width: 27%;float: left;">{{'salary' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 25%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                         <mat-label>{{'salary' | translate }}</mat-label>
@@ -1605,7 +1606,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="salary">
-                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">Salary</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">{{'salary' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
                       <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
                       <mat-label>{{'salary' | translate }}</mat-label>
@@ -1733,11 +1734,11 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Cours">
+    <mat-tab label="{{'course' | translate }}">
       <vex-page-layout style="margin: 2% 0 0 0;">
 
           <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
-            <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Reservations'" [route]="'bookings'"
+            <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
             (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="'&with[]=booking&with[]=course.courseGroups.courseSubgroups'"
             [showDetail]="showDetail">
           </vex-aio-table>
@@ -1942,7 +1943,7 @@
       </mat-card>
       </vex-page-layout-content>
     </mat-tab>
-    <mat-tab label="Planning">
+    <mat-tab label="{{'timeline.timeline' | translate }}">
 
       <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetailTimeline || showBlockTimeline}">
         <div class="header-navigation">

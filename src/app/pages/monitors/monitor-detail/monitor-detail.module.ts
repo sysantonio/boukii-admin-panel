@@ -34,6 +34,7 @@ import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.mo
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { TranslateModule } from '@ngx-translate/core';
     PageLayoutModule,
     ComponentsModule,
     ComponentsCustomModule,
-    TranslateModule
+    TranslateModule,
+    MatProgressSpinnerModule
   ],
   declarations: [MonitorDetailComponent],
   exports: [MonitorDetailComponent]

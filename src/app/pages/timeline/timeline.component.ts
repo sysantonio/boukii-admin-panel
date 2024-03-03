@@ -470,7 +470,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
                   //Do the same but for each separate group
                   for (const groupedBookingArray of bookingArrayComplete) {
-                    
+
                     if(!this.areAllChecked()){
                       hasAtLeastOneBooking = this.checkedSports.has(groupedBookingArray[0].course.sport_id);
                     }
@@ -1701,7 +1701,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
             .subscribe((data) => {
 
               this.getData();
-              this.snackbar.open('Event created');
+              this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
             })
           }
         } else {
@@ -1714,7 +1714,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
               .subscribe((data) => {
 
                 this.getData();
-                this.snackbar.open('Event created');
+                this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
               })
             })
           // hacer el update y el create
@@ -1809,7 +1809,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
             .subscribe((data) => {
 
               this.getData();
-              this.snackbar.open('Event created');
+              this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
             })
           }
         } else {
@@ -1822,7 +1822,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
               .subscribe((data) => {
 
                 this.getData();
-                this.snackbar.open('Event created');
+                this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
               })
             })
           // hacer el update y el create
@@ -2230,5 +2230,5 @@ export class TimelineComponent implements OnInit, OnDestroy {
   changeMonitorDegree(monitor: any, index: number): void {
     monitor.sport_degrees_check = index;
   }
-  
+
 }

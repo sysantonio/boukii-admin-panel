@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { ApiCrudService } from 'src/service/crud.service';
 import { EventService } from 'src/service/event.service';
+import { TranslateService } from '@ngx-translate/core';
 
 const colors: any = {
   blue: {
@@ -67,7 +68,8 @@ export class CalendarComponent implements OnInit {
     private snackbar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private crudService: ApiCrudService,
-    private eventService: EventService
+    private eventService: EventService,
+    private translateService: TranslateService
   ) {
     this.id = this.activatedRoute.snapshot.params.id;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));;
@@ -214,7 +216,7 @@ export class CalendarComponent implements OnInit {
             .subscribe((data) => {
 
               this.getData();
-              this.snackbar.open('Event created');
+              this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
             })
           }
         } else {
@@ -227,7 +229,7 @@ export class CalendarComponent implements OnInit {
               .subscribe((data) => {
 
                 this.getData();
-                this.snackbar.open('Event created');
+                this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
               })
             })
           // hacer el update y el create

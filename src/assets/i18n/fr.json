@@ -264,6 +264,7 @@
   "courses.errors.students": "La capacité du groupe ne peut pas dépasser la capacité du cours",
   "courses.transfer.title": "Étudiant transversal",
   "bonus.new_bonus": "Nouveau bonus",
+  "bonus.edit_bonus": "Modifier le bonus",
   "bonus.code": "Code",
   "bonus.generate": "Générer du code automatiquement",
   "monitors.creation.title": "Nouveau moniteur",

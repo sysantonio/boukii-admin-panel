@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="Bonuses">
   <vex-breadcrumbs
-    [crumbs]="['bonus', 'new_bonus']"
+    [crumbs]="['bonus', mode === 'create' ? 'bonus.new_bonus' : 'bonus.edit_bonus']"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
@@ -16,7 +16,7 @@
   <div class="flex flex-col sm:flex-row gap-4">
     <div @fadeInUp class="card flex-auto">
       <div class="px-6 py-4 border-b flex items-center">
-        <h2 class="title m-0">{{'bonus.new_bonus' |translate}}</h2>
+        <h2 class="title m-0">{{mode === 'create' ? 'bonus.new_bonus' : 'bonus.edit_bonus' |translate}}</h2>
       </div>
       <div class="px-6 py-4 flex flex-col" [formGroup]="form">
 
