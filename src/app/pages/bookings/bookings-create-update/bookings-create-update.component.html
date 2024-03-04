@@ -252,8 +252,8 @@
                     <mat-label>{{'hour' | translate}}</mat-label>
                     <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)">
                       <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':')
-                      ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min')"
-                      [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
+                      ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min'); let hI = index"
+                      [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time, i)"
                         (onSelectionChange)="courseDate.hour_start = time;">{{ time }}</mat-option>
                     </mat-select>
                   </mat-form-field>

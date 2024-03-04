@@ -537,15 +537,27 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
   }
 
-  calculateAvailableHours(selectedCourseDateItem: any, time: any) {
+  calculateAvailableHours(selectedCourseDateItem: any, time: any, courseDateIndex: any) {
 
-    const todayHour = moment(moment(), 'HH:mm:ss');
+    // Obtener la fecha y hora actuales
+    const now = moment();
+
+    // Convertir la fecha del curso y la hora de inicio/fin a objetos moment
+    const courseDate = moment(this.courseDates[courseDateIndex].date, 'YYYY-MM-DD'); // Asumiendo que tienes una propiedad 'date'
     const start = moment(selectedCourseDateItem.hour_start, 'HH:mm:ss');
     const end = moment(selectedCourseDateItem.hour_end, 'HH:mm:ss');
 
-    const hour = moment(time, 'HH:mm');
+    // Convertir la hora proporcionada a un objeto moment (con la fecha del curso para comparaciones correctas)
+    const hour = moment(`${selectedCourseDateItem.date} ${time}`, 'YYYY-MM-DD HH:mm');
 
-    return  hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
+    // Primero, comprueba si es el mismo día
+    if (!now.isSame(courseDate, 'day')) {
+      return false; // Si no es el mismo día, no es necesario comprobar la hora
+    }
+
+    // Si es el mismo día, comprueba si la hora actual es después de la hora proporcionada
+    // y si la hora proporcionada está entre la hora de inicio y fin del curso
+    return now.isAfter(hour) || (hour.isSameOrAfter(start) && hour.isSameOrBefore(end));
   }
 
   resetCourseDates() {

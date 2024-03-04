@@ -264,7 +264,7 @@
                         [disabled]="externalData && externalData.onlyPrivate" [value]="externalData && externalData.hour ? externalData.hour: ''">
                         <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':')
                         ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min')"
-                        [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time)"
+                        [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time, i)"
                           (onSelectionChange)="courseDate.hour_start = time;">{{ time }}</mat-option>
                       </mat-select>
                     </mat-form-field>
