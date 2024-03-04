@@ -543,9 +543,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const start = moment(selectedCourseDateItem.hour_start, 'HH:mm:ss');
     const end = moment(selectedCourseDateItem.hour_end, 'HH:mm:ss');
 
-    const hour = moment(time, 'HH:mm')
+    const hour = moment(time, 'HH:mm');
 
-    return todayHour.isAfter(hour) || hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
+    return  hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
   }
 
   resetCourseDates() {

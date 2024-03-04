@@ -574,13 +574,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   calculateAvailableHours(selectedCourseDateItem: any, time: any) {
 
-    const todayHour = moment(moment(), 'HH:mm:ss');
     const start = moment(selectedCourseDateItem.hour_start, 'HH:mm:ss');
     const end = moment(selectedCourseDateItem.hour_end, 'HH:mm:ss');
 
     const hour = moment(time, 'HH:mm')
 
-    return todayHour.isAfter(hour) || hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
+    return hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
   }
 
   resetCourseDates() {

@@ -60,7 +60,7 @@ export class UpdateCourseModalComponent implements OnInit {
 
     const hour = moment(time, 'HH:mm')
 
-    return todayHour.isAfter(hour) || hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
+    return hour.isSameOrBefore(start) && hour.isSameOrAfter(end);
   }
 
   generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
