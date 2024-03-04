@@ -31,6 +31,9 @@ import { CourseDetailComponent } from './course-detail.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+import { ComponentsModule } from 'src/@vex/components/components.module';
+import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
 
 @NgModule({
   imports: [
@@ -67,7 +70,10 @@ import { TranslateModule } from '@ngx-translate/core';
     AngularEditorModule,
     MatTabsModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    TranslateModule,
+    PageLayoutModule,
+    ComponentsModule,
+    ComponentsCustomModule
   ],
   declarations: [CourseDetailComponent],
   exports: [CourseDetailComponent]

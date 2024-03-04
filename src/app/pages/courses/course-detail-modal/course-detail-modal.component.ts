@@ -14,6 +14,7 @@ import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dia
 import { TranslateService } from '@ngx-translate/core';
 import { CoursesCreateUpdateComponent } from '../courses-create-update/courses-create-update.component';
 import { CoursesCreateUpdateModalComponent } from '../courses-create-update-modal/courses-create-update-modal.component';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 
 @Component({
   selector: 'vex-course-detail-modal',
@@ -130,7 +131,26 @@ export class CourseDetailModalComponent implements OnInit {
   languages: any = [];
   countries = MOCK_COUNTRIES;
   rangeForm: UntypedFormGroup;
+  showDetail: boolean = false;
+  detailData: any;
 
+  entity = '/booking-users';
+  columns: TableColumn<any>[] = [
+    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
+    { label: 'course', property: 'course', type: 'course_type_data', visible: true},
+    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
+    //{ label: 'Options', property: 'options', type: 'text', visible: true },
+    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
+    //{ label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
+    //{ label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
+    { label: 'price', property: 'price', type: 'price', visible: true },
+    //{ label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
+    //{ label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
+    //{ label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true }
+  ];
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
     private snackbar: MatSnackBar, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
@@ -1115,6 +1135,204 @@ export class CourseDetailModalComponent implements OnInit {
     } else {
       const translations = JSON.parse(course.translations);
       return translations[this.translateService.currentLang].name;
+    }
+  }
+
+
+
+  getDateIndex() {
+    let ret = 0;
+    if (this.detailData.course && this.detailData.course.course_dates) {
+      this.detailData.course.course_dates.forEach((element, idx) => {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+          ret = idx +1;
+        }
+      });
+    }
+
+    return ret;
+  }
+
+  getGroupsQuantity() {
+    let ret = 0;
+    if (this.detailData.course && this.detailData.course.course_dates) {
+      this.detailData.course.course_dates.forEach((element, idx) => {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+          ret = element.groups.length;
+        }
+      });
+    }
+
+    return ret;
+  }
+
+
+  getSubGroupsIndex() {
+    let ret = 0;
+    if (this.detailData.course && this.detailData.course.course_dates) {
+
+      this.detailData.course.course_dates.forEach((element, idx) => {
+        const group = element.groups.find((g) => g.id === this.detailData.course_group_id);
+
+        if (group){
+          group.subgroups.forEach((s, sindex) => {
+            if (s.id === this.detailData.course_subgroup_id) {
+              ret = sindex + 1;
+            }
+          });
+        }
+      });
+    }
+    return ret;
+  }
+
+  getHoursMinutes(hour_start:string, hour_end:string) {
+    const parseTime = (time:string) => {
+      const [hours, minutes] = time.split(':').map(Number);
+      return { hours, minutes };
+    };
+
+    const startTime = parseTime(hour_start);
+    const endTime = parseTime(hour_end);
+
+    let durationHours = endTime.hours - startTime.hours;
+    let durationMinutes = endTime.minutes - startTime.minutes;
+
+    if (durationMinutes < 0) {
+      durationHours--;
+      durationMinutes += 60;
+    }
+
+    return `${durationHours}h${durationMinutes}m`;
+  }
+
+  getDateFormatLong(date:string) {
+    return moment(date).format('dddd, D MMMM YYYY');
+  }
+
+  getHourRangeFormat(hour_start:string,hour_end:string) {
+    return hour_start.substring(0, 5)+' - '+hour_end.substring(0, 5);
+  }
+
+  getAllLevelsBySport() {
+    let ret = [];
+    this.schoolSports.forEach(element => {
+      if (element.sport_id === this.detailData.sport.id) {
+        ret = element.degrees;
+      }
+    });
+
+    return ret;
+  }
+
+  getClientDegree(sport_id:any,sports:any) {
+    const sportObject = sports.find(sport => sport.sport_id === sport_id);
+    if (sportObject) {
+      return sportObject.degree_id;
+    }
+    else{
+      return 0;
+    }
+  }
+
+  getBirthYears(date:string) {
+    const birthDate = moment(date);
+    return moment().diff(birthDate, 'years');
+  }
+
+  getLanguageById(languageId: number): string {
+    const language = this.languages.find(c => c.id === languageId);
+    return language ? language.code.toUpperCase() : '';
+  }
+
+  getCountryById(countryId: number): string {
+    const country = MOCK_COUNTRIES.find(c => c.id === countryId);
+    return country ? country.code : 'Aucun';
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
+    }
+  }
+
+  showDetailEvent(event: any) {
+
+    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
+      this.detailData = event.item;
+
+      this.crudService.get('/admin/courses/'+this.detailData.course_id)
+        .subscribe((course) => {
+          this.detailData.course = course.data;
+          this.crudService.get('/sports/'+this.detailData.course.sport_id)
+          .subscribe((sport) => {
+            this.detailData.sport = sport.data;
+          });
+
+          if (this.detailData.degree_id !== null) {
+            this.crudService.get('/degrees/'+this.detailData.degree_id)
+            .subscribe((degree) => {
+              this.detailData.degree = degree.data;
+            })
+          }
+
+      })
+
+      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+        .subscribe((booking) => {
+          this.detailData.users = [];
+
+          booking.data.forEach((element, idx) => {
+            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+              this.detailData.users.push(element);
+
+                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
+                .subscribe((cd) => {
+
+                  if (cd.data.length > 0) {
+                    element.sports= [];
+
+                    cd.data.forEach(c => {
+                      element.sports.push(c);
+                    });
+                  }
+
+
+                })
+
+            }
+          });
+          this.showDetail = true;
+
+        });
+
+
+    } else {
+
+      this.showDetail = event.showDetail;
+      this.detailData = null;
+    }
+
+  }
+
+
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h') && duration.includes('min')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }
   }
 }
