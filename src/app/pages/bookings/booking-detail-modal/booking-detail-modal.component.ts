@@ -2461,4 +2461,11 @@ export class BookingDetailModalComponent implements OnInit {
         this.bookingLog = data.data;
       })
   }
+
+  canUpdate(date: any) {
+    const today = moment();
+    const dateFormat = moment(date);
+
+    return today.isSameOrBefore(dateFormat) || !this.booking.paid;
+  }
 }

@@ -1318,7 +1318,6 @@ export class CourseDetailModalComponent implements OnInit {
 
   }
 
-
   calculateHourEnd(hour: any, duration: any) {
     if(duration.includes('h') && duration.includes('min')) {
       const hours = duration.split(' ')[0].replace('h', '');
