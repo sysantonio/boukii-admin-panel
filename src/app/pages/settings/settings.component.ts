@@ -136,6 +136,7 @@ export class SettingsComponent implements OnInit {
   authorized = true;
   authorizedBookingComm = true;
   selectedSport = -1;
+  degrees: any = [];
 
   hasCancellationInsurance = false;
   hasBoukiiCare = false;
@@ -170,10 +171,12 @@ export class SettingsComponent implements OnInit {
   }
 
   getData() {
+    this.loading = true;
     this.crudService.get('/schools/'+this.user.schools[0].id)
       .subscribe((data) => {
 
         this.school = data.data;
+        this.getDegrees();
 
         forkJoin([this.getSchoolSeason(),this.getSports(),this.getBlockages(), this.getSchoolSports()])
           .subscribe((data: any) => {
@@ -486,7 +489,8 @@ export class SettingsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         res.data.sports.forEach(sport => {
-          const hasDegrees = this.schoolSports.filter((s) => s.sport_id === sport.id).length > 0;
+
+          const hasDegrees = this.degrees.filter((s) => s.sport_id === sport.id).length > 0;
 
           if (!hasDegrees) {
             this.mockLevelData.forEach((degree, idx) => {
@@ -504,13 +508,15 @@ export class SettingsComponent implements OnInit {
                 });
             });
 
-            setTimeout(() => {
-              this.getSchoolSportDegrees();
-            }, 1000);
+
           }
 
         });
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.sports'), 'OK', {duration: 3000});
+        setTimeout(() => {
+          this.snackbar.open(this.translateSerivce.instant('snackbar.settings.sports'), 'OK', {duration: 3000});
+
+          this.getData();
+        }, 1000);
       });
   }
 
@@ -549,6 +555,12 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  getDegrees() {
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.school.id)
+        .subscribe((data) => {
+          this.degrees = data.data;
+        })
+  }
 
   setSport(id: number) {
     let index = this.sportsList.indexOf(id);
