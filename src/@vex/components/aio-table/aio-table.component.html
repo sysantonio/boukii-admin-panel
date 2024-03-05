@@ -686,7 +686,7 @@
     </button>
     <button (click)="deactivate(item)" mat-menu-item *ngIf="canDeactivate">
       <mat-icon svgIcon="mat:delete"></mat-icon>
-      <span>Deactivate</span>
+      <span>{{'deactivate' | translate }}</span>
     </button>
   </ng-template>
 </mat-menu>

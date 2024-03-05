@@ -562,5 +562,7 @@
   "partial_cancel": "Teilstornierung",
   "cancel_no_refund": "Stornierung ohne Rückerstattung",
   "refund_cash": "Barzahlung oder andere Rückerstattung",
-  "voucher_refund": "Rückerstattung mit Bonus"
+  "voucher_refund": "Rückerstattung mit Bonus",
+  "deactivate": "Deaktivieren"
+
 }
