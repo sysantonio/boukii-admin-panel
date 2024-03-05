@@ -52,6 +52,7 @@ export class ClientsComponent {
     { label: 'type', property: 'a', type: 'coronita', visible: true, cssClasses: ['font-medium'] },
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'client', property: 'first_name', type: 'client_2', visible: true, cssClasses: ['font-medium'] },
+    { label: 'level', property: 'test', type: 'level', visible: true, cssClasses: ['font-medium'] },
     { label: 'users', property: 'utilizers', type: 'count', visible: true, cssClasses: ['font-medium'] },
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'sports', property: 'client_sports', type: 'sports', visible: true, cssClasses: ['font-medium'] },
