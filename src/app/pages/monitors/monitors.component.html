@@ -50,7 +50,7 @@
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
         <div style="float: left; width: 100%;">
           <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">Sports</p>
+            <p style="font-size: 20px;">{{'sports' | translate }}</p>
           </div>
           <ng-container *ngFor="let item of monitorSport">
             <div style="float: left; width: 50%;">
@@ -72,6 +72,12 @@
                   }">
                     <p style="text-align: center;font-size: 12px;margin: 3% 0 0 0;">{{item?.level?.annotation}} {{item?.level?.name}}</p>
                   </div>
+                </div>
+              </div>
+
+              <div style="float:left; width: 100%">
+                <div *ngFor="let auth of item.authorized">
+                  <div style="width: 15px; height: 15px; float: left; margin: 4px 0 0 4px" [style.background]="auth?.degree?.color"></div>
                 </div>
               </div>
             </div>

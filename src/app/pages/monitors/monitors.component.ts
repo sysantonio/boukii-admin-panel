@@ -72,11 +72,18 @@ export class MonitorsComponent {
         this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+event.item.id+'&school_id='+this.user.schools[0].id)
           .subscribe((mn) => {
             this.monitorSport = mn.data;
-
             this.monitorSport.forEach(element => {
               this.crudService.list('/monitor-sport-authorized-degrees', 1, 10000, 'desc', 'id', '&monitor_sport_id=' + element.id)
                 .subscribe((msad) => {
-                  element.authorized = msad.data;
+                  element.authorized = msad.data.reverse();
+
+                  element.authorized.forEach(au => {
+                    this.crudService.get('/degrees/'+au.degree_id)
+                      .subscribe((level) => {
+                        au.degree = level.data;
+
+                    });
+                  });
                 });
 
                 this.crudService.get('/sports/'+element.sport_id)
