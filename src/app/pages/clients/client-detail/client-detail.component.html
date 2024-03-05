@@ -394,15 +394,24 @@
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:100%;">
+
                   <div style="float: left; width:20%;">
                     <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
                   </div>
                   <div style="float: left; width:80%;">
+
                     <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore() / this.selectedGoal.length}}%</p>
-                    <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}</h1>
+                    <h1 style="float: left; width:100%;font-size: 20px;position: relative;left: -5%;">
+                      <mat-icon svgIcon="mat:chevron_left" class="icon-sm flex-none" style="float:left;position: relative;left: -30%;cursor:pointer;" (click)="changeLevel(-1)"></mat-icon>
+                      {{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}
+                      <mat-icon svgIcon="mat:chevron_right" class="icon-sm flex-none" style="float:right;position: relative;left: 10%;cursor:pointer;"(click)="changeLevel(1)"></mat-icon>
+                    </h1>
+
+
                   </div>
 
                   <div style="float: left; width:100%;margin: 2% 0 0 0;">
+
                     <mat-progress-bar mode="determinate" [value]="calculateGoalsScore()" [color]="selectedSport?.level?.color"></mat-progress-bar>
 
                   </div>
@@ -433,6 +442,8 @@
                     </div>
 
                   </div>
+
+
                 </div>
 
 
@@ -1101,6 +1112,7 @@
           <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo" style="border-bottom: 1px solid #ededed; padding:5%">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
+
                 <div style="float: left; width:100%;">
                   <div style="float: left; width:20%;">
                     <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
@@ -1108,6 +1120,7 @@
                   <div style="float: left; width:80%;">
                     <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore() / this.selectedGoal.length}}%</p>
                     <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}</h1>
+
                   </div>
 
                   <div style="float: left; width:100%;margin: 2% 0 0 0;">

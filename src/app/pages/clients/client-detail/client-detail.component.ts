@@ -144,6 +144,7 @@ export class ClientDetailComponent {
   id: any;
 
   allLevels: any = [];
+  sportIdx: any = -1;
   selectedSport: any;
   clientSport = [];
   clients = [];
@@ -779,10 +780,25 @@ export class ClientDetailComponent {
       this.allLevels.push(element);
     });
 
+    this.sportIdx = this.allLevels.findIndex((al) => al.id === sport.level.id);
     this.allLevels.sort((a, b) => a.degree_order - b.degree_order);
 
     this.goals.forEach(element => {
       if (element.degree_id === sport.level.id) {
+
+        this.selectedGoal.push(element);
+      }
+    });
+    this.coloring = false;
+  }
+
+  changeLevel(nextLevel: any) {
+    this.selectedGoal = [];
+    this.sportIdx = this.sportIdx + nextLevel;
+    this.allLevels.sort((a, b) => a.degree_order - b.degree_order);
+    this.selectedSport.level = this.allLevels[this.sportIdx];
+    this.goals.forEach(element => {
+      if (element.degree_id === this.allLevels[this.sportIdx].id) {
 
         this.selectedGoal.push(element);
       }
@@ -931,7 +947,8 @@ export class ClientDetailComponent {
   getGoals() {
     this.clientSport.forEach(cs => {
 
-      this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id='+cs.degree_id)
+      cs.degrees.forEach(dg => {
+        this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id='+dg.id)
         .subscribe((data) => {
           data.data.forEach(goal => {
 
@@ -945,6 +962,8 @@ export class ClientDetailComponent {
             });
           });
         })
+      });
+
     });
   }
 
