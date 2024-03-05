@@ -172,12 +172,32 @@ export class BookingsComponent {
     }
   }
 
+  getClientDegree(id: any) {
+    if (!id) {
+      return 0;
+    }
+    const client = this.clients.find(c => c.id === id);
+    if (!client || !client.client_sports || !client.client_sports.length) {
+      return 0;
+    }
+    const sportId = this.detailData.bookingusers && this.detailData.bookingusers[0] ? this.detailData.bookingusers[0].course.sport_id : null;
+    if (!sportId) {
+      return 0;
+    }
+    const clientSport = client.client_sports.find(cs => cs.sport_id === sportId);
+    if (!clientSport || !clientSport.degree_id) {
+      return 0;
+    }
+    return clientSport.degree_id;
+  }
+  
+
   getSportName(id) {
     return this.sports.find((s) => s.id === id).name
   }
 
   getClients() {
-    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports')
       .subscribe((client) => {
         this.clients = client.data;
       })
@@ -205,10 +225,46 @@ export class BookingsComponent {
         sport.data.forEach((element, idx) => {
           this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
           .subscribe((data) => {
+            //For aureola
+            data.data.forEach((degree: any) => {
+              degree.inactive_color = this.lightenColor(degree.color, 30);
+            });
             this.detailData.sports[idx].degrees = data.data.reverse();
+
+            //For aureola
+            if (this.detailData.bookingusers && this.detailData.bookingusers.length) {
+              const sportId = this.detailData.bookingusers[0].course.sport_id;
+              const matchingSport = this.detailData.sports.find(sport => sport.sport_id === sportId);
+              
+              if (matchingSport && matchingSport.degrees) {
+                  this.detailData.degrees_sport = [...matchingSport.degrees].reverse();
+              } else {
+                  this.detailData.degrees_sport = [];
+              }
+            } else {
+                this.detailData.degrees_sport = [];
+            }      
           });
         });
       })
+  }
+
+  private lightenColor(hexColor: string, percent: number): string {
+    let r:any = parseInt(hexColor.substring(1, 3), 16);
+    let g:any = parseInt(hexColor.substring(3, 5), 16);
+    let b:any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + (255 - r) * percent / 100);
+    g = Math.round(g + (255 - g) * percent / 100);
+    b = Math.round(b + (255 - b) * percent / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, '0');
+    g = g.toString(16).padStart(2, '0');
+    b = b.toString(16).padStart(2, '0');
+
+    return '#'+r+g+b;
   }
 
   getDegree(degreeId: any) {

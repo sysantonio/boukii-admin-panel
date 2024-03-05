@@ -23,6 +23,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BookingDetailComponent } from './booking-detail/booking-detail.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { ComponentsCustomModule } from '../../components/components-custom.module';
 
 @NgModule({
   declarations: [BookingsComponent],
@@ -49,7 +50,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatCardModule,
     MatDividerModule,
     MatSlideToggleModule,
-    TranslateModule
+    TranslateModule,
+    ComponentsCustomModule
   ]
 })
 export class BookingsModule {

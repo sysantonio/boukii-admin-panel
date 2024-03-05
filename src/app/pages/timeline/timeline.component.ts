@@ -2191,6 +2191,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
           if (this.langMatch(monitorLanguages, clientLanguages)) {
             ret = false;
           }
+          else{
+            ret = true;
+            break;
+          }
 
           if (this.taskDetail.course.course_type !== 2) {
             const data = await firstValueFrom(this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+monitor.id+'&school_id='+this.activeSchool+'&sport_id='+this.taskDetail.sport_id));

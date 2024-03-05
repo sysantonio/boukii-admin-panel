@@ -46,7 +46,11 @@
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">
+              <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
+
+              <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
+                [selectLevel]="getClientDegree(detailData?.client_main_id)" [size]="60" [userImage]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar"></app-level-user>
+
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p>{{getLanguage(getClient(detailData?.client_main_id)?.language1_id)}} · {{ getCountry(getClient(detailData?.client_main_id)?.country) }} · {{calculateAge(getClient(detailData?.client_main_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
@@ -67,7 +71,12 @@
         <ng-container>
           <div style="float: left; width: 100%;">
             <div style="float: left; width: 15%;margin: 2% 0 0 0 ">
-              <img [src]="getClient(detailData.bookingusers[0].client_id)?.image !== null ? getClient(detailData.bookingusers[0].client_id)?.image : imageAvatar" width="50" height="50" style="border-radius: 100%">
+              <!--<img [src]="getClient(detailData.bookingusers[0].client_id)?.image !== null ? getClient(detailData.bookingusers[0].client_id)?.image : imageAvatar" width="50" height="50" style="border-radius: 100%">-->
+
+
+              <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
+                [selectLevel]="getClientDegree(detailData.bookingusers[0].client_id)" [size]="44" [userImage]="getClient(detailData.bookingusers[0].client_id)?.image !== null ? getClient(detailData.bookingusers[0].client_id)?.image : imageAvatar"></app-level-user>
+
             </div>
             <div style="float: left; width: 65%;">
               <p>{{getLanguage(getClient(detailData.bookingusers[0]?.client_id)?.language1_id)}} · {{ getCountry(getClient(detailData.bookingusers[0]?.client_id)?.country) }} · {{calculateAge(getClient(detailData.bookingusers[0]?.client_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
