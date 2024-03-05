@@ -127,7 +127,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     });
 
     this.formPersonalInfo = this.fb.group({
-      fromDate: [''],
+      fromDate: ['', Validators.required],
       phone: [''],
       mobile: ['', Validators.required],
       address: [''],
