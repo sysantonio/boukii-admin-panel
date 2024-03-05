@@ -155,18 +155,18 @@ export class ClientDetailComponent {
   entity = '/booking-users';
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Type', property: 'type', type: 'image', visible: true },
-    { label: 'Course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'Client', property: 'client_id', type: 'client', visible: true },
-    { label: 'Enregistrée', property: 'created_at', type: 'date', visible: true },
-    { label: 'Options', property: 'options', type: 'text', visible: true },
-    { label: 'Bons', property: 'bonus', type: 'light', visible: true },
-    { label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
-    { label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
-    { label: 'Prix', property: 'price', type: 'price', visible: true },
-    { label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
-    { label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
-    { label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
+    { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
+    { label: 'course', property: 'course', type: 'course_type_data', visible: true},
+    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
+    //{ label: 'Options', property: 'options', type: 'text', visible: true },
+    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
+    //{ label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
+    //{ label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
+    { label: 'price', property: 'price', type: 'price', visible: true },
+    //{ label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
+    //{ label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
+    //{ label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
@@ -1242,5 +1242,17 @@ export class ClientDetailComponent {
   close() {
     this.showDetail = false;
     this.detailData = null;
+  }
+
+  getGoalImage(): string {
+    let ret = '';
+
+    this.allLevels.forEach(element => {
+      if (element.id === this.selectedGoal[0].degree_id) {
+        ret = element.image;
+      }
+    });
+
+    return ret;
   }
 }

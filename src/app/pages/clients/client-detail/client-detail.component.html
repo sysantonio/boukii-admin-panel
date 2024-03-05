@@ -448,7 +448,7 @@
             <div class="py-3 flex items-center">
 
               <div style="float: left; width:100%;">
-                <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="this.defaults.image"></app-level-user>
+                <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="getGoalImage()"></app-level-user>
 
               </div>
             </div>

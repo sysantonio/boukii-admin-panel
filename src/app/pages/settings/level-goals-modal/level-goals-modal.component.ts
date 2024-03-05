@@ -33,6 +33,8 @@ export class LevelGoalsModalComponent implements OnInit {
             this.mode = 'create';
           }
 
+          this.imagePreviewUrl = this.defaults.image;
+
           this.goals = data.data;
           this.loading = false;
 
@@ -42,10 +44,15 @@ export class LevelGoalsModalComponent implements OnInit {
   }
 
   save() {
-    this.goals.forEach(element => {
-      element.image = this.imagePreviewUrl;
-    });
-    this.dialogRef.close({goals: this.goals, mode: this.mode, deletedGoals: this.deleteGoals});
+    this.crudService.update('/degrees', {image: this.imagePreviewUrl, active: this.defaults.active, color: this.defaults.color, degree_order: this.defaults.degree_order, league: this.defaults.league,
+      level: this.defaults.level, name: this.defaults.name, progress: this.defaults.progress, sport_id: this.defaults.sport_id}, this.defaults.id)
+      .subscribe(() => {
+
+        this.goals.forEach(element => {
+          element.image = this.imagePreviewUrl;
+        });
+        this.dialogRef.close({goals: this.goals, mode: this.mode, deletedGoals: this.deleteGoals});
+      })
   }
 
   isCreateMode() {
