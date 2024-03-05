@@ -246,6 +246,15 @@ export class CourseDetailComponent implements OnInit {
             })
           }
 
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+this.detailData.course.sport_id + '&active=1')
+          .subscribe((data) => {
+            //For aureola
+            data.data.forEach((degree: any) => {
+              degree.inactive_color = this.lightenColor(degree.color, 30);
+            });
+            this.detailData.degrees_sport = data.data;     
+          });
+
       })
 
       this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
@@ -283,6 +292,24 @@ export class CourseDetailComponent implements OnInit {
       this.detailData = null;
     }
 
+  }
+
+  private lightenColor(hexColor: string, percent: number): string {
+    let r:any = parseInt(hexColor.substring(1, 3), 16);
+    let g:any = parseInt(hexColor.substring(3, 5), 16);
+    let b:any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + (255 - r) * percent / 100);
+    g = Math.round(g + (255 - g) * percent / 100);
+    b = Math.round(b + (255 - b) * percent / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, '0');
+    g = g.toString(16).padStart(2, '0');
+    b = b.toString(16).padStart(2, '0');
+
+    return '#'+r+g+b;
   }
 
   getStations() {
@@ -1295,9 +1322,14 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getClientDegree(sport_id:any,sports:any) {
-    const sportObject = sports.find(sport => sport.sport_id === sport_id);
-    if (sportObject) {
-      return sportObject.degree_id;
+    if(sport_id && sports && sports.length){
+      const sportObject = sports.find(sport => sport.sport_id === sport_id);
+      if (sportObject) {
+        return sportObject.degree_id;
+      }
+      else{
+        return 0;
+      }
     }
     else{
       return 0;
