@@ -385,7 +385,7 @@ export class ClientDetailComponent {
   }
 
   getClientObservations() {
-    this.crudService.list('/client-observations', 1, 10000, 'desc', 'id', '&client_id='+this.id)
+    this.crudService.list('/client-observations', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&client_id='+this.id)
       .subscribe((data) => {
         if(data.data.length > 0) {
 
@@ -727,6 +727,11 @@ export class ClientDetailComponent {
                 console.log('client observation created');
               })
 
+            } else {
+              this.crudService.create('/client-observations', this.defaultsObservations)
+              .subscribe((obs) => {
+                console.log('client observation created');
+              })
             }
 
               this.sportsData.data.forEach(element => {
@@ -1266,11 +1271,14 @@ export class ClientDetailComponent {
   getGoalImage(): string {
     let ret = '';
 
-    this.allLevels.forEach(element => {
-      if (element.id === this.selectedGoal[0].degree_id) {
-        ret = element.image;
-      }
-    });
+    if (this.selectedGoal.length > 0) {
+      this.allLevels.forEach(element => {
+        if (element.id === this.selectedGoal[0].degree_id) {
+          ret = element.image;
+        }
+      });
+    }
+
 
     return ret;
   }
