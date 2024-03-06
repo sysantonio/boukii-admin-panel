@@ -59,7 +59,7 @@
                 <mat-label>{{'name' | translate }}</mat-label>
                 <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
                 <mat-error *ngIf="formInfoAccount.controls?.name?.errors?.['required']">
-                  {{'monitors.creation.errors.name' | translate }}
+                  {{'clients.creation.errors.name' | translate }}
                 </mat-error>
               </mat-form-field>
 
@@ -77,10 +77,10 @@
                 <mat-label>Email</mat-label>
                 <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
                 <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
-                  {{'monitors.creation.errors.email' | translate }}
+                  {{'clients.creation.errors.email' | translate }}
                 </mat-error>
                 <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['email']">
-                  {{'monitors.creation.errors.email_format' | translate }}
+                  {{'clients.creation.errors.email_format' | translate }}
                 </mat-error>
               </mat-form-field>
 
@@ -110,7 +110,7 @@
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
                 <mat-error *ngIf="formPersonalInfo.controls?.fromDate?.errors?.['required']">
-                 {{'monitors.creation.errors.monitor_date' | translate }}
+                 {{'clients.creation.errors.monitor_date' | translate }}
                 </mat-error>
               </mat-form-field>
 
@@ -127,7 +127,7 @@
                 <mat-label>{{'mobile' | translate }}</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
                 <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
-                  {{'monitors.creation.errors.mobile' | translate }}
+                  {{'clients.creation.errors.mobile' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
