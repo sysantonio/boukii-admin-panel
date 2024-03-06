@@ -30,7 +30,7 @@
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <app-level-user [allLevels]="getSportLevels(clientSport[0].sport_id)" [selectLevel]="clientSport[0]?.degree_id" [size]="100" [userImage]="detailData.image"></app-level-user>
+              <app-level-user [allLevels]="getSportLevels(clientSport[0].sport_id)" [selectLevel]="clientSport[0]?.degree_id" [size]="100" [userImage]="detailData.image !== null ? detailData.image : imageAvatar"></app-level-user>
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p>{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</p>

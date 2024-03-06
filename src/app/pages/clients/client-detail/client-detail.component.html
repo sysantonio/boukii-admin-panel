@@ -9,14 +9,14 @@
 
       <img
         class="avatar h-24 w-24 absolute top-6 ltr:left-4 rtl:right-4 sm:hidden"
-        [src]="defaults.image" />
+        [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/avatar.png'" />
     </div>
 
     <div class="z-10 relative -mt-16 px-6 flex items-center" style="margin-top: -6rem !important;position: relative;bottom: 80px;" >
       <img
         @scaleIn
         class="avatar h-24 w-24 flex-none align-start hidden sm:block border-2 border-white"
-        [src]="defaults.image" />
+        [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/avatar.png'" />
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
         <div class="h-16 items-end">
@@ -628,7 +628,7 @@
 
                   <div *ngIf="defaults" class="box-detail-user-block">
                       <div class="box-detail-user-block-img">
-                          <img [src]="defaults.image ? defaults.image : 'assets/img/avatar.png'" />
+                          <img [src]="defaults.image ? defaults.image : '../../../../assets/img/avatar.png'" />
                       </div>
                       <div class="box-detail-user-block-text">
                           <div>{{ defaults.first_name }} {{ defaults.last_name }}</div>
@@ -1165,7 +1165,7 @@
             <div class="py-3 flex items-center">
 
               <div style="float: left; width:100%;">
-                <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="this.defaults.image"></app-level-user>
+                <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="defaults.image !== null ? defaults.image : '../../../../assets/img/avatar.png'"></app-level-user>
 
               </div>
             </div>
@@ -1336,7 +1336,7 @@
 
                   <div *ngIf="defaults" class="box-detail-user-block">
                       <div class="box-detail-user-block-img">
-                          <img [src]="defaults.image ? defaults.image : 'assets/img/avatar.png'" />
+                          <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/avatar.png'" />
                       </div>
                       <div class="box-detail-user-block-text">
                           <div>{{ defaults.first_name }} {{ defaults.last_name }}</div>
