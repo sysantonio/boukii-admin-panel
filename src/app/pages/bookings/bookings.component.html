@@ -69,18 +69,18 @@
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
         <ng-container>
-          <div style="float: left; width: 100%;">
+          <div style="float: left; width: 100%;" *ngFor="let item of detailData.bookingusers">
             <div style="float: left; width: 15%;margin: 2% 0 0 0 ">
               <!--<img [src]="getClient(detailData.bookingusers[0].client_id)?.image !== null ? getClient(detailData.bookingusers[0].client_id)?.image : imageAvatar" width="50" height="50" style="border-radius: 100%">-->
 
 
               <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
-                [selectLevel]="getClientDegree(detailData.bookingusers[0].client_id)" [size]="44" [userImage]="getClient(detailData.bookingusers[0].client_id)?.image !== null ? getClient(detailData.bookingusers[0].client_id)?.image : imageAvatar"></app-level-user>
+                [selectLevel]="getClientDegree(item.client_id)" [size]="44" [userImage]="getClient(item.client_id)?.image !== null ? getClient(item.client_id)?.image : imageAvatar"></app-level-user>
 
             </div>
             <div style="float: left; width: 65%;">
-              <p>{{getLanguage(getClient(detailData.bookingusers[0]?.client_id)?.language1_id)}} · {{ getCountry(getClient(detailData.bookingusers[0]?.client_id)?.country) }} · {{calculateAge(getClient(detailData.bookingusers[0]?.client_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
-                <p>{{getClient(detailData.bookingusers[0]?.client_id)?.first_name}} {{getClient(detailData.bookingusers[0]?.client_id)?.last_name}} </p>
+              <p>{{getLanguage(getClient(item?.client_id)?.language1_id)}} · {{ getCountry(getClient(item?.client_id)?.country) }} · {{calculateAge(getClient(item?.client_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
+                <p>{{getClient(item?.client_id)?.first_name}} {{getClient(item?.client_id)?.last_name}} </p>
             </div>
             <div style="float: left; width: 20%;">
               <p style="text-align: right;color:#5ade47" *ngIf="detailData.bookingusers[0]?.status === 1 && detailData.paid">{{'payed' | translate}}</p>
@@ -120,7 +120,7 @@
                   <p>
                     <span *ngIf="detailData.color !== ''" class="dot" [ngStyle]="{'background': detailData.color}"></span>
                     {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.first_name}} {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.last_name}}</p>
-                  <p style="font-size:8px;margin: 0 0 0 20px;"><i>{{getLanguage(getMonitor(detailData.bookingusers[0]?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(detailData.bookingusers[0]?.monitor_id)?.country) }} · {{calculateAge(getMonitor(detailData.bookingusers[0]?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
+                  <p style="font-size:8px"><i>{{getLanguage(getMonitor(detailData.bookingusers[0]?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(detailData.bookingusers[0]?.monitor_id)?.country) }} · {{calculateAge(getMonitor(detailData.bookingusers[0]?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="!getMonitor(detailData.bookingusers[0]?.monitor_id)">
                   <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
