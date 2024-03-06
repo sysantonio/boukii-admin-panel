@@ -826,6 +826,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 client_id: item.client_id,
                 course_id: item.course_id,
                 course_date_id: item.course_date_id,
+                degree_id: this.levelForm.value.id,
                 monitor_id: this.externalData.monitorId,
                 hour_start: item.hour_start,
                 hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
@@ -861,6 +862,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                   client_id: person.id,
                   course_id: item.course_id,
                   course_date_id: item.course_date_id,
+                  degree_id: this.levelForm.value.id,
                   monitor_id: this.externalData.monitorId,
                   hour_start: item.hour_start,
                   hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
@@ -882,6 +884,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               client_id: item.client_id,
               course_id: item.course_id,
               course_date_id: item.course_date_id,
+              degree_id: this.levelForm.value.id,
               monitor_id: this.externalData.monitorId,
               hour_start: item.hour_start,
               hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
@@ -916,6 +919,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                   client_id: person.id,
                   course_id: item.course_id,
                   course_date_id: item.course_date_id,
+                  degree_id: this.levelForm.value.id,
                   monitor_id: this.externalData.monitorId,
                   hour_start: item.hour_start,
                   hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso

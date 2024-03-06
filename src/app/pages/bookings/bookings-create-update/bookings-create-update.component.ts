@@ -790,6 +790,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 client_id: item.client_id,
                 course_id: item.course_id,
                 course_date_id: item.course_date_id,
+                degree_id: this.levelForm.value.id,
                 monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
                 hour_start: item.hour_start,
                 hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
@@ -825,6 +826,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   client_id: person.id,
                   course_id: item.course_id,
                   course_date_id: item.course_date_id,
+                  degree_id: this.levelForm.value.id,
                   monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
                   hour_start: item.hour_start,
                   hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
@@ -845,6 +847,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               booking_id: null,
               client_id: item.client_id,
               course_id: item.course_id,
+              degree_id: this.levelForm.value.id,
               course_date_id: item.course_date_id,
               monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
               hour_start: item.hour_start,
@@ -880,6 +883,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   client_id: person.id,
                   course_id: item.course_id,
                   course_date_id: item.course_date_id,
+                  degree_id: this.levelForm.value.id,
                   monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
                   hour_start: item.hour_start,
                   hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
@@ -1037,7 +1041,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               paxes: item.paxes,
               notes: item.notes,
               school_notes: item.school_notes,
-              degree_id: this.levelForm.value.id,
+              degree_id: item.degree_id,
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }

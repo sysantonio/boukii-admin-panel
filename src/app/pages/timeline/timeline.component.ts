@@ -2235,4 +2235,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
     monitor.sport_degrees_check = index;
   }
 
+  getDegree(id: any) {
+    if (id && id !== null) {
+      return this.degrees.find((l) => l.id === id);
+
+    }
+  }
 }

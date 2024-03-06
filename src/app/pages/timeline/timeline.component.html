@@ -204,7 +204,7 @@
                                 </div>
                                 <!--PRIVATE BOOKING COLOR-->
                                 <ng-container *ngIf="task.type === 'private'">
-                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
                                         [ngClass]="{
                                             'private-color-green': task.booking_color === 'green',
                                             'private-color-yellow': task.booking_color === 'yellow',
@@ -234,7 +234,7 @@
                                 </div>
                                 <!--PRIVATE BOOKING COLOR-->
                                 <ng-container *ngIf="task.type === 'private'">
-                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
                                         [ngClass]="{
                                             'private-color-green': task.booking_color === 'green',
                                             'private-color-yellow': task.booking_color === 'yellow',
@@ -258,7 +258,7 @@
                                 <ng-container *ngIf="weekIndex === 0">
                                     <ng-container *ngIf="monitor.id">
                                         <div class="monitor-left">
-                                            
+
                                             <ng-container *ngFor="let sport of monitor.sports; let i = index">
                                                 <ng-container *ngIf="monitor.sport_degrees_check === i">
                                                     <app-level-user *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length" [allLevels]="sport.degrees_sport"
@@ -269,7 +269,7 @@
                                                     </div>
                                                 </ng-container>
                                             </ng-container>
-                                            
+
                                             <div class="monitor-text">
                                                 <div class="monitor-lang">
                                                     FR · EN · ES
@@ -354,7 +354,7 @@
                                 </div>
                                 <!--PRIVATE BOOKING COLOR-->
                                 <ng-container *ngIf="task.type === 'private'">
-                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')" 
+                                    <div *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
                                         [ngClass]="{
                                             'private-color-green': task.booking_color === 'green',
                                             'private-color-yellow': task.booking_color === 'yellow',
