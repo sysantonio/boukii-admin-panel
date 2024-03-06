@@ -463,7 +463,7 @@
           <ng-container *ngIf="column.type === 'client'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <img [src]="getClient(row[column.property])?.image" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
+              <img [src]="getClient(row[column.property])?.image !== null ? getClient(row[column.property])?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
               <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getClient(row[column.property])?.language1_id)}} · {{getCountry(getClient(row[column.property])?.country)}} ·
                 {{calculateAge(getClient(row[column.property])?.birth_date)}} {{'years' | translate }}</span>
               <span style="float: left; width: 50%;">{{ getClient(row[column.property])?.first_name }} {{ getClient(row[column.property])?.last_name }}</span>
@@ -476,7 +476,7 @@
           <ng-container *ngIf="column.type === 'client_2'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <img [src]="getClient(data[i]?.id)?.image" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
+              <img [src]="getClient(data[i]?.id)?.image !== null ? getClient(data[i]?.id)?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
               <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getClient(data[i]?.id)?.language1_id)}} · {{getCountry(getClient(data[i]?.id)?.country)}} ·
                 {{calculateAge(getClient(data[i]?.id)?.birth_date)}} {{'years' | translate }}</span>
               <span style="float: left; width: 50%;">{{ getClient(data[i]?.id)?.first_name }} {{ getClient(data[i]?.id)?.last_name }}</span>
@@ -490,7 +490,7 @@
           <ng-container *ngIf="column.type === 'monitor'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell style="    width: 70px;">
-              <img [src]="getMonitor(data[i]?.id)?.image" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
+              <img [src]="getMonitor(data[i]?.id)?.image !== null ? getMonitor(data[i]?.id)?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
               <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getMonitor(data[i]?.id)?.language1_id)}} · {{getCountry(getMonitor(data[i]?.id)?.country)}} ·
                 {{calculateAge(getMonitor(data[i]?.id)?.birth_date)}} {{'years' | translate }}</span>
               <span style="float: left; width: 50%;">{{ getMonitor(data[i]?.id)?.first_name }} {{ getMonitor(data[i]?.id)?.last_name }}</span>

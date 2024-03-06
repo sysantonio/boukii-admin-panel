@@ -102,7 +102,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl('');
-
+  imageAvatar = '../../../assets/img/avatar.png';
   loading = true;
   user: any;
   schoolId: any;
