@@ -240,7 +240,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'count'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property].length }}</td>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell style="text-align: center;">{{ row[column.property].length }}</td>
           </ng-container>
         </ng-container>
 

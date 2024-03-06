@@ -41,11 +41,13 @@ export class ClientsComponent {
   utilizer: any = [];
   borderActive = -1;
   utilizerSportLoaded = false;
+  allLevels = [];
 
   constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService,
     private dialog: MatDialog, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.getLanguages();
+    this.getDegrees();
   }
 
   columns: TableColumn<any>[] = [
@@ -193,5 +195,16 @@ export class ClientsComponent {
 
       this.utilizerSportLoaded = true;
     })
+  }
+
+  getDegrees() {
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+      .subscribe((data) => {
+        this.allLevels = data.data;
+      })
+  }
+
+  getSportLevels(id: any) {
+    return this.allLevels.filter((a) => a.sport_id === id)
   }
 }
