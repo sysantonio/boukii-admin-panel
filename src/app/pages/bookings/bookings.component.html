@@ -56,12 +56,12 @@
               <p>{{getLanguage(getClient(detailData?.client_main_id)?.language1_id)}} · {{ getCountry(getClient(detailData?.client_main_id)?.country) }} · {{calculateAge(getClient(detailData?.client_main_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
               <p><strong>{{getClient(detailData?.client_main_id)?.first_name}} {{getClient(detailData?.client_main_id)?.last_name}} </strong></p>
               <div>
-                <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
+                <mat-icon svgIcon="mat:chat" ></mat-icon>
                 <a href="mailto:{{getClient(detailData?.client_main_id)?.email}}" style="cursor:pointer">
-                  <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+                  <mat-icon svgIcon="mat:mail_outline"></mat-icon>
                 </a>
                 <a href="tel:{{getClient(detailData?.client_main_id)?.phone}}">
-                  <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+                  <mat-icon svgIcon="mat:contact_phone"></mat-icon>
                 </a>
               </div>
             </div>
@@ -114,13 +114,13 @@
                 <div style="float: left; width: 20%;">
                   <img [src]="getMonitor(detailData.bookingusers[0]?.monitor_id) ? getMonitor(detailData.bookingusers[0]?.monitor_id)?.image : imageAvatar" style="border-radius: 100%;">
                 </div>
-                <div style="float: left; width: 80%;" *ngIf="getMonitor(detailData.bookingusers[0].monitor_id)">
+                <div style="float: left; width: 80%;text-wrap: nowrap;" *ngIf="getMonitor(detailData.bookingusers[0].monitor_id)">
 
 
                   <p>
                     <span *ngIf="detailData.color !== ''" class="dot" [ngStyle]="{'background': detailData.color}"></span>
                     {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.first_name}} {{getMonitor(detailData.bookingusers[0]?.monitor_id)?.last_name}}</p>
-                  <p style="font-size:8px"><i>{{getLanguage(getMonitor(detailData.bookingusers[0]?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(detailData.bookingusers[0]?.monitor_id)?.country) }} · {{calculateAge(getMonitor(detailData.bookingusers[0]?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
+                  <p style="font-size:8px;margin: 0 0 0 20px;"><i>{{getLanguage(getMonitor(detailData.bookingusers[0]?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(detailData.bookingusers[0]?.monitor_id)?.country) }} · {{calculateAge(getMonitor(detailData.bookingusers[0]?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
                 </div>
                 <div style="float: left; width: 80%;" *ngIf="!getMonitor(detailData.bookingusers[0]?.monitor_id)">
                   <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
