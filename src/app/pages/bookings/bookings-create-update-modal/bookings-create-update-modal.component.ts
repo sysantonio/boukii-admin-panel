@@ -1571,14 +1571,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       .subscribe((data) => {
 
         this.defaultsBookingUser.degree_id = level.id;
-        this.courses = [];
+        this.courses = data.data;
 
-        data.data.forEach(element => {
-          if (this.filterByCourseHours(element.course_dates[0].hour_start, element.course_dates[0].hour_end,
-            element.duration.includes(':') ? this.transformTime(element.duration) : element.duration, '5min')) {
-            this.courses.push(element);
-          }
-        });
         if (!fromPrivate) {
 
           this.coursesMonth = data.data;
