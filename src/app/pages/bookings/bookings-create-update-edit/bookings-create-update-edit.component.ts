@@ -2010,11 +2010,18 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   }
 
   setClientsNotes(event: any, item: any) {
-    item.notes = event.target.value;
+    item.courseDates.forEach(element => {
+      element.school_notes = event.target.value;
+
+    });
   }
 
   setSchoolNotes(event: any, item: any) {
-    item.school_notes = event.target.value;
+
+    item.courseDates.forEach(element => {
+      element.school_notes = event.target.value;
+
+    });
   }
 
   public monthChanged(value: any, widget: any): void {

@@ -1282,4 +1282,8 @@ export class ClientDetailComponent {
 
     return ret;
   }
+
+  getEvaluations() {
+
+  }
 }

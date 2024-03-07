@@ -1940,11 +1940,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   setClientsNotes(event: any, item: any) {
-    item.notes = event.target.value;
+    item.courseDates.forEach(element => {
+      element.school_notes = event.target.value;
+
+    });
   }
 
   setSchoolNotes(event: any, item: any) {
-    item.school_notes = event.target.value;
+
+    item.courseDates.forEach(element => {
+      element.school_notes = event.target.value;
+
+    });
   }
 
   public monthChanged(value: any, widget: any): void {
@@ -2632,4 +2639,5 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getMaxDate() {
     return moment(this.selectedItem.course_dates[this.selectedItem.course_dates.length - 1].date).toDate();
   }
+
 }

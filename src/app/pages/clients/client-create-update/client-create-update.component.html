@@ -190,7 +190,7 @@
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="goToStep3(stepper)">
-                Next
+                {{'next' | translate}}
               </button>
             </div>
           </form>
@@ -289,7 +289,7 @@
 
               <button (click)="stepper.reset()" [disabled]="formPersonalInfo.pristine" color="primary" mat-button type="button">Reset</button>
               <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
-                Save
+                {{'save' | translate}}
               </button>
             </div>
           </form>

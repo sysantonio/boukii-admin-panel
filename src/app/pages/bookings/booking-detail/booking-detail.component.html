@@ -237,7 +237,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>{{'observation_client' | translate }}</mat-label>
-                    <input matInput required type="text" (blur)="setClientsNotes($event, item)">
+                    <input matInput [value]="item.courseDates[0].notes" required type="text" (blur)="setClientsNotes($event)">
 
                   </mat-form-field>
 
@@ -247,7 +247,7 @@
 
                   <mat-form-field class="flex-auto">
                     <mat-label>{{'observation_school' | translate }}</mat-label>
-                    <input  matInput required type="text" (blur)="setSchoolNotes($event, item)">
+                    <input [value]="item.courseDates[0].notes_school" matInput required type="text" (blur)="setSchoolNotes($event)">
 
                   </mat-form-field>
 

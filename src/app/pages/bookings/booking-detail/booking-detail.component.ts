@@ -1147,27 +1147,30 @@ export class BookingDetailComponent implements OnInit {
     this.getCourses(this.levelForm.value, this.monthAndYear);
   }
 
-  setClientsNotes(event: any, bookingUsers: any) {
+  setClientsNotes(event: any) {
 
-    bookingUsers.forEach(element => {
+    this.bookingUsersUnique.forEach(element => {
       this.crudService.update('/booking-users', {notes: event.target.value}, element.id)
       .subscribe(() => {
 
       })
 
-      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.notes_client'), 'OK', {duration:3000})
     });
+
+    this.snackbar.open(this.translateService.instant('snackbar.booking_detail.notes_client'), 'OK', {duration:3000})
+
   }
 
-  setSchoolNotes(event: any, bookingUsers: any) {
-    bookingUsers.forEach(element => {
+  setSchoolNotes(event: any) {
+    this.bookingUsersUnique.forEach(element => {
       this.crudService.update('/booking-users', {notes_school: event.target.value}, element.id)
       .subscribe(() => {
 
       })
 
-      this.snackbar.open(this.translateService.instant('snackbar.booking_detail.notes_school'), 'OK', {duration:3000})
     });
+    this.snackbar.open(this.translateService.instant('snackbar.booking_detail.notes_school'), 'OK', {duration:3000})
+
   }
 
 
