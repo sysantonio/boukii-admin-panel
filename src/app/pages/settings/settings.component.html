@@ -295,7 +295,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_from'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field class="flex-auto">
-                            <input matInput placeholder="Acronym" type="number" [value]="element.age_min" [(ngModel)]="element.age_min">
+                            <input matInput placeholder="{{'acronym'|translate}}" type="number" [value]="element.age_min" [(ngModel)]="element.age_min">
                           </mat-form-field>
                         </td>
                       </ng-container>
@@ -304,7 +304,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_to'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field class="flex-auto">
-                            <input matInput placeholder="Acronym" type="number" [value]="element.age_max" [(ngModel)]="element.age_max">
+                            <input matInput placeholder="{{'acronym'|translate}}" type="number" [value]="element.age_max" [(ngModel)]="element.age_max">
                           </mat-form-field>
                         </td>
                       </ng-container>
@@ -314,7 +314,7 @@
                         <td mat-cell *matCellDef="let element">
 
                           <mat-form-field class="flex-auto">
-                            <input matInput placeholder="Acronym" type="text" [value]="element.annotation" [(ngModel)]="element.annotation">
+                            <input matInput placeholder="{{'acronym'|translate}}" type="text" [value]="element.annotation" [(ngModel)]="element.annotation">
                           </mat-form-field>
 
                         </td>
@@ -324,7 +324,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
                           <mat-form-field class="flex-auto">
-                            <input matInput placeholder="Name" type="text" [value]="element.name" [(ngModel)]="element.name">
+                            <input matInput placeholder="{{'name'|translate}}" type="text" [value]="element.name" [(ngModel)]="element.name">
                           </mat-form-field>
                         </td>
                       </ng-container>
