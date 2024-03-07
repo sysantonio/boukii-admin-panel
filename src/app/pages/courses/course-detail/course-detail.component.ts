@@ -23,7 +23,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 export class CourseDetailComponent implements OnInit {
   imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   imagePathPrivate = 'https://school.boukii.com/assets/icons/prive_ski2x.png';
-  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  userAvatar = '../../../../assets/img/avatar.png';
 
   mode: 'create' | 'update' = 'update';
   today = new Date();
@@ -252,7 +252,7 @@ export class CourseDetailComponent implements OnInit {
             data.data.forEach((degree: any) => {
               degree.inactive_color = this.lightenColor(degree.color, 30);
             });
-            this.detailData.degrees_sport = data.data;     
+            this.detailData.degrees_sport = data.data;
           });
 
       })

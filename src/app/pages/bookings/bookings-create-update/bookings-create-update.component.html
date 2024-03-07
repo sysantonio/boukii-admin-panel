@@ -158,7 +158,7 @@
               </div>
               <p>{{(selectedItem.course_type === 1 ? 'colective' : 'private') | translate}} {{selectedItem.sport.name}}</p>
               <p>
-                {{selectedItem.date_start | date: 'dd-MM-YYYY'}} - {{selectedItem.date_end | date: 'dd-MM-YYYY'}}
+                {{selectedItem?.course_dates[0].date | date: 'dd-MM-YYYY'}} - {{selectedItem?.course_dates[selectedItem.course_dates.length - 1].date | date: 'dd-MM-YYYY'}}
               </p>
               <p style="text-wrap: balance;">
                 {{getAvailableWeekDays(selectedItem.settings)}}
@@ -194,7 +194,7 @@
                       </div>
                       <p>{{(course.course_type === 1 ? 'colective' : 'private') | translate}} {{course.sport.name}}</p>
                       <p>
-                        {{course.date_start | date: 'dd-MM-YYYY'}} - {{course.date_end | date: 'dd-MM-YYYY'}}
+                        {{course?.course_dates[0].date | date: 'dd-MM-YYYY'}} - {{course?.course_dates[course.course_dates.length - 1].date | date: 'dd-MM-YYYY'}}
                       </p>
                       <p style="text-wrap: balance;">
                         {{getAvailableWeekDays(course.settings)}}
@@ -233,7 +233,7 @@
                   <mat-form-field class="flex-auto" style="width: 50%;">
                     <mat-label>{{'date' | translate}}</mat-label>
 
-                    <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate"  [matDatepickerFilter]="inUseDatesFilter">
+                    <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate" [max]="getMaxDate()" [matDatepickerFilter]="inUseDatesFilter">
                       <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
                       <mat-datepicker #pickerDateFrom [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
 

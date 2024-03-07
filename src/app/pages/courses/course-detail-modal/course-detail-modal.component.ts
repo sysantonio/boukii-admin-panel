@@ -25,7 +25,7 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 export class CourseDetailModalComponent implements OnInit {
   imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   imagePathPrivate = 'https://school.boukii.com/assets/icons/prive_ski2x.png';
-  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  userAvatar = '../../../../assets/img/avatar.png';
 
   mode: 'create' | 'update' = 'update';
   today = new Date();

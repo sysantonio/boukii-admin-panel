@@ -61,7 +61,7 @@ export class BookingDetailModalComponent implements OnInit {
     new Date(),
     // ... otras fechas
   ];
-  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  userAvatar = '../../../../assets/img/avatar.png';
   userName = 'Nombre de Usuario';
   userNameSub = 'Nombre de Utilizador';
   userLevel = 'Intermedio';

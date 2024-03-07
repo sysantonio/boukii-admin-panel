@@ -132,7 +132,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     new Date(),
     // ... otras fechas
   ];
-  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  userAvatar = '../../../../assets/img/avatar.png';
   userName = 'Nombre de Usuario';
   userNameSub = 'Nombre de Utilizador';
   userLevel = 'Intermedio';
@@ -1148,6 +1148,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
             this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
             this.goTo('/bookings/update/'+booking.data.id);
           }
+
+
+          this.crudService.post('/admin/bookings/mail/' + booking.data.id, {})
+            .subscribe((data) => {
+              console.log(data);
+            })
         }, 1000);
       })
 
@@ -2621,5 +2627,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   isNanValue(value) {
     return isNaN(value);
+  }
+
+  getMaxDate() {
+    return moment(this.selectedItem.course_dates[this.selectedItem.course_dates.length - 1].date).toDate();
   }
 }

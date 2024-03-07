@@ -35,7 +35,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
   @ViewChild('privateReductionTable') privateReductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
 
-  userAvatar = 'https://school.boukii.online/assets/icons/icons-outline-default-avatar.svg';
+  userAvatar = '../../../../assets/img/avatar.png';
 
   people = 6; // Aquí puedes cambiar el número de personas
   intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
