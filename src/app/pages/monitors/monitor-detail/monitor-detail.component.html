@@ -458,7 +458,9 @@
 
               </div>
               <div style="width: 100%;float:left;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' |translate}}</mat-card-title>
+              <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'course_detail' |translate}}
+                <span style="float:right; text-align: right;" [style.color]="detailData.paid ? '#66E055' : '#DFDB32'"> {{(detailData.paid ? 'payed' : 'no_paid') | translate }}</span>
+              </mat-card-title>
               <mat-icon svgIcon="mat:close" style="float: right;cursor:pointer; color:red;" (click)="close()"></mat-icon>
               </div>
               <div style="width:100%; margin-top:5%;float:left">
@@ -828,7 +830,9 @@
 
               </div>
               <div style="width: 100%;float:left;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' |translate}}</mat-card-title>
+              <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'course_detail' |translate}}
+                <span style="float:right; text-align: right;" [style.color]="taskDetailTimeline.paid ? '#66E055' : '#DFDB32'"> {{(taskDetailTimeline.paid ? 'payed' : 'no_paid') | translate }}</span>
+              </mat-card-title>
               </div>
               <div style="width:100%; margin-top:5%;float:left">
               <div style="width: 100%;">
@@ -1752,7 +1756,9 @@
 
             </div>
             <div style="width: 100%;float:left;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' | translate}}</mat-card-title>
+            <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'course_detail' | translate}}
+              <span style="float:right; text-align: right;" [style.color]="detailData.paid ? '#66E055' : '#DFDB32'"> {{(detailData.paid ? 'payed' : 'no_paid') | translate }}</span>
+            </mat-card-title>
             </div>
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
@@ -2074,7 +2080,9 @@
 
             </div>
             <div style="width: 100%;float:left;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' | translate}}</mat-card-title>
+            <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'course_detail' | translate}}
+              <span style="float:right; text-align: right;" [style.color]="taskDetailTimeline.paid ? '#66E055' : '#DFDB32'"> {{(taskDetailTimeline.paid ? 'payed' : 'no_paid') | translate }}</span>
+            </mat-card-title>
             </div>
             <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">

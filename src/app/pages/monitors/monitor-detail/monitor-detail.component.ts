@@ -1560,6 +1560,7 @@ export class MonitorDetailComponent {
           subgroup_number: booking.subgroup_number,
           total_subgroups: booking.total_subgroups,
           course: booking.course,
+          paid: booking?.booking?.paid,
           ...dateTotalAndIndex
         };
       }),
