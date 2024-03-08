@@ -563,5 +563,6 @@
   "voucher_refund": "Remboursement avec bonus",
   "deactivate": "Désactiver",
   "monitor_comments": "Surveiller les commentaires",
-  "multimedia": "Multimédia"
+  "multimedia": "Multimédia",
+  "no_data": "Il n'y a aucune donnée à afficher"
 }

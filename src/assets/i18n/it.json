@@ -565,5 +565,6 @@
   "voucher_refund": "Rimborso con bonus",
   "deactivate": "Disattivare",
   "monitor_comments": "Monitorare i commenti",
-  "multimedia": "Multimedia"
+  "multimedia": "Multimedia",
+  "no_data": "Non ci sono dati da mostrare"
 }

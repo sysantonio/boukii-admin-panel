@@ -571,5 +571,6 @@
   "voucher_refund": "Reembolso con bono",
   "deactivate": "Desactivar",
   "monitor_comments": "Comentarios del monitor",
-  "multimedia": "Multimedia"
+  "multimedia": "Multimedia",
+  "no_data": "No hay datos que mostrar"
 }
