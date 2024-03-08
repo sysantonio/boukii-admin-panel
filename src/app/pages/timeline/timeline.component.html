@@ -418,7 +418,9 @@
 
                 </div>
                 <div style="width: 100%;float:left;">
-                <mat-card-title class="font-bold" style="float: left;width: 80%;">{{ 'course_detail' | translate}}</mat-card-title>
+                <mat-card-title class="font-bold" style="float: left;width: 100%;">{{ 'course_detail' | translate}}
+                  <span style="float:right; text-align: right;" [style.color]="taskDetail.paid ? '#66E055' : '#DFDB32'"> {{(taskDetail.paid ? 'payed' : 'no_paid') | translate }}</span>
+                </mat-card-title>
                 </div>
                 <div style="width:100%; margin-top:5%;float:left">
                 <div style="width: 100%;">

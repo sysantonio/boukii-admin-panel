@@ -513,12 +513,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
       } else if (booking.course.course_type === 1) {
         usersToProcess = booking.booking_users;
       }
-    
+
       usersToProcess.forEach(userObj => {
         const client = (userObj.client || userObj);
         const clientInfo = { id: client.id, first_name: client.first_name, last_name: client.last_name };
         const isExistingUser = allBookingUsers.some(user => user.id === clientInfo.id);
-    
+
         if (!isExistingUser) {
           allBookingUsers.push(clientInfo);
         }
@@ -542,10 +542,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
         } else if (booking.course.course_type === 1) {
           usersToCheck = booking.booking_users.map(clientObj => clientObj.client);
         }
-    
+
         return usersToCheck.some(user => user.id === this.filterBookingUser.id);
       });
-    
+
       allBookings = filteredBookings;
     }
 
@@ -641,6 +641,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           subgroup_number: booking.subgroup_number,
           total_subgroups: booking.total_subgroups,
           course: booking.course,
+          paid: booking?.booking?.paid,
           ...dateTotalAndIndex
         };
       }),
@@ -1898,7 +1899,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   compareUsers(user1: any, user2: any): boolean {
     return user1 && user2 ? user1.id === user2.id && user1.first_name === user2.first_name && user1.last_name === user2.last_name : user1 === user2;
-  }  
+  }
 
   showResetFilters() {
     return !(this.areAllChecked() && this.filterMonitor == null && this.filterBookingUser == null &&
