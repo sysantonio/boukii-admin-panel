@@ -167,14 +167,12 @@ export class CoursesComponent {
   getMaxStudents(levelId: any) {
     let ret = 0;
 
-    this.detailData.course_dates.forEach(courseDate => {
-      courseDate.course_groups.forEach(group => {
-        if (group.degree_id === levelId) {
-          group.course_subgroups.forEach(sb => {
-            ret = ret + sb.max_participants;
-          });
-        }
-      });
+    this.detailData.course_dates[0].course_groups.forEach(group => {
+      if (group.degree_id === levelId) {
+        group.course_subgroups.forEach(sb => {
+          ret = ret + sb.max_participants;
+        });
+      }
 
     });
 

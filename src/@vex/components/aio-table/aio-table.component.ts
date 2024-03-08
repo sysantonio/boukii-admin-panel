@@ -233,6 +233,12 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         filter = filter + '&finished=0';
       }
 
+      if (this.activeCourse && !this.inActiveCourse) {
+        filter = filter + '&active=1';
+      } else if (!this.activeCourse && this.inActiveCourse) {
+        filter = filter + '&active=0';
+      }
+
       if(this.sportsControl.value.length !== this.sports.length) {
         const ids = [];
         this.sportsControl.value.forEach(element => {
