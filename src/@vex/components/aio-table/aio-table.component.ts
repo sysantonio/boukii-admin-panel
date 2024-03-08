@@ -182,82 +182,85 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   }
 
-  filterData(incFilter = '') {
+  filterData(all: boolean = false) {
     let filter = '';
 
-    if(this.entity.includes('booking')) {
+    if (!all) {
+      if(this.entity.includes('booking')) {
 
-      if (this.courseColective && !this.coursePrivate) {
-        filter = filter + '&course_type=1';
-      } else if (!this.courseColective && this.coursePrivate) {
-        filter = filter + '&course_type=2';
+        if (this.courseColective && !this.coursePrivate) {
+          filter = filter + '&course_type=1';
+        } else if (!this.courseColective && this.coursePrivate) {
+          filter = filter + '&course_type=2';
+        }
+
+        if (this.bookingPayed && !this.bookingNoPayed) {
+          filter = filter + '&paid=1';
+        } else if (!this.bookingPayed && this.bookingNoPayed) {
+          filter = filter + '&paid=0';
+        }
+
+        if (this.courseColective && !this.coursePrivate) {
+          filter = filter + '&courseType=1';
+        } else if (!this.courseColective && this.coursePrivate) {
+          filter = filter + '&courseType=2';
+        }
+
+        if (this.reservationTypeSingle && !this.reservationTypeMultiple) {
+          filter = filter + '&isMultiple=0';
+        } else if (!this.reservationTypeSingle && this.reservationTypeMultiple) {
+          filter = filter + '&isMultiple=1';
+        }
+
+        if (this.finishedBooking) {
+          filter = filter + '&finished=1';
+        } else {
+          filter = filter + '&finished=0';
+        }
+
       }
 
-      if (this.bookingPayed && !this.bookingNoPayed) {
-        filter = filter + '&paid=1';
-      } else if (!this.bookingPayed && this.bookingNoPayed) {
-        filter = filter + '&paid=0';
+      if(this.entity.includes('courses')) {
+
+        if (this.courseColective && !this.coursePrivate) {
+          filter = filter + '&course_type=1';
+        } else if (!this.courseColective && this.coursePrivate) {
+          filter = filter + '&course_type=2';
+        }
+
+        if (this.finishedCourse) {
+          filter = filter + '&finished=1';
+        } else {
+          filter = filter + '&finished=0';
+        }
+
+        if (this.activeCourse && !this.inActiveCourse) {
+          filter = filter + '&active=1';
+        } else if (!this.activeCourse && this.inActiveCourse) {
+          filter = filter + '&active=0';
+        }
+
+        if(this.sportsControl.value.length !== this.sports.length) {
+          const ids = [];
+          this.sportsControl.value.forEach(element => {
+            ids.push(element.id);
+          });
+          filter = filter + '&sport_id='+ids.toString();
+        }
       }
 
-      if (this.courseColective && !this.coursePrivate) {
-        filter = filter + '&courseType=1';
-      } else if (!this.courseColective && this.coursePrivate) {
-        filter = filter + '&courseType=2';
+      if(this.entity.includes('monitor')) {
+        if (this.activeMonitor && !this.inactiveMonitor) {
+          filter = filter + '&school_active=1';
+        } else if (!this.activeMonitor && this.inactiveMonitor) {
+          filter = filter + '&school_active=0';
+        }
       }
-
-      if (this.reservationTypeSingle && !this.reservationTypeMultiple) {
-        filter = filter + '&isMultiple=0';
-      } else if (!this.reservationTypeSingle && this.reservationTypeMultiple) {
-        filter = filter + '&isMultiple=1';
-      }
-
-      if (this.finishedBooking) {
-        filter = filter + '&finished=1';
-      } else {
-        filter = filter + '&finished=0';
-      }
-
     }
 
-    if(this.entity.includes('courses')) {
-
-      if (this.courseColective && !this.coursePrivate) {
-        filter = filter + '&course_type=1';
-      } else if (!this.courseColective && this.coursePrivate) {
-        filter = filter + '&course_type=2';
-      }
-
-      if (this.finishedCourse) {
-        filter = filter + '&finished=1';
-      } else {
-        filter = filter + '&finished=0';
-      }
-
-      if (this.activeCourse && !this.inActiveCourse) {
-        filter = filter + '&active=1';
-      } else if (!this.activeCourse && this.inActiveCourse) {
-        filter = filter + '&active=0';
-      }
-
-      if(this.sportsControl.value.length !== this.sports.length) {
-        const ids = [];
-        this.sportsControl.value.forEach(element => {
-          ids.push(element.id);
-        });
-        filter = filter + '&sport_id='+ids.toString();
-      }
-    }
-
-    if(this.entity.includes('monitor')) {
-      if (this.activeMonitor && !this.inactiveMonitor) {
-        filter = filter + '&school_active=1';
-      } else if (!this.activeMonitor && this.inactiveMonitor) {
-        filter = filter + '&school_active=0';
-      }
-    }
 
     this.filter = filter;
-    this.getFilteredData(1, 10, incFilter + filter);
+    this.getFilteredData(1, 10, filter);
   }
 
   /**
