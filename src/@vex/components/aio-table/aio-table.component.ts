@@ -528,15 +528,6 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     return ret;
   }
-  getSportNamesMonitor(data: any) {
-    let ret = 'NDF';
-
-    data.forEach((element, idx) => {
-      ret = element.name + (idx + 1 === data.length ? '' : ', ');
-    });
-
-    return ret;
-  }
 
   getBookingCourse(data: any) {
     if (data.length === 1 || this.checkIfCourseIdIsSame(data)) {

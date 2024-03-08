@@ -2724,4 +2724,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   getMaxDate() {
     return moment(this.selectedItem.course_dates[this.selectedItem.course_dates.length - 1].date).toDate();
   }
+
+  setPaid(event: any) {
+    this.defaults.paid = event.source.checked;
+  }
 }

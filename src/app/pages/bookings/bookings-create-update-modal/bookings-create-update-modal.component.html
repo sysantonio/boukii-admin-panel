@@ -973,7 +973,7 @@
               <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
                 <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
-                <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" style="float: right;"></mat-slide-toggle>
+                <mat-slide-toggle color="primary" (change)="setPaid($event)"  style="float: right;"></mat-slide-toggle>
               </div>
               <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
