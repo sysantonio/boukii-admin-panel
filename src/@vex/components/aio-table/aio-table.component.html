@@ -362,7 +362,11 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'price'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell><strong>{{ row[column.property] }} CHF</strong></td>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
+              <strong *ngIf="!data[i].is_flexible">{{ row[column.property] }} CHF</strong>
+              <strong *ngIf="data[i].is_flexible && data[i].course_type === 1">{{'from' | translate }} {{ row[column.property] }} CHF</strong>
+              <strong *ngIf="data[i].is_flexible && data[i].course_type === 2">{{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(data[i].price_range)) }} CHF</strong>
+            </td>
           </ng-container>
         </ng-container>
 

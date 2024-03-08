@@ -362,7 +362,10 @@
                       <div class="content-container">
                         <div class="title-container">
                           <h3 class="title" style="width: 70%;float: left; text-wrap:balance">{{ course.name | uppercase}}</h3>
-                          <h3 class="price">
+                          <h3 class="price" style="font-size:14px" *ngIf="course.is_flexible">
+                            {{'from' | translate }} {{course.price}} {{ course.currency }}
+                          </h3>
+                          <h3 class="price" style="font-size:14px" *ngIf="!course.is_flexible">
                             {{course.price}} {{ course.currency }}
                           </h3>
                         </div>

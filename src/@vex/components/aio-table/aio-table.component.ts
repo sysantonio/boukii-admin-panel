@@ -922,4 +922,24 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   /* END EXPORT QR */
+
+  encontrarPrimeraCombinacionConValores(data: any) {
+    for (const intervalo of data) {
+      // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+      if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+        return intervalo;
+      }
+    }
+    return null; // Devuelve null si no encuentra ninguna combinación válida
+  }
+
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    for (const clave of Object.keys(obj)) {
+      if (obj[clave] !== null && clave !== 'intervalo') {
+        return obj[clave];
+      }
+    }
+    return null;
+  }
+
 }
