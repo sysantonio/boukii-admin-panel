@@ -849,7 +849,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
                   course_date_id: item.course_date_id,
                   monitor_id: this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id,
                   hour_start: item.hour_start,
-                  hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
+                  hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
                   price: 0,
                   currency: item.currency,
                   paxes: this.personsSelected.length + 1,
@@ -2064,7 +2064,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
     } else {
-      const minutes = duration.split(' ')[0].replace('min', '');
+      const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }

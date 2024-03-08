@@ -1281,7 +1281,7 @@ export class MonitorDetailComponent {
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
     } else {
-      const minutes = duration.split(' ')[0].replace('min', '');
+      const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
     }

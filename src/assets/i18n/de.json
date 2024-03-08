@@ -563,6 +563,7 @@
   "cancel_no_refund": "Stornierung ohne Rückerstattung",
   "refund_cash": "Barzahlung oder andere Rückerstattung",
   "voucher_refund": "Rückerstattung mit Bonus",
-  "deactivate": "Deaktivieren"
-
+  "deactivate": "Deaktivieren",
+  "monitor_comments": "Überwachen Sie Kommentare",
+  "multimedia": "Multimedia"
 }

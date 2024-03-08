@@ -554,7 +554,7 @@
                 <ul>
                   <ng-container *ngIf="item.courseDates[0].course?.is_flexible">
                     <li *ngFor="let courseDateDate of item.courseDates">
-                      {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDateDate?.course?.course_type === 1 ? courseDateDate?.hour_end : calculateHourEnd(courseDateDate?.hour_start, courseDateDate?.course?.duration)}}</i>
+                      {{ courseDateDate.date | date : 'dd/MM/YYYY'}} <i style="float: right;">{{ courseDateDate.hour_start }} - {{courseDateDate?.hour_end}}h</i>
                     </li>
                   </ng-container>
                   <ng-container *ngIf="!item.courseDates[0].course?.is_flexible">

@@ -563,5 +563,7 @@
   "cancel_no_refund": "Cancellazione senza rimborso",
   "refund_cash": "Rimborso in contanti o altro",
   "voucher_refund": "Rimborso con bonus",
-  "deactivate": "Disattivare"
+  "deactivate": "Disattivare",
+  "monitor_comments": "Monitorare i commenti",
+  "multimedia": "Multimedia"
 }
