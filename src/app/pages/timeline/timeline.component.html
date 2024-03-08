@@ -56,6 +56,17 @@
                     </div>
 
                     <div class="filter-container-column">
+                        <span>{{ 'client' | translate | uppercase }}</span>
+                        <mat-form-field appearance="fill">
+                        <mat-select [(ngModel)]="filterBookingUser" color="primary">
+                            <ng-container *ngFor="let user of allBookingUsers">
+                                <mat-option *ngIf="user.id" [value]="user">{{user.first_name}} {{user.last_name}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="filter-container-column">
                       <span>{{ 'monitors' | translate | uppercase }}</span>
                       <mat-checkbox color="primary" [(ngModel)]="filterFree">{{ 'free' | translate }}</mat-checkbox>
                       <mat-checkbox color="primary" [(ngModel)]="filterOccupied">{{ 'occupied' | translate }}</mat-checkbox>
