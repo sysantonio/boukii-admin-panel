@@ -112,6 +112,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   matchResults: { [monitorId: string]: boolean } = {};
 
   nullMonitor:any = {id:null};
+  filterBookingUser:any;
+  allBookingUsers:any[] = [];
 
   constructor(private crudService: ApiCrudService,private dialog: MatDialog,private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.mockLevels.forEach(level => {
@@ -497,6 +499,54 @@ export class TimelineComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    //ADD all bookingusers and then filter them.
+    //get bookingusers
+    let allBookingUsers = [];
+
+    allBookings.forEach(booking => {
+      // Private or colective
+      let usersToProcess = [];
+      if (booking.course.course_type === 2) {
+        usersToProcess = booking.bookings_clients;
+      } else if (booking.course.course_type === 1) {
+        usersToProcess = booking.booking_users;
+      }
+    
+      usersToProcess.forEach(userObj => {
+        const client = (userObj.client || userObj);
+        const clientInfo = { id: client.id, first_name: client.first_name, last_name: client.last_name };
+        const isExistingUser = allBookingUsers.some(user => user.id === clientInfo.id);
+    
+        if (!isExistingUser) {
+          allBookingUsers.push(clientInfo);
+        }
+      });
+    });
+
+    //Saved object to filter
+    if (this.filterBookingUser && !allBookingUsers.some(user => user.id === this.filterBookingUser.id)) {
+      allBookingUsers.push(this.filterBookingUser);
+    }
+
+    allBookingUsers.sort((a, b) => a.first_name.localeCompare(b.first_name));
+    this.allBookingUsers = allBookingUsers;
+
+    //filter the bookings if bookinguser
+    if (this.filterBookingUser && this.filterBookingUser.id) {
+      const filteredBookings = allBookings.filter(booking => {
+        let usersToCheck = [];
+        if (booking.course.course_type === 2) {
+          usersToCheck = booking.bookings_clients.map(clientObj => clientObj.client);
+        } else if (booking.course.course_type === 1) {
+          usersToCheck = booking.booking_users.map(clientObj => clientObj.client);
+        }
+    
+        return usersToCheck.some(user => user.id === this.filterBookingUser.id);
+      });
+    
+      allBookings = filteredBookings;
     }
 
     //Convert them into TASKS
@@ -1847,7 +1897,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   showResetFilters() {
-    return !(this.areAllChecked() && this.filterMonitor == null &&
+    return !(this.areAllChecked() && this.filterMonitor == null && this.filterBookingUser == null &&
              this.filterFree && !this.filterOccupied &&
              this.filterCollective && this.filterPrivate && this.filterNwd &&
              this.filterBlockPayed && this.filterBlockNotPayed);
@@ -1863,6 +1913,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const filterOptions = {
       checkedSports: Array.from(this.checkedSports),
       filterMonitor: this.filterMonitor,
+      filterBookingUser: this.filterBookingUser,
       filterFree: this.filterFree,
       filterOccupied: this.filterOccupied,
       filterCollective: this.filterCollective,
@@ -1882,6 +1933,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
       this.checkedSports = new Set(options.checkedSports);
       this.filterMonitor = options.filterMonitor;
+      this.filterBookingUser = options.filterBookingUser,
       this.filterFree = options.filterFree;
       this.filterOccupied = options.filterOccupied;
       this.filterCollective = options.filterCollective;
@@ -1896,6 +1948,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.checkedSports.clear();
     this.sports.forEach(sport => this.checkedSports.add(sport.id));
     this.filterMonitor=null;
+    this.filterBookingUser=null;
     this.filterFree=true;
     this.filterOccupied=false;
     this.filterCollective=true;
