@@ -1896,6 +1896,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
     return this.checkedSports.size === this.sports.length;
   }
 
+  compareUsers(user1: any, user2: any): boolean {
+    return user1 && user2 ? user1.id === user2.id && user1.first_name === user2.first_name && user1.last_name === user2.last_name : user1 === user2;
+  }  
+
   showResetFilters() {
     return !(this.areAllChecked() && this.filterMonitor == null && this.filterBookingUser == null &&
              this.filterFree && !this.filterOccupied &&
