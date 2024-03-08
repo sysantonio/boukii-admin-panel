@@ -400,7 +400,7 @@
                   </div>
                   <div style="float: left; width:80%;">
 
-                    <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore() / this.selectedGoal.length}}%</p>
+                    <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore()}}%</p>
                     <h1 style="float: left; width:100%;font-size: 20px;position: relative;left: -5%;">
                       <mat-icon svgIcon="mat:chevron_left" class="icon-sm flex-none" style="float:left;position: relative;left: -30%;cursor:pointer;" (click)="changeLevel(-1)"></mat-icon>
                       {{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}
@@ -452,10 +452,27 @@
                 <div style="float: left; width:100%;margin-top: 5%" >
                   <h1 style="float: left; width:100%;font-size: 20px;">{{'multimedia' | translate }}</h1>
 
+                  <div style="float: left; width: 100%; border-radius: 10px;" *ngFor="let item of getEvaluationsData()">
+                    <ng-container style="float: left; width: 25%; border-radius: 10px;" *ngFor="let file of item.files">
+                      <img *ngIf="file.type === 'image'" [src]="file.file" style="height: 150px;width: 150px;object-fit: cover;">
+
+                      <video *ngIf="file.type === 'video'" width="150" heigth="150" controls>
+                        <source [src]="file.file" type="video/mp4">
+                        <source [src]="file.file" type="video/ogg">
+                      </video>
+
+                    </ng-container>
+                  </div>
+
                 </div>
 
                 <div style="float: left; width:100%;margin-top: 5%" >
                   <h1 style="float: left; width:100%;font-size: 20px;">{{'monitor_comments' | translate }}</h1>
+
+                  <mat-form-field class="flex-auto" style="width: 100%" *ngFor="let item of getEvaluationsData()">
+                    <input matInput [readonly]=true type="text" [value]="item.observations">
+
+                  </mat-form-field>
 
                 </div>
 
@@ -479,7 +496,7 @@
             <vex-page-layout style="margin: 2% 0 0 0;">
 
                 <vex-page-layout-content class="-mt-6 fullwidth" >
-                  <vex-aio-table [columns]="columns" [entity]="entity" [title]="'Reservations'" [route]="'bookings'"
+                  <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
                   (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'" [with]="'&with[]=booking&with[]=course.courseGroups.courseSubgroups'"
                   [showDetail]="showDetail">
                 </vex-aio-table>
@@ -1124,7 +1141,7 @@
                     <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
                   </div>
                   <div style="float: left; width:80%;">
-                    <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore() / this.selectedGoal.length}}%</p>
+                    <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore()}}%</p>
                     <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}</h1>
 
                   </div>

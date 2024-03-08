@@ -80,6 +80,8 @@ export class ClientDetailComponent {
   deletedItems = [];
   clientUsers = [];
   selectedGoal = [];
+  evaluations = [];
+  evaluationFullfiled = [];
   maxSelection = 6;
   today: Date;
   minDate: Date;
@@ -233,6 +235,7 @@ export class ClientDetailComponent {
             this.getClientSport();
             this.getClients();
             this.getClientObservations();
+            this.getEvaluations();
 
             if (!onChangeUser) {
               this.getClientUtilisateurs();
@@ -955,17 +958,12 @@ export class ClientDetailComponent {
       cs.degrees.forEach(dg => {
         this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id='+dg.id)
         .subscribe((data) => {
-          data.data.forEach(goal => {
 
-          this.crudService.list('/evaluation-fulfilled-goals', 1, 10000, 'desc', 'id', '&degrees_school_sport_goals_id='+goal.id)
-            .subscribe((ev: any) => {
-              if (ev.data.length > 0) {
-                goal.score = ev.data[0].score;
-              }
+          data.data.forEach(element => {
 
-              this.goals.push(goal);
-            });
+            this.goals.push(element);
           });
+
         })
       });
 
@@ -975,14 +973,23 @@ export class ClientDetailComponent {
 
   calculateGoalsScore() {
     let ret = 0;
-    this.selectedGoal.forEach(element => {
-      if (element.goal) {
 
-        ret = ret + element.goal;
-      }
-    });
+    const goals = this.goals.filter((g) => g.degree_id == this.selectedSport.level.id);
 
-    return ret;
+    if (goals.length > 0) {
+      const maxPoints = goals.length * 10;
+      this.evaluationFullfiled.forEach(element => {
+        if (element.score) {
+
+          ret = ret + element.score;
+        }
+      });
+
+      return (ret / maxPoints) * 100;
+    } else {
+      return ret;
+    }
+
   }
 
   showInfoEvent(event: boolean) {
@@ -1284,6 +1291,33 @@ export class ClientDetailComponent {
   }
 
   getEvaluations() {
+    this.crudService.list('/evaluations', 1, 10000, 'desc', 'id', '&client_id='+this.id)
+      .subscribe((data) => {
+        this.evaluations = data.data;
 
+        data.data.forEach(evaluation => {
+
+          this.crudService.list('/evaluation-fulfilled-goals', 1, 10000, 'desc', 'id', '&evaluation_id='+evaluation.id)
+            .subscribe((ev: any) => {
+              ev.data.forEach(element => {
+                this.evaluationFullfiled.push(element);
+
+              });
+
+            });
+          });
+      })
+  }
+
+  getEvaluationsData(): any {
+    let ret: any = [];
+
+    this.evaluations.forEach(element => {
+      if (element.degree_id === this.selectedSport.level.id) {
+        ret.push(element);
+      }
+    });
+
+    return ret;
   }
 }

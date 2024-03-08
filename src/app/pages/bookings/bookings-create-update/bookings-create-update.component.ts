@@ -1150,7 +1150,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           }
 
 
-          this.crudService.post('/admin/bookings/mail/' + booking.data.id, {})
+          this.crudService.post('/admin/bookings/mail/' + booking.data.id, {paid: this.defaults.paid, payment_method: this.defaults.payment_method})
             .subscribe((data) => {
               console.log(data);
             })
