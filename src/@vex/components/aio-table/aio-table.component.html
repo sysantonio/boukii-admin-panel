@@ -460,7 +460,19 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
               <div class="m-0 body-1" [style.background]="data[i].client_sports[0].degree.color" style="padding: 5%;;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">
-                {{data[i].client_sports[0].degree.annotation}} / {{data[i].client_sports[0].degree.name}}
+                {{data[i].client_sports[0].degree.annotation}} {{data[i].client_sports[0].degree.name}}
+              </div>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Level Monitor Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'monitor_sports_degrees'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
+              <div class="m-0 body-1" [style.background]="findHighestDegreeIdElement(row[column.property])?.color" style="padding: 5%;;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">
+                {{findHighestDegreeIdElement(row[column.property])?.annotation}} {{findHighestDegreeIdElement(row[column.property])?.name}}
               </div>
             </td>
           </ng-container>

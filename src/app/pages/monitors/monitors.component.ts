@@ -57,6 +57,7 @@ export class MonitorsComponent {
     { label: 'monitor', property: 'first_name', type: 'monitor', visible: true, cssClasses: ['font-medium'] },
     { label: 'mobile', property: 'phone', type: 'text', visible: true },
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'level', property: 'monitor_sports_degrees', type: 'monitor_sports_degrees', visible: true, cssClasses: ['font-medium'] },
     { label: 'sports', property: 'sports', type: 'sports_monitor', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     { label: "status", property: 'monitors_schools', type: 'light_monitors_schools', visible: true },

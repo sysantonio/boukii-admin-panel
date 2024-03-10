@@ -110,6 +110,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   monitors: any = [];
   languages: any = [];
   sports: any = [];
+  allLevels: any = [];
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
   sportsControl = new FormControl();
@@ -156,6 +157,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     this.getClients();
     this.getSports();
     this.getLanguages();
+    this.getDegrees();
   }
 
   getLanguages() {
@@ -940,6 +942,24 @@ export class AioTableComponent implements OnInit, AfterViewInit {
       }
     }
     return null;
+  }
+
+  findHighestDegreeIdElement(data: any) {
+    if (data.length > 0) {
+
+      if (data[0].monitor_sport_authorized_degrees.length > 0) {
+
+        const dId = data[0].monitor_sport_authorized_degrees.reduce((prev, current) => (prev.degree_id > current.degree_id) ? prev : current);
+        return this.allLevels.find((l) => l.id === dId.degree_id);
+      }
+    }
+  }
+
+  getDegrees() {
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+      .subscribe((data) => {
+        this.allLevels = data.data;
+      })
   }
 
 }
