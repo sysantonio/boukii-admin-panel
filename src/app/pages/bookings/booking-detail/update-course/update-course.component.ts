@@ -43,6 +43,16 @@ export class UpdateCourseModalComponent implements OnInit {
 
     this.selectedDates = this.defaults.course.course_dates;
     this.dates = this.defaults.dates;
+
+    this.dates.forEach((item) => {
+      const correspondingDate = this.selectedDates.find(date => date.id === item.course_date_id);
+      if (correspondingDate) {
+        item.selectedCourseDateId = correspondingDate.id; // Esto establece el valor por defecto en el mat-select
+        item.duration = this.calculateDuration(item.hour_start, item.hour_end);
+      }
+
+      item.mainDuration = this.calculateDuration(item.hour_start, item.hour_end);
+    });
   }
 
   transformTime(time: string): string {
@@ -105,7 +115,7 @@ export class UpdateCourseModalComponent implements OnInit {
             break;
         }
 
-        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}:00`);
 
         currentMinutes += intervalMinutes;
         currentHours += intervalHours + Math.floor(currentMinutes / 60);
@@ -153,9 +163,356 @@ export class UpdateCourseModalComponent implements OnInit {
         const dataBook = [];
         const deleteMonitorRQS = [];
 
+        if (this.defaults.course.course_type === 2 && this.defaults.course.is_flexible) {
+          this.dates.forEach(element => {
+            deleteMonitorRQS.push(this.crudService.update('/booking-users', {monitor_id: null}, element.id));
+          });
+
+          forkJoin(deleteMonitorRQS)
+          .subscribe((deleteMonitorsResponse) => {
+
+            const monitorAvailableRQS = [];
+
+            this.dates.forEach(element => {
+              const date = this.defaults.course.course_dates.filter((d) => d.id === element.selectedCourseDateId);
+              const degreeId = element.degree_id;
+              const hourS = moment(element.hour_start, 'HH:mm:ss').format('HH:mm');
+              monitorAvailableRQS.push(this.checkAvailableMonitors(hourS, this.calculateDuration(element.hour_start, this.calculateHourEnd(element.hour_start, element.mainDuration)),
+                moment(date[0].date).format('YYYY-MM-DD'), degreeId ? degreeId : this.defaults.dates[0].degree_id));
+            });
+
+            forkJoin(monitorAvailableRQS)
+            .subscribe((monitorsResponse) => {
+
+              this.dates.forEach((element, idx) => {
+
+                if (data.length > 0) {
+                  if (element[0].monitor_id !== null) {
+                    const monitor = monitorsResponse[idx].data.find((m) => m.id === element[0].monitor_id);
+
+                    if (!monitor) {
+                      this.noAvailableMonitorDate.push(element[0]);
+                    }
+                  }
+                } else {
+                  if (this.defaults.dates[0].monitor_id !== null) {
+                    const monitor = monitorsResponse[idx].data.find((m) => m.id === this.defaults.dates[0].monitor_id);
+
+                    if (!monitor) {
+                      this.noAvailableMonitorDate.push(element[0]);
+                    }
+                  }
+
+                }
+
+              });
+
+              if (this.noAvailableMonitorDate.length > 0) {
+
+                console.log(this.noAvailableMonitorDate);
+
+                const noDispoRef = this.dialog.open(NoMonitorDateModalComponent, {
+                  data: {title: this.translateService.instant('monitor_no_available'), message: this.translateService.instant('monitor_no_available_text'),
+                   message2: this.translateService.instant('monitor_no_available_text2'), dates: this.noAvailableMonitorDate}
+                });
+
+                noDispoRef.afterClosed().subscribe((data: any) => {
+                  if (data) {
+                    let basePrice = 0;
+
+                    this.dates.forEach(element => {
+                      // bucle a los monitores y comprobar que ese monitor esta libre
+                      const date = this.defaults.course.course_dates.filter((d) => d.id === element.selectedCourseDateId);
+                      const dateDegreeId = element.degree_id;
+                      let dateMonitorId = element;
+                      basePrice = basePrice + parseFloat(element.price);
+                      if (this.noAvailableMonitorDate.find((n) => n.monitor_id === dateMonitorId.monitor_id)) {
+                        dateMonitorId = null;
+                      }
+                      dataBook.push({
+                        school_id: this.defaults.mainBooking.school_id,
+                        booking_id: this.defaults.mainBooking.booking_id,
+                        client_id: this.defaults.mainBooking.client_id,
+                        course_id: this.defaults.mainBooking.course_id,
+                        course_date_id: element.selectedCourseDateId,
+                        course_subgroup_id: this.defaults.mainBooking.course_subgroup_id,
+                        course_group_id: this.defaults.mainBooking.course_group_id,
+                        degree_id: dateDegreeId ? dateDegreeId : this.defaults.dates[0].degree_id,
+                        monitor_id: dateMonitorId ? dateMonitorId.monitor_id : null,
+                        hour_start: element.hour_start,
+                        hour_end: this.calculateHourEnd(element.hour_start, element.mainDuration),
+                        currency: this.defaults.mainBooking.currency,
+                        notes: this.defaults.mainBooking.notes,
+                        school_notes: this.defaults.mainBooking.school_notes,
+                        date: moment(date[0].date).format('YYYY-MM-DD'),
+                        attended: this.defaults.mainBooking.attended
+                      });
+                    });
+
+                    let discountReduction = 0;
+                    const discounts = typeof this.defaults.course.discounts === 'string' ? JSON.parse(this.defaults.course.discounts) : this.defaults.course.discounts;
+                      //ret = ret + (b?.courseDates[0].price * b.courseDates.length);
+                      if (discounts !== null) {
+                        discounts.forEach(element => {
+                          if (element.date === this.dates.length) {
+                            discountReduction = -(this.defaults.course.price * this.datesControl.value.length * (element.percentage / 100));
+                          }
+                        });
+                      }
 
 
-        if (this.defaults.course.course_type === 2) {
+                    let price = basePrice + discountReduction;
+                    let boukiiCarePrice = 0;
+                    let canInsurance = 0;
+                    let tva = 0;
+
+                    if (this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0) {
+                      price = price + (this.defaults.boukiiCarePrice * this.defaults.clientIds.length * this.datesControl.value.length);
+                      boukiiCarePrice = (this.defaults.boukiiCarePrice * this.defaults.clientIds.length * this.datesControl.value.length);
+                    }
+
+                    if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
+                      price = price + (this.defaults.cancellationInsurance * (basePrice + (discountReduction)))
+                      canInsurance = (this.defaults.cancellationInsurance * (basePrice + (discountReduction)))
+                    }
+
+                    if (this.defaults.tva && this.defaults.tva > 0) {
+                      price = price + (price * this.defaults.tva);
+                      tva = (price * this.defaults.tva);
+                    }
+
+                    const bookingData = {
+                      has_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0,
+                      has_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0,
+                      price_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0 ? boukiiCarePrice : 0,
+                      price_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0 ? canInsurance : 0,
+                      price_total: price
+                    };
+
+                    this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.booking_id)
+                      .subscribe(() => {
+
+                        const bookingLog = {
+                        booking_id: this.defaults.mainBooking.booking_id,
+                        action: 'update',
+                        description: 'update booking',
+                        user_id: this.user.id,
+                        before_change: 'confirmed',
+                        school_id: this.user.schools[0].id
+                      }
+
+                      this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});})
+
+
+
+                      const rqs = [];
+                      this.defaults.dates.forEach(element => {
+                        rqs.push(this.crudService.delete('/booking-users', element.id));
+
+                    });
+
+                    forkJoin(rqs)
+                      .subscribe(() => {
+                        this.defaults.clientIds.forEach(client => {
+                          dataBook.forEach(bu => {
+                            const basePrice = this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : parseFloat(this.defaults.course.price);
+                            bu.client_id = parseInt(client);
+                            bu.price = parseInt(client) == this.defaults.mainBooking.client_id ? basePrice : 0;
+                            this.crudService.create('/booking-users', bu)
+                              .subscribe((bookingUser) => {
+
+                                if (this.defaults.courseExtra.length > 0) {
+                                  const bookingUserExtra = {
+                                    booking_user_id: bookingUser.data.id,
+                                    course_extra_id: null,
+                                  };
+
+                                  const courseExtra = {
+                                    course_id: this.defaults.course.id,
+                                    name: this.defaults.courseExtra[0].name,
+                                    description: this.defaults.courseExtra[0].description,
+                                    price: this.defaults.courseExtra[0].price
+                                  };
+
+                                  this.crudService.create('/course-extras', courseExtra)
+                                    .subscribe((responseCourseExtra) => {
+
+                                      bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                                      this.crudService.create('/booking-user-extras', bookingUserExtra)
+                                      .subscribe((bookExtra) => {
+
+                                      })
+
+                                    })
+                                }
+
+                              })
+                          });
+                        });
+                      })
+
+
+
+                    setTimeout(() => {
+                      this.dialogRef.close(true)
+                    }, 1000);
+                  } else {
+
+                    this.dates.forEach(element => {
+                      this.crudService.update('/booking-users', {monitor_id: element.monitor_id}, element.id)
+                        .subscribe(() => {
+
+                        })
+
+                    });
+                    this.noAvailableMonitorDate = [];
+                  }
+                });
+              } else {
+                let basePrice = 0;
+
+                this.dates.forEach(element => {
+                  // bucle a los monitores y comprobar que ese monitor esta libre
+                  const date = this.defaults.course.course_dates.filter((d) => d.id === element.selectedCourseDateId);
+                  const dateDegreeId = element.degree_id;
+                  let dateMonitorId = element;
+                  basePrice = basePrice + parseFloat(element.price);
+                  dataBook.push({
+                    school_id: this.defaults.mainBooking.school_id,
+                    booking_id: this.defaults.mainBooking.booking_id,
+                    client_id: this.defaults.mainBooking.client_id,
+                    course_id: this.defaults.mainBooking.course_id,
+                    course_date_id: element.selectedCourseDateId,
+                    course_subgroup_id: this.defaults.mainBooking.course_subgroup_id,
+                    course_group_id: this.defaults.mainBooking.course_group_id,
+                    degree_id: dateDegreeId ? dateDegreeId : this.defaults.dates[0].degree_id,
+                    monitor_id: dateMonitorId ? dateMonitorId.monitor_id : null,
+                    hour_start: element.hour_start,
+                    hour_end: this.calculateHourEnd(element.hour_start, element.mainDuration),
+                    currency: this.defaults.mainBooking.currency,
+                    notes: this.defaults.mainBooking.notes,
+                    school_notes: this.defaults.mainBooking.school_notes,
+                    date: moment(date[0].date).format('YYYY-MM-DD'),
+                    attended: this.defaults.mainBooking.attended
+                  });
+                });
+
+                let discountReduction = 0;
+                const discounts = typeof this.defaults.course.discounts === 'string' ? JSON.parse(this.defaults.course.discounts) : this.defaults.course.discounts;
+                  //ret = ret + (b?.courseDates[0].price * b.courseDates.length);
+                  if (discounts !== null) {
+                    discounts.forEach(element => {
+                      if (element.date === this.dates.length) {
+                        discountReduction = -(this.defaults.course.price * this.datesControl.value.length * (element.percentage / 100));
+                      }
+                    });
+                  }
+
+
+                let price = basePrice + discountReduction;
+                let boukiiCarePrice = 0;
+                let canInsurance = 0;
+                let tva = 0;
+
+                if (this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0) {
+                  price = price + (this.defaults.boukiiCarePrice * this.defaults.clientIds.length * this.datesControl.value.length);
+                  boukiiCarePrice = (this.defaults.boukiiCarePrice * this.defaults.clientIds.length * this.datesControl.value.length);
+                }
+
+                if (this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0) {
+                  price = price + (this.defaults.cancellationInsurance * (basePrice + (discountReduction)))
+                  canInsurance = (this.defaults.cancellationInsurance * (basePrice + (discountReduction)))
+                }
+
+                if (this.defaults.tva && this.defaults.tva > 0) {
+                  price = price + (price * this.defaults.tva);
+                  tva = (price * this.defaults.tva);
+                }
+
+                const bookingData = {
+                  has_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0,
+                  has_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0,
+                  price_boukii_care: this.defaults.boukiiCarePrice && this.defaults.boukiiCarePrice > 0 ? boukiiCarePrice : 0,
+                  price_cancellation_insurance: this.defaults.cancellationInsurance && this.defaults.cancellationInsurance > 0 ? canInsurance : 0,
+                  price_total: price
+                };
+
+                this.crudService.update('/bookings', bookingData, this.defaults.mainBooking.booking_id)
+                  .subscribe(() => {
+
+                    const bookingLog = {
+                      booking_id: this.defaults.mainBooking.booking_id,
+                      action: 'update',
+                      description: 'update booking',
+                      user_id: this.user.id,
+                      before_change: 'confirmed',
+                      school_id: this.user.schools[0].id
+                    }
+
+                    this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});
+                  })
+
+                  const rqs = [];
+                  this.defaults.dates.forEach(element => {
+                    rqs.push(this.crudService.delete('/booking-users', element.id));
+
+                });
+
+                forkJoin(rqs)
+                  .subscribe(() => {
+                    this.defaults.clientIds.forEach(client => {
+                      dataBook.forEach(bu => {
+                        const basePrice = this.defaults.course.course_type === 2 ? this.defaults.mainBooking.price : parseFloat(this.defaults.course.price);
+                        bu.client_id = parseInt(client);
+                        bu.price = parseInt(client) == this.defaults.mainBooking.client_id ? basePrice : 0;
+                        this.crudService.create('/booking-users', bu)
+                          .subscribe((bookingUser) => {
+
+                            if (this.defaults.courseExtra.length > 0) {
+                              const bookingUserExtra = {
+                                booking_user_id: bookingUser.data.id,
+                                course_extra_id: null,
+                              };
+
+                              const courseExtra = {
+                                course_id: this.defaults.course.id,
+                                name: this.defaults.courseExtra[0].name,
+                                description: this.defaults.courseExtra[0].description,
+                                price: this.defaults.courseExtra[0].price
+                              };
+
+                              this.crudService.create('/course-extras', courseExtra)
+                                .subscribe((responseCourseExtra) => {
+
+                                  bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                                  this.crudService.create('/booking-user-extras', bookingUserExtra)
+                                  .subscribe((bookExtra) => {
+
+                                  })
+
+                                })
+                            }
+
+                          })
+                      });
+                    });
+                  })
+
+
+
+                setTimeout(() => {
+                  this.dialogRef.close(true)
+                }, 1000);
+              }
+
+              /*this.dialogRef.close({})*/
+            })
+
+          });
+
+
+        } else if (this.defaults.course.course_type === 2 && !this.defaults.course.is_flexible) {
+
           this.dates.forEach(element => {
             deleteMonitorRQS.push(this.crudService.update('/booking-users', {monitor_id: null}, element.id));
           });
@@ -169,8 +526,7 @@ export class UpdateCourseModalComponent implements OnInit {
             this.datesControl.value.forEach(element => {
               const date = this.defaults.course.course_dates.filter((d) => d.id === element);
               const degreeId = this.defaults.dates.find((d) => d.course_date_id === element)?.degree_id;
-              monitorAvailableRQS.push(this.checkAvailableMonitors(this.defaults.course.course_type === 2 ? this.hourStart : this.defaults.mainBooking.hour_start,
-                this.defaults.course.duration, moment(date[0].date).format('YYYY-MM-DD'), degreeId ? degreeId : this.defaults.dates[0].degree_id));
+              monitorAvailableRQS.push(this.checkAvailableMonitors(this.hourStart, this.defaults.course.duration, moment(date[0].date).format('YYYY-MM-DD'), degreeId ? degreeId : this.defaults.dates[0].degree_id));
 
             });
             forkJoin(monitorAvailableRQS)
@@ -661,5 +1017,39 @@ export class UpdateCourseModalComponent implements OnInit {
     }
 
     return this.crudService.post('/admin/monitors/available', data);
+  }
+
+  getDateValue(id) {
+    const ret = this.selectedDates.find((d) => d.id === id);
+    return ret;
+  }
+
+  calculateDuration(hourStart: string, hourEnd: string): string {
+    const start = moment(hourStart, 'HH:mm:ss');
+    const end = moment(hourEnd, 'HH:mm:ss');
+    const duration = moment.duration(end.diff(start));
+
+    // Construir la cadena de duración
+    let durationStr = "";
+    if (duration.hours() > 0) {
+      durationStr += `${duration.hours()}h `;
+    }
+    if (duration.minutes() > 0 || duration.hours() > 0) {
+      durationStr += `${duration.minutes()}m `;
+    }
+    if (duration.seconds() > 0 && duration.minutes() === 0 && duration.hours() === 0) {
+      durationStr += `${duration.seconds()}s`;
+    }
+
+    // Eliminar el espacio extra al final si existe
+    durationStr = durationStr.trim();
+
+    return durationStr;
+  }
+
+  setHourStart(event: any, time: any, item: any) {
+    if (event.isUserInput) {
+      item.hour_start = time;
+    }
   }
 }
