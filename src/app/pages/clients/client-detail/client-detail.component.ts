@@ -803,9 +803,15 @@ export class ClientDetailComponent {
   changeLevel(nextLevel: any) {
     this.selectedGoal = [];
     this.sportIdx = this.sportIdx + nextLevel;
-    this.allLevels.sort((a, b) => a.degree_order - b.degree_order);
+
+    if (this.sportIdx < 0) {
+      this.sportIdx = 0;
+    } else if (this.sportIdx >= this.allLevels.length) {
+      this.sportIdx = this.allLevels.length - 1;
+    }
+    this.allLevels.sort((a: any, b: any) => a.degree_order - b.degree_order);
     this.selectedSport.level = this.allLevels[this.sportIdx];
-    this.goals.forEach(element => {
+    this.goals.forEach((element: any) => {
       if (element.degree_id === this.allLevels[this.sportIdx].id) {
 
         this.selectedGoal.push(element);
