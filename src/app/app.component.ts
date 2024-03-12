@@ -52,7 +52,7 @@ export class AppComponent {
             sidenav: {
               imageUrl: data.data.logo,
               title: data.data.name,
-              showCollapsePin: false
+              showCollapsePin: true
             }
           });
         })

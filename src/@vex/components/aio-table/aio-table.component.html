@@ -175,7 +175,7 @@
       </div>
 
 
-      <table @stagger #dataTable [dataSource]="dataSource" class="w-full" mat-table matSort *ngIf="!loading">
+      <table (matSortChange)="sortData($event)" @stagger #dataTable [dataSource]="dataSource" class="w-full" mat-table matSort *ngIf="!loading">
 
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->

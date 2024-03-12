@@ -4,6 +4,13 @@
   transition: var(--trans-ease-out);
   width: var(--sidenav-width);
 
+  .collapsed-logo {
+    width: 100% !important;
+  }
+
+  .normal-logo {
+    width: 40% !important;
+  }
   &.collapsed {
     width: var(--sidenav-collapsed-width);
 
@@ -50,6 +57,9 @@
     }
 
     &.open {
+      .collapsed-logo {
+        width: 40% !important;
+      }
       width: var(--sidenav-width);
 
       ::ng-deep {

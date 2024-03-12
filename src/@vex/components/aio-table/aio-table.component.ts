@@ -3,7 +3,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
@@ -309,6 +309,20 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   onPageChange(event: PageEvent) {
     // La API puede esperar la primera página como 1, no como 0.
     this.getData(event.pageIndex +1, event.pageSize);
+  }
+
+  sortData(sort: Sort) {
+    const data = this.dataSource.data.slice();
+
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+    } else {
+      this.dataSource.data = data.sort((a, b) => {
+        const aValue = (a as any)[sort.active];
+        const bValue = (b as any)[sort.active];
+        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+      });
+    }
   }
 
   ngAfterViewInit() {

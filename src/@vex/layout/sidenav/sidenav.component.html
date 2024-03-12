@@ -4,9 +4,10 @@
      [class.open]="collapsed && collapsedOpen$ | async"
      class="sidenav flex flex-col">
   <div class="vex-sidenav-toolbar__container">
-    <div class="sidenav-toolbar flex-none flex items-center" style="width: 40% !important;">
+    <div class="sidenav-toolbar flex-none flex items-center" [class.collapsed-logo]="collapsed" [class.normal-logo]="!collapsed">
       <img [src]="imageUrl$ | async" alt="Logo"/>
-      <p style="margin: 0 0 0 10px;">{{ title$ | async }}</p>
+      <p style="margin: 0 0 0 10px;" *ngIf="!collapsed">{{ title$ | async }}</p>
+      <p style="margin: 0 0 0 10px;" *ngIf="collapsed && collapsedOpen$ | async">{{ title$ | async }}</p>
       <button (click)="toggleCollapse()"
               *ngIf="showCollapsePin$ | async"
               class="-mr-4 leading-none flex-none hidden lg:block"
