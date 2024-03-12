@@ -1,4 +1,4 @@
-<vex-secondary-toolbar current="Courses">
+<vex-secondary-toolbar current="{{'courses.title' | translate}}">
   <vex-breadcrumbs
     [crumbs]="['courses.title', (mode === 'update' ? 'courses.new' : 'courses.update')]"
     class="flex-auto"
@@ -483,12 +483,12 @@
 
                   <ng-container matColumnDef="dateFrom">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'courses.date_start' | translate }} </th>
-                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.dateFrom}}</span> </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.dateFrom}}</span> </td>
                   </ng-container>
 
                   <ng-container matColumnDef="dateTo">
                     <th mat-header-cell *matHeaderCellDef> {{'courses.date_end' | translate }} </th>
-                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && element.id && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.dateTo}}</span> </td>
+                    <td mat-cell *matCellDef="let element"> <span [ngStyle]="{'text-decoration': mode === 'update' && (element.active === 0 || !element.active) ? 'line-through' : ''}">{{element.dateTo}}</span> </td>
                   </ng-container>
 
                   <ng-container matColumnDef="delete">

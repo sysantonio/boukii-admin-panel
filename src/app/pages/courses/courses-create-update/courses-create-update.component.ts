@@ -166,7 +166,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         friday: false,
         saturday: false,
         sunday: false
-      }
+      },
+      periods: []
     },
     sport_id: null,
     school_id: null,
@@ -557,9 +558,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
 
           if (this.defaults.course_type === 2 && this.defaults.is_flexible) {
-            this.defaults.course_dates.forEach(element => {
+            /*this.defaults.course_dates.forEach(element => {
               this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('YYYY-MM-DD'), dateTo: moment(element.date).format('YYYY-MM-DD'), active: element.active, id: element.id});
-            });
+            });*/
+
+            if (this.defaults.settings.periods) {
+
+              this.defaults.settings.periods.forEach(element => {
+                this.dataSourceDatePrivate.data.push({dateFrom: element.from, dateTo: element.to, active: element.active, id: element.id});
+              });
+            }
 
             this.dataSourceReductionsPrivate.data = JSON.parse(this.defaults.discounts);
           }
@@ -1081,7 +1089,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY')});
+        this.defaults.settings.periods.push({from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true})
+        this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true});
         this.privateDatesTable?.renderRows();
         this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
       }
@@ -1148,9 +1157,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     if (this.mode === 'update') {
       this.dataSourceDatePrivate.data[index].active = false;
-      this.defaults.course_dates[index].active = false;
+      this.defaults.settings.periods[index].active = false;
+      const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'DD-MM-YYYY').add(-1, 'd');
+      const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'DD-MM-YYYY').add(1, 'd');
+      this.defaults.course_dates.forEach(element => {
+        if (moment(element.date).isBetween(from, to)) {
+
+          element.active = false;
+        }
+       });
       this.privateDatesTable.renderRows();
     } else {
+      this.defaults.settings.periods.splice(index, 1);
       this.dataSourceDatePrivate.data.splice(index, 1);
       this.privateDatesTable.renderRows();
     }
@@ -1223,7 +1241,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
           friday: false,
           saturday: false,
           sunday: false
-        }
+        },
+        periods: []
       },
       sport_id: this.defaults.sport_id,
       school_id: null,
@@ -1427,7 +1446,19 @@ export class CoursesCreateUpdateComponent implements OnInit {
               hour_end: hourEnd,
             })
           } else {
-            this.defaults.course_dates[index].active = moment(this.defaults.date_end_res).isSameOrAfter(currentDate);
+
+            this.dataSourceDatePrivate.data.forEach(element => {
+              const from = moment(element.dateFrom, 'DD-MM-YYYY').startOf('day');
+              const to = moment(element.dateTo, 'DD-MM-YYYY').startOf('day');
+              const currentDate = moment(existDate.date).startOf('day');
+
+              if (currentDate.isBetween(from, to) || currentDate.isSame(from) || currentDate.isSame(to)) {
+                const idx = this.defaults.course_dates.findIndex((d) => d.id === existDate.id);
+                this.defaults.course_dates[idx].active = element.active;
+              }
+
+            });
+
           }
           currentDate = currentDate.add(1, 'days');
 
@@ -2050,7 +2081,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     if (this.defaults.course_type === 2 && this.defaults.is_flexible && this.periodeMultiple) {
       dates = this.dataSourceDatePrivate.data.filter((date) => date.active || date.active === 1);
-      sortedDates = dates.map(d => new Date(d.dateFrom)).sort((a, b) => a - b);
+      sortedDates = dates.map(d => moment(d.dateFrom, 'DD-MM-YYYY').toDate()).sort((a, b) => a - b);
     } else {
 
       dates = this.dataSource.data.filter((date) => date.active || date.active === 1);

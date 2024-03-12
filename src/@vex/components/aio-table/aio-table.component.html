@@ -365,7 +365,8 @@
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
               <strong *ngIf="!data[i].is_flexible">{{ row[column.property] }} CHF</strong>
               <strong *ngIf="data[i].is_flexible && data[i].course_type === 1">{{'from' | translate }} {{ row[column.property] }} CHF</strong>
-              <strong *ngIf="data[i].is_flexible && data[i].course_type === 2">{{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(data[i].price_range)) }} CHF</strong>
+              <strong *ngIf="data[i].is_flexible && data[i].course_type === 2 && data[i].price_range !== null">{{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(data[i].price_range, data[i])) }} CHF</strong>
+              <strong *ngIf="data[i].is_flexible && data[i].course_type === 2 && data[i].price_range === null">NO PRICE RANGE SET</strong>
             </td>
           </ng-container>
         </ng-container>
