@@ -37,7 +37,7 @@
 
         <div style="float:left; width: 70%" *ngIf="entity.includes('courses') || entity.includes('monitors')">
           <span style="float:left; width: 100%; font-size:16px">{{ 'sport' | translate}}</span>
-          <mat-form-field style="float:left; width: 100%;" class="flex-auto" appearance="fill">
+          <mat-form-field appearance="outline" style="float:left; width: 100%;" class="flex-auto">
 
             <mat-select [formControl]="sportsControl" multiple (selectionChange)="filterData()">
 

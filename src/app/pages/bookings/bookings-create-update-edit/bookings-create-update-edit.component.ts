@@ -449,11 +449,20 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   }
 
   inUseDatesFilter = (d: Date): boolean => {
-    if (d !== null) {
+    if (!d) return false; // Si la fecha es nula o indefinida, no debería ser seleccionable.
 
-      const time=moment(d).startOf('day').toDate().getTime();
-      return !this.myHolidayDates.find(x=>x.getTime()==time);
-    }
+    const formattedDate = moment(d).format('YYYY-MM-DD');
+    const time = moment(d).startOf('day').valueOf(); // .getTime() es igual a .valueOf()
+
+    // Encuentra si la fecha actual está en myHolidayDates.
+    const isHoliday = this.myHolidayDates.some(x => x.getTime() === time);
+
+    // Encuentra si la fecha actual está en selectedItem.course_dates y si es activa.
+    const courseDate = this.selectedItem.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === formattedDate);
+    const isActive = courseDate ? (courseDate.active || courseDate.active === 1) : false;
+
+    // La fecha debería ser seleccionable si no es un día festivo y está activa (o sea, active no es falso ni 0).
+    return !isHoliday && isActive;
   }
 
   selectItem(item: any) {

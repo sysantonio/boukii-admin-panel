@@ -57,7 +57,7 @@
             <div style="width: 100%;">
               <p>{{'bookings_page.cancelations.refund_text' | translate }}</p>
               <div style="float:left; width: 100%">
-                <mat-form-field class="flex-auto" style="float:left; width: 100%">
+                <mat-form-field appearance="outline" class="flex-auto" style="float:left; width: 100%">
                   <mat-label>{{'reason' | translate}}</mat-label>
                   <input type="text" formControlName="reason" matInput required (blur)="setReason($event)">
                 </mat-form-field>

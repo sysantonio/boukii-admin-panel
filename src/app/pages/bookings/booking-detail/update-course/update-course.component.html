@@ -24,7 +24,7 @@
       <div style="width:100%" *ngFor="let item of dates">
 
         <ng-container *ngIf="defaults.course.course_type === 2">
-          <mat-form-field class="flex-auto" style="width: 48%; margin-right: 2%">
+          <mat-form-field appearance="outline" class="flex-auto" style="width: 48%; margin-right: 2%">
             <mat-label>{{'hour' | translate}}</mat-label>
             <mat-select [(ngModel)]="item.hour_start" [ngModelOptions]="{standalone: true}">
               <mat-option *ngFor="let time of generateCourseHours(defaults.course.course_dates[0].hour_start, defaults.course.course_dates[0].hour_end, defaults.course.duration.includes(':')
@@ -35,7 +35,7 @@
           </mat-form-field>
         </ng-container>
 
-        <mat-form-field class="flex-auto" style="width: 48%">
+        <mat-form-field appearance="outline" class="flex-auto" style="width: 48%">
           <mat-label>{{'dates' | translate}}</mat-label>
           <mat-select [(ngModel)]="item.selectedCourseDateId" [ngModelOptions]="{standalone: true}">
             <mat-option *ngFor="let date of selectedDates" [value]="date.id" [disabled]="!isAfter(date)">
@@ -47,7 +47,7 @@
     </ng-container>
 
     <div style="width:100%" *ngIf="defaults.course.course_type === 1 || (defaults.course.course_type === 2 && !defaults.course.is_flexible)">
-      <mat-form-field class="flex-auto" style="width: 50%;" *ngIf="defaults.course.course_type === 2">
+      <mat-form-field appearance="outline" class="flex-auto" style="width: 50%;" *ngIf="defaults.course.course_type === 2">
         <mat-label>{{'hour' | translate}}</mat-label>
         <mat-select [(ngModel)]="hourStart" [ngModelOptions]="{standalone: true}">
           <mat-option *ngFor="let time of generateCourseHours(defaults.course.course_dates[0].hour_start, defaults.course.course_dates[0].hour_end, defaults.course.duration.includes(':')
@@ -57,7 +57,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="flex-auto" style="width: 100%">
+      <mat-form-field appearance="outline" class="flex-auto" style="width: 100%">
         <mat-label>{{'dates' | translate}}</mat-label>
         <mat-select multiple [formControl]="datesControl">
           <mat-option *ngFor="let date of selectedDates" [value]="date.id" [disabled]="!isAfter(date)">

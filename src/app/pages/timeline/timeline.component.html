@@ -27,7 +27,7 @@
                     <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()" style="font-size:14px;">{{'timeline.reset_filters' | translate}}</button>
                     <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()" style="font-size:14px;">{{'timeline.apply_filters' | translate}}</button>
 
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                         <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (ngModelChange)="onDateChange()">
                         <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                         <mat-datepicker #pickerFrom></mat-datepicker>
@@ -46,7 +46,7 @@
                 <div *ngIf="showFilter" class="filter-container">
                     <div class="filter-container-column">
                         <span>{{ 'monitor' | translate | uppercase }}</span>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterMonitor" color="primary">
                             <ng-container *ngFor="let monitor of allMonitors">
                                 <mat-option *ngIf="monitor.id" [value]="monitor.id">{{monitor.first_name}} {{monitor.last_name}}</mat-option>
@@ -57,7 +57,7 @@
 
                     <div class="filter-container-column">
                         <span>{{ 'client' | translate | uppercase }}</span>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterBookingUser" [compareWith]="compareUsers" color="primary">
                             <ng-container *ngFor="let user of allBookingUsers">
                                 <mat-option *ngIf="user.id" [value]="user">{{user.first_name}} {{user.last_name}}</mat-option>
@@ -587,7 +587,7 @@
                     <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
                         <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'new_monitor' | translate}}</mat-card-title>
                     </div>
-                    <mat-form-field class="flex-auto" style="width: 100%;" *ngIf="!loadingMonitors">
+                    <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;" *ngIf="!loadingMonitors">
                         <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor">
                             <mat-option *ngIf="taskDetail.monitor_id" [value]="nullMonitor">
                                 {{'no_monitor_choose' | translate}}
@@ -698,7 +698,7 @@
                     <mat-checkbox [(ngModel)]="allHoursDay">{{'full_day' | translate }}</mat-checkbox>
 
                     <ng-container *ngIf="!allHoursDay">
-                        <mat-form-field class="flex-auto" style="width: 100%;">
+                        <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;">
                             <mat-select placeholder="{{'start_hour' | translate}}" [(ngModel)]="startTimeDay" (change)="onStartTimeDayChange()">
                             <ng-container *ngFor="let hour of hoursRangeMinutes">
                                 <mat-option [value]="hour">
@@ -708,7 +708,7 @@
                             </mat-select>
                         </mat-form-field>
 
-                        <mat-form-field class="flex-auto" style="width: 100%;">
+                        <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;">
                             <mat-select placeholder="{{'end_hour' | translate}}" [(ngModel)]="endTimeDay">
                             <ng-container *ngFor="let hour of filteredEndHoursDay">
                                 <mat-option [value]="hour">
@@ -719,14 +719,14 @@
                         </mat-form-field>
                     </ng-container>
 
-                    <mat-form-field class="flex-auto" style="width: 100%;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;">
                         <input matInput placeholder="{{'title' | translate}}" [(ngModel)]="nameBlockDay">
                     </mat-form-field>
 
                     <mat-checkbox [(ngModel)]="divideDay">{{'split' | translate}}</mat-checkbox>
 
                     <ng-container *ngIf="divideDay">
-                        <mat-form-field class="flex-auto" style="width: 100%;">
+                        <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;">
                             <mat-select placeholder="{{'start_split' | translate}}" [(ngModel)]="startTimeDivision" (change)="onStartTimeDivisionChange()">
                             <ng-container *ngFor="let hour of filteredStartHoursDivision">
                                 <mat-option [value]="hour">
@@ -736,7 +736,7 @@
                             </mat-select>
                         </mat-form-field>
 
-                        <mat-form-field class="flex-auto" style="width: 100%;">
+                        <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;">
                             <mat-select placeholder="{{'end_splite' | translate}}" [(ngModel)]="endTimeDivision">
                             <ng-container *ngFor="let hour of filteredEndHoursDivision">
                                 <mat-option [value]="hour">

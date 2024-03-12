@@ -20,7 +20,7 @@
         <li style="width: 100%; float:left" *ngFor="let item of goals;let i = index;">
           <div  style="width: 80%; float:left;">
 
-            <mat-form-field class="flex-auto" style="width: 100%">
+            <mat-form-field appearance="outline" class="flex-auto" style="width: 100%">
               <input matInput placeholder="" type="text" (blur)="setName(i, $event)" [value]="item.name">
             </mat-form-field>
           </div>

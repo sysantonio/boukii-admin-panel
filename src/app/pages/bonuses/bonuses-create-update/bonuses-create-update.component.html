@@ -22,7 +22,7 @@
 
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-          <mat-form-field class="flex-auto" style="width: 80%;" [ngStyle]="{'width': mode === 'create' ? '80%' : '100%'}">
+          <mat-form-field appearance="outline" class="flex-auto" style="width: 80%;" [ngStyle]="{'width': mode === 'create' ? '80%' : '100%'}">
             <mat-label>{{'bonus.code' |translate}}</mat-label>
             <input formControlName="code" [(ngModel)]="defaults.code" matInput required [readonly]="mode === 'update'">
           </mat-form-field>
@@ -31,7 +31,7 @@
             <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%; border-radius: 0; margin: 3% 0 0 0;" (click)="generateRandomCode()">{{'bonus.generate' | translate}}</button>
           </div>
         </div>
-        <mat-form-field class="flex-auto">
+        <mat-form-field appearance="outline" class="flex-auto">
           <mat-label>{{'client' | translate}}</mat-label>
           <input
             type="text"
@@ -53,19 +53,19 @@
           <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
         </mat-form-field>
 
-        <mat-form-field class="flex-auto" *ngIf="mode === 'create'">
+        <mat-form-field appearance="outline" class="flex-auto" *ngIf="mode === 'create'">
           <mat-label>{{'quantity' | translate}}</mat-label>
           <input formControlName="quantity" [(ngModel)]="defaults.quantity" matInput required>
         </mat-form-field>
 
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="mode === 'update'">
 
-          <mat-form-field class="flex-auto">
+          <mat-form-field appearance="outline" class="flex-auto">
             <mat-label>{{'quantity' | translate}}</mat-label>
             <input formControlName="quantity" [(ngModel)]="defaults.quantity" matInput required>
           </mat-form-field>
 
-          <mat-form-field class="flex-auto">
+          <mat-form-field appearance="outline" class="flex-auto">
             <mat-label>{{'quantity_res' | translate}}</mat-label>
             <input formControlName="budget" matInput [value]="defaults.remaining_balance" [(ngModel)]="defaults.remaining_balance" readonly="true">
           </mat-form-field>

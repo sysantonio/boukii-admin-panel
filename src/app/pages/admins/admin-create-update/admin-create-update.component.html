@@ -40,26 +40,26 @@
             <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'name' | translate }}</mat-label>
                   <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
 
                 </mat-form-field>
 
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'surname' | translate }}</mat-label>
                   <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                 </mat-form-field>
              </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
 
                 </mat-form-field>
 
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'username' | translate }}</mat-label>
                   <input formControlName="username" matInput required type="text" [(ngModel)]="defaults.username">
                 </mat-form-field>
@@ -67,7 +67,7 @@
 
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput required type="text" [(ngModel)]="defaults.password">
 
@@ -87,7 +87,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
@@ -96,13 +96,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'phone' | translate }}</mat-label>
 
                 <input formControlName="phone" matInput required type="tel" [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'mobile' | translate }}</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
 
@@ -110,13 +110,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'address' | translate }}</mat-label>
 
                 <input formControlName="address" matInput required type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'cp' | translate }}</mat-label>
                 <input formControlName="postalCode" matInput required type="text" [(ngModel)]="defaults.cp">
 
@@ -126,7 +126,7 @@
 
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'country' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
@@ -136,7 +136,7 @@
                 </mat-autocomplete>
               </mat-form-field>
 
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'province' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
@@ -146,7 +146,7 @@
                 </mat-autocomplete>
               </mat-form-field>
 
-              <mat-form-field class="flex-auto" appearance="fill">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'langs' | translate }}</mat-label>
                 <mat-select [formControl]="languagesControl" multiple>
                   <mat-select-trigger>

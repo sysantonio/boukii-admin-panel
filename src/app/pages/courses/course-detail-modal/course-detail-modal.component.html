@@ -100,7 +100,7 @@
                   <div class="flex-auto">
 
                     <label for="dateFrom">{{'courses.date_reservable' | translate}}</label>
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field appearance="outline" style="width: 100%">
 
                       <input matInput id="dateFrom" [value]="defaults.date_start_res | date: 'dd/MM/YYYY'" [readonly]="true">
                     </mat-form-field>
@@ -108,7 +108,7 @@
                   <div class="flex-auto">
 
                     <label for="dateTo">{{'courses.date_reservable_to' | translate}}</label>
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field appearance="outline" style="width: 100%">
 
                       <input matInput id="dateTo" [value]="defaults.date_end_res | date: 'dd/MM/YYYY'" [readonly]="true">
                     </mat-form-field>
@@ -118,7 +118,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                   <div class="flex-auto" style="width: 50%; float:left">
                     <label for="duration">{{'duration' | translate}}</label>
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field appearance="outline" style="width: 100%">
 
                       <input id="duration" matInput required type="text" placeholder="{{'duration' | translate}}" [value]="defaults.duration ? defaults.duration : 'FLEXIBLE'" [readonly]="true">
                     </mat-form-field>
@@ -126,7 +126,7 @@
                   <div class="flex-auto" style="width: 50%; float:left">
                     <label for="participants">{{'max_pax' | translate}}</label>
 
-                    <mat-form-field style="width: 100%">
+                    <mat-form-field appearance="outline" style="width: 100%">
                       <mat-label>{{'max_pax' | translate}}</mat-label>
                       <input id="participants" matInput required type="number" [value]="defaults.max_participants" [(ngModel)]="defaults.max_participants" [readonly]="true">
                     </mat-form-field>
@@ -196,7 +196,7 @@
                                 *ngIf="!groupLevel.visible && !groupLevel.active">
                                   {{groupLevel.annotation}} - {{groupLevel.name}}
                                 </div>
-                                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active">
+                                <mat-form-field appearance="outline" class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active">
                                   <mat-select placeholder="Nivel minimo del profesor" (selectionChange)="setLevelTeacher($event, groupLevel)" [value]="calculateMonitorLevel(groupLevel)">
                                     <mat-option *ngFor="let item of levels" [value]="item">
                                       {{ item.league }} - {{ item.name }}
@@ -218,7 +218,7 @@
                                   {{'age' | translate}}
                                 </div>
                                 <form [formGroup]="rangeForm" novalidate>
-                                  <mat-form-field style="width: 45%; margin-top: 10%;margin-right: 10%">
+                                  <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%;margin-right: 10%">
                                     <input type="number" placeholder="Min." aria-label="Number" matInput [min]="0" (blur)="setMinAge($event, groupLevel)" [value]="groupLevel.age_min"
                                     [value]="calculateAgeMin(groupLevel)"/>
                                     <mat-error *ngIf="minAge.errors?.['min']">
@@ -228,7 +228,7 @@
                                       {{'mandatory' | translate}}
                                     </mat-error>
                                   </mat-form-field>
-                                  <mat-form-field style="width: 45%; margin-top: 10%">
+                                  <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%">
                                     <input type="number" placeholder="Max" aria-label="Number" matInput [min]="0" (blur)="setMaxAge($event, groupLevel)" [value]="groupLevel.age_max"
                                     [value]="calculateAgeMax(groupLevel)"/>
                                     <mat-error *ngIf="maxAge.errors?.['ageRange']">
@@ -248,7 +248,7 @@
                                   Duracion<br>
                                   {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
                                 </div>
-                                <mat-form-field style="width: 100%; margin-top: 10%;margin-right: 10%">
+                                <mat-form-field appearance="outline" style="width: 100%; margin-top: 10%;margin-right: 10%">
                                   <input type="text" placeholder="Duración" aria-label="Number" matInput
                                     [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
                                 </mat-form-field>
@@ -257,7 +257,7 @@
                                 <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px" >
                                   {{'students' | translate}} <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
-                                <mat-form-field class="flex-auto" style="width: 100%; margin-top: 10%">
+                                <mat-form-field appearance="outline" class="flex-auto" style="width: 100%; margin-top: 10%">
                                   <input type="number" placeholder="Max per Group" [value]="calculateMaxGroup(groupLevel)" aria-label="Number" matInput (blur)="setSubGroupPax($event, groupLevel)" />
                                   <mat-error *ngIf="groupLevel.max_participants > this.defaults.max_participants">
                                     {{'courses.errors.students' | translate }}
@@ -295,7 +295,7 @@
                                             <label for="monitor" style="font-size: 20px;">{{'monitor' | translate}}</label>
 
                                             <mat-spinner *ngIf="loadingMonitors"> </mat-spinner>
-                                            <mat-form-field class="flex-auto" *ngIf="!loadingMonitors">
+                                            <mat-form-field appearance="outline" class="flex-auto" *ngIf="!loadingMonitors">
 
                                               <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur" [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)"/>
                                               <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs" >

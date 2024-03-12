@@ -1,7 +1,7 @@
 <mat-dialog-content>
 
   <!-- Select con las fechas basadas en un índice -->
-  <mat-form-field style="width: 100%;">
+  <mat-form-field appearance="outline" style="width: 100%;">
     <mat-label>Fecha</mat-label>
     <mat-select [(ngModel)]="selectedDateIndex">
         <mat-option *ngFor="let i of generatedNumbers; let idx = index" [value]="idx">
@@ -11,7 +11,7 @@
 </mat-form-field>
 
   <!-- Input para el porcentaje con un límite de 100 -->
-  <mat-form-field style="width: 100%;">
+  <mat-form-field appearance="outline" style="width: 100%;">
     <input type="number" matInput [(ngModel)]="percentage" placeholder="Porcentaje (0 - 100)" min="0" max="100">
     <mat-error *ngIf="percentage > 100 || percentage < 0">The value must be set between 0 and 100</mat-error>
   </mat-form-field>

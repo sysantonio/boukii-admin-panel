@@ -445,7 +445,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     // La fecha debería ser seleccionable si no es un día festivo y está activa (o sea, active no es falso ni 0).
     return !isHoliday && isActive;
-}
+  }
 
   selectItem(item: any) {
     this.color = '';

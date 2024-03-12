@@ -36,25 +36,25 @@
 
       <div class="block w-full">
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <input id="date" matInput [matDatepicker]="pickerFrom" placeholder="{{'from' | translate}}" [(ngModel)]="selectedDateFrom" [min]="today">
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field style="margin: 0 0 0 8%;">
+        <mat-form-field appearance="outline" style="margin: 0 0 0 8%;">
           <input id="date" matInput [matDatepicker]="pickerTo" placeholder="{{'to' | translate}}" [(ngModel)]="selectedDateTo" [disabled]="selectedDateFrom === null" [min]="selectedDateFrom">
           <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
         </mat-form-field>
       </div>
       <!--<div [@dropdown]="dropdownOpen" class="overflow-hidden">
-        <mat-form-field class="block w-full">
+        <mat-form-field appearance="outline" class="block w-full">
           <mat-label>Cc</mat-label>
           <input matInput type="text"/>
         </mat-form-field>
 
-        <mat-form-field class="block w-full">
+        <mat-form-field appearance="outline" class="block w-full">
           <mat-label>Bcc</mat-label>
           <input matInput type="text"/>
         </mat-form-field>
@@ -93,7 +93,7 @@
 
       <div class="block w-full" style="margin: 5% 0 0 0">
 
-        <mat-form-field class="block w-full">
+        <mat-form-field appearance="outline" class="block w-full">
           <mat-label>{{'subject' | translate}}</mat-label>
           <input matInput type="text" [(ngModel)]="generalSubjet" [value]="generalSubjet"/>
         </mat-form-field>
@@ -149,7 +149,7 @@
   <mat-tab label="Automático">
     <mat-dialog-content>
       <div class="block w-full">
-        <mat-form-field style="width: 100%">
+        <mat-form-field appearance="outline" style="width: 100%">
           <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
             <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
             <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
@@ -168,12 +168,12 @@
       </div>
 
       <!--<div [@dropdown]="dropdownOpen" class="overflow-hidden">
-        <mat-form-field class="block w-full">
+        <mat-form-field appearance="outline" class="block w-full">
           <mat-label>Cc</mat-label>
           <input matInput type="text"/>
         </mat-form-field>
 
-        <mat-form-field class="block w-full">
+        <mat-form-field appearance="outline" class="block w-full">
           <mat-label>Bcc</mat-label>
           <input matInput type="text"/>
         </mat-form-field>
@@ -181,7 +181,7 @@
 
       <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="{{'france' | translate }}">
-          <mat-form-field class="block w-full">
+          <mat-form-field appearance="outline" class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectFr" [value]="subjectFr"/>
           </mat-form-field>
@@ -200,7 +200,7 @@
 
         </mat-tab>
         <mat-tab label="{{'english' | translate }}">
-          <mat-form-field class="block w-full">
+          <mat-form-field appearance="outline" class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
           </mat-form-field>
@@ -218,7 +218,7 @@
           </div>
         </mat-tab>
         <mat-tab label="{{'spanish' | translate }}" >
-          <mat-form-field class="block w-full">
+          <mat-form-field appearance="outline" class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectEs" [value]="subjectEs"/>
           </mat-form-field>
@@ -236,7 +236,7 @@
           </div>
         </mat-tab>
         <mat-tab label="{{'germany' | translate }}">
-          <mat-form-field class="block w-full">
+          <mat-form-field appearance="outline" class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectIt" [value]="subjectIt"/>
           </mat-form-field>
@@ -254,7 +254,7 @@
           </div>
         </mat-tab>
         <mat-tab label="{{'italian' | translate }}">
-          <mat-form-field class="block w-full">
+          <mat-form-field appearance="outline" class="block w-full">
             <mat-label>{{'subject' | translate}}</mat-label>
             <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
           </mat-form-field>

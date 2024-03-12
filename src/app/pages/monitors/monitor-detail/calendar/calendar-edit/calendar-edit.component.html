@@ -9,7 +9,7 @@
 
         <div class="flex flex-col">
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>{{'courses.date_start' | translate }}</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
@@ -23,14 +23,14 @@
             <mat-datepicker #startDatepickerAvailable></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>{{'start_hour' | translate }}</mat-label>
             <mat-select [(value)]="defaults.start_time" (selectionChange)="onStartTimeChange()">
               <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>{{'end_hour' | translate }}</mat-label>
             <mat-select [(value)]="defaults.end_time" [disabled]="defaults.start_time === null">
               <mat-option *ngFor="let time of filteredTimes" [value]="time"  (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
@@ -44,7 +44,7 @@
 
           <mat-checkbox *ngIf="!event.block_general" formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Start Date</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
@@ -57,7 +57,7 @@
             <mat-datepicker #startDatepickerNonAvailable></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
+          <mat-form-field appearance="outline" *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
@@ -73,14 +73,14 @@
           <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
 
           <ng-container *ngIf="!form.get('full_day').value">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Hora Inicio</mat-label>
               <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Hora Fin</mat-label>
               <mat-select [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
@@ -88,7 +88,7 @@
             </mat-form-field>
           </ng-container>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <input type="text" id="description" formControlName="description" placeholder="Añade una descripción" matInput [value]="defaults.description" [(ngModel)]="defaults.description">
           </mat-form-field>
         </div>
@@ -97,7 +97,7 @@
 
         <div class="flex flex-col">
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Selecciona un bloqueo</mat-label>
             <mat-select formControlName="blockage" [(ngModel)]="blockageSelected" [value]="blockageSelected" [style.background]="blockageSelected?.color">
               <mat-option *ngFor="let blockage of blockages" [value]="blockage" (onSelectionChange)="defaults.color = blockage.color;defaults.description = blockage.name" [style.background]="blockage.color"
@@ -109,7 +109,7 @@
 
           <mat-checkbox *ngIf="!event.block_general" formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Start Date</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
@@ -122,7 +122,7 @@
             <mat-datepicker #startDatepickerPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
+          <mat-form-field appearance="outline" *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
@@ -138,14 +138,14 @@
           <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
 
           <ng-container *ngIf="!form.get('full_day').value">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Hora Inicio</mat-label>
               <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Hora Fin</mat-label>
               <mat-select [disabled]="defaults.start_time === null" [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
@@ -153,11 +153,11 @@
             </mat-form-field>
           </ng-container>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <input type="text" id="description" formControlName="description" placeholder="La description" matInput [value]="defaults.description" [(ngModel)]="defaults.description">
           </mat-form-field>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>{{'station' | translate }}</mat-label>
 
             <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
@@ -176,7 +176,7 @@
 
           <mat-checkbox *ngIf="!event.block_general" formControlName="range_dates">{{'range_of_dates' | translate }}</mat-checkbox>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>Start Date</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
@@ -189,7 +189,7 @@
             <mat-datepicker #startDatepickerNonPayedBlock></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field *ngIf="form.get('range_dates').value && !event.block_general">
+          <mat-form-field appearance="outline" *ngIf="form.get('range_dates').value && !event.block_general">
             <mat-label>End Date</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
@@ -205,14 +205,14 @@
           <mat-checkbox formControlName="full_day">{{'full_day' | translate }}</mat-checkbox>
 
           <ng-container *ngIf="!form.get('full_day').value">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Hora Inicio</mat-label>
               <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Hora Fin</mat-label>
               <mat-select [disabled]="defaults.start_time === null" [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
@@ -220,10 +220,10 @@
             </mat-form-field>
           </ng-container>
 
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <input type="text" id="description" formControlName="description" placeholder="La description" [value]="defaults.description" matInput [(ngModel)]="defaults.description">
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field appearance="outline">
             <mat-label>{{'station' | translate }}</mat-label>
 
             <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">

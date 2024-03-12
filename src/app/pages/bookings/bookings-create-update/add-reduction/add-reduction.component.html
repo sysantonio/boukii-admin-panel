@@ -19,7 +19,7 @@
     <div class="button-div" (click)="type = 2" [ngStyle]="{'background': type === 2 ? '#FF0055' : '#fff', 'color': type === 2 ? '#fff' : 'black'}">{{'bookings_page.reductions.amount' | translate}}</div>
 
     <div style="width:100%" [formGroup]="form">
-      <mat-form-field style="width:100%">
+      <mat-form-field appearance="outline" style="width:100%">
         <mat-label>{{'bookings_page.reductions.discount' |translate}}</mat-label>
         <input type="number" matInput formControlName="discount" [(ngModel)]="discount"/>
       </mat-form-field>

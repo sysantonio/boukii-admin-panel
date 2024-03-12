@@ -33,7 +33,7 @@
 
                     <div class="flex-auto">
                       <label for="dateFrom">{{'settings.new_season.start' | translate}}</label>
-                      <mat-form-field style="width: 100%">
+                      <mat-form-field appearance="outline" style="width: 100%">
 
                         <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="selectedFrom" [value]="selectedFrom">
                         <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
@@ -43,7 +43,7 @@
                     <div class="flex-auto">
                       <label for="dateTo">{{'settings.new_season.end' | translate}}</label>
 
-                      <mat-form-field style="width: 100%">
+                      <mat-form-field appearance="outline" style="width: 100%">
 
                         <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="toDate" [disabled]="selectedFrom === null" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo">
                         <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
@@ -55,7 +55,7 @@
 
                     <div class="flex-auto">
                       <label for="hour">{{'settings.new_season.hour_start' | translate }}</label>
-                      <mat-form-field style="width: 100%;">
+                      <mat-form-field appearance="outline" style="width: 100%;">
                         <input id="hour" type="text" placeholder="Hora " matInput [matAutocomplete]="matHourFrom" formControlName="startHour">
                         <mat-autocomplete #matHourFrom="matAutocomplete">
                           <mat-option *ngFor="let hour of hours" [value]="hour" (onSelectionChange)="selectedFromHour = hour">
@@ -67,7 +67,7 @@
 
                     <div class="flex-auto">
                       <label for="endHour">{{'settings.new_season.hour_end' | translate }}</label>
-                      <mat-form-field style="width: 100%;">
+                      <mat-form-field appearance="outline" style="width: 100%;">
                         <input id="endHour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" formControlName="endHour">
                         <mat-autocomplete #matHourTo="matAutocomplete">
                           <mat-option *ngFor="let hour of filteredHours" [value]="hour" (onSelectionChange)="selectedToHour = hour">
@@ -87,7 +87,7 @@
                       <div style="width: 95%; float:left;">
                         <label for="holiday-{{i}}">{{'settings.new_season.holiday' | translate }}</label>
 
-                        <mat-form-field style="width: 100%">
+                        <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event, i)" [value]="holiday">
                           <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
                           <mat-datepicker #picker [startAt]="today"></mat-datepicker>
@@ -121,33 +121,33 @@
                 </div>
                 <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'address' | translate}}</mat-label>
 
                       <input formControlName="contact_phone" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_address">
                     </mat-form-field>
 
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>Email</mat-label>
                       <input formControlName="contact_address" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_email">
 
                     </mat-form-field>
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'cp' | translate}}</mat-label>
 
                       <input formControlName="contact_address_number" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_cp">
                     </mat-form-field>
 
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'phone' | translate}}</mat-label>
                       <input formControlName="contact_cp" matInput required type="tel" [(ngModel)]="defaultsSchoolData.contact_phone">
 
                     </mat-form-field>
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <mat-form-field class="vex-flex-form-field flex-auto">
+                    <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                       <mat-label>{{'country' | translate }}</mat-label>
                       <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="contact_country" >
                       <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
@@ -157,7 +157,7 @@
                       </mat-autocomplete>
                     </mat-form-field>
 
-                    <mat-form-field class="vex-flex-form-field flex-auto">
+                    <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                       <mat-label>{{'province' | translate }}</mat-label>
                       <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="contact_province" >
                       <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
@@ -168,7 +168,7 @@
                     </mat-form-field>
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'city' | translate}}</mat-label>
 
                       <input formControlName="contact_city" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_city">
@@ -294,7 +294,7 @@
                       <ng-container matColumnDef="ageMin">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_from'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-form-field class="flex-auto">
+                          <mat-form-field appearance="outline" class="flex-auto">
                             <input matInput placeholder="{{'acronym'|translate}}" type="number" [value]="element.age_min" [(ngModel)]="element.age_min">
                           </mat-form-field>
                         </td>
@@ -303,7 +303,7 @@
                       <ng-container matColumnDef="ageMax">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_to'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-form-field class="flex-auto">
+                          <mat-form-field appearance="outline" class="flex-auto">
                             <input matInput placeholder="{{'acronym'|translate}}" type="number" [value]="element.age_max" [(ngModel)]="element.age_max">
                           </mat-form-field>
                         </td>
@@ -313,7 +313,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'acronym'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
 
-                          <mat-form-field class="flex-auto">
+                          <mat-form-field appearance="outline" class="flex-auto">
                             <input matInput placeholder="{{'acronym'|translate}}" type="text" [value]="element.annotation" [(ngModel)]="element.annotation">
                           </mat-form-field>
 
@@ -323,7 +323,7 @@
                       <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-form-field class="flex-auto">
+                          <mat-form-field appearance="outline" class="flex-auto">
                             <input matInput placeholder="{{'name'|translate}}" type="text" [value]="element.name" [(ngModel)]="element.name">
                           </mat-form-field>
                         </td>
@@ -374,7 +374,7 @@
           </div>
           <div class="p-6">
 
-            <mat-form-field class="flex-auto">
+            <mat-form-field appearance="outline" class="flex-auto">
               <input matInput placeholder="Enter people number" type="number" [value]="people" [(ngModel)]="people" (ngModelChange)="updateTable()">
             </mat-form-field>
 
@@ -392,7 +392,7 @@
                 <ng-container *ngFor="let col of displayedColumns.slice(1)" [matColumnDef]="col">
                   <th mat-header-cell *matHeaderCellDef> {{col}} </th>
                   <td mat-cell *matCellDef="let row">
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field appearance="outline" class="flex-auto">
                       <input class="flex-auto" matInput [(ngModel)]="row[col]" style="margin-top:3%">
                     </mat-form-field>
                   </td>
@@ -476,7 +476,7 @@
                   </div>
 
                   <div class="p-6">
-                    <mat-form-field class="flex-auto" *ngFor="let item of blockages" style="width: 30%; margin: 0 2% 0 0">
+                    <mat-form-field appearance="outline" class="flex-auto" *ngFor="let item of blockages" style="width: 30%; margin: 0 2% 0 0">
                       <span matPrefix class="square-prefix" [ngStyle]="{'background-color': item.color}"></span>
                       <input matInput placeholder="Enter text" [value]="item.name" [(ngModel)]="item.name">
                     </mat-form-field>
@@ -563,7 +563,7 @@
                   <mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle> {{'op_rem'|translate}}</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.op_rem_text'|translate}}</p>
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput placeholder="Percentaje" type="number" [value]="cancellationInsurancePercent * 100" (blur)="updateInsuranceValue($event)">
 
                   </mat-form-field>
@@ -586,7 +586,7 @@
                 </p>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.boukii_care_price' | translate}}</p>
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput placeholder="Percentaje" type="number" [value]="boukiiCarePrice" (blur)="updateBoukiiCareValue($event)">
 
                   </mat-form-field>
@@ -596,14 +596,14 @@
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations' | translate}}</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;" [innerHTML]="'settings.bookings.cancelations.text1' | translate"></p>
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                       <input matInput type="number" [value]="cancellationNoRem" (blur)="updateCancelationNoRem($event)">
 
                   </mat-form-field>
                 </div>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;" [innerHTML]="'settings.bookings.cancelations.text3' | translate"></p>
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput type="number" [value]="cancellationRem" (blur)="updateCancelationRem($event)">
                   </mat-form-field>
                 </div>
@@ -618,7 +618,7 @@
                   <mat-slide-toggle [(ngModel)]="hasTVA"></mat-slide-toggle>{{'tva' | translate}}</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.tva.text1' | translate}}</p>
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput placeholder="TVA" type="number" [value]="tva* 100" (blur)="updateTVAValue($event)">
 
                   </mat-form-field>

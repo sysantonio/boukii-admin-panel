@@ -13,7 +13,7 @@
       </div>
       <div class="px-6 py-4 flex flex-col" [formGroup]="form">
         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-          <mat-form-field class="client-search-container">
+          <mat-form-field appearance="outline" class="client-search-container">
             <mat-label>{{'client' | translate}}</mat-label>
             <input type="text" placeholder="{{'choose_client' | translate}}" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
@@ -55,7 +55,7 @@
 
             </mat-card-header>
             <mat-card-content>
-              <mat-card-title style="text-align: center;">{{ item.first_name }} {{ item.last_name }}</mat-card-title>
+              <mat-card-title style="text-align: center;font-size: 16px;">{{ item.first_name }} {{ item.last_name }}</mat-card-title>
               <mat-card-subtitle style="text-align: center;">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} &ensp;{{'years' | translate}} · {{ getCountry(item.country) }}</mat-card-subtitle>
             </mat-card-content>
             <mat-card-actions>
@@ -119,7 +119,7 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <mat-form-field class="flex-auto" style="width: 48%">
+          <mat-form-field appearance="outline" class="flex-auto" style="width: 48%">
             <input type="text" placeholder="{{'choose_level' | translate}}" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" (click)="clearInput()" />
             <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
               <mat-option *ngFor="let level of filteredLevel | async" [value]="level" (onSelectionChange)="getCourses(level, monthAndYear)">
@@ -133,7 +133,7 @@
         <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
         <div style="width: 100%; float:left">
           <mat-spinner *ngIf="loadingCalendar"></mat-spinner>
-          <mat-form-field class="flex-auto" style="width: 50%; float:left"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
+          <mat-form-field appearance="outline" class="flex-auto" style="width: 50%; float:left"  *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
 
             <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [(ngModel)]="selectedDatePrivate"
               (dateChange)="emitDateChange($event)" (dateInput)="emitDateChange($event, true)">
@@ -230,7 +230,7 @@
 
               <ng-container *ngFor="let courseDate of courseDates; let i = index">
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
-                  <mat-form-field class="flex-auto" style="width: 50%;">
+                  <mat-form-field appearance="outline" class="flex-auto" style="width: 50%;">
                     <mat-label>{{'date' | translate}}</mat-label>
 
                     <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
@@ -249,7 +249,7 @@
                     -->
                   </mat-form-field>
 
-                  <mat-form-field class="flex-auto" style="width: 50%;">
+                  <mat-form-field appearance="outline" class="flex-auto" style="width: 50%;">
                     <mat-label>{{'hour' | translate}}</mat-label>
                     <mat-select (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)">
                       <mat-option *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':')
@@ -263,7 +263,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="selectedItem.is_flexible">
 
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'duration' |translate}}</mat-label>
                     <mat-select (selectionChange)="calculateAvailablePaxes($event.value)" [disabled]="!courseDate.hour_start">
                       <ng-container >
@@ -272,7 +272,7 @@
                     </mat-select>
                   </mat-form-field>
 
-                  <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
+                  <mat-form-field appearance="outline" class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
                     <mat-label>{{'paxes' |translate}}</mat-label>
                     <mat-select [disabled]="!courseDate.duration" multiple>
                       <mat-option *ngFor="let person of personsToBook" [value]="person" (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
@@ -284,7 +284,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!selectedItem.is_flexible">
 
-                  <mat-form-field class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
+                  <mat-form-field appearance="outline" class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
                     <mat-label>{{'paxes' |translate}}</mat-label>
                     <mat-select multiple>
                       <mat-option *ngFor="let person of personsToBook" [value]="person" (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
@@ -296,7 +296,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="(sameMonitor && i === 0) || !sameMonitor">
 
-                  <mat-form-field class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
+                  <mat-form-field appearance="outline" class="flex-auto" (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
                     <mat-label>{{'choose_monitor' | translate }}</mat-label>
                     <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration))
                     || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"/>
@@ -823,7 +823,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'observation_client' | translate}}</mat-label>
                     <input matInput required type="text" (blur)="setClientsNotes($event, item)">
 
@@ -833,7 +833,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-                  <mat-form-field class="flex-auto">
+                  <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'observation_school' | translate}}</mat-label>
                     <input  matInput required type="text" (blur)="setSchoolNotes($event, item)">
 

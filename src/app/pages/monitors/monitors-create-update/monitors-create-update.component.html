@@ -56,7 +56,7 @@
             </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'name' | translate }}</mat-label>
                   <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
                   <mat-error *ngIf="formInfoAccount.controls?.name?.errors?.['required']">
@@ -64,7 +64,7 @@
                   </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'surname' | translate }}</mat-label>
                   <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
                   <mat-error *ngIf="formInfoAccount.controls?.surname?.errors?.['required']">
@@ -74,7 +74,7 @@
              </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
                   <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
@@ -85,7 +85,7 @@
                   </mat-error>
                 </mat-form-field>
 
-                <mat-form-field class="flex-auto">
+                <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'username' | translate }}</mat-label>
                   <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
                 </mat-form-field>
@@ -94,7 +94,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'station' | translate }}</mat-label>
 
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlStations" [matAutocomplete]="autoStation" formControlName="station">
@@ -122,7 +122,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required>
                 <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
@@ -134,13 +134,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'phone' | translate }}</mat-label>
 
                 <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'mobile' | translate }}</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
                 <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
@@ -150,13 +150,13 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'address' | translate }}</mat-label>
 
                 <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'cp' | translate }}</mat-label>
                 <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
 
@@ -164,7 +164,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'country' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
@@ -174,7 +174,7 @@
                 </mat-autocomplete>
               </mat-form-field>
 
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'province' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
@@ -184,7 +184,7 @@
                 </mat-autocomplete>
               </mat-form-field>
 
-              <mat-form-field class="flex-auto" appearance="fill">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'langs' | translate }}</mat-label>
                 <mat-select [formControl]="languagesControl" multiple>
                   <mat-select-trigger>
@@ -216,20 +216,20 @@
             <ng-template matStepLabel>{{'work_data' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>Nº AVS</mat-label>
                 <input formControlName="avs" matInput type="text" [(ngModel)]="defaults.avs">
 
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'work_id' | translate }}</mat-label>
                 <input formControlName="workId" matInput type="text" [(ngModel)]="defaults.work_license">
               </mat-form-field>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>IBAN</mat-label>
                 <input formControlName="iban" matInput type="text" [(ngModel)]="defaults.bank_details">
 
@@ -237,7 +237,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="vex-flex-form-field flex-auto">
+              <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'country' | translate }}</mat-label>
                 <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlWorkCountries" [matAutocomplete]="autoCountryWork" formControlName="countryWork">
                 <mat-autocomplete #autoCountryWork="matAutocomplete" [displayWith]="displayFnCountry">
@@ -247,7 +247,7 @@
                 </mat-autocomplete>
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'children' | translate }}</mat-label>
                 <input formControlName="children" matInput type="number" (input)="updateChildren($event)" [(ngModel)]="defaults.children">
 
@@ -263,7 +263,7 @@
                 <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef> {{'name' | translate }}</mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
                       <mat-label>{{'name' | translate }}</mat-label>
                       <input matInput [(ngModel)]="element.name" formControlName="childName" type="text">
                     </mat-form-field>
@@ -273,7 +273,7 @@
                 <ng-container matColumnDef="date">
                   <mat-header-cell *matHeaderCellDef>  {{'birth_date' | translate }} </mat-header-cell>
                   <mat-cell *matCellDef="let element">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
                       <input matInput [matDatepicker]="pickerFromChild" placeholder="{{'birth_date' | translate }}" [(ngModel)]="element.date" [max]="minDateChild" formControlName="childAge">
                       <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
                       <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
@@ -312,7 +312,7 @@
 
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-              <mat-form-field class="flex-auto" appearance="fill">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'sports' | translate}}</mat-label>
                 <mat-select [formControl]="sportsControl" multiple>
 
@@ -337,7 +337,7 @@
                 <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;"> {{'name' | translate }}</mat-header-cell>
                   <mat-cell *matCellDef="let element" style="width: 30%;float: left;">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
                       <mat-label>{{'name' | translate }}</mat-label>
                       <input matInput [value]="element.name" type="text" [readonly]="true">
                     </mat-form-field>
@@ -347,7 +347,7 @@
                 <ng-container matColumnDef="level">
                   <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">{{'level' | translate }}</mat-header-cell>
                   <mat-cell *matCellDef="let element"  style="width: 30%;float: left;">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
                     <mat-label>{{'level' | translate }}</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
                     <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
@@ -362,7 +362,7 @@
                 <ng-container matColumnDef="salary">
                   <mat-header-cell *matHeaderCellDef style="width: 33%;float: left;">{{'salary' | translate}}</mat-header-cell>
                   <mat-cell *matCellDef="let element"  style="width: 30%;float: left;">
-                    <mat-form-field class="flex-auto" style="margin: 2% 0 0 0;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
                     <mat-label>{{'salary' | translate }}</mat-label>
                     <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="salaryForm" [matAutocomplete]="autoSalary"/>
                     <mat-autocomplete #autoSalary="matAutocomplete" [displayWith]="displayFnSalary">
@@ -433,7 +433,7 @@
             <ng-template matStepLabel>{{'civil_status' | translate }}</ng-template>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'civil_status' | translate }}</mat-label>
                 <input type="text" matInput [formControl]="myControlCivilStatus" formControlName="civilStatus" [matAutocomplete]="autoCivilStatus">
                 <mat-autocomplete #autoCivilStatus="matAutocomplete">
@@ -444,7 +444,7 @@
 
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'wife_status' | translate }}</mat-label>
                 <mat-select formControlName="spouse" (selectionChange)="setValueSpouse($event)">
                   <mat-option value="y">{{'yes' | translate}}</mat-option>
@@ -452,7 +452,7 @@
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'mobility' | translate }}</mat-label>
                 <mat-select formControlName="workMobility" (selectionChange)="setValueLocation($event)">
                   <mat-option value="y" >{{'yes' | translate}}</mat-option>
@@ -462,12 +462,12 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.partner_works">
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'wife_id' | translate }}</mat-label>
                 <input formControlName="spouseWorkId" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_work_license">
 
               </mat-form-field>
-              <mat-form-field class="flex-auto">
+              <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'wife_percent' | translate }} (%)</mat-label>
                 <input formControlName="spousePercentage" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
 

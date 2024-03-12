@@ -16,7 +16,7 @@
   <mat-dialog-content class="flex flex-col" *ngIf="!loading">
     <div style="width: 100%;">
       <p>{{'clients.add.title' | translate}}</p>
-      <mat-form-field style="width: 100%;">
+      <mat-form-field appearance="outline" style="width: 100%;">
         <mat-label>{{'clients.add.search' | translate}}</mat-label>
         <input type="text" placeholder="{{'clients.add.search' | translate}}" aria-label="Number" matInput [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id"/>
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
@@ -38,26 +38,26 @@
     <div [formGroup]="form" style="margin: 5% 0 0 0">
       <p>{{'clients.add.create' | translate}}</p>
       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0">
-        <mat-form-field class="flex-auto">
+        <mat-form-field appearance="outline" class="flex-auto">
           <mat-label>{{'name' | translate }}</mat-label>
           <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
 
         </mat-form-field>
 
-        <mat-form-field class="flex-auto">
+        <mat-form-field appearance="outline" class="flex-auto">
           <mat-label>{{'surname' | translate }}</mat-label>
           <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
         </mat-form-field>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-        <mat-form-field class="flex-auto">
+        <mat-form-field appearance="outline" class="flex-auto">
           <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field class="flex-auto" appearance="fill">
+        <mat-form-field appearance="outline" class="flex-auto">
           <mat-label>{{'langs' | translate }}</mat-label>
           <mat-select [formControl]="languagesControl" multiple>
             <mat-select-trigger>

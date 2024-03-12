@@ -13,17 +13,17 @@
 
     <div [formGroup]="form" class="p-6 flex flex-col gap-4 flex-auto flex flex-col">
       <div>
-        <mat-form-field class="flex-1 block">
+        <mat-form-field appearance="outline" class="flex-1 block">
           <mat-label>{{'name' | translate }}</mat-label>
           <input formControlName="name" matInput required>
         </mat-form-field>
 
-        <mat-form-field class="flex-1 block">
+        <mat-form-field appearance="outline" class="flex-1 block">
           <mat-label>E-Mail</mat-label>
           <input formControlName="email" matInput required>
         </mat-form-field>
 
-        <mat-form-field class="flex-1 block">
+        <mat-form-field appearance="outline" class="flex-1 block">
           <mat-label>Password</mat-label>
           <input [type]="inputType" formControlName="password" matInput required>
           <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button">
@@ -32,7 +32,7 @@
           </button>
         </mat-form-field>
 
-        <mat-form-field class="flex-1 block">
+        <mat-form-field appearance="outline" class="flex-1 block">
           <mat-label>Password (Confirm)</mat-label>
           <input [type]="inputType" formControlName="passwordConfirm" matInput required>
           <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button">

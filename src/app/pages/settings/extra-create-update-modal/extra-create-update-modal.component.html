@@ -15,25 +15,25 @@
 
   <mat-dialog-content class="flex flex-col">
     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-      <mat-form-field class="flex-auto">
+      <mat-form-field appearance="outline" class="flex-auto">
         <mat-label>{{'product' | translate}}</mat-label>
         <input formControlName="product" matInput required type="text" [readonly]="true" [(ngModel)]="defaults.product">
 
       </mat-form-field>
 
-      <mat-form-field class="flex-auto">
+      <mat-form-field appearance="outline" class="flex-auto">
         <mat-label>{{'name' | translate }}</mat-label>
         <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.name">
       </mat-form-field>
     </div>
     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-      <mat-form-field class="flex-auto">
+      <mat-form-field appearance="outline" class="flex-auto">
         <mat-label>{{'price_per_day' | translate }}</mat-label>
         <input formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
 
       </mat-form-field>
 
-      <mat-form-field class="flex-auto">
+      <mat-form-field appearance="outline" class="flex-auto">
         <mat-label>{{'tva' | translate}}</mat-label>
         <input formControlName="tva" matInput required type="number" [(ngModel)]="defaults.tva">
       </mat-form-field>

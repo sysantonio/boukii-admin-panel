@@ -5,12 +5,12 @@
 <mat-dialog-content>
   <form [formGroup]="form">
     <div class="flex flex-col">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Event Name</mat-label>
         <input formControlName="title" matInput />
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Start Date</mat-label>
         <input
           [matDatepicker]="startDatepicker"
@@ -22,7 +22,7 @@
         <mat-datepicker #startDatepicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>End Date</mat-label>
         <input [matDatepicker]="endDatepicker" formControlName="end" matInput />
         <mat-datepicker-toggle
