@@ -190,7 +190,7 @@
                 <div style="float:left; width: 100%">
                   <div class="image-container" style="float: left;width: 50%;">
 
-                    <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'"
+                    <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'"
                       alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
                   </div>
 
@@ -899,7 +899,7 @@
                 <div style="float:left; width: 100%">
                   <div class="image-container" style="float: left;width: 50%;">
 
-                    <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style=" height: 150px;width: 400px;height: 290px;object-fit: contain;">
+                    <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" width="400" height="290" style=" height: 150px;width: 400px;height: 290px;object-fit: contain;">
                   </div>
 
                   <div class="input-container">

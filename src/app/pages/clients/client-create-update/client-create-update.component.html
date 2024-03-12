@@ -41,7 +41,7 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="image-container">
-                <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" style="width: 200px;height: 200px;border-radius: 100%;object-fit: fill;">
+                <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" style="width: 200px;height: 200px;border-radius: 100%;object-fit: fill;">
               </div>
 
               <div class="input-container">

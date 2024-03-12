@@ -43,7 +43,7 @@
           <mat-card class="card-users" (click)="mainIdSelected = !mainIdSelected;" (click)="selectMainUser(defaults.client_main_id)" [ngClass]="{'active-border': mainIdSelected}">
             <mat-card-header>
               <div mat-card-avatar class="card-avatar">
-                <img [src]="defaults?.client_main_id?.image !== null ? defaults?.client_main_id?.image : userAvatar" style="border-radius: 100%;width: 100%;height: 100%;"/>
+                <img [src]="defaults?.client_main_id?.image !== null && defaults?.client_main_id?.image !== '' ? defaults?.client_main_id?.image : userAvatar" style="border-radius: 100%;width: 100%;height: 100%;"/>
               </div>
 
             </mat-card-header>
@@ -59,7 +59,7 @@
             <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}" >
               <mat-card-header>
                 <div mat-card-avatar class="card-avatar">
-                  <img [src]="item.image !== null ? item.image : userAvatar" style="border-radius: 100%;width: 100%;height: 100%;"/>
+                  <img [src]="item.image !== null && item.image !== '' ? item.image : userAvatar" style="border-radius: 100%;width: 100%;height: 100%;"/>
                 </div>
 
               </mat-card-header>

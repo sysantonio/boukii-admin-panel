@@ -49,7 +49,7 @@
               <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
 
               <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
-                [selectLevel]="getClientDegree(detailData?.client_main_id)" [size]="60" [userImage]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar"></app-level-user>
+                [selectLevel]="getClientDegree(detailData?.client_main_id)" [size]="60" [userImage]="getClient(detailData.client_main_id)?.image !== null && getClient(detailData.client_main_id)?.image !== '' ? getClient(detailData.client_main_id)?.image : imageAvatar"></app-level-user>
 
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
@@ -75,7 +75,7 @@
 
 
               <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
-                [selectLevel]="getClientDegree(item.client_id)" [size]="44" [userImage]="getClient(item.client_id)?.image !== null ? getClient(item.client_id)?.image : imageAvatar"></app-level-user>
+                [selectLevel]="getClientDegree(item.client_id)" [size]="44" [userImage]="getClient(item.client_id)?.image !== null && getClient(item.client_id)?.image !== '' ? getClient(item.client_id)?.image : imageAvatar"></app-level-user>
 
             </div>
             <div style="float: left; width: 65%;">

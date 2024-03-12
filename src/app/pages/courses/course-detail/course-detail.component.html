@@ -58,7 +58,7 @@
             <mat-card-content>
 
               <div style="float: left; width: 47%;margin: 2% 3% 0 0;">
-                <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/defult.jpg'">
+                <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/defult.jpg'">
                 <ul style="margin: 2% 0 0 0;" *ngIf="defaults.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' | translate}}</strong></li>
                   <li>{{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'LL')}}
@@ -508,7 +508,7 @@
 
                         <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
                           [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
-                          
+
                             <div class="box-detail-user-block-text">
                                 <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
                                 <span>

@@ -53,7 +53,7 @@
             <mat-card-content>
 
               <div style="float: left; width: 47%;margin: 2% 3% 0 0;">
-                <img [src]="defaults.image !== null ? defaults.image : '../../../../assets/img/defult.jpg'">
+                <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/defult.jpg'">
                 <ul style="margin: 2% 0 0 0;" *ngIf="defaults.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' | translate}}</strong></li>
                   <li>{{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(defaults.course_dates[0].date, 'YYYY-MM-DD', 'LL')}}
