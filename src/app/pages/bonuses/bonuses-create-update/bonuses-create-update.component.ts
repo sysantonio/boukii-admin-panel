@@ -119,7 +119,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
 
 
   displayFn(client: any): string {
-    return client && client.first_name && client.last_name ? client.first_name + ' ' + client.last_name : client.first_name;
+    return client && client?.first_name && client?.last_name ? client?.first_name + ' ' + client?.last_name : client?.first_name;
   }
 
   getClients() {
