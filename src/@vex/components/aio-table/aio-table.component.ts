@@ -98,7 +98,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   pageSize = 10;
   filter = '';
   totalRecords = 1000;
-  pageSizeOptions: number[] = [5, 10];
+  pageSizeOptions: number[] = [10, 25, 50];
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new UntypedFormControl('');
