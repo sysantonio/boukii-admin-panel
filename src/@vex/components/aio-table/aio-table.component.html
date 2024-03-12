@@ -511,7 +511,7 @@
           <ng-container *ngIf="column.type === 'monitor'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell style="width: 70px;">
-              <img [src]="getMonitor(data[i]?.id)?.image !== null ? getMonitor(data[i]?.id)?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
+              <img [src]="getMonitor(data[i]?.id)?.image !== null && getMonitor(data[i]?.id)?.image !== '' ? getMonitor(data[i]?.id)?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;">
               <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getMonitor(data[i]?.id)?.language1_id)}} · {{getCountry(getMonitor(data[i]?.id)?.country)}} ·
                 {{calculateAge(getMonitor(data[i]?.id)?.birth_date)}} {{'years' | translate }}</span>
               <span style="float: left; width: 50%;">{{ getMonitor(data[i]?.id)?.first_name }} {{ getMonitor(data[i]?.id)?.last_name }}</span>
