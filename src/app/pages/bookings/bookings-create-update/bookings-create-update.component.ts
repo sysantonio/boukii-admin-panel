@@ -2483,9 +2483,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const priceRangeCourse = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
     durations.forEach(element => {
       const priceRange = priceRangeCourse.find((p) => p.intervalo === element);
-      if (priceRange && priceRange.intervalo === element ) {
+      if (priceRange && priceRange.intervalo === element) {
 
-        if (this.extractValues(priceRange)[0]) {
+        if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= this.selectedItem.max_participants) {
           tableDurations.push(this.extractValues(priceRange)[0].interval);
 
 

@@ -2575,7 +2575,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       const priceRange = priceRangeCourse.find((p) => p.intervalo === element);
       if (priceRange && priceRange.intervalo === element ) {
 
-        if (this.extractValues(priceRange)[0]) {
+        if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= this.selectedItem.max_participants) {
           tableDurations.push(this.extractValues(priceRange)[0].interval);
 
 
