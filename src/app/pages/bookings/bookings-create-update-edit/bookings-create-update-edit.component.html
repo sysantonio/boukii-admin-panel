@@ -275,7 +275,7 @@
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
-                    <mat-label>{{'paxes' |translate}}</mat-label>
+                    <mat-label>{{'participant' |translate}}</mat-label>
                     <mat-select [disabled]="!courseDate.duration" multiple>
                       <mat-option *ngFor="let person of personsToBook" [value]="person" (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
                         {{ person?.first_name }} {{ person?.last_name }}
@@ -287,7 +287,7 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!selectedItem.is_flexible">
 
                   <mat-form-field appearance="outline" class="flex-auto" title="First select the duration to calculate how many paxes can book this course">
-                    <mat-label>{{'paxes' |translate}}</mat-label>
+                    <mat-label>{{'participant' |translate}}</mat-label>
                     <mat-select multiple>
                       <mat-option *ngFor="let person of personsToBook" [value]="person" (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
                         {{ person?.first_name }} {{ person?.last_name }}

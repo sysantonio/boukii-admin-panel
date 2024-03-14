@@ -367,6 +367,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
           } else {
             this.defaults.translations = JSON.parse(this.defaults.translations);
           }
+
+          if (this.defaults.is_flexible && this.defaults.course_type === 2) {
+            this.defaults.price = 'FLEX';
+          }
           this.defaults.translations.fr.name = this.defaults.name;
           this.defaults.translations.fr.short_description = this.defaults.short_description;
           this.defaults.translations.fr.description = this.defaults.description;
