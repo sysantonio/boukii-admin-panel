@@ -310,7 +310,8 @@ export class CourseDetailModalComponent implements OnInit {
         if (data) {
           this.crudService.delete('/course-subgroups', subgroup.id)
             .subscribe(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
+              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000});
+              this.getData();
             })
         }
       });
@@ -482,7 +483,7 @@ export class CourseDetailModalComponent implements OnInit {
             groupsToDelete.forEach(element => {
               this.crudService.delete('/course-groups', element)
                 .subscribe(() => {
-                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
+                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000});
                 })
             });
           }

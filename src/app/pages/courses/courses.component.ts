@@ -37,7 +37,7 @@ export class CoursesComponent {
     //{ label: '', property: 'qr', type: 'qr', visible: true },
     { label: 'Id', property: 'id', type: 'text', visible: true },
     { label: 'type', property: 'course_type', type: 'course_image', visible: true },
-    { label: 'course', property: 'name', type: 'text', visible: true},
+    { label: 'course', property: 'translations', type: 'trads', visible: true},
     { label: 'sport', property: 'sport', type: 'sport', visible: true },
     { label: 'FX-FI', property: 'is_flexible', type: 'flexible', visible: true },
     { label: 'dates', property: 'course_dates', type: 'datesCourse', visible: true },

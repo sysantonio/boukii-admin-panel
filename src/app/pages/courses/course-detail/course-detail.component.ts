@@ -205,6 +205,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getData() {
+    this.reset();
     this.getLanguages();
     this.getClients();
     this.getMonitors();
@@ -382,7 +383,8 @@ export class CourseDetailComponent implements OnInit {
         if (data) {
           this.crudService.delete('/course-subgroups', subgroup.id)
             .subscribe(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
+              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000});
+              this.getData();
             })
         }
       });
@@ -872,7 +874,7 @@ export class CourseDetailComponent implements OnInit {
     this.defaults.course_dates.forEach(courseDate => {
       courseDate.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
-          ret = group.course_subgroups[0].max_participants;
+          ret = group.course_subgroups[0]?.max_participants;
         }
       });
     });
