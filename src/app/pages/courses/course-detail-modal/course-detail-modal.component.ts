@@ -486,6 +486,10 @@ export class CourseDetailModalComponent implements OnInit {
                   this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000});
                 })
             });
+
+            setTimeout(() => {
+              this.getData();
+            }, 500);
           }
         });
       } else {
