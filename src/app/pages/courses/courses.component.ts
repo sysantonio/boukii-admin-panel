@@ -201,7 +201,7 @@ export class CoursesComponent {
       let find = false;
       courseDate.course_groups.forEach(group => {
         if (group.degree_id === levelId && !find) {
-          ret = group.course_subgroups[0].max_participants;
+          ret = group.course_subgroups[0]?.max_participants;
           find = true;
         }
       });
