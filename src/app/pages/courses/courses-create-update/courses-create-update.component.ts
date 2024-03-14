@@ -369,7 +369,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           }
 
           if (this.defaults.is_flexible && this.defaults.course_type === 2) {
-            this.defaults.price = 'FLEX';
+            this.defaults.price = this.encontrarPrimeraClaveConValor(this.encontrarPrimeraCombinacionConValores(this.defaults.price_range))
           }
           this.defaults.translations.fr.name = this.defaults.name;
           this.defaults.translations.fr.short_description = this.defaults.short_description;
@@ -2452,5 +2452,30 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   toDate(date) {
     return moment(date).toDate()
+  }
+
+  encontrarPrimeraCombinacionConValores(data: any) {
+    if (data !== null) {
+      for (const intervalo of data) {
+        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+          return intervalo;
+        }
+      }
+      return null; // Devuelve null si no encuentra ninguna combinación válida
+    }
+
+  }
+
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    if (obj !== null) {
+      for (const clave of Object.keys(obj)) {
+        if (obj[clave] !== null && clave !== 'intervalo') {
+          return obj[clave];
+        }
+      }
+      return null;
+    }
+
   }
 }

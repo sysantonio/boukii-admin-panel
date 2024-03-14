@@ -567,5 +567,6 @@
   "monitor_comments": "Überwachen Sie Kommentare",
   "multimedia": "Multimedia",
   "no_data": "Es sind keine Daten zum Anzeigen vorhanden",
-  "add_participant": "Teilnehmer hinzufügen"
+  "add_participant": "Teilnehmer hinzufügen",
+  "min_price": "Minimaler Preis"
 }

@@ -567,5 +567,6 @@
   "monitor_comments": "Monitorare i commenti",
   "multimedia": "Multimedia",
   "no_data": "Non ci sono dati da mostrare",
-  "add_participant": "Aggiungi partecipante"
+  "add_participant": "Aggiungi partecipante",
+  "min_price": "Prezzo minimo"
 }

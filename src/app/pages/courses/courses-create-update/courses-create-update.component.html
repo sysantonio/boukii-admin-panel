@@ -164,7 +164,7 @@
               </mat-tab-group>
 
               <div class="flex-auto" style="width: 15%">
-                <label for="courseName">{{'price' |translate}} (CHF) <span style="color:red">(*)</span></label>
+                <label for="courseName">{{(defaults.is_flexible ? 'min_price' : 'price' )|translate}} (CHF) <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
                   <input id="courseName" formControlName="price" matInput [required]="!defaults.is_flexible" [type]="defaults.is_flexible ? 'text' : 'number'" [(ngModel)]="defaults.price" [readonly]="defaults.is_flexible"
                   [value]="defaults.is_flexible ? 'FLEXIBLE' : null">
