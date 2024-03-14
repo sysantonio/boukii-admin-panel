@@ -566,5 +566,6 @@
   "deactivate": "Deactivate",
   "monitor_comments": "Monitor Comments",
   "multimedia": "Multimedia",
-  "no_data": "There is no data to show"
+  "no_data": "There is no data to show",
+  "add_participant": "Add participant"
 }
