@@ -1003,7 +1003,7 @@
               <div class="flex-auto">
 
                 <label for="dateFromPrivate" *ngIf="defaults.is_flexible">{{'courses.date_reservable' | translate}} <span style="color:red">(*)</span></label>
-                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">{{'from' | translate}} <span style="color:red">(*)</span></label>
+                <label for="dateFromPrivate" *ngIf="!defaults.is_flexible">{{'courses.date_reservable' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate" [min]="minDate" [matDatepickerFilter]="myHolidayFilter" [max]="maxDate" [(ngModel)]="defaults.date_start_res">
@@ -1018,7 +1018,7 @@
               <div class="flex-auto">
 
                 <label for="dateToPrivate" *ngIf="defaults.is_flexible">{{'courses.date_reservable_to' | translate}} <span style="color:red">(*)</span></label>
-                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">{{'to' | translate}} <span style="color:red">(*)</span></label>
+                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">{{'courses.date_reservable_to' | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [matDatepickerFilter]="myHolidayFilter" [min]="courseConfigForm.value.fromDate" [max]="maxDate" [(ngModel)]="defaults.date_end_res"
