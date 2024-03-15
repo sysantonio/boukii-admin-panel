@@ -183,6 +183,7 @@ export class CourseDetailModalComponent implements OnInit {
   }
 
   getData() {
+    this.reset();
     this.getLanguages();
     this.getClients();
     this.getMonitors();
