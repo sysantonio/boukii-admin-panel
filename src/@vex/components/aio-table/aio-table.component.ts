@@ -987,4 +987,26 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     return data !== null && dataJ[this.translateService.currentLang].name !== null && dataJ[this.translateService.currentLang].name !== '' ? dataJ[this.translateService.currentLang].name : name
   }
+
+  getShortestDuration(times) {
+    let shortest = null;
+
+    times.forEach(time => {
+      const start = moment(time.hour_start, "HH:mm:ss");
+      const end = moment(time.hour_end, "HH:mm:ss");
+      const duration = moment.duration(end.diff(start));
+
+      if (shortest === null || duration < shortest) {
+        shortest = duration;
+      }
+    });
+
+    if (shortest !== null) {
+      const hours = shortest.hours();
+      const minutes = shortest.minutes();
+      return `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'min' : ''}`.trim();
+    } else {
+      return "No durations found";
+    }
+  }
 }

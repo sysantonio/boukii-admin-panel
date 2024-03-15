@@ -121,7 +121,7 @@
                     <label for="duration">{{'duration' | translate}}</label>
                     <mat-form-field appearance="outline" style="width: 100%">
 
-                      <input id="duration" matInput required type="text" placeholder="{{'duration' | translate}}" [value]="defaults.duration ? defaults.duration : 'FLEXIBLE'" [readonly]="true">
+                      <input id="duration" matInput required type="text" placeholder="{{'duration' | translate}}" [value]="defaults.duration ? defaults.duration : getShortestDuration(defaults?.course_dates)" [readonly]="true">
                     </mat-form-field>
                   </div>
                   <div class="flex-auto" style="width: 50%; float:left">

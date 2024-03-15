@@ -566,7 +566,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'duration'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] ? row[column.property] : 'FLEX' }}</td>
+            <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] ? row[column.property] : getShortestDuration(data[i]?.course_dates) }}</td>
           </ng-container>
         </ng-container>
 
