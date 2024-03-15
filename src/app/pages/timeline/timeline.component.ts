@@ -132,6 +132,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   async getData() {
     this.loading = true;
+    this.showGrouped = false;
+    this.showDetail = false;
     //ESC to close moveMonitor
     document.addEventListener('keydown', this.handleKeydownEvent.bind(this));
     this.destroy$.pipe(takeUntil(this.destroy$)).subscribe(() => {
