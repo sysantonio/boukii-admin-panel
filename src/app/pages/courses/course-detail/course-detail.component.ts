@@ -1357,4 +1357,20 @@ export class CourseDetailComponent implements OnInit {
     const country = MOCK_COUNTRIES.find(c => c.id === countryId);
     return country ? country.code : 'Aucun';
   }
+
+  getAgeRange(data: any[]): { age_min: number, age_max: number } {
+    let age_min = Number.MAX_SAFE_INTEGER;
+    let age_max = Number.MIN_SAFE_INTEGER;
+
+    data.forEach(item => {
+      if (item.age_min < age_min) {
+        age_min = item.age_min;
+      }
+      if (item.age_max > age_max) {
+        age_max = item.age_max;
+      }
+    });
+
+    return { age_min, age_max };
+  }
 }

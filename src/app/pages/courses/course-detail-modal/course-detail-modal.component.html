@@ -90,8 +90,9 @@
                   <p style="float: left;width: 50%;text-align: left;" [innerHTML]="getDescription(defaults)">
                   </p>
                   <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 2">{{'from' | translate}} {{defaults.age_min}} {{'to' | translate}} {{defaults.age_max}} {{'years' | translate}}</p>
-                  <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 1">FLEX</p>
-                </div>
+                  <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 1">{{'from' | translate}} {{getAgeRange(defaults.course_dates[0].course_groups).age_min}}
+                    {{'to' | translate}} {{getAgeRange(defaults.course_dates[0].course_groups).age_max}} {{'years' | translate}}</p>
+                  </div>
               </div>
 
               <div style="width:50%; margin-top:2%;float:left">
