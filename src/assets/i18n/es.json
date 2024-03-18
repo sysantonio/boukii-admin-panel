@@ -575,5 +575,6 @@
   "no_data": "No hay datos que mostrar",
   "add_participant": "Añadir participante",
   "min_price": "Precio mínimo",
-  "used": "Utilizado"
+  "used": "Utilizado",
+  "forgot_message": "Recibirá un link para resetear su contraseña en su bandeja de entrada"
 }

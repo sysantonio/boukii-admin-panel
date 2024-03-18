@@ -569,5 +569,7 @@
   "no_data": "Non ci sono dati da mostrare",
   "add_participant": "Aggiungi partecipante",
   "min_price": "Prezzo minimo",
-  "used": "Usato"
+  "used": "Usato",
+  "forgot_message": "Riceverai un link per reimpostare la password nella tua casella di posta"
+
 }

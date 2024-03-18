@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
   selector: 'vex-forgot-password',
@@ -17,14 +20,20 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private crudService: ApiCrudService,
+    private snackbar: MatSnackBar,
+    private translateService: TranslateService
   ) { }
 
-  ngOnInit() {
-    //api/forgot-password
-  }
+  ngOnInit() { }
 
   send() {
-    this.router.navigate(['/']);
+    this.crudService.login('/forgot-password', {email: this.form.value.email, type: 'admin'})
+      .subscribe((res) => {
+        this.snackbar.open(this.translateService.instant('forgot_message'), 'OK', {duration: 3000})
+        this.router.navigate(['/login']);
+
+      })
   }
 }

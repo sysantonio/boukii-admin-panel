@@ -569,5 +569,7 @@
   "no_data": "There is no data to show",
   "add_participant": "Add participant",
   "min_price": "Minimal price",
-  "used": "Used"
+  "used": "Used",
+  "forgot_message": "You will receive a link to reset your password in your inbox"
+
 }

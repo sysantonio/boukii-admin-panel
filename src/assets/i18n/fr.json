@@ -567,5 +567,7 @@
   "no_data": "Il n'y a aucune donnée à afficher",
   "add_participant": "Ajouter un participant",
   "min_price": "Prix minime",
-  "used": "Utilisé"
+  "used": "Utilisé",
+  "forgot_message": "Vous recevrez un lien pour réinitialiser votre mot de passe dans votre boîte de réception"
+
 }
