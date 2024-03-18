@@ -249,6 +249,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   school = [];
   languages = [];
   settings: any = [];
+  allLevels: any = [];
   user: any;
   mainIdSelected = true;
   reduction: any = null;
@@ -678,7 +679,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
         price = price * this.reservableCourseDate.length;
         discounts.forEach(element => {
-          if (element.date === this.reservableCourseDate.length) {
+          if (element.date === this.reservableCourseDate.length && element.percentage) {
             price = price - (price * (element.percentage / 100));
           }
         });
@@ -2649,4 +2650,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return moment(this.selectedItem.course_dates[this.selectedItem.course_dates.length - 1].date).toDate();
   }
 
+  getAllDegrees() {
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+      .subscribe((data) => {
+        this.allLevels = data.data;
+      })
+  }
+
+  getDegree(id: any) {
+    if (id && id !== null) {
+      return this.allLevels.find((l) => l.id === id);
+
+    }
+  }
 }

@@ -245,6 +245,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   coursesMonth = [];
   monitors = [];
   season: any = [];
+  allLevels: any = [];
   holidays: any = [];
   myHolidayDates: any = [];
   school = [];
@@ -714,7 +715,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
         price = price * this.reservableCourseDate.length;
         discounts.forEach(element => {
-          if (element.date === this.reservableCourseDate.length) {
+          if (element.date === this.reservableCourseDate.length && element.percentage) {
             price = price - (price * (element.percentage / 100));
           }
         });
@@ -2736,5 +2737,19 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   setPaid(event: any) {
     this.defaults.paid = event.source.checked;
+  }
+
+  getAllDegrees() {
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+      .subscribe((data) => {
+        this.allLevels = data.data;
+      })
+  }
+
+  getDegree(id: any) {
+    if (id && id !== null) {
+      return this.allLevels.find((l) => l.id === id);
+
+    }
   }
 }

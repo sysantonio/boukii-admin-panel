@@ -397,16 +397,14 @@ img[mat-card-image] {
 
 @media only screen and (min-width: 2100px) {
   .reservation-detail-card {
-    width: 23%;
+    width: 31%;
   }
 }
-
-
 
 .qrcodeImage {
   display: flex;
   float: right;
-  margin: 0 25px 0 0;
+  margin: 0 10px 0 0;
 }
 
 /* Add custom styles here */
