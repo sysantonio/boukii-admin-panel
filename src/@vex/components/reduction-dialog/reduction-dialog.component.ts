@@ -10,7 +10,7 @@ export class ReductionDialogComponent implements OnInit {
 
   generatedNumbers: number[] = [];
   selectedDateIndex: number = null;
-  percentage: number;
+  percentage: number = null;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
     this.setIterations(data.iterations);
   }

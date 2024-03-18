@@ -6,6 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -379,7 +380,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
               .subscribe((obs) => {
                 console.log('client observation created');
               })
-            this.crudService.create('/clients-schools', {client_id: client.data.id, school_id: this.user.schools[0].id})
+            this.crudService.create('/clients-schools', {client_id: client.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
               .subscribe((clientSchool) => {
                 this.sportsData.data.forEach(element => {
 

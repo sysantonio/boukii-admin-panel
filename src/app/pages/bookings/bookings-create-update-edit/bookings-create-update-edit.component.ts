@@ -2338,7 +2338,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               .subscribe((clientCreated) => {
                 this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
-                this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id})
+                this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
                   .subscribe((clientSchool) => {
 
                     setTimeout(() => {

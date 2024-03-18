@@ -59,6 +59,7 @@ export class ClientsComponent {
     { label: 'Email', property: 'email', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'sports', property: 'client_sports', type: 'sports', visible: true, cssClasses: ['font-medium'] },
     { label: 'register', property: 'created_at', type: 'date', visible: true, cssClasses: ['font-medium'] },
+    { label: 'status', property: 'clients_schools', type: 'clients_schools', visible: true, cssClasses: ['font-medium'] },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

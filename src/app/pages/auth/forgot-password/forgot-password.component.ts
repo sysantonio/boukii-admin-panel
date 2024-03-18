@@ -21,6 +21,7 @@ export class ForgotPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    //api/forgot-password
   }
 
   send() {

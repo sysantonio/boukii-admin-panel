@@ -155,6 +155,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
     this.getMonitors();
     this.getClients();
     this.getSports();
@@ -422,10 +423,21 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.update(this.deleteEntity, {active: false}, item.id)
+        if (this.entity.includes('monitor')) {
+          this.crudService.update(this.deleteEntity, {active: false}, item.id)
           .subscribe(() => {
             this.getData(1, 10);
           })
+        } else if (this.entity.includes('clients')) {
+          const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
+
+          this.crudService.update('/clients-schools', {client_id: clientSchool.client_id, school_id: clientSchool.school_id, accepted_at: clientSchool.accepted_at !== null ? null : moment().format('YYYY-MM-DD HH:mm:ss')}, clientSchool.id)
+            .subscribe(() => {
+              this.getData(1, 10);
+            })
+
+        }
+
       }
     });
   }
@@ -547,10 +559,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   getSportNames(data: any) {
-    let ret = 'NDF';
+    let ret = '';
 
     data.forEach((element, idx) => {
-      ret = element.sport.name + (idx + 1 === data.length ? '' : ', ');
+      ret = (element?.sport?.name || element?.name) + (idx + 1 === data.length ? '' : ', ');
     });
 
     return ret;
@@ -1014,5 +1026,20 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   duplicate(item: any) {
 
+  }
+
+  getSportName(id) {
+    return this.sports.find((s) => s.id === id)
+  }
+
+  checkClientStatus(data: any) {
+    let ret = false;
+    data.forEach(element => {
+      if (element.school_id === this.user.schools[0].id) {
+        ret = element.accepted_at !== null;
+      }
+    });
+
+    return ret;
   }
 }

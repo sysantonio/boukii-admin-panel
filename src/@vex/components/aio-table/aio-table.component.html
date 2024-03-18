@@ -330,7 +330,13 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'sports'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ getSportNames(row[column.property]) }}</td>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <span *ngIf="row[column.property].length === 1">{{ getSportName(row[column.property][0]?.sport_id)?.name }}</span>
+              <span *ngIf="row[column.property].length === 2">{{ getSportName(row[column.property][0]?.sport_id)?.name }} - {{getSportName(row[column.property][1]?.sport_id)?.name}}</span>
+              <span *ngIf="row[column.property].length > 2">{{ getSportName(row[column.property][0]?.sport_id)?.name }} - {{getSportName(row[column.property][1]?.sport_id)?.name}} (+{{row[column.property].length - 2}})</span>
+            </td>
+
+
           </ng-container>
         </ng-container>
 
@@ -385,6 +391,16 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]=" row[column.property] ? '#CEE741' : 'red'">
               {{ (row[column.property] ? 'yes' : 'no')| translate | uppercase }}
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <!-- Client status Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'clients_schools'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell [style.color]="checkClientStatus(row[column.property]) ? '#CEE741' : 'red'">
+              {{ (checkClientStatus(row[column.property]) ? 'active' : 'inactive')| translate | uppercase }}
             </td>
           </ng-container>
         </ng-container>
