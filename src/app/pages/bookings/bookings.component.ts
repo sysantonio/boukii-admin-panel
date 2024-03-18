@@ -27,6 +27,7 @@ export class BookingsComponent {
   bonus: any = [];
   user: any;
   school: any;
+  bookingLog: any;
   bookingUsersUnique = [];
 
   createComponent = BookingsCreateUpdateComponent;
@@ -70,6 +71,7 @@ export class BookingsComponent {
       this.detailData = event.item;
       this.getUniqueBookingUsers(this.detailData.bookingusers);
       this.getSchoolSportDegrees();
+      this.getBookingsLogs(this.detailData.id);
       this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.id)
           .subscribe((vl) => {
             if(vl.data.length > 0) {
@@ -190,7 +192,7 @@ export class BookingsComponent {
     }
     return clientSport.degree_id;
   }
-  
+
 
   getSportName(id) {
     return this.sports.find((s) => s.id === id).name
@@ -235,7 +237,7 @@ export class BookingsComponent {
             if (this.detailData.bookingusers && this.detailData.bookingusers.length) {
               const sportId = this.detailData.bookingusers[0].course.sport_id;
               const matchingSport = this.detailData.sports.find(sport => sport.sport_id === sportId);
-              
+
               if (matchingSport && matchingSport.degrees) {
                   this.detailData.degrees_sport = [...matchingSport.degrees].reverse();
               } else {
@@ -243,7 +245,7 @@ export class BookingsComponent {
               }
             } else {
                 this.detailData.degrees_sport = [];
-            }      
+            }
           });
         });
       })
@@ -354,5 +356,12 @@ export class BookingsComponent {
       }
       return false;
     });
+  }
+
+  getBookingsLogs(id) {
+    this.crudService.list('/booking-logs', 1, 10000, 'desc', 'id', '&booking_id='+id)
+      .subscribe((data) => {
+        this.bookingLog = data.data;
+      })
   }
 }

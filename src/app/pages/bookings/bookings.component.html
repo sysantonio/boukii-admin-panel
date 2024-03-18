@@ -160,6 +160,28 @@
           <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
         </ng-container>
+
+        <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+
+          <h3 style="font-size: 1.5rem!important;" *ngIf="bookingLog.length > 0">{{'change_history' | translate}}</h3>
+          <div class="opaque-box" *ngIf="bookingLog.length > 0">
+            <ng-container *ngFor="let item of bookingLog">
+              <span style="width: 100%; float:left">
+                <p style="float:left" *ngIf="item.action == 'created by api'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'api_created' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'cancel_refund' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'refund_boukii_pay'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'refund_boukii_pay' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'full_cancel'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'full_cancel' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'partial_cancel'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'partial_cancel' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'no_refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'cancel_no_refund' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'refund_cash'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'refund_cash' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'voucher_refund'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'voucher_refund' | translate }}</p>
+                <p style="float:left" *ngIf="item.action == 'update'">{{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}: {{'mails.type3' | translate }}</p>
+              </span>
+            </ng-container>
+
+
+          </div>
+        </div>
         <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
 
           <div style="text-align: left;width: 50%;float:left">
