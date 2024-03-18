@@ -71,7 +71,7 @@
           </mat-form-field>
         </div>
 
-        <div class="flex-auto">
+        <div class="flex-auto" *ngIf="mode === 'create'">
           <mat-label>{{'used' | translate}}</mat-label><br>
           <mat-slide-toggle
             color="accent"
