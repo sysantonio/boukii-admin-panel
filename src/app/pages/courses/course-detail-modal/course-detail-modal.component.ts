@@ -1164,7 +1164,7 @@ export class CourseDetailModalComponent implements OnInit {
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
         if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-          ret = element.groups.length;
+          ret = element.course_groups.length;
         }
       });
     }
@@ -1178,10 +1178,10 @@ export class CourseDetailModalComponent implements OnInit {
     if (this.detailData.course && this.detailData.course.course_dates) {
 
       this.detailData.course.course_dates.forEach((element, idx) => {
-        const group = element.groups.find((g) => g.id === this.detailData.course_group_id);
+        const group = element.course_groups.find((g) => g.id === this.detailData.course_group_id);
 
         if (group){
-          group.subgroups.forEach((s, sindex) => {
+          group.course_subgroups.forEach((s, sindex) => {
             if (s.id === this.detailData.course_subgroup_id) {
               ret = sindex + 1;
             }
@@ -1377,5 +1377,30 @@ export class CourseDetailModalComponent implements OnInit {
     } else {
       return "No durations found";
     }
+  }
+
+  encontrarPrimeraCombinacionConValores(data: any) {
+    if (data !== null) {
+      for (const intervalo of data) {
+        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+          return intervalo;
+        }
+      }
+      return null; // Devuelve null si no encuentra ninguna combinación válida
+    }
+
+  }
+
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    if (obj !== null) {
+      for (const clave of Object.keys(obj)) {
+        if (obj[clave] !== null && clave !== 'intervalo') {
+          return obj[clave];
+        }
+      }
+      return null;
+    }
+
   }
 }

@@ -440,7 +440,9 @@
                     <p style="float: left;width: 65%;text-align: right;"><b>{{ 'max_pax' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{taskDetail.course.price}}</b> {{taskDetail.course.currency}}</p>
+                    <p style="float: left;width: 50%;text-align: left;" *ngIf="taskDetail.course.course_type === 1 || (taskDetail.course.course_type === 2 && !taskDetail.course.is_flexible)"><b>{{taskDetail.course.price}}</b> {{taskDetail.course.currency}}</p>
+                    <p style="float: left;width: 50%;text-align: left;" *ngIf="taskDetail.course.course_type === 2 && taskDetail.course.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(taskDetail.course.price_range)) }}
+                    </b> {{taskDetail.course.currency}}</p>
                     <p style="float: left;width: 50%;text-align: right;"><b>{{taskDetail.course.max_participants}}</b></p>
                 </div>
                 </div>

@@ -83,7 +83,11 @@
                   <p style="float: left;width: 50%;text-align: left;" [innerHTML]="getShotrDescription(defaults)">
 
                   </p>
-                  <p style="float: left;width: 50%;text-align: right;color:#ff3085"><b>{{defaults.price}}</b> CHF</p>
+                  <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{defaults.price}}</b> CHF</p>
+                  <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
+                    {{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}
+                  </b>
+                  CHF</p>
                 </div>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
@@ -417,7 +421,9 @@
                     <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
+                    <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
+                    <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
+                      {{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</p>
                     <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
                 </div>
                 </div>
@@ -494,7 +500,7 @@
 
                     <div style="float: left; width: 100%;">
                         <ul>
-                            <li class="font-bold">{{getDateFormatLong(detailData?.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
+                            <li class="font-bold">{{getDateFormatLong(detailData?.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
                         </ul>
                     </div>
 

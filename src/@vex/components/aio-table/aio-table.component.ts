@@ -77,6 +77,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   @Input()
   canDeactivate: boolean = false;
   @Input()
+  canDuplicate: boolean = false;
+  @Input()
   createOnModal: boolean = false;
   @Input()
   widthModal?: string = '90vw';
@@ -1008,5 +1010,9 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     } else {
       return "No durations found";
     }
+  }
+
+  duplicate(item: any) {
+
   }
 }

@@ -713,11 +713,15 @@
     </button>
     <button (click)="delete(item)" mat-menu-item *ngIf="canDelete">
       <mat-icon svgIcon="mat:delete"></mat-icon>
-      <span>Delete</span>
+      <span>{{'delete_title' | translate}}</span>
     </button>
     <button (click)="deactivate(item)" mat-menu-item *ngIf="canDeactivate">
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>{{'deactivate' | translate }}</span>
+    </button>
+    <button (click)="duplicate(item)" mat-menu-item *ngIf="canDuplicate">
+      <mat-icon svgIcon="mat:file_copy"></mat-icon>
+      <span>{{'duplicate' | translate }}</span>
     </button>
   </ng-template>
 </mat-menu>

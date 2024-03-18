@@ -1189,7 +1189,7 @@ export class MonitorDetailComponent {
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
         if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-          ret = element.groups.length;
+          ret = element.course_groups.length;
         }
       });
     }
@@ -1203,10 +1203,10 @@ export class MonitorDetailComponent {
     if (this.detailData.course && this.detailData.course.course_dates) {
 
       this.detailData.course.course_dates.forEach((element, idx) => {
-        const group = element.groups.find((g) => g.id === this.detailData.course_group_id);
+        const group = element.course_groups.find((g) => g.id === this.detailData.course_group_id);
 
         if (group){
-          group.subgroups.forEach((s, sindex) => {
+          group.course_subgroups.forEach((s, sindex) => {
             if (s.id === this.detailData.course_subgroup_id) {
               ret = sindex + 1;
             }
