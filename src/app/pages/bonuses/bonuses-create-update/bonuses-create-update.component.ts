@@ -93,7 +93,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
     const data = {
       code: this.defaults.code,
       quantity: this.defaults.quantity,
-      remaining_balance: this.defaults.quantity,
+      remaining_balance: this.defaults.payed ? 0 : this.defaults.quantity,
       payed: this.defaults.payed,
       client_id: this.defaults.client_id.id,
       school_id: this.user.schools[0].id

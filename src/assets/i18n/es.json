@@ -574,5 +574,6 @@
   "multimedia": "Multimedia",
   "no_data": "No hay datos que mostrar",
   "add_participant": "Añadir participante",
-  "min_price": "Precio mínimo"
+  "min_price": "Precio mínimo",
+  "used": "Utilizado"
 }

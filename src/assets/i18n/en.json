@@ -568,5 +568,6 @@
   "multimedia": "Multimedia",
   "no_data": "There is no data to show",
   "add_participant": "Add participant",
-  "min_price": "Minimal price"
+  "min_price": "Minimal price",
+  "used": "Used"
 }
