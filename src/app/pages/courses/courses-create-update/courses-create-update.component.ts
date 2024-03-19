@@ -109,6 +109,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   selectedItem: any;
   selectedTabNameIndex: any = 0;
   selectedTabDescIndex: any = 0;
+  selectedPeriod: any = -1;
   loadingMonitors = true;
   defaults: any = {
     unique: false,
@@ -568,9 +569,22 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
             if (this.defaults.settings.periods) {
 
-              this.defaults.settings.periods.forEach(element => {
-                this.dataSourceDatePrivate.data.push({dateFrom: element.from, dateTo: element.to, active: element.active, id: element.id});
+              this.defaults.settings.periods.forEach((period, periodIdx) => {
+
+                this.dataSourceDatePrivate.data.push({dateFrom: period.from, dateTo: period.to, active: period.active, id: period.id, main: true, mainPeriod: periodIdx});
+
+                const from = moment(period.from, 'DD-MM-YYYY').startOf('day');
+                const to = moment(period.to, 'DD-MM-YYYY').startOf('day');
+
+                this.defaults.course_dates.forEach(element => {
+                  const current = moment(element.date).startOf('day');
+
+                  if (current.isSame(from) || current.isSame(to) || current.isBetween(from, to)) {
+                    this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('DD-MM-YYYY'), dateTo: moment(element.date).format('DD-MM-YYYY'), active: element.active, id: element.id, main: false, period: periodIdx})
+                  }
+                })
               });
+
             }
 
             this.dataSourceReductionsPrivate.data = JSON.parse(this.defaults.discounts);
@@ -1157,20 +1171,35 @@ export class CoursesCreateUpdateComponent implements OnInit {
     // Aquí también puedes deseleccionar el chip correspondiente
   }
 
-  removePrivateDate(index: any) {
+  removePrivateDate(index: any, main: any, period: any) {
 
     if (this.mode === 'update') {
-      this.dataSourceDatePrivate.data[index].active = false;
-      this.defaults.settings.periods[index].active = false;
-      const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'DD-MM-YYYY').add(-1, 'd');
-      const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'DD-MM-YYYY').add(1, 'd');
-      this.defaults.course_dates.forEach(element => {
-        if (moment(element.date).isBetween(from, to)) {
 
-          element.active = false;
-        }
-       });
-      this.privateDatesTable.renderRows();
+      if (main) {
+        this.dataSourceDatePrivate.data[index].active = false;
+        this.defaults.settings.periods[index].active = false;
+        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'DD-MM-YYYY').add(-1, 'd');
+        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'DD-MM-YYYY').add(1, 'd');
+        this.defaults.course_dates.forEach(element => {
+          if (moment(element.date).isBetween(from, to)) {
+
+            element.active = false;
+          }
+         });
+
+         this.dataSourceDatePrivate.data.forEach(element => {
+          if (element.period === period) {
+
+            element.active = false;
+          }
+         });
+        this.privateDatesTable.renderRows();
+      } else {
+        this.defaults.course_dates[index - (period+1)].active = false;
+        this.dataSourceDatePrivate.data[index].active = false;
+        this.privateDatesTable.renderRows();
+      }
+
     } else {
       this.defaults.settings.periods.splice(index, 1);
       this.dataSourceDatePrivate.data.splice(index, 1);
@@ -2235,6 +2264,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.goTo('/courses');
+      }, (error) => {
+        this.snackbar.open(error.message, 'OK', {duration: 5000})
       })
   }
 
@@ -2475,6 +2506,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
       }
       return null;
+    }
+
+  }
+
+  selectPeriod(data: any, isMain: boolean) {
+    if (isMain) {
+      if (data !== this.selectedPeriod) {
+        this.selectedPeriod = data;
+      } else {
+        this.selectedPeriod = -1;
+      }
     }
 
   }

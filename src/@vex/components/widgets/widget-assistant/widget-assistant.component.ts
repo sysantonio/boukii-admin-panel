@@ -17,7 +17,7 @@ export class WidgetAssistantComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    this.today = moment().locale(this.translateService.currentLang).format('LLLL');
+    this.today = moment().locale(this.translateService.currentLang).format('ll');
     this.getWeather();
   }
 

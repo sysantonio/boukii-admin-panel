@@ -494,12 +494,13 @@
                   <ng-container matColumnDef="delete">
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let idx = index">
-                      <mat-icon svgIcon="mat:delete" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="removePrivateDate(idx)"></mat-icon>
+                      <mat-icon svgIcon="mat:delete" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="removePrivateDate(idx, element.main, element.period)"></mat-icon>
                     </td>
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="displayedPrivateDateColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedPrivateDateColumns;"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedPrivateDateColumns;let i = index"
+                  [hidden]="!row.main && row?.period !== selectedPeriod" (click)="selectPeriod(row.mainPeriod, row.main)" [style.cursor]="row.main ? 'pointer': 'default'"></tr>
                 </table>
               </div>
               <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
