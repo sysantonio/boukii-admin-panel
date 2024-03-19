@@ -2265,7 +2265,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         console.log(res);
         this.goTo('/courses');
       }, (error) => {
-        this.snackbar.open(error.message, 'OK', {duration: 5000})
+        this.snackbar.open(error.error.message, 'OK', {duration: 5000})
       })
   }
 
