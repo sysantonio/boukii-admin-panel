@@ -576,5 +576,7 @@
   "same_pwd": "Les mots de passe ne sont pas les mêmes",
   "pwd_updated": "Mot de passe mis à jour",
   "close_pwd": "Fermez cette page et entrez votre nouveau mot de passe dans votre compte",
-  "forgot_pwd": "Récupérer le mot de passe?"
+  "forgot_pwd": "Récupérer le mot de passe?",
+  "copy": "Copier",
+  "duplicate": "Dupliquer"
 }

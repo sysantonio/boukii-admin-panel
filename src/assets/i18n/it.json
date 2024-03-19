@@ -578,5 +578,7 @@
   "same_pwd": "Le password non sono le stesse",
   "pwd_updated": "Password aggiornata",
   "close_pwd": "Chiudi questa pagina e inserisci la nuova password nel tuo account",
-  "forgot_pwd": "Recupera la password?"
+  "forgot_pwd": "Recupera la password?",
+  "copy": "Copia",
+  "duplicate": "Duplicato"
 }

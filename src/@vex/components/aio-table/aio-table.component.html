@@ -735,7 +735,7 @@
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>{{'deactivate' | translate }}</span>
     </button>
-    <button (click)="duplicate(item)" mat-menu-item *ngIf="canDuplicate">
+    <button (click)="copy(item)" mat-menu-item *ngIf="canDuplicate">
       <mat-icon svgIcon="mat:file_copy"></mat-icon>
       <span>{{'duplicate' | translate }}</span>
     </button>

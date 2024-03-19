@@ -1024,10 +1024,6 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     }
   }
 
-  duplicate(item: any) {
-
-  }
-
   getSportName(id) {
     return this.sports.find((s) => s.id === id)
   }
@@ -1041,5 +1037,149 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     });
 
     return ret;
+  }
+
+
+  copy(item: any) {
+    if(this.entity.includes('course')) {
+      this.copyCourse(item);
+    }
+  }
+
+  copyCourse(item: any) {
+
+    let data: any = {};
+
+    if (item.course_type === 1 && item.is_flexible) {
+      data = {
+        course_type: item.course_type,
+        is_flexible: item.is_flexible,
+        name: this.translateService.instant('copy') + ' - ' + item.name,
+        short_description: item.short_description,
+        description: item.description,
+        price: item.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(item.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(item.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: item.active,
+        online: item.online,
+        options: item.options,
+        image: null,
+        translations: item.translations,
+        discounts: item.discounts,
+        sport_id: item.sport_id,
+        school_id: this.user.schools[0].id, //sacar del global
+        station_id: item.station_id,
+        max_participants: item.max_participants,
+        course_dates: item.course_dates
+      }
+      console.log(data);
+
+    } else if (item.course_type === 1 && !item.is_flexible) {
+      data = {
+        course_type: item.course_type,
+        is_flexible: item.is_flexible,
+        name: this.translateService.instant('copy') + ' - ' + item.name,
+        short_description: item.short_description,
+        description: item.description,
+        price: item.price,
+        currency: 'CHF',//poner currency de reglajes
+        date_start: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(item.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(item.date_end_res).format('YYYY-MM-DD'),
+        confirm_attendance: false,
+        active: item.active,
+        online: item.online,
+        options: item.options,
+        image: null,
+        translations: item.translations,
+        sport_id: item.sport_id,
+        school_id: this.user.schools[0].id, //sacar del global
+        station_id: item.station_id,
+        max_participants: item.max_participants,
+        course_dates: item.course_dates
+      }
+      console.log(data);
+    } else if (item.course_type === 2  && item.is_flexible) {
+      data = {
+        course_type: item.course_type,
+        is_flexible: item.is_flexible,
+        name: this.translateService.instant('copy') + ' - ' + item.name,
+        short_description: item.short_description,
+        description: item.description,
+        price: 0,
+        currency: 'CHF',
+        date_start: item.unique ? moment(item.date_start).format('YYYY-MM-DD') : moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end: item.unique ? moment(item.date_end).format('YYYY-MM-DD') : moment(item.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(item.date_end_res).format('YYYY-MM-DD'),
+        active: item.active,
+        online: item.online,
+        options: item.options,
+        image: null,
+        confirm_attendance: false,
+        translations: item.translations,
+        discounts: item.discounts,
+        price_range: item.price_range,
+        sport_id: item.sport_id,
+        school_id: item.school_id,
+        station_id: item.station_id,
+        max_participants: item.max_participants,
+        duration: item.duration,
+        age_min: item.age_min,
+        age_max: item.age_max,
+        course_dates: item.course_dates,
+        settings: item.settings,
+        unique: item.unique,
+        hour_min: item.hour_min,
+        hour_max: item.hour_max,
+      };
+      console.log(data);
+    } else if (item.course_type === 2 && !item.is_flexible) {
+
+      data = {
+        course_type: item.course_type,
+        is_flexible: item.is_flexible,
+        name: this.translateService.instant('copy') + ' - ' + item.name,
+        short_description: item.short_description,
+        description: item.description,
+        price: item.price,
+        currency: 'CHF',
+        date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(item.date_end_res).format('YYYY-MM-DD'),
+        date_start: moment(item.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(item.date_end_res).format('YYYY-MM-DD'),
+        active: item.active,
+        online: item.online,
+        options: item.options,
+        image: null,
+        confirm_attendance: false,
+        translations: item.translations,
+        price_range: null,
+        sport_id: item.sport_id,
+        school_id: item.school_id,
+        station_id: item.station_id,
+        max_participants: item.max_participants,
+        duration: item.duration,
+        age_min: item.age_min,
+        age_max: item.age_max,
+        course_dates: item.course_dates,
+        hour_min: item.hour_min,
+        hour_max: item.hour_max,
+        settings: item.settings
+      };
+    }
+
+    data.school_id = this.user.schools[0].id;
+
+    this.crudService.create('/admin/courses', data)
+      .subscribe((res) => {
+        console.log(res);
+        this.getData(1, 10);
+      })
   }
 }

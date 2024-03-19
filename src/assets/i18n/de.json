@@ -578,5 +578,7 @@
   "same_pwd": "Das Passwort ist nicht dasselbe",
   "pwd_updated": "Passwort aktualisiert",
   "close_pwd": "Schließen Sie diese Seite und geben Sie Ihr neues Passwort in Ihr Konto ein",
-  "forgot_pwd": "Passwort wiederherstellen?"
+  "forgot_pwd": "Passwort wiederherstellen?",
+  "copy": "Kopieren",
+  "duplicate": "Doppelt"
 }

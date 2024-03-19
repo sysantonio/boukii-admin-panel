@@ -584,5 +584,7 @@
   "same_pwd": "La contraseña no son iguales",
   "pwd_updated": "Contraseña actualizada",
   "close_pwd": "Cierre esta página e ingrese su nueva contraseña en su cuenta",
-  "forgot_pwd": "¿Recuperar contraseña?"
+  "forgot_pwd": "¿Recuperar contraseña?",
+  "copy": "Copia",
+  "duplicate": "Duplicar"
 }
