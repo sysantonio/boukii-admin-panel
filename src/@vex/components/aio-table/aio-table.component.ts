@@ -1076,6 +1076,32 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         max_participants: item.max_participants,
         course_dates: item.course_dates
       }
+
+      delete data.course_dates;
+      data.course_dates = [];
+
+      item.course_dates.forEach(element => {
+        const currentDate = {
+          active: element.active,
+          groups: element.course_groups,
+          date: element.date,
+          hour_end: element.hour_end,
+          hour_start: element.hour_start,
+        };
+
+        data.course_dates.push(currentDate);
+      });
+
+
+      data.course_dates.forEach((element, dateIdx) => {
+        element.groups.forEach((group, idx) => {
+
+          group.subgroups = item.course_dates[dateIdx].course_groups[idx].course_subgroups;
+          delete group.course_subgroups;
+
+        });
+      });
+
       console.log(data);
 
     } else if (item.course_type === 1 && !item.is_flexible) {
@@ -1103,6 +1129,31 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         max_participants: item.max_participants,
         course_dates: item.course_dates
       }
+
+      delete data.course_dates;
+      data.course_dates = [];
+
+      item.course_dates.forEach(element => {
+        const currentDate = {
+          active: element.active,
+          groups: element.course_groups,
+          date: element.date,
+          hour_end: element.hour_end,
+          hour_start: element.hour_start,
+        };
+
+        data.course_dates.push(currentDate);
+      });
+
+
+      data.course_dates.forEach((element, dateIdx) => {
+        element.groups.forEach((group, idx) => {
+
+          group.subgroups = item.course_dates[dateIdx].course_groups[idx].course_subgroups;
+          delete group.course_subgroups;
+
+        });
+      });
       console.log(data);
     } else if (item.course_type === 2  && item.is_flexible) {
       data = {
