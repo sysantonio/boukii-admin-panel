@@ -570,6 +570,14 @@
   "add_participant": "Add participant",
   "min_price": "Minimal price",
   "used": "Used",
-  "forgot_message": "You will receive a link to reset your password in your inbox"
+  "forgot_message": "You will receive a link to reset your password in your inbox",
+  "set_pwd": "Enter your new password",
+  "repeat_pwd": "Repeat password",
+  "must_pwd": "Password is required",
+  "pwd_length": "The password is not in the correct format. ",
+  "same_pwd": "The password are not the same",
+  "pwd_updated": "Updated password",
+  "close_pwd": "Close this page and enter your new password into your account",
+  "forgot_pwd": "Recover password?"
 
 }

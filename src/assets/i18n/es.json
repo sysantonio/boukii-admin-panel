@@ -576,5 +576,13 @@
   "add_participant": "Añadir participante",
   "min_price": "Precio mínimo",
   "used": "Utilizado",
-  "forgot_message": "Recibirá un link para resetear su contraseña en su bandeja de entrada"
+  "forgot_message": "Recibirá un link para resetear su contraseña en su bandeja de entrada",
+  "set_pwd": "Ingresa tu nueva contraseña",
+  "repeat_pwd": "Repetir contraseña",
+  "must_pwd": "La constraseña es obligatoria",
+  "pwd_length": "La contraseña no tiene un formato correcto. Tiene que contener un de 6 caracteres",
+  "same_pwd": "La contraseña no son iguales",
+  "pwd_updated": "Contraseña actualizada",
+  "close_pwd": "Cierre esta página e ingrese su nueva contraseña en su cuenta",
+  "forgot_pwd": "¿Recuperar contraseña?"
 }

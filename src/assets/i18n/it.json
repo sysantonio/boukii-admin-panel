@@ -570,6 +570,13 @@
   "add_participant": "Aggiungi partecipante",
   "min_price": "Prezzo minimo",
   "used": "Usato",
-  "forgot_message": "Riceverai un link per reimpostare la password nella tua casella di posta"
-
+  "forgot_message": "Riceverai un link per reimpostare la password nella tua casella di posta",
+  "set_pwd": "Inserisci la tua nuova password",
+  "repeat_pwd": "Ripeti la password",
+  "must_pwd": "E 'richiesta la password",
+  "pwd_length": "La password non è nel formato corretto. ",
+  "same_pwd": "Le password non sono le stesse",
+  "pwd_updated": "Password aggiornata",
+  "close_pwd": "Chiudi questa pagina e inserisci la nuova password nel tuo account",
+  "forgot_pwd": "Recupera la password?"
 }

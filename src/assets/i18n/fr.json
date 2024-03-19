@@ -568,6 +568,13 @@
   "add_participant": "Ajouter un participant",
   "min_price": "Prix minime",
   "used": "Utilisé",
-  "forgot_message": "Vous recevrez un lien pour réinitialiser votre mot de passe dans votre boîte de réception"
-
+  "forgot_message": "Vous recevrez un lien pour réinitialiser votre mot de passe dans votre boîte de réception",
+  "set_pwd": "Entrez votre nouveau mot de passe",
+  "repeat_pwd": "Répéter le mot de passe",
+  "must_pwd": "Mot de passe requis",
+  "pwd_length": "Le mot de passe n'est pas au bon format. ",
+  "same_pwd": "Les mots de passe ne sont pas les mêmes",
+  "pwd_updated": "Mot de passe mis à jour",
+  "close_pwd": "Fermez cette page et entrez votre nouveau mot de passe dans votre compte",
+  "forgot_pwd": "Récupérer le mot de passe?"
 }
