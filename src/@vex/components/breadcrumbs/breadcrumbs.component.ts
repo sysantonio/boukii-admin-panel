@@ -13,7 +13,11 @@ import { trackByValue } from '../../utils/track-by';
       <ng-container *ngFor="let crumb of crumbs; trackBy: trackByValue">
         <div class="w-1 h-1 bg-gray rounded-full ltr:mr-2 rtl:ml-2"></div>
         <vex-breadcrumb>
-          <a [routerLink]="[]">{{ crumb | translate }}</a>
+          <a [routerLink]="[]">
+          <span *ngIf="crumb.text !== ''">
+            {{ crumb.text | translate }}
+          </span>
+          <mat-icon *ngIf="crumb.icon !== ''" svgIcon="logo:{{crumb.icon}}" class="icon-sm"></mat-icon></a>
         </vex-breadcrumb>
       </ng-container>
     </div>
@@ -21,7 +25,7 @@ import { trackByValue } from '../../utils/track-by';
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  @Input() crumbs: string[] = [];
+  @Input() crumbs: any[] = [];
 
   trackByValue = trackByValue;
 

@@ -1223,12 +1223,15 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'name' | translate }}</mat-label>
                     <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
+                    <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
 
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'surname' | translate }}</mat-label>
                     <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
+                    <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                   </mat-form-field>
                 </div>
 
@@ -1236,12 +1239,15 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>Email</mat-label>
                     <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
+                    <mat-icon class="mr-2" matPrefix svgIcon="logo:mail"></mat-icon>
 
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'username' | translate }}</mat-label>
                     <input formControlName="username" matInput required type="text" [(ngModel)]="defaultsUser.username">
+                    <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                   </mat-form-field>
                 </div>
 
@@ -1254,6 +1260,8 @@
                     <mat-icon *ngIf="visible" svgIcon="mat:visibility"></mat-icon>
                     <mat-icon *ngIf="!visible" svgIcon="mat:visibility_off"></mat-icon>
                   </button>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:lock"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto" style="width: 50%">
@@ -1266,6 +1274,8 @@
                       {{option.name}}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
               </div>
               <div class="actions flex items-center justify-end gap-2">
@@ -1299,11 +1309,14 @@
                   <mat-label>{{'phone' | translate }}</mat-label>
 
                   <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'mobile' | translate }}</mat-label>
                   <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
 
                 </mat-form-field>
               </div>
@@ -1313,11 +1326,14 @@
                   <mat-label>{{'address' | translate }}</mat-label>
 
                   <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'cp' | translate }}</mat-label>
                   <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
 
                 </mat-form-field>
               </div>
@@ -1333,6 +1349,8 @@
                       {{country.name}}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
@@ -1343,6 +1361,8 @@
                       {{province.name}}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
@@ -1358,6 +1378,8 @@
                       {{language.name}}
                     </mat-option>
                   </mat-select>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:message-text"></mat-icon>
+
                 </mat-form-field>
               </div>
 
@@ -1382,12 +1404,15 @@
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>Nº AVS</mat-label>
                   <input formControlName="avs" matInput type="text" [(ngModel)]="defaults.avs">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
 
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'work_id' | translate }}</mat-label>
                   <input formControlName="workId" matInput type="text" [(ngModel)]="defaults.work_license">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
               </div>
 
@@ -1395,6 +1420,7 @@
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>IBAN</mat-label>
                   <input formControlName="iban" matInput type="text" [(ngModel)]="defaults.bank_details">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
 
                 </mat-form-field>
               </div>
@@ -1408,6 +1434,8 @@
                       {{country.name}}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
@@ -1491,6 +1519,8 @@
                       {{sport.name}}
                     </mat-option>
                   </mat-select>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
               </div>
 
@@ -1691,6 +1721,7 @@
                       {{ civilStatus }}
                     </mat-option>
                   </mat-autocomplete>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
 
                 </mat-form-field>
 
@@ -1700,6 +1731,8 @@
                     <mat-option value="y">{{'yes' | translate}}</mat-option>
                     <mat-option value="n">{{'no' | translate}}</mat-option>
                   </mat-select>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
@@ -1708,6 +1741,8 @@
                     <mat-option value="y" >{{'next' | translate}}</mat-option>
                     <mat-option value="n" >{{'no' | translate}}</mat-option>
                   </mat-select>
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+
                 </mat-form-field>
               </div>
 
@@ -1720,6 +1755,7 @@
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'wife_percent' | translate }} (%)</mat-label>
                   <input formControlName="spousePercentage" matInput type="text" [disabled]="!defaults.partner_works" [(ngModel)]="defaults.partner_percentaje">
+                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
 
                 </mat-form-field>
               </div>
