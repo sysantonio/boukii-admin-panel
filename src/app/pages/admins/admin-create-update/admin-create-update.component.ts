@@ -51,7 +51,7 @@ export class AdminCreateUpdateComponent implements OnInit {
     last_name: null,
     email: null,
     image: null,
-    type: "admin",
+    type: "1",
     active: true,
     password: null
   }

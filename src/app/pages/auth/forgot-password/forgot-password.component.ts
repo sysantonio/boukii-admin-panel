@@ -29,7 +29,7 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit() { }
 
   send() {
-    this.crudService.login('/forgot-password', {email: this.form.value.email, type: 'admin'})
+    this.crudService.login('/forgot-password', {email: this.form.value.email, type: '1'})
       .subscribe((res) => {
         this.snackbar.open(this.translateService.instant('forgot_message'), 'OK', {duration: 3000})
         this.router.navigate(['/login']);
