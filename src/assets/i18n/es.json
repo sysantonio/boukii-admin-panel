@@ -586,5 +586,6 @@
   "close_pwd": "Cierre esta página e ingrese su nueva contraseña en su cuenta",
   "forgot_pwd": "¿Recuperar contraseña?",
   "copy": "Copia",
-  "duplicate": "Duplicar"
+  "duplicate": "Duplicar",
+  "all_tasks": "Todas las tareas"
 }

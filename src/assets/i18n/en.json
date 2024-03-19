@@ -580,5 +580,6 @@
   "close_pwd": "Close this page and enter your new password into your account",
   "forgot_pwd": "Recover password?",
   "copy": "Copy",
-  "duplicate": "Duplicate"
+  "duplicate": "Duplicate",
+  "all_tasks": "All tasks"
 }

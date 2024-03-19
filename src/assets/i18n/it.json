@@ -580,5 +580,6 @@
   "close_pwd": "Chiudi questa pagina e inserisci la nuova password nel tuo account",
   "forgot_pwd": "Recupera la password?",
   "copy": "Copia",
-  "duplicate": "Duplicato"
+  "duplicate": "Duplicato",
+  "all_tasks": "Tutti i compiti"
 }

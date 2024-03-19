@@ -578,5 +578,7 @@
   "close_pwd": "Fermez cette page et entrez votre nouveau mot de passe dans votre compte",
   "forgot_pwd": "Récupérer le mot de passe?",
   "copy": "Copier",
-  "duplicate": "Dupliquer"
+  "duplicate": "Dupliquer",
+  "all_tasks": "Toutes les tâches"
+
 }

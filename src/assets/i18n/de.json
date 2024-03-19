@@ -580,5 +580,6 @@
   "close_pwd": "Schließen Sie diese Seite und geben Sie Ihr neues Passwort in Ihr Konto ein",
   "forgot_pwd": "Passwort wiederherstellen?",
   "copy": "Kopieren",
-  "duplicate": "Doppelt"
+  "duplicate": "Doppelt",
+  "all_tasks": "Alle Aufgaben"
 }
