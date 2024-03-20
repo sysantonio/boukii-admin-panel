@@ -2,7 +2,12 @@
 
   <div class="p-6 text-primary-contrast flex-auto">
     <h2 class="headline m-0">{{'welcome' | translate }}, {{user.first_name}}!</h2>
-    <p class="caption m-0 opacity-50"><i class="fa fa-calendar" aria-hidden="true"></i> {{ today }}</p>
+
+    <mat-form-field [hidden]="true" style="height: 0px;">
+      <input matInput [matDatepicker]="picker" (dateChange)="emitDate()" [hidden]="true" [(ngModel)]="date" [min]="today">
+      <mat-datepicker #picker [hidden]="true" ></mat-datepicker>
+    </mat-form-field>
+    <p class="caption m-0 opacity-50"><i class="fa fa-calendar" aria-hidden="true" style="cursor: pointer;" (click)="picker.open()"></i> {{ getLocale(date) }}</p>
     <span class="body-2">{{'work_day' | translate }}</span>
 
     <div class="mt-4 items-center">

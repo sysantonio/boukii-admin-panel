@@ -9,7 +9,7 @@
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
     <div class="container p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-      <vex-widget-assistant class="sm:col-span-2"></vex-widget-assistant>
+      <vex-widget-assistant class="sm:col-span-2" [date]="date" (dateEvent)="emitDate($event)"></vex-widget-assistant>
 
       <vex-widget-quick-line-chart
         [series]="pageViewsSeries"

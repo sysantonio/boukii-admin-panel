@@ -76,15 +76,26 @@ export class DashboardAnalyticsComponent implements OnInit {
   dispoCol = 0;
   bookings = 0;
   bookingList = [];
+
+  date = moment();
   constructor(private crudService: ApiCrudService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
   }
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  getData() {
     this.getBlockages();
     this.getCourses();
     this.getBookings();
+  }
+
+  emitDate(event: any) {
+    this.date = moment(event);
+    this.getData();
   }
 
   getBlockages() {
@@ -95,14 +106,14 @@ export class DashboardAnalyticsComponent implements OnInit {
   }
 
   getCourses() {
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+moment().format('YYYY-MM-DD') + '&course_type=1')
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+this.date.format('YYYY-MM-DD') + '&course_type=1')
       .subscribe((data) => {
         this.dispoCol = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
       }, 0);
 
     })
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+moment().format('YYYY-MM-DD') + '&course_type=2')
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+this.date.format('YYYY-MM-DD') + '&course_type=2')
       .subscribe((data) => {
         this.dispoPrivate = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
@@ -112,7 +123,7 @@ export class DashboardAnalyticsComponent implements OnInit {
   }
 
   getBookings() {
-    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&date='+moment().format('YYYY-MM-DD'))
+    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&date='+this.date.format('YYYY-MM-DD'))
       .subscribe((data) => {
         this.bookings = data.data.length;
 

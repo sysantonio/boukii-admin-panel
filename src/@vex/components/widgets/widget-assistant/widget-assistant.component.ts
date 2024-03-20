@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -11,14 +11,20 @@ import { ApiCrudService } from 'src/service/crud.service';
 export class WidgetAssistantComponent implements OnInit {
 
   user: any;
-  today;
+  today = new Date();
+  @Input() date;
+  @Output() dateEvent = new EventEmitter<any>();
   weather;
-  constructor(private translateService: TranslateService, private crudService: ApiCrudService) { }
+  constructor(public translateService: TranslateService, private crudService: ApiCrudService) { }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    this.today = moment().locale(this.translateService.currentLang).format('ll');
+    this.date = moment();
     this.getWeather();
+  }
+
+  getLocale(date) {
+    return moment(date).locale(this.translateService.currentLang).format('ll');
   }
 
   getWeather() {
@@ -26,5 +32,9 @@ export class WidgetAssistantComponent implements OnInit {
       .subscribe((data) => {
         this.weather = data.data;
       })
+  }
+
+  emitDate() {
+    this.dateEvent.emit(this.date);
   }
 }
