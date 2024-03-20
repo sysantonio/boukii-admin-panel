@@ -112,17 +112,18 @@ export class DashboardAnalyticsComponent implements OnInit {
           return accumulator + currentObject.total_available_places;
       }, 0);
 
-    })
+      })
     this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+this.date.format('YYYY-MM-DD') + '&course_type=2')
       .subscribe((data) => {
         this.dispoPrivate = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
       }, 0);
 
-    })
+      })
   }
 
   getBookings() {
+    this.bookingList = [];
     this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&date='+this.date.format('YYYY-MM-DD'))
       .subscribe((data) => {
         this.bookings = data.data.length;
@@ -144,5 +145,41 @@ export class DashboardAnalyticsComponent implements OnInit {
           })
       });
     })
+  }
+
+  getPaidBookings() {
+    return this.bookingList.filter((b) => !b.paid).length;
+  }
+
+  getPrivateNoAssigned() {
+
+    let ret = 0;
+    this.bookingList.forEach(element => {
+
+      element.bookingusers.forEach(bu => {
+        if (bu.course.course_type === 2 && bu.monitor_id === null) {
+          ret = ret + 1;
+
+        }
+      });
+    });
+
+    return ret;
+  }
+
+  getColNoAssigned() {
+
+    let ret = 0;
+    this.bookingList.forEach(element => {
+
+      element.bookingusers.forEach(bu => {
+        if (bu.course.course_type === 1 && bu.monitor_id === null) {
+          ret = ret + 1;
+
+        }
+      });
+    });
+
+    return ret;
   }
 }
