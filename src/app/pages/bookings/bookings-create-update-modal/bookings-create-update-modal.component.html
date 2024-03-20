@@ -889,19 +889,13 @@
                   {{ getLanguage(defaults.client_main_id.language1_id) }} · {{ getCountry(defaults.client_main_id.country) }} · {{calculateAge(defaults.client_main_id.birth_date) }} &ensp;{{'years' | translate}}
                 </mat-card-subtitle>
                 <mat-card-subtitle>
-                  <button mat-icon-button color="primary">
                     <mat-icon svgIcon="logo:message-text"></mat-icon>
-                  </button>
-                  <button mat-icon-button color="accent">
                     <a href="tel:{{getClient(defaults.client_main_id)?.phone}}" title="{{getClient(defaults.client_main_id)?.phone}}">
                       <mat-icon svgIcon="logo:phone"></mat-icon>
                     </a>
-                  </button>
-                  <button mat-icon-button color="warn">
                     <a href="mailto:{{getClient(defaults.client_main_id)?.email}}" style="cursor:pointer" title="{{getClient(defaults.client_main_id)?.email}}">
                       <mat-icon svgIcon="logo:mail"></mat-icon>
                     </a>
-                  </button>
                 </mat-card-subtitle>
               </mat-card-header>
               <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
