@@ -24,12 +24,12 @@
 
           <h1 @fadeInRight class="headline text-white">{{ defaults.first_name}} {{ defaults.last_name }}</h1>
 
-          <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
-                <a href="mailto:{{defaults?.email}}" style="cursor:pointer">
-                  <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+          <mat-icon style="color:white" svgIcon="logo:message-text" ></mat-icon>
+                <a href="mailto:{{defaults?.email}}" style="cursor:pointer" title="{{defaults?.email}}">
+                  <mat-icon style="color:white" svgIcon="logo:mail"></mat-icon>
                 </a>
-                <a href="tel:{{defaults?.phone}}">
-                  <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+                <a href="tel:{{defaults?.phone}}" style="cursor:pointer" title="{{defaults?.phone}}">
+                  <mat-icon style="color:white" svgIcon="logo:phone"></mat-icon>
                 </a>
         </div>
 

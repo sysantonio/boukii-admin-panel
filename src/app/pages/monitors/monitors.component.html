@@ -36,12 +36,12 @@
               <p><strong>{{detailData?.first_name}} {{detailData?.last_name}}</strong></p>
               <p>{{getLanguage(detailData?.language1_id)}} · {{getCountry(detailData?.country)}} · {{calculateAge(detailData?.birth_date)}} {{'years' | translate }}</p>
               <div>
-                <mat-icon svgIcon="mat:chat" ></mat-icon>
-                <a href="mailto:{{detailData?.email}}" style="cursor:pointer">
-                  <mat-icon svgIcon="mat:mail_outline"></mat-icon>
+                <mat-icon svgIcon="logo:message-text" ></mat-icon>
+                <a href="mailto:{{detailData?.email}}" style="cursor:pointer" title="{{detailData?.email}}">
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
-                <a href="tel:{{detailData?.phone}}">
-                  <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+                <a href="tel:{{detailData?.phone}}" style="cursor:pointer" title="{{detailData?.phone}}">
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
             </div>

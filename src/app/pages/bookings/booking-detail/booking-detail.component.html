@@ -119,8 +119,8 @@
               <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id">
 
                 <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
-                [selectLevel]="getClientDegree(bu?.client_id, item.sport_id)" [size]="40" [userImage]="getClientAvatar(bu?.client_id)"></app-level-user>
-                <!--<div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>-->
+                [selectLevel]="getClientDegree(bu?.client_id, item.sport_id)" [size]="40" [userImage]="getClientAvatar(bu?.client_id) !== null ? getClientAvatar(bu?.client_id) : userAvatar"></app-level-user>
+                <!--<div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'"></div>-->
                 <mat-card-subtitle>{{getClientName(bu?.client_id)}}</mat-card-subtitle>
                 <mat-card-subtitle>{{ getLanguage(getClient(bu?.client_id)?.language1_id) }} · {{ getCountry(getClient(bu?.client_id)?.country) }} · {{calculateAge(getClient(bu?.client_id)?.birth_date) }} {{'years' |translate}}</mat-card-subtitle>
 
@@ -135,7 +135,7 @@
             <mat-card-header *ngIf="(booking.old_id === null || booking.old_id !== null) && courses[bI].course_type === 1">
               <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
               [selectLevel]="getClientDegree(item?.courseDates[0]?.client_id,item.sport_id)" [size]="40" [userImage]="getClientAvatar(item?.courseDates[0]?.client_id)"></app-level-user>
-              <!--<div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'"></div>-->
+              <!--<div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'"></div>-->
               <mat-card-subtitle>{{getClientName(item?.courseDates[0]?.client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>{{ getLanguage(getClient(item?.courseDates[0]?.client_id)?.language1_id) }} · {{ getCountry(getClient(item?.courseDates[0]?.client_id)?.country) }} · {{calculateAge(getClient(item?.courseDates[0]?.client_id)?.birth_date) }} {{'years' |translate}}</mat-card-subtitle>
             </mat-card-header>
@@ -295,20 +295,24 @@
           </div>
           <mat-card style="width: 100%;padding:1%">
             <mat-card-header>
-              <div mat-card-avatar [style.background-image]="'url(' + getClientAvatar(booking.client_main_id) + ')'" style="width:100px; height: 60px;"></div>
+              <div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'" style="width:100px; height: 60px;"></div>
               <mat-card-subtitle>{{getClientName(booking.client_main_id)}}</mat-card-subtitle>
               <mat-card-subtitle>
                 {{ getLanguage(getClient(booking.client_main_id)?.language1_id) }} · {{ getCountry(getClient(booking.client_main_id)?.country) }} · {{calculateAge(getClient(booking.client_main_id)?.birth_date) }} &ensp;{{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
-                  <mat-icon svgIcon="mat:chat"></mat-icon>
+                  <mat-icon svgIcon="logo:message-text"></mat-icon>
                 </button>
                 <button mat-icon-button color="accent">
-                  <mat-icon svgIcon="mat:phone"></mat-icon>
+                  <a href="tel:{{getClient(booking.client_main_id)?.phone}}" title="{{getClient(booking.client_main_id)?.phone}}">
+                    <mat-icon svgIcon="logo:phone"></mat-icon>
+                  </a>
                 </button>
                 <button mat-icon-button color="warn">
-                  <mat-icon svgIcon="mat:mail"></mat-icon>
+                  <a href="mailto:{{getClient(booking.client_main_id)?.email}}" style="cursor:pointer" title="{{getClient(booking.client_main_id)?.email}}">
+                    <mat-icon svgIcon="logo:mail"></mat-icon>
+                  </a>
                 </button>
               </mat-card-subtitle>
             </mat-card-header>

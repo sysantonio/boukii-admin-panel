@@ -2396,6 +2396,15 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     return country ? country.name : 'NDF';
   }
 
+  getClient(id: number) {
+    if (id && id !== null) {
+
+      const client = this.allClients.find((m) => m.id === id);
+
+      return client;
+    }
+  }
+
   calculateFinalPrice() {
     let price = this.getBasePrice();
 

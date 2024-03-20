@@ -493,12 +493,12 @@
                 <p><strong>{{ getClientName(defaults.client_main_id.id)}}</strong></p>
 
                 <div>
-                  <mat-icon style="color:white" svgIcon="mat:chat" ></mat-icon>
-                  <a href="mailto:{{defaults.email}}" style="cursor:pointer">
-                    <mat-icon style="color:white" svgIcon="mat:mail_outline"></mat-icon>
+                  <mat-icon style="color:white" svgIcon="logo:message-text" ></mat-icon>
+                  <a href="mailto:{{defaults.email}}" style="cursor:pointer" title="{{defaults.email}}">
+                    <mat-icon style="color:white" svgIcon="logo:mail"></mat-icon>
                   </a>
-                  <a href="tel:{{defaults.phone}}">
-                    <mat-icon style="color:white" svgIcon="mat:contact_phone"></mat-icon>
+                  <a href="tel:{{defaults.phone}}" title="{{defaults.phone}}" style="cursor: pointer">
+                    <mat-icon style="color:white" svgIcon="logo:phone"></mat-icon>
                   </a>
                 </div>
               </div>
@@ -879,13 +879,17 @@
               </mat-card-subtitle>
               <mat-card-subtitle>
                 <button mat-icon-button color="primary">
-                  <mat-icon svgIcon="mat:chat"></mat-icon>
+                  <mat-icon svgIcon="logo:message-text"></mat-icon>
                 </button>
                 <button mat-icon-button color="accent">
-                  <mat-icon svgIcon="mat:phone"></mat-icon>
+                  <a href="tel:{{getClient(defaults.client_main_id)?.phone}}" title="{{getClient(defaults.client_main_id)?.phone}}">
+                    <mat-icon svgIcon="logo:phone"></mat-icon>
+                  </a>
                 </button>
                 <button mat-icon-button color="warn">
-                  <mat-icon svgIcon="mat:mail"></mat-icon>
+                  <a href="mailto:{{getClient(defaults.client_main_id)?.email}}" style="cursor:pointer" title="{{getClient(defaults.client_main_id)?.email}}">
+                    <mat-icon svgIcon="logo:mail"></mat-icon>
+                  </a>
                 </button>
               </mat-card-subtitle>
             </mat-card-header>

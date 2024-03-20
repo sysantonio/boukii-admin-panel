@@ -36,12 +36,12 @@
               <p>{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</p>
               <p><strong>{{detailData.first_name}} {{detailData.last_name}} </strong></p>
               <div>
-                <mat-icon svgIcon="mat:chat" ></mat-icon>
-                <a href="mailto:{{detailData?.email}}" style="cursor:pointer">
-                  <mat-icon svgIcon="mat:mail_outline"></mat-icon>
+                <mat-icon svgIcon="logo:message-text" ></mat-icon>
+                <a href="mailto:{{detailData?.email}}" style="cursor:pointer" title="{{detailData?.email}}">
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
-                <a href="tel:{{detailData?.phone}}">
-                  <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+                <a href="tel:{{detailData?.phone}}" style="cursor:pointer" title="{{detailData?.phone}}">
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
             </div>
@@ -61,9 +61,9 @@
               <p>{{getLanguage(utilizer.language1_id)}} · {{getCountry(utilizer.country)}} · {{calculateAge(utilizer.birth_date)}} {{'years' | translate }}</p>
               <p><strong>{{utilizer.first_name}} {{utilizer.last_name}} </strong></p>
               <div>
-                <mat-icon svgIcon="mat:chat"></mat-icon>
-                <mat-icon svgIcon="mat:mail_outline"></mat-icon>
-                <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+                <mat-icon svgIcon="logo:message-text"></mat-icon>
+                <mat-icon svgIcon="logo:mail"></mat-icon>
+                <mat-icon svgIcon="logo:phone"></mat-icon>
               </div>
             </div>
           </div>

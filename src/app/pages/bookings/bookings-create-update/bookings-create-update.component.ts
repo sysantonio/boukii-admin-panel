@@ -1775,6 +1775,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  getClient(id: number) {
+    if (id && id !== null) {
+
+      const client = this.allClients.find((m) => m.id === id);
+
+      return client;
+    }
+  }
+
   getUtilizer(id: any) {
     if (id!==null) {
 

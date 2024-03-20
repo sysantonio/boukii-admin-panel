@@ -56,12 +56,12 @@
               <p>{{getLanguage(getClient(detailData?.client_main_id)?.language1_id)}} · {{ getCountry(getClient(detailData?.client_main_id)?.country) }} · {{calculateAge(getClient(detailData?.client_main_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
               <p><strong>{{getClient(detailData?.client_main_id)?.first_name}} {{getClient(detailData?.client_main_id)?.last_name}} </strong></p>
               <div>
-                <mat-icon svgIcon="mat:chat" ></mat-icon>
-                <a href="mailto:{{getClient(detailData?.client_main_id)?.email}}" style="cursor:pointer">
-                  <mat-icon svgIcon="mat:mail_outline"></mat-icon>
+                <mat-icon svgIcon="logo:message-text" ></mat-icon>
+                <a href="mailto:{{getClient(detailData?.client_main_id)?.email}}" style="cursor:pointer" title="{{getClient(detailData?.client_main_id)?.email}}">
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
-                <a href="tel:{{getClient(detailData?.client_main_id)?.phone}}">
-                  <mat-icon svgIcon="mat:contact_phone"></mat-icon>
+                <a href="tel:{{getClient(detailData?.client_main_id)?.phone}}" title="{{getClient(detailData?.client_main_id)?.phone}}">
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
             </div>
