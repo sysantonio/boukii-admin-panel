@@ -1068,7 +1068,7 @@ export class BookingDetailComponent implements OnInit {
     } else {
 
       const client = this.clients.find((m) => m.id === id);
-      return client?.image;
+      return client?.image !== '' ? client?.image : this.userAvatar;
     }
   }
 

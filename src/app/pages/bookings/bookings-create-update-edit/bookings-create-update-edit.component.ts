@@ -1841,7 +1841,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     } else {
 
       const client = this.allClients.find((m) => m.id === id);
-      return client?.image;
+      return client?.image !== '' ? client?.image : this.userAvatar;
     }
   }
 
@@ -1882,10 +1882,10 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       const client = this.allClients.find((m) => m.id === id);
       if (client) {
 
-        return client?.image;
+        return client?.image !== '' ? client?.image : this.userAvatar;
       } else {
         const utilizer = this.getUtilizer(id);
-        return utilizer?.image;
+        return utilizer?.image !== '' ? utilizer?.image : this.userAvatar;
 
       }
     }
