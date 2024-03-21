@@ -627,6 +627,11 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
     let paxes = 0;
 
+    if (this.levelForm.value == null || this.levelForm.value == '') {
+      this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration: 3000});
+      return;
+    }
+
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
       this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});

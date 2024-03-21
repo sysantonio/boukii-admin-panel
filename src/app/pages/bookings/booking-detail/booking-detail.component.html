@@ -123,7 +123,7 @@
               <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id && bu.course_date_id === item.courseDates[0].course_date_id">
 
                 <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
-                [selectLevel]="getClientDegree(bu?.client_id, item.sport_id)" [size]="40" [userImage]="getClientAvatar(bu?.client_id) !== null ? getClientAvatar(bu?.client_id) : userAvatar"></app-level-user>
+                [selectLevel]="getClientDegree(bu?.client_id, item.sport_id)" [size]="40" [userImage]="getClientAvatar(bu?.client_id) !== null && getClientAvatar(bu?.client_id) !== '' ? getClientAvatar(bu?.client_id) : userAvatar"></app-level-user>
                 <!--<div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'"></div>-->
                 <mat-card-subtitle>{{getClientName(bu?.client_id)}}</mat-card-subtitle>
                 <mat-card-subtitle>{{ getLanguage(getClient(bu?.client_id)?.language1_id) }} · {{ getCountry(getClient(bu?.client_id)?.country) }} · {{calculateAge(getClient(bu?.client_id)?.birth_date) }} {{'years' |translate}}</mat-card-subtitle>
