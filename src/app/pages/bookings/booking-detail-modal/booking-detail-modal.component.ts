@@ -342,30 +342,32 @@ export class BookingDetailModalComponent implements OnInit {
 
                     if (course.data.course_type === 2 && this.booking.old_id === null) {
 
-                      const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null, clients: []}
 
-                        groupedByCourseId[courseId].forEach((element, idx) => {
+                      groupedByCourseId[courseId].forEach((element, idx) => {
+                        const dataBook = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null, clients: [], relatedMainClient: null}
 
-                          if(parseFloat(element.price) !== 0) {
-                            data.sport_id = course.data?.sport_id;
-                            data.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
-                            this.courses.push(course.data);
-                            data.courseDates.push(element);
-                            this.clientsIds.push(element.client_id);
+                        if(parseFloat(element.price) !== 0) {
+                          dataBook.sport_id = course.data?.sport_id;
+                          dataBook.degrees_sport = this.degreesClient.filter(degree => degree.sport_id === course.data?.sport_id);
+                          dataBook.relatedMainClient = element.client_id;
+                          dataBook.courseDates.push(element);
+                          this.courses.push(course.data);
+                          this.clientsIds.push(element.client_id);
+                          this.bookingsToCreate.push(dataBook);
 
-
-                          } else {
-                            data.clients.push(courseId);
-                            this.clientsIds.push(element.client_id);
-                          }
-
-                        });
-
-                        if(data.courseDates.length > 0) {
-                          this.bookingsToCreate.push(data);
+                        } else {
+                          dataBook.relatedMainClient = this.booking.client_main_id;
+                          dataBook.clients.push(courseId);
+                          this.clientsIds.push(element.client_id);
                         }
 
-                    } else {
+                      });
+
+                      /*if(data.courseDates.length > 0) {
+                        this.bookingsToCreate.push(data);
+                      }*/
+
+                  }  else {
                       this.courses.push(course.data);
 
                       const data = {price_total: 0, courseDates: [], degrees_sport: [], sport_id: null}
@@ -1172,7 +1174,7 @@ export class BookingDetailModalComponent implements OnInit {
     } else {
 
       const client = this.clients.find((m) => m.id === id);
-      return client?.image !== '' ? client?.image : this.userAvatar;
+      return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
     }
   }
 

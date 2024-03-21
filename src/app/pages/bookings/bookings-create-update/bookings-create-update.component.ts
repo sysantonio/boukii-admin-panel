@@ -1771,7 +1771,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     } else {
 
       const client = this.allClients.find((m) => m.id === id);
-      return client?.image !== '' ? client?.image : this.userAvatar;
+      return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
     }
   }
 
@@ -1821,7 +1821,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const client = this.allClients.find((m) => m.id === id);
       if (client) {
 
-        return client?.image !== '' ? client?.image : this.userAvatar;
+        return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
       } else {
         const utilizer = this.getUtilizer(id);
         return utilizer?.image !== '' ? utilizer?.image : this.userAvatar;

@@ -90,7 +90,7 @@
                 {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}
               </mat-card-subtitle>
               <div style="color: #EA0C60;" *ngIf="getCourse(item?.courseDates[0]?.course_id)?.course_type === 2 && getCourse(item?.courseDates[0]?.course_id)?.is_flexible ">
-                {{'from' | translate}} {{ getAmountCourse(bookingUsersUnique, bI)}} CHF
+                {{'from' | translate}} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(courses[bI].price_range))}} CHF
 
                 </div>
               <div style="color: #EA0C60;" *ngIf="getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 && getCourse(item?.courseDates[0]?.course_id)?.is_flexible">
@@ -103,9 +103,12 @@
             </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;margin: 10px 0 0 0; width: 100%;">
-                <li *ngFor="let date of item?.courseDates">
-                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }} - {{date.hour_start}} / {{ date.hour_end }}
-                </li>
+                <ng-container *ngFor="let date of item?.courseDates">
+                  <li *ngIf="date.client_id === item.relatedMainClient">
+                    <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }} - {{date.hour_start}} / {{ date.hour_end }}
+                  </li>
+                </ng-container>
+
               </ul>
             </mat-card-content>
 
@@ -116,7 +119,8 @@
             </div>
 
             <ng-container *ngFor="let bu of bookingUsersUnique">
-              <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id">
+
+              <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id && bu.course_date_id === item.courseDates[0].course_date_id">
 
                 <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
                 [selectLevel]="getClientDegree(bu?.client_id, item.sport_id)" [size]="40" [userImage]="getClientAvatar(bu?.client_id) !== null ? getClientAvatar(bu?.client_id) : userAvatar"></app-level-user>
@@ -126,7 +130,7 @@
 
               </mat-card-header>
 
-              <div style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff" *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id"
+              <div style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff" *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id && bu.course_date_id === item.courseDates[0].course_date_idt"
                 [ngStyle]="{'background': getDegree(item.courseDates[0].degree_id)?.color !== null ? getDegree(item.courseDates[0].degree_id)?.color : ''}">
                 {{getDegree(item.courseDates[0].degree_id)?.annotation}} {{getDegree(item.courseDates[0].degree_id)?.level}}
               </div>
@@ -134,7 +138,7 @@
 
             <mat-card-header *ngIf="(booking.old_id === null || booking.old_id !== null) && courses[bI].course_type === 1">
               <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
-              [selectLevel]="getClientDegree(item?.courseDates[0]?.client_id,item.sport_id)" [size]="40" [userImage]="getClientAvatar(item?.courseDates[0]?.client_id)"></app-level-user>
+              [selectLevel]="getClientDegree(item?.courseDates[0]?.client_id,item.sport_id)" [size]="40" [userImage]="getClientAvatar(item?.courseDates[0]?.client_id) !== '' && getClientAvatar(item?.courseDates[0]?.client_id) !== null ? getClientAvatar(item?.courseDates[0]?.client_id) : userAvatar"></app-level-user>
               <!--<div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'"></div>-->
               <mat-card-subtitle>{{getClientName(item?.courseDates[0]?.client_id)}}</mat-card-subtitle>
               <mat-card-subtitle>{{ getLanguage(getClient(item?.courseDates[0]?.client_id)?.language1_id) }} · {{ getCountry(getClient(item?.courseDates[0]?.client_id)?.country) }} · {{calculateAge(getClient(item?.courseDates[0]?.client_id)?.birth_date) }} {{'years' |translate}}</mat-card-subtitle>

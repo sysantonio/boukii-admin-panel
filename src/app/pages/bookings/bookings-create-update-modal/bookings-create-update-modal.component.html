@@ -531,7 +531,7 @@
 
             <div style="float: left; width: 100%;;height: 40px" *ngIf="item.courseDates[0].client_id !== defaults.client_main_id.id">
               <div style="float: left; width: 20%;">
-                <img [src]="getUtilizer(item.courseDates[0].client_id)?.image" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
+                <img [src]="getUtilizer(item.courseDates[0].client_id)?.image !== '' ? getUtilizer(item.courseDates[0].client_id)?.image : userAvatar" style="height:100%;border-radius: 100%;width: 70px;height: 70px;">
               </div>
               <div style="float: left; width: 80%;">
                 <p>{{getUtilizer(item.courseDates[0].client_id)?.first_name}} {{getUtilizer(item.courseDates[0].client_id)?.last_name}}</p>
