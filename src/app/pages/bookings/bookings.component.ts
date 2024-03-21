@@ -27,7 +27,7 @@ export class BookingsComponent {
   bonus: any = [];
   user: any;
   school: any;
-  bookingLog: any;
+  bookingLog: any = [];
   bookingUsersUnique = [];
 
   createComponent = BookingsCreateUpdateComponent;

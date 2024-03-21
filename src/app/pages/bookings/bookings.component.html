@@ -107,7 +107,7 @@
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of bookingUsersUnique">
                 <ul>
-                  <li>{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
+                  <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
                 </ul>
               </div>
               <div style="float: left; width: 100%;margin-top: 5%;">
