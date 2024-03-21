@@ -82,11 +82,11 @@
               <p>{{getLanguage(getClient(item?.client_id)?.language1_id)}} · {{ getCountry(getClient(item?.client_id)?.country) }} · {{calculateAge(getClient(item?.client_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
                 <p>{{getClient(item?.client_id)?.first_name}} {{getClient(item?.client_id)?.last_name}} </p>
             </div>
-            <div style="float: left; width: 20%;">
+            <!--<div style="float: left; width: 20%;">
               <p style="text-align: right;color:#5ade47" *ngIf="detailData.bookingusers[0]?.status === 1 && detailData.paid">{{'payed' | translate}}</p>
               <p style="text-align: right;color:#dbd616" *ngIf="detailData.bookingusers[0]?.status === 1 && !detailData.paid">{{'no_payed' | translate }}</p>
               <p style="text-align: right;color:#dbd616"*ngIf="detailData.bookingusers[0]?.status === 2">{{'cancelled' | translate | uppercase }}</p>
-            </div>
+            </div>-->
           </div>
           <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
           <div style="float: left; width: 100%;">
