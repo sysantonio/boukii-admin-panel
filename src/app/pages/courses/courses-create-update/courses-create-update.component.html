@@ -1,6 +1,6 @@
 <vex-secondary-toolbar current="{{'courses.title' | translate}}">
   <vex-breadcrumbs
-    [crumbs]="['courses.title', (mode === 'update' ? 'courses.new' : 'courses.update')]"
+    [crumbs]="[{text: '', icon: 'cursos-2'}, {text: (mode === 'update' ? 'courses.new' : 'courses.update'), icon: ''}]"
     class="flex-auto"
   ></vex-breadcrumbs>
   <button class="ml-2" color="primary" mat-icon-button type="button">
