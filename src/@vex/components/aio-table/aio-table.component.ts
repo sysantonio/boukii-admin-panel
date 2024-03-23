@@ -218,9 +218,9 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         }
 
         if (this.finishedBooking) {
-          filter = filter + '&finished=1';
-        } else {
           filter = filter + '&finished=0';
+        } else {
+          filter = filter + '&finished=1';
         }
 
       }
