@@ -18,8 +18,9 @@ import { CourseUserTransferComponent } from '../courses/course-user-transfer/cou
 import { CourseUserTransferTimelineComponent } from './course-user-transfer-timeline/course-user-transfer-timeline.component';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorComponent } from './confirm-unmatch-monitor/confirm-unmatch-monitor.component';
-import { Subject, firstValueFrom } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject, firstValueFrom } from 'rxjs';
+import { map, startWith, takeUntil } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 moment.locale('fr');
 
@@ -114,6 +115,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
   nullMonitor:any = {id:null};
   filterBookingUser:any;
   allBookingUsers:any[] = [];
+  userControl = new FormControl();
+  monitorControl = new FormControl();
+  filteredUsers: Observable<any[]>;
+  filteredMonitorsO: Observable<any[]>;
 
   constructor(private crudService: ApiCrudService,private dialog: MatDialog,private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.mockLevels.forEach(level => {
@@ -128,7 +133,61 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.getData();
+
+    this.filteredUsers = this.userControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.first_name),
+        map(name => name ? this._filter(name) : this.allBookingUsers.slice())
+      );
+
+    this.filteredMonitorsO = this.monitorControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.first_name),
+        map(name => name ? this._filterMonitor(name) : this.allMonitors.slice())
+      );
   }
+
+  displayFn(user: any): string {
+    return user && user.first_name ? user.first_name + ' ' + user.last_name : '';
+  }
+
+  displayMonitorFn(user: any): string {
+    return user && user.first_name ? user.first_name + ' ' + user.last_name : '';
+  }
+
+  private _filter(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.allBookingUsers.filter(option =>
+      option?.first_name.toLowerCase().includes(filterValue) ||
+      option?.last_name.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterMonitor(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.allMonitors.filter(option =>
+      option.id !== null && (
+        option?.first_name.toLowerCase().includes(filterValue) ||
+        option?.last_name.toLowerCase().includes(filterValue))
+    );
+  }
+
+  setBookingUser(event:any, user: any) {
+    if (event.isUserInput) {
+      this.filterBookingUser = user;
+    }
+  }
+
+  setMonitorUser(event:any, user: any) {
+    if (event.isUserInput) {
+      this.filterMonitor = user.id;
+    }
+  }
+
 
   async getData() {
     this.loading = true;

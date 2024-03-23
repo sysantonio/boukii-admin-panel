@@ -46,23 +46,36 @@
                 <div *ngIf="showFilter" class="filter-container">
                     <div class="filter-container-column">
                         <span>{{ 'monitor' | translate | uppercase }}</span>
+
                         <mat-form-field appearance="outline">
-                        <mat-select [(ngModel)]="filterMonitor" color="primary">
-                            <ng-container *ngFor="let monitor of allMonitors">
-                                <mat-option *ngIf="monitor.id" [value]="monitor.id">{{monitor.first_name}} {{monitor.last_name}}</mat-option>
+                          <input type="text"
+                                 placeholder="{{'monitor' | translate }}"
+                                 matInput
+                                 [matAutocomplete]="autoMonitor"
+                                 [formControl]="monitorControl">
+                          <mat-autocomplete #autoMonitor="matAutocomplete" [displayWith]="displayMonitorFn">
+                            <ng-container *ngFor="let user of filteredMonitorsO | async" >
+                              <mat-option *ngIf="user.id!==null" [value]="user" (onSelectionChange)="setMonitorUser($event, user)">
+                                {{user.first_name}} {{user.last_name}}
+                              </mat-option>
                             </ng-container>
-                        </mat-select>
+                          </mat-autocomplete>
                         </mat-form-field>
                     </div>
 
                     <div class="filter-container-column">
                         <span>{{ 'client' | translate | uppercase }}</span>
                         <mat-form-field appearance="outline">
-                        <mat-select [(ngModel)]="filterBookingUser" [compareWith]="compareUsers" color="primary">
-                            <ng-container *ngFor="let user of allBookingUsers">
-                                <mat-option *ngIf="user.id" [value]="user">{{user.first_name}} {{user.last_name}}</mat-option>
-                            </ng-container>
-                        </mat-select>
+                          <input type="text"
+                                 placeholder="{{'client' | translate }}"
+                                 matInput
+                                 [matAutocomplete]="auto"
+                                 [formControl]="userControl">
+                          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                            <mat-option *ngFor="let user of filteredUsers | async" [value]="user" (onSelectionChange)="setBookingUser($event, user)">
+                              {{user.first_name}} {{user.last_name}}
+                            </mat-option>
+                          </mat-autocomplete>
                         </mat-form-field>
                     </div>
 

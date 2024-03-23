@@ -33,6 +33,7 @@ import { CourseUserTransferTimelineModalModule } from './course-user-transfer-ti
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-unmatch-monitor.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [TimelineComponent],
@@ -70,7 +71,8 @@ import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-u
     CourseUserTransferTimelineModalModule,
     TranslateModule,
     MatDatepickerModule,
-    ConfirmUnmatchMonitorModule
+    ConfirmUnmatchMonitorModule,
+    MatAutocompleteModule
   ]
 })
 export class TimelineModule {
