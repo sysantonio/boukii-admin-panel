@@ -99,17 +99,26 @@
                   {{(detailData.bookingusers[0]?.course?.course_type === 1 ? 'colective' : 'private' )| translate}} {{getSportName(detailData.bookingusers[0]?.course?.sport_id)}} {{detailData.bookingusers[0]?.price}} {{detailData.bookingusers[0]?.currency}}
                 </p>
               </div>
-              <div style="float: left; width: 100%;" *ngIf="detailData.bookingusers[0].course.course_type">
+              <!--<div style="float: left; width: 100%;" *ngIf="detailData.bookingusers[0].course.course_type">
                 <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(detailData.bookingusers[0]?.degree_id)?.color}">
                   {{getDegree(detailData.bookingusers[0]?.degree_id)?.league}} - {{getDegree(detailData.bookingusers[0]?.degree_id)?.annotation}}/{{getDegree(detailData.bookingusers[0]?.degree_id)?.name}}
                 </div>
 
-              </div>
-              <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of bookingUsersUnique">
-                <ul>
-                  <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
-                </ul>
-              </div>
+              </div>-->
+              <ng-container *ngIf="detailData.bookingusers[0]?.course?.course_type === 1">
+                <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
+                  <ul>
+                    <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
+                  </ul>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="detailData.bookingusers[0]?.course?.course_type === 2">
+                <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of bookingUsersUnique">
+                  <ul>
+                    <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
+                  </ul>
+                </div>
+              </ng-container>
               <div style="float: left; width: 100%;margin-top: 5%;">
                 <div style="float: left; width: 20%;">
                   <img [src]="getMonitor(detailData.bookingusers[0]?.monitor_id) ? getMonitor(detailData.bookingusers[0]?.monitor_id)?.image : imageAvatar" style="border-radius: 100%;">
