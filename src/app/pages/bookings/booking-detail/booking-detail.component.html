@@ -120,7 +120,8 @@
 
             <ng-container *ngFor="let bu of bookingUsersUnique">
 
-              <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id && findCourseDateId(bu.course_date_id, bookingUsers)">
+              <mat-card-header *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id
+                && (bookingUsers.length === bookingUsersUnique.length ? bu.course_date_id === item.courseDates[0].course_date_id : findCourseDateId(bu.course_date_id, bookingUsers))">
 
                 <app-level-user mat-card-avatar *ngIf="item.degrees_sport && item.degrees_sport.length" [allLevels]="item.degrees_sport"
                 [selectLevel]="getClientDegree(bu?.client_id, item.sport_id)" [size]="40" [userImage]="getClientAvatar(bu?.client_id) !== null && getClientAvatar(bu?.client_id) !== '' ? getClientAvatar(bu?.client_id) : userAvatar"></app-level-user>
@@ -130,7 +131,8 @@
 
               </mat-card-header>
 
-              <div style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff" *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id && findCourseDateId(bu.course_date_id, bookingUsers)"
+              <div style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff" *ngIf="booking.old_id === null && courses[bI].course_type === 2 && courses[bI].id === bu.course_id
+              && (bookingUsers.length === bookingUsersUnique.length ? bu.course_date_id === item.courseDates[0].course_date_id : findCourseDateId(bu.course_date_id, bookingUsers))"
                 [ngStyle]="{'background': getDegree(item.courseDates[0].degree_id)?.color !== null ? getDegree(item.courseDates[0].degree_id)?.color : ''}">
                 {{getDegree(item.courseDates[0].degree_id)?.annotation}} {{getDegree(item.courseDates[0].degree_id)?.level}}
               </div>
