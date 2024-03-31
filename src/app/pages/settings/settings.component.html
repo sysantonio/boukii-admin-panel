@@ -446,9 +446,9 @@
           <mat-tab-group>
 
             <mat-tab label="{{'salarys' | translate}}">
-              <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+              <vex-page-layout style="float: left;width: 100%;">
+                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0;float: left;width: 100%;">
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;width: 100%;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'salarys' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.monitors.salaris.text1' | translate}}<br>
@@ -457,7 +457,7 @@
 
                   </div>
 
-                    <vex-aio-table [columns]="columns" [entity]="entitySalary" [title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
+                    <vex-aio-table style="float: left;width: 100%;" [columns]="columns" [withHeader]="false" [entity]="entitySalary" [title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
