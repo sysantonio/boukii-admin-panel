@@ -1294,9 +1294,9 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && duration.includes('min')) {
+    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
-      const minutes = duration.split(' ')[1].replace('min', '');
+      const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
     } else if(duration.includes('h')) {
