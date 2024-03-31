@@ -2474,5 +2474,16 @@ export class BookingDetailModalComponent implements OnInit {
     return today.isSameOrBefore(dateFormat) || !this.booking.paid;
   }
 
+  findCourseDateId(dateId, items) {
+    let ret = false;
+
+    items.forEach(element => {
+      if (dateId === element.course_date_id && !ret) {
+        ret = true;
+      }
+    });
+
+    return ret;
+  }
 
 }

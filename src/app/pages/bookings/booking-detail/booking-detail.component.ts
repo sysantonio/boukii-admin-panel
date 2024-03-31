@@ -2406,4 +2406,16 @@ export class BookingDetailComponent implements OnInit {
       return null;
     }
   }
+
+  findCourseDateId(dateId, items) {
+    let ret = false;
+
+    items.forEach(element => {
+      if (dateId === element.course_date_id && !ret) {
+        ret = true;
+      }
+    });
+
+    return ret;
+  }
 }
