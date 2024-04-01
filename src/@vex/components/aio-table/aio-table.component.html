@@ -116,18 +116,18 @@
           </button>
         </div>
         <div *ngIf="entity.includes('bookings')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = true; activeBooking=false; allBookings=true; filterData()">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
             <span [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">{{'finished' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('bookings')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = false; activeBooking=false; allBookings=true; filterData()">
-            <span [ngStyle]="{'color': !finishedBooking ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
+          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = false; activeBooking=false; allBookings=false; filterData()">
+            <span [ngStyle]="{'color': !allBookings && !finishedBooking && !activeBooking ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('bookings')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData()">
-            <span [ngStyle]="{'color': allBookings ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
+            <span [ngStyle]="{'color': allBookings && !finishedBooking ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
           </button>
         </div>
 

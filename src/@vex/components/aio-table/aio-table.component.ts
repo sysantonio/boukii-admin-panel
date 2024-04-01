@@ -139,7 +139,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
   activeBooking = false;
   finishedBooking = false;
-  allBookings = true;
+  allBookings = false;
 
   activeMonitor = false;
   inactiveMonitor = false;
@@ -221,6 +221,10 @@ export class AioTableComponent implements OnInit, AfterViewInit {
           filter = filter + '&finished=0';
         } else {
           filter = filter + '&finished=1';
+        }
+
+        if (this.allBookings) {
+          filter = filter + '&all=1'
         }
 
       }
