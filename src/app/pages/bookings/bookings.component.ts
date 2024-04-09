@@ -69,6 +69,7 @@ export class BookingsComponent {
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.bonus = [];
       this.detailData = event.item;
+      this.detailData.bookingusers = this.orderBookingUsers(this.detailData.bookingusers);
       this.getUniqueBookingUsers(this.detailData.bookingusers);
       this.getSchoolSportDegrees();
       this.getBookingsLogs(this.detailData.id);
@@ -348,13 +349,28 @@ export class BookingsComponent {
 
   getUniqueBookingUsers(data: any) {
     const clientIds = new Set();
+    const uniqueDates = new Set();
     this.bookingUsersUnique = [];
     this.bookingUsersUnique = data.filter(item => {
-      if (!clientIds.has(item.client_id)) {
+      if (!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) {
         clientIds.add(item.client_id);
+        uniqueDates.add(item.date);
         return true;
       }
       return false;
+    });
+  }
+
+  orderBookingUsers(users: any[]) {
+    return users.sort((a, b) => {
+      // Ordenar por fecha
+      const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+      if (dateComparison !== 0) {
+        return dateComparison;
+      }
+
+      // Si la fecha es la misma, ordenar por hora de inicio
+      return a.hour_start.localeCompare(b.hour_start);
     });
   }
 
