@@ -123,7 +123,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   persons = []; // Ejemplo de número de personas
   personsToBook = []; // Ejemplo de número de personas
   personsSelected = []; // Ejemplo de número de personas
-
+  personsSelectedMultiple = [];
   reservedDates = [
     new Date(),
     new Date(),
@@ -690,6 +690,16 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           hour_end: this.calculateHourEnd(element.hour_start, element.duration),
           date: moment(element.date).format('YYYY-MM-DD'),
         })
+        if (this.personsSelectedMultiple[element.course_date_id]?.[element.hour_start]) {
+          this.personsSelectedMultiple[element.course_date_id][element.hour_start].forEach((person) => {
+            checkAval.bookingUsers.push({
+              client_id: person.id,
+              hour_start: element.hour_start,
+              hour_end: this.calculateHourEnd(element.hour_start, element.duration),
+              date: moment(element.date).format('YYYY-MM-DD'),
+            });
+          });
+        }
       });
     } else {
       this.courseDates.forEach(element => {
@@ -699,6 +709,16 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           hour_end: this.calculateHourEnd(element.hour_start, this.selectedItem.duration),
           date: moment(element.date).format('YYYY-MM-DD'),
         })
+        if (this.personsSelectedMultiple[element.course_date_id]?.[element.hour_start]) {
+          this.personsSelectedMultiple[element.course_date_id][element.hour_start].forEach((person) => {
+            checkAval.bookingUsers.push({
+              client_id: person.id,
+              hour_start: element.hour_start,
+              hour_end: this.calculateHourEnd(element.hour_start, this.selectedItem.duration),
+              date: moment(element.date).format('YYYY-MM-DD'),
+            });
+          });
+        }
       });
     }
 
@@ -833,124 +853,93 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
 
           this.courseDates.forEach(item => {
-            const price = data.price_total + (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[this.personsSelected.length + 1]));
-            data.price_total = data.price_total + price;
-              data.courseDates.push({
-                school_id: this.user.schools[0].id,
-                booking_id: null,
-                client_id: item.client_id,
-                course_id: item.course_id,
-                course_date_id: item.course_date_id,
-                degree_id: this.levelForm.value.id,
-                monitor_id: this.externalData.monitorId,
-                hour_start: item.hour_start,
-                hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
-                price: parseFloat(price),
-                currency: item.currency,
-                paxes: this.personsSelected.length + 1,
-                course: this.selectedItem,
-                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-            });
+            data = {};
+            data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
+            data.price_cancellation_insurance = 0;
+            data.has_boukii_care = this.defaults.has_boukii_care;
+            data.price_boukii_care = 0;
+            data.payment_method_id = this.defaults.payment_method_id;
+            data.paid = this.defaults.payment_method_id === 1 ? true : this.defaults.paid;
+            data.currency = this.selectedItem.currency;
+            data.school_id = this.user.schools[0].id;
+            data.client_main_id = this.defaults.client_main_id.id;
+            data.notes = this.defaults.notes;
+            data.notes_school = this.defaults.notes_school;
+            data.paxes = paxes;
+            data.courseDates = [];
+            data.school_id = this.user.schools[0].id
+            data.booking_id = null
+            data.client_id= item.client_id
+            data.course_id= item.course_id
+            data.course_date_id= item.course_date_id
+            data.degree_id= this.levelForm.value.id
+            data.monitor_id= this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
+            data.hour_start= item.hour_start
+            data.hour_end= this.calculateHourEnd(item.hour_start, item.duration) //calcular en base a la duracion del curso
+
+            data.currency= item.currency
+
+            data.course= this.selectedItem
+            data.date= moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            let people = [];
+            if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
+              people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
+              data.people = people;
+            }
+            data.paxes= people.length + 1
+            const price = (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[people.length + 1]));
+            data.price = price
+            data.price_total = price;
+            data.courseDates.push(data);
+            this.bookingsToCreate.push(data);
           });
 
-          this.personsSelected.forEach(person => {
-            let extraData: any = {};
-            extraData.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
-            extraData.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
-            extraData.price_cancellation_insurance = 0;
-            extraData.has_boukii_care = this.defaults.has_boukii_care;
-            extraData.price_boukii_care = 0;
-            extraData.payment_method_id = this.defaults.payment_method_id;
-            extraData.paid = this.defaults.paid;
-            extraData.currency = this.selectedItem.currency;
-            extraData.school_id = this.user.schools[0].id;
-            extraData.client_main_id = this.defaults.client_main_id.id;
-            extraData.notes = this.defaults.notes;
-            extraData.notes_school = this.defaults.notes_school;
-            extraData.paxes = paxes;
-            extraData.courseDates = [];
-
-            this.courseDates.forEach(item => {
-                extraData.courseDates.push({
-                  school_id: this.user.schools[0].id,
-                  booking_id: null,
-                  client_id: person.id,
-                  course_id: item.course_id,
-                  course_date_id: item.course_date_id,
-                  degree_id: this.levelForm.value.id,
-                  monitor_id: this.externalData.monitorId,
-                  hour_start: item.hour_start,
-                  hour_end: this.calculateHourEnd(item.hour_start, item.duration), //calcular en base a la duracion del curso
-                  price: 0,
-                  currency: item.currency,
-                  paxes: this.personsSelected.length + 1,
-                  course: this.selectedItem,
-                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-              });
-            });
-
-            this.bookingsToCreate.push(extraData);
-          });
         } else if (this.courseTypeId === 2 && !this.selectedItem.is_flexible) {
           this.courseDates.forEach(item => {
-            data.courseDates.push({
-              school_id: this.user.schools[0].id,
-              booking_id: null,
-              client_id: item.client_id,
-              course_id: item.course_id,
-              course_date_id: item.course_date_id,
-              degree_id: this.levelForm.value.id,
-              monitor_id: this.externalData.monitorId,
-              hour_start: item.hour_start,
-              hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
-              price: parseFloat(item.price),
-              currency: item.currency,
-              course: this.selectedItem,
-              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-            });
-          });
+            data = {};
+            data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
+            data.price_cancellation_insurance = 0;
+            data.has_boukii_care = this.defaults.has_boukii_care;
+            data.price_boukii_care = 0;
+            data.payment_method_id = this.defaults.payment_method_id;
+            data.paid = this.defaults.payment_method_id === 1 ? true : this.defaults.paid;
+            data.currency = this.selectedItem.currency;
+            data.school_id = this.user.schools[0].id;
+            data.client_main_id = this.defaults.client_main_id.id;
+            data.notes = this.defaults.notes;
+            data.notes_school = this.defaults.notes_school;
+            data.paxes = paxes;
+            data.courseDates = [];
+            data.school_id = this.user.schools[0].id
+            data.booking_id = null
+            data.client_id= item.client_id
+            data.course_id= item.course_id
+            data.course_date_id= item.course_date_id
+            data.degree_id= this.levelForm.value.id
+            data.monitor_id= this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
+            data.hour_start= item.hour_start
+            data.hour_end= this.calculateHourEnd(item.hour_start, this.selectedItem.duration) //calcular en base a la duracion del curso
 
-          this.personsSelected.forEach(person => {
-            let extraData: any = {};
-            extraData.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
-            extraData.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
-            extraData.price_cancellation_insurance = 0;
-            extraData.has_boukii_care = this.defaults.has_boukii_care;
-            extraData.price_boukii_care = 0;
-            extraData.payment_method_id = this.defaults.payment_method_id;
-            extraData.paid = this.defaults.paid;
-            extraData.currency = this.selectedItem.currency;
-            extraData.school_id = this.user.schools[0].id;
-            extraData.client_main_id = this.defaults.client_main_id.id;
-            extraData.notes = this.defaults.notes;
-            extraData.notes_school = this.defaults.notes_school;
-            extraData.paxes = paxes;
-            extraData.courseDates = [];
+            data.currency= item.currency
 
-            this.courseDates.forEach(item => {
-                extraData.courseDates.push({
-                  school_id: this.user.schools[0].id,
-                  booking_id: null,
-                  client_id: person.id,
-                  course_id: item.course_id,
-                  course_date_id: item.course_date_id,
-                  degree_id: this.levelForm.value.id,
-                  monitor_id: this.externalData.monitorId,
-                  hour_start: item.hour_start,
-                  hour_end: this.calculateHourEnd(item.hour_start, this.selectedItem.duration), //calcular en base a la duracion del curso
-                  price: 0,
-                  currency: item.currency,
-                  paxes: this.personsSelected.length + 1,
-                  course: this.selectedItem,
-                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
-              });
-            });
-
-            this.bookingsToCreate.push(extraData);
+            data.course= this.selectedItem
+            data.date= moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            let people = [];
+            if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
+              people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
+              data.people = people;
+            }
+            data.paxes= people.length + 1
+            data.price = parseFloat(item.price)
+            data.price_total = price;
+            data.courseDates.push(data);
+            this.bookingsToCreate.push(data);
           });
         }
 
-        this.bookingsToCreate.unshift(data);
+        if(this.courseTypeId !== 2){
+          this.bookingsToCreate.unshift(data);
+        }
         this.showDetail = this.bookingsToCreate.length - 1;
 
         this.selectedItem = null;
@@ -1097,6 +1086,28 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               degree_id: this.levelForm.value.id,
               date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
+            let bookingC = this.bookingsToCreate.find((b) => b.course_date_id === item.course_date_id && b.hour_start == item.hour_start)
+            if (bookingC?.people?.length) {
+              bookingC.people.forEach(person => {
+                rqs.push({
+                  school_id: item.school_id,
+                  booking_id: booking.data.id,
+                  client_id: person.id,
+                  course_id: item.course_id,
+                  course_date_id: item.course_date_id,
+                  monitor_id: item.monitor_id,
+                  hour_start: item.hour_start,
+                  hour_end: item.hour_end, //calcular en base a la duracion del curso
+                  price: 0,
+                  currency: item.currency,
+                  paxes: item.paxes,
+                  notes: item.notes,
+                  school_notes: item.school_notes,
+                  degree_id: item.degree_id,
+                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                });
+              })
+            }
           }
         });
 
@@ -2651,19 +2662,33 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   onSelectionChangePaxes(event: any, courseDate: any) {
     const value = event.source.value;
-    const index = this.personsSelected.findIndex((p) => p.id === value.id);
 
-    if (this.personsSelected.length >= this.persons.length) {
-      this.snackbar.open(this.translateService.instant('pax_limit_reached') + this.personsSelected, 'OK', {duration: 3000});
+    // Verifica si this.personsSelectedMultiple[i] existe
+    if (!this.personsSelectedMultiple[courseDate.course_date_id]) {
+      // Si no existe, inicialízalo como un array vacío
+      this.personsSelectedMultiple[courseDate.course_date_id] = [];
+    }
+
+    if (!this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start]) {
+      // Si no existe, inicialízalo como un array vacío
+      this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start] = [];
+    }
+    let personsSelected = this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start]
+    const index = personsSelected.findIndex((p) => p.id === value.id);
+
+    if (personsSelected.length + 1 >= this.persons.length && index === -1 ) {
+      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
       return;
     } else {
-      if (this.personsSelected.length === 0 || index === -1) {
-        this.personsSelected.push(value);
+      if (personsSelected.length === 0 || index === -1) {
+        personsSelected.push(value);
+      } else {
+        personsSelected.pop(value)
       }
     }
 
     // Ahora puedes hacer lo que necesites con las personas seleccionadas
-    courseDate.paxes = this.personsSelected.length;
+    courseDate.paxes = personsSelected.length;
     this.checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);
   }
 

@@ -2219,6 +2219,18 @@ export class BookingDetailComponent implements OnInit {
     return ret;
   }
 
+  getCourseExtraForfaitPriceByDateHour(data: any) {
+    let bookingUsers = this.getBookingUsersByCourseDateAndHour(data.course_date_id, data.hour_start);
+    let ret = 0;
+    this.courseExtra.forEach(c => {
+      if (bookingUsers.some(bookingUser => bookingUser.id === c.booking_user_id)) {
+        ret += parseFloat(c.price);
+        data.forfait = c;
+      }
+    });
+    return ret;
+  }
+
   getBookingPaxes(){
     return this.bookingUsersUnique.length;
   }
@@ -2417,5 +2429,21 @@ export class BookingDetailComponent implements OnInit {
     });
 
     return ret;
+  }
+
+  findCourseDateIdAndHour(dateId, hour, items) {
+    let ret = false;
+
+    items.forEach(element => {
+      if (dateId === element.course_date_id && hour == element.hour_start && !ret) {
+        ret = true;
+      }
+    });
+
+    return ret;
+  }
+
+  getBookingUsersByCourseDateAndHour(dateId, hour) {
+    return this.bookingUsers.filter((b) => b.course_date_id === dateId && b.hour_start == hour);
   }
 }
