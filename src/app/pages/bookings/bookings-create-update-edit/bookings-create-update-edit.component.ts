@@ -282,6 +282,27 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               }
 
   ngOnInit() {
+    debugger;
+    this.defaults.price_total = this.bookingService.editData.price;
+    this.defaults.has_cancellation_insurance = this.bookingService.editData.booking.has_cancellation_insurance;
+    this.defaults.price_cancellation_insurance = this.bookingService.editData.booking.price_cancellation_insurance;
+    this.defaults.has_boukii_care = this.bookingService.editData.booking.has_boukii_care;
+    this.defaults.price_boukii_care = this.bookingService.editData.booking.price_boukii_care;
+    this.defaults.currency = this.bookingService.editData.booking.currency;
+    this.defaults.paid_total = this.bookingService.editData.booking.paid_total;
+    this.defaults.paid = this.bookingService.editData.booking.paid;
+    this.defaults.payrexx_reference = this.bookingService.editData.booking.payrexx_reference;
+    this.defaults.payrexx_transaction = this.bookingService.editData.booking.payrexx_transaction;
+    this.defaults.attendance = this.bookingService.editData.booking.attendance;
+    this.defaults.payrexx_refund = this.bookingService.editData.booking.payrexx_refund;
+    this.defaults.notes = this.bookingService.editData.booking.notes;
+    this.defaults.notes_school = this.bookingService.editData.booking.notes_school;
+    this.defaults.school_id = this.bookingService.editData.booking.school_id;
+    this.defaults.client_main_id = this.bookingService.editData.booking.client_main_id;
+    this.defaults.payment_method_id = this.bookingService.editData.booking.payment_method_id;
+    this.defaults.paxes = this.bookingService.editData.booking.paxes;
+    this.defaults.color = this.bookingService.editData.booking.color;
+
     const dialogRef = this.dialog.open(ConfirmModalEditBookingComponent, {
       data: {title: this.translateService.instant('update_booking_title'), message: this.translateService.instant('update_booking_message'), route:('/bookings/update/'+this.bookingService.editData.id)}
     });
@@ -644,7 +665,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       return;
     }
 
-    const checkAval = {bookingUsers: []};
+    const checkAval = {bookingUsers: [], bookingUserIds: this.bookingService.editData.booking_users.map(bookingUser => bookingUser.id)};
 
     if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
 
@@ -868,7 +889,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
             let people = [];
             if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
               people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
-              data.people = people;
+              data.people = [... people];
             }
             data.paxes= people.length + 1
             const price = (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[people.length + 1]));
@@ -910,7 +931,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
             let people = [];
             if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
               people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
-              data.people = people;
+              data.people = [... people];
             }
             data.paxes= people.length + 1
             data.price = parseFloat(item.price)
@@ -941,6 +962,15 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   }
 
   save() {
+    this.bookingsToCreate.forEach((booking: any) => {
+      booking.uniqueId = this.generateUniqueId();
+      if(booking.people) {
+        booking.people.forEach((person: any, index: number) => {
+          person.uniqueId = this.generateUniqueId(); // O usa una función para generar un identificador único
+          person['showOptions'] = false;
+        });
+      }
+    });
     this.bookingComplete = true;
     this.addAnotherCourse();
     this.calculateFinalPrice();
@@ -952,46 +982,48 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     let data: any = {};
     const courseDates = [];
     const bookingExtras = [];
+    let finalPriceObject = this.calculateFinalPriceAll();
+
+    data = {
+      price_total: finalPriceObject.finalPrice,
+      has_cancellation_insurance: this.bookingService.editData.booking.has_cancellation_insurance,
+      has_boukii_care: this.bookingService.editData.booking.has_boukii_care,
+      price_boukii_care: finalPriceObject.boukiiCarePrice,
+      price_cancellation_insurance: finalPriceObject.cancellationInsurance,
+      has_tva: finalPriceObject.tvaAllPrice > 0,
+      price_tva: finalPriceObject.tvaAllPrice,
+      has_reduction: this.bookingService.editData.booking.has_reduction,
+      price_reduction: this.bookingService.editData.booking.price_reduction,
+      currency: this.bookingService.editData.booking.currency,
+      paid_total: this.bookingService.editData.booking.paid_total !== null ? this.bookingService.editData.booking.paid_total : 0,
+      paid: this.bookingService.editData.booking.paid && this.finalPrice <= this.bookingService.editData.price,
+      notes: this.bookingService.editData.booking.notes,
+      notes_school: this.bookingService.editData.booking.notes_school,
+      school_id: this.bookingService.editData.booking.school_id,
+      client_main_id: this.bookingService.editData.booking.client_main_id,
+      paxes: this.getBookingAllPaxes(),
+      payment_method_id: this.defaults.payment_method_id,
+      source: 'admin',
+      user_id: this.user.id,
+      color: this.color
+    }
 
     this.bookingsToCreate.forEach((element, idx) => {
       element.courseDates.forEach(cs => {
         courseDates.push(cs);
         if (element.forfait) {
-
-          bookingExtras.push({forfait: element.forfait, course_date_id: cs.course_date_id});
+          bookingExtras.push({forfait: element.forfait, course_date_id: cs.course_date_id,
+            client_id: element.client_id});
+        }
+        if (element.people) {
+          element.people.forEach(people => {
+            if (people.forfait) {
+              bookingExtras.push({forfait: people.forfait, course_date_id: cs.course_date_id,
+                client_id: people.id});
+            }
+          });
         }
       });
-
-      let paxes = 1;
-
-      if (element.paxes && !isNaN(element.paxes)) {
-
-        paxes = paxes + element.paxes;
-      }
-
-      data = {
-        price_total: this.finalPrice,
-        has_cancellation_insurance: this.defaults.has_cancellation_insurance,
-        has_boukii_care: this.defaults.has_boukii_care,
-        price_boukii_care: this.defaults.has_boukii_care ? this.defaults.price_boukii_care : 0,
-        price_cancellation_insurance: this.defaults.has_cancellation_insurance ? this.defaults.price_cancellation_insurance : 0,
-        has_tva: this.tvaPrice > 0,
-        price_tva: this.tvaPrice,
-        has_reduction: this.reduction !== null,
-        price_reduction: this.reduction !== null ? this.reduction.appliedPrice : 0,
-        currency: element.currency,
-        paid_total: this.bookingService.editData.booking.paid_total !== null ? this.bookingService.editData.booking.paid_total : 0,
-        paid: this.bookingService.editData.booking.paid && this.finalPrice <= this.bookingService.editData.price,
-        notes: element.notes,
-        notes_school: element.notes_school,
-        school_id: element.school_id,
-        client_main_id: element.client_main_id,
-        paxes: paxes,
-        payment_method_id: this.defaults.payment_method_id,
-        source: 'admin',
-        user_id: this.user.id,
-        color: this.color
-      }
     });
 
     const clientsWithoutSelectedSport = [];
@@ -1091,7 +1123,10 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       this.crudService.update('/bookings', data, this.bookingService.editData.id)
         .subscribe(() => {
           rqs.forEach((rq, idx) => {
-            const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
+            let bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
+            if(!rq.course_subgroup_id) {
+              bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id && b.client_id === rq.client_id )
+            }
 
             this.crudService.create('/booking-users', rq)
             .subscribe((bookingUser) => {
@@ -1641,7 +1676,11 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         console.log(data);
 
         this.defaultsBookingUser.degree_id = level.id;
-        this.courses = data.data.filter((c) => c.is_flexible === this.bookingService.editData.course_is_flexible && c.course_type === this.bookingService.editData.course_type);
+
+        //Antiguo filtro solo por el tipo si es flexible o no
+        //this.courses = data.data.filter((c) => c.is_flexible === this.bookingService.editData.course_is_flexible && c.course_type === this.bookingService.editData.course_type);
+
+        this.courses = data.data;
         if (!fromPrivate) {
 
           this.coursesMonth = data.data;
@@ -2138,15 +2177,59 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     return ret;
   }
 
-  setForfait(event:any, forfait: any, booking: any, bookingIndex: number) {
+  getBasePriceAllBooking() {
+    let ret = 0;
 
+    let bookingUsers = this.bookingService.editData.booking.booking_users
+      .filter(user => !this.bookingService.editData.booking_users.map(user => user.id).includes(user.id))
+      .concat(this.bookingsToCreate);
+
+    bookingUsers.forEach(element => {
+      ret = ret + (element.price_total ? +element.price_total : +element.price);
+    });
+
+    return ret;
+  }
+
+  setForfait(event:any, forfait: any, booking: any, people: any) {
     if (event.source.checked) {
-      booking.forfait = forfait;
+      if(people) {
+        people.forfait = forfait;
+      } else {
+        booking.forfait = forfait;
+      }
+
       this.calculateFinalPrice();
     } else {
-      booking.forfait = null;
+      if(people) {
+        people.forfait = null;
+      } else {
+        booking.forfait = null;
+      }
       this.calculateFinalPrice();
     }
+  }
+
+  calculateForfaitPriceBookingPrivate(booking) {
+    let price = 0;
+    if (booking.forfait && booking.forfait.tva) {
+      price = price + booking.forfait.price + (booking.forfait.price * (booking.forfait.tva / 100));
+    }
+    if (booking.forfait && !booking.forfait.tva) {
+      price = price + +booking.forfait.price;
+    }
+    if (!booking.forfait && booking.booking_user_extras && booking.booking_user_extras.length > 0
+      && booking.booking_user_extras[0]?.course_extra?.price) {
+      price = price + +booking.booking_user_extras[0].course_extra.price
+    }
+    if (booking?.people?.length) {
+      booking.people.forEach(person => {
+        if (person.forfait) {
+          price = price + person.forfait.price + (person.forfait.price * (person.forfait.tva / 100));
+        }
+      })
+    }
+    return price;
   }
 
   deleteBooking(index: number) {
@@ -2239,11 +2322,11 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
   calculateRem(event: any) {
     if(event.source.checked) {
-      this.opRem = this.getBasePrice() * this.cancellationInsurance;
+      this.opRem = this.finalPrice * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
-      this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
+      this.defaults.price_cancellation_insurance = this.finalPrice * this.cancellationInsurance;
       this.calculateFinalPrice();
-      return this.getBasePrice() *this.cancellationInsurance;
+      return this.finalPrice *this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
@@ -2420,17 +2503,135 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     }
   }
 
+  toggleOptions(item: any, uniqueId: number) {
+    const person = item.people.find((p: any) => p.uniqueId === uniqueId);
+    if (person) {
+      person['showOptions']= !person['showOptions'];
+    }
+  }
+
+  generateUniqueId(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  calculateAllForfaitPriceBookingPrivate() {
+    let price = 0;
+
+    this.bookingsToCreate.forEach(element => {
+      if(element.courseDates[0].course.course_type == 1) {
+        price += (element.forfait.price * element.courseDates.length) + (element.forfait.price * element.courseDates.length) * (element.forfait.tva / 100);
+      } else {
+        price += this.calculateForfaitPriceBookingPrivate(element);
+      }
+    });
+
+    return price;
+  }
+
+  calculateAllForfaitPriceBookingPrivateOldBooking() {
+    let price = 0;
+
+    let bookingUsers = this.bookingService.editData.booking.booking_users
+      .filter(user => !this.bookingService.editData.booking_users.map(user => user.id).includes(user.id))
+      .concat(this.bookingsToCreate);
+
+    bookingUsers.forEach(element => {
+      if((element.courseDates && element.courseDates[0].course.course_type == 1)) {
+        price += (element.forfait.price * element.courseDates.length) + (element.forfait.price * element.courseDates.length) * (element.forfait.tva / 100);
+      } else {
+        price += this.calculateForfaitPriceBookingPrivate(element);
+      }
+    });
+
+    return price;
+  }
+
+  calculateFinalPriceAll() {
+    let price = this.getBasePriceAllBooking();
+    price = price + this.calculateAllForfaitPriceBookingPrivateOldBooking();
+
+    let booking = this.bookingService.editData.booking;
+    let vl = booking.vouchers_logs;
+    let oldBonus;
+    if(vl.length > 0) {
+      oldBonus = [];
+      vl.forEach(voucherLog => {
+        let v = voucherLog.voucher
+
+        v.currentPay = parseFloat(voucherLog.amount);
+        v.before = true;
+
+        if (parseFloat(voucherLog.amount) < 0) {
+          const idx = oldBonus.findIndex((b) => b.bonus.id === voucherLog.voucher_id);
+          oldBonus.splice(idx, 1);
+        } else {
+
+          this.bonus.push({bonus: v.data});
+          oldBonus.push({bonus: v.data});
+        }
+      });
+
+    }
+
+    if (oldBonus && price > 0) {
+      oldBonus.forEach(element => {
+        if (price > 0) {
+
+          if (element.bonus.remaining_balance > price) {
+            price = price - price;
+          } else {
+            price = price - element.bonus.remaining_balance;
+          }
+        }
+      });
+    }
+    let cancellationInsuranceAll = 0;
+    if(booking.has_cancellation_insurance) {
+      cancellationInsuranceAll = (price * this.cancellationInsurance);
+      price = price + (price * this.cancellationInsurance);
+    }
+
+    let boukiiCarePriceAll = 0;
+    if(this.defaults.has_boukii_care) {
+      boukiiCarePriceAll = (booking.boukii_care_price * this.getBookingAllPaxes() * this.getBookingAllDates());
+      // coger valores de reglajes
+      price = price + (booking.boukii_care_price * this.getBookingAllPaxes() * this.getBookingAllDates());
+    }
+    let tvaPrice = 0;
+    // añadir desde reglajes el tva
+    if (this.tva && !isNaN(this.tva)) {
+      price = price + (price * this.tva);
+      tvaPrice = (price * this.tva);
+    } else {
+      //this.finalPrice = price;
+    }
+    let data = {
+      finalPrice: price,
+      cancellationInsurance: cancellationInsuranceAll,
+      tvaAllPrice: tvaPrice,
+      boukiiCarePrice: boukiiCarePriceAll
+    }
+
+    return data;
+
+  }
+
   calculateFinalPrice() {
     let price = this.getBasePrice();
 
+    //TODO: Check collective
     //forfait primero
+    price = price + this.calculateAllForfaitPriceBookingPrivate();
 
-    this.bookingsToCreate.forEach(element => {
+/*    this.bookingsToCreate.forEach(element => {
       if (element.forfait) {
-
         price = price + (element.forfait.price * element.courseDates.length * element.paxes) + (element.forfait.price * element.courseDates.length * element.paxes * (element.forfait.tva / 100));
       }
-    });
+    });*/
 
     if (this.reduction !== null) {
       if (this.reduction.type === 1) {
@@ -2454,7 +2655,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     }
 
     if(this.defaults.has_cancellation_insurance) {
-      price = price + (this.getBasePrice() * this.cancellationInsurance);
+      price = price + (price * this.cancellationInsurance);
     }
 
     if(this.defaults.has_boukii_care) {
@@ -2577,7 +2778,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
     const priceRangeCourse = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
     durations.forEach(element => {
-      const priceRange = priceRangeCourse.find((p) => p.intervalo === element);
+      const priceRange = priceRangeCourse ? priceRangeCourse.find((p) => p.intervalo === element) : null;
       if (priceRange && priceRange.intervalo === element ) {
 
         if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= this.selectedItem.max_participants) {
@@ -2656,8 +2857,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     let personsSelected = this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start]
     const index = personsSelected.findIndex((p) => p.id === value.id);
 
-    if (personsSelected.length + 1 >= this.persons.length && index === -1 ) {
-      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
+    if (personsSelected.length + 1 >= this.getCourse(courseDate.course_id).max_participants && index === -1 ) {      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
       return;
     } else {
       if (personsSelected.length === 0 || index === -1) {
@@ -2702,6 +2902,31 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     return ret;
   }
 
+  getBookingAllPaxes(){
+    let ret = 0;
+
+    this.bookingsToCreate.forEach(element => {
+      ret = ret + element.paxes;
+    });
+
+    ret = ret + this.bookingService.editData.booking.booking_users
+      .filter(user => !this.bookingService.editData.booking_users.map(user => user.id).includes(user.id)).length;
+
+    return ret;
+  }
+
+  getBookingAllDates(){
+    let ret = 0;
+    let bookingUsers = this.bookingService.editData.booking.booking_users
+      .filter(user => !this.bookingService.editData.booking_users.map(user => user.id).includes(user.id))
+      .concat(this.bookingsToCreate);
+    bookingUsers.forEach(element => {
+      ret = ret + element.courseDates.length;
+    });
+
+    return ret;
+  }
+
   itemExist(item: any) {
     return this.reservableCourseDate.find((r) => r.id === item.id);
   }
@@ -2720,7 +2945,8 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
         startTime: start,
         endTime: this.calculateHourEnd(start, duration),
         date: moment(date).format('YYYY-MM-DD'),
-        clientIds: [this.bookingService.editData.is_main ? this.bookingService.editData.client_main_id : this.bookingService.editData.client_id]
+        clientIds: [this.bookingService.editData.is_main ? this.bookingService.editData.client_main_id : this.bookingService.editData.client_id],
+        bookingUserIds: this.bookingService.editData.booking_users.map(bookingUser => bookingUser.id)
       };
     } else{
       data = {
@@ -2770,4 +2996,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
     }
   }
+
+  protected readonly Math = Math;
 }

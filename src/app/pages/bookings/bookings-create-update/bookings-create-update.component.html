@@ -401,7 +401,7 @@
                     color="accent"
                     [(ngModel)]="periodUnique"
                     formControlName="periodUnique"
-                    (change)="periodMultiple = false; periodUnique =true; resetCourseDates()"
+                    (change)="periodMultiple = false; periodUnique =true; resetCourseDates(); sameMonitor=false;"
                   >{{'bookings_page.same_date' | translate}}</mat-checkbox
                   >
                 </div>
@@ -414,11 +414,12 @@
                   >{{'bookings_page.multiple_date' | translate}}</mat-checkbox
                   >
                 </div>
-                <div class="flex-auto">
+                <div class="flex-auto" *ngIf="periodMultiple">
                   <mat-checkbox
                     color="accent"
                     [(ngModel)]="sameMonitor"
                     formControlName="sameMonitor"
+                    [disabled]="periodUnique"
                   >{{'bookings_page.same_monitor' | translate}}</mat-checkbox
                   >
                 </div>
@@ -968,7 +969,7 @@
                     ·
                     {{ getCountry(getClientProvince(item.courseDates[0].client_id)) }}
                     ·
-                    {{calculateAge(getMonitorBirth(item.courseDates[0].client_id)) }}
+                    {{calculateAge(getClient(item.courseDates[0].client_id)?.birth_date) }}
                     &ensp;{{'years' | translate}}</i
                   >
                 </p>
@@ -1005,7 +1006,6 @@
                 </p>
               </div>
             </div>
-
           </div>
           <div
             *ngIf="item.courseDates[0].course.course_type === 2"
@@ -1277,53 +1277,190 @@
                 {{'no_paid' | translate | uppercase }}
               </p>
             </div>
+            <div>
+              <mat-card-header>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  class="delete-icon"
+                  (click)="deleteBooking(bI)"
+                >
+                  <mat-icon svgIcon="mat:delete"></mat-icon>
+                </button>
+                <div
+                  mat-card-avatar
+                  [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"
+                ></div>
+                <mat-card-subtitle
+                >{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle
+                >
+                <mat-card-subtitle>
+                  {{ getLanguageUtilizer(item.courseDates[0].client_id) }} ·
+                  {{ getCountryUtilizer(item.courseDates[0].client_id) }} ·
+                  {{calculateAgeUtilizer(item.courseDates[0].client_id) }}
+                  &ensp;{{'years' | translate}}
+                </mat-card-subtitle>
 
-            <mat-card-header>
-              <button
-                mat-icon-button
-                color="warn"
-                class="delete-icon"
-                (click)="deleteBooking(bI)"
-              >
-                <mat-icon svgIcon="mat:delete"></mat-icon>
-              </button>
-              <div
-                mat-card-avatar
-                [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"
-              ></div>
-              <mat-card-subtitle
-              >{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle
-              >
-              <mat-card-subtitle>
-                {{ getLanguageUtilizer(item.courseDates[0].client_id) }} ·
-                {{ getCountryUtilizer(item.courseDates[0].client_id) }} ·
-                {{calculateAgeUtilizer(item.courseDates[0].client_id) }}
-                &ensp;{{'years' | translate}}
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-header *ngFor="let people of item.people">
-              <div
-                mat-card-avatar
-                [style.background-image]="'url(' + getClientAvatarUtilizer(people.id) + ')'"
-              ></div>
-              <mat-card-subtitle
-              >{{getClientNameUtilizer(people.id)}}</mat-card-subtitle
-              >
-              <mat-card-subtitle>
-                {{ getLanguageUtilizer(people.id) }} ·
-                {{ getCountryUtilizer(people.id) }} ·
-                {{calculateAgeUtilizer(people.id) }}
-                &ensp;{{'years' | translate}}
-              </mat-card-subtitle>
-            </mat-card-header>
 
+              </mat-card-header>
+              <p (click)="item.courseDates[0].showOptions = !item.courseDates[0].showOptions"
+                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
+              >
+                {{'options' | translate}}
+              </p>
+
+              <div style="width: 100%; float:left" *ngIf="item.courseDates[0].showOptions">
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <strong>Forfait</strong>
+                    </div>
+
+                    <div>
+                      <p>
+                        +{{item.forfait ? (item.forfait.price ) + ((item.forfait.price) * (item.forfait.tva / 100)) : 0}}
+                        CHF
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <ul>
+                      <li *ngFor="let forfait of settings?.extras?.forfait">
+                        <mat-checkbox
+                          class="radio"
+                          [value]="forfait"
+                          (change)="setForfait($event, forfait, item, null)"
+                          [checked]="item?.forfait?.id === forfait.id"
+                        >
+                          <span>{{forfait.id}}</span>
+                        </mat-checkbox>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let people of item.people">
+              <mat-card-header >
+                <div
+                  mat-card-avatar
+                  [style.background-image]="'url(' + getClientAvatarUtilizer(people.id) + ')'"
+                ></div>
+                <mat-card-subtitle
+                >{{getClientNameUtilizer(people.id)}}</mat-card-subtitle
+                >
+                <mat-card-subtitle>
+                  {{ getLanguageUtilizer(people.id) }} ·
+                  {{ getCountryUtilizer(people.id) }} ·
+                  {{calculateAgeUtilizer(people.id) }}
+                  &ensp;{{'years' | translate}}
+                </mat-card-subtitle>
+
+              </mat-card-header>
+              <p (click)="toggleOptions(item, people.uniqueId)"
+                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
+              >
+                {{'options' | translate}}
+              </p>
+
+              <div style="width: 100%; float:left" *ngIf="people.showOptions">
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <strong>Forfait</strong>
+                    </div>
+
+                    <div>
+                      <p>
+                        +{{people.forfait ? (people.forfait.price) + ((people.forfait.price ) * (people.forfait.tva / 100)) : 0}}
+                        CHF
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <ul>
+                      <li *ngFor="let forfait of settings?.extras?.forfait">
+                        <mat-checkbox
+                          class="radio"
+                          [value]="forfait"
+                          (change)="setForfait($event, forfait, item, people)"
+                          [checked]="people?.forfait?.id === forfait.id"
+                        >
+                          <span>{{forfait.id}}</span>
+                        </mat-checkbox>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  *ngIf="false"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div class="flex-auto">
+                      <mat-checkbox color="accent" [checked]="false"
+                      >Media Jornada</mat-checkbox
+                      >
+                    </div>
+                    <div class="flex-auto">
+                      <mat-checkbox color="accent" [checked]="false"
+                      >Jornada completa</mat-checkbox
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  *ngIf="false"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Comida</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%;"
+                  *ngIf="false"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Transporte</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <mat-divider class="text-border"></mat-divider>
             <p
               style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
             >
               {{'activity' | translate }}
             </p>
-
             <mat-card-header>
               <div
                 mat-card-avatar
@@ -1404,8 +1541,8 @@
               </p>
 
               <div style="width: 100%; float:left">
-                <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                <div *ngIf="item.courseDates[0].course?.course_type === 1"
+                     style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
@@ -1496,8 +1633,12 @@
                   <p style="width: 60%;float: left;">
                     {{'options_total' | translate}}
                   </p>
-                  <p style="color: #EA0C60;">
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 1">
                     {{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}}
+                    CHF
+                  </p>
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 2">
+                    {{calculateForfaitPriceBookingPrivate(item)}}
                     CHF
                   </p>
                 </div>
@@ -1513,7 +1654,7 @@
                   <p style="width: 60%;font-size: 21px;float:left">
                     {{'booking_total' | translate}}
                   </p>
-                  <p style="color: #EA0C60;">
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 1">
                     {{
 
                       ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : ((item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
@@ -1521,6 +1662,10 @@
 
                         + (item.forfait ?  + (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0))
                     }}{{item.currency}}
+                  </p>
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 2">
+                    {{calculateForfaitPriceBookingPrivate(item) + ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : ((item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
+                    ? item.courseDates[0].course?.price * item.courseDates.length : item?.price_total)))}}{{item.currency}}
                   </p>
                 </div>
               </div>
@@ -1714,12 +1859,23 @@
               <ng-container
                 *ngFor="let item of bookingsToCreate; let i = index"
               >
-                <span style="width: 100%; float:left" *ngIf="item.forfait">
-                  <p style="float:left">Forfait {{item.forfait.id}}</p>
+                <span *ngIf="item.courseDates[0].course.course_type == 1">
+                                  <span style="width: 100%; float:left" *ngIf="item.forfait">
+                  <p style="float:left">Forfaits {{item.forfait.id}}</p>
                   <p style="float:right">
                     {{(item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100))
                     }}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                   </p>
+                </span>
+                </span>
+                <span *ngIf="item.courseDates[0].course.course_type == 2">
+                                  <span style="width: 100%; float:left" *ngIf="calculateForfaitPriceBookingPrivate(item)">
+                  <p style="float:left">Forfaits {{item.courseDates[0].date}} - {{item.courseDates[0].hour_start}} - {{item.courseDates[0].hour_end}}</p>
+                  <p style="float:right">
+                    {{calculateForfaitPriceBookingPrivate(item)
+                    }}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
+                  </p>
+                </span>
                 </span>
               </ng-container>
 
@@ -1729,7 +1885,7 @@
               >
                 <p style="float:left">{{'op_rem' | translate}}</p>
                 <p style="float:right">
-                  {{(getBasePrice()*this.cancellationInsurance).toFixed(2)}}
+                  {{this.finalPrice - (Math.round(this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1) * 100) / 100)}}
                   {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                 </p>
               </span>

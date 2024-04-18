@@ -2597,7 +2597,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     const priceRangeCourse = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
     durations.forEach(element => {
-      const priceRange = priceRangeCourse.find((p) => p.intervalo === element);
+      const priceRange = priceRangeCourse ? priceRangeCourse.find((p) => p.intervalo === element) : null;
       if (priceRange && priceRange.intervalo === element ) {
 
         if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= this.selectedItem.max_participants) {
@@ -2676,8 +2676,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let personsSelected = this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start]
     const index = personsSelected.findIndex((p) => p.id === value.id);
 
-    if (personsSelected.length + 1 >= this.persons.length && index === -1 ) {
-      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
+    if (personsSelected.length + 1 >= this.getCourse(courseDate.course_id).max_participants && index === -1 ) {      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
       return;
     } else {
       if (personsSelected.length === 0 || index === -1) {

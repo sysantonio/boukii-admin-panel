@@ -79,21 +79,20 @@
             <mat-card-header>
               <div mat-card-avatar class="card-avatar">
                 <img
-                  [src]="defaults?.client_main_id?.image !== null && defaults?.client_main_id?.image !== '' ? defaults?.client_main_id?.image : userAvatar"
+                  [src]="getClientAvatar(defaults?.client_main_id) ? getClientAvatar(defaults?.client_main_id) : userAvatar"
                   style="border-radius: 100%;width: 100%;height: 100%;"
                 />
               </div>
             </mat-card-header>
             <mat-card-content>
               <mat-card-title style="text-align: center;font-size: 16px;"
-              >{{ defaults?.client_main_id?.first_name }}
-                {{ defaults?.client_main_id?.last_name }}</mat-card-title
+              >{{ getClientName(defaults?.client_main_id) }} </mat-card-title
               >
               <mat-card-subtitle style="text-align: center;"
-              >{{ getLanguage(defaults?.client_main_id?.language1_id) }} ·
-                {{calculateAge(defaults?.client_main_id?.birth_date) }}
+              >{{ getLanguage(getClientLang(defaults?.client_main_id)) }} ·
+                {{calculateAge(getClient(defaults?.client_main_id)?.birth_date) }}
                 &ensp;{{'years' | translate}} ·
-                {{ getCountry(defaults?.client_main_id?.country) }}</mat-card-subtitle
+                {{ getCountry(getClient(defaults?.client_main_id).country) }}</mat-card-subtitle
               >
             </mat-card-content>
             <mat-card-actions>
@@ -481,7 +480,7 @@
                   >
                     <mat-label>{{'hour' | translate}}</mat-label>
                     <mat-select
-                      (selectionChange)="generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
+                      (selectionChange)="courseDate.hour_start = $event.value; generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
                     >
                       <mat-option
                         *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min')"
@@ -914,7 +913,7 @@
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%;height: 80px;">
               <img
-                [src]="getClientAvatar(defaults.client_main_id.id)"
+                [src]="getClientAvatar(defaults.client_main_id)"
                 width="100"
                 height="100"
                 style="border-radius: 100%;height:100%"
@@ -922,14 +921,14 @@
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p>
-                {{ getLanguage(getClientLang(defaults.client_main_id.id)) }} ·
-                {{ getCountry(getClientProvince(defaults.client_main_id.id)) }}
+                {{ getLanguage(getClientLang(defaults.client_main_id)) }} ·
+                {{ getCountry(getClientProvince(defaults.client_main_id)) }}
                 ·
                 {{calculateAge(defaults.client_main_id.birth_date)
                 }}&ensp;{{'years' | translate}}
               </p>
               <p>
-                <strong>{{ getClientName(defaults.client_main_id.id)}}</strong>
+                <strong>{{ getClientName(defaults.client_main_id)}}</strong>
               </p>
 
               <div>
@@ -958,63 +957,98 @@
         <mat-divider
           style="float: left;width: 100%;margin: 5% 0 5% 0;"
         ></mat-divider>
+
         <div style="float: left; width: 100%;margin-top: 5%;">
           <div
-            style="float: left; width: 100%;;height: 40px"
-            *ngIf="item.courseDates[0].client_id === defaults.client_main_id.id"
+            *ngIf="item.courseDates[0].course.course_type !== 2"
           >
-            <div style="float: left; width: 20%;">
-              <img
-                [src]="getClientAvatar(item.courseDates[0].client_id)"
-                style="height:100%;border-radius: 100%;width: 70px;height: 70px;"
-              />
-            </div>
-            <div style="float: left; width: 80%;">
-              <p>{{getClientName(item.courseDates[0].client_id)}}</p>
-              <p
-                style="font-size:8px"
-                *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"
-              >
-                <i>
-                  {{ getLanguage(getClientLang(item.courseDates[0].monitor_id)) }}
-                  ·
-                  {{ getCountry(getClientProvince(item.courseDates[0].monitor_id)) }}
-                  ·
-                  {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }}
-                  &ensp;{{'years' | translate}}</i
+            <div
+              style="float: left; width: 100%;;height: 40px"
+              *ngIf="item.courseDates[0].client_id === defaults.client_main_id"
+            >
+              <div style="float: left; width: 20%;">
+                <img
+                  [src]="getClientAvatar(item.courseDates[0].client_id)"
+                  style="height:100%;border-radius: 100%;width: 70px;height: 70px;"
+                />
+              </div>
+              <div style="float: left; width: 80%;">
+                <p>{{getClientName(item.courseDates[0].client_id)}}</p>
+                <p
+                  style="font-size:8px"
+                  *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"
                 >
-              </p>
+                  <i>
+                    {{ getLanguage(getClientLang(item.courseDates[0].monitor_id)) }}
+                    ·
+                    {{ getCountry(getClientProvince(item.courseDates[0].monitor_id)) }}
+                    ·
+                    {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }}
+                    &ensp;{{'years' | translate}}</i
+                  >
+                </p>
+              </div>
+            </div>
+
+            <div
+              style="float: left; width: 100%;;height: 40px"
+              *ngIf="item.courseDates[0].client_id !== defaults.client_main_id"
+            >
+              <div style="float: left; width: 20%;">
+                <img
+                  [src]="getUtilizer(item.courseDates[0].client_id)?.image !== '' ? getUtilizer(item.courseDates[0].client_id)?.image : userAvatar"
+                  style="height:100%;border-radius: 100%;width: 70px;height: 70px;"
+                />
+              </div>
+              <div style="float: left; width: 80%;">
+                <p>
+                  {{getUtilizer(item.courseDates[0].client_id)?.first_name}}
+                  {{getUtilizer(item.courseDates[0].client_id)?.last_name}}
+                </p>
+                <p
+                  style="font-size:8px"
+                  *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"
+                >
+                  <i>
+                    {{ getLanguage(getUtilizer(item.courseDates[0].client_id)?.language1_id) }}
+                    ·
+                    {{ getCountry(getUtilizer(item.courseDates[0].client_id)?.province) }}
+                    ·
+                    {{calculateAge(getUtilizer(item.courseDates[0].client_id)?.birth_date) }}
+                    &ensp;{{'years' | translate}}</i
+                  >
+                </p>
+              </div>
             </div>
           </div>
-
           <div
-            style="float: left; width: 100%;;height: 40px"
-            *ngIf="item.courseDates[0].client_id !== defaults.client_main_id.id"
+            *ngIf="item.courseDates[0].course.course_type === 2"
           >
-            <div style="float: left; width: 20%;">
-              <img
-                [src]="getUtilizer(item.courseDates[0].client_id)?.image !== '' ? getUtilizer(item.courseDates[0].client_id)?.image : userAvatar"
-                style="height:100%;border-radius: 100%;width: 70px;height: 70px;"
-              />
-            </div>
-            <div style="float: left; width: 80%;">
-              <p>
-                {{getUtilizer(item.courseDates[0].client_id)?.first_name}}
-                {{getUtilizer(item.courseDates[0].client_id)?.last_name}}
-              </p>
-              <p
-                style="font-size:8px"
-                *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null"
-              >
-                <i>
-                  {{ getLanguage(getUtilizer(item.courseDates[0].client_id)?.language1_id) }}
-                  ·
-                  {{ getCountry(getUtilizer(item.courseDates[0].client_id)?.province) }}
-                  ·
-                  {{calculateAge(getUtilizer(item.courseDates[0].client_id)?.birth_date) }}
-                  &ensp;{{'years' | translate}}</i
+            <div
+              style="float: left; width: 100%;;height: 40px"
+              *ngFor="let people of item.people"
+            >
+              <div style="float: left; width: 10%;">
+                <img
+                  [src]="getClientAvatar(people.id)"
+                  style="height:100%;border-radius: 100%;width: 35px;height: 35px;"
+                />
+              </div>
+              <div style="float: left; width: 80%;">
+                <p>{{getClientName(people.id)}}</p>
+                <p
+                  style="font-size:8px"
                 >
-              </p>
+                  <i>
+                    {{ getLanguage(people.language1_id) }}
+                    ·
+                    {{ getCountry(people.country) }}
+                    ·
+                    {{calculateAge(people.birth_date) }}
+                    &ensp;{{'years' | translate}}</i
+                  >
+                </p>
+              </div>
             </div>
           </div>
           <div style="float: left; width: 100%;margin-top: 10%;">
@@ -1256,64 +1290,215 @@
                 {{'no_paid' | translate | uppercase }}
               </p>
             </div>
-
-            <mat-card-header>
-              <button
-                mat-icon-button
-                color="warn"
-                class="delete-icon"
-                (click)="deleteBooking(bI)"
-              >
-                <mat-icon svgIcon="mat:delete"></mat-icon>
-              </button>
-              <div
-                mat-card-avatar
-                [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"
-              ></div>
-              <mat-card-subtitle
-              >{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle
-              >
-              <mat-card-subtitle>
-                {{ getLanguageUtilizer(item.courseDates[0].client_id) }} ·
-                {{ getCountryUtilizer(item.courseDates[0].client_id) }} ·
-                {{calculateAgeUtilizer(item.courseDates[0].client_id) }}
-                &ensp;{{'years' | translate}}
-              </mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-divider class="text-border"></mat-divider>
-            <p
-              style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
-            >
-              {{'activity' | translate }}
-            </p>
-
-            <mat-card-header>
-              <div
-                mat-card-avatar
-                [style.background-image]="'url(' + (item.courseDates[0].course?.course_type === 1 ? collectifIcon : privateIcon) + ')'"
-                style="border-radius: 5px"
-              ></div>
-              <mat-card-title class="mat-mdc-card-title">
-                <div style="float: left;width: 70%;font-size: 14px;">
-                  {{item.courseDates[0].course?.name}}
-                </div>
-                <div
-                  class="ng-tns-c545279033-6"
-                  style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"
+            <div>
+              <mat-card-header>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  class="delete-icon"
+                  (click)="deleteBooking(bI)"
                 >
-                  {{
-                    item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : (
-                      item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible ? item.courseDates[0].course?.price * item.courseDates.length : item.courseDates[0].course?.price)
-                  }}
-                  {{item.courseDates[0].course?.currency}}
-                </div>
-              </mat-card-title>
-              <mat-card-subtitle style="margin: 0"
-              >{{item.courseDates[0].course?.course_type === 1 ? 'colective' : 'private' | translate}}
-                {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle
+                  <mat-icon svgIcon="mat:delete"></mat-icon>
+                </button>
+                <div
+                  mat-card-avatar
+                  [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"
+                ></div>
+                <mat-card-subtitle
+                >{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle
+                >
+                <mat-card-subtitle>
+
+                  {{ getLanguageUtilizer(item.courseDates[0].client_id) }} ·
+                  {{ getCountryUtilizer(item.courseDates[0].client_id) }} ·
+                  {{calculateAgeUtilizer(item.courseDates[0].client_id) }}
+                  &ensp;{{'years' | translate}}
+                </mat-card-subtitle>
+              </mat-card-header>
+              <p (click)="item.courseDates[0].showOptions = !item.courseDates[0].showOptions"
+                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
               >
-            </mat-card-header>
+                {{'options' | translate}}
+              </p>
+
+              <div style="width: 100%; float:left" *ngIf="item.courseDates[0].showOptions">
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <strong>Forfait</strong>
+                    </div>
+
+                    <div>
+                      <p>
+                        +{{item.forfait ? (item.forfait.price ) + ((item.forfait.price) * (item.forfait.tva / 100)) : 0}}
+                        CHF
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <ul>
+                      <li *ngFor="let forfait of settings?.extras?.forfait">
+                        <mat-checkbox
+                          class="radio"
+                          [value]="forfait"
+                          (change)="setForfait($event, forfait, item, null)"
+                          [checked]="item?.forfait?.id === forfait.id"
+                        >
+                          <span>{{forfait.id}}</span>
+                        </mat-checkbox>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let people of item.people">
+              <mat-card-header>
+                <div
+                  mat-card-avatar
+                  [style.background-image]="'url(' + getClientAvatarUtilizer(people.id) + ')'"
+                ></div>
+                <mat-card-subtitle
+                >{{getClientNameUtilizer(people.id)}}</mat-card-subtitle
+                >
+                <mat-card-subtitle>
+                  {{ getLanguageUtilizer(people.id) }} ·
+                  {{ getCountryUtilizer(people.id) }} ·
+                  {{calculateAgeUtilizer(people.id) }}
+                  &ensp;{{'years' | translate}}
+                </mat-card-subtitle>
+              </mat-card-header>
+              <p (click)="toggleOptions(item, people.uniqueId)"
+                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
+              >
+                {{'options' | translate}}
+              </p>
+
+              <div style="width: 100%; float:left" *ngIf="people.showOptions">
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <strong>Forfait</strong>
+                    </div>
+
+                    <div>
+                      <p>
+                        +{{people.forfait ? (people.forfait.price) + ((people.forfait.price ) * (people.forfait.tva / 100)) : 0}}
+                        CHF
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <ul>
+                      <li *ngFor="let forfait of settings?.extras?.forfait">
+                        <mat-checkbox
+                          class="radio"
+                          [value]="forfait"
+                          (change)="setForfait($event, forfait, item, people)"
+                          [checked]="people?.forfait?.id === forfait.id"
+                        >
+                          <span>{{forfait.id}}</span>
+                        </mat-checkbox>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  *ngIf="false"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Alquiler material</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div class="flex-auto">
+                      <mat-checkbox color="accent" [checked]="false"
+                      >Media Jornada</mat-checkbox
+                      >
+                    </div>
+                    <div class="flex-auto">
+                      <mat-checkbox color="accent" [checked]="false"
+                      >Jornada completa</mat-checkbox
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  *ngIf="false"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Comida</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%;"
+                  *ngIf="false"
+                >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                    <div style="width: 65%;">
+                      <mat-slide-toggle>Transporte</mat-slide-toggle>
+                    </div>
+                    <div>
+                      <p>+ 168 CHF</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <mat-divider class="text-border"></mat-divider>
+              <p
+                style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
+              >
+                {{'activity' | translate }}
+              </p>
+
+              <mat-card-header>
+                <div
+                  mat-card-avatar
+                  [style.background-image]="'url(' + (item.courseDates[0].course?.course_type === 1 ? collectifIcon : privateIcon) + ')'"
+                  style="border-radius: 5px"
+                ></div>
+                <mat-card-title class="mat-mdc-card-title">
+                  <div style="float: left;width: 70%;font-size: 14px;">
+                    {{item.courseDates[0].course?.name}}
+                  </div>
+                  <div
+                    class="ng-tns-c545279033-6"
+                    style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;"
+                  >
+                    {{
+                      item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : (
+                        item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible ? item.courseDates[0].course?.price * item.courseDates.length : item.courseDates[0].course?.price)
+                    }}
+                    {{item.courseDates[0].course?.currency}}
+                  </div>
+                </mat-card-title>
+                <mat-card-subtitle style="margin: 0"
+                >{{item.courseDates[0].course?.course_type === 1 ? 'colective' : 'private' | translate}}
+                  {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle
+                >
+              </mat-card-header>
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;">
                 <li *ngFor="let date of item.courseDates">
@@ -1368,7 +1553,7 @@
               </p>
 
               <div style="width: 100%; float:left">
-                <div
+                <div *ngIf="item.courseDates[0].course?.course_type === 1"
                   style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -1460,8 +1645,12 @@
                   <p style="width: 60%;float: left;">
                     {{'options_total' | translate}}
                   </p>
-                  <p style="color: #EA0C60;">
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 1">
                     {{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}}
+                    CHF
+                  </p>
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 2">
+                    {{calculateForfaitPriceBookingPrivate(item)}}
                     CHF
                   </p>
                 </div>
@@ -1477,7 +1666,7 @@
                   <p style="width: 60%;font-size: 21px;float:left">
                     {{'booking_total' | translate}}
                   </p>
-                  <p style="color: #EA0C60;">
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 1">
                     {{
 
                       ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : ((item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
@@ -1485,6 +1674,10 @@
 
                         + (item.forfait ?  + (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0))
                     }}{{item.currency}}
+                  </p>
+                  <p style="color: #EA0C60;" *ngIf="item.courseDates[0].course?.course_type === 2">
+                    {{calculateForfaitPriceBookingPrivate(item) + ((item.courseDates[0].course?.course_type === 2 && item.courseDates[0].course?.is_flexible ? item.price_total : ((item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
+                    ? item.courseDates[0].course?.price * item.courseDates.length : item?.price_total)))}}{{item.currency}}
                   </p>
                 </div>
               </div>
@@ -1553,14 +1746,14 @@
             <mat-card-header>
               <div
                 mat-card-avatar
-                [style.background-image]="'url(' + getClientAvatar(defaults.client_main_id.id) + ')'"
+                [style.background-image]="'url(' + getClientAvatar(defaults.client_main_id) + ')'"
                 style="width:100px; height: 60px;"
               ></div>
               <mat-card-subtitle
-              >{{getClientName(defaults.client_main_id.id)}}</mat-card-subtitle
+              >{{getClientName(defaults.client_main_id)}}</mat-card-subtitle
               >
               <mat-card-subtitle>
-                {{ getLanguage(defaults.client_main_id.language1_id) }} ·
+                {{ getLanguage(getClient(defaults.client_main_id)?.language1_id) }} ·
                 {{ getCountry(defaults.client_main_id.country) }} ·
                 {{calculateAge(defaults.client_main_id.birth_date) }}
                 &ensp;{{'years' | translate}}
@@ -1678,12 +1871,23 @@
               <ng-container
                 *ngFor="let item of bookingsToCreate; let i = index"
               >
-                <span style="width: 100%; float:left" *ngIf="item.forfait">
-                  <p style="float:left">Forfait {{item.forfait.id}}</p>
+                <span *ngIf="item.courseDates[0].course.course_type == 1">
+                                  <span style="width: 100%; float:left" *ngIf="item.forfait">
+                  <p style="float:left">Forfaits {{item.forfait.id}}</p>
                   <p style="float:right">
                     {{(item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100))
                     }}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                   </p>
+                </span>
+                </span>
+                <span *ngIf="item.courseDates[0].course.course_type == 2">
+                                  <span style="width: 100%; float:left" *ngIf="calculateForfaitPriceBookingPrivate(item)">
+                  <p style="float:left">Forfaits {{item.courseDates[0].date}} - {{item.courseDates[0].hour_start}} - {{item.courseDates[0].hour_end}}</p>
+                  <p style="float:right">
+                    {{calculateForfaitPriceBookingPrivate(item)
+                    }}{{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
+                  </p>
+                </span>
                 </span>
               </ng-container>
 
@@ -1693,7 +1897,7 @@
               >
                 <p style="float:left">{{'op_rem' | translate}}</p>
                 <p style="float:right">
-                  {{(getBasePrice()*this.cancellationInsurance).toFixed(2)}}
+                  {{this.finalPrice - (Math.round(this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1) * 100) / 100)}}
                   {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                 </p>
               </span>
@@ -1749,7 +1953,7 @@
               >
                 <p style="float:left">{{'total' | translate | uppercase}}</p>
                 <p style="float:right">
-                  {{(finalPrice - bookingService.editData.price).toFixed(2)}}
+                  {{(bookingService.editData.price - finalPrice).toFixed(2)}}
                   {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                 </p>
               </span>
@@ -1777,7 +1981,7 @@
                 class="square-button"
                 (click)="selectedButton='1';selectedSubButton='0';"
                 [class.selected]="selectedButton==='1'"
-                *ngIf="(finalPrice - bookingService.editData.price) > 0"
+                *ngIf="(bookingService.editData.price - finalPrice) > 0"
               >
                 {{'payment_direct' | translate}}
               </button>
@@ -1787,7 +1991,7 @@
                 class="square-button"
                 (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3"
                 [class.selected]="selectedButton==='2'"
-                *ngIf="(finalPrice - bookingService.editData.price) > 0"
+                *ngIf="(bookingService.editData.price - finalPrice) > 0"
               >
                 {{'payment_online' | translate}}
               </button>
@@ -1797,7 +2001,7 @@
                 class="square-button"
                 (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5"
                 [class.selected]="selectedButton==='3'"
-                *ngIf="(finalPrice - bookingService.editData.price) > 0"
+                *ngIf="(bookingService.editData.price - finalPrice) > 0"
               >
                 {{'confirm' | translate}}
               </button>
@@ -1813,7 +2017,7 @@
                 class="square-button"
                 (click)="selectedSubButton='1';defaults.payment_method_id = 1"
                 [class.selected]="selectedSubButton==='1'"
-                *ngIf="(finalPrice - bookingService.editData.price) > 0"
+                *ngIf="(bookingService.editData.price - finalPrice) > 0"
               >
                 {{'payment_cash' | translate}}
               </button>
@@ -1832,7 +2036,7 @@
                 class="square-button"
                 (click)="selectedSubButton='3'; defaults.payment_method_id = 2"
                 [class.selected]="selectedSubButton==='3'"
-                *ngIf="(finalPrice - bookingService.editData.price) > 0"
+                *ngIf="(bookingService.editData.price - finalPrice) > 0"
               >
                 Boukii Pay
               </button>
