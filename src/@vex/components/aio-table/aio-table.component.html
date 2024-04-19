@@ -589,11 +589,20 @@
           </ng-container>
         </ng-container>
 
-        <!-- Register Date Columns -->
+        <!-- Register Date Columns
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] | date: 'dd/MM/YYYY' }}</td>
+          </ng-container>
+        </ng-container>-->
+
+        <!-- Register Date Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] | date: 'dd/MM/YYYY' }}
+              <br> {{ row[column.property] | date: 'HH:mm' }}</td>
           </ng-container>
         </ng-container>
 
