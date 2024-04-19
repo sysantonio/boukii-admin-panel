@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {BonusesCreateUpdateComponent} from '../bonuses/bonuses-create-update/bonuses-create-update.component';
 
 @Component({
   selector: 'vex-analytics',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AnalyticsComponent {
 
+    protected readonly createComponent = BonusesCreateUpdateComponent;
 }

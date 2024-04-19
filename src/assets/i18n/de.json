@@ -1,6 +1,10 @@
 
 {
   "add": "Hinzufügen...",
+  "calendar": "Kalender",
+  "vouchers": "Einkaufsgutscheine",
+  "gift_vouchers": "Geschenkgutscheine",
+  "discount_code": "Einkaufsgutscheine",
   "add_client": "Kunde hinzufügen",
   "add_task": "Aufgabe hinzufügen",
   "add_booking": "Reservierung hinzufügen",

@@ -1,5 +1,9 @@
 {
   "add": "Añadir...",
+  "calendar": "Calendario",
+  "vouchers": "Bonos de compra",
+  "gift_vouchers": "Bonos de regalo",
+  "discount_code": "Bonos de compra",
   "add_client": "Añadir cliente",
   "add_task": "Añadir tarea",
   "add_booking": "Añadir reserva",

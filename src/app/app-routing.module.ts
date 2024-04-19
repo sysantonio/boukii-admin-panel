@@ -94,7 +94,8 @@ const childrenRoutes: VexRoutes = [
       },
       {
         path: 'stats',
-        loadChildren: () => import('./pages/analytics/analytics.module').then(m => m.AnalyticsModule),
+        loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
+        //loadChildren: () => import('./pages/analytics/analytics.module').then(m => m.AnalyticsModule),
         canActivate: [AuthGuard],
       },
       {
@@ -155,6 +156,10 @@ const childrenRoutes: VexRoutes = [
       {
         path: 'mail',
         loadChildren: () => import('./pages/mail/mail.module').then(m => m.MailModule),
+      },
+      {
+        path: 'communications',
+        loadChildren: () => import('./pages/communications/communications.module').then(m => m.CommunicationsModule),
       }
     ]
   }

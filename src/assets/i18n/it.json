@@ -1,6 +1,10 @@
 
 {
   "add": "Aggiungere...",
+  "calendar": "Calendario",
+  "vouchers": "Buoni acquisto",
+  "gift_vouchers": "Buoni regalo",
+  "discount_code": "Buoni acquisto",
   "add_client": "Aggiungi cliente",
   "add_task": "Aggiungi attività",
   "add_booking": "Aggiungi prenotazione",

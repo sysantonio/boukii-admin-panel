@@ -1,5 +1,9 @@
 {
   "add": "Add...",
+  "calendar": "Calendar",
+  "vouchers": "Purchase vouchers",
+  "gift_vouchers": "Gift vouchers",
+  "discount_code": "Purchase vouchers",
   "add_client": "Add client",
   "add_task": "Add task",
   "add_booking": "Add reservation",

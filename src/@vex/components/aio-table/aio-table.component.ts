@@ -155,7 +155,6 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this.getMonitors();
     this.getClients();
     this.getSports();

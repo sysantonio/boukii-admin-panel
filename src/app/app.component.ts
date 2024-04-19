@@ -173,14 +173,15 @@ export class AppComponent {
             icon_active: '../assets/img/icons/planificador.svg',
 
             routerLinkActiveOptions: { exact: true }
-          },/*
+          },
           {
             type: 'link',
-            label: 'Calendrier',
+            label: 'calendar',
             route: '/calendar',
-            icon: 'mat:calendar_today',
+            icon: '../assets/img/icons/calendar-2.svg',
+            icon_active: '../assets/img/icons/calendar.svg',
             routerLinkActiveOptions: { exact: true }
-          },*/
+          },
           {
             type: 'link',
             label: 'bookings',
@@ -213,14 +214,22 @@ export class AppComponent {
             icon_active: '../assets/img/icons/comunicacion.svg',
             routerLinkActiveOptions: { exact: true }
           },
-          /*{
+          {
+            type: 'link',
+            label: 'Chat',
+            route: '/communications',
+            icon: '../assets/img/icons/comunicacion-2.svg',
+            icon_active: '../assets/img/icons/comunicacion.svg',
+            routerLinkActiveOptions: { exact: true }
+          },
+          {
             type: 'link',
             label: 'menu.stats',
             route: '/stats',
             icon: '../assets/img/icons/stats-2.svg',
             icon_active: '../assets/img/icons/stats.svg',
             routerLinkActiveOptions: { exact: true }
-          }*/
+          }
         ]
       },
       // Otra seccion
