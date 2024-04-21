@@ -1910,6 +1910,18 @@ export class BookingDetailComponent implements OnInit {
     return "BOU-"+this.generateRandomNumber();
   }
 
+  sendMailInfo() {
+    this.crudService.post('/admin/bookings/mail/' + this.booking.id,
+      {paid: this.booking.paid, is_info:true})
+      .subscribe((data) => {
+        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.send_mail'), 'OK', {duration: 1000});
+        console.log(data);
+      }, (error) => {
+        console.log(error);
+        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.send_mail.error'), 'OK', {duration: 1000});
+    })
+  }
+
   addBonus() {
     const dialogRef = this.dialog.open(AddDiscountBonusModalComponent, {
       width: '600px',

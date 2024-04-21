@@ -378,6 +378,8 @@
   "snackbar.bonus.create": "Successfully created bonus",
   "snackbar.bonus.update": "Correctly modified bonus",
   "snackbar.booking_detail.mandatory": "Complete the date and time fields of the course reservation",
+  "snackbar.booking_detail.send_mail": "The email has been sent successfully",
+  "snackbar.booking_detail.send_mail.error": "An error occurred while sending the email",
   "snackbar.booking_detail.update": "Reservation successfully updated",
   "snackbar.booking_detail.notes_client": "Updated client notes",
   "snackbar.booking_detail.notes_school": "Updated school notes",

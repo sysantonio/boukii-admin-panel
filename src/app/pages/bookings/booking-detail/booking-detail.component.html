@@ -632,6 +632,13 @@
                   <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
               </mat-card-subtitle>
+              <button
+                mat-raised-button
+                color="accent"
+                (click)="sendMailInfo()"
+              >
+                {{'send' | translate}} {{'mail' | translate}}
+              </button>
             </mat-card-header>
             <mat-divider
               class="text-border"
