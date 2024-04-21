@@ -2307,7 +2307,6 @@ export class BookingDetailComponent implements OnInit {
   }
 
   goToEdit(index: any, item: any) {
-    debugger;
     this.bookingService.editData.id = this.id;
     this.bookingService.editData.booking = this.booking;
     this.bookingService.editData.price = this.finalPrice;

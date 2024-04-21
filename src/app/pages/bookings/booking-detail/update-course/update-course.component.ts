@@ -63,7 +63,6 @@ export class UpdateCourseModalComponent implements OnInit {
 
       item.mainDuration = this.calculateDuration(item.hour_start, item.hour_end);
     });*/
-    debugger;
   }
 
   transformTime(time: string): string {

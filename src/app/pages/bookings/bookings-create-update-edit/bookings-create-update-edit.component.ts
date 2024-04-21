@@ -282,7 +282,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
               }
 
   ngOnInit() {
-    debugger;
     this.defaults.price_total = this.bookingService.editData.price;
     this.defaults.has_cancellation_insurance = this.bookingService.editData.booking.has_cancellation_insurance;
     this.defaults.price_cancellation_insurance = this.bookingService.editData.booking.price_cancellation_insurance;
