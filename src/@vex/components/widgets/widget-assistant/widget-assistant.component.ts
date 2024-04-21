@@ -34,7 +34,7 @@ export class WidgetAssistantComponent implements OnInit {
       })
   }
 
-  emitDate() {
-    this.dateEvent.emit(this.date);
+  emitDate(event: any) {
+    this.dateEvent.emit(event.value);
   }
 }
