@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { duration } from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {ColorSchemeName} from '../../config/colorSchemeName';
 @Component({
   selector: 'vex-toolbar',
   templateUrl: './toolbar.component.html',
@@ -32,7 +33,7 @@ export class ToolbarComponent {
   isNavbarInToolbar$: Observable<boolean> = this.configService.config$.pipe(map(config => config.navbar.position === 'in-toolbar'));
   isNavbarBelowToolbar$: Observable<boolean> = this.configService.config$.pipe(map(config => config.navbar.position === 'below-toolbar'));
   userVisible$: Observable<boolean> = this.configService.config$.pipe(map(config => config.toolbar.user.visible));
-
+  isDarkMode: boolean;
   megaMenuOpen$: Observable<boolean> = of(false);
 
   constructor(private layoutService: LayoutService,
@@ -44,7 +45,9 @@ export class ToolbarComponent {
               private snackbar: MatSnackBar,
               private translateService: TranslateService) {
 
-                switch(translateService.getDefaultLang()) {
+    this.isDarkMode = this.getThemePreference() === 'dark';
+    this.setColor();
+    switch(translateService.getDefaultLang()) {
                   case 'es':
                     this.flag = 'flag:spain';
                   break;
@@ -65,6 +68,24 @@ export class ToolbarComponent {
 
   openQuickpanel(): void {
     this.layoutService.openQuickpanel();
+  }
+
+  setThemePreference(isDarkMode: boolean): void {
+    sessionStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
+  }
+
+  getThemePreference(): string {
+    return sessionStorage.getItem('themePreference') || 'light';
+  }
+
+  toggleDarkMode(): void {
+    this.setColor();
+    this.setThemePreference(this.isDarkMode);
+  }
+
+  setColor(): void {
+    const colorScheme = this.isDarkMode ? ColorSchemeName.dark : ColorSchemeName.light;
+    this.configService.updateConfig({ style: { colorScheme } });
   }
 
   openSidenav(): void {

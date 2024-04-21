@@ -3,12 +3,131 @@
 // Vex Core
 @import "./@vex/styles/core";
 @import "../node_modules/angular-calendar/scss/angular-calendar.scss";
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 100; /* Thin */
+  src: url('./assets/fonts/Dinamit/Dinamit Thin.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 200; /* ExtraLight */
+  src: url('./assets/fonts/Dinamit/Dinamit ExtraLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 300; /* Light */
+  src: url('./assets/fonts/Dinamit/Dinamit Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 400; /* Regular */
+  src: url('./assets/fonts/Dinamit/Dinamit Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 500; /* Medium */
+  src: url('./assets/fonts/Dinamit/Dinamit Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 600; /* SemiBold */
+  src: url('./assets/fonts/Dinamit/Dinamit SemiBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 700; /* Bold */
+  src: url('./assets/fonts/Dinamit/Dinamit Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 800; /* ExtraBold */
+  src: url('./assets/fonts/Dinamit/Dinamit Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 900; /* Black */
+  src: url('./assets/fonts/Dinamit/Dinamit Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 100; /* Thin */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Thin Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 200; /* ExtraLight */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit ExtraLight Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 300; /* Light */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Light Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 400; /* Regular */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Regular Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 500; /* Medium */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Medium Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 600; /* SemiBold */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit SemiBold Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 700; /* Bold */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Bold Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 800; /* ExtraBold */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Bold Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Dinamit';
+  font-weight: 900; /* Black */
+  font-style: italic;
+  src: url('./assets/fonts/Dinamit/Dinamit Bold Italic.otf') format('opentype');
+}
 
 vex-calendar {
   .calendar-bg {
     background: url("./assets/img/demo/landscape.jpg") no-repeat center;
     background-size: cover;
   }
+}
+body {
+  font-family: 'Dinamit', sans-serif; /* Usa la fuente Dinamit como fuente predeterminada */
 }
 
 /**

@@ -617,8 +617,8 @@ export class SettingsComponent implements OnInit {
   }
 
   setTheme() {
-
-    if (this.theme === 'dark'){
+      //TODO: Save bookingpage color mode
+/*    if (this.theme === 'dark'){
 
       this.configService.updateConfig({
         style: {
@@ -632,7 +632,7 @@ export class SettingsComponent implements OnInit {
           colorScheme: ColorSchemeName.light
         }
       });
-    }
+    }*/
   }
 
   createExtra(product: string, isEdit: boolean, idx: number, extra: any) {

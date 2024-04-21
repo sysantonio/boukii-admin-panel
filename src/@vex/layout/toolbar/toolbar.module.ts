@@ -14,6 +14,8 @@ import { NavigationItemModule } from '../../components/navigation-item/navigatio
 import { MegaMenuModule } from '../../components/mega-menu/mega-menu.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddTaskModule } from './add-task/add-task.module';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [ToolbarComponent],
@@ -31,7 +33,9 @@ import { AddTaskModule } from './add-task/add-task.module';
     RouterModule,
     NavigationItemModule,
     MegaMenuModule,
-    AddTaskModule
+    AddTaskModule,
+    MatSlideToggleModule,
+    FormsModule
   ],
   exports: [ToolbarComponent]
 })
