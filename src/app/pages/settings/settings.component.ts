@@ -19,6 +19,7 @@ import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/ext
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
 import { SchoolService } from 'src/service/school.service';
 import { TranslateService } from '@ngx-translate/core';
+import {DateAdapter} from '@angular/material/core';
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
@@ -145,8 +146,11 @@ export class SettingsComponent implements OnInit {
   user: any;
 
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private configService: ConfigService, private dialog: MatDialog, private schoolService: SchoolService, private translateSerivce: TranslateService) {
+    private configService: ConfigService, private dialog: MatDialog, private schoolService: SchoolService,
+              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.filteredHours = this.hours;
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
   }
 
 
@@ -355,7 +359,7 @@ export class SettingsComponent implements OnInit {
           data.deletedGoals.forEach(element => {
             this.crudService.delete('/degrees-school-sport-goals', element.id)
               .subscribe((res) => {
-                this.snackbar.open(this.translateSerivce.instant('snackbar.settings.objectives_update'), 'OK', {duration: 3000});
+                this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_update'), 'OK', {duration: 3000});
               })
           });
         }
@@ -364,12 +368,12 @@ export class SettingsComponent implements OnInit {
 
           this.crudService.update('/degrees-school-sport-goals', element, element.id)
           .subscribe((data) => {
-            this.snackbar.open(this.translateSerivce.instant('snackbar.settings.objectives_update'), 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_update'), 'OK', {duration: 3000});
           })
           } else {
             this.crudService.create('/degrees-school-sport-goals', element)
             .subscribe((data) => {
-              this.snackbar.open(this.translateSerivce.instant('snackbar.settings.objectives_created'), 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_created'), 'OK', {duration: 3000});
             })
           }
 
@@ -445,7 +449,7 @@ export class SettingsComponent implements OnInit {
       this.crudService.update('/seasons', data, this.season.id)
       .subscribe((res) => {
         console.log(res);
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.season_created'), 'Close', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.season_created'), 'Close', {duration: 3000});
         this.getData();
         this.schoolService.refreshSchoolData();
       });
@@ -453,7 +457,7 @@ export class SettingsComponent implements OnInit {
       this.crudService.create('/seasons', data)
       .subscribe((res) => {
         console.log(res);
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.season_updated'), 'Close', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.season_updated'), 'Close', {duration: 3000});
         this.getData();
         this.schoolService.refreshSchoolData();
       });
@@ -477,7 +481,7 @@ export class SettingsComponent implements OnInit {
     this.crudService.update('/schools', data, this.school.id)
       .subscribe((res) => {
         console.log(res);
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.save'), this.translateSerivce.instant('cancel'), {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.save'), this.translateService.instant('cancel'), {duration: 3000});
         this.schoolService.refreshSchoolData();
         //this.getData();
       });
@@ -513,7 +517,7 @@ export class SettingsComponent implements OnInit {
 
         });
         setTimeout(() => {
-          this.snackbar.open(this.translateSerivce.instant('snackbar.settings.sports'), 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.settings.sports'), 'OK', {duration: 3000});
 
           this.getData();
         }, 1000);
@@ -532,7 +536,7 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.prices'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.prices'), 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
       })
   }
@@ -586,7 +590,7 @@ export class SettingsComponent implements OnInit {
         })
     });
 
-    this.snackbar.open(this.translateSerivce.instant('snackbar.settings.blocks'), 'OK', {duration: 3000});
+    this.snackbar.open(this.translateService.instant('snackbar.settings.blocks'), 'OK', {duration: 3000});
   }
 
 
@@ -610,7 +614,7 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.auths'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.auths'), 'OK', {duration: 3000});
         this.getData();
         this.schoolService.refreshSchoolData();
       })
@@ -758,7 +762,7 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.extras'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.extras'), 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
 
         this.getData();
@@ -783,7 +787,7 @@ export class SettingsComponent implements OnInit {
     this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
       .subscribe(() => {
 
-        this.snackbar.open(this.translateSerivce.instant('snackbar.settings.taxes'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.taxes'), 'OK', {duration: 3000});
         this.schoolService.refreshSchoolData();
         this.getData();
 
@@ -823,7 +827,7 @@ export class SettingsComponent implements OnInit {
         })
     });
 
-    this.snackbar.open(this.translateSerivce.instant('snackbar.settings.levels'), 'OK', {duration: 3000});
+    this.snackbar.open(this.translateService.instant('snackbar.settings.levels'), 'OK', {duration: 3000});
   }
 
   generateRandomNumber() {

@@ -16,6 +16,7 @@ import { SchoolService } from 'src/service/school.service';
 import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import {DateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'vex-courses-create-modal-update',
@@ -78,7 +79,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
   endDayControl = new FormControl();
   availableEndDays: string[] = [];
 
-  separatedDates = false;
+  //separatedDates = false;
   displayedColumns: string[] = ['date', 'duration', 'hour', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage', 'delete'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
@@ -256,10 +257,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,private dialogRef: MatDialogRef<any>,
-      private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
+      private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService,
+              @Inject(MAT_DIALOG_DATA) public externalData: any, private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.externalData && this.externalData.id ? this.externalData.id : this.activatedRoute.snapshot.params.id;
-
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.generateDurations();
 
     this.startDayControl.valueChanges.subscribe(startDay => {

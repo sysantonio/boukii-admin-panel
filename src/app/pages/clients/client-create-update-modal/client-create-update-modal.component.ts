@@ -16,6 +16,7 @@ import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { ApiCrudService } from 'src/service/crud.service';
+import {DateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'vex-client-create-update-modal',
@@ -108,7 +109,10 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   mode: 'create' |'update';
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-    private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>, private translateService: TranslateService) {
+    private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>, private translateService: TranslateService,
+              private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.today = new Date()
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);

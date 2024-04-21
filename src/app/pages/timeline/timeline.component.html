@@ -15,9 +15,9 @@
                     <div class="date-navigation">
 
                     <button (click)="goToPrevious()">&lt;</button>
-                    <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
-                    <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
-                    <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
+                      <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate':'':translateService.getDefaultLang() }}</span>
+                      <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
+                      <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
                     <button (click)="goToNext()">&gt;</button>
                     <div class="filter-wrapper">
                         <div class="filter-bullet" *ngIf="showResetFilters()"></div>

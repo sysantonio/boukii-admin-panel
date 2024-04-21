@@ -5,6 +5,8 @@ import moment from 'moment';
 import { dropdownAnimation } from 'src/@vex/animations/dropdown.animation';
 import { ApiCrudService } from 'src/service/crud.service';
 import { SchoolService } from 'src/service/school.service';
+import {TranslateService} from '@ngx-translate/core';
+import {DateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'vex-mail-compose',
@@ -59,11 +61,13 @@ export class MailComposeComponent implements OnInit {
   user: any;
 
   constructor(private cd: ChangeDetectorRef, private crudService: ApiCrudService, private schoolService: SchoolService,
-              private dialogRef: MatDialogRef<MailComposeComponent>, private snackbar: MatSnackBar) { }
+              private dialogRef: MatDialogRef<MailComposeComponent>, private snackbar: MatSnackBar,
+              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) { }
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.schoolService.getSchoolData(this.user)
       .subscribe((data) => {
         this.school = data.data;

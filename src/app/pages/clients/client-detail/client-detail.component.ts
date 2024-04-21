@@ -22,6 +22,7 @@ import { PasswordService } from 'src/service/password.service';
 import { MatStepper } from '@angular/material/stepper';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { TranslateService } from '@ngx-translate/core';
+import {DateAdapter} from '@angular/material/core';
 
 
 @Component({
@@ -176,11 +177,12 @@ export class ClientDetailComponent {
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
      private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
-     private translateService: TranslateService) {
+     private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
-
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];

@@ -270,8 +270,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-              private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private translateService: TranslateService, private cdr: ChangeDetectorRef) {
-
+              private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router,
+              private translateService: TranslateService, private cdr: ChangeDetectorRef, private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
     this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
       this.handleMonthChange(firstDayOfMonth);

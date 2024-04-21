@@ -18,6 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -81,7 +82,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   endDayControl = new FormControl();
   availableEndDays: string[] = [];
 
-  separatedDates = false;
+  //separatedDates = false;
   displayedColumns: string[] = ['date', 'duration', 'hour', 'edit', 'delete'];
   displayedReductionsColumns: string[] = ['date', 'percentage', 'delete'];
   displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
@@ -261,7 +262,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-      private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService) {
+      private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService,
+              private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -277,7 +279,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.endDayControl.disable();
       }
     });
-
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.rangeForm = this.fb.group({
       minAge: ['', [Validators.required, Validators.min(3)]],
       maxAge: ['', [Validators.required, Validators.max(80)]]

@@ -21,6 +21,7 @@ import { ConfirmUnmatchMonitorComponent } from './confirm-unmatch-monitor/confir
 import { Observable, Subject, firstValueFrom } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import {DateAdapter} from '@angular/material/core';
 
 moment.locale('fr');
 
@@ -120,7 +121,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
   filteredUsers: Observable<any[]>;
   filteredMonitorsO: Observable<any[]>;
 
-  constructor(private crudService: ApiCrudService,private dialog: MatDialog,private translateService: TranslateService, private snackbar: MatSnackBar) {
+  constructor(private crudService: ApiCrudService,private dialog: MatDialog, public translateService: TranslateService,
+              private snackbar: MatSnackBar, private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.mockLevels.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];

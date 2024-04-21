@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, map, startWith } from 'rxjs';
 import { ApiCrudService } from 'src/service/crud.service';
+import {DateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'vex-add-client-user',
@@ -30,9 +31,11 @@ export class AddClientUserModalComponent implements OnInit {
   user:any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>, private translateService: TranslateService) {
+    private fb: UntypedFormBuilder, private dialogRef: MatDialogRef<any>, private translateService: TranslateService,
+              private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.today = new Date();
     this.minDate = new Date(this.today);
   }

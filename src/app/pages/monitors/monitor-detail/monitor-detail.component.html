@@ -660,7 +660,7 @@
         <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetailTimeline || showBlockTimeline}">
           <div class="header-navigation-monitor">
               <div class="date-navigation">
-              <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
+              <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate':'':translateService.getDefaultLang() }}</span>
               <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
               <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
               <button (click)="goToPrevious()">&lt;</button>
@@ -1990,7 +1990,7 @@
       <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetailTimeline || showBlockTimeline}">
         <div class="header-navigation">
             <div class="date-navigation">
-            <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate' }}</span>
+            <span *ngIf="timelineView == 'day'">{{ currentDate | date: 'longDate':'':translateService.getDefaultLang() }}</span>
             <span *ngIf="timelineView == 'week'">{{ currentWeek }}</span>
             <span *ngIf="timelineView == 'month'">{{ currentMonth }}</span>
             <button (click)="goToPrevious()">&lt;</button>

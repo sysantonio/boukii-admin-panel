@@ -20,7 +20,8 @@ import { CommonModule } from '@angular/common';
 import { Observable, map, startWith } from 'rxjs';
 import * as moment from 'moment';
 import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/bookings-create-update-modal/bookings-create-update-modal.component';
-import { TranslateModule } from '@ngx-translate/core';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {DateAdapter} from '@angular/material/core';
 
 @Component({
   selector: 'vex-calendar-edit',
@@ -76,12 +77,18 @@ export class CalendarEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CalendarEditComponent>,
     @Inject(MAT_DIALOG_DATA) public event: any,
-    private fb: UntypedFormBuilder, private crudService: ApiCrudService, private dialog: MatDialog
-  ) {}
+    private fb: UntypedFormBuilder, private crudService: ApiCrudService, private dialog: MatDialog,
+    private translateService: TranslateService,
+    private dateAdapter: DateAdapter<Date>
+  ) {
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
+  }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.defaults.start_time = this.event.hour_start;
     this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
 

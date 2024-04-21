@@ -22,6 +22,7 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { BookingDetailModalComponent } from '../../bookings/booking-detail-modal/booking-detail-modal.component';
 import { CourseUserTransferTimelineComponent } from '../../timeline/course-user-transfer-timeline/course-user-transfer-timeline.component';
 import { TranslateService } from '@ngx-translate/core';
+import {DateAdapter} from '@angular/material/core';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
@@ -223,7 +224,10 @@ export class MonitorDetailComponent {
   searchDate:any;
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
-    private activatedRoute: ActivatedRoute, private dialog: MatDialog, private translateService: TranslateService) {
+    private activatedRoute: ActivatedRoute, private dialog: MatDialog, public translateService: TranslateService,
+              private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale(this.translateService.getDefaultLang());
+    this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.mockLevelData.forEach(level => {
       if (!this.groupedByColor[level.color]) {
         this.groupedByColor[level.color] = [];

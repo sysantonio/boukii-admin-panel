@@ -309,7 +309,7 @@
           <ng-container *ngIf="column.type === 'booking_users_image'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <img [src]="row[column.property]" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
+              <img *ngIf="row[column.property] != 'multiple'" [src]="row[column.property]" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
               <!--<ng-container *ngIf="data[i].bookingusers > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->

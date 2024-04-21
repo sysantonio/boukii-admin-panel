@@ -1011,7 +1011,7 @@
                   <mat-datepicker #pickerDateFrom [startAt]="minDate"></mat-datepicker>
 
                   <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromDate.errors?.['required']">
-                    >{{'courses.errors.date_reservable' | translate}}
+                    {{'courses.errors.date_reservable' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -1026,7 +1026,7 @@
                   <mat-datepicker-toggle matSuffix [for]="pickerDateTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerDateTo [startAt]="courseConfigForm.value.fromDate"></mat-datepicker>
                   <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromDate.errors?.['required']">
-                    >{{'courses.errors.date_reservable' | translate}}
+                    {{'courses.errors.date_reservable' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>

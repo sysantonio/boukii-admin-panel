@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
 import { ConfigService } from '../@vex/config/config.service';
 import { Settings } from 'luxon';
-import { DOCUMENT } from '@angular/common';
+import {DOCUMENT, registerLocaleData} from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
 import { NavigationService } from '../@vex/services/navigation.service';
 import { LayoutService } from '../@vex/services/layout.service';
@@ -16,6 +16,11 @@ import { ColorVariable, colorVariables } from '../@vex/components/config-panel/c
 import { defaultConfig } from 'src/@vex/config/configs';
 import { SchoolService } from 'src/service/school.service';
 import { TranslateService } from '@ngx-translate/core';
+import localeIt from '@angular/common/locales/it';
+import localeEnGb from '@angular/common/locales/en-GB';
+import localeEs from '@angular/common/locales/es';
+import localeDe from '@angular/common/locales/de';
+import localeFr from '@angular/common/locales/fr';
 
 @Component({
   selector: 'vex-root',
@@ -38,6 +43,12 @@ export class AppComponent {
               private schoolService: SchoolService,
               private readonly matIconRegistry: MatIconRegistry,
               private readonly domSanitizer: DomSanitizer) {
+
+    registerLocaleData(localeIt, 'it-IT');
+    registerLocaleData(localeEnGb, 'en-GB');
+    registerLocaleData(localeEs, 'es');
+    registerLocaleData(localeDe, 'de');
+    registerLocaleData(localeFr, 'fr');
     Settings.defaultLocale = this.localeId;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.translateService.setDefaultLang(navigator.language.split('-')[0]);
