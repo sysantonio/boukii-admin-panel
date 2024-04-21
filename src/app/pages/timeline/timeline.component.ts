@@ -1098,10 +1098,19 @@ export class TimelineComponent implements OnInit, OnDestroy {
         this.idGroupedTasks = task.booking_id;
         this.hourGrouped = task.hour_start;
         this.dateGrouped = task.date;
+        this.taskDetail = null;
+        this.idDetail = null;
         this.showGrouped = true;
       }
       else{
         //Load course
+        if(this.groupedTasks && this.groupedTasks.includes(task)){
+          this.showGrouped = true;
+        } else {
+          this.showGrouped = false;
+          this.groupedTasks = task.grouped_tasks;
+          this.idGroupedTasks = task.booking_id;
+        }
         this.idDetail = task.booking_id;
         this.hourDetail = task.hour_start;
         this.dateDetail = task.date;
