@@ -6,7 +6,7 @@
                 [disableClose]="isDesktop$ | async"
                 class="vex-mail-drawer max-w-3xs w-full bg-base"
                 position="start">
-      <div class="vex-mail-header bg-primary/10 px-gutter relative flex flex-col" style="background:#ECECEC !important">
+      <div class="vex-mail-header px-gutter relative flex flex-col" >
         <div *ngIf="isDesktop$ | async" class="flex-1 flex items-center">
           <p class="text-2xl font-medium flex items-center">
             <mat-icon @scaleIn class="ltr:mr-4 rtl:ml-4 block icon-2xl" svgIcon="logo:mail" style="color:#FF3085"></mat-icon>
@@ -24,8 +24,8 @@
     </mat-drawer>
 
     <mat-drawer-content class="bg-base flex flex-col overflow-hidden">
-      <div class="vex-mail-header flex-none bg-primary/10 flex flex-col">
-        <div class="flex-auto flex items-center" style="background:#ECECEC !important">
+      <div class="vex-mail-header flex-none  flex flex-col">
+        <div class="flex-auto flex items-center" >
           <button (click)="drawer.open()" *ngIf="ltLg$ | async" class="mx-gutter" mat-icon-button type="button">
             <mat-icon class="text-contrast-white" svgIcon="mat:menu"></mat-icon>
           </button>
