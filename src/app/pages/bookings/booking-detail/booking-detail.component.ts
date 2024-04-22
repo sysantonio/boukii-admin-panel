@@ -2046,14 +2046,19 @@ export class BookingDetailComponent implements OnInit {
   }
 
   addCancellationInsurance(event: any) {
-
+    this.calculateFinalPrice();
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
-      data: {title: this.translateService.instant('add_insurance'), message: this.translateService.instant('add_insurance_message')}
+      data: {
+        title: event.checked ? this.translateService.instant('add_insurance') :
+          this.translateService.instant('remove_insurance'),
+        message: event.checked ? this.translateService.instant('add_insurance_message') :
+          this.translateService.instant('remove_insurance_message')}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
+
       if (data) {
-        const price = this.getBasePrice() * this.cancellationInsurance;
+        const price = this.finalPrice - (Math.round(this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1) * 100) / 100)
         if (event.checked) {
           this.crudService.update('/bookings', {price_total: this.finalPrice + price, has_cancellation_insurance: true, price_cancellation_insurance: price}, this.id)
             .subscribe(() => {
@@ -2068,8 +2073,10 @@ export class BookingDetailComponent implements OnInit {
                 .subscribe(() => {})
               this.getData(true);
             })
-
         }
+      } else {
+        this.booking.has_cancellation_insurance = !this.booking.has_cancellation_insurance;
+        this.calculateFinalPrice();
       }
     })
 
@@ -2493,4 +2500,6 @@ export class BookingDetailComponent implements OnInit {
   getBookingUsersByCourseDateAndHour(dateId, hour) {
     return this.bookingUsers.filter((b) => b.course_date_id === dateId && b.hour_start == hour);
   }
+
+  protected readonly Math = Math;
 }

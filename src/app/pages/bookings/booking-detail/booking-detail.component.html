@@ -786,7 +786,7 @@
               >
                 <p style="float:left">{{'op_rem' | translate }}</p>
                 <p style="float:right">
-                  {{booking.price_cancellation_insurance}}
+                  {{this.finalPrice - (Math.round(this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1) * 100) / 100)}}
                   {{bookingsToCreate.length > 0 ? bookingsToCreate[0].courseDates[0].currency : ''}}
                 </p>
               </span>
