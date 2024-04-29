@@ -269,7 +269,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private dialogRef: MatDialogRef<any>,
-    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, public translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
                 this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {

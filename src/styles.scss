@@ -315,6 +315,110 @@ body {
 .cal-event-title {
   //@apply text-default no-underline text-sm;
 }
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-focus-state-layer-color: #3949ab;
+  --mdc-switch-selected-handle-color: #3949ab;
+  --mdc-switch-selected-hover-state-layer-color: #3949ab;
+  --mdc-switch-selected-pressed-state-layer-color: #3949ab;
+  --mdc-switch-selected-focus-handle-color: #1a237e;
+  --mdc-switch-selected-hover-handle-color: #1a237e;
+  --mdc-switch-selected-pressed-handle-color: #1a237e;
+  --mdc-switch-selected-focus-track-color: #7986cb;
+  --mdc-switch-selected-hover-track-color: #7986cb;
+  --mdc-switch-selected-pressed-track-color: #7986cb;
+  --mdc-switch-selected-track-color: #7986cb;
+  --mdc-switch-disabled-selected-handle-color: #424242;
+  --mdc-switch-disabled-selected-icon-color: #fff;
+  --mdc-switch-disabled-selected-track-color: #424242;
+  --mdc-switch-disabled-unselected-handle-color: #424242;
+  --mdc-switch-disabled-unselected-icon-color: #fff;
+  --mdc-switch-disabled-unselected-track-color: #424242;
+  --mdc-switch-handle-surface-color: var(--mdc-theme-surface, #fff);
+  --mdc-switch-handle-elevation-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  --mdc-switch-handle-shadow-color: black;
+  --mdc-switch-disabled-handle-elevation-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+  --mdc-switch-selected-icon-color: #fff;
+  --mdc-switch-unselected-focus-handle-color: #212121;
+  --mdc-switch-unselected-focus-state-layer-color: #424242;
+  --mdc-switch-unselected-focus-track-color: #e0e0e0;
+  --mdc-switch-unselected-handle-color: #616161;
+  --mdc-switch-unselected-hover-handle-color: #212121;
+  --mdc-switch-unselected-hover-state-layer-color: #424242;
+  --mdc-switch-unselected-hover-track-color: #e0e0e0;
+  --mdc-switch-unselected-icon-color: #fff;
+  --mdc-switch-unselected-pressed-handle-color: #212121;
+  --mdc-switch-unselected-pressed-state-layer-color: #424242;
+  --mdc-switch-unselected-pressed-track-color: #e0e0e0;
+  --mdc-switch-unselected-track-color: #e0e0e0
+}
+
+.mat-mdc-slide-toggle .mdc-form-field {
+  color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87))
+}
+
+.mat-mdc-slide-toggle .mdc-switch--disabled+label {
+  color: rgba(0, 0, 0, .38)
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+  --mdc-switch-selected-focus-state-layer-color: #d81b60;
+  --mdc-switch-selected-handle-color: #d81b60;
+  --mdc-switch-selected-hover-state-layer-color: #d81b60;
+  --mdc-switch-selected-pressed-state-layer-color: #d81b60;
+  --mdc-switch-selected-focus-handle-color: #880e4f;
+  --mdc-switch-selected-hover-handle-color: #880e4f;
+  --mdc-switch-selected-pressed-handle-color: #880e4f;
+  --mdc-switch-selected-focus-track-color: #f06292;
+  --mdc-switch-selected-hover-track-color: #f06292;
+  --mdc-switch-selected-pressed-track-color: #f06292;
+  --mdc-switch-selected-track-color: #f06292
+}
+
+.mat-mdc-slide-toggle.mat-warn {
+  --mdc-switch-selected-focus-state-layer-color: #e53935;
+  --mdc-switch-selected-handle-color: #e53935;
+  --mdc-switch-selected-hover-state-layer-color: #e53935;
+  --mdc-switch-selected-pressed-state-layer-color: #e53935;
+  --mdc-switch-selected-focus-handle-color: #b71c1c;
+  --mdc-switch-selected-hover-handle-color: #b71c1c;
+  --mdc-switch-selected-pressed-handle-color: #b71c1c;
+  --mdc-switch-selected-focus-track-color: #e57373;
+  --mdc-switch-selected-hover-track-color: #e57373;
+  --mdc-switch-selected-pressed-track-color: #e57373;
+  --mdc-switch-selected-track-color: #e57373
+}
+
+.mat-mdc-slide-toggle {
+  --mdc-switch-state-layer-size: 48px
+}
+
+.mat-mdc-slide-toggle {
+  --mat-slide-toggle-label-text-font: Roboto, sans-serif;
+  --mat-slide-toggle-label-text-size: 14px;
+  --mat-slide-toggle-label-text-tracking: 0.0178571429em;
+  --mat-slide-toggle-label-text-line-height: 20px;
+  --mat-slide-toggle-label-text-weight: 400
+}
+
+.mat-mdc-slide-toggle .mdc-form-field {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: Roboto, sans-serif;
+  font-family: var(--mdc-typography-body2-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));
+  font-size: 0.875rem;
+  font-size: var(--mdc-typography-body2-font-size, 0.875rem);
+  line-height: 1.25rem;
+  line-height: var(--mdc-typography-body2-line-height, 1.25rem);
+  font-weight: 400;
+  font-weight: var(--mdc-typography-body2-font-weight, 400);
+  letter-spacing: 0.0178571429em;
+  letter-spacing: var(--mdc-typography-body2-letter-spacing, 0.0178571429em);
+  text-decoration: inherit;
+  text-decoration: var(--mdc-typography-body2-text-decoration, inherit);
+  text-transform: inherit;
+  text-transform: var(--mdc-typography-body2-text-transform, inherit)
+}
+
 
 /*
   You can override any CSS Variable or style here

@@ -341,9 +341,12 @@ img[mat-card-image] {
 @media only screen and (max-width: 1024px) {
   .reservation-detail-card {
     width: 48%;
-    position: relative;
-    margin: 1% 0 1% 10%;
-    float: left;
+  }
+  .button-cancel {
+    width: 100%;
+  }
+  .button-cancel {
+    width: 100%;
   }
 }
 
@@ -363,6 +366,12 @@ img[mat-card-image] {
   .column-container:nth-child(2) { /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
   }
+  .button-cancel {
+    width: 100%;
+  }
+  .button-cancel {
+    width: 100%;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -380,12 +389,30 @@ img[mat-card-image] {
   .column-container:nth-child(2) { /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
   }
+  .button-cancel {
+    width: 100%;
+  }
+  .button-cancel {
+    width: 100%;
+  }
 }
 
 @media only screen and (min-width: 2100px) {
   .reservation-detail-card {
-    width: 23%;
+    width: 31%;
   }
 }
 
+.qrcodeImage {
+  display: flex;
+  float: right;
+  margin: 0 10px 0 0;
+}
+
+/* Add custom styles here */
+.center {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
 

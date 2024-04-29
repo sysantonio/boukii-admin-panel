@@ -234,6 +234,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   bookings = [];
   bookingsToCreate = [];
+  discounts = [];
   clients = [];
   allClients = [];
   sportData = [];
@@ -264,6 +265,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   tva = 0;
   tvaPrice = 0;
+  bookingPendingPrice = 0;
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
 
@@ -271,7 +273,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
               private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router,
-              private translateService: TranslateService, private cdr: ChangeDetectorRef, private dateAdapter: DateAdapter<Date>) {
+              public translateService: TranslateService, private cdr: ChangeDetectorRef, private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
@@ -307,6 +309,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.getMonitors();
     this.getSeason();
     this.getSchool();
+    this.getAllDegrees();
 
     forkJoin([this.getSportsType(), this.getClients(), this.getClientsAll()])
       .subscribe((data: any) => {
@@ -706,13 +709,26 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         let price = this.selectedItem.price;
         if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
+          price = price *  this.reservableCourseDate.length;
           const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
-          price = price * this.reservableCourseDate.length;
-          discounts.forEach(element => {
-            if (element.date === this.reservableCourseDate.length && element.percentage) {
-              price = price - (price * (element.percentage / 100));
-            }
-          });
+/*          price = 0;
+          if(discounts && discounts.length) {
+            let i = 0;
+            this.reservableCourseDate.forEach(element => {
+              const selectedDiscount = discounts.find(item => item.date == i+1);
+              if(selectedDiscount) {
+                price = price + ((1*this.selectedItem.price) * (selectedDiscount.percentage / 100));
+              } else {
+                price = price + (1*this.selectedItem.price);
+              }
+              i++;
+            });
+          }*/
+          /*          discounts.forEach(element => {
+                      if (element.date === this.reservableCourseDate.length && element.percentage) {
+                        price = price - (price * (element.percentage / 100));
+                      }
+                    });*/
         }
 
         let data: any = {};
@@ -1072,8 +1088,33 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
     this.bookingComplete = true;
     this.addAnotherCourse();
+    this.calculateDiscounts();
     this.calculateFinalPrice();
     //this.create();
+  }
+
+  calculateDiscounts() {
+      this.discounts = [];
+      this.bookingsToCreate.forEach((b, idx) => {
+        if (b.courseDates[0].course.is_flexible && b.courseDates[0].course.course_type === 1) {
+          const discounts = typeof b.courseDates[0].course.discounts === 'string' ? JSON.parse(b.courseDates[0].course.discounts)
+            : b.courseDates[0].course.discounts;
+          if(discounts && discounts.length) {
+            let i = 0;
+            let price = 0;
+            b.courseDates.forEach(element => {
+              const selectedDiscount = discounts.find(item => item.date == i+1);
+              if(selectedDiscount) {
+                price = price + ((1*b.courseDates[0].course.price) * (selectedDiscount.percentage / 100));
+              }
+              i++;
+            });
+            this.discounts.push(price);
+          }
+        }
+
+      });
+
   }
 
   create() {
@@ -2039,6 +2080,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+
   calculateAgeUtilizer(id) {
 
     if (id && id !== null) {
@@ -2229,9 +2271,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   getBasePrice() {
     let ret = 0;
 
-    this.bookingsToCreate.forEach(element => {
-      ret = ret + ((!element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 2)
-        ? element.price_total * element.courseDates.length : element.price_total);
+    this.bookingsToCreate.forEach(item => {
+      ret = ret + (item.courseDates[0].course?.is_flexible ? item.price_total : +item.courseDates[0].course?.price)
     });
 
     return ret;
@@ -2565,22 +2606,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
       }
     }
 
-    if (this.bonus !== null && price > 0) {
-      this.bonus.forEach(element => {
-        if (price > 0) {
 
-          if (element.bonus.remaining_balance > price) {
-            price = price - price;
-          } else {
-            price = price - element.bonus.remaining_balance;
-          }
-        }
-      });
-    }
 
     if(this.defaults.has_boukii_care) {
       // coger valores de reglajes
       price = price + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
+    }
+
+    if (this.discounts && this.discounts.length) {
+      price -= this.discounts.reduce((total, discount) => total + discount, 0);
     }
 
     if(this.defaults.has_cancellation_insurance) {
@@ -2589,11 +2623,23 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     // añadir desde reglajes el tva
     if (this.tva && !isNaN(this.tva)) {
-      this.finalPrice = price + (price * this.tva);
       this.tvaPrice = (price * this.tva);
-    } else {
-      this.finalPrice = price;
     }
+    this.finalPrice = price + this.tvaPrice;
+    this.bookingPendingPrice =  this.finalPrice;
+    if (this.bonus !== null && price > 0) {
+      this.bonus.forEach(element => {
+        if ( this.finalPrice > 0) {
+
+          if (element.bonus.remaining_balance >  this.finalPrice) {
+            this.bookingPendingPrice =  this.finalPrice - this.finalPrice;
+          } else {
+            this.bookingPendingPrice =  this.finalPrice - element.bonus.remaining_balance;
+          }
+        }
+      });
+    }
+
     this.finalPriceNoTaxes = price;
   }
 

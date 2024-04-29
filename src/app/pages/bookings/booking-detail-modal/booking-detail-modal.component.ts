@@ -206,7 +206,7 @@ export class BookingDetailModalComponent implements OnInit {
   degreesClient:any[]=[];
 
   constructor(private bookingService: BookingService, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-    private snackbar: MatSnackBar, private translateService: TranslateService, private schoolService: SchoolService, private router: Router,
+    private snackbar: MatSnackBar, public translateService: TranslateService, private schoolService: SchoolService, private router: Router,
     @Inject(MAT_DIALOG_DATA) public incData: any, private dialogRef: MatDialogRef<any>,) {
 
                 this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
@@ -1978,7 +1978,7 @@ export class BookingDetailModalComponent implements OnInit {
           this.crudService.post('/admin/bookings/cancel', {bookingUsers: this.bookingUsers.map((b) => b.id)})
           .subscribe(() => {
           })
-          this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingsToCreate[index].price_total, status: 'refund', notes: 'vouher'})
+          this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.bookingsToCreate[index].price_total, status: 'refund', notes: 'voucher'})
             .subscribe(() => {
 
             })

@@ -1364,7 +1364,7 @@
                       style="height: 15px;width: 20px;"
                       svgIcon="mat:calendar_today"
                     ></mat-icon
-                    >{{ date.date | date:'fullDate' }} - {{date.hour_start}} /
+                    >{{ date.date | date:'fullDate': '' : translateService.currentLang }} - {{date.hour_start}} /
                     {{ date.hour_end }}
                   </li>
                 </ul>

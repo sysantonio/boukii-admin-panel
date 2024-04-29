@@ -104,7 +104,7 @@
             <mat-card-content>
               <ul style="font-size: 12px;padding: 0 0 0 18%;margin: 10px 0 0 0; width: 100%;">
                 <li *ngFor="let date of item?.courseDates">
-                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate' }} - {{date.hour_start}} / {{ date.hour_end }}
+                  <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date | date:'fullDate': '' : translateService.currentLang }} - {{date.hour_start}} / {{ date.hour_end }}
                 </li>
               </ul>
             </mat-card-content>
@@ -333,11 +333,11 @@
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.cancellationInsurance)">
               <p style="float: left;">{{'op_rem' | translate}}</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="addCancellationInsurance($event)" [disabled]="booking.status === 2" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="accent" [(ngModel)]="booking.has_cancellation_insurance" *ngIf="cancellationInsurance" (change)="addCancellationInsurance($event)" [disabled]="booking.status === 2" style="float: right;"></mat-slide-toggle>
             </div>
             <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.boukiiCarePrice) && boukiiCarePrice > 0">
               <p style="float: left;">Boukii Care</p>
-              <mat-slide-toggle color="primary" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="addBoukiiCare($event)" [disabled]="booking.status === 2" style="float: right;"></mat-slide-toggle>
+              <mat-slide-toggle color="accent" [(ngModel)]="booking.has_boukii_care" *ngIf="boukiiCarePrice" (change)="addBoukiiCare($event)" [disabled]="booking.status === 2" style="float: right;"></mat-slide-toggle>
             </div>
             <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
             <h3 style="font-size: 1.5rem!important;">{{'summary' | translate}}</h3>
@@ -468,7 +468,7 @@
               <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
                 <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
-                <mat-slide-toggle color="primary" [(ngModel)]="defaults.paid" [checked]="defaults.paid" style="float: right;"></mat-slide-toggle>
+                <mat-slide-toggle color="accent" [(ngModel)]="defaults.paid" [checked]="defaults.paid" style="float: right;"></mat-slide-toggle>
               </div>
               <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'" class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <div style="width:100%" class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">

@@ -33,6 +33,8 @@ import { AddDiscountBonusModalModule } from './add-discount-bonus/add-discount-b
 import { ClientsCreateUpdateModalModule } from '../../clients/client-create-update-modal/client-create-update-modal.module';
 import { AddClientSportModalModule } from '../add-client-sport/add-client-sport.module';
 import { TranslateModule } from '@ngx-translate/core';
+import {QRCodeModule} from 'angularx-qrcode';
+import {ComponentsCustomModule} from '../../../components/components-custom.module';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -82,7 +84,9 @@ export const MY_DATE_FORMATS = {
     AddDiscountBonusModalModule,
     ClientsCreateUpdateModalModule,
     AddClientSportModalModule,
-    TranslateModule
+    TranslateModule,
+    QRCodeModule,
+    ComponentsCustomModule
   ],
   declarations: [BookingsCreateUpdateComponent],
   exports: [BookingsCreateUpdateComponent],

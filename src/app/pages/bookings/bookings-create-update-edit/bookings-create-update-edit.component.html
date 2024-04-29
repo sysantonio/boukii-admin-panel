@@ -1175,7 +1175,10 @@
               <strong
               >{{
 
-                  (item.courseDates[0].course?.course_type === 1 && item.courseDates[0].course?.is_flexible || item.courseDates[0].course?.course_type === 2 && !item.courseDates[0].course?.is_flexible)
+                  (item.courseDates[0].course?.course_type === 1 &&
+                    item.courseDates[0].course?.is_flexible && item.discounts ||
+                    item.courseDates[0].course?.course_type === 2 &&
+                    !item.courseDates[0].course?.is_flexible)
                     ? item.courseDates[0].course?.price * item.courseDates.length : item.price_total
                 }}{{item.currency}}</strong
               >
@@ -1506,7 +1509,7 @@
                     style="height: 15px;width: 20px;"
                     svgIcon="mat:calendar_today"
                   ></mat-icon
-                  >{{ date.date | date:'fullDate' }} - {{date.hour_start}} /
+                  >{{ date.date | date:'fullDate': '' : translateService.currentLang }} - {{date.hour_start}} /
                   {{ date.hour_end }}
                 </li>
               </ul>
@@ -1897,7 +1900,7 @@
               >
                 <p style="float:left">{{'op_rem' | translate}}</p>
                 <p style="float:right">
-                  {{this.finalPrice - (Math.round(this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1) * 100) / 100)}}
+                  {{+(this.finalPrice - (Math.round(this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1) * 100) / 100)).toFixed(2)}}
                   {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                 </p>
               </span>
