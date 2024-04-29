@@ -2262,21 +2262,30 @@ export class BookingDetailComponent implements OnInit {
     }
 
     let bonusPrices = 0;
+    let bonusPricesOld = 0;
+    let bonusPricesNew = 0;
     if (this.bonus !== null && price > 0) {
       this.bonus.forEach(element => {
         if (price > 0) {
 
           if (element.bonus.remaining_balance > this.bookingPendingPrice) {
             //price = price - price;
-            bonusPrices = this.finalPrice;
+            if (element.bonus.before) {
+              //price = price - element.bonus.currentPay;
+              bonusPricesOld = this.finalPrice;
+            } else{
+              //price = price - element.bonus.remaining_balance;
+              bonusPricesNew = this.finalPrice;
+            }
+
 
           }  else {
             if (element.bonus.before) {
               //price = price - element.bonus.currentPay;
-              bonusPrices = bonusPrices + element.bonus.currentPay;
+              bonusPricesOld = bonusPricesOld + element.bonus.currentPay;
             } else{
               //price = price - element.bonus.remaining_balance;
-              bonusPrices = bonusPrices + element.bonus.remaining_balance;
+              bonusPricesNew = bonusPricesNew + element.bonus.remaining_balance;
             }
 
           }
@@ -2284,13 +2293,15 @@ export class BookingDetailComponent implements OnInit {
       });
     }
 
+    bonusPrices = bonusPricesNew + bonusPricesOld;
+
     this.finalPriceNoTaxes = price;
 
     if (this.booking.paid_total && this.booking.paid_total != this.finalPrice) {
       if(this.booking.paid) {
         this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total)
       } else {
-        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPrices;
+        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew;
       }
     } else {
       this.bookingPendingPrice = 0;

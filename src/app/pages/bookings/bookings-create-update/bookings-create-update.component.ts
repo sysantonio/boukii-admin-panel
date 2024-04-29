@@ -1159,7 +1159,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
         has_reduction: this.reduction !== null,
         price_reduction: this.reduction !== null ? this.reduction.appliedPrice : 0,
         currency: element.currency,
-        paid_total: this.defaults.paid || this.defaults.payment_method_id === 1 ? this.finalPrice : 0,
+        paid_total: this.defaults.paid || this.defaults.payment_method_id === 1 ? this.finalPrice :
+          this.bonus.reduce((total, bonus) => total + bonus.bonus.reducePrice, 0),
         paid: this.defaults.paid,
         notes: element.notes,
         notes_school: element.notes_school,
