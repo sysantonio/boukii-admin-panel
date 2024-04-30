@@ -1169,7 +1169,7 @@
               <span
                 style="width: 100%; float:left"
               >
-              <p style="float:left">
+              <p style="float:left" *ngIf="bonus.length > 0 || (booking.status !== 2 && bookingPendingPrice > 0)">
                 {{ "vouchers" | translate }}
               </p>
               <button *ngIf="booking.status !== 2 && bookingPendingPrice > 0"
@@ -1207,7 +1207,6 @@
                            <mat-icon
                              svgIcon="mat:delete"
                              style="float: left;color: red; cursor:pointer; margin-left: 2px"
-                             *ngIf="!item?.bonus?.before"
                              (click)="deleteBonus(i)"
                            ></mat-icon>
                 </span>

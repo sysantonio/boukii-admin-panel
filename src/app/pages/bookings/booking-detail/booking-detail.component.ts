@@ -2268,7 +2268,7 @@ export class BookingDetailComponent implements OnInit {
       this.bonus.forEach(element => {
         if (price > 0) {
 
-          if (element.bonus.remaining_balance > this.bookingPendingPrice) {
+          if (element.bonus.remaining_balance >= this.finalPrice) {
             //price = price - price;
             if (element.bonus.before) {
               //price = price - element.bonus.currentPay;
@@ -2301,7 +2301,7 @@ export class BookingDetailComponent implements OnInit {
       if(this.booking.paid) {
         this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total)
       } else {
-        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew;
+        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPrices;
       }
     } else {
       this.bookingPendingPrice = 0;
@@ -2309,9 +2309,35 @@ export class BookingDetailComponent implements OnInit {
   }
 
   deleteBonus(index: number) {
-    this.bonus.splice(index, 1);
-    this.calculateFinalPrice();
+    if(this.bonus[index].bonus.before) {
+      const dialogRef = this.dialog.open(ConfirmModalComponent, {
+        data: {message: '', title: this.translateService.instant('remove_bonus_title')}
+      });
+
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          const data = {
+            remaining_balance: this.bonus[index].bonus.remaining_balance + this.bonus[index].bonus.currentPay,
+            payed: false
+          };
+          const logData = this.bonus[index].log;
+          logData.amount = -logData.amount
+
+          // Crear una observación para cada llamada HTTP y agregarla al array de observables
+          this.crudService.update('/vouchers', data, this.bonus[index].bonus.id).subscribe(res=>({}));
+          this.crudService.create('/vouchers-logs',logData).subscribe(res=>({}));
+          this.crudService.update('/bookings', {paid_total: this.booking.paid_total - this.bonus[index].bonus.currentPay,
+          paid: false}, this.booking.id).subscribe(res=>({}));
+          this.bonus.splice(index, 1);
+          this.calculateFinalPrice();
+        }
+      })
+    } else {
+      this.bonus.splice(index, 1);
+      this.calculateFinalPrice();
+    }
   }
+
 
   calculateForfaitPriceBookingPrivate(booking) {
     let price = 0;
