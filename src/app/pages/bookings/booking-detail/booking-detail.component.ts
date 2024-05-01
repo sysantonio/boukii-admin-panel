@@ -616,11 +616,11 @@ export class BookingDetailComponent implements OnInit {
 
 
   create() {
-    this.loading=true;
-    setTimeout(() => {
+
+
 
       if (this.defaults.payment_method_id === 2 || this.defaults.payment_method_id === 3) {
-
+        this.loading=true;
         const observables = [];
 
         const bonuses = this.bonus.map(element => ({
@@ -628,80 +628,102 @@ export class BookingDetailComponent implements OnInit {
           quantity: 1,
           price: -(element.bonus.quantity)
         }));
-        observables.push(this.crudService.post('/admin/bookings/payments/' + this.id, { bonus: bonuses }));
 
         const extras = this.courseExtra.map(element => ({
           name: element.name,
           quantity: 1,
           price: parseFloat(element.price)
         }));
-        observables.push(this.crudService.post('/admin/bookings/payments/' + this.id, { extras }));
 
-        observables.push(this.crudService.post('/admin/bookings/payments/' + this.id, {
+        const basket = {
           payment_method_id: this.defaults.payment_method_id,
           price_base: { name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.courses[0].name, quantity: 1, price: this.getBasePrice() - parseFloat(this.booking.paid_total) },
           reduction: { name: 'Reduction', quantity: 1, price: -(this.reduction) },
           boukii_care: { name: 'Boukii Care', quantity: 1, price: parseFloat(this.booking.price_boukii_care) },
           cancellation_insurance: { name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.booking.price_cancellation_insurance) },
+          extras: {total: this.courseExtra.length, extras: extras},
+          bonus: {total: this.bonus.length, bonuses: bonuses},
           tva: { name: 'TVA', quantity: 1, price: this.tvaPrice },
-          price_total: parseFloat(this.booking.price_total),
-          paid_total: parseFloat(this.booking.paid_total) + parseFloat(this.bookingPendingPrice),
-          pending_amount: parseFloat(this.bookingPendingPrice).toFixed(2)
-        }));
+          price_total: this.finalPrice,
+          paid_total: this.finalPrice - parseFloat(this.bookingPendingPrice),
+          pending_amount: this.defaults.paid ? 0 : parseFloat(this.bookingPendingPrice).toFixed(2)
+        };
 
-        // Ejecutar todas las llamadas HTTP en paralelo
-        forkJoin(observables).subscribe(results => {
-          // results contiene los resultados de todas las llamadas HTTP
-          console.log(results);
-          window.open(results[results.length-1].data, "_self");
-        });
-      } else {
-        const observables = [];
+        this.crudService.post('/admin/bookings/payments/' + this.id, basket)
 
-        observables.push(this.crudService.update('/bookings', {
-          paid: this.finalPrice - this.bookingPendingPrice == 0,
-          paid_total: this.finalPrice - this.bookingPendingPrice,
-          payment_method_id: this.defaults.payment_method_id
-        }, this.id));
-
-        observables.push(this.crudService.create('/payments', {
-          booking_id: this.id,
-          school_id: this.user.schools[0].id,
-          amount: this.bookingPendingPrice,
-          status: 'paid',
-          notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'
-        }));
-
-        if (this.bonus.length > 0) {
-          this.bonus.forEach(element => {
-            if (!element.bonus.before) {
-              const data = {
-                code: element.bonus.code,
-                quantity: element.bonus.quantity,
-                remaining_balance: element.bonus.quantity - element.bonus.reducePrice,
-                payed: element.bonus.quantity - element.bonus.reducePrice === 0,
-                client_id: element.bonus.client_id,
-                school_id: this.user.schools[0].id
-              };
-
-              // Crear una observación para cada llamada HTTP y agregarla al array de observables
-              observables.push(this.crudService.update('/vouchers', data, element.bonus.id));
-              observables.push(this.crudService.create('/vouchers-logs',
-                { voucher_id: element.bonus.id, booking_id: this.id, amount: element.bonus.reducePrice }));
-            }
-          });
-        }
-
-        // Ejecutar las operaciones de actualización y creación en paralelo
-        forkJoin(observables).subscribe(() => {
-          this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', { duration: 1000 });
-          this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 1000 });
-          this.getData(false);
-          // this.goTo('/bookings');
-        });
+          .subscribe((result: any) => {
+            console.log((result));
+            window.open(result.data, "_self");
+          })
 
       }
-    }, 1000);
+      else {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+          data: {title: this.translateService.instant('is_paid')}
+        });
+
+        dialogRef.afterClosed().subscribe((data: any) => {
+          if (data) {
+            this.loading=true;
+            const observables = [];
+
+            observables.push(this.crudService.update('/bookings', {
+              paid: true,
+              paid_total: this.finalPrice,
+              payment_method_id: this.defaults.payment_method_id
+            }, this.id));
+
+            if (this.bonus.length > 0) {
+              this.bonus.forEach(element => {
+                if (!element.bonus.before) {
+                  const data = {
+                    code: element.bonus.code,
+                    quantity: element.bonus.quantity,
+                    remaining_balance: element.bonus.quantity - element.bonus.reducePrice,
+                    payed: element.bonus.quantity - element.bonus.reducePrice === 0,
+                    client_id: element.bonus.client_id,
+                    school_id: this.user.schools[0].id
+                  };
+
+                  // Crear una observación para cada llamada HTTP y agregarla al array de observables
+                  observables.push(this.crudService.update('/vouchers', data, element.bonus.id));
+                  observables.push(this.crudService.create('/vouchers-logs',
+                    { voucher_id: element.bonus.id, booking_id: this.id, amount: element.bonus.reducePrice }));
+                }
+              });
+            }
+
+            if(this.defaults.payment_method_id != 5) {
+              observables.push(this.crudService.create('/payments', {
+                booking_id: this.id,
+                school_id: this.user.schools[0].id,
+                amount: this.bookingPendingPrice,
+                status: 'paid',
+                notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'
+              }));
+            }
+
+            const bookingLog = {
+              booking_id: this.id,
+              action: 'update',
+              description: 'update booking',
+              user_id: this.user.id,
+              before_change: 'confirmed',
+              school_id: this.user.schools[0].id
+            }
+            observables.push(this.crudService.post('/booking-logs', bookingLog));
+
+            // Ejecutar las operaciones de actualización y creación en paralelo
+            forkJoin(observables).subscribe(() => {
+              this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', { duration: 1000 });
+              //this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 1000 });
+              this.getData(true);
+              // this.goTo('/bookings');
+            });
+          }
+        });
+      }
+
 
     /*this.crudService.update('/bookings', {paid: this.defaults.paid, payment_method_id: this.defaults.payment_method_id}, this.id)
       .subscribe((res) => {
@@ -2285,7 +2307,7 @@ export class BookingDetailComponent implements OnInit {
               bonusPricesOld = bonusPricesOld + element.bonus.currentPay;
             } else{
               //price = price - element.bonus.remaining_balance;
-              bonusPricesNew = bonusPricesNew + element.bonus.remaining_balance;
+              bonusPricesNew = bonusPricesNew + element.bonus.reducePrice;
             }
 
           }

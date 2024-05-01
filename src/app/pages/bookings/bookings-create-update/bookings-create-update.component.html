@@ -1455,7 +1455,7 @@
                 {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
                 {{ getDegree(item.courseDates[0].degree_id)?.level }}
               </div>
-              <ng-container *ngIf="item.courseDates[0].course.course_type === 2">
+              <ng-container *ngIf="item.courseDates[0].course.course_type === 2 && item.courseDates[0].course.options">
                 <p
                   (click)="item.courseDates[0].showOptions = !item.courseDates[0].showOptions"
                   style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
@@ -1558,60 +1558,63 @@
                     {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
                     {{ getDegree(item.courseDates[0].degree_id)?.level }}
                   </div>
-                  <p
-                    (click)="people.showOptions = !people.showOptions"
-                    style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
-                  >
-                    {{ "options" | translate }}
-                    <mat-icon  *ngIf="!people.showOptions"
-                               style="height: 15px;width: 20px;"
-                               svgIcon="mat:add"
-                    ></mat-icon>
-                    <mat-icon  *ngIf="people.showOptions"
-                               style="height: 15px;width: 20px;"
-                               svgIcon="mat:remove"
-                    ></mat-icon>
-                  </p>
-
-                  <div
-                    style="width: 100%; float:left; color: #868686;"
-                    *ngIf="people.showOptions"
-                  >
-                    <div
-                      style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  <ng-container *ngIf="item.courseDates[0].course.options">
+                    <p
+                      (click)="people.showOptions = !people.showOptions"
+                      style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
                     >
-                      <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                        <div style="width: 65%;">
-                          <strong>Forfait</strong>
+                      {{ "options" | translate }}
+                      <mat-icon  *ngIf="!people.showOptions"
+                                 style="height: 15px;width: 20px;"
+                                 svgIcon="mat:add"
+                      ></mat-icon>
+                      <mat-icon  *ngIf="people.showOptions"
+                                 style="height: 15px;width: 20px;"
+                                 svgIcon="mat:remove"
+                      ></mat-icon>
+                    </p>
+
+                    <div
+                      style="width: 100%; float:left; color: #868686;"
+                      *ngIf="people.showOptions"
+                    >
+                      <div
+                        style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                      >
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                          <div style="width: 65%;">
+                            <strong>Forfait</strong>
+                          </div>
+
+                          <div>
+                            <p>
+                            <p>
+                              +{{item.forfait ? (item.forfait.price ) + ((item.forfait.price) * (item.forfait.tva / 100)) : 0}}
+                              CHF
+                            </p>
+                          </div>
                         </div>
 
-                        <div>
-                          <p>
-                          <p>
-                            +{{item.forfait ? (item.forfait.price ) + ((item.forfait.price) * (item.forfait.tva / 100)) : 0}}
-                            CHF
-                          </p>
-                        </div>
-                      </div>
-
-                      <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                        <ul>
-                          <li *ngFor="let forfait of settings?.extras?.forfait">
-                            <mat-checkbox
-                              class="radio"
-                              [value]="forfait"
-                              (change)="setForfait($event, forfait, item, people)"
-                              [checked]="people?.forfait?.id === forfait.id"
-                            >
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                          <ul>
+                            <li *ngFor="let forfait of settings?.extras?.forfait">
+                              <mat-checkbox
+                                class="radio"
+                                [value]="forfait"
+                                (change)="setForfait($event, forfait, item, people)"
+                                [checked]="people?.forfait?.id === forfait.id"
+                              >
                             <span style="color: #868686;">{{
                                 forfait.id
                               }}</span>
-                            </mat-checkbox>
-                          </li>
-                        </ul>
+                              </mat-checkbox>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </ng-container>
+
                 </ng-container>
               </ng-container>
 
@@ -1670,7 +1673,7 @@
                 style="float: left;width: 100%;"
                 class="text-border"
               ></mat-divider>
-
+              <ng-container *ngIf="item.courseDates[0].course.options">
               <p
                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
                 *ngIf="item.courseDates[0].course.course_type == 1"
@@ -1776,7 +1779,7 @@
                 style="float: left;width: 100%;"
                 class="text-border"
               ></mat-divider>
-
+              </ng-container>
               <div style="width: 100%;float:left;">
                 <div>
                   <p style="width: 60%;font-size: 21px;float:left">

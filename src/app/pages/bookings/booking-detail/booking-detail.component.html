@@ -956,7 +956,7 @@
                 mat-raised-button
                 color="accent"
                 (click)="addReduction()"
-                [disabled]="booking.status === 2"
+                [disabled]="booking.status === 2 || booking.paid"
               >
                 {{ "apply_reduction" | translate }}
               </button>
@@ -1003,7 +1003,7 @@
                   [(ngModel)]="booking.has_cancellation_insurance"
                   *ngIf="cancellationInsurance"
                   (change)="addCancellationInsurance($event)"
-                  [disabled]="booking.status === 2"
+                  [disabled]="booking.status === 2 || booking.paid"
                   style="float: left; margin-left: 10px"
                 ></mat-slide-toggle>
                 <p style="float:right" *ngIf="booking.has_cancellation_insurance">
@@ -1195,8 +1195,8 @@
                   <p style="float:right">
                     -{{
                       item?.bonus.before
-                        ? item?.bonus?.currentPay
-                        : item?.bonus?.reducePrice
+                        ? item?.bonus?.currentPay.toFixed(2)
+                        : item?.bonus?.reducePrice.toFixed(2)
                     }}
                     {{
                       bookingsToCreate.length > 0
@@ -1204,7 +1204,7 @@
                         : ""
                     }}
                   </p>
-                           <mat-icon
+                           <mat-icon *ngIf="!booking.paid && booking.status != 2"
                              svgIcon="mat:delete"
                              style="float: left;color: red; cursor:pointer; margin-left: 2px"
                              (click)="deleteBonus(i)"
@@ -1215,7 +1215,7 @@
                      style="width: 100%; float:left"
               >
               <p style="float:left">
-                {{ "payment_method" | translate }}
+                {{ "method_paiment" | translate }}
               </p>
               </span>
               <ng-container *ngFor="let item of payments">
@@ -1230,7 +1230,7 @@
                   </p>
                   <p style="float:left" *ngIf="item.status == 'paid'">
                     {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:
-                    {{ "payment" | translate }}
+                    {{ "payment" | translate }} -  {{ item.notes | translate }}
                   </p>
                   <p style="float:right" *ngIf="item.status === 'refund'">
                     {{ item.amount }}
@@ -1473,7 +1473,7 @@
                   mat-raised-button
                   color="primary"
                   class="square-button"
-                  (click)="create()"
+                  (click)="defaults.payment_method_id = 5; create()"
                 >
                   {{ "confirm_booking" | translate }}
                 </button>
