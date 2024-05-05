@@ -13,14 +13,15 @@
 
   <mat-divider class="text-border"></mat-divider>
 
-  <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" >
+  <mat-tab-group >
 
-    <mat-step [stepControl]="noRefundForm" >
-      <ng-template matStepLabel>{{'bookings_page.cancelations.no_refund' | translate }}</ng-template>
+    <mat-tab label="{{'bookings_page.cancelations.no_refund' | translate }}">
 
       <mat-dialog-content class="flex flex-col" *ngIf="!loading">
         <div style="width: 100%;">
-          <p>{{'bookings_page.cancelations.no_refund_text' | translate}} <span style="color:#fe3085">{{defaults.itemPrice}} {{defaults.booking.currency}}</span></p>
+          <p>{{'bookings_page.cancelations.no_refund_text' | translate}}
+            <span style="color:#fe3085">{{defaults.itemPrice}} {{defaults.booking.currency}}</span>
+          </p>
         </div>
         <mat-divider></mat-divider>
 
@@ -29,9 +30,8 @@
           <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
         </mat-dialog-actions>
       </mat-dialog-content>
-    </mat-step>
-    <mat-step [stepControl]="refundForm">
-      <ng-template matStepLabel>{{'bookings_page.cancelations.refund' | translate }}</ng-template>
+    </mat-tab>
+    <mat-tab label="{{'bookings_page.cancelations.refund' | translate }}">
 
       <mat-tab-group>
         <mat-tab label="Boukii Pay">
@@ -51,7 +51,8 @@
             </mat-dialog-actions>
           </mat-dialog-content>
 
-        </mat-tab>        <mat-tab label="{{'bookings_page.cancelations.cash' | translate}}">
+        </mat-tab>
+        <mat-tab label="{{'bookings_page.cancelations.cash' | translate}}">
 
           <mat-dialog-content class="flex flex-col" *ngIf="!loading">
             <div style="width: 100%;">
@@ -95,8 +96,8 @@
           </mat-dialog-content>
         </mat-tab>
       </mat-tab-group>
-    </mat-step>
-    <mat-step [stepControl]="bonusForm" *ngIf="false">
+    </mat-tab>
+    <!--<mat-step [stepControl]="bonusForm">
 
       <ng-template matStepLabel>{{'bookings_page.cancelations.bonus_refund' | translate}}</ng-template>
 
@@ -135,8 +136,8 @@
           <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
         </mat-dialog-actions>
       </mat-dialog-content>
-    </mat-step>
-  </mat-vertical-stepper>
+    </mat-step>-->
+  </mat-tab-group>
 
 
 

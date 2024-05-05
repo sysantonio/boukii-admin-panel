@@ -219,7 +219,7 @@
               </mat-card-subtitle>
               <div  *ngIf="getCourse(item?.courseDates[0]?.course_id)?.is_flexible"
                 style="color: #EA0C60;">
-                {{  parseFloatValue(getTotalBook(bI, item)) }} CHF
+                {{  parseFloatValue(getTotalBook(bI, item)) }} CHFs
 
               </div>
 
@@ -781,7 +781,9 @@
       <div class="card-container">
         <div @fadeInUp class="card flex-auto" style="padding: 1%">
           <div class="px-6 py-4 border-b flex items-center">
-            <h2 class="title m-0">{{ "client_info" | translate }}</h2>
+            <h2 class="title m-0"  style="color: red;" *ngIf="booking.status == 2">{{ "booking" | translate }} {{ "cancelled" | translate }}</h2>
+            <h2 class="title m-0"  style="color: rgb(206, 231, 65);" *ngIf="booking.status == 1">{{ "booking" | translate }} {{ "active" | translate }}</h2>
+            <h2 class="title m-0"  style="color: rgb(250, 199, 16);" *ngIf="booking.status == 3">{{ "booking" | translate }} {{ "partial_cancelled" | translate }}</h2>
           </div>
           <mat-card style="width: 100%;padding:1%">
             <mat-card-header>
@@ -1103,7 +1105,7 @@
                 *ngIf="
                   bookingPendingPrice > 0 &&
                   !booking.paid &&
-                  booking.status === 1
+                   (booking.status === 1 ||  booking.status === 3)
                 "
               >
                 <p style="float:left; color:#FB9B1B">
@@ -1124,7 +1126,7 @@
                 *ngIf="
                   bookingPendingPrice === 0 &&
                   booking.paid &&
-                  booking.status === 1
+                  (booking.status === 1 ||  booking.status === 3)
                 "
               >
                 <p style="float:left; color:#2fca45">
@@ -1144,7 +1146,7 @@
                 *ngIf="
                   bookingPendingPrice === 0 &&
                   !booking.paid &&
-                  booking.status === 1
+                  (booking.status === 1 ||  booking.status === 3)
                 "
               >
                 <p style="float:left; color:#2fca45">
@@ -1152,6 +1154,25 @@
                 </p>
                 <p style="float:right; color:#2fca45">
                   {{ finalPrice }}
+                  {{
+                    bookingsToCreate.length > 0
+                      ? bookingsToCreate[0].courseDates[0].currency
+                      : ""
+                  }}
+                </p>
+              </span>
+              <span
+                style="width: 100%; float:left"
+                *ngIf="
+                  booking.status === 2
+                  && booking.has_cancellation_insurance
+                "
+              >
+                <p style="float:left; color:#2fca45">
+                  {{ "ispaid" | translate | uppercase }}
+                </p>
+                <p style="float:right; color:#2fca45">
+                  {{ booking.price_cancellation_insurance }}
                   {{
                     bookingsToCreate.length > 0
                       ? bookingsToCreate[0].courseDates[0].currency
