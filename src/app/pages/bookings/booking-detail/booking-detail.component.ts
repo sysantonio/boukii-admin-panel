@@ -1778,6 +1778,7 @@ export class BookingDetailComponent implements OnInit {
             this.getData(true);
           }, 1000);
         } else {
+          event.source.checked = !event.source.checked
         }
       });
     } else {
@@ -1809,6 +1810,8 @@ export class BookingDetailComponent implements OnInit {
           setTimeout(() => {
             this.getData(true);
           }, 1000);
+        } else {
+          event.source.checked = !event.source.checked
         }
       });
     }
