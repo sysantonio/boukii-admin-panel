@@ -169,12 +169,11 @@
                   item?.courseDates[0]?.status === 1 &&
                   canUpdate(
                     item?.courseDates[item?.courseDates.length - 1]?.date
-                  )
-                "
+                  ) && !(item?.courseDates[0]?.course?.course_type === 1 && !item?.courseDates[0]?.course?.is_flexible)"
               >
                 <mat-icon svgIcon="mat:edit" style="color:#FF4081"></mat-icon>
               </button>
-              <button
+              <button *ngIf="item?.courseDates[0]?.status === 1"
                 mat-icon-button
                 color="warn"
                 class="delete-icon"
@@ -336,7 +335,7 @@
                   {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
                   {{ getDegree(item.courseDates[0].degree_id)?.level }}
                 </div>
-                <p
+                <p *ngIf="item.courseDates[0].course.options"
                   (click)="bu.showOptions = !bu.showOptions"
                   style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
                 >
@@ -388,7 +387,7 @@
                               bu.booking_user_extras[0]?.course_extra?.name ===
                               forfait.id
                             "
-                            [disabled]="booking.status === 2"
+                            [disabled]="booking.status === 2 || bu.status === 2"
                           >
                             <span style="color: #868686;">{{
                                 forfait.id
@@ -583,7 +582,7 @@
 
               <p
                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
-                *ngIf="courses[bI].options"
+                *ngIf="courses[bI].options && courses[bI].course_type == 1"
               >
                 {{ "options" | translate }}
               </p>
@@ -591,7 +590,7 @@
               <div style="width: 100%; float:left">
                 <div
                   style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
-                  *ngIf="courses[bI].options"
+                  *ngIf="courses[bI].options && courses[bI].course_type == 1"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 50%;">
@@ -1005,21 +1004,11 @@
                   [(ngModel)]="booking.has_cancellation_insurance"
                   *ngIf="cancellationInsurance"
                   (change)="addCancellationInsurance($event)"
-                  [disabled]="booking.status === 2 || booking.paid"
+                  [disabled]="booking.status === 2 || booking.paid || hasOneCancelled()"
                   style="float: left; margin-left: 10px"
                 ></mat-slide-toggle>
                 <p style="float:right" *ngIf="booking.has_cancellation_insurance">
-                  {{
-                    +(
-                      this.finalPrice -
-                      Math.round(
-                        (this.finalPrice /
-                          (+this.cancellationInsurance.toFixed(2) + 1)) *
-                        100
-                      ) /
-                      100
-                    ).toFixed(2)
-                  }}
+                  {{getOpRemPrice()}}
                   {{
                     bookingsToCreate.length > 0
                       ? bookingsToCreate[0].courseDates[0].currency
@@ -1085,7 +1074,7 @@
             <div class="opaque-box" >
               <span
                 style="width: 100%; float:left"
-                *ngIf="bookingPendingPrice < 0 && booking.paid"
+                *ngIf="bookingPendingPrice > 0 && booking.paid"
               >
                 <p style="float:left; color:#FB9B1B">
                   {{ "refund_text" | translate | uppercase }}

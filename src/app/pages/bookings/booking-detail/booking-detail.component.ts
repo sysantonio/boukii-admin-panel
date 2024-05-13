@@ -197,6 +197,7 @@ export class BookingDetailComponent implements OnInit {
   detailClient: any;
   reduction: any = null;
   finalPrice: any = null;
+  bonusPrices: any = null;
   finalPriceNoTaxes: any = null;
   bonus: any = [];
   currentBonus: any = [];
@@ -213,6 +214,8 @@ export class BookingDetailComponent implements OnInit {
 
   tva = 0;
   tvaPrice: any = 0;
+  priceRefund: any = 0;
+  priceNoRefund: any = 0;
   cancellationInsurance = 0;
   boukiiCarePrice = 0;
   payments = [];
@@ -458,14 +461,7 @@ export class BookingDetailComponent implements OnInit {
                 this.calculateFinalPrice();
 
                 this.booking.price_total = this.finalPrice;
-                this.booking.price_cancellation_insurance =
-                  this.finalPrice -
-                  Math.round(
-                    (this.finalPrice /
-                      (+this.cancellationInsurance.toFixed(2) + 1)) *
-                    100
-                  ) /
-                  100;
+                this.booking.price_cancellation_insurance = this.getOpRemPrice();
                 //  this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
                 if (updateBooking) {
                   this.booking.paid = this.bookingPendingPrice <= 0;
@@ -2268,6 +2264,10 @@ export class BookingDetailComponent implements OnInit {
     return discountPrice;
   }
 
+  hasOneCancelled() {
+    return this.bookingsToCreate.filter(b => b.courseDates[0].status == 1).length >= 1;
+  }
+
   deletePartialBooking(index: number, book: any) {
     debugger;
     let bookTotalPrice  = book.price_total + this.getCourseExtraForfaitPriceByCourse(
@@ -2292,7 +2292,7 @@ export class BookingDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-
+        let isPartial = this.bookingsToCreate.filter(b => b.courseDates[0].status == 1).length > 1;
         const bookingLog = {
           booking_id: this.id,
           action: "partial_cancel",
@@ -2508,9 +2508,8 @@ export class BookingDetailComponent implements OnInit {
                 1 *
                 this.bookingsToCreate[index].courseDates.length;
             }
-            debugger;
             this.crudService
-              .update("/bookings", { status: 3 }, this.id)
+              .update("/bookings", { status: isPartial ? 3 : 2 }, this.id)
               .subscribe(() => {
                 this.bookingsToCreate.splice(index, 1);
                 this.getData();
@@ -2762,6 +2761,7 @@ export class BookingDetailComponent implements OnInit {
 
   addCancellationInsurance(event: any) {
     this.calculateFinalPrice();
+    debugger;
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       data: {
         title: event.checked
@@ -2917,17 +2917,40 @@ export class BookingDetailComponent implements OnInit {
     return price;
   }
 
+  getOpRemPrice() {
+    let price = 0;
+    if (this.booking.paid) {
+      price =
+        +this.booking.paid_total - this.priceRefund - this.priceNoRefund
+    } else {
+      price =
+        this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
+    }
+    return +(
+      price -
+      Math.round(
+        (price /
+          (+this.cancellationInsurance.toFixed(2) + 1)) *
+        100
+      ) /
+      100
+    ).toFixed(2);
+  }
+
   calculateFinalPrice() {
     let price = this.getBasePrice(true);
 
     //forfait primero
     let bookingsCancelled = this.bookingUsers.filter(b => b.status == 2).map(i => i.id);
 
+    let extraPrice = 0;
     this.courseExtra.forEach((element) => {
-      if(!bookingsCancelled.includes(element.booking_user_id)) {
-        price = price + +element.price;
-      }
+
+        extraPrice = extraPrice + +element.price;
+
     });
+
+    price += extraPrice;
 
     if (this.booking.has_reduction) {
       price = price - this.booking.price_reduction;
@@ -2937,9 +2960,10 @@ export class BookingDetailComponent implements OnInit {
       price -= this.discounts.reduce((total, discount) => total + discount, 0);
     }
 
-    let priceRefund = this.payments.filter(p => p.status == 'refund').reduce((acc, item) => acc + parseFloat(item.amount), 0);
+    this.priceRefund = this.payments.filter(p => p.status == 'refund').reduce((acc, item) => acc + parseFloat(item.amount), 0);
+    this.priceNoRefund = this.payments.filter(p => p.status == 'no_refund').reduce((acc, item) => acc + parseFloat(item.amount), 0);
 
-    price += priceRefund;
+    price -= this.priceRefund;
 
     if (
       this.booking.has_cancellation_insurance &&
@@ -2976,7 +3000,7 @@ export class BookingDetailComponent implements OnInit {
       }
     }
 
-    let bonusPrices = 0;
+    this.bonusPrices = 0;
     let bonusPricesOld = 0;
     let bonusPricesNew = 0;
     if (this.bonus !== null && price > 0) {
@@ -3004,17 +3028,17 @@ export class BookingDetailComponent implements OnInit {
       });
     }
 
-    bonusPrices = bonusPricesNew + bonusPricesOld;
+    this.bonusPrices = bonusPricesNew + bonusPricesOld;
 
     this.finalPriceNoTaxes = price;
 
     if (this.booking.paid_total && this.booking.paid_total != this.finalPrice) {
       if (this.booking.paid) {
         this.bookingPendingPrice =
-          this.finalPrice - parseFloat(this.booking.paid_total);
+          +this.booking.paid_total - this.priceRefund - this.priceNoRefund
       } else {
         this.bookingPendingPrice =
-          this.finalPrice - parseFloat(this.booking.paid_total) - bonusPrices;
+          this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
       }
     } else {
       this.bookingPendingPrice = 0;
@@ -3285,6 +3309,7 @@ export class BookingDetailComponent implements OnInit {
         }
       });
     } else {
+      debugger;
       const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
         width: "60vw",
         maxWidth: "100vw",
