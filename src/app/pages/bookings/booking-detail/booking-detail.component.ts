@@ -1475,7 +1475,7 @@ export class BookingDetailComponent implements OnInit {
       duration.includes("h") &&
       (duration.includes("min") || duration.includes("m"))
     ) {
-      const hours = duration.split(" ")[0].replace("h", "");
+      const hours = duration.split(" ")[0].replacthe("h", "");
       const minutes = duration
         .split(" ")[1]
         .replace("min", "")
@@ -2925,9 +2925,11 @@ export class BookingDetailComponent implements OnInit {
     if (this.booking.paid) {
       price =
         +this.booking.paid_total - this.priceRefund - this.priceNoRefund
-    } else {
+    } else if(this.booking.status !== 1){
       price =
         this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
+    } else {
+      price = this.finalPrice;
     }
     return +(
       price -
@@ -3039,9 +3041,11 @@ export class BookingDetailComponent implements OnInit {
       if (this.booking.paid) {
         this.bookingPendingPrice =
           +this.booking.paid_total - this.priceRefund - this.priceNoRefund
-      } else {
+      } else if(this.booking.status !== 1) {
         this.bookingPendingPrice =
           this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
+      } else {
+        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total);
       }
     } else {
       this.bookingPendingPrice = 0;
@@ -3267,6 +3271,13 @@ export class BookingDetailComponent implements OnInit {
     this.bookingService.editData.is_main =
       this.bookingService.editData.client_main_id ===
       this.bookingService.editData.client_id;
+
+    this.bookingService.editData.selectedPrice =
+      this.courses[index].course_type == 1 ? this.parseFloatValue(this.getTotalBook(index, item)) +
+        this.getCourseExtraForfaitPrice(item.courseDates[0]) : this.parseFloatValue(this.getTotalBook(index, item)) +
+        this.getCourseExtraForfaitPriceByDateHour(
+          item.courseDates[0]
+        )
 
     this.router.navigate(["bookings/edit/" + this.id]);
   }

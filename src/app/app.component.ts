@@ -185,14 +185,14 @@ export class AppComponent {
 
             routerLinkActiveOptions: { exact: true }
           },
-          {
+/*          {
             type: 'link',
             label: 'calendar',
             route: '/calendar',
             icon: '../assets/img/icons/calendar-2.svg',
             icon_active: '../assets/img/icons/calendar.svg',
             routerLinkActiveOptions: { exact: true }
-          },
+          },*/
           {
             type: 'link',
             label: 'bookings',

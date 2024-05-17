@@ -145,6 +145,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   static id = 100;
   minDate: Date;
   selectedDate = null;
+  discounts = [];
   selectedPrivateCoursesDate = moment();
   selectedItem: any = null;
   selectedCourseDateItem: any = null;
@@ -256,6 +257,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
   mainIdSelected = true;
   reduction: any = null;
   finalPrice: any = null;
+  bookingPendingPrice = 0;
   finalPriceNoTaxes: any = null;
   bonus: any = [];
   totalPrice: any = 0;
@@ -484,6 +486,60 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
     // La fecha debería ser seleccionable si no es un día festivo y está activa (o sea, active no es falso ni 0).
     return !isHoliday && isActive;
+  }
+
+  getTotalBook(bI: number, item: any) {
+    if (this.courses[bI]?.course_type === 2 && this.courses[bI]?.is_flexible) {
+      return this.getPrivateFlexPrice(item.courseDates);
+    } else if (this.courses[bI]?.course_type === 1) {
+      return item?.price_total;
+    } else if (
+      this.courses[bI]?.course_type === 2 &&
+      !this.courses[bI]?.is_flexible
+    ) {
+      return this.courses[bI]?.price * item.courseDates.length;
+    }
+  }
+
+  getPrivateFlexPrice(courseDates) {
+    let ret = 0;
+    courseDates.forEach((element) => {
+      ret = ret + parseFloat(element.price);
+    });
+
+    return ret;
+  }
+
+  getAmountCourse(index: number) {
+    if (
+      this.courses[index].course_type === 2 &&
+      this.courses[index].is_flexible
+    ) {
+      const priceRange = this.courses[index].price_range.find(
+        (a) => a[1] !== null
+      );
+      return priceRange[
+        this.bookingsToCreate.filter(
+          (b) => b.course_id === this.courses[index].id
+        ).length
+        ];
+    } else {
+      return this.courses[index].price;
+    }
+  }
+
+  getClientDegree(id: number, sport_id: number) {
+    if (id && id !== null && sport_id && sport_id !== null) {
+      const client = this.clients.find((m) => m.id === id);
+      const sportObject = client?.client_sports.find(
+        (obj) => obj.sport_id === sport_id
+      );
+
+      return sportObject?.degree_id;
+    }
+  }
+  parseFloatValue(value) {
+    return parseFloat(value);
   }
 
   selectItem(item: any) {
@@ -972,6 +1028,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     });
     this.bookingComplete = true;
     this.addAnotherCourse();
+    this.calculateDiscounts();
     this.calculateFinalPrice();
     //this.create();
   }
@@ -995,7 +1052,8 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       price_reduction: this.bookingService.editData.booking.price_reduction,
       currency: this.bookingService.editData.booking.currency,
       paid_total: this.bookingService.editData.booking.paid_total !== null ? this.bookingService.editData.booking.paid_total : 0,
-      paid: this.bookingService.editData.booking.paid && this.finalPrice <= this.bookingService.editData.price,
+      paid: this.bookingService.editData.price - this.bookingService.editData.selectedPrice + this.finalPrice
+        <= this.bookingService.editData.booking.paid_total,
       notes: this.bookingService.editData.booking.notes,
       notes_school: this.bookingService.editData.booking.notes_school,
       school_id: this.bookingService.editData.booking.school_id,
@@ -2549,88 +2607,80 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
     return price;
   }
 
+  getLastPrice() {
+    let lastPrice = !this.bookingService.editData.booking.has_cancellation_insurance
+      ? this.bookingService.editData.selectedPrice : this.bookingService.editData.selectedPrice
+      + (this.bookingService.editData.selectedPrice * this.cancellationInsurance);
+      return lastPrice;
+  }
+
   calculateFinalPriceAll() {
-    let price = this.getBasePriceAllBooking();
-    price = price + this.calculateAllForfaitPriceBookingPrivateOldBooking();
-
-    let booking = this.bookingService.editData.booking;
-    let vl = booking.vouchers_logs;
-    let oldBonus;
-    if(vl.length > 0) {
-      oldBonus = [];
-      vl.forEach(voucherLog => {
-        let v = voucherLog.voucher
-
-        v.currentPay = parseFloat(voucherLog.amount);
-        v.before = true;
-
-        if (parseFloat(voucherLog.amount) < 0) {
-          const idx = oldBonus.findIndex((b) => b.bonus.id === voucherLog.voucher_id);
-          oldBonus.splice(idx, 1);
-        } else {
-
-          this.bonus.push({bonus: v.data});
-          oldBonus.push({bonus: v.data});
-        }
-      });
-
-    }
-
-    if (oldBonus && price > 0) {
-      oldBonus.forEach(element => {
-        if (price > 0) {
-
-          if (element.bonus.remaining_balance > price) {
-            price = price - price;
-          } else {
-            price = price - element.bonus.remaining_balance;
-          }
-        }
-      });
-    }
+    let currentPrice = this.finalPrice;
+    let totalFinalPrice = this.bookingService.editData.price - this.getLastPrice() + currentPrice;
+    let tvaAllPrice = 0;
+    let boukiiCareAllPrice = 0;
     let cancellationInsuranceAll = 0;
-    if(booking.has_cancellation_insurance) {
-      cancellationInsuranceAll = (price * this.cancellationInsurance);
-      price = price + (price * this.cancellationInsurance);
+
+    if (
+      this.bookingService.editData.booking.has_cancellation_insurance &&
+      this.cancellationInsurance > 0
+    ) {
+      cancellationInsuranceAll = totalFinalPrice -
+        Math.round((totalFinalPrice / (+this.cancellationInsurance.toFixed(2) + 1)) * 100) / 100;
     }
 
-    let boukiiCarePriceAll = 0;
     if(this.defaults.has_boukii_care) {
-      boukiiCarePriceAll = (booking.boukii_care_price * this.getBookingAllPaxes() * this.getBookingAllDates());
+      boukiiCareAllPrice =  (this.boukiiCarePrice * this.getBookingAllPaxes() * this.getBookingAllDates());
       // coger valores de reglajes
-      price = price + (booking.boukii_care_price * this.getBookingAllPaxes() * this.getBookingAllDates());
+      totalFinalPrice = totalFinalPrice + boukiiCareAllPrice;
     }
-    let tvaPrice = 0;
     // añadir desde reglajes el tva
     if (this.tva && !isNaN(this.tva)) {
-      price = price + (price * this.tva);
-      tvaPrice = (price * this.tva);
-    } else {
-      //this.finalPrice = price;
-    }
-    let data = {
-      finalPrice: price,
-      cancellationInsurance: cancellationInsuranceAll,
-      tvaAllPrice: tvaPrice,
-      boukiiCarePrice: boukiiCarePriceAll
+      totalFinalPrice = totalFinalPrice + (totalFinalPrice * this.tva);
+      tvaAllPrice = (totalFinalPrice * this.tva);
     }
 
+
+
+    let data = {
+      finalPrice: totalFinalPrice,
+      cancellationInsurance: cancellationInsuranceAll,
+      tvaAllPrice: tvaAllPrice,
+      boukiiCarePrice: boukiiCareAllPrice
+    }
+    debugger;
     return data;
 
   }
 
+  calculateDiscounts() {
+    this.discounts = [];
+    this.bookingsToCreate.forEach((b, idx) => {
+      if (b.courseDates[0].course.is_flexible && b.courseDates[0].course.course_type === 1) {
+        const discounts = typeof b.courseDates[0].course.discounts === 'string' ? JSON.parse(b.courseDates[0].course.discounts)
+          : b.courseDates[0].course.discounts;
+        if(discounts && discounts.length) {
+          let i = 0;
+          let price = 0;
+          b.courseDates.forEach(element => {
+            const selectedDiscount = discounts.find(item => item.date == i+1);
+            if(selectedDiscount) {
+              price = price + ((1*b.courseDates[0].course.price) * (selectedDiscount.percentage / 100));
+            }
+            i++;
+          });
+          this.discounts.push(price);
+        }
+      }
+
+    });
+
+  }
   calculateFinalPrice() {
     let price = this.getBasePrice();
 
-    //TODO: Check collective
     //forfait primero
     price = price + this.calculateAllForfaitPriceBookingPrivate();
-
-/*    this.bookingsToCreate.forEach(element => {
-      if (element.forfait) {
-        price = price + (element.forfait.price * element.courseDates.length * element.paxes) + (element.forfait.price * element.courseDates.length * element.paxes * (element.forfait.tva / 100));
-      }
-    });*/
 
     if (this.reduction !== null) {
       if (this.reduction.type === 1) {
@@ -2640,35 +2690,40 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       }
     }
 
-    if (this.bonus !== null && price > 0) {
-      this.bonus.forEach(element => {
-        if (price > 0) {
 
-          if (element.bonus.remaining_balance > price) {
-            price = price - price;
-          } else {
-            price = price - element.bonus.remaining_balance;
-          }
-        }
-      });
-    }
-
-    if(this.defaults.has_cancellation_insurance) {
-      price = price + (price * this.cancellationInsurance);
-    }
 
     if(this.defaults.has_boukii_care) {
       // coger valores de reglajes
       price = price + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
 
+    if (this.discounts && this.discounts.length) {
+      price -= this.discounts.reduce((total, discount) => total + discount, 0);
+    }
+
+    if(this.defaults.has_cancellation_insurance) {
+      price = price + (price * this.cancellationInsurance);
+    }
+
     // añadir desde reglajes el tva
     if (this.tva && !isNaN(this.tva)) {
-      this.finalPrice = price + (price * this.tva);
       this.tvaPrice = (price * this.tva);
-    } else {
-      this.finalPrice = price;
     }
+    this.finalPrice = price + this.tvaPrice;
+    this.bookingPendingPrice =  this.finalPrice;
+    if (this.bonus !== null && price > 0) {
+      this.bonus.forEach(element => {
+        if ( this.finalPrice > 0) {
+
+          if (element.bonus.remaining_balance >  this.finalPrice) {
+            this.bookingPendingPrice =  this.finalPrice - this.finalPrice;
+          } else {
+            this.bookingPendingPrice =  this.finalPrice - element.bonus.remaining_balance;
+          }
+        }
+      });
+    }
+
     this.finalPriceNoTaxes = price;
   }
 
@@ -2991,7 +3046,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
   getDegree(id: any) {
     if (id && id !== null) {
-      return this.allLevels.find((l) => l.id === id);
+      return this.levels.find((l) => l.id === id);
 
     }
   }

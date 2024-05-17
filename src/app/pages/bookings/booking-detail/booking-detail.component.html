@@ -351,11 +351,11 @@
                 </p>
 
                 <div
-                  style="width: 100%; float:left; color: #868686;"
+                  style="width: 100%; float:left; border: 1px solid black;"
                   *ngIf="bu.showOptions"
                 >
                   <div
-                    style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                    style="width: 100%; float:left;padding: 2%; margin-bottom: 15px;"
                   >
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <div style="width: 65%;">
@@ -389,7 +389,7 @@
                             "
                             [disabled]="booking.status === 2 || bu.status === 2"
                           >
-                            <span style="color: #868686;">{{
+                            <span >{{
                                 forfait.id
                               }}</span>
                           </mat-checkbox>
@@ -589,7 +589,7 @@
 
               <div style="width: 100%; float:left">
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;padding: 2%; margin-bottom: 15px;  border: 1px solid black;"
                   *ngIf="courses[bI].options && courses[bI].course_type == 1"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">

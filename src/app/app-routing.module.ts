@@ -27,11 +27,11 @@ const childrenRoutes: VexRoutes = [
         loadChildren: () => import('./pages/timeline/timeline.module').then(m => m.TimelineModule),
         canActivate: [AuthGuard],
       },
-      {
+/*      {
         path: 'calendar',
         loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarMonitorModule),
         canActivate: [AuthGuard],
-      },
+      },*/
       {
         path: 'bookings',
         loadChildren: () => import('./pages/bookings/bookings.module').then(m => m.BookingsModule),

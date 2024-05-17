@@ -34,6 +34,8 @@ import { BookingsCreateUpdateEditComponent, CustomDateAdapter } from './bookings
 import { AddReductionModalModule } from '../bookings-create-update/add-reduction/add-reduction.module';
 import { AddDiscountBonusModalModule } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.module';
 import { ConfirmModalEditBookingModule } from './confirm-dialog-edit-booking/confirm-dialog-edit-booking.component.module';
+import {ComponentsCustomModule} from '../../../components/components-custom.module';
+import {QRCodeModule} from 'angularx-qrcode';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -48,44 +50,46 @@ export const MY_DATE_FORMATS = {
 };
 
 @NgModule({
-  imports: [
-    FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatDividerModule,
-    MatAutocompleteModule,
-    WidgetClientsGroupModule,
-    WidgetClientsSportsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatListModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    SecondaryToolbarModule,
-    BreadcrumbsModule,
-    MatStepperModule,
-    MatChipsModule,
-    MatSlideToggleModule,
-    MatDialogModule,
-    BookingsCreateUpdateModalModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule,
-    AddReductionModalModule,
-    AddDiscountBonusModalModule,
-    ClientsCreateUpdateModalModule,
-    AddClientSportModalModule,
-    TranslateModule,
-    ConfirmModalEditBookingModule
-  ],
+    imports: [
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatDividerModule,
+        MatAutocompleteModule,
+        WidgetClientsGroupModule,
+        WidgetClientsSportsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        MatListModule,
+        NgxMatDatetimePickerModule,
+        NgxMatTimepickerModule,
+        SecondaryToolbarModule,
+        BreadcrumbsModule,
+        MatStepperModule,
+        MatChipsModule,
+        MatSlideToggleModule,
+        MatDialogModule,
+        BookingsCreateUpdateModalModule,
+        MatCheckboxModule,
+        MatProgressSpinnerModule,
+        AddReductionModalModule,
+        AddDiscountBonusModalModule,
+        ClientsCreateUpdateModalModule,
+        AddClientSportModalModule,
+        TranslateModule,
+        ConfirmModalEditBookingModule,
+        ComponentsCustomModule,
+        QRCodeModule
+    ],
   declarations: [BookingsCreateUpdateEditComponent],
   exports: [BookingsCreateUpdateEditComponent],
   providers: [

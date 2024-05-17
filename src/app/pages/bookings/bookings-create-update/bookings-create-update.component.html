@@ -144,13 +144,13 @@
           </mat-card>
         </div>
 
-        <mat-divider
+        <mat-divider *ngIf="defaults.client_main_id"
           class="text-border"
           style="margin: 10px 0 10px 0"
         ></mat-divider>
 
-        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-          <div class="flex-auto">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.client_main_id">
+          <div class="flex-auto" >
             <mat-radio-group
               aria-label="Select an option"
               formControlName="sportType"
@@ -184,12 +184,12 @@
             </div>
           </div>
         </div>
-        <mat-divider
+        <mat-divider *ngIf="defaults.client_main_id"
           class="text-border"
           style="margin: 10px 0 10px 0"
         ></mat-divider>
 
-        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.client_main_id">
           <div class="flex-auto" style="width:20%">
             <mat-card
               class="custom-card"
@@ -242,7 +242,7 @@
           </mat-form-field>
         </div>
 
-        <mat-divider
+        <mat-divider *ngIf="defaults.client_main_id"
           class="text-border"
           style="margin: 10px 0 10px 0"
         ></mat-divider>
@@ -280,7 +280,7 @@
           <mat-list-item
             class="custom-list-item"
             *ngIf="selectedItem !== null && courseType === 'privee'"
-            style="width: 48%;float: left;background: #f5f5f5;border: 2px solid #E6E6E6;margin: 0 0 4% 2%;"
+            style="width: 48%;float: left;border: 2px solid #E6E6E6;margin: 0 0 4% 2%;"
           >
             <div class="avatar-container">
               <img
@@ -923,7 +923,7 @@
 
               <div>
                 <mat-icon
-                  style="color:white"
+                   style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
                   svgIcon="logo:message-text"
                 ></mat-icon>
                 <a
@@ -931,10 +931,10 @@
                   style="cursor:pointer"
                   title="{{defaults.email}}"
                 >
-                  <mat-icon style="color:white" svgIcon="logo:mail"></mat-icon>
+                  <mat-icon  style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:mail"></mat-icon>
                 </a>
                 <a href="tel:{{defaults.phone}}" title="{{defaults.phone}}">
-                  <mat-icon style="color:white" svgIcon="logo:phone"></mat-icon>
+                  <mat-icon   style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
             </div>
@@ -944,8 +944,8 @@
           style="float: left;width: 100%;margin: 5% 0 5% 0;"
         ></mat-divider>
 
-        <div style="float: left; width: 100%;margin-top: 5%;">
-          <div
+        <div style="float: left; width: 100%;">
+     <!--     <div
             *ngIf="item.courseDates[0].course.course_type !== 2"
           >
             <div
@@ -1006,12 +1006,12 @@
                 </p>
               </div>
             </div>
-          </div>
+          </div>-->
           <div
             *ngIf="item.courseDates[0].course.course_type === 2"
           >
             <div
-              style="float: left; width: 100%;;height: 40px"
+              style="float: left; width: 100%;height: 40px;margin-bottom: 5%"
               *ngFor="let people of item.people"
             >
               <div style="float: left; width: 10%;">
@@ -1038,7 +1038,7 @@
             </div>
           </div>
 
-          <div style="float: left; width: 100%;margin-top: 10%;">
+          <div style="float: left; width: 100%;">
             <div style="float: left; width: 100%;">
               <div
                 *ngIf="item.courseDates[0].course.course_type === 2"
@@ -1418,8 +1418,8 @@
               <mat-card-header>
                 <app-level-user
                   mat-card-avatar
-                  *ngIf="item.degrees_sport && item.degrees_sport.length"
-                  [allLevels]="item.degrees_sport"
+                  *ngIf="levels"
+                  [allLevels]="levels"
                   [selectLevel]="
                       getDegree(item.courseDates[0].degree_id)
                     "
@@ -1521,8 +1521,8 @@
                   <mat-card-header>
                     <app-level-user
                       mat-card-avatar
-                      *ngIf="item.degrees_sport && item.degrees_sport.length"
-                      [allLevels]="item.degrees_sport"
+                      *ngIf="levels"
+                      [allLevels]="levels"
                       [selectLevel]="
                       getDegree(item.courseDates[0].degree_id)
                     "
@@ -1589,7 +1589,7 @@
                           <div>
                             <p>
                             <p>
-                              +{{item.forfait ? (item.forfait.price ) + ((item.forfait.price) * (item.forfait.tva / 100)) : 0}}
+                            +{{people?.forfait ? (people?.forfait.price ) + ((people?.forfait.price) * (people?.forfait.tva / 100)) : 0}}
                               CHF
                             </p>
                           </div>
@@ -2370,19 +2370,19 @@
                 &ensp;{{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
-                <mat-icon svgIcon="logo:message-text"></mat-icon>
+                <mat-icon   style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:message-text"></mat-icon>
                 <a
                   href="tel:{{getClient(defaults.client_main_id)?.phone}}"
                   title="{{getClient(defaults.client_main_id)?.phone}}"
                 >
-                  <mat-icon svgIcon="logo:phone"></mat-icon>
+                  <mat-icon   style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:phone"></mat-icon>
                 </a>
                 <a
                   href="mailto:{{getClient(defaults.client_main_id)?.email}}"
                   style="cursor:pointer"
                   title="{{getClient(defaults.client_main_id)?.email}}"
                 >
-                  <mat-icon svgIcon="logo:mail"></mat-icon>
+                  <mat-icon   style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:mail"></mat-icon>
                 </a>
               </mat-card-subtitle>
             </mat-card-header>
@@ -2390,6 +2390,7 @@
               class="text-border"
               style="margin: 10px 0 10px 0"
             ></mat-divider>
+
             <h3 style="font-size: 1.5rem!important;">
               {{'summary' | translate}}
             </h3>
