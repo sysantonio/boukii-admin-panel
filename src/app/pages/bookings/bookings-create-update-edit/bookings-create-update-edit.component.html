@@ -92,7 +92,7 @@
               >{{ getLanguage(getClientLang(defaults?.client_main_id)) }} ·
                 {{calculateAge(getClient(defaults?.client_main_id)?.birth_date) }}
                 &ensp;{{'years' | translate}} ·
-                {{ getCountry(getClient(defaults?.client_main_id).country) }}</mat-card-subtitle
+                {{ getCountry(getClient(defaults?.client_main_id)?.country) }}</mat-card-subtitle
               >
             </mat-card-content>
             <mat-card-actions>
