@@ -387,7 +387,9 @@
                               bu.booking_user_extras[0]?.course_extra?.name ===
                               forfait.id
                             "
-                            [disabled]="booking.status === 2 || bu.status === 2"
+                            [disabled]="booking.status === 2 || bu.status === 2 || !canUpdate(
+                    item?.courseDates[item?.courseDates.length - 1]?.date
+                  )"
                           >
                             <span >{{
                                 forfait.id
@@ -613,7 +615,9 @@
                         <mat-checkbox
                           class="radio"
                           [value]="forfait"
-                          [disabled]="item?.courseDates[0]?.status === 2"
+                          [disabled]="item?.courseDates[0]?.status === 2 ||  !canUpdate(
+                    item?.courseDates[item?.courseDates.length - 1]?.date
+                  )"
                           (change)="setForfait($event, forfait, item, bI)"
                           [checked]="
                             getCourseExtraForfait(forfait, item.courseDates[0])
@@ -1074,7 +1078,7 @@
             <div class="opaque-box" >
               <span
                 style="width: 100%; float:left"
-                *ngIf="bookingPendingPrice > 0 && booking.paid"
+                *ngIf="bookingPendingPrice < 0 && booking.paid"
               >
                 <p style="float:left; color:#FB9B1B">
                   {{ "refund_text" | translate | uppercase }}
@@ -1092,7 +1096,7 @@
               <span
                 style="width: 100%; float:left"
                 *ngIf="
-                  bookingPendingPrice > 0 &&
+                  bookingPendingPrice < 0 &&
                   !booking.paid &&
                    (booking.status === 1 ||  booking.status === 3)
                 "
@@ -1187,7 +1191,7 @@
                 mat-raised-button
                 color="accent"
                 (click)="addBonus()"
-                [disabled]="booking.status === 2 || bookingPendingPrice == 0"
+                [disabled]="booking.status === 2 || bookingPendingPrice <= 0"
               >
                +
               </button>

@@ -456,7 +456,7 @@ export class BookingDetailComponent implements OnInit {
                 }
               });
 
-              setTimeout(() => {
+
                 this.calculateDiscounts();
                 this.calculateFinalPrice();
 
@@ -489,7 +489,6 @@ export class BookingDetailComponent implements OnInit {
                         parseFloat(this.booking.paid_total);
                     });
                 }
-
                 if (this.bookingPendingPrice < 0 && this.booking.paid) {
                   const dialogRef = this.dialog.open(ConfirmModalComponent, {
                     data: {
@@ -506,7 +505,6 @@ export class BookingDetailComponent implements OnInit {
                 }
 
                 this.loading = false;
-              }, 1000);
             });
         });
       });
@@ -3040,7 +3038,7 @@ export class BookingDetailComponent implements OnInit {
     if (this.booking.paid_total && this.booking.paid_total != this.finalPrice) {
       if (this.booking.paid) {
         this.bookingPendingPrice =
-          +this.booking.paid_total - this.priceRefund - this.priceNoRefund
+          this.finalPrice - +this.booking.paid_total - this.priceRefund - this.priceNoRefund
       } else if(this.booking.status !== 1) {
         this.bookingPendingPrice =
           this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
