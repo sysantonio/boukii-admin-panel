@@ -174,11 +174,11 @@
                 <mat-icon svgIcon="mat:edit" style="color:#FF4081"></mat-icon>
               </button>
               <button *ngIf="item?.courseDates[0]?.status === 1"
-                mat-icon-button
-                color="warn"
-                class="delete-icon"
-                (click)="deletePartialBooking(bI, item)"
-                style="float: right;"
+                      mat-icon-button
+                      color="warn"
+                      class="delete-icon"
+                      (click)="deletePartialBooking(bI, item)"
+                      style="float: right;"
               >
                 <mat-icon svgIcon="mat:delete"></mat-icon>
               </button>
@@ -217,7 +217,7 @@
                 {{ getCourse(item?.courseDates[0]?.course_id)?.sport?.name }}
               </mat-card-subtitle>
               <div  *ngIf="getCourse(item?.courseDates[0]?.course_id)?.is_flexible"
-                style="color: #EA0C60;">
+                    style="color: #EA0C60;">
                 {{  parseFloatValue(getTotalBook(bI, item)) }} CHFs
 
               </div>
@@ -336,14 +336,14 @@
                   {{ getDegree(item.courseDates[0].degree_id)?.level }}
                 </div>
                 <p *ngIf="item.courseDates[0].course.options"
-                  (click)="bu.showOptions = !bu.showOptions"
-                  style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
+                   (click)="bu.showOptions = !bu.showOptions"
+                   style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
                 >
                   {{ "options" | translate }}
                   <mat-icon  *ngIf="!bu.showOptions"
-                  style="height: 15px;width: 20px;"
-                  svgIcon="mat:add"
-                ></mat-icon>
+                             style="height: 15px;width: 20px;"
+                             svgIcon="mat:add"
+                  ></mat-icon>
                   <mat-icon  *ngIf="bu.showOptions"
                              style="height: 15px;width: 20px;"
                              svgIcon="mat:remove"
@@ -905,7 +905,7 @@
                 *ngFor="let item of bookingsToCreate; let i = index"
               >
                 <span *ngIf="item.courseDates[0].course.course_type == 1 && getCourseExtraForfaitPriceByCourse(item.courseDates[0])"
-                style="width: 100%; float:left">
+                      style="width: 100%; float:left">
                   <p style="float:left">
                     Forfaits - {{'course' | translate}} {{ item.courseDates[0].course.name }}
                   </p>
@@ -1187,11 +1187,11 @@
                 {{ "vouchers" | translate }}
               </p>
               <button *ngIf="booking.status !== 2 && bookingPendingPrice > 0"
-                style="min-width: 2rem;height: 1rem;float: right;"
-                mat-raised-button
-                color="accent"
-                (click)="addBonus()"
-                [disabled]="booking.status === 2 || bookingPendingPrice <= 0"
+                      style="min-width: 2rem;height: 1rem;float: right;"
+                      mat-raised-button
+                      color="accent"
+                      (click)="addBonus()"
+                      [disabled]="booking.status === 2 || bookingPendingPrice <= 0"
               >
                +
               </button>
@@ -1219,9 +1219,9 @@
                     }}
                   </p>
                            <mat-icon *ngIf="!booking.paid && booking.status != 2"
-                             svgIcon="mat:delete"
-                             style="float: left;color: red; cursor:pointer; margin-left: 2px"
-                             (click)="deleteBonus(i)"
+                                     svgIcon="mat:delete"
+                                     style="float: left;color: red; cursor:pointer; margin-left: 2px"
+                                     (click)="deleteBonus(i)"
                            ></mat-icon>
                 </span>
               </ng-container>
@@ -1286,6 +1286,10 @@
                   <p style="float:left" *ngIf="item.action == 'created by api'">
                     {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:
                     {{ "api_created" | translate }}
+                  </p>
+                  <p style="float:left" *ngIf="item.action == 'page_created'">
+                    {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:
+                  {{ "page_created" | translate }}
                   </p>
                   <p style="float:left" *ngIf="item.action == 'refund'">
                     {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:

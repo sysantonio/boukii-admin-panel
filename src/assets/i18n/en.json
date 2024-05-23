@@ -562,6 +562,7 @@
   "color_3": "Prohibited modifications",
   "change_history": "Change history",
   "api_created": "Reservation created from the panel",
+  "page_created": "Reservation created from the reservation page",
   "cancel_refund": "Reservation refunded",
   "refund_boukii_pay": "Reservation refunded by Boukii Pay",
   "full_cancel": "Total cancellation",
