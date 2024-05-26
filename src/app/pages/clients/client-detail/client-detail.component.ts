@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, map, startWith } from 'rxjs';
+import {Observable, map, startWith, forkJoin, tap, from, mergeMap, toArray} from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
@@ -23,6 +23,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { TranslateService } from '@ngx-translate/core';
 import {DateAdapter} from '@angular/material/core';
+import {switchMap} from 'rxjs/operators';
 
 
 @Component({
@@ -71,7 +72,7 @@ export class ClientDetailComponent {
   selectedSports: any[] = [];
   sportsData = new _MatTableDataSource([]);
   sportsCurrentData = new _MatTableDataSource([]);
-  stations = [];
+  stations:any = [];
 
   languagesControl = new FormControl([]);
   languages = [];
@@ -230,78 +231,79 @@ export class ClientDetailComponent {
           .subscribe((user)=> {
 
 
-            this.getSchoolSportDegrees();
-            this.getLanguages();
-            this.getStations();
-            this.getClientSchool();
-            this.getClientSport();
-            this.getClients();
-            this.getClientObservations();
-            this.getEvaluations();
+            forkJoin({
+              schoolSportDegrees: this.getSchoolSportDegrees(),
+              languages: this.getLanguages(),
+              stations: this.getStations(),
+              clientSchool: this.getClientSchool(),
+              clientSport: this.getClientSport(),
+              clients: this.getClients(),
+              clientObservations: this.getClientObservations(),
+              evaluations: this.getEvaluations()
+            }).subscribe((results) => {
+              console.log('All data loaded', results);
+              if (!onChangeUser) {
+                this.getClientUtilisateurs();
+              }
+              this.defaultsUser = user.data;
 
-            if (!onChangeUser) {
-              this.getClientUtilisateurs();
-            }
-            this.defaultsUser = user.data;
+              this.formInfoAccount = this.fb.group({
+                image: [''],
+                name: ['', Validators.required],
+                surname: ['', Validators.required],
+                email: ['', [Validators.required, Validators.email]],
+                username: [''],
+                password: [''],
 
-            this.formInfoAccount = this.fb.group({
-              image: [''],
-              name: ['', Validators.required],
-              surname: ['', Validators.required],
-              email: ['', [Validators.required, Validators.email]],
-              username: [''],
-              password: [''],
-
-            });
-
-            this.formPersonalInfo = this.fb.group({
-              fromDate: [''],
-              phone: [''],
-              mobile: ['', Validators.required],
-              address: [''],
-              postalCode: [''],
-              lang: [''],
-              country: this.myControlCountries,
-              province: this.myControlProvinces
-
-            });
-
-            this.formSportInfo = this.fb.group({
-              sportName: [''],
-            });
-
-            this.formOtherInfo = this.fb.group({
-              summary: [''],
-              notes: [''],
-              hitorical: ['']
-            });
-
-            if(!onChangeUser) {
-
-              this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filterCountries(name) : this.countries.slice())
-              );
-
-              this.myControlCountries.valueChanges.subscribe(country => {
-                this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-                this.filteredProvinces = this._filterProvinces(country?.id);
               });
 
-              this.filteredLevel = this.levelForm.valueChanges.pipe(
-                startWith(''),
-                map((value: any) => typeof value === 'string' ? value : value?.annotation),
-                map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
-              );
+              this.formPersonalInfo = this.fb.group({
+                fromDate: [''],
+                phone: [''],
+                mobile: ['', Validators.required],
+                address: [''],
+                postalCode: [''],
+                lang: [''],
+                country: this.myControlCountries,
+                province: this.myControlProvinces
 
-              this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-                startWith(''),
-                map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-              );
+              });
 
-            }
-            setTimeout(() => {
+              this.formSportInfo = this.fb.group({
+                sportName: [''],
+              });
+
+              this.formOtherInfo = this.fb.group({
+                summary: [''],
+                notes: [''],
+                hitorical: ['']
+              });
+
+              if(!onChangeUser) {
+
+                this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+                  startWith(''),
+                  map(value => typeof value === 'string' ? value : value.name),
+                  map(name => name ? this._filterCountries(name) : this.countries.slice())
+                );
+
+                this.myControlCountries.valueChanges.subscribe(country => {
+                  this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+                  this.filteredProvinces = this._filterProvinces(country?.id);
+                });
+
+                this.filteredLevel = this.levelForm.valueChanges.pipe(
+                  startWith(''),
+                  map((value: any) => typeof value === 'string' ? value : value?.annotation),
+                  map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+                );
+
+                this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+                  startWith(''),
+                  map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+                );
+
+              }
 
               this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
               this.myControlCountries.setValue(this.countries.find((c) => c.id === +this.defaults.country));
@@ -310,120 +312,202 @@ export class ClientDetailComponent {
               this.languages.forEach(element => {
                 if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
                   element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
-                    langs.push(element);
-                  }
+                  langs.push(element);
+                }
               });
 
               this.languagesControl.setValue(langs);
 
               this.loading = false;
+            });
 
-            }, 500);
+
 
           })
     })
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((sport) => {
-        this.schoolSports = sport.data;
-        sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
-          .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data;
+    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id, null, null, null, ['sport'])
+      .pipe(
+        mergeMap((sport) => {
+          this.schoolSports = sport.data;
+          this.schoolSports.forEach(sport => {
+            sport.name = sport.sport.name;
+            sport.icon_selected = sport.sport.icon_selected;
+            sport.icon_unselected = sport.sport.icon_unselected;
           });
-        });
-      })
+
+          const degreeRequests = sport.data.map((element, idx) =>
+            this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + element.sport_id)
+              .pipe(
+                map((data) => {
+                  this.schoolSports[idx].degrees = data.data;
+                  return data.data;
+                })
+              )
+          );
+
+          return forkJoin(degreeRequests)
+            .pipe(
+              mergeMap(() => this.getSports() .pipe(
+                mergeMap(() => this.getGoals())
+              ))
+            );
+        })
+      );
   }
 
-
   getSports() {
-    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((data) => {
-        data.data.forEach(element => {
-          this.schoolSports.forEach(sport => {
-            if(element.id === sport.sport_id) {
-              sport.name = element.name;
-              sport.icon_selected = element.icon_selected;
-              sport.icon_unselected = element.icon_unselected;
-            }
+    return this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
+      .pipe(
+        tap((data) => {
+          this.schoolSports.forEach(element => {
+            this.clientSport.forEach(sport => {
+              if (element.sport_id === sport.sport_id) {
+                sport.name = element.name;
+                sport.icon_selected = element.icon_selected;
+                sport.icon_unselected = element.icon_unselected;
+                sport.degrees = element.degrees;
+              }
+            });
           });
-        });
-
-        this.schoolSports.forEach(element => {
-
-          this.clientSport.forEach(sport => {
-            if(element.sport_id === sport.sport_id) {
-              sport.name = element.name;
-              sport.icon_selected = element.icon_selected;
-              sport.icon_unselected = element.icon_unselected;
-              sport.degrees = element.degrees;
-            }
-          });
-        });
-
-        this.getGoals();
 
           this.sportsCurrentData.data = this.clientSport;
 
           const availableSports = [];
           this.schoolSports.forEach(element => {
-            if(!this.sportsCurrentData.data.find((s) => s.sport_id === element.sport_id)) {
+            if (!this.sportsCurrentData.data.find((s) => s.sport_id === element.sport_id)) {
               availableSports.push(element);
             }
           });
+
           this.filteredSports = this.sportsControl.valueChanges.pipe(
             startWith(''),
             map((sport: string | null) => sport ? this._filterSports(sport) : availableSports.slice())
           );
-      })
+
+        //  return this.getGoals(); // Asegúrate de que getGoals también devuelva un observable
+        })
+      );
   }
+
+
 
   getDegrees() {
-    this.clientSport.forEach(element => {
-      this.crudService.get('/degrees/'+element.degree_id)
-        .subscribe((data) => {
-          element.level = data.data;
-        })
-    });
+    const degreeRequests = this.clientSport.map(element =>
+      this.crudService.get('/degrees/' + element.degree_id)
+        .pipe(
+          tap((data) => {
+            console.log('Degree data for element:', element, 'data:', data);
+          }),
+          map((data) => {
+            element.level = data.data;
+          })
+        )
+    );
+    return forkJoin(degreeRequests);
   }
+
+  getEvaluations() {
+    return this.crudService.list('/evaluations', 1, 10000, 'desc', 'id', '&client_id=' + this.id)
+      .pipe(
+        switchMap((data) => {
+          this.evaluations = data.data;
+          const evaluationRequests = data.data.map(evaluation =>
+            this.crudService.list('/evaluation-fulfilled-goals', 1, 10000, 'desc', 'id', '&evaluation_id=' + evaluation.id).pipe(
+              map(ev => ev.data)
+            )
+          );
+          return forkJoin(evaluationRequests);
+        }),
+        tap((evaluations:any) => {
+          evaluations.forEach(ev => {
+            ev.forEach(element => {;
+              this.evaluationFullfiled.push(element);
+            });
+          });
+        })
+      );
+  }
+
+
 
   getClientObservations() {
-    this.crudService.list('/client-observations', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&client_id='+this.id)
-      .subscribe((data) => {
-        if(data.data.length > 0) {
-
-          this.defaultsObservations = data.data[0];
-        } else {
-          this.defaultsObservations = {
-            id: null,
-            general: '',
-            notes: '',
-            historical: '',
-            client_id: null,
-            school_id: null
+    return this.crudService.list('/client-observations', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&client_id=' + this.id)
+      .pipe(
+        map((data) => {
+          if (data.data.length > 0) {
+            this.defaultsObservations = data.data[0];
+          } else {
+            this.defaultsObservations = {
+              id: null,
+              general: '',
+              notes: '',
+              historical: '',
+              client_id: null,
+              school_id: null
+            };
           }
-        }
-      })
+        })
+      );
   }
 
-  getClientSchool() {
-    this.crudService.list('/clients-schools', 1, 10000, 'desc', 'id', '&client_id='+this.id)
-    .subscribe((data) => {
-      this.clientSchool = data.data;
 
-    })
+  getClientSchool() {
+    return this.crudService.list('/clients-schools', 1, 10000, 'desc', 'id', '&client_id=' + this.id)
+      .pipe(
+        map((data) => {
+          this.clientSchool = data.data;
+        })
+      );
   }
 
   getClientSport() {
-    this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+this.id+"&school_id="+this.user.schools[0].id)
-      .subscribe((data) => {
-        this.clientSport = data.data;
-        this.selectedSport = this.clientSport[0];
-        this.getSports();
-        this.getDegrees();
+    return this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id=' + this.id + "&school_id=" + this.user.schools[0].id)
+      .pipe(
+        switchMap((data) => {
+          this.clientSport = data.data;
+          this.selectedSport = this.clientSport[0];
+          return forkJoin([this.getDegrees()]);
+        })
+      );
+  }
+
+  getStations() {
+    return this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
+      .pipe(
+        switchMap((station) => {
+          const stationRequests = station.data.map(element =>
+            this.crudService.get('/stations/' + element.station_id).pipe(
+              map(data => data.data)
+            )
+          );
+          return forkJoin(stationRequests);
+        }),
+        tap((stations) => {
+          this.stations = stations;
+        })
+      );
+  }
+
+
+
+  getLanguages() {
+    return this.crudService.list('/languages', 1, 1000).pipe(
+      tap((data) => {
+        this.languages = data.data.reverse();
+        this.setInitLanguages();
       })
+    );
+  }
+
+  getClients() {
+    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
+      tap((client) => {
+        this.clients = client.data;
+      })
+    );
   }
 
   onFileChanged(event: Event) {
@@ -453,28 +537,6 @@ export class ClientDetailComponent {
     } else {
       return { passwordStrength: true };
     }
-  }
-
-  getStations() {
-    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((station) => {
-        station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.station_id)
-            .subscribe((data) => {
-              this.stations.push(data.data);
-
-            })
-        });
-      })
-  }
-
-
-  getLanguages() {
-    this.crudService.list('/languages', 1, 1000)
-      .subscribe((data) => {
-        this.languages = data.data.reverse();
-        this.setInitLanguages();
-      })
   }
 
   /**Countries */
@@ -961,28 +1023,24 @@ export class ClientDetailComponent {
   }
 
   getGoals() {
-    this.clientSport.forEach(cs => {
-
-      cs.degrees.forEach(dg => {
-        this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id='+dg.id)
-        .subscribe((data) => {
-
-          data.data.forEach(element => {
-
-            this.goals.push(element);
-          });
-
-        })
-      });
-
-    });
+    return from(this.clientSport).pipe(
+      mergeMap(cs => from(cs.degrees || []).pipe(
+        mergeMap((dg:any) => this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id=' + dg.id)),
+        map(response => response.data)
+      )),
+      toArray(),
+      tap(goalsArrays => {
+        this.goals = goalsArrays.flat();  // Aplanamos el array de arrays en un solo array
+      })
+    );
   }
+
 
 
   calculateGoalsScore() {
     let ret = 0;
 
-    if(this.selectedSport) {
+    if(this.selectedSport?.level) {
       const goals = this.goals.filter((g) => g.degree_id == this.selectedSport.level.id);
 
       if (goals.length > 0) {
@@ -1158,12 +1216,7 @@ export class ClientDetailComponent {
     }
   }
 
-  getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((client) => {
-        this.clients = client.data;
-      })
-  }
+
 
   getDateIndex() {
     let ret = 0;
@@ -1301,33 +1354,18 @@ export class ClientDetailComponent {
     return ret;
   }
 
-  getEvaluations() {
-    this.crudService.list('/evaluations', 1, 10000, 'desc', 'id', '&client_id='+this.id)
-      .subscribe((data) => {
-        this.evaluations = data.data;
 
-        data.data.forEach(evaluation => {
-
-          this.crudService.list('/evaluation-fulfilled-goals', 1, 10000, 'desc', 'id', '&evaluation_id='+evaluation.id)
-            .subscribe((ev: any) => {
-              ev.data.forEach(element => {
-                this.evaluationFullfiled.push(element);
-
-              });
-
-            });
-          });
-      })
-  }
 
   getEvaluationsData(): any {
     let ret: any = [];
 
-    this.evaluations.forEach(element => {
-      if (element.degree_id === this.selectedSport.level.id) {
-        ret.push(element);
-      }
-    });
+    if(this.selectedSport?.level) {
+      this.evaluations.forEach(element => {
+        if (element.degree_id === this.selectedSport.level.id) {
+          ret.push(element);
+        }
+      });
+    }
 
     return ret;
   }
