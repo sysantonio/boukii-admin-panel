@@ -2920,10 +2920,10 @@ export class BookingDetailComponent implements OnInit {
 
   getOpRemPrice() {
     let price = 0;
-    if (this.booking.paid) {
+    if (this.booking.paid && this.booking.status === 1) {
       price =
         +this.booking.paid_total - this.priceRefund - this.priceNoRefund
-    } else if(this.booking.status !== 1){
+    } else if(this.booking.status !== 1 && !this.booking.paid){
       price =
         this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
     } else {
