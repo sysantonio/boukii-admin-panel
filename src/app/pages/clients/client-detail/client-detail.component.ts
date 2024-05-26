@@ -982,18 +982,21 @@ export class ClientDetailComponent {
   calculateGoalsScore() {
     let ret = 0;
 
-    const goals = this.goals.filter((g) => g.degree_id == this.selectedSport.level.id);
+    if(this.selectedSport) {
+      const goals = this.goals.filter((g) => g.degree_id == this.selectedSport.level.id);
 
-    if (goals.length > 0) {
-      const maxPoints = goals.length * 10;
-      this.evaluationFullfiled.forEach(element => {
-        if (element.score) {
+      if (goals.length > 0) {
+        const maxPoints = goals.length * 10;
+        this.evaluationFullfiled.forEach(element => {
+          if (element.score) {
 
-          ret = ret + element.score;
-        }
-      });
+            ret = ret + element.score;
+          }
+        });
+        return (ret / maxPoints) * 100;
+    }
+      return ret;
 
-      return (ret / maxPoints) * 100;
     } else {
       return ret;
     }

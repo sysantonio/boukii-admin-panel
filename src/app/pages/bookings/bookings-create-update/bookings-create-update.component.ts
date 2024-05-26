@@ -322,8 +322,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         this.filteredOptions = this.clientsForm.valueChanges.pipe(
           startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filter(full_name) : this.clients.slice(0, 50))
+          map((value: any) => typeof value === 'string' ? value : this.displayFn(value)),
+          map(name => name ? this._filter(name) : this.expandClients(this.clients).slice(0, 50))
         );
 
         this.filteredSports = this.sportForm.valueChanges.pipe(
@@ -1435,11 +1435,27 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return this.mode === 'update';
   }
 
+  private expandClients(clients: any[]): any[] {
+    let expandedClients = [];
+    clients.forEach(client => {
+      expandedClients.push(client);
+      if (client.utilizers && client.utilizers.length > 0) {
+        client.utilizers.forEach(utilizer => {
+          let expandedUtilizer = { ...utilizer, main_client: client };
+          expandedClients.push(expandedUtilizer);
+        });
+      }
+    });
+    return expandedClients;
+  }
 
   // pasar a utils
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.clients.filter(client => (client.first_name.toLowerCase().includes(filterValue) || client.last_name.toLowerCase().includes(filterValue)));
+    return this.expandClients(this.clients).filter(client =>
+      client.first_name.toLowerCase().includes(filterValue) ||
+      client.last_name.toLowerCase().includes(filterValue)
+    );
   }
 
   private _filterMonitor(name: string): any[] {
@@ -1521,6 +1537,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         const level = this.levels.find((l) => l.id === sport.degree_id);
         this.levelForm.patchValue(level);
         this.defaultsBookingUser.degree_id = level.id;
+        this.backToList();
         this.getCourses(level, this.monthAndYear);
       }
     });
@@ -1542,6 +1559,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
           hasSport = true;
+          this.backToList();
           this.getCourses(level, this.monthAndYear);
         }
       });
@@ -1704,7 +1722,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         this.snackBarRef.dismiss();
       }
-
+      let selectedClient = client;
+      if(client.main_client) {
+        client = client.main_client;
+        this.defaults.client_main_id = client.id;
+      }
       this.loadingUtilizers = true;
       this.utilizers = [];
       this.mainIdSelected = true;
@@ -1714,20 +1736,28 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.crudService.get('/admin/clients/' + client.id +'/utilizers')
         .subscribe((data: any) => {
           this.utilizers = data.data;
-          if (!onLoad) {
-            client.client_sports.forEach(sport => {
-              if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
-                const level = this.levels.find((l) => l.id === sport.degree_id);
 
-                if (level) {
-                  this.levelForm.patchValue(level);
-                  this.defaultsBookingUser.degree_id = level?.id;
-                  this.clientsForm.patchValue(client);
-                  this.getCourses(level, this.monthAndYear)
+          if (!onLoad) {
+            if(client != selectedClient) {
+              this.mainIdSelected = false;
+              this.clientsForm.patchValue(client);
+              let index = this.utilizers.findIndex((utilizer: any) => utilizer.id === selectedClient.id);
+              this.toggleBorder(index, this.utilizers[index]);
+            } else {
+              client.client_sports.forEach(sport => {
+                if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
+                  const level = this.levels.find((l) => l.id === sport.degree_id);
+
+                  if (level) {
+                    this.levelForm.patchValue(level);
+                    this.defaultsBookingUser.degree_id = level?.id;
+                    this.clientsForm.patchValue(client);
+                    this.getCourses(level, this.monthAndYear)
+                  };
                 }
-                ;
-              }
-            });
+              });
+            }
+
           }
 
           //this.getDegrees(this.defaults.sport_id);

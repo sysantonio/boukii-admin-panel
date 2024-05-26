@@ -63,9 +63,9 @@
               </div>
             </div>
 
-            <div style="margin: 2% 0 0 2%;width: 48%;float: left;">
+            <div style="margin: 2% 0 0 2%;width: 48%;float: left;" *ngIf="defaults.sport_id">
 
-              <div style="width: 100%;float:left">
+              <div style="width: 100%;float:left" >
                 <mat-card class="custom-card" [class.selected-collectif]="defaults.course_type === 1" (click)="setCourseType('collectif', 1)" >
                   <mat-card-content>
                     <p>{{'course_colective' |translate }}</p>
@@ -777,7 +777,7 @@
               </div>
             </div>
 
-            <div style="margin: 2% 0 0 2%;width: 48%;float: left;">
+            <div style="margin: 2% 0 0 2%;width: 48%;float: left;"  *ngIf="defaults.sport_id">
 
               <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-collectif]="defaults.course_type === 1" (click)="setCourseType('collectif', 1)" >

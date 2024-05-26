@@ -115,12 +115,12 @@
         </div>-->
         <div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'finished' | translate}}</span>
+            <span [ngStyle]="{'color': !allCourse && finishedCourse ? '#fe3085' : 'black'}">{{'finished' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = false;activeCourse=true;inActiveCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': !finishedCourse ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
+            <span [ngStyle]="{'color': !finishedCourse && !allCourse && activeCourse ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('courses')">
