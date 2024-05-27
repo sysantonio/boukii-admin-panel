@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Observable, map, startWith, forkJoin, tap, from, mergeMap, toArray} from 'rxjs';
+import {Observable, map, startWith, forkJoin, tap, from, mergeMap, toArray, retry, catchError, of} from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
@@ -231,21 +231,63 @@ export class ClientDetailComponent {
           .subscribe((user)=> {
 
 
-            forkJoin({
-              schoolSportDegrees: this.getSchoolSportDegrees(),
-              languages: this.getLanguages(),
-              stations: this.getStations(),
-              clientSchool: this.getClientSchool(),
-              clientSport: this.getClientSport(),
-              clients: this.getClients(),
-              clientObservations: this.getClientObservations(),
-              evaluations: this.getEvaluations()
-            }).subscribe((results) => {
+            const requestsInitial = {
+              languages: this.getLanguages().pipe(retry(3), catchError(error => {
+                console.error('Error fetching languages:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+              stations: this.getStations().pipe(retry(3), catchError(error => {
+                console.error('Error fetching stations:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+              clients: this.getClients().pipe(retry(3), catchError(error => {
+                console.error('Error fetching clients:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+            };
+
+            const requestsClient = {
+              schoolSportDegrees: this.getSchoolSportDegrees().pipe(retry(3), catchError(error => {
+                console.error('Error fetching school sport degrees:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+              clientSchool: this.getClientSchool().pipe(retry(3), catchError(error => {
+                console.error('Error fetching client school:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+              clientSport: this.getClientSport().pipe(retry(3), catchError(error => {
+                console.error('Error fetching client sport:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+              clientObservations: this.getClientObservations().pipe(retry(3), catchError(error => {
+                console.error('Error fetching client observations:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+              evaluations: this.getEvaluations().pipe(retry(3), catchError(error => {
+                console.error('Error fetching evaluations:', error);
+                return of([]); // Devuelve un array vacío en caso de error
+              })),
+            };
+
+            const requests = onChangeUser ? requestsClient : { ...requestsInitial, ...requestsClient };
+
+            forkJoin(requests).subscribe((results) => {
               console.log('All data loaded', results);
               if (!onChangeUser) {
                 this.getClientUtilisateurs();
               }
+
               this.defaultsUser = user.data;
+
+              const langs = [];
+              this.languages.forEach(element => {
+                if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
+                  element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
+                  langs.push(element);
+                }
+              });
+
+              this.languagesControl.setValue(langs);
 
               this.formInfoAccount = this.fb.group({
                 image: [''],
@@ -308,19 +350,9 @@ export class ClientDetailComponent {
               this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
               this.myControlCountries.setValue(this.countries.find((c) => c.id === +this.defaults.country));
               this.myControlProvinces.setValue(this.provinces.find((c) => c.id === +this.defaults.province));
-              const langs = [];
-              this.languages.forEach(element => {
-                if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
-                  element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
-                  langs.push(element);
-                }
-              });
-
-              this.languagesControl.setValue(langs);
 
               this.loading = false;
             });
-
 
 
           })
@@ -422,6 +454,7 @@ export class ClientDetailComponent {
           return forkJoin(evaluationRequests);
         }),
         tap((evaluations:any) => {
+          this.evaluationFullfiled = [];
           evaluations.forEach(ev => {
             ev.forEach(element => {;
               this.evaluationFullfiled.push(element);
@@ -469,7 +502,10 @@ export class ClientDetailComponent {
         switchMap((data) => {
           this.clientSport = data.data;
           this.selectedSport = this.clientSport[0];
-          return forkJoin([this.getDegrees()]);
+          return forkJoin([this.getDegrees().pipe(retry(3), catchError(error => {
+            console.error('Error fetching degrees:', error);
+            return of([]); // Devuelve un array vacío en caso de error
+          }))]);
         })
       );
   }
@@ -702,7 +738,7 @@ export class ClientDetailComponent {
   }
 
   setInitLanguages() {
-
+    this.selectedLanguages = [];
     this.languages.forEach(element => {
       if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
         || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
@@ -1051,6 +1087,7 @@ export class ClientDetailComponent {
             ret = ret + element.score;
           }
         });
+        ret = ret > maxPoints ? maxPoints : ret
         return (ret / maxPoints) * 100;
     }
       return ret;
