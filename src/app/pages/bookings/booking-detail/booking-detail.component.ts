@@ -251,15 +251,12 @@ export class BookingDetailComponent implements OnInit {
   async ngOnInit() {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.id = this.activatedRoute.snapshot.params.id;
+    this.schoolService.getSchoolData(this.user).subscribe((school) => {
+      this.schoolSettings = school.data;
+    })
 
-    await this.schoolService
-      .getSchoolData()
-      .toPromise()
-      .then((data) => {
-        this.schoolSettings = data.data;
-      });
     await this.getDegreesClient();
-    this.getData(false);
+    await this.getData(false);
   }
 
   async getDegreesClient() {

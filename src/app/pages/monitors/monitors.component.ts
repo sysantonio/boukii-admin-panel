@@ -67,7 +67,7 @@ export class MonitorsComponent {
   showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
-      this.crudService.get('/monitors/'+event.item.id)
+      this.crudService.get('/monitors/'+event.item.id, ['monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'])
       .subscribe((data) => {
         this.detailData = data.data;
 
@@ -75,7 +75,8 @@ export class MonitorsComponent {
           .subscribe((mn) => {
             this.monitorSport = mn.data;
             this.monitorSport.forEach(element => {
-              this.crudService.list('/monitor-sport-authorized-degrees', 1, 10000, 'desc', 'id', '&monitor_sport_id=' + element.id)
+              this.crudService.list('/monitor-sport-authorized-degrees', 1, 10000, 'desc', 'id', '&monitor_sport_id=' + element.id,
+                null, null, null , ['degree'])
                 .subscribe((msad) => {
                   element.authorized = msad.data.reverse();
 
@@ -114,6 +115,31 @@ export class MonitorsComponent {
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id == +id);
     return country ? country.name : 'NDF';
+  }
+
+
+  findHighestDegreeIdElement(data: any) {
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    let highestDegree = null;
+
+
+    const highestInCurrent = data.reduce((prev, current) =>
+      (prev.degree.degree_order > current.degree.degree_order ) ? prev : current
+    );
+    if (!highestDegree || highestInCurrent.degree.degree_order  > highestDegree.degree.degree_order ) {
+      highestDegree = highestInCurrent;
+    }
+
+
+
+    if (highestDegree) {
+      return  highestDegree.degree;
+    }
+
+    return null;
   }
 
   getProvince(id: any) {

@@ -21,6 +21,7 @@ export class SchoolService {
   }
 
   getSchoolData(user = null, forceParam = false) {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     if (this.user && !forceParam) {
 
       return this.crudService.get('/schools/'+this.user.schools[0].id);

@@ -2126,6 +2126,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         this.goTo('/courses');
+      },error => {
+        console.log(error);
+        this.snackbar.open(error.error.message, 'OK', {duration: 5000})
+
       })
 
   }

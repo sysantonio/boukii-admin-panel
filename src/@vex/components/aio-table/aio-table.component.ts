@@ -982,15 +982,30 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   findHighestDegreeIdElement(data: any) {
-    if (data.length > 0) {
+    if (!data || data.length === 0) {
+      return null;
+    }
 
-      if (data[0].monitor_sport_authorized_degrees.length > 0) {
+    let highestDegree = null;
 
-        const dId = data[0].monitor_sport_authorized_degrees.reduce((prev, current) => (prev.degree_id > current.degree_id) ? prev : current);
-        return this.allLevels.find((l) => l.id === dId.degree_id);
+    for (const item of data) {
+      if (item.monitor_sport_authorized_degrees && item.monitor_sport_authorized_degrees.length > 0) {
+        const highestInCurrent = item.monitor_sport_authorized_degrees.reduce((prev, current) =>
+          (prev.degree.degree_order > current.degree.degree_order ) ? prev : current
+        );
+        if (!highestDegree || highestInCurrent.degree.degree_order  > highestDegree.degree.degree_order ) {
+          highestDegree = highestInCurrent;
+        }
       }
     }
+
+    if (highestDegree) {
+      return this.allLevels.find((l) => l.id === highestDegree.degree_id);
+    }
+
+    return null;
   }
+
 
   getDegrees() {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')

@@ -60,7 +60,7 @@ export class LevelUserComponent  implements OnInit {
     // Start/end position
     const startX = circleRadius * Math.cos(this.degToRad(startAngle - 90));
     const startY = circleRadius * Math.sin(this.degToRad(startAngle - 90));
-    
+
     const endX = circleRadius * Math.cos(this.degToRad(endAngle - 90));
     const endY = circleRadius * Math.sin(this.degToRad(endAngle - 90));
 
@@ -73,18 +73,23 @@ export class LevelUserComponent  implements OnInit {
     const circleRadius = this.size / 2;
     const circleAngleSize = 360 / this.allLevels.length;
     const sizeMarker = this.markerRadius * 2;
-  
+
     const gapAngleSize = ( (this.size / 20) / circleRadius) * (180 / Math.PI);
     const levelAngleSize = circleAngleSize - gapAngleSize;
-  
+
     // Start angle for the selected level
     const shiftAdjustment = circleAngleSize; //manually to fit in gap;
     const startAngle = ( (this.selectLevel + 1) * circleAngleSize) - shiftAdjustment;
     const markerAngle = startAngle + levelAngleSize + sizeMarker; // middle of the gap
-  
+
     const x =   circleRadius * Math.cos(this.degToRad(markerAngle - 90));
     const y = circleRadius * Math.sin(this.degToRad(markerAngle - 90));
-  
+
+    if (isNaN(x) || isNaN(y)) {
+    //  console.error('getMarkerPosition: Calculated position is NaN');
+      return { x: 0, y: 0 }; // Default safe position
+    }
+
     return { x, y };
   }
 

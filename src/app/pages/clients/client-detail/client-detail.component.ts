@@ -305,10 +305,6 @@ export class ClientDetailComponent {
         }
 
         const requestsClient = {
-          schoolSportDegrees: this.getSchoolSportDegrees().pipe(retry(3), catchError(error => {
-            console.error('Error fetching school sport degrees:', error);
-            return of([]); // Devuelve un array vacío en caso de error
-          })),
           clientSchool: this.getClientSchool().pipe(retry(3), catchError(error => {
             console.error('Error fetching client school:', error);
             return of([]); // Devuelve un array vacío en caso de error
@@ -429,7 +425,7 @@ export class ClientDetailComponent {
     return this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='
       + this.id + "&school_id=" + this.user.schools[0].id, null, null, null, ['degree.degreesSchoolSportGoals'])
       .pipe(
-        map((data) => {
+        switchMap((data) => {
           this.clientSport = data.data;
           this.selectedSport = this.clientSport[0];
           this.goals = [];
@@ -438,6 +434,7 @@ export class ClientDetailComponent {
             element.level = element.degree;
 
           });
+          return this.getSchoolSportDegrees();
         })
       );
   }
