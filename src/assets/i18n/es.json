@@ -50,6 +50,7 @@
   "no_monitor": "No hay instructor asignado",
   "course_detail": "Detalles curso",
   "flexidates": "Fechas flexibles",
+
   "from": "Desde",
   "to": "Hasta",
   "in": "en",
@@ -101,6 +102,7 @@
   "Samedi": "Sábado",
   "Diamanche": "Domingo",
   "register": "Registrado",
+
   "status": "Estado",
   "payed": "Pago efectuado",
   "no_payed": "No pagado",
@@ -112,7 +114,7 @@
   "extras": "Extras",
   "course_options": "Opciones de curso",
   "rent": "Alquiler",
-  "op_rem": "Opción de reemboloso",
+  "op_rem": "Opción de rembolso",
   "total": "Cantidad total",
   "tva": "IVA",
   "type": "Tipo",
@@ -152,6 +154,7 @@
   "choose_all": "Seleccionar todos",
   "new_user": "Nuevo usuario",
   "flex": "Flexible",
+
   "paxes": "Personas",
   "activity": "Actividad",
   "base_price": "Precio base",
@@ -203,6 +206,7 @@
   "image_recomendation": "Tamaño recomendado: 400x290px",
   "enter_text":"Introduce un texto aquí...",
   "timeline.timeline": "Planificador",
+
   "timeline.reset_filters": "Limpiar filtro",
   "timeline.apply_filters": "Aplicar filtros",
   "timeline.event_type": "Tipo de evento",
@@ -268,12 +272,10 @@
   "courses.errors.max_age_range": "La edad máxima debe ser mayor que la edad mínima y menor o igual a 80.",
   "courses.errors.students": "La capacidad del grupo no puede superar la capacidad del curso",
   "courses.transfer.title": "Transer student",
-
   "bonus.new_bonus": "Nuevo bono",
   "bonus.edit_bonus": "Editar bono",
   "bonus.code": "Código",
   "bonus.generate": "Generar código automaticamente",
-
   "monitors.creation.title": "Nuevo monitor",
   "monitors.creation.info": "Información de la cuenta",
   "monitors.creation.errors.name": "El nombre del monitor es obligatorio",

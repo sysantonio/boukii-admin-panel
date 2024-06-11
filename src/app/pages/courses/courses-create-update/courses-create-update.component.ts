@@ -35,6 +35,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   @ViewChild('dateTable') dateTable: MatTable<any>;
   @ViewChild('reductionTable') reductionTable: MatTable<any>;
   @ViewChild('privateDatesTable') privateDatesTable: MatTable<any>;
+  @ViewChild('activityDatesTable') activityDatesTable: MatTable<any>;
   @ViewChild('privateReductionTable') privateReductionTable: MatTable<any>;
   @ViewChild('levelTable') table: MatTable<any>;
 
@@ -132,6 +133,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   selectedTabDescIndex: any = 0;
   selectedPeriod: any = -1;
   loadingMonitors = true;
+  groups: any = [];
   defaults: any = {
     unique: false,
     course_type: null,
@@ -631,7 +633,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
 
             setTimeout(() => {
-              this.filterSportsByType();
+              if(this.mode == 'create') {
+                this.filterSportsByType();
+              }
               this.defaults.station_id = this.stations.filter((s) => s.id === this.defaults.station_id)[0];
               this.loading = false;
             }, 500);
@@ -823,6 +827,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.courseInfoPriveFormGroup.patchValue({ periodeMultiple: false });
       this.dataSourceDatePrivate.data = [];
       this.privateDatesTable?.renderRows();
+      this.activityDatesTable?.renderRows();
 
     } else {
       this.courseInfoPriveFormGroup.patchValue({ periodeUnique: false });
@@ -835,6 +840,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
     } else if (this.mode === 'update') {
       this.update();
     }
+  }
+
+  addGroup() {
+    this.groups.push({
+      groupName: '',
+      ageFrom: '',
+      ageTo: '',
+      optionName: '',
+      price: ''
+    })
   }
 
 
@@ -1142,6 +1157,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.defaults.settings.periods.push({from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true})
         this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true});
         this.privateDatesTable?.renderRows();
+        this.activityDatesTable?.renderRows();
         this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
       }
     });
@@ -1226,16 +1242,19 @@ export class CoursesCreateUpdateComponent implements OnInit {
           }
         });
         this.privateDatesTable.renderRows();
+this.activityDatesTable.renderRows();
       } else {
         this.defaults.course_dates[index - (period+1)].active = false;
         this.dataSourceDatePrivate.data[index].active = false;
         this.privateDatesTable.renderRows();
+this.activityDatesTable.renderRows();
       }
 
     } else {
       this.defaults.settings.periods.splice(index, 1);
       this.dataSourceDatePrivate.data.splice(index, 1);
       this.privateDatesTable.renderRows();
+this.activityDatesTable.renderRows();
     }
 
 
@@ -1324,12 +1343,19 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.courseTypeFormGroup.get("courseType").patchValue(id);
     this.defaults.course_type = id;
 
+
+
     this.courseInfoFormGroup.reset();
     this.courseInfoPriveFormGroup.reset();
     this.courseInfoPriveSeparatedFormGroup.reset();
     this.courseInfoCollecDateSplitFormGroup.reset();
     this.courseLevelFormGroup.reset();
     this.courseInfoPriveFormGroup.get("periodeUnique").patchValue(true);
+    if(id ===3) {
+      this.defaults.is_flexible = true
+      this.daysDates = [];
+      this.daysDatesLevels = [];
+    }
   }
 
   setFlexibility(event: any) {
@@ -1586,14 +1612,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           }, [0, 0]);
 
           this.daysDatesLevels.push({date: moment(element.date).format('YYYY-MM-DD'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
-          if (this.courseType === 'privee') {
-
-            this.defaults.course_dates.push({
-              date: moment(element.date).format('YYYY-MM-DD'),
-              hour_start: element.hour,
-              hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
-            })
-          } else {
+          if (this.courseType === 'collectif') {
 
             this.defaults.course_dates.push({
               date: moment(element.date).format('YYYY-MM-DD'),
@@ -1601,6 +1620,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
               hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
               groups: []
             })
+          } else {
+
+            this.defaults.course_dates.push({
+              date: moment(element.date).format('YYYY-MM-DD'),
+              hour_start: element.hour,
+              hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
+            })
+
 
           }
         } else {
@@ -1967,7 +1994,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   create() {
 
-    if (this.defaults.course_type  === 2) {
+    if (this.defaults.course_type  !== 1) {
       this.checkStep3PrivateNoFlex();
       this.setDebut(this.defaults.hour_min);
       this.setHourEnd(this.defaults.hour_max);
@@ -2119,6 +2146,46 @@ export class CoursesCreateUpdateComponent implements OnInit {
         hour_max: this.defaults.hour_max,
         settings: JSON.stringify(this.defaults.settings)
       };
+    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
+
+      if (this.periodeUnique) {
+
+        this.getDatesBetween(this.defaults.date_start, this.defaults.date_end, true, this.defaults.hour_min, this.defaults.hour_max);
+      }
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.translations.fr.name,
+        short_description: this.defaults.translations.fr.short_description,
+        description: this.defaults.translations.fr.description,
+        price: 0,
+        currency: 'CHF',
+        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        active: this.defaults.active,
+        online: this.defaults.online,
+        options: this.defaults.options,
+        image: this.imagePreviewUrl,
+        confirm_attendance: false,
+        translations: JSON.stringify(this.defaults.translations),
+        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
+        price_range: this.dataSourceFlexiblePrices,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        age_min: this.defaults.age_min,
+        age_max: this.defaults.age_max,
+        course_dates: this.defaults.course_dates,
+        settings: JSON.stringify(this.defaults.settings),
+        unique: this.periodeUnique,
+        hour_min: this.defaults.hour_min,
+        hour_max: this.defaults.hour_max,
+      };
+      console.log(data);
     }
     data.school_id = this.user.schools[0].id;
 
