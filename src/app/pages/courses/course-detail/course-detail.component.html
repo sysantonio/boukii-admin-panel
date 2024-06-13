@@ -83,11 +83,11 @@
                   <p style="float: left;width: 50%;text-align: left;" [innerHTML]="getShotrDescription(defaults)">
 
                   </p>
-                  <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{defaults.price}}</b> CHF</p>
+                  <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{defaults.price}}</b> {{defaults.currency}}</p>
                   <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
                     {{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}
                   </b>
-                  CHF</p>
+                  {{defaults.currency}}</p>
                 </div>
               </div>
               <div style="width:50%; margin-top:2%;float:left">

@@ -1992,7 +1992,6 @@ export class BookingDetailComponent implements OnInit {
     const priceToRefund = !this.booking.has_cancellation_insurance
       ? this.finalPrice
       : this.finalPrice - this.booking.price_cancellation_insurance;
-    debugger;
     const dialogRef = this.dialog.open(CancelBookingModalComponent, {
       width: "1000px", // Asegurarse de que no haya un ancho máximo
       panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
@@ -2766,7 +2765,6 @@ export class BookingDetailComponent implements OnInit {
 
   addCancellationInsurance(event: any) {
     this.calculateFinalPrice();
-    debugger;
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       data: {
         title: event.checked
@@ -3336,7 +3334,6 @@ export class BookingDetailComponent implements OnInit {
         }
       });
     } else {
-      debugger;
       const dialogRef = this.dialog.open(UpdateCourseModalComponent, {
         width: "60vw",
         maxWidth: "100vw",

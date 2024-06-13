@@ -142,7 +142,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     short_description: null,
     description: null,
     price: null,
-    currency: 'CHF',
+    currency: '',
     date_start: null,
     date_end: null,
     date_start_res: null,
@@ -306,8 +306,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    const svgObject = document.getElementById('svg1') as HTMLObjectElement;
-    svgObject.contentDocument.querySelector('#background').setAttribute('fill', '#FF5733')
   }
 
   ngOnInit() {
@@ -1089,14 +1087,18 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((data: any) => {
           if (data) {
+            if( this.defaults.course_dates[index]) {
+              this.defaults.course_dates[index].date = moment(result.date).format('YYYY-MM-DD');
+              this.defaults.course_dates[index].hour_start = result.hour;
+              this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
 
-            this.defaults.course_dates[index].date = moment(result.date).format('YYYY-MM-DD');
-            this.defaults.course_dates[index].hour_start = result.hour;
-            this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
-            this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
-            this.dataSource.data[index].hour = result.hour;
-            this.dataSource.data[index].duration = result.duration;
-            this.dateTable?.renderRows();
+            } else if(this.dataSource.data[index]) {
+              this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
+              this.dataSource.data[index].hour = result.hour;
+              this.dataSource.data[index].duration = result.duration;
+              this.dateTable?.renderRows();
+            }
+
           }
         });
 
@@ -1279,7 +1281,7 @@ this.activityDatesTable.renderRows();
       short_description: null,
       description: null,
       price: null,
-      currency: 'CHF',
+      currency: '',
       date_start: null,
       date_end: null,
       date_start_res: null,
@@ -2020,7 +2022,7 @@ this.activityDatesTable.renderRows();
       courseDates = this.defaults.course_dates;
     }
 
-
+    let settings = JSON.parse(this.user.schools[0].settings);
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -2029,7 +2031,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2057,7 +2059,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency:  settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2088,7 +2090,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: 0,
-        currency: 'CHF',
+        currency:  settings?.taxes?.currency || 'CHF',
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2124,7 +2126,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency: 'CHF',
+        currency:  settings?.taxes?.currency || 'CHF',
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2161,7 +2163,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: 0,
-        currency: 'CHF',
+        currency:  settings?.taxes?.currency || 'CHF',
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2238,7 +2240,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency:  this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2269,7 +2271,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency:  this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2295,7 +2297,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: 0,
-        currency: 'CHF',
+        currency:  this.defaults.currency,
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2336,7 +2338,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',
+        currency:  this.defaults.currency,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start: lowestDateP,

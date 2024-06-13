@@ -713,8 +713,8 @@
                           </ng-container>
 
                           <ng-container matColumnDef="price">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                            <td mat-cell *matCellDef="let element"> 30 chf/dia </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - {{ currency || 'CHF' }} / Dia </th>
+                            <td mat-cell *matCellDef="let element"> 30 {{ currency || 'CHF' }}/dia </td>
                           </ng-container>
 
                           <ng-container matColumnDef="tva">
@@ -801,7 +801,7 @@
 
                     <ng-container matColumnDef="price">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/{{'day' | translate}} </td>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
@@ -869,8 +869,8 @@
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/dia </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - {{ currency || 'CHF' }} / Dia </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/dia </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
@@ -938,8 +938,8 @@
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - CHF / Dia </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} chf/dia </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - {{ currency || 'CHF' }} / Dia </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/dia </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">

@@ -90,15 +90,15 @@
                 {{getCourse(item?.courseDates[0]?.course_id)?.sport?.name}}
               </mat-card-subtitle>
               <div style="color: #EA0C60;" *ngIf="getCourse(item?.courseDates[0]?.course_id)?.course_type === 2 && getCourse(item?.courseDates[0]?.course_id)?.is_flexible ">
-                {{'from' | translate}} {{ getAmountCourse(bookingUsersUnique, bI)}} CHF
+                {{'from' | translate}} {{ getAmountCourse(bookingUsersUnique, bI)}} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
 
                 </div>
               <div style="color: #EA0C60;" *ngIf="getCourse(item?.courseDates[0]?.course_id)?.course_type === 1 && getCourse(item?.courseDates[0]?.course_id)?.is_flexible">
-                {{ getAmountCourse(bookingUsersUnique, bI)}} CHF {{'/ per day'}}
+                {{ getAmountCourse(bookingUsersUnique, bI)}} {{getCourse(item?.courseDates[0]?.course_id)?.currency}} {{'/ per day'}}
               </div>
 
               <div style="color: #EA0C60;" *ngIf="!getCourse(item?.courseDates[0]?.course_id)?.is_flexible">
-                {{ getAmountCourse(bookingUsersUnique, bI)}} CHF
+                {{ getAmountCourse(bookingUsersUnique, bI)}} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
               </div>
             </mat-card-header>
             <mat-card-content>
@@ -187,7 +187,7 @@
                     </div>
 
                     <div style="float: right;width: 50%;">
-                      <p style="float: right;"> +{{getCourseExtraForfaitPrice(item.courseDates[0])}} CHF</p>
+                      <p style="float: right;"> +{{getCourseExtraForfaitPrice(item.courseDates[0])}} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}</p>
                     </div>
                   </div>
 
@@ -250,7 +250,7 @@
               <div style="width: 100%;float:left; margin-top: 10px">
                 <div>
                   <p style="width: 60%;float: left;">{{'options_total' | translate }}</p>
-                  <p style="color: #EA0C60;">{{getCourseExtraForfaitPrice(item.courseDates[0])}} CHF</p>
+                  <p style="color: #EA0C60;">{{getCourseExtraForfaitPrice(item.courseDates[0])}} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}</p>
                 </div>
               </div>
 

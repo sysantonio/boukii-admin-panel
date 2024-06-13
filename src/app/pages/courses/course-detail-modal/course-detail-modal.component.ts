@@ -49,7 +49,7 @@ export class CourseDetailModalComponent implements OnInit {
     short_description: null,
     description: null,
     price: null,
-    currency: 'CHF',
+    currency: '',
     date_start: null,
     date_end: null,
     date_start_res: null,
@@ -1036,7 +1036,7 @@ export class CourseDetailModalComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1061,7 +1061,7 @@ export class CourseDetailModalComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),

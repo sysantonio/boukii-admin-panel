@@ -2648,7 +2648,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       tvaAllPrice: tvaAllPrice,
       boukiiCarePrice: boukiiCareAllPrice
     }
-    debugger;
+
     return data;
 
   }

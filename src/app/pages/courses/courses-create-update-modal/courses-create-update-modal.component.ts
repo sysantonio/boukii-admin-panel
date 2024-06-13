@@ -136,7 +136,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
     short_description: null,
     description: null,
     price: null,
-    currency: 'CHF',
+    currency: '',
     date_start: null,
     date_end: null,
     date_start_res: null,
@@ -1069,7 +1069,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
       short_description: null,
       description: null,
       price: null,
-      currency: 'CHF',
+      currency: '',
       date_start: null,
       date_end: null,
       date_start_res: null,
@@ -1856,7 +1856,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
       courseDates = this.defaults.course_dates;
     }
 
-
+    let settings = JSON.parse(this.user.schools[0].settings);
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -1865,7 +1865,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1892,7 +1892,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1922,7 +1922,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: 0,
-        currency: 'CHF',
+        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1955,7 +1955,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency: 'CHF',
+        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2024,7 +2024,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2054,7 +2054,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2079,7 +2079,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: 0,
-        currency: 'CHF',
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2117,7 +2117,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start: lowestDateP,

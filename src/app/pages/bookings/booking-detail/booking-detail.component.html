@@ -218,7 +218,7 @@
               </mat-card-subtitle>
               <div  *ngIf="getCourse(item?.courseDates[0]?.course_id)?.is_flexible"
                     style="color: #EA0C60;">
-                {{  parseFloatValue(getTotalBook(bI, item)) }} CHFs
+                {{  parseFloatValue(getTotalBook(bI, item)) }} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
 
               </div>
 
@@ -226,7 +226,7 @@
                 style="color: #EA0C60;"
                 *ngIf="!getCourse(item?.courseDates[0]?.course_id)?.is_flexible"
               >
-                {{ getAmountCourse(bookingUsersUnique, bI) }} CHF
+                {{ getAmountCourse(bookingUsersUnique, bI) }} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
               </div>
             </mat-card-header>
             <mat-card-content>
@@ -369,7 +369,7 @@
                               ? bu.booking_user_extras[0].course_extra.price
                               : 0
                           }}
-                          CHF
+                          {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                         </p>
                       </div>
                     </div>
@@ -604,7 +604,7 @@
                         +{{
                           getCourseExtraForfaitPrice(item.courseDates[0])
                         }}
-                        CHF
+                        {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                       </p>
                     </div>
                   </div>
@@ -683,7 +683,7 @@
                     +{{
                       getCourseExtraForfaitPriceByDateHour(item.courseDates[0])
                     }}
-                    CHF
+                    {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                   </p>
                 </div>
                 <div *ngIf="courses[bI].course_type == 1">
@@ -691,7 +691,7 @@
                     {{ "options_total" | translate }}
                   </p>
                   <p style="color: #EA0C60;">
-                    +{{ getCourseExtraForfaitPrice(item.courseDates[0]) }} CHF
+                    +{{ getCourseExtraForfaitPrice(item.courseDates[0]) }} {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                   </p>
                 </div>
               </div>
@@ -913,7 +913,7 @@
                     +{{
                       getCourseExtraForfaitPriceByCourse(item.courseDates[0])
                     }}
-                    CHF
+                    {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                   </p>
                 </span>
                 <span *ngIf="item.courseDates[0].course.course_type == 2 &&  getCourseExtraForfaitPriceByDateHour(item.courseDates[0])"
@@ -933,7 +933,7 @@
                           item.courseDates[0]
                         )
                       }}
-                      CHF
+                      {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                     </p>
                   </span>
               </ng-container>

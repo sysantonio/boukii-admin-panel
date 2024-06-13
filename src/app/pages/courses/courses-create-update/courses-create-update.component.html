@@ -175,7 +175,7 @@
               </mat-tab-group>
 
               <div class="flex-auto" style="width: 15%">
-                <label for="courseName">{{(defaults.is_flexible ? 'min_price' : 'price' )|translate}} (CHF) <span style="color:red">(*)</span></label>
+                <label for="courseName">{{(defaults.is_flexible ? 'min_price' : 'price' )|translate}} ({{defaults.currency}}) <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
                   <input id="courseName" formControlName="price" matInput [required]="!defaults.is_flexible" [type]="defaults.is_flexible ? 'text' : 'number'" [(ngModel)]="defaults.price" [readonly]="defaults.is_flexible"
                   [value]="defaults.is_flexible ? 'FLEXIBLE' : null">
@@ -898,8 +898,8 @@
                 </mat-tab>
               </mat-tab-group>
               <div class="flex-auto" style="width: 15%">
-                <label for="price" *ngIf="defaults.is_flexible">{{'price_per_date' | translate}} (CHF) <span style="color:red">(*)</span></label>
-                <label for="price" *ngIf="!defaults.is_flexible">{{'price' | translate}} (CHF) <span style="color:red">(*)</span></label>
+                <label for="price" *ngIf="defaults.is_flexible">{{'price_per_date' | translate}} ({{defaults.currency}}) <span style="color:red">(*)</span></label>
+                <label for="price" *ngIf="!defaults.is_flexible">{{'price' | translate}} ({{defaults.currency}}) <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
                   <input id="price" formControlName="price" matInput required type="number" [(ngModel)]="defaults.price">
                   <mat-error *ngIf="courseInfoFormGroup.controls?.price?.errors?.['required']">
@@ -1221,7 +1221,7 @@
                       <p style="float: left;width: 20%;text-align: right;"><b>{{'participants' | translate }}</b></p>
                     </div>
                     <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>{{defaults.price}}</b> CHF</p>
+                      <p style="float: left;width: 50%;text-align: left;"><b>{{defaults.price}}</b> {{defaults.currency}}</p>
                       <p style="float: left;width: 50%;text-align: right;"><b>{{defaults.max_participants}}</b></p>
                     </div>
                   </div>

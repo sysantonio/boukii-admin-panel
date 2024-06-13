@@ -39,7 +39,7 @@ export class CourseDetailComponent implements OnInit {
     short_description: null,
     description: null,
     price: null,
-    currency: 'CHF',
+    currency: '',
     date_start: null,
     date_end: null,
     date_start_res: null,
@@ -131,6 +131,7 @@ export class CourseDetailComponent implements OnInit {
   rangeForm: UntypedFormGroup;
   showDetail: boolean = false;
   detailData: any;
+  settings: any;
 
   entity = '/booking-users';
   columns: TableColumn<any>[] = [
@@ -153,6 +154,7 @@ export class CourseDetailComponent implements OnInit {
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
     private snackbar: MatSnackBar, private translateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+    this.settings = JSON.parse(this.user.schools[0].settings);
     this.id = this.activatedRoute.snapshot.params.id;
 
     this.generateDurations();
@@ -1117,7 +1119,7 @@ export class CourseDetailComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -1142,7 +1144,7 @@ export class CourseDetailComponent implements OnInit {
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start).format('YYYY-MM-DD'),

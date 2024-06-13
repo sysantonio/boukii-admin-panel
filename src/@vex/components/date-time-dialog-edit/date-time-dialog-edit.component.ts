@@ -20,7 +20,6 @@ export class DateTimeDialogEditComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data) { }
 
   ngOnInit(): void {
-    debugger;
     this.generateDurations();
     this.generateHours();
 

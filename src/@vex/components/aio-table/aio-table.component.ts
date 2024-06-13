@@ -1076,7 +1076,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         short_description: item.short_description,
         description: item.description,
         price: item.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: item.currency,//poner currency de reglajes
         date_start: moment(item.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(item.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
@@ -1130,7 +1130,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         short_description: item.short_description,
         description: item.description,
         price: item.price,
-        currency: 'CHF',//poner currency de reglajes
+        currency: item.currency,//poner currency de reglajes
         date_start: moment(item.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(item.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
@@ -1181,7 +1181,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         short_description: item.short_description,
         description: item.description,
         price: 0,
-        currency: 'CHF',
+        currency: item.currency,
         date_start: item.unique ? moment(item.date_start).format('YYYY-MM-DD') : moment(item.date_start_res).format('YYYY-MM-DD'),
         date_end: item.unique ? moment(item.date_end).format('YYYY-MM-DD') : moment(item.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
@@ -1217,7 +1217,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
         short_description: item.short_description,
         description: item.description,
         price: item.price,
-        currency: 'CHF',
+        currency: item.currency,
         date_start_res: moment(item.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(item.date_end_res).format('YYYY-MM-DD'),
         date_start: moment(item.date_start_res).format('YYYY-MM-DD'),

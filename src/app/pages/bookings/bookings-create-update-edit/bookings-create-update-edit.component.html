@@ -1953,7 +1953,7 @@
                         <p>
                         <p>
                           +{{item.forfait ? (item.forfait.price ) + ((item.forfait.price) * (item.forfait.tva / 100)) : 0}}
-                          CHF
+                        {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                         </p>
                       </div>
                     </div>
@@ -2053,7 +2053,7 @@
                             <p>
                             <p>
                               +{{people?.forfait ? (people?.forfait.price ) + ((people?.forfait.price) * (people?.forfait.tva / 100)) : 0}}
-                              CHF
+                            {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                             </p>
                           </div>
                         </div>
@@ -2157,7 +2157,7 @@
                       <div style="float: right;width: 50%;">
                         <p style="float: right;">
                           +{{item.forfait ? (item.forfait.price * item.courseDates.length * item.paxes) + ((item.forfait.price * item.courseDates.length * item.paxes) * (item.forfait.tva / 100)) : 0}}
-                          CHF
+                          {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
                         </p>
                       </div>
                     </div>
