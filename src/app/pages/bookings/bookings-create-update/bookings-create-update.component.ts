@@ -1659,7 +1659,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
               this.levelForm.patchValue(level);
               this.defaultsBookingUser.degree_id = level.id;
               hasSport = true;
-              this.getCourses(level, this.monthAndYear);
+              if(this.courseTypeId) {
+                this.getCourses(level, this.monthAndYear);
+              }
             }
           });
         }
@@ -1752,7 +1754,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     this.levelForm.patchValue(level);
                     this.defaultsBookingUser.degree_id = level?.id;
                     this.clientsForm.patchValue(client);
-                    this.getCourses(level, this.monthAndYear)
+                    if(this.courseTypeId) {
+                      this.getCourses(level, this.monthAndYear)
+                    }
                   };
                 }
               });
@@ -1767,7 +1771,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   }
   getCourses(level: any, date: any, fromPrivate = false) {
-
+    if(!this.courseTypeId) {
+      this.setCourseType('collectif', 1);
+    }
     this.loadingCalendar = true;
     this.dateClass();
     this.privateDateClass();

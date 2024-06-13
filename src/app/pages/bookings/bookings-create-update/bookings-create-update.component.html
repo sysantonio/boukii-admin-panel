@@ -439,6 +439,7 @@
                     <input
                       matInput
                       id="dateFromPrivate"
+                      [value]="selectedDatePrivate"
                       [matDatepicker]="pickerDateFrom"
                       (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
                       [min]="minDate"

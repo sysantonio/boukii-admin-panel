@@ -3,7 +3,7 @@ import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup, Validator
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, map, startWith } from 'rxjs';
+import {Observable, map, startWith, retry, catchError, of, forkJoin, tap} from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -23,6 +23,7 @@ import { BookingDetailModalComponent } from '../../bookings/booking-detail-modal
 import { CourseUserTransferTimelineComponent } from '../../timeline/course-user-transfer-timeline/course-user-transfer-timeline.component';
 import { TranslateService } from '@ngx-translate/core';
 import {DateAdapter} from '@angular/material/core';
+import {switchMap} from 'rxjs/operators';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
@@ -178,7 +179,7 @@ export class MonitorDetailComponent {
   editing: boolean = false;
   user: any;
   schoolSports: any[] = [];
-  stations: any[] = [];
+  stations: any = [];
 
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
@@ -224,7 +225,7 @@ export class MonitorDetailComponent {
   searchDate:any;
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
-    private activatedRoute: ActivatedRoute, private dialog: MatDialog, public translateService: TranslateService,
+              private activatedRoute: ActivatedRoute, private dialog: MatDialog, public translateService: TranslateService,
               private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
@@ -238,170 +239,205 @@ export class MonitorDetailComponent {
     this.colorKeys = Object.keys(this.groupedByColor);
   }
 
-  async ngOnInit() {
-    this.getData();
+  ngOnInit() {
+    this.getInitialData().pipe(
+      switchMap(() => this.getData())
+    ).subscribe(() => {
+      // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
+    });
   }
 
-  async getData() {
+  getInitialData() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
-    this.getClients();
 
-    this.crudService.get('/monitors/'+this.id)
-      .subscribe((data) => {
-        this.defaults = data.data;
-        console.log(this.defaults);
-        this.crudService.get('/users/'+data.data.user_id)
-          .subscribe((user)=> {
-            this.defaultsUser = user.data;
+    const requestsInitial = {
+      languages: this.getLanguages().pipe(retry(3), catchError(error => {
+        console.error('Error fetching languages:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      })),
+      stations: this.getStations().pipe(retry(3), catchError(error => {
+        console.error('Error fetching stations:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      })),
+      clients: this.getClients().pipe(retry(3), catchError(error => {
+        console.error('Error fetching clients:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      })),
+      salary: this.getSalarySchoolData().pipe(retry(3), catchError(error => {
+        console.error('Error fetching clients:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      })),
+      schoolRel: this.getSchoolRel().pipe(retry(3), catchError(error => {
+        console.error('Error fetching clients:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      }))
 
-            this.getSchoolRel();
-            this.getSchoolSportDegrees();
-            this.getStations();
-            this.getLanguages();
+    };
 
-            this.formInfoAccount = this.fb.group({
-              image: [''],
-              name: ['', Validators.required],
-              surname: ['', Validators.required],
-              email: ['', [Validators.required, Validators.email]],
-              username: [''],
-              station: [''],
-              password: [''],
+    return forkJoin(requestsInitial).pipe(tap((results) => {
+      this.formInfoAccount = this.fb.group({
+        image: [''],
+        name: ['', Validators.required],
+        surname: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        username: [''],
+        station: [''],
+        password: [''],
 
+      });
+
+      this.formPersonalInfo = this.fb.group({
+        fromDate: ['', Validators.required],
+        phone: [''],
+        mobile: ['', Validators.required],
+        address: [''],
+        postalCode: [''],
+        country: this.myControlCountries,
+        province: this.myControlProvinces
+
+      });
+
+      this.formWorkInfo = this.fb.group({
+        avs: [],
+        workId: [],
+        iban: [],
+        countryWork: this.myControlWorkCountries,
+        children: [],
+        childName: [],
+        childAge: [],
+        sports: [],
+        sportName: [],
+      });
+
+      this.formCivilStatusInfo = this.fb.group({
+
+        civilStatus: [this.defaults.civil_status],
+        spouse: [this.defaults.partner_works ? 'y' : 'n'],
+        workMobility: [this.defaults.family_allowance ? 'y' : 'n'],
+        spouseWorkId: [],
+        spousePercentage: []
+      });
+
+      this.filteredStations = this.myControlStations.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filterStations(value))
+        );
+
+      this.myControlStations.valueChanges.subscribe(value => {
+        this.formInfoAccount.get('station').setValue(value);
+      });
+
+      this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
+      );
+
+      this.myControlCountries.valueChanges.subscribe(country => {
+        this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+        this.filteredProvinces = this._filterProvinces(country.id);
+      });
+
+    }));
+
+  }
+
+  getData() {
+
+
+    //this.getClients();
+
+    return this.crudService.get('/monitors/'+this.id, ['user'])
+      .pipe(
+        tap((data) => {
+          this.defaults = data.data;
+          console.log(this.defaults);
+          this.defaultsUser = data.data.user;
+
+
+          //this.getStations();
+          //this.getLanguages();
+
+          this.filteredWorkCountries = this.myControlWorkCountries.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value.name),
+            map(name => name ? this._filterCountries(name) : this.mockWorkCountriesData.slice())
+          );
+
+          this.filteredCivilStatus = this.myControlCivilStatus.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filterCivilStatus(value))
+          );
+
+          this.filteredLevel = this.levelForm.valueChanges.pipe(
+            startWith(''),
+            map((value: any) => typeof value === 'string' ? value : value?.annotation),
+            map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+          );
+
+          this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+            startWith(''),
+            map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+          );
+
+          this.filteredSalary = this.salaryForm.valueChanges.pipe(
+            startWith(''),
+            map((value: any) => typeof value === 'string' ? value : value?.annotation),
+            map(annotation => annotation ? this._filterSalary(annotation) : this.salaryData.slice())
+          );
+
+          this.getSchoolSportDegrees().subscribe((results) => {
+            console.log('All data loaded', results);
+            //this.getMonitorSportsDegree();
+            this.getSports();
+
+            this.myControlCivilStatus.setValue(this.mockCivilStatus.find((cv) => cv === this.defaults.civil_status));
+            this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
+            this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaults.country));
+            this.myControlProvinces.setValue(this.mockProvincesData.find((c) => c.id === +this.defaults.province));
+            this.myControlWorkCountries.setValue(this.mockWorkCountriesData.find((c) => c.id === +this.defaults.world_country));
+
+            const langs = [];
+            this.languages.forEach(element => {
+              if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
+                element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
+                langs.push(element);
+              }
             });
 
-            this.formPersonalInfo = this.fb.group({
-              fromDate: ['', Validators.required],
-              phone: [''],
-              mobile: ['', Validators.required],
-              address: [''],
-              postalCode: [''],
-              country: this.myControlCountries,
-              province: this.myControlProvinces
+            this.languagesControl.setValue(langs);
+            this.activeSchool = this.user.schools.find(school => school.active === true) || 0;
 
-            });
+            this.getSportsTimeline();
+            this.getDegrees();
 
-            this.formWorkInfo = this.fb.group({
-              avs: [],
-              workId: [],
-              iban: [],
-              countryWork: this.myControlWorkCountries,
-              children: [],
-              childName: [],
-              childAge: [],
-              sports: [],
-              sportName: [],
-            });
+            this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+              .subscribe((season) => {
+                let hour_start = '08:00';
+                let hour_end = '18:00';
+                if (season.data.length > 0) {
+                  this.vacationDays = JSON.parse(season.data[0].vacation_days);
+                  hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
+                  hour_end = season.data[0].hour_end ? season.data[0].hour_end.substring(0, 5) : '18:00';
+                }
+                this.hoursRange = this.generateHoursRange(hour_start, hour_end);
+                this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
+                this.hoursRangeMinutes = this.generateHoursRangeMinutes(hour_start, hour_end);
+              })
 
-            this.formCivilStatusInfo = this.fb.group({
+            this.calculateWeeksInMonth();
+            //await this.calculateTaskPositions();
+            this.loadBookings(this.currentDate);
+            this.loading = false;
 
-              civilStatus: [this.defaults.civil_status],
-              spouse: [this.defaults.partner_works ? 'y' : 'n'],
-              workMobility: [this.defaults.family_allowance ? 'y' : 'n'],
-              spouseWorkId: [],
-              spousePercentage: []
-            });
+          });
 
-            this.filteredStations = this.myControlStations.valueChanges
-              .pipe(
-                startWith(''),
-                map(value => this._filterStations(value))
-              );
+        }))
 
-              this.myControlStations.valueChanges.subscribe(value => {
-                this.formInfoAccount.get('station').setValue(value);
-            });
+    //Planificador
 
-            this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-              startWith(''),
-              map(value => typeof value === 'string' ? value : value.name),
-              map(name => name ? this._filterCountries(name) : this.mockCountriesData.slice())
-            );
-
-            this.myControlCountries.valueChanges.subscribe(country => {
-              this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-              this.filteredProvinces = this._filterProvinces(country.id);
-            });
-
-            this.filteredWorkCountries = this.myControlWorkCountries.valueChanges.pipe(
-              startWith(''),
-              map(value => typeof value === 'string' ? value : value.name),
-              map(name => name ? this._filterCountries(name) : this.mockWorkCountriesData.slice())
-            );
-
-            this.filteredCivilStatus = this.myControlCivilStatus.valueChanges.pipe(
-              startWith(''),
-              map(value => this._filterCivilStatus(value))
-            );
-
-            this.filteredLevel = this.levelForm.valueChanges.pipe(
-              startWith(''),
-              map((value: any) => typeof value === 'string' ? value : value?.annotation),
-              map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
-            );
-
-            this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-              startWith(''),
-              map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-            );
-
-            this.filteredSalary = this.salaryForm.valueChanges.pipe(
-              startWith(''),
-              map((value: any) => typeof value === 'string' ? value : value?.annotation),
-              map(annotation => annotation ? this._filterSalary(annotation) : this.salaryData.slice())
-            );
-
-            setTimeout(() => {
-              this.getSalarySchoolData();
-              this.getMonitorSportsDegree();
-              this.getSports();
-
-              this.myControlCivilStatus.setValue(this.mockCivilStatus.find((cv) => cv === this.defaults.civil_status));
-              this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
-              this.myControlCountries.setValue(this.mockCountriesData.find((c) => c.id === +this.defaults.country));
-              this.myControlProvinces.setValue(this.mockProvincesData.find((c) => c.id === +this.defaults.province));
-              this.myControlWorkCountries.setValue(this.mockWorkCountriesData.find((c) => c.id === +this.defaults.world_country));
-
-              const langs = [];
-              this.languages.forEach(element => {
-                if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
-                  element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
-                    langs.push(element);
-                  }
-              });
-
-              this.languagesControl.setValue(langs);
-
-              this.loading = false;
-
-            }, 500);
-          })
-      })
-
-      //Planificador
-      this.activeSchool = this.user.schools.find(school => school.active === true) || 0;
-
-      await this.getSportsTimeline();
-      await this.getDegrees();
-
-      this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
-      .subscribe((season) => {
-        let hour_start = '08:00';
-        let hour_end = '18:00';
-        if (season.data.length > 0) {
-          this.vacationDays = JSON.parse(season.data[0].vacation_days);
-          hour_start = season.data[0].hour_start ? season.data[0].hour_start.substring(0, 5) : '08:00';
-          hour_end = season.data[0].hour_end ? season.data[0].hour_end.substring(0, 5) : '18:00';
-        }
-        this.hoursRange = this.generateHoursRange(hour_start, hour_end);
-        this.hoursRangeMinusLast = this.hoursRange.slice(0, -1);
-        this.hoursRangeMinutes = this.generateHoursRangeMinutes(hour_start, hour_end);
-      })
-
-      await this.calculateWeeksInMonth();
-      //await this.calculateTaskPositions();
-      this.loadBookings(this.currentDate);
   }
 
   onDateChange(event:any) {
@@ -590,12 +626,12 @@ export class MonitorDetailComponent {
   }
 
   getLanguages() {
-    this.crudService.list('/languages', 1, 1000)
-      .subscribe((data) => {
-        this.languages = data.data;
-        console.log(this.languages);
+    return this.crudService.list('/languages', 1, 1000).pipe(
+      tap((data) => {
+        this.languages = data.data.reverse();
         this.setInitLanguages();
       })
+    );
   }
 
   getSports() {
@@ -613,40 +649,127 @@ export class MonitorDetailComponent {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((station) => {
-        station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.station_id)
-            .subscribe((data) => {
-              this.stations.push(data.data);
-
-            })
-        });
-      })
+    return this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
+      .pipe(
+        switchMap((station) => {
+          const stationRequests = station.data.map(element =>
+            this.crudService.get('/stations/' + element.station_id).pipe(
+              map(data => data.data)
+            )
+          );
+          return forkJoin(stationRequests);
+        }),
+        tap((stations) => {
+          this.stations = stations;
+        })
+      );
   }
 
   getSchoolSportDegrees() {
+    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' +
+      this.user.schools[0].id, null, null, null, ['sport', 'degrees'])
+      .pipe(
+        switchMap((sport) => {
+          this.schoolSports = sport.data;
+          return this.getMonitorSportsDegree()
+        })
+      );
+  }
+  getSchoolSportDegreesOld() {
     this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
           this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
-          .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data
-          });
+            .subscribe((data) => {
+              this.schoolSports[idx].degrees = data.data
+            });
         });
       })
+
   }
 
   getSchoolRel() {
-    this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id)
-      .subscribe((data) => {
-        this.monitorSchoolRel = data.data;
-      })
+    return this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id)
+      .pipe(
+        map((data) => {
+          this.monitorSchoolRel = data.data;
+        })
+      )
   }
 
   getMonitorSportsDegree() {
-    this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+this.id+'&school_id='+this.user.schools[0].id)
+    return this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id',
+      '&monitor_id='+this.id+'&school_id='+this.user.schools[0].id, null, null, null,
+      ['monitorSportAuthorizedDegrees'])
+      .pipe(
+        map((monitorDegree) => {
+          let selectedSports = []; // Obtén los deportes actualmente seleccionados o inicializa un arreglo vacío
+          const level = [];
+
+          this.schoolSports.forEach(element => {
+
+            element.degrees.forEach(degree => {
+              monitorDegree.data.forEach(monitorDegree => {
+                if ((monitorDegree.sport_id === element.sport_id) && (monitorDegree.degree_id === degree.id)) {
+                  monitorDegree.degrees = element.degrees;
+                  monitorDegree.level = degree;
+                  level.push(monitorDegree);
+                }
+              });
+            });
+            const mDegree = monitorDegree.data.filter((m) => m.sport_id === element.sport_id);
+            if (mDegree.length > 0) {
+              element.monitor_sports_degree_id = mDegree[0].id;
+              selectedSports.push(element);
+            }
+          });
+
+          selectedSports.forEach(element => {
+            const degreeLevel = level.find((l) => l.sport_id === element.sport_id);
+            if (degreeLevel) {
+              element.level = degreeLevel.level;
+              element.salary_level = degreeLevel.salary_level;
+            }
+          });
+
+          this.sportsCurrentData.data = selectedSports;
+          this.selectedSports = selectedSports;
+          this.sportsControl.setValue(selectedSports);
+          this.monitorSportsDegree = monitorDegree.data;
+
+          console.log(this.sportsCurrentData.data);
+          const availableSports = [];
+          this.schoolSports.forEach(element => {
+            if(!this.sportsCurrentData.data.find((s) => s.id === element.id)) {
+              availableSports.push(element);
+            }
+          });
+          this.filteredSports = this.sportsControl.valueChanges.pipe(
+            startWith(''),
+            map((sport: string | null) => sport ? this._filterSports(sport) : availableSports.slice())
+          );
+
+          monitorDegree.data.forEach(mDG => {
+            selectedSports.forEach(element => {
+              element.degrees.forEach(dg => {
+                if (dg.id === mDG.monitor_sport_authorized_degrees[0].degree_id) {
+                  element.authorisedLevels =  mDG.monitor_sport_authorized_degrees;
+
+                }
+              });
+
+            });
+
+          });
+        })
+      )
+  }
+
+
+  getMonitorSportsDegreeOld() {
+    this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id',
+      '&monitor_id='+this.id+'&school_id='+this.user.schools[0].id, null, null, null, ['monitorSportAuthorizedDegrees'])
       .subscribe((monitorDegree) => {
         let selectedSports = []; // Obtén los deportes actualmente seleccionados o inicializa un arreglo vacío
         const level = [];
@@ -709,7 +832,7 @@ export class MonitorDetailComponent {
 
               });
               console.log(data);
-          })
+            })
         });
       })
   }
@@ -763,8 +886,8 @@ export class MonitorDetailComponent {
     this.languages.forEach(element => {
       if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
         || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
-          this.selectedLanguages.push(element);
-        }
+        this.selectedLanguages.push(element);
+      }
     });
   }
 
@@ -886,17 +1009,17 @@ export class MonitorDetailComponent {
       }
 
       this.crudService.update('/monitor-sports-degrees', data, auLevel.monitor_sport_id)
-      .subscribe(() => {
-        this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth_adult'), 'OK', {duration: 3000});
-        this.getData();
-      })
+        .subscribe(() => {
+          this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth_adult'), 'OK', {duration: 3000});
+          this.getData();
+        })
     });
   }
 
   setValueSpouse(value: any) {
 
-      this.defaults.partner_works = value.value === 'y';
-      this.cdr.detectChanges();
+    this.defaults.partner_works = value.value === 'y';
+    this.cdr.detectChanges();
   }
 
   setValueLocation(value: any) {
@@ -907,10 +1030,12 @@ export class MonitorDetailComponent {
   }
 
   getSalarySchoolData() {
-    this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
-      .subscribe((data) => {
-        this.salaryData = data.data;
-      })
+    return this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
+      .pipe(
+        map((data) => {
+          this.salaryData = data.data;
+        })
+      )
   }
 
   checkMonitorAuth(item: any, id: any) {
@@ -1004,39 +1129,39 @@ export class MonitorDetailComponent {
                 console.log(a)
               })
             // revisar a partir de aqui
-              this.sportsData.data.forEach(element => {
-                this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
-                  .subscribe((e) => {
-                    this.authorisedLevels.forEach(auLevel => {
+            this.sportsData.data.forEach(element => {
+              this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
+                .subscribe((e) => {
+                  this.authorisedLevels.forEach(auLevel => {
 
-                      if(e.data.sport_id === auLevel.sport_id) {
+                    if(e.data.sport_id === auLevel.sport_id) {
 
-                        this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel.id})
+                      this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel.id})
                         .subscribe((d) => {
                           console.log(d)
                         })
-                      }
-                    });
-                  })
-              });
-              setTimeout(() => {
-                this.router.navigate(['/monitors']);
+                    }
+                  });
+                })
+            });
+            setTimeout(() => {
+              this.router.navigate(['/monitors']);
 
-              }, 3000);
+            }, 3000);
           })
       })
   }
 
   updateLevel(monitorDegree, level) {
     this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
-       degree_id: level.id, salary_level: monitorDegree.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+      degree_id: level.id, salary_level: monitorDegree.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', {duration: 3000});      })
   }
 
   updateSalary(monitorDegree, salary) {
     this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
-       degree_id: monitorDegree.level.id, salary_level: salary.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+      degree_id: monitorDegree.level.id, salary_level: salary.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000});      })
   }
@@ -1071,7 +1196,7 @@ export class MonitorDetailComponent {
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
@@ -1096,18 +1221,18 @@ export class MonitorDetailComponent {
         .subscribe((course) => {
           this.detailData.course = course.data;
           this.crudService.get('/sports/'+this.detailData.course.sport_id)
-          .subscribe((sport) => {
-            this.detailData.sport = sport.data;
-          });
+            .subscribe((sport) => {
+              this.detailData.sport = sport.data;
+            });
 
           if (this.detailData.degree_id !== null) {
             this.crudService.get('/degrees/'+this.detailData.degree_id)
-            .subscribe((degree) => {
-              this.detailData.degree = degree.data;
-            })
+              .subscribe((degree) => {
+                this.detailData.degree = degree.data;
+              })
           }
 
-      })
+        })
 
       this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
         .subscribe((booking) => {
@@ -1117,7 +1242,7 @@ export class MonitorDetailComponent {
             if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
-                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
+              this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
                 .subscribe((cd) => {
 
                   if (cd.data.length > 0) {
@@ -1169,10 +1294,11 @@ export class MonitorDetailComponent {
   }
 
   getClients() {
-    this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((client) => {
+    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
+      tap((client) => {
         this.clients = client.data;
       })
+    );
   }
 
   getDateIndex() {
@@ -1294,27 +1420,24 @@ export class MonitorDetailComponent {
   //Planificador
 
 
-  async getSportsTimeline(){
-    try {
-      const data: any = await this.crudService.get('/sports?perPage='+99999).toPromise();
-      console.log(data);
-      this.sports = data.data;
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
+  getSportsTimeline(){
+    return this.crudService.get('/sports?perPage='+99999).pipe(
+      map((data) => {
+        console.log(data);
+        this.sports = data.data;
+      }));
+
   }
 
-  async getDegrees(){
-    try {
-      const data: any = await this.crudService.get('/degrees?perPage='+99999).toPromise();
-      console.log(data);
-      this.degrees = data.data.sort((a, b) => a.degree_order - b.degree_order);
-      this.degrees.forEach((degree: any) => {
-        degree.inactive_color = this.lightenColor(degree.color, 30);
-      });
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
+  getDegrees(){
+    return this.crudService.get('/degrees?perPage='+99999).pipe(
+      map((data) => {
+        console.log(data);
+        this.degrees = data.data.sort((a, b) => a.degree_order - b.degree_order);
+        this.degrees.forEach((degree: any) => {
+          degree.inactive_color = this.lightenColor(degree.color, 30);
+        });
+      }));
   }
 
   private lightenColor(hexColor: string, percent: number): string {
@@ -1424,54 +1547,54 @@ export class MonitorDetailComponent {
     let allBookings = [];
 
     for (const key in data) {
-        const item = data[key];
+      const item = data[key];
 
-        // Process 'nwds' field
-        if (item.nwds) {
-          const nwdsArray = this.normalizeToArray(item.nwds);
-          allNwds.push(...nwdsArray);
-        }
+      // Process 'nwds' field
+      if (item.nwds) {
+        const nwdsArray = this.normalizeToArray(item.nwds);
+        allNwds.push(...nwdsArray);
+      }
 
-        // Process 'bookings' field
-        /*NO NEED TO GROUP WHEN CHANGE IN CALL*/
-        /*allBookings.push(...item.bookings);*/
-        if (item.bookings && typeof item.bookings === 'object') {
-            for (const bookingKey in item.bookings) {
-                let bookingArray = item.bookings[bookingKey];
-                if (!Array.isArray(bookingArray)) {
-                  bookingArray = [bookingArray];
+      // Process 'bookings' field
+      /*NO NEED TO GROUP WHEN CHANGE IN CALL*/
+      /*allBookings.push(...item.bookings);*/
+      if (item.bookings && typeof item.bookings === 'object') {
+        for (const bookingKey in item.bookings) {
+          let bookingArray = item.bookings[bookingKey];
+          if (!Array.isArray(bookingArray)) {
+            bookingArray = [bookingArray];
+          }
+
+          let bookingArrayComplete = [];
+
+          if (Array.isArray(bookingArray) && bookingArray.length > 0) {
+
+            //Check if private bookings have the the same hours - and group them
+            if (bookingArray[0].course.course_type === 2 && bookingArray.length > 1) {
+              const groupedByTime = bookingArray.reduce((acc, curr) => {
+                const timeKey = `${curr.hour_start}-${curr.hour_end}`;
+                if (!acc[timeKey]) {
+                  acc[timeKey] = [];
                 }
+                acc[timeKey].push(curr);
+                return acc;
+              }, {});
+              for (const group in groupedByTime) {
+                bookingArrayComplete.push(groupedByTime[group]);
+              }
 
-                let bookingArrayComplete = [];
-
-                if (Array.isArray(bookingArray) && bookingArray.length > 0) {
-
-                  //Check if private bookings have the the same hours - and group them
-                  if (bookingArray[0].course.course_type === 2 && bookingArray.length > 1) {
-                    const groupedByTime = bookingArray.reduce((acc, curr) => {
-                        const timeKey = `${curr.hour_start}-${curr.hour_end}`;
-                        if (!acc[timeKey]) {
-                            acc[timeKey] = [];
-                        }
-                        acc[timeKey].push(curr);
-                        return acc;
-                    }, {});
-                    for (const group in groupedByTime) {
-                        bookingArrayComplete.push(groupedByTime[group]);
-                    }
-
-                  } else {
-                      bookingArrayComplete.push(bookingArray);
-                  }
-
-                  //Do the same but for each separate group
-                  for (const groupedBookingArray of bookingArrayComplete) {
-                    const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
-                    allBookings.push(firstBooking);
-                  }
-                }
+            } else {
+              bookingArrayComplete.push(bookingArray);
             }
+
+            //Do the same but for each separate group
+            for (const groupedBookingArray of bookingArrayComplete) {
+              const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
+              allBookings.push(firstBooking);
+            }
+          }
         }
+      }
     }
 
     //Convert them into TASKS
@@ -1572,18 +1695,18 @@ export class MonitorDetailComponent {
       ...allNwds.map(nwd => {
         let type;
         if (nwd.user_nwd_subtype_id === 1) {
-            type = 'block_personal';
+          type = 'block_personal';
         } else if (nwd.user_nwd_subtype_id === 2) {
-            type = 'block_payed';
+          type = 'block_payed';
         } else if (nwd.user_nwd_subtype_id === 3) {
-            type = 'block_no_payed';
+          type = 'block_no_payed';
         } else {
-            type = 'unknown';
+          type = 'unknown';
         }
         const hourTimesNwd = nwd.full_day ? {
-            hour_start: this.hoursRange[0],
-            hour_end: this.hoursRange[this.hoursRange.length-1]
-          } : {
+          hour_start: this.hoursRange[0],
+          hour_end: this.hoursRange[this.hoursRange.length-1]
+        } : {
           hour_start: nwd.start_time.substring(0, 5),
           hour_end: nwd.end_time.substring(0, 5)
         };
@@ -1618,96 +1741,96 @@ export class MonitorDetailComponent {
   }
 
   async calculateTaskPositions(tasks:any) {
-     const pixelsPerMinute = 150 / 60;
-     const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
-     let plannerTasks = tasks.map((task:any) => {
-       //Style for days
-       const startTime = this.parseTime(task.hour_start);
-       const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
-       const rangeStart = this.parseTime(this.hoursRange[0]);
-       const rangeStartMinutes = rangeStart.getHours() * 60 + rangeStart.getMinutes();
-       const leftMinutes = startMinutes - rangeStartMinutes;
-       const leftPixels = leftMinutes * pixelsPerMinute;
+    const pixelsPerMinute = 150 / 60;
+    const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
+    let plannerTasks = tasks.map((task:any) => {
+      //Style for days
+      const startTime = this.parseTime(task.hour_start);
+      const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
+      const rangeStart = this.parseTime(this.hoursRange[0]);
+      const rangeStartMinutes = rangeStart.getHours() * 60 + rangeStart.getMinutes();
+      const leftMinutes = startMinutes - rangeStartMinutes;
+      const leftPixels = leftMinutes * pixelsPerMinute;
 
-       const endTime = this.parseTime(task.hour_end);
-       const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
-       const durationMinutes = endMinutes - startMinutes;
-       const widthPixels = durationMinutes * pixelsPerMinute;
+      const endTime = this.parseTime(task.hour_end);
+      const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+      const durationMinutes = endMinutes - startMinutes;
+      const widthPixels = durationMinutes * pixelsPerMinute;
 
-       //Only 1 monitor
-       const monitorIndex = 0;
-       const topPixels = monitorIndex * 100;
+      //Only 1 monitor
+      const monitorIndex = 0;
+      const topPixels = monitorIndex * 100;
 
-       const style = {
-         'left': `${leftPixels}px`,
-         'width': `${widthPixels}px`,
-         'top': `${topPixels}px`
-       };
+      const style = {
+        'left': `${leftPixels}px`,
+        'width': `${widthPixels}px`,
+        'top': `${topPixels}px`
+      };
 
-       //Style for weeks
-       const taskDate = new Date(task.date);
-       const dayOfWeek = taskDate.getDay();
-       const initialLeftOffset = (dayOfWeek === 0 ? 6 : dayOfWeek - 1) * 300;
+      //Style for weeks
+      const taskDate = new Date(task.date);
+      const dayOfWeek = taskDate.getDay();
+      const initialLeftOffset = (dayOfWeek === 0 ? 6 : dayOfWeek - 1) * 300;
 
-       const startTimeWeek = this.parseTime(task.hour_start);
-       const rangeStartWeek = this.parseTime(this.hoursRange[0]);
-       const startMinutesWeek = startTimeWeek.getHours() * 60 + startTimeWeek.getMinutes();
-       const rangeStartMinutesWeek = rangeStartWeek.getHours() * 60 + rangeStartWeek.getMinutes();
-       const leftMinutesWeek = startMinutesWeek - rangeStartMinutesWeek;
-       const additionalLeftPixels = leftMinutesWeek * pixelsPerMinuteWeek;
+      const startTimeWeek = this.parseTime(task.hour_start);
+      const rangeStartWeek = this.parseTime(this.hoursRange[0]);
+      const startMinutesWeek = startTimeWeek.getHours() * 60 + startTimeWeek.getMinutes();
+      const rangeStartMinutesWeek = rangeStartWeek.getHours() * 60 + rangeStartWeek.getMinutes();
+      const leftMinutesWeek = startMinutesWeek - rangeStartMinutesWeek;
+      const additionalLeftPixels = leftMinutesWeek * pixelsPerMinuteWeek;
 
-       const endTimeWeek = this.parseTime(task.hour_end);
-       const endMinutesWeek = endTimeWeek.getHours() * 60 + endTimeWeek.getMinutes();
-       const durationMinutesWeek = endMinutesWeek - startMinutesWeek;
-       const widthPixelsWeek = durationMinutesWeek * pixelsPerMinuteWeek;
+      const endTimeWeek = this.parseTime(task.hour_end);
+      const endMinutesWeek = endTimeWeek.getHours() * 60 + endTimeWeek.getMinutes();
+      const durationMinutesWeek = endMinutesWeek - startMinutesWeek;
+      const widthPixelsWeek = durationMinutesWeek * pixelsPerMinuteWeek;
 
-       const styleWeek = {
-         'left': `${initialLeftOffset + additionalLeftPixels}px`,
-         'width': `${widthPixelsWeek}px`,
-         'top': `${topPixels}px`
-       };
+      const styleWeek = {
+        'left': `${initialLeftOffset + additionalLeftPixels}px`,
+        'width': `${widthPixelsWeek}px`,
+        'top': `${topPixels}px`
+      };
 
-       //Style for months
-       const taskMonthInfo = this.getMonthWeekInfo(task.date);
-       const topPixelsMonth = (taskMonthInfo.weekIndex * 100) + (monitorIndex * taskMonthInfo.totalWeeks * 100);
+      //Style for months
+      const taskMonthInfo = this.getMonthWeekInfo(task.date);
+      const topPixelsMonth = (taskMonthInfo.weekIndex * 100) + (monitorIndex * taskMonthInfo.totalWeeks * 100);
 
-       const styleMonth = {
-         'left': styleWeek.left,
-         'width': styleWeek.width,
-         'top': `${topPixelsMonth}px`
-       };
+      const styleMonth = {
+        'left': styleWeek.left,
+        'width': styleWeek.width,
+        'top': `${topPixelsMonth}px`
+      };
 
-       //Background color of block tasks
-       if (task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed') {
+      //Background color of block tasks
+      if (task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed') {
         style['background-color'] = this.hexToRgbA(task.color,0.4);
         styleWeek['background-color'] = this.hexToRgbA(task.color,0.4);
         styleMonth['background-color'] = this.hexToRgbA(task.color,0.4);
-       }
+      }
 
-       return {
-         ...task,
-         style,
-         styleWeek,
-         styleMonth,
-         class: `task-${task.type}`
-       };
-     });
+      return {
+        ...task,
+        style,
+        styleWeek,
+        styleMonth,
+        class: `task-${task.type}`
+      };
+    });
 
-     this.plannerTasks = plannerTasks;
+    this.plannerTasks = plannerTasks;
 
-     console.log('Planner Tasks:', this.plannerTasks);
-   }
+    console.log('Planner Tasks:', this.plannerTasks);
+  }
 
-   hexToRgbA(hex:string, transparency = 1) {
-     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-     if (!rgb) {
-         return null;
-     }
-     const r = parseInt(rgb[1], 16);
-     const g = parseInt(rgb[2], 16);
-     const b = parseInt(rgb[3], 16);
-     return `rgba(${r},${g},${b},${transparency})`;
-   }
+  hexToRgbA(hex:string, transparency = 1) {
+    const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!rgb) {
+      return null;
+    }
+    const r = parseInt(rgb[1], 16);
+    const g = parseInt(rgb[2], 16);
+    const b = parseInt(rgb[3], 16);
+    return `rgba(${r},${g},${b},${transparency})`;
+  }
 
   getPositionDate(courseDates: any[], courseDateId: string): number {
     const index = courseDates.findIndex(date => date.id === courseDateId);
@@ -1847,10 +1970,10 @@ export class MonitorDetailComponent {
 
   toggleDetailTimeline(task:any){
     if(task.booking_id){
-        //Load course
-        console.log(task);
-        this.idDetailTimeline = task.booking_id;
-        this.taskDetailTimeline = task;
+      //Load course
+      console.log(task);
+      this.idDetailTimeline = task.booking_id;
+      this.taskDetailTimeline = task;
       this.hideBlockTimeline();
       this.hideEditBlock();
       this.showDetailTimeline = true;
@@ -1915,39 +2038,39 @@ export class MonitorDetailComponent {
 
     switch (type) {
       case 'day':
-          dateInfo = {
-            date: this.currentDate,
-            date_format: moment(this.currentDate).format('DD-MM-YYYY'),
-            hour: position,
-            monitor_id: this.id
-          };
-          break;
+        dateInfo = {
+          date: this.currentDate,
+          date_format: moment(this.currentDate).format('DD-MM-YYYY'),
+          hour: position,
+          monitor_id: this.id
+        };
+        break;
       case 'week':
-          let mondayOfWeek = currentDate.clone().startOf('isoWeek');
-          let weekDayDate = mondayOfWeek.add(position, 'days');
-          console.log(mondayOfWeek);
-          console.log(weekDayDate);
-          dateInfo = {
-            date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-            date_format: moment(weekDayDate).format('DD-MM-YYYY'),
-            hour: hourDay,
-            monitor_id: this.id
-          };
-          break;
+        let mondayOfWeek = currentDate.clone().startOf('isoWeek');
+        let weekDayDate = mondayOfWeek.add(position, 'days');
+        console.log(mondayOfWeek);
+        console.log(weekDayDate);
+        dateInfo = {
+          date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
+          date_format: moment(weekDayDate).format('DD-MM-YYYY'),
+          hour: hourDay,
+          monitor_id: this.id
+        };
+        break;
       case 'month':
-          let firstDayOfMonth = currentDate.clone().startOf('month');
-          let startOfWeek = firstDayOfMonth.add(positionWeek, 'weeks');
-          startOfWeek.startOf('isoWeek');
-          let monthDayDate = startOfWeek.add(position, 'days');
-          dateInfo = {
-            date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-            date_format: moment(monthDayDate).format('DD-MM-YYYY'),
-            hour: hourDay,
-            monitor_id: this.id
-          };
-          break;
+        let firstDayOfMonth = currentDate.clone().startOf('month');
+        let startOfWeek = firstDayOfMonth.add(positionWeek, 'weeks');
+        startOfWeek.startOf('isoWeek');
+        let monthDayDate = startOfWeek.add(position, 'days');
+        dateInfo = {
+          date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
+          date_format: moment(monthDayDate).format('DD-MM-YYYY'),
+          hour: hourDay,
+          monitor_id: this.id
+        };
+        break;
       default:
-          throw new Error('Invalid type');
+        throw new Error('Invalid type');
     }
 
     console.log(dateInfo);
@@ -1975,31 +2098,31 @@ export class MonitorDetailComponent {
           const endDate = moment(result.end_date);
 
           while (currentDate <= endDate) {
-              dates.push(currentDate.format('YYYY-MM-DD'));
-              currentDate = currentDate.add(1, 'days');
+            dates.push(currentDate.format('YYYY-MM-DD'));
+            currentDate = currentDate.add(1, 'days');
           }
 
           //Promise for each date
           const promises = dates.map(date => {
-              const data = {
-                default:false, user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: date, end_date: date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
-              };
-              return this.crudService.create('/monitor-nwds', data).toPromise();
+            const data = {
+              default:false, user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: date, end_date: date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
+            };
+            return this.crudService.create('/monitor-nwds', data).toPromise();
           });
 
           Promise.allSettled(promises).then(results => {
             const failedDates = [];
             results.forEach((result, index) => {
-                if (result.status === 'rejected') {
-                    failedDates.push(dates[index]);
-                }
+              if (result.status === 'rejected') {
+                failedDates.push(dates[index]);
+              }
             });
 
             this.loadBookings(this.currentDate);
             if (failedDates.length === 0) {
-                this.snackbar.open(this.translateService.instant('all_events_created'), 'OK', { duration: 3000 });
+              this.snackbar.open(this.translateService.instant('all_events_created'), 'OK', { duration: 3000 });
             } else {
-                this.snackbar.open(`${this.translateService.instant('some_dates_overlap')} : ${failedDates.join(', ')}`, 'OK', { duration: 4000 });
+              this.snackbar.open(`${this.translateService.instant('some_dates_overlap')} : ${failedDates.join(', ')}`, 'OK', { duration: 4000 });
             }
           }).catch(error => {
             console.error('Error in range dates:', error);
@@ -2015,23 +2138,23 @@ export class MonitorDetailComponent {
           this.crudService.create('/monitor-nwds', data)
             .subscribe((data) => {
 
-              //this.getData();
-              this.loadBookings(this.currentDate);
-              this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
-            },
-            (error) => {
-              // Error handling code
-              console.error('Error occurred:', error);
-              if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd"){
-                this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
-              }
-              else{
-                this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
-              }
-            })
+                //this.getData();
+                this.loadBookings(this.currentDate);
+                this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
+              },
+              (error) => {
+                // Error handling code
+                console.error('Error occurred:', error);
+                if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd"){
+                  this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+                }
+                else{
+                  this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+                }
+              })
         }
 
-          //CHANGE
+        //CHANGE
         /*let id = 1
         result.monitor_id = id;
 
@@ -2135,74 +2258,74 @@ export class MonitorDetailComponent {
   }
 
   saveEditedBlock() {
-      const commonData = {
-        monitor_id: this.blockDetailTimeline.monitor_id,
-        school_id: this.blockDetailTimeline.school_id,
-        station_id: this.blockDetailTimeline.station_id,
-        description: this.nameBlockDay,
-        color: this.blockDetailTimeline.color_block,
-        user_nwd_subtype_id: this.blockDetailTimeline.user_nwd_subtype_id,
-      };
-      let firstBlockData:any = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date };
-      let secondBlockData:any;
+    const commonData = {
+      monitor_id: this.blockDetailTimeline.monitor_id,
+      school_id: this.blockDetailTimeline.school_id,
+      station_id: this.blockDetailTimeline.station_id,
+      description: this.nameBlockDay,
+      color: this.blockDetailTimeline.color_block,
+      user_nwd_subtype_id: this.blockDetailTimeline.user_nwd_subtype_id,
+    };
+    let firstBlockData:any = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date };
+    let secondBlockData:any;
 
-      // Calculate time moments
-      firstBlockData.start_time = this.allHoursDay ? `${this.hoursRangeMinutes[0]}:00` : `${this.startTimeDay}:00`;
-      firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
-      firstBlockData.full_day = this.allHoursDay && !this.divideDay;
+    // Calculate time moments
+    firstBlockData.start_time = this.allHoursDay ? `${this.hoursRangeMinutes[0]}:00` : `${this.startTimeDay}:00`;
+    firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
+    firstBlockData.full_day = this.allHoursDay && !this.divideDay;
 
-      console.log(this.blockDetailTimeline);
-      console.log(firstBlockData);
+    console.log(this.blockDetailTimeline);
+    console.log(firstBlockData);
 
-      // Function update first block -> CALL LATER
-      const updateFirstBlock = () => {
-          this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetailTimeline.block_id).subscribe(
-              response => {
-                  //console.log('First block updated:', response);
-                  this.hideEditBlock();
-                  this.hideBlockTimeline();
-                  this.loadBookings(this.currentDate);
-              },
-              error => {
-                  console.error('Error updating first block:', error);
-              }
-          );
-      };
+    // Function update first block -> CALL LATER
+    const updateFirstBlock = () => {
+      this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetailTimeline.block_id).subscribe(
+        response => {
+          //console.log('First block updated:', response);
+          this.hideEditBlock();
+          this.hideBlockTimeline();
+          this.loadBookings(this.currentDate);
+        },
+        error => {
+          console.error('Error updating first block:', error);
+        }
+      );
+    };
 
-          if (this.divideDay) {
-              secondBlockData = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
+    if (this.divideDay) {
+      secondBlockData = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date, start_time: `${this.endTimeDivision}:00`, end_time: `${this.endTimeDay}:00`, full_day: false };
 
-                  this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
-                      secondResponse => {
-                          //console.log('Second block created:', secondResponse);
-                          updateFirstBlock();
-                      },
-                      error => {
-                          console.error('Error creating second block:', error);
-                      }
-                  );
+      this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
+        secondResponse => {
+          //console.log('Second block created:', secondResponse);
+          updateFirstBlock();
+        },
+        error => {
+          console.error('Error creating second block:', error);
+        }
+      );
 
-          } else {
-              // Update FIRST
-              updateFirstBlock();
-          }
+    } else {
+      // Update FIRST
+      updateFirstBlock();
+    }
   }
 
   deleteEditedBlock() {
-        const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer le blocage?');
-        if (isConfirmed) {
-            this.crudService.delete('/monitor-nwds', this.blockDetailTimeline.block_id).subscribe(
-                response => {
-                    //console.log('Response:', response);
-                    this.hideEditBlock();
-                    this.hideBlockTimeline();
-                    this.loadBookings(this.currentDate);
-                },
-                error => {
-                    console.error('Error:', error);
-                }
-            );
+    const isConfirmed = confirm('Êtes-vous sûr de vouloir supprimer le blocage?');
+    if (isConfirmed) {
+      this.crudService.delete('/monitor-nwds', this.blockDetailTimeline.block_id).subscribe(
+        response => {
+          //console.log('Response:', response);
+          this.hideEditBlock();
+          this.hideBlockTimeline();
+          this.loadBookings(this.currentDate);
+        },
+        error => {
+          console.error('Error:', error);
         }
+      );
+    }
   }
 
   getDayOfWeek(dayIndex: number): number {
