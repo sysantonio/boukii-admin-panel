@@ -342,6 +342,7 @@
   "settings.bookings.op_rem_text2": "Este porcentaje se aplica al importe total de la reserva y no es reembolsable en ningún caso.",
   "settings.bookings.op_rem_text3": "Es opcional para el cliente.",
   "settings.bookings.op_rem_text4": "La activación lo hace visible a la finalización del proceso de reserva junto con los importes a pagar.",
+  "settings.bookings.boukii_care_title": "Seguro adicional",
   "settings.bookings.boukii_care_text1": "Boukii Care es un seguro que ponemos a vuestra disposición para cubrir posibles",
   "settings.bookings.boukii_care_text2": "eventualidades del cliente, desligando a la escuela de cualquier trámite burocrático.",
   "settings.bookings.boukii_care_text3": "El importe será deducido de la factura final emitida desde la plataforma Boukii Pay.",
@@ -595,5 +596,6 @@
   "forgot_pwd": "¿Recuperar contraseña?",
   "copy": "Copia",
   "duplicate": "Duplicar",
-  "all_tasks": "Todas las tareas"
+  "all_tasks": "Todas las tareas",
+  "currency": "Moneda"
 }

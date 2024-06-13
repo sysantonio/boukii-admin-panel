@@ -336,6 +336,7 @@
   "settings.bookings.op_rem_text2": "Dieser Prozentsatz wird auf den Gesamtbetrag der Reservierung angerechnet und ist in keinem Fall erstattungsfähig.",
   "settings.bookings.op_rem_text3": "Für den Kunden ist es optional.",
   "settings.bookings.op_rem_text4": "Durch die Aktivierung wird es am Ende des Reservierungsvorgangs zusammen mit den zu zahlenden Beträgen sichtbar.",
+  "settings.bookings.boukii_care_title": "Zusätzliche Versicherung",
   "settings.bookings.boukii_care_text1": "Boukii Care ist eine Versicherung, die wir Ihnen zur Verfügung stellen, um mögliche Schäden abzudecken",
   "settings.bookings.boukii_care_text2": "Eventualitäten des Kunden berücksichtigen und die Schule von jeglichem bürokratischen Verfahren entbinden.",
   "settings.bookings.boukii_care_text3": "Der Betrag wird von der endgültigen Rechnung abgezogen, die über die Boukii Pay-Plattform ausgestellt wird.",
@@ -588,5 +589,6 @@
   "forgot_pwd": "Passwort wiederherstellen?",
   "copy": "Kopieren",
   "duplicate": "Doppelt",
-  "all_tasks": "Alle Aufgaben"
+  "all_tasks": "Alle Aufgaben",
+  "currency": "Währung"
 }

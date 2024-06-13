@@ -336,6 +336,7 @@
   "settings.bookings.op_rem_text2": "This percentage is applied to the total amount of the reservation and is not refundable in any case.",
   "settings.bookings.op_rem_text3": "It is optional for the client.",
   "settings.bookings.op_rem_text4": "Activation makes it visible at the end of the reservation process along with the amounts to be paid.",
+  "settings.bookings.boukii_care_title": "Additional insurance",
   "settings.bookings.boukii_care_text1": "Boukii Care is an insurance that we put at your disposal to cover possible",
   "settings.bookings.boukii_care_text2": "eventualities of the client, separating the school from any bureaucratic procedure.",
   "settings.bookings.boukii_care_text3": "The amount will be deducted from the final invoice issued from the Boukii Pay platform.",
@@ -588,5 +589,6 @@
   "forgot_pwd": "Recover password?",
   "copy": "Copy",
   "duplicate": "Duplicate",
-  "all_tasks": "All tasks"
+  "all_tasks": "All tasks",
+  "currency": "Currency"
 }

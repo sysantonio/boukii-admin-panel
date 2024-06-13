@@ -577,7 +577,8 @@
               </div>
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
-                  <mat-slide-toggle [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care <span style="color: #e6e6e6">(Seguro adicional)</span></h1>
+                  <mat-slide-toggle [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care
+                  <span style="color: #e6e6e6">({{'settings.bookings.boukii_care_title' | translate}})</span></h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   {{'settings.bookings.boukii_care_text1' |translate}}<br>
                   {{'settings.bookings.boukii_care_text2' |translate}}<br>
@@ -627,6 +628,19 @@
                   {{'settings.bookings.tva.text1' | translate}}
                 </p>
 
+              </div>
+              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
+                 {{'currency' | translate}}</h1>
+                <div style="width:100%; float:left;">
+                  <mat-form-field appearance="outline" class="flex-auto">
+                    <mat-select placeholder="{{'currency' | translate}}" [(ngModel)]="currency">
+                      <mat-option *ngFor="let item of currencies" [value]="item">
+                        {{ item }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
             </vex-page-layout-content>
           </vex-page-layout>

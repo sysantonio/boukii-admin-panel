@@ -20,6 +20,7 @@ import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.
 import { SchoolService } from 'src/service/school.service';
 import { TranslateService } from '@ngx-translate/core';
 import {DateAdapter} from '@angular/material/core';
+import {th} from 'date-fns/locale';
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
@@ -68,8 +69,9 @@ export class SettingsComponent implements OnInit {
   dataSourceFood = new MatTableDataSource([]);
   displayedSportColumns: string[] = ['id', 'sport', 'name', 'price', 'tva', 'status', 'edit', 'delete'];
   displayedExtrasColumns: string[] = ['id', 'product', 'name', 'price', 'tva', 'status', 'edit', 'delete'];
-
+  currencies: string[] = ['CHF', 'EUR', 'GBP']
   tva = 0;
+  currency = '';
   boukiiCarePrice = 0;
   cancellationInsurancePercent = 0;
   cancellationNoRem = 0;
@@ -265,6 +267,8 @@ export class SettingsComponent implements OnInit {
             this.hasCancellationInsurance = settings?.taxes?.cancellation_insurance_percent !== null && parseFloat(settings?.taxes?.cancellation_insurance_percent) !== 0 && !isNaN(parseFloat(settings?.taxes?.cancellation_insurance_percent));
             this.hasBoukiiCare = settings?.taxes?.boukii_care_price !== null && parseInt(settings?.taxes?.boukii_care_price) !== 0 && !isNaN(parseInt(settings?.taxes?.boukii_care_price));
             this.hasTVA = settings?.taxes?.tva !== null && parseFloat(settings?.taxes?.tva) !== 0 && !isNaN(parseFloat(settings?.taxes?.tva));
+
+            this.currency = settings?.taxes?.currency;
 
             this.cancellationInsurancePercent = parseFloat(settings?.taxes?.cancellation_insurance_percent);
             this.boukiiCarePrice = parseInt(settings?.taxes?.boukii_care_price);
@@ -774,7 +778,7 @@ export class SettingsComponent implements OnInit {
 
     const data = {
       taxes: {cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
-        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
         tva: this.hasTVA ? this.tva : 0},
       cancellations: {with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem},
       prices_range: {people: this.people, prices: this.dataSource},
