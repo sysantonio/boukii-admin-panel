@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {Observable, map, of, startWith, forkJoin, mergeMap} from 'rxjs';
@@ -29,7 +29,7 @@ import { DateAdapter } from '@angular/material/core';
   ],
   animations: [fadeInUp400ms,stagger20ms]
 })
-export class CoursesCreateUpdateComponent implements OnInit {
+export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('dateTable') dateTable: MatTable<any>;
@@ -306,6 +306,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    const svgObject = document.getElementById('svg1') as HTMLObjectElement;
+    svgObject.contentDocument.querySelector('#background').setAttribute('fill', '#FF5733')
   }
 
   ngOnInit() {

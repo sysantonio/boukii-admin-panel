@@ -1,7 +1,7 @@
 <mat-dialog-content>
 
   <div class="flex-auto">
-    <label for="date">Date</label>
+    <label for="date">{{'date' | translate}}</label>
 
     <mat-form-field appearance="outline">
       <input id="date" matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="selectedDate" [matDatepickerFilter]="myHolidayFilter" [min]="data.minDate" [max]="data.maxDate">
@@ -39,5 +39,6 @@
 
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>{{'cancel' | translate }}</button>
-  <button mat-button [mat-dialog-close]="{date: selectedDate, duration: selectedDuration, hour: selectedHour}">{{'confirm' | translate}}</button>
+  <button mat-button [mat-dialog-close]="{date: selectedDate, duration: selectedDuration, hour: selectedHour}"
+          [disabled]="!selectedDuration || !selectedDate || !selectedHour">{{'confirm' | translate}}</button>
 </mat-dialog-actions>

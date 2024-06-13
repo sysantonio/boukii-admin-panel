@@ -2267,10 +2267,17 @@ export class BookingDetailComponent implements OnInit {
   }
 
   deletePartialBooking(index: number, book: any) {
-    debugger;
-    let bookTotalPrice  = book.price_total + this.getCourseExtraForfaitPriceByCourse(
-      book.courseDates[0]
-    );
+    let bookTotalPrice = 0;
+    if (book.courseDates[0].course.course_type == 1) {
+      bookTotalPrice  = book.price_total + this.getCourseExtraForfaitPriceByCourse(
+        book.courseDates[0]
+      );
+    } else {
+      bookTotalPrice  = book.price_total + this.getCourseExtraForfaitPriceByDateHour(
+        book.courseDates[0]
+      );
+    }
+
     let bookingUsers = book.courseDates[0].course.course_type == 1 ?
       this.getBookingUsersByCourse(book.courseDates[0].course_id) :
       this.getBookingUsersByCourseDateAndHour(book.courseDates[0].course_date_id, book.courseDates[0].hour_start)
@@ -3189,6 +3196,17 @@ export class BookingDetailComponent implements OnInit {
     let ret = 0;
     this.courseExtra
       .filter((c) => c.course_id === data.course_id)
+      .forEach((c) => {
+        ret += parseFloat(c.price);
+        data.forfait = c;
+      });
+    return ret;
+  }
+
+  getCourseExtraForfaitPriceByBookingUser(data) {
+    let ret = 0;
+    this.courseExtra
+      .filter((c) => c.booking_user_id === data.id)
       .forEach((c) => {
         ret += parseFloat(c.price);
         data.forfait = c;

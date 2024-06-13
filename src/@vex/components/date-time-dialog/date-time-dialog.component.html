@@ -1,7 +1,7 @@
 <mat-dialog-content>
 
   <div class="flex-auto">
-    <label for="date">Date</label>
+    <label for="date">{{'date' | translate}}</label>
 
     <mat-form-field appearance="outline">
       <input id="date" matInput [matDatepicker]="picker" placeholder="Fecha" [(ngModel)]="selectedDate" [matDatepickerFilter]="myHolidayFilter" [min]="data.minDate" [max]="data.maxDate">
@@ -11,7 +11,7 @@
   </div>
 
   <div class="flex-auto">
-    <label for="duration">Durée</label>
+    <label for="duration">{{'duration' | translate}}</label>
 
     <mat-form-field appearance="outline" style="width: 100%">
       <input id="duration" type="text" placeholder="{{'duration' | translate}}" matInput [matAutocomplete]="autoTimes"  [(ngModel)]="selectedDuration">
@@ -24,7 +24,7 @@
   </div>
 
   <div class="flex-auto">
-    <label for="hour">Hour</label>
+    <label for="hour">{{'hour' | translate}}</label>
     <mat-form-field appearance="outline" style="width: 100%;">
       <input id="hour" type="text" placeholder="Hora" matInput [matAutocomplete]="auto" [(ngModel)]="selectedHour">
       <mat-autocomplete #auto="matAutocomplete">
@@ -39,5 +39,6 @@
 
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>{{'cancel' | translate }}</button>
-  <button mat-button [mat-dialog-close]="{date: selectedDate, duration: selectedDuration, hour: selectedHour}">Aceptar</button>
+  <button mat-button [mat-dialog-close]="{date: selectedDate, duration: selectedDuration, hour: selectedHour}"
+          [disabled]="!selectedDuration || !selectedDate || !selectedHour">{{'confirm' | translate}}</button>
 </mat-dialog-actions>
