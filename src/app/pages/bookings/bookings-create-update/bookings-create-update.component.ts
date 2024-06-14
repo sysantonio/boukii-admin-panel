@@ -478,14 +478,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.selectedPrivateDates = [];
 
       this.selectedItem = item;
+      let selectedPrivateDateItem = this.selectedItem.course_dates.find(i=> moment(i.date).startOf('day').format('YYYY-MM-DD') == moment(this.selectedDatePrivate).startOf('day').format('YYYY-MM-DD'));
       this.courseDates.push({
         school_id: this.user.schools[0].id,
         booking_id: null,
         client_id: this.defaultsBookingUser.client_id,
         course_subgroup_id: null,
         course_id: item.id,
-        course_date_id: this.selectedItem.course_dates[0].id,
-        date: this.selectedItem.course_dates[0].date,
+        course_date_id: selectedPrivateDateItem ? selectedPrivateDateItem.id : this.selectedItem.course_dates[0].id,
+        date: selectedPrivateDateItem ? selectedPrivateDateItem.date : this.selectedItem.course_dates[0].date,
         hour_start: null,
         hour_end: null,
         price: this.selectedItem.price,
@@ -2854,8 +2855,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   onSelectionChangePaxes(event: any, courseDate: any) {
     const value = event.source.value;
+    const checked = event.source.selected;
 
-    // Verifica si this.personsSelectedMultiple[i] existe
+    // Verifica si this.personsSelectedMultiple[courseDate.course_date_id] existe
     if (!this.personsSelectedMultiple[courseDate.course_date_id]) {
       // Si no existe, inicialízalo como un array vacío
       this.personsSelectedMultiple[courseDate.course_date_id] = [];
@@ -2865,16 +2867,25 @@ export class BookingsCreateUpdateComponent implements OnInit {
       // Si no existe, inicialízalo como un array vacío
       this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start] = [];
     }
-    let personsSelected = this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start]
+
+    let personsSelected = this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start];
     const index = personsSelected.findIndex((p) => p.id === value.id);
 
-    if (personsSelected.length + 1 >= this.getCourse(courseDate.course_id).max_participants && index === -1 ) {      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
-      return;
+    if (checked) {
+      if (personsSelected.length >= this.getCourse(courseDate.course_id).max_participants) {
+        this.snackbar.open(
+          this.translateService.instant('pax_limit_reached') + (personsSelected.length + 1),
+          'OK',
+          { duration: 3000 }
+        );
+        return;
+      }
+      if (index === -1) {
+        personsSelected.push({ ...value });
+      }
     } else {
-      if (personsSelected.length === 0 || index === -1) {
-        personsSelected.push({... value});
-      } else {
-        personsSelected.pop({... value})
+      if (index !== -1) {
+        personsSelected.splice(index, 1);
       }
     }
 
