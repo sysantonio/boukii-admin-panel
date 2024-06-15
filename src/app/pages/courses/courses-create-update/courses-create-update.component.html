@@ -53,11 +53,11 @@
                 <div style="float:left; width: 20%" *ngFor="let item of sportDataList.reverse()">
                   <span style="width: 100%;margin: 0 auto">
                     <img style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer"
-                    [ngStyle]="{
+                         [ngStyle]="{
                       'background': defaults.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
                       'border': defaults.sport_id === item.sport_id ? '#fff' : '#808080'
                     }"
-                    [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
+                         [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
                   </span>
                   <p style="text-align: center;">{{ item.name }}</p>
                 </div>
@@ -94,16 +94,16 @@
                   <mat-icon svgIcon="mat:info"></mat-icon>
                 </div>
               </div>
-<!--              <div style="width: 100%;float:left">
+              <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-prive]="defaults.course_type === 3" (click)="setCourseType('activity', 3)">
                   <mat-card-content>
-                    <p>{{'course_private' |translate }}</p>
+                    <p>{{'activity' |translate }}</p>
                   </mat-card-content>
                 </mat-card>
                 <div style="float: left; margin: 17px">
                   <mat-icon svgIcon="mat:info"></mat-icon>
                 </div>
-              </div>-->
+              </div>
             </div>
 
 
@@ -178,7 +178,7 @@
                 <label for="courseName">{{(defaults.is_flexible ? 'min_price' : 'price' )|translate}} ({{defaults.currency}}) <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
                   <input id="courseName" formControlName="price" matInput [required]="!defaults.is_flexible" [type]="defaults.is_flexible ? 'text' : 'number'" [(ngModel)]="defaults.price" [readonly]="defaults.is_flexible"
-                  [value]="defaults.is_flexible ? 'FLEXIBLE' : null">
+                         [value]="defaults.is_flexible ? 'FLEXIBLE' : null">
                   <mat-error *ngIf="courseInfoFormGroup.controls.price.errors?.['required'] && !defaults.is_flexible">
                     {{'courses.errors.price' | translate}}
                   </mat-error>
@@ -210,7 +210,7 @@
                   <div class="image-container" style="float: left;width: 50%;">
 
                     <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'"
-                      alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
+                         alt="Image Preview" width="400" height="290" style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
                   </div>
 
                   <div class="input-container">
@@ -359,8 +359,8 @@
                 <mat-form-field appearance="outline" style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerTo" formControlName="toDate" [matDatepickerFilter]="myHolidayFilter" [min]="courseInfoPriveFormGroup.value.fromDate" [max]="maxDate"
-                  [(ngModel)]="defaults.date_end_res"
-                  [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
+                         [(ngModel)]="defaults.date_end_res"
+                         [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerTo [startAt]="courseInfoPriveFormGroup.value.fromDate"></mat-datepicker>
 
@@ -451,7 +451,7 @@
 
                 <mat-checkbox (change)="onCheckboxChange('multiple')" [checked]="periodeMultiple" formControlName="periodeMultiple">{{'courses.multiperiod' | translate}}</mat-checkbox>
               </div>
-              </div>
+            </div>
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.course_type === 2 && !periodeMultiple && defaults.is_flexible">
               <div class="flex-auto" style="width:50%">
@@ -460,7 +460,7 @@
                 <mat-form-field appearance="outline" style="width: 100%">
 
                   <input matInput id="dateFromPrivate" [matDatepicker]="pickerFromUnique" formControlName="fromDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="mode !== 'update' ? minDate : ''"
-                  [max]="maxDate" [(ngModel)]="defaults.date_start">
+                         [max]="maxDate" [(ngModel)]="defaults.date_start">
                   <mat-datepicker-toggle matSuffix [for]="pickerFromUnique"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFromUnique [startAt]="minDate"></mat-datepicker>
 
@@ -475,7 +475,7 @@
                 <mat-form-field appearance="outline" style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerToUnique" formControlName="toDateUnique" [matDatepickerFilter]="myHolidayFilter" [min]="courseInfoPriveFormGroup?.value?.fromDateUnique" [max]="maxDate" [(ngModel)]="defaults.date_end"
-                  [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
+                         [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerToUnique"></mat-datepicker-toggle>
                   <mat-datepicker #pickerToUnique [startAt]="courseInfoPriveFormGroup?.value?.fromDateUnique"></mat-datepicker>
 
@@ -511,7 +511,7 @@
 
                   <tr mat-header-row *matHeaderRowDef="displayedPrivateDateColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedPrivateDateColumns;let i = index"
-                  [hidden]="!row.main && row?.period !== selectedPeriod" (click)="selectPeriod(row.mainPeriod, row.main)" [style.cursor]="row.main ? 'pointer': 'default'"></tr>
+                      [hidden]="!row.main && row?.period !== selectedPeriod" (click)="selectPeriod(row.mainPeriod, row.main)" [style.cursor]="row.main ? 'pointer': 'default'"></tr>
                 </table>
               </div>
               <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
@@ -777,11 +777,11 @@
                 <div style="float:left; width: 20%" *ngFor="let item of sportDataList.reverse()">
                   <span style="width: 100%;margin: 0 auto">
                     <img style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer"
-                    [ngStyle]="{
+                         [ngStyle]="{
                       'background': defaults.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
                       'border': defaults.sport_id === item.sport_id ? '#fff' : '#808080'
                     }"
-                    [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
+                         [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected" (click)="selectSport(item)">
                   </span>
                   <p style="text-align: center;">{{ item.name }}</p>
                 </div>
@@ -818,16 +818,16 @@
                   <mat-icon svgIcon="mat:info"></mat-icon>
                 </div>
               </div>
-<!--              <div style="width: 100%;float:left">
+              <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-prive]="defaults.course_type === 3" (click)="setCourseType('activity', 3)">
                   <mat-card-content>
-                    <p>{{'course_private' | translate}}</p>
+                    <p>{{'activity' | translate}}</p>
                   </mat-card-content>
                 </mat-card>
                 <div style="float: left; margin: 17px">
                   <mat-icon svgIcon="mat:info"></mat-icon>
                 </div>
-              </div>-->
+              </div>
             </div>
 
           </div>
@@ -946,71 +946,71 @@
               </div>
             </div><div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 3%">
 
-              <mat-tab-group style="width: 100%" [(selectedIndex)]="selectedTabDescIndex" (selectedTabChange)="onTabDesChanged($event);">
-                <mat-tab label="FR">
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
-                    <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
-                    <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
-                      {{'courses.errors.summary' | translate}}
-                    </mat-error>
-                  </div>
+            <mat-tab-group style="width: 100%" [(selectedIndex)]="selectedTabDescIndex" (selectedTabChange)="onTabDesChanged($event);">
+              <mat-tab label="FR">
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
+                  <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
+                  <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
+                    {{'courses.errors.summary' | translate}}
+                  </mat-error>
+                </div>
 
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
-                    <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
-                    <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
-                      {{'courses.errors.desc' | translate}}
-                    </mat-error>
-                  </div>
-                </mat-tab>
-                <mat-tab label="EN">
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
-                    <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></angular-editor>
-                  </div>
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
+                  <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
+                  <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
+                    {{'courses.errors.desc' | translate}}
+                  </mat-error>
+                </div>
+              </mat-tab>
+              <mat-tab label="EN">
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
+                  <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></angular-editor>
+                </div>
 
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
-                    <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></angular-editor>
-                  </div>
-                </mat-tab>
-                <mat-tab label="DE">
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
-                    <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></angular-editor>
-                  </div>
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
+                  <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></angular-editor>
+                </div>
+              </mat-tab>
+              <mat-tab label="DE">
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
+                  <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></angular-editor>
+                </div>
 
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
-                    <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></angular-editor>
-                  </div>
-                </mat-tab>
-                <mat-tab label="ES">
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
-                    <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></angular-editor>
-                  </div>
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
+                  <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></angular-editor>
+                </div>
+              </mat-tab>
+              <mat-tab label="ES">
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
+                  <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></angular-editor>
+                </div>
 
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
-                    <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></angular-editor>
-                  </div>
-                </mat-tab>
-                <mat-tab label="IT">
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
-                    <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></angular-editor>
-                  </div>
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
+                  <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></angular-editor>
+                </div>
+              </mat-tab>
+              <mat-tab label="IT">
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
+                  <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></angular-editor>
+                </div>
 
-                  <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
-                    <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></angular-editor>
-                  </div>
-                </mat-tab>
-              </mat-tab-group>
+                <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
+                  <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
+                  <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></angular-editor>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
 
-            </div>
+          </div>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
@@ -1055,7 +1055,7 @@
                 <mat-form-field appearance="outline" style="width: 100%">
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerDateTo" formControlName="toDate" [matDatepickerFilter]="myHolidayFilter" [min]="courseConfigForm.value.fromDate" [max]="maxDate" [(ngModel)]="defaults.date_end_res"
-                  [disabled]="courseConfigForm.value.fromDate === null">
+                         [disabled]="courseConfigForm.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix [for]="pickerDateTo"></mat-datepicker-toggle>
                   <mat-datepicker #pickerDateTo [startAt]="courseConfigForm.value.fromDate"></mat-datepicker>
                   <mat-error *ngIf="courseInfoPriveFormGroup.controls.fromDate.errors?.['required']">
@@ -1279,7 +1279,7 @@
                           <form [formGroup]="rangeForm" novalidate>
                             <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%;margin-right: 10%">
                               <input type="number" placeholder="Min." aria-label="Number" matInput [min]="0" (blur)="setMinAge($event, groupLevel)" [value]="groupLevel.age_min"
-                              [value]="calculateAgeMin(groupLevel)"/>
+                                     [value]="calculateAgeMin(groupLevel)"/>
                               <mat-error *ngIf="minAge.errors?.['min']">
                                 {{'courses.errors.min_age_levels' | translate}}
                               </mat-error>
@@ -1289,7 +1289,7 @@
                             </mat-form-field>
                             <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%">
                               <input type="number" placeholder="Max" aria-label="Number" matInput [min]="0" (blur)="setMaxAge($event, groupLevel)" [value]="groupLevel.age_max"
-                              [value]="calculateAgeMax(groupLevel)"/>
+                                     [value]="calculateAgeMax(groupLevel)"/>
                               <mat-error *ngIf="maxAge.errors?.['ageRange']">
                                 {{'courses.errors.max_age_range' | translate}}
                               </mat-error>
@@ -1309,7 +1309,7 @@
                           </div>
                           <mat-form-field appearance="outline" style="width: 100%; margin-top: 10%;margin-right: 10%">
                             <input type="text" placeholder="Duración" aria-label="Number" matInput
-                              [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
+                                   [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)" [readonly]="true"/>
                           </mat-form-field>
                         </div>
                         <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
@@ -1357,7 +1357,7 @@
 
                                         <ng-container *ngFor="let monitor of filteredMonitors | async">
                                           <mat-option *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
-                                            (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
+                                                      (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
                                             {{monitor && monitor?.first_name ? monitor?.first_name : '' }} {{monitor && monitor?.last_name ? monitor?.last_name : ''}}
                                           </mat-option>
                                         </ng-container>
@@ -1397,7 +1397,7 @@
 </div>
 
 <!-- Activites -->
-<!--
+
 <div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading && ((defaults.course_type === 3 && mode === 'create') || (defaults.course_type === 3 && mode === 'update'))">
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left; margin: 0 2% 0 0">
     <div @fadeInUp class="card flex-auto" style="width: 100%;">
@@ -1486,7 +1486,7 @@
               <div style="width: 100%;float:left">
                 <mat-card class="custom-card" [class.selected-prive]="defaults.course_type === 3" (click)="setCourseType('activity', 3)">
                   <mat-card-content>
-                    <p>{{'course_private' |translate }}</p>
+                    <p>{{'activity' |translate }}</p>
                   </mat-card-content>
                 </mat-card>
                 <div style="float: left; margin: 17px">
@@ -1956,33 +1956,6 @@
 
             </div>
 
-            &lt;!&ndash;<div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin-top: 5%;" *ngIf="this.defaults.is_flexible">
-              <div class="flex-auto">
-
-                <label for="minDuration">DURÉE MINIMALE</label>
-                <mat-form-field appearance="outline" class="flex-auto" style="width: 100%">
-                  <input type="text" id="minDuration" formControlName="minDuration" placeholder="DURÉE MINIMALE" matInput [matAutocomplete]="autoTimesMinDuration">
-                  <mat-autocomplete #autoTimesMinDuration="matAutocomplete">
-                    <mat-option *ngFor="let duration of durations" [value]="duration.text">
-                      {{duration.text}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto">
-
-                <label for="maxDuration">DURÉE MAXIMALE</label>
-                <mat-form-field appearance="outline" class="flex-auto" style="width: 100%">
-                  <input type="text" id="maxDuration" formControlName="maxDuration" placeholder="DURÉE MAXIMALE" matInput [matAutocomplete]="autoTimesMmaxDuration">
-                  <mat-autocomplete #autoTimesMmaxDuration="matAutocomplete">
-                    <mat-option *ngFor="let duration of filteredMaxDurations" [value]="duration.text">
-                      {{duration.text}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-              </div>
-            </div>&ndash;&gt;
-
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.is_flexible">
               <div class="flex-auto">
 
@@ -2009,7 +1982,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+            <div style="width: 100%; margin: 2% 0 1% 0; float:left;border: 1px solid #e6e6e6;padding: 1%;" *ngIf="this.defaults.options">
               <div style="width: 5%; float:left;">
 
                 <button class="add-date" style="cursor:pointer" mat-fab (click)="addGroup()">
@@ -2021,108 +1994,54 @@
               </div>
             </div>
 
-              <ng-container
-                *ngFor="let group of groups; let i = index"
-              >
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                  <mat-form-field
-                    appearance="outline"
-                    class="flex-auto"
-                    style="width: 50%;"
-                  >
-                    <mat-label>{{'group_name' | translate}}</mat-label>
-
-                    <input
-                      type="text"
-                      matInput
-                      id="groupName"
-                      [value]="group.groupName"
-                    />
-
-                  </mat-form-field>
-                  <div  style="float: left;width: 16%;margin: 0 0 0 2%;">
-                    <div style="width:100%;border-radius: 0;padding: 2%;color: #000;background: #e6e6e6;text-align: center;" >
-                      {{'age' | translate}}
-                    </div>
-                      <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%;margin-right: 10%">
-                        <input type="number" placeholder="Min." aria-label="Number" matInput [min]="0"
-                               [value]="group.ageMin"/>
-                      </mat-form-field>
-                      <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%">
-                        <input type="number" placeholder="Max" aria-label="Number" matInput [min]="group.ageMin ?? 0"
-                               [value]="group.ageMax"/>
-                      </mat-form-field>
-
-                  </div>
-                  <mat-form-field
-                    appearance="outline"
-                    class="flex-auto"
-                    style="width: 50%;"
-                  >
-                    <mat-label>{{'option_name' | translate}}</mat-label>
-
-                    <input
-                      type="text"
-                      matInput
-                      id="optionName"
-                      [value]="group.optionName"
-                    />
-
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline" style="width: 45%; margin-top: 10%">
-                    <mat-label>{{'option_price' | translate}}</mat-label>
-                    <input type="number" placeholder="Price" aria-label="Number" matInput [min]="1"
-                           [value]="group.price"/>
-                  </mat-form-field>
-                </div>
-              </ng-container>
 
 
 
-            &lt;!&ndash;
-            <div class="sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0" *ngIf="defaults.course_type === 2 && this.defaults.is_flexible && this.periodeMultiple">
-              <div class="flex-auto" style="width: 100%">
-                <label for="table-reduction">{{'courses.reduction_title' | translate}}</label>
-
-                <table #privateReductionTable id="table-private-reduction" mat-table [dataSource]="dataSourceReductionsPrivate" matSort style="border: 1px solid #e6e6e6">
-
-                  <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'date' | translate}} </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="percentage">
-                    <th mat-header-cell *matHeaderCellDef> {{'reduction' | translate}} (%) </th>
-                    <td mat-cell *matCellDef="let element"> {{element.percentage}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="delete">
-                    <th mat-header-cell *matHeaderCellDef>  </th>
-                    <td mat-cell *matCellDef="let element; let idx = index">
-                      <mat-icon svgIcon="mat:delete" (click)="removePrivateReduction(element, idx)"></mat-icon>
-                    </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedReductionsColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedReductionsColumns;"></tr>
-                </table>
-              </div>
-              <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
-                <div style="width: 5%; float:left;">
-
-                  <button class="add-date" mat-fab (click)="openDialogPrivateReductions()">
-                    <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                  </button>
-                </div>
-                <div style="width: 95%; float:left;margin: 1% 0 0 0;">
-                  <p> {{'add_date' | translate}}</p>
-                </div>
-              </div>
-            </div>&ndash;&gt;
           </div>
-
-
+          <div class="px-6 py-4 flex flex-col" *ngIf="this.defaults.options">
+          <ng-container *ngFor="let group of groups; let i = index">
+            <div class="flex flex-wrap gap-4 mb-4">
+              <div class="flex-auto" style="flex-basis: 20%;">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>{{'group_name' | translate}}</mat-label>
+                  <input type="text" matInput [(ngModel)]="groups[i].groupName" id="groupName{{i}}" name="groupName{{i}}"/>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto" style="flex-basis: 15%;">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>{{'age_min' | translate}}</mat-label>
+                  <input type="number" placeholder="Min." aria-label="Number" matInput  id="ageMin{{i}}"
+                         [min]="0" [(ngModel)]="groups[i].ageMin" name="ageMin{{i}}"/>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto" style="flex-basis: 15%;">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>{{'age_max' | translate}}</mat-label>
+                  <input type="number" placeholder="Max" aria-label="Number" matInput
+                         [min]="group.ageMin ?? 0" [(ngModel)]="groups[i].ageMax" id="ageMax{{i}}" name="ageMax{{i}}"/>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto" style="flex-basis: 20%;">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>{{'option_name' | translate}}</mat-label>
+                  <input type="text" matInput [(ngModel)]="groups[i].optionName" id="optionName{{i}}" name="optionName{{i}}"/>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto" style="flex-basis: 15%;">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>{{'option_price' | translate}}</mat-label>
+                  <input type="number" placeholder="Price" aria-label="Number"
+                         matInput [min]="1" [(ngModel)]="groups[i].price" id="price{{i}}" name="price{{i}}"/>
+                </mat-form-field>
+              </div>
+              <div class="flex-auto" style="flex-basis: 10%; display: flex; align-items: center;">
+                <button mat-icon-button (click)="removeGroup(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+          </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
             <button color="primary" mat-raised-button *ngIf="defaults.is_flexible" (click)="checkStep3PrivateFlex(stepper)">
@@ -2187,6 +2106,6 @@
   </div>
 
 </div>
--->
+
 
 

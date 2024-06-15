@@ -133,7 +133,15 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   selectedTabDescIndex: any = 0;
   selectedPeriod: any = -1;
   loadingMonitors = true;
-  groups: any = [];
+  groups = [
+    {
+      groupName: '',
+      ageMin: '',
+      ageMax: '',
+      optionName: '',
+      price: ''
+    }
+  ];
   defaults: any = {
     unique: false,
     course_type: null,
@@ -481,6 +489,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
               periodeMultiple: [!this.defaults.unique]
             });
 
+            if(this.defaults?.settings?.groups) {
+              this.groups = this.defaults.settings.groups;
+            }
+
             this.courseInfoPriveFormGroup.controls.periodeUnique.patchValue(this.defaults.unique);
             this.courseInfoPriveFormGroup.controls.periodeMultiple.patchValue(!this.defaults.unique);
             this.courseInfoPriveFormGroup.controls.periodeUnique.disable();
@@ -746,6 +758,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           image: [null],
         });
 
+
         this.courseConfigForm = this.fb.group({
 
           fromDate: [null, Validators.required],
@@ -845,13 +858,16 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   addGroup() {
     this.groups.push({
       groupName: '',
-      ageFrom: '',
-      ageTo: '',
+      ageMax: '',
+      ageMin: '',
       optionName: '',
       price: ''
     })
   }
 
+  removeGroup(index: number) {
+    this.groups.splice(index, 1);
+  }
 
   sortEventsByDate() {
     return this.defaults.course_dates.sort((a, b) => {
@@ -2156,6 +2172,9 @@ this.activityDatesTable.renderRows();
 
         this.getDatesBetween(this.defaults.date_start, this.defaults.date_end, true, this.defaults.hour_min, this.defaults.hour_max);
       }
+      if(this.groups) {
+        this.defaults.settings.groups = this.groups;
+      }
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -2289,7 +2308,7 @@ this.activityDatesTable.renderRows();
         course_dates: this.defaults.course_dates
       }
       console.log(data);
-    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
+    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -2362,6 +2381,44 @@ this.activityDatesTable.renderRows();
         hour_max: this.defaults.hour_max,
         settings: JSON.stringify(this.defaults.settings)
       };
+    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
+      if(this.groups) {
+        this.defaults.settings.groups = this.groups;
+      }
+      data = {
+        course_type: this.defaults.course_type,
+        is_flexible: this.defaults.is_flexible,
+        name: this.defaults.name,
+        short_description: this.defaults.short_description,
+        description: this.defaults.description,
+        price: 0,
+        currency:  this.defaults.currency,
+        date_start: lowestDate,
+        date_end: highestDate,
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        active: this.defaults.active,
+        online: this.defaults.online,
+        options: this.defaults.options,
+        image: this.imagePreviewUrl,
+        confirm_attendance: false,
+        translations: JSON.stringify(this.defaults.translations),
+        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
+        price_range: this.dataSourceFlexiblePrices,
+        sport_id: this.defaults.sport_id,
+        school_id: this.defaults.school_id,
+        station_id: this.defaults.station_id.id,
+        max_participants: this.defaults.max_participants,
+        duration: this.defaults.duration,
+        age_min: this.defaults.age_min,
+        age_max: this.defaults.age_max,
+        course_dates: this.defaults.course_dates,
+        settings: JSON.stringify(this.defaults.settings),
+        unique: this.periodeUnique,
+        hour_min: this.defaults.hour_min,
+        hour_max: this.defaults.hour_max,
+      };
+      console.log(data);
     }
     data.school_id = this.user.schools[0].id;
 
