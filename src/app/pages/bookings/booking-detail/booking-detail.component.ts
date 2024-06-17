@@ -525,8 +525,30 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
+  findPaxesByCourseExtra(group) {
+    return this.courseExtra.filter(cE => cE.name+cE.description == group.groupName+group.optionName).length
+  }
+
+  getSettingsOptions(course) {
+    let settings = typeof course.settings === 'string' ?
+      JSON.parse(course.settings) : course.settings;
+
+    if(settings?.groups) {
+      settings.groups.forEach(group => {
+        group.paxes = 0;
+      });
+      return settings?.groups;
+    }
+
+    return [];
+  }
+
+  trackByIndex(index: number, item: any): number {
+    return index; // Devuelve el índice como identificador único
+  }
+
   getTotalBook(bI: number, item: any) {
-    if (this.courses[bI]?.course_type === 2 && this.courses[bI]?.is_flexible) {
+    if ((this.courses[bI]?.course_type === 2 || this.courses[bI]?.course_type === 3) && this.courses[bI]?.is_flexible) {
       return this.getPrivateFlexPrice(item.courseDates);
     } else if (this.courses[bI]?.course_type === 1) {
       return item?.price_total;
@@ -1567,7 +1589,7 @@ export class BookingDetailComponent implements OnInit {
 
           if (
             this.courses[idx].is_flexible &&
-            this.courses[idx].course_type === 2
+            (this.courses[idx].course_type === 2 || this.courses[idx].course_type === 3)
           ) {
             ret = ret + this.getPrivateFlexPrice(b.courseDates);
             b.price_total = this.getPrivateFlexPrice(b.courseDates);
@@ -2262,7 +2284,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   hasOneCancelled() {
-    return this.bookingsToCreate.filter(b => b.courseDates[0].status == 1).length >= 1;
+    return this.bookingsToCreate.filter(b => b.courseDates[0].status != 1).length >= 1;
   }
 
   deletePartialBooking(index: number, book: any) {

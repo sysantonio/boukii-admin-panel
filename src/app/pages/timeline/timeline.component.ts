@@ -22,6 +22,7 @@ import { Observable, Subject, firstValueFrom } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import {DateAdapter} from '@angular/material/core';
+import {Router} from '@angular/router';
 
 moment.locale('fr');
 
@@ -122,7 +123,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   filteredMonitorsO: Observable<any[]>;
 
   constructor(private crudService: ApiCrudService,private dialog: MatDialog, public translateService: TranslateService,
-              private snackbar: MatSnackBar, private dateAdapter: DateAdapter<Date>) {
+              private snackbar: MatSnackBar, private dateAdapter: DateAdapter<Date>, private router: Router) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.mockLevels.forEach(level => {
@@ -518,7 +519,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
                 if (Array.isArray(bookingArray) && bookingArray.length > 0) {
 
                     //Check if private bookings have the the same hours - and group them
-                    if (bookingArray[0].course.course_type === 2 && bookingArray.length > 1) {
+                    if ((bookingArray[0].course.course_type === 2 || bookingArray[0].course.course_type === 3) && bookingArray.length > 1) {
                       const groupedByTime = bookingArray.reduce((acc, curr) => {
                           const timeKey = `${curr.hour_start}-${curr.hour_end}`;
                           if (!acc[timeKey]) {
@@ -573,7 +574,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     allBookings.forEach(booking => {
       // Private or colective
       let usersToProcess = [];
-      if (booking.course.course_type === 2) {
+      if (booking.course.course_type === 2 || booking.course.course_type === 3) {
         usersToProcess = booking.bookings_clients;
       } else if (booking.course.course_type === 1) {
         usersToProcess = booking.booking_users;
@@ -602,7 +603,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     if (this.filterBookingUser && this.filterBookingUser.id) {
       const filteredBookings = allBookings.filter(booking => {
         let usersToCheck = [];
-        if (booking.course.course_type === 2) {
+        if (booking.course.course_type === 2 || booking.course.course_type === 3) {
           usersToCheck = booking.bookings_clients.map(clientObj => clientObj.client);
         } else if (booking.course.course_type === 1) {
           usersToCheck = booking.booking_users.map(clientObj => clientObj.client);
@@ -643,11 +644,14 @@ export class TimelineComponent implements OnInit, OnDestroy {
           case 2:
             type = 'private';
             break;
+          case 3:
+            type = 'activity';
+            break;
           default:
             type = 'unknown';
         }
 
-        const dateTotalAndIndex = booking.course.course_type === 2 ? { date_total: 0, date_index: 0 } : {
+        const dateTotalAndIndex = (booking.course.course_type === 2 || booking.course.course_type === 3) ? { date_total: 0, date_index: 0 } : {
           date_total: booking.course.course_dates.length,
           date_index: this.getPositionDate(booking.course.course_dates, booking.course_date_id)
         };
@@ -672,7 +676,20 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
           //Booking color
           booking_color = booking.color;
+        } else if(type == 'activity'){
+          const sportObject = booking.bookings_clients[0].client.sports.find(sport => sport.id === booking.course.sport_id);
+          if (sportObject && sportObject.pivot && sportObject.pivot.degree_id) {
+            degree = this.degrees.find(degree => degree.id === sportObject.pivot.degree_id);
+          }
+          if (!degree) {
+            degree = degrees_sport[0];
+          }
+          degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
+
+          //Booking color
+          booking_color = booking.color;
         }
+
 
         let monitor = null;
         if(booking.monitor_id){
@@ -1663,6 +1680,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   }
 
+  goTo(route: string) {
+    this.router.navigate([route]);
+  }
+
   goToEditCourse() {
     const dialogRef = this.dialog.open(CourseDetailModalComponent, {
       width: '100%',
@@ -2236,7 +2257,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   detailBooking(bookingId = null) {
-    const dialogRef = this.dialog.open(BookingDetailModalComponent, {
+    let id = bookingId !== null ? bookingId : this.taskDetail.booking_id;
+    this.router.navigate(["bookings/update/" + id]);
+    /*const dialogRef = this.dialog.open(BookingDetailModalComponent, {
       width: '100%',
       height: '1200px',
       maxWidth: '90vw',
@@ -2250,7 +2273,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       if (data) {
         this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
       }
-    });
+    });*/
   }
 
   openUserTransfer() {

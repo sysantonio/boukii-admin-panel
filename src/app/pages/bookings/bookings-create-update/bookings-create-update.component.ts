@@ -619,7 +619,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return;
     }
 
-    if (this.courseTypeId === 2 && this.checkAllFields()) {
+    if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.checkAllFields()) {
 
       this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});
       return;
@@ -653,7 +653,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
-    } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible){
+    } else if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible){
       this.courseDates.forEach((element, index) => {
         checkAval.bookingUsers.push({
           client_id: element.client_id,
@@ -698,7 +698,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         console.log(response);
 
-        if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
+        if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible) {
           this.courseDates.forEach(item => {
             if(item.paxes) {
               paxes = paxes + parseInt(item.paxes);
@@ -712,19 +712,19 @@ export class BookingsCreateUpdateComponent implements OnInit {
         if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
           price = price *  this.reservableCourseDate.length;
           const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
-/*          price = 0;
-          if(discounts && discounts.length) {
-            let i = 0;
-            this.reservableCourseDate.forEach(element => {
-              const selectedDiscount = discounts.find(item => item.date == i+1);
-              if(selectedDiscount) {
-                price = price + ((1*this.selectedItem.price) * (selectedDiscount.percentage / 100));
-              } else {
-                price = price + (1*this.selectedItem.price);
-              }
-              i++;
-            });
-          }*/
+          /*          price = 0;
+                    if(discounts && discounts.length) {
+                      let i = 0;
+                      this.reservableCourseDate.forEach(element => {
+                        const selectedDiscount = discounts.find(item => item.date == i+1);
+                        if(selectedDiscount) {
+                          price = price + ((1*this.selectedItem.price) * (selectedDiscount.percentage / 100));
+                        } else {
+                          price = price + (1*this.selectedItem.price);
+                        }
+                        i++;
+                      });
+                    }*/
           /*          discounts.forEach(element => {
                       if (element.date === this.reservableCourseDate.length && element.percentage) {
                         price = price - (price * (element.percentage / 100));
@@ -835,7 +835,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               });
             }
           });
-        } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
+        } else if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible) {
           const priceRange = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
 
           this.courseDates.forEach(item => {
@@ -941,7 +941,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
 
           /*});*/
-        } else if (this.courseTypeId === 2 && !this.selectedItem.is_flexible) {
+        } else if ((this.courseTypeId === 2 || this.courseTypeId === 3) && !this.selectedItem.is_flexible) {
 
           this.courseDates.forEach(item => {
             data = {};
@@ -1041,7 +1041,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     });*/
         }
         console.log('Response before un shift:', this.bookingsToCreate);
-        if(this.courseTypeId !== 2){
+        if(this.courseTypeId !== 2 && this.courseTypeId !==3){
           this.bookingsToCreate.unshift(data);
         }
         console.log('Response after un shift:', this.bookingsToCreate);
@@ -1094,27 +1094,73 @@ export class BookingsCreateUpdateComponent implements OnInit {
     //this.create();
   }
 
-  calculateDiscounts() {
-      this.discounts = [];
-      this.bookingsToCreate.forEach((b, idx) => {
-        if (b.courseDates[0].course.is_flexible && b.courseDates[0].course.course_type === 1) {
-          const discounts = typeof b.courseDates[0].course.discounts === 'string' ? JSON.parse(b.courseDates[0].course.discounts)
-            : b.courseDates[0].course.discounts;
-          if(discounts && discounts.length) {
-            let i = 0;
-            let price = 0;
-            b.courseDates.forEach(element => {
-              const selectedDiscount = discounts.find(item => item.date == i+1);
-              if(selectedDiscount) {
-                price = price + ((1*b.courseDates[0].course.price) * (selectedDiscount.percentage / 100));
-              }
-              i++;
-            });
-            this.discounts.push(price);
-          }
-        }
+  getSettingsOptions(course) {
+    let settings = typeof course.settings === 'string' ?
+      JSON.parse(course.settings) : course.settings;
 
+    if(settings?.groups) {
+      settings.groups.forEach(group => {
+        group.paxes = 0;
       });
+      return settings?.groups;
+    }
+
+    return [];
+  }
+
+  setGroups(event: any, group: any, booking: any) {
+
+    if (!booking.groups) {
+      booking.groups = [];
+    }
+
+    group.paxes = +event.target.value; // Convert value to number
+    const existingGroupIndex = booking.groups.findIndex(g => g.groupName === group.groupName && g.optionName === group.optionName);
+
+    if (existingGroupIndex !== -1) {
+      // Update existing group
+      booking.groups[existingGroupIndex].paxes = group.paxes;
+    } else {
+      // Add new group
+      booking.groups.push({...group});
+    }
+    this.calculateFinalPrice();
+  }
+
+  trackByIndex(index: number, item: any): number {
+    return index; // Devuelve el índice como identificador único
+  }
+
+  getBookingGroupsPrice(booking: any): number {
+    if(!booking.groups) {
+      return 0;
+    }
+    return booking.groups.reduce((total, group) => {
+      return total + (group.price * (group.paxes || 0));
+    }, 0);
+  }
+
+  calculateDiscounts() {
+    this.discounts = [];
+    this.bookingsToCreate.forEach((b, idx) => {
+      if (b.courseDates[0].course.is_flexible && b.courseDates[0].course.course_type === 1) {
+        const discounts = typeof b.courseDates[0].course.discounts === 'string' ? JSON.parse(b.courseDates[0].course.discounts)
+          : b.courseDates[0].course.discounts;
+        if(discounts && discounts.length) {
+          let i = 0;
+          let price = 0;
+          b.courseDates.forEach(element => {
+            const selectedDiscount = discounts.find(item => item.date == i+1);
+            if(selectedDiscount) {
+              price = price + ((1*b.courseDates[0].course.price) * (selectedDiscount.percentage / 100));
+            }
+            i++;
+          });
+          this.discounts.push(price);
+        }
+      }
+
+    });
 
   }
 
@@ -1131,6 +1177,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
         if (element.forfait) {
           bookingExtras.push({forfait: element.forfait, course_date_id: cs.course_date_id,
             client_id: element.client_main_id});
+        }
+        if (element.groups) {
+          element.groups.forEach(group => {
+            for (let i = 0; i < group.paxes; i++) {
+              bookingExtras.push({
+                forfait: { ...group }, // Clonamos el objeto group para evitar referencia directa
+                course_date_id: cs.course_date_id,
+                client_id: element.client_main_id
+              });
+            }
+          })
         }
         if (element.people) {
           element.people.forEach(people => {
@@ -1270,12 +1327,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
               })
             }
           }
+          if (item.course.course_type === 3) {
+            rqs.push({
+              school_id: item.school_id,
+              booking_id: booking.data.id,
+              client_id: item.client_id,
+              course_id: item.course_id,
+              course_date_id: item.course_date_id,
+              monitor_id: item.monitor_id,
+              hour_start: item.hour_start,
+              hour_end: item.hour_end, //calcular en base a la duracion del curso
+              price: item.price,
+              currency: item.currency,
+              paxes: item.paxes,
+              notes: item.notes,
+              school_notes: item.school_notes,
+              degree_id: item.degree_id,
+              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+              isActivity: true
+            });
+          }
         });
 
         rqs.forEach((rq, idx) => {
           let bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
           if(!rq.course_subgroup_id) {
             bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id && b.client_id === rq.client_id )
+          }
+
+          if(rq.isActivity) {
+            bExtra = bookingExtras.filter((b)=> b.course_date_id === rq.course_date_id && b.client_id === rq.client_id )
           }
 
           this.crudService.create('/booking-users', rq)
@@ -1285,24 +1366,40 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   booking_user_id: bookingUser.data.id,
                   course_extra_id: null,
                 }
-                const courseExtra = {
-                  course_id: rq.course_id,
-                  name: bExtra.forfait.id,
-                  description: bExtra.forfait.name,
-                  price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
-                }
-                this.crudService.create('/course-extras', courseExtra)
-                  .subscribe((responseCourseExtra) => {
-
-                    bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                    this.crudService.create('/booking-user-extras', bookingUserExtra)
-                      .subscribe((bookExtra) => {
-                        console.log("b.extra created", bookExtra, idx);
+                if(rq.isActivity) {
+                  bExtra.forEach(bE => {
+                    let courseExtra = {
+                      course_id: rq.course_id,
+                      name: bE.forfait.optionName,
+                      description: bE.forfait.groupName,
+                      price: bE.forfait.price,
+                    }
+                    this.crudService.create('/course-extras', courseExtra)
+                      .subscribe((responseCourseExtra) => {
+                        bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                        this.crudService.create('/booking-user-extras', bookingUserExtra)
+                          .subscribe((bookExtra) => {
+                            console.log("b.extra created", bookExtra, idx);
+                          })
                       })
                   })
+                } else {
+                  let courseExtra = {
+                    course_id: rq.course_id,
+                    name: bExtra.forfait.id,
+                    description: bExtra.forfait.name,
+                    price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
+                  }
+                  this.crudService.create('/course-extras', courseExtra)
+                    .subscribe((responseCourseExtra) => {
+                      bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                      this.crudService.create('/booking-user-extras', bookingUserExtra)
+                        .subscribe((bookExtra) => {
+                          console.log("b.extra created", bookExtra, idx);
+                        })
+                    })
+                }
               }
-
-
             });
         });
         setTimeout(() => {
@@ -2633,11 +2730,22 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return price;
   }
 
+  calculateAllGroupPriceBooking() {
+    let price = 0;
+    this.bookingsToCreate.forEach(element => {
+      price += this.getBookingGroupsPrice(element);
+    });
+
+    return price;
+  }
+
   calculateFinalPrice() {
     let price = this.getBasePrice();
 
     //forfait primero
     price = price + this.calculateAllForfaitPriceBookingPrivate();
+
+    price = price + this.calculateAllGroupPriceBooking();
 
     if (this.reduction !== null) {
       if (this.reduction.type === 1) {

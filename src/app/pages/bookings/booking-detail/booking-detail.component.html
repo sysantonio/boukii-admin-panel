@@ -250,11 +250,11 @@
               </ul>
             </mat-card-content>
 
-            <mat-divider
+            <mat-divider *ngIf="courses[bI].course_type !== 3"
               style="float: left;width: 100%;"
               class="text-border"
             ></mat-divider>
-            <div style="float:left; width: 100%">
+            <div style="float:left; width: 100%"  *ngIf="courses[bI].course_type !== 3">
               <p
                 style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
               >
@@ -584,7 +584,7 @@
 
               <p
                 style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
-                *ngIf="courses[bI].options && courses[bI].course_type == 1"
+                *ngIf="courses[bI].options && (courses[bI].course_type == 1 || courses[bI].course_type == 3)"
               >
                 {{ "options" | translate }}
               </p>
@@ -629,6 +629,35 @@
                     </ul>
                   </div>
                 </div>
+                <div
+                  style="width: 100%; float:left;padding: 2%; margin-bottom: 15px;  border: 1px solid black;"
+                  *ngIf="courses[bI].options && courses[bI].course_type == 3"
+                >
+                  <div *ngFor="let group of getSettingsOptions(item.courseDates[0].course); let i = index; trackBy: trackByIndex"
+                       style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  >
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                      <div style="width: 65%;">
+                        <strong>{{ group.groupName }} - {{group.optionName}} </strong>
+                      </div>
+
+                      <div>
+                        <p>
+                        <p>
+                          +{{group.price * findPaxesByCourseExtra(group)}}
+                          {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>{{'paxes' | translate}}</mat-label>
+                        <input matInput [min]="0" [value]="findPaxesByCourseExtra(group)" type="number">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  </div>
 
                 <!--<div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -920,6 +949,26 @@
                       style="width: 100%; float:left">
                     <p style="float:left">
                       Forfait
+                      {{
+                        item.courseDates[0].date
+                          | date: "fullDate":"":translateService.currentLang
+                      }}
+                      - {{ item.courseDates[0].hour_start.slice(0, -3) }} -
+                      {{ item.courseDates[0].hour_end.slice(0, -3) }}
+                    </p>
+                    <p style="float:right">
+                      +{{
+                        getCourseExtraForfaitPriceByDateHour(
+                          item.courseDates[0]
+                        )
+                      }}
+                      {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
+                    </p>
+                  </span>
+                <span *ngIf="item.courseDates[0].course.course_type == 3 "
+                      style="width: 100%; float:left">
+                    <p style="float:left">
+                      Extra
                       {{
                         item.courseDates[0].date
                           | date: "fullDate":"":translateService.currentLang
