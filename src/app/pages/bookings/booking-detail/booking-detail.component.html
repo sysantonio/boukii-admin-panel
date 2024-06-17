@@ -653,7 +653,7 @@
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <mat-form-field appearance="outline" class="w-full">
                         <mat-label>{{'paxes' | translate}}</mat-label>
-                        <input matInput [min]="0" [value]="findPaxesByCourseExtra(group)" type="number">
+                        <input matInput [readonly]="true" [min]="0" [value]="findPaxesByCourseExtra(group)" type="number">
                       </mat-form-field>
                     </div>
                   </div>

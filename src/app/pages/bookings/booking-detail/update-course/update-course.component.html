@@ -20,8 +20,8 @@
       <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
     </mat-dialog-actions>
 
-    <ng-container *ngIf="defaults.course.course_type === 2 ">
-        <ng-container *ngIf="defaults.course.course_type === 2">
+    <ng-container *ngIf="(defaults.course.course_type === 2 || defaults.course.course_type === 3) ">
+        <ng-container *ngIf="(defaults.course.course_type === 2 || defaults.course.course_type === 3)">
           <mat-form-field appearance="outline" class="flex-auto" style="width: 48%; margin-right: 2%">
             <mat-label>{{'hour' | translate}}</mat-label>
             <mat-select

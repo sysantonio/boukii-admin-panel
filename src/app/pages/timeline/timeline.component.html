@@ -197,10 +197,15 @@
               <!--TASKS-->
               <ng-container *ngFor="let task of plannerTasks">
                 <!--DAY-->
-                <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper cursor-pointer" [ngClass]="[
-                                (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
-                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
-                                '',
+                <div *ngIf="timelineView == 'day'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
+                     (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ?
+                     $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper cursor-pointer" [ngClass]="[
+                                (task.booking_id && ((idDetail == task.booking_id &&
+                                hourDetail == task.hour_start && dateDetail == task.date
+                                 && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id
+                                  && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
+                                (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
+                                : task.type === 'activity' ? 'task-selected-activity' : '') : '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.style">
@@ -219,7 +224,7 @@
                               'width': (task.type === 'private' || task.type === 'activity') ? '34px' : '54px'}">
                     <!-- PENDING LEVEL -->
                     <ng-container *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
-                      <div class="task-block-level" *ngIf="task.degree" [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}} {{task.subgroup_number}}</div>
+                      <div class="task-block-level" *ngIf="task.degree && task.type !== 'activity'" [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}} {{task.subgroup_number}}</div>
                       <div *ngIf="task.type=='collective'" class="task-block-people">{{task.clients_number}}/{{task.max_participants}}</div>
                     </ng-container>
                     <ng-container *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
@@ -240,8 +245,8 @@
                 <!--WEEK-->
                 <div *ngIf="timelineView == 'week'" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" class="task-wrapper-week cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
-                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
-                                '',
+                                 (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
+                                : task.type === 'activity' ? 'task-selected-activity' : '') : '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleWeek">
@@ -360,8 +365,8 @@
                 <!--MONTH-->
                 <div class="task-wrapper-week cursor-pointer" (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)" (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id) || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
-                                (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
-                                '',
+                                 (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
+                                : task.type === 'activity' ? 'task-selected-activity' : '') : '',
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleMonth">
@@ -402,8 +407,8 @@
         </div>
         <div *ngFor="let task of groupedTasks" (click)="toggleDetail(task)" class="modal-grouped-task-wrapper cursor-pointer" (contextmenu)="toggleDetailMove(task, $event)" [ngClass]="[
                     (task.booking_id && (idDetail == task.booking_id && hourDetail == task.hour_start && dateDetail == task.date && monitorDetail == task.monitor_id && subgroupDetail == task.course_subgroup_id)) ?
-                    (task.type === 'collective' ? 'task-selected-collective' : 'task-selected-private') :
-                    '',
+                      (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
+                                : task.type === 'activity' ? 'task-selected-activity' : '') : '',
                     task.class
                 ]">
           <div class="task-text">

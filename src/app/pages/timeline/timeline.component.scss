@@ -129,10 +129,16 @@
     background:rgba(252,196,47,1) !important;
 }
 .task-private {
-    border:2px solid rgba(147,206,90,0.7);background:rgba(147,206,90,0.5);
+  border:2px solid rgba(147,206,90,0.7);background:rgba(147,206,90,0.5);
+}
+.task-activity {
+  border:2px solid rgba(0,210,255,255);background:rgba(0,190,255,255);
 }
 .task-selected-private {
     background:rgba(56,199,77,1) !important;
+}
+.task-selected-activity {
+  background:rgba(0,120,255,255) !important;
 }
 .task-other {
     border:2px solid rgba(241,36,120,1);background:rgba(241,36,120,0.5);
