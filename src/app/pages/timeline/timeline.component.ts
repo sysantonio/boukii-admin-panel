@@ -827,10 +827,15 @@ export class TimelineComponent implements OnInit, OnDestroy {
     return !this.vacationDays.includes(moment(specificDate).format('YYYY-MM-DD'));
   }
 
-  isDayVisibleDay(){
+  isDayVisibleDay(): boolean {
+    // Si vacationDays es undefined o null, asumimos que no hay días de vacaciones
+    if (!this.vacationDays) {
+      return true;
+    }
+
+    // Verificamos si la fecha actual está en la lista de días de vacaciones
     return !this.vacationDays.includes(moment(this.currentDate).format('YYYY-MM-DD'));
   }
-
   generateHoursRange(start: string, end: string): string[] {
     const startTime = this.parseTime(start);
     const endTime = this.parseTime(end);
