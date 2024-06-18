@@ -280,7 +280,9 @@ export class AioTableComponent implements OnInit, AfterViewInit {
 
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id', filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''), '', this.searchCtrl.value, this.with)
+    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
+      filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
+      '', null, this.searchCtrl.value, this.with)
       .subscribe((response: any) => {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;

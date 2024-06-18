@@ -8,8 +8,10 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
-      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'" [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-      (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon" [with]="'&with[]=sports&with[]=clientSports.degree&with[]=clientsSchools&with[]=utilizers'"
+      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
+                     [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+      (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                     [with]="'&with[]=sports&with[]=clientSports.degree&with[]=clientsSchools&with[]=utilizers'"
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
