@@ -30,12 +30,12 @@
           <div style="width: 100%;float:left">
             <mat-icon svgIcon="mat:check" style="margin:2%; color:#CEE741" *ngIf="getPrivateNoAssigned() === 0 && getColNoAssigned() === 0"></mat-icon>
             <mat-icon svgIcon="mat:warning" style="margin:2%; color:red" *ngIf="getPrivateNoAssigned() > 0 || getColNoAssigned() > 0"></mat-icon>
-            <p style="text-align: center;font-size: 20px;color: #808080">{{ 'courses' | translate }}</p>
+            <p style="text-align: center;font-size: 20px;color: #808080">{{ 'courses.title' | translate }}</p>
           </div>
 
           <div style="width: 100%;float:left;">
             <mat-icon svgIcon="logo:cursos" style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
-            <p style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{ 'courses' | translate }}</b></p>
+            <p style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{ 'courses.title' | translate }}</b></p>
           </div>
 
           <div style="width: 100%;float:left;margin: 5% 0 0 0;">
@@ -46,7 +46,7 @@
             </div>
 
             <div style="width: 48%;float:left;height:75px">
-              <p style="float: left;width:100%;text-align: center;color: #808080">{{ 'collective' | translate }}</p>
+              <p style="float: left;width:100%;text-align: center;color: #808080">{{ 'colective' | translate }}</p>
               <p style="float: left;width:100%;text-align: center;color:#CEE741; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getColNoAssigned()}}</p>
 
             </div>
