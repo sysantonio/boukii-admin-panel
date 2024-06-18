@@ -66,7 +66,7 @@
   "duration": "Durée",
   "days": "Jours",
   "booking": "Réservation",
-  "years": "Années",
+  "years": "Ans",
   "new_monitor": "Nouveau moniteur",
   "new_client": "Nouvelle cliente",
   "current_sport": "Sports associés",
@@ -112,7 +112,8 @@
   "extras": "Options supplémentaires",
   "course_options": "Options de cours",
   "rent": "Louer",
-  "op_rem": "Option remboursement",
+  "op_rem": "O.R.",
+  "op_rem_abr": "Option remboursement",
   "total": "Montant total",
   "tva": "T.V.A.",
   "type": "Type",
@@ -587,5 +588,6 @@
   "duplicate": "Dupliquer",
   "all_tasks": "Toutes les tâches",
   "settings.bookings.boukii_care_title": "Assurance supplémentaire",
-  "currency": "Monnaie"
+  "currency": "Monnaie",
+  "not_assigned": "Non attribué"
 }

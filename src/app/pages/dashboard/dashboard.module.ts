@@ -21,32 +21,34 @@ import { WidgetSummaryChartsModule } from 'src/@vex/components/widgets/widget-su
 import { WidgetSummaryMonitorsModule } from 'src/@vex/components/widgets/widget-summary-monitors/widget-summary-monitors.module';
 import { WidgetSummaryTasksModule } from 'src/@vex/components/widgets/widget-summary-tasks/widget-summary-tasks.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [DashboardAnalyticsComponent],
-  imports: [
-    CommonModule,
-    LayoutModule,
-    PageLayoutModule,
-    BreadcrumbsModule,
-    RouterModule,
-    DashboardRoutingModule,
-    SecondaryToolbarModule,
-    MatIconModule,
-    ChartModule,
-    WidgetQuickLineChartModule,
-    WidgetQuickValueCenterModule,
-    WidgetQuickValueStartModule,
-    WidgetLargeGoalChartModule,
-    WidgetAssistantModule,
-    WidgetLargeChartModule,
-    WidgetTableModule,
-    WidgetSummaryChartsModule,
-    WidgetSummaryModule,
-    WidgetSummaryMonitorsModule,
-    WidgetSummaryTasksModule,
-    ComponentsModule
-  ]
+    imports: [
+        CommonModule,
+        LayoutModule,
+        PageLayoutModule,
+        BreadcrumbsModule,
+        RouterModule,
+        DashboardRoutingModule,
+        SecondaryToolbarModule,
+        MatIconModule,
+        ChartModule,
+        WidgetQuickLineChartModule,
+        WidgetQuickValueCenterModule,
+        WidgetQuickValueStartModule,
+        WidgetLargeGoalChartModule,
+        WidgetAssistantModule,
+        WidgetLargeChartModule,
+        WidgetTableModule,
+        WidgetSummaryChartsModule,
+        WidgetSummaryModule,
+        WidgetSummaryMonitorsModule,
+        WidgetSummaryTasksModule,
+        ComponentsModule,
+        TranslateModule
+    ]
 })
 export class DashboardModule {
 }

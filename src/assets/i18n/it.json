@@ -113,7 +113,8 @@
   "extras": "Caratteristiche aggiuntive",
   "course_options": "Opzioni del corso",
   "rent": "Affitto",
-  "op_rem": "Opzione di rimborso",
+  "op_rem": "O.R.",
+  "op_rem_abr": "Opzione di rimborso",
   "total": "Quantità totale",
   "tva": "I.V.A.",
   "type": "Tipo",
@@ -590,5 +591,6 @@
   "copy": "Copia",
   "duplicate": "Duplicato",
   "all_tasks": "Tutti i compiti",
-  "currency": "Valuta"
+  "currency": "Valuta",
+  "not_assigned": "Non allocato"
 }
