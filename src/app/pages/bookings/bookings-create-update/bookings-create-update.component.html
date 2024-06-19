@@ -223,14 +223,14 @@
               </mat-card-content>
             </mat-card>
           </div>
-          <mat-form-field *ngIf="courseTypeId !== 3"
+          <mat-form-field
                           appearance="outline"
                           class="flex-auto"
-                          style="width: 48%"
+                          style="width: 48%;"
           >
-            <input
+            <input [disabled]="courseTypeId === 3" [readonly]="courseTypeId === 3"
               type="text"
-              placeholder="{{'choose_level' | translate}}"
+              placeholder="{{courseTypeId === 3 ? ('not_required' | translate) : ('choose_level' | translate)}}"
               aria-label="Number"
               matInput
               [formControl]="levelForm"
@@ -240,6 +240,7 @@
             <mat-autocomplete
               #autoLevel="matAutocomplete"
               [displayWith]="displayFnLevel"
+              [disableRipple]="courseTypeId === 3"
             >
               <mat-option
                 *ngFor="let level of filteredLevel | async"

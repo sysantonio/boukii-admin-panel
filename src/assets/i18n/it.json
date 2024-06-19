@@ -592,5 +592,6 @@
   "duplicate": "Duplicato",
   "all_tasks": "Tutti i compiti",
   "currency": "Valuta",
-  "not_assigned": "Non allocato"
+  "not_assigned": "Non allocato",
+  "not_required": "Non assegnato"
 }

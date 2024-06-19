@@ -598,5 +598,7 @@
   "copy": "Copia",
   "duplicate": "Duplicar",
   "all_tasks": "Todas las tareas",
-  "currency": "Moneda"
+  "currency": "Moneda",
+  "not_assigned": "No asignado",
+  "not_required": "No requerido"
 }

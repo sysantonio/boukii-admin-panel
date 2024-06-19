@@ -589,5 +589,6 @@
   "all_tasks": "Toutes les tâches",
   "settings.bookings.boukii_care_title": "Assurance supplémentaire",
   "currency": "Monnaie",
-  "not_assigned": "Non attribué"
+  "not_assigned": "Non attribué",
+  "not_required": "Non requise"
 }
