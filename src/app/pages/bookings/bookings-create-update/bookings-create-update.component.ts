@@ -2060,7 +2060,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     } else {
 
       const monitor = this.monitors.find((m) => m.id === id);
-      return monitor?.image;
+      return monitor?.image ? monitor.image : this.userAvatar;
     }
   }
 

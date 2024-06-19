@@ -756,7 +756,7 @@
                             <div style="float: left;width: 50%;">
                               <div style="float: left; width: 20%;">
                                 <img
-                                  [src]="subgroup.monitor_id !== null ? getMonitorAvatar(subgroup.monitor_id) : userAvatar"
+                                  [src]="subgroup.monitor_id ? getMonitorAvatar(subgroup.monitor_id) : userAvatar"
                                   style="border-radius: 50%;"
                                 />
                               </div>
@@ -1097,7 +1097,7 @@
             <div style="float: left; width: 100%;margin-top: 5%;">
               <div style="float: left; width: 15%;">
                 <img
-                  [src]="item.courseDates[0].monitor_id !== null ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar"
+                  [src]="item.courseDates[0].monitor_id ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar"
                   style="width: 50px;height: 50px;object-fit: contain;border-radius:50%"
                 />
               </div>

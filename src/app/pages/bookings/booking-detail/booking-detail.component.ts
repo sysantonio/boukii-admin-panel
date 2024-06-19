@@ -1334,7 +1334,7 @@ export class BookingDetailComponent implements OnInit {
       return this.userAvatar;
     } else {
       const monitor = this.monitors.find((m) => m.id === id);
-      return monitor?.image;
+      return monitor?.image ? monitor.image : this.userAvatar;
     }
   }
 
@@ -3067,7 +3067,7 @@ export class BookingDetailComponent implements OnInit {
         this.bookingPendingPrice =
           this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
       } else {
-        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total);
+        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices;
       }
     } else {
       this.bookingPendingPrice = 0;
