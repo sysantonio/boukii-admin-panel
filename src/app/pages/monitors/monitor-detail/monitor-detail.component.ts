@@ -753,7 +753,7 @@ export class MonitorDetailComponent {
           monitorDegree.data.forEach(mDG => {
             selectedSports.forEach(element => {
               element.degrees.forEach(dg => {
-                if (dg.id === mDG.monitor_sport_authorized_degrees[0].degree_id) {
+                if (dg.id === mDG.monitor_sport_authorized_degrees[0]?.degree_id) {
                   element.authorisedLevels =  mDG.monitor_sport_authorized_degrees;
 
                 }

@@ -15,7 +15,7 @@
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
-  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left" *ngIf="showDetail">
+  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left;position: fixed;left: 66%;" *ngIf="showDetail">
     <mat-card style="padding: 0 3%;">
       <mat-card-header style="display:block">
         <div style="width: 100%;float: left;">
@@ -36,7 +36,7 @@
                 [allLevels]="clientSport.length ? getSportLevels(clientSport[0]?.sport_id) : []"
                 [selectLevel]=" clientSport.length ? clientSport[0]?.degree_id : null"
                 [size]="100"
-                [userImage]="detailData.image !== null ? detailData.image : imageAvatar">
+                [userImage]="detailData.image ? detailData.image : imageAvatar">
 
               </app-level-user>
             </div>

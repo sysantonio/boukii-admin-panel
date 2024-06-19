@@ -13,7 +13,7 @@
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
-  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left" *ngIf="showDetail">
+  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left;position: fixed;left: 66%;" *ngIf="showDetail">
     <mat-card style="padding: 0 3%;">
       <mat-card-header style="display:block">
         <div style="width: 100%;float: left;">
@@ -30,7 +30,7 @@
           </div>
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="detailData.image" width="100" height="100" style="border-radius: 100%;">
+              <img [src]="detailData.image ? detailData.image : '../../../assets/img/avatar.png'" width="100" height="100" style="border-radius: 100%; height: 100px; width: 100px; object-fit: cover;">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p><strong>{{detailData?.first_name}} {{detailData?.last_name}}</strong></p>
