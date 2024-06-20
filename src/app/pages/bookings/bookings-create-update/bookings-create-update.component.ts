@@ -1,11 +1,21 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  Input,
+  ChangeDetectorRef,
+  Inject,
+  Optional
+} from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin, map, of, startWith } from 'rxjs';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { MatDialog } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -273,10 +283,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
               private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router,
-              public translateService: TranslateService, private cdr: ChangeDetectorRef, private dateAdapter: DateAdapter<Date>) {
+              public translateService: TranslateService, private cdr: ChangeDetectorRef,
+              private dateAdapter: DateAdapter<Date>,
+              @Optional() @Inject(MAT_DIALOG_DATA) public externalData: any) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
-    this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
+    this.minDate = new Date();
+    if(this.externalData) {
+      this.minDate = new Date(this.externalData.date);
+    }
+     // Establecer la fecha mínima como la fecha actual
     this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
       this.handleMonthChange(firstDayOfMonth);
       this.selectedDatePrivate = firstDayOfMonth;
@@ -313,6 +329,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     forkJoin([this.getSportsType(), this.getClients(), this.getClientsAll()])
       .subscribe((data: any) => {
+
         this.sportTypeData = data[0].data.reverse();
         this.clients = data[1].data;
         this.allClients = data[2].data;
@@ -346,9 +363,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         setTimeout(() => {
 
+          if(this.externalData) {
+            this.sportTypeSelected = this.sportData[0].sport_type;
+            this.form.patchValue({ sportType: this.sportData[0].sport_type });
+          }
           this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
           this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
           this.selectSport(this.sportDataList[0]);
+
           //this.getUtilzers(this.clients[0], true);
           //this.getDegrees(this.defaults.sport_id);
 
@@ -402,6 +424,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   setCourseType(type: string, id: number) {
     this.monthAndYear = new Date();
+    if(this.externalData) {
+      this.monthAndYear = new Date(this.externalData.date);
+    }
+
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -502,6 +528,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.generateCourseDurations(item.course_dates[0].hour_start, item.course_dates[0].hour_end, item.duration.length == 9 ? this.transformTime(item.duration) : item.duration);
       } else {
         this.calculatePaxesPrivateFix();
+      }
+      if(this.externalData){
+        this.setCourseDateItemPrivateNoFlexible(this.courseDates[0], {value:this.externalData.date});
+        this.courseDates[0].hour_start = this.externalData.hour;
+        this.generateCourseDurations(
+          this.externalData.hour+':00', this.getDateFromSelectedDates().hour_end,
+          this.selectedItem.duration.includes(':') ? this.transformTime( this.selectedItem.duration) : this.selectedItem.duration)
       }
     }
   }
@@ -1721,11 +1754,27 @@ export class BookingsCreateUpdateComponent implements OnInit {
             });
         });
 
+        if(this.externalData && this.externalData.monitor.sports){
+          this.sportData = this.sportData.filter(i =>
+            this.externalData.monitor.sports.some(sport => sport.id === i.sport_id)
+          ).map(i => {
+            const matchingSport = this.externalData.monitor.sports.find(sport => sport.id === i.sport_id);
+            return {
+              ...i,
+              sport_id: matchingSport ? matchingSport.id : null,
+              name: matchingSport ? matchingSport.name : null,
+              icon_selected: matchingSport ? matchingSport.icon_selected : null,
+              icon_unselected: matchingSport ? matchingSport.icon_unselected : null,
+              sport_type: matchingSport ? matchingSport.sport_type : null
+            };
+          })
+        }
       })
 
   }
 
   selectSport(sport: any) {
+    this.backToList();
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -1870,7 +1919,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
   getCourses(level: any, date: any, fromPrivate = false) {
     if(!this.courseTypeId) {
-      this.setCourseType('collectif', 1);
+      this.setCourseType('private', 2);
     }
     this.loadingCalendar = true;
     this.dateClass();
@@ -2797,6 +2846,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
+  getDateFromSelectedDates() {
+    let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
+
+    const formattedDate = new Date(date).toISOString().split('T')[0];
+
+    return this.selectedItem.course_dates.find(i => {
+      const courseDate = new Date(i.date).toISOString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
+      return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
+    });
+
+  }
+
   generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
@@ -3040,6 +3101,71 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.levelForm.setValue('');
   }
 
+  checkProblems(monitor, clients) {
+    const monitorLanguages = {
+      "language1_id": monitor.language1_id,
+      "language2_id": monitor.language2_id,
+      "language3_id": monitor.language3_id,
+      "language4_id": monitor.language4_id,
+      "language5_id": monitor.language5_id,
+      "language6_id": monitor.language6_id
+    };
+
+    if (this.courseTypeId === 2) {
+      this.defaults.booking.all_clients.forEach(client => {
+        const clientLanguages = {
+          "language1_id": client.client.language1_id,
+          "language2_id": client.client.language2_id,
+          "language3_id": client.client.language3_id,
+          "language4_id": client.client.language4_id,
+          "language5_id": client.client.language5_id,
+          "language6_id": client.client.language6_id
+        };
+
+
+        if (!this.langMatch(monitorLanguages, clientLanguages)) {
+          return 'language_match';
+        }
+      });
+    } else {
+
+      this.defaults.booking.all_clients.forEach(client => {
+        const clientLanguages = {
+          "language1_id": client.client.language1_id,
+          "language2_id": client.client.language2_id,
+          "language3_id": client.client.language3_id,
+          "language4_id": client.client.language4_id,
+          "language5_id": client.client.language5_id,
+          "language6_id": client.client.language6_id
+        };
+
+        if (!this.langMatch(monitorLanguages, clientLanguages)) {
+          return 'language_match';
+        } else {
+          this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+this.defaults.monitor.id+'&school_id='+this.defaults.school_id+'&sport_id='+this.defaults.booking.sport_id)
+            .subscribe((data) => {
+              monitor.degrees = data.data;
+              return 'degree_match';
+
+            })
+        }
+      });
+    }
+  }
+
+  langMatch(objeto1, objeto2) {
+    for (const key1 in objeto1) {
+      if (objeto1[key1] !== null) {
+        for (const key2 in objeto2) {
+          if (objeto1[key1] === objeto2[key2]) {
+            return true; // Retorna verdadero si encuentra una coincidencia
+          }
+        }
+      }
+    }
+    return false; // Retorna falso si no encuentra ninguna coincidencia
+  }
+
   checkAvailableMonitors(start: any, duration: any, date) {
 
     let data: any;
@@ -3066,16 +3192,63 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.crudService.post('/admin/monitors/available', data)
       .subscribe((response) => {
         this.monitors = response.data;
-        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
-        );
+        if(!this.externalData) {
 
-        if (response.data.length === 0) {
+          this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+            startWith(''),
+            map((value: any) => typeof value === 'string' ? value : value?.full_name),
+            map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+          );
 
-          this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
+          if (response.data.length === 0) {
+
+            this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
+          }
+        } else {
+          const selectedMonitor = this.monitors.find(monitor => monitor.id === this.externalData.monitor.id);
+
+          if (selectedMonitor) {
+            // Si el monitor está en `this.monitors`, actualizar `this.monitors` para que contenga solo ese monitor
+            this.monitors = [selectedMonitor];
+            this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+              startWith(''),
+              map((value: any) => typeof value === 'string' ? value : value?.full_name),
+              map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+            );
+          } else {
+            // Si el monitor no está en `this.monitors`, mostrar el modal de confirmación
+            const dialogRef = this.dialog.open(ConfirmModalComponent, {
+              maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+              panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+              data: {
+                message: this.translateService.instant('El monitor seleccionado no cumple los requisitos. ¿Quieres igualmente seleccionar ese monitor?'),
+                title: this.translateService.instant('match_error')
+              }
+            });
+
+            dialogRef.afterClosed().subscribe(result => {
+              if (result === 'confirm') {
+                // Si el usuario confirma, actualizar `this.monitors` para que contenga solo `this.externalData.monitor`
+                this.monitors = [this.externalData.monitor];
+              } else {
+                // Si el usuario no confirma, mantener `response.data` en `this.monitors`
+                this.monitors = response.data;
+              }
+
+              // Continuar con la lógica de filtrado
+              this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
+                startWith(''),
+                map((value: any) => typeof value === 'string' ? value : value?.full_name),
+                map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
+              );
+
+              if (response.data.length === 0) {
+                this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', { duration: 3000 });
+              }
+            });
+          }
         }
+
       })
   }
 

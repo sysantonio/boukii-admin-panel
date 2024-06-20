@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Input } from "@angular/core";
+import {Component, EventEmitter, OnInit, Output, Input, Inject, Optional} from '@angular/core';
 import {
   FormControl,
   UntypedFormBuilder,
@@ -15,7 +15,7 @@ import {
 } from "rxjs";
 import { stagger20ms } from "src/@vex/animations/stagger.animation";
 import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
-import { MatDialog } from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from "../bookings-create-update-modal/bookings-create-update-modal.component";
 import { ApiCrudService } from "src/service/crud.service";
 import {
@@ -191,7 +191,7 @@ export class BookingDetailComponent implements OnInit {
   school = [];
   settings: any = [];
   user: any;
-  id: any;
+  @Input() id: any;
   selectedForfait = [];
   mainIdSelected = true;
   detailClient: any;
@@ -234,7 +234,8 @@ export class BookingDetailComponent implements OnInit {
     private schoolService: SchoolService,
     private router: Router,
     public translateService: TranslateService,
-    private dateAdapter: DateAdapter<Date>
+    private dateAdapter: DateAdapter<Date>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public incData: any
   ) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => {
@@ -250,7 +251,11 @@ export class BookingDetailComponent implements OnInit {
 
   async ngOnInit() {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
-    this.id = this.activatedRoute.snapshot.params.id;
+    if(!this.incData) {
+      this.id = this.activatedRoute.snapshot.params.id;
+    } else {
+      this.id = this.incData.id;
+    }
     this.schoolService.getSchoolData(this.user).subscribe((school) => {
       this.schoolSettings = school.data;
     })

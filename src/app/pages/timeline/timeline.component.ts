@@ -23,6 +23,7 @@ import { map, startWith, takeUntil } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import {DateAdapter} from '@angular/material/core';
 import {Router} from '@angular/router';
+import {BookingDetailComponent} from '../bookings/booking-detail/booking-detail.component';
 
 moment.locale('fr');
 
@@ -2263,8 +2264,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   detailBooking(bookingId = null) {
     let id = bookingId !== null ? bookingId : this.taskDetail.booking_id;
-    this.router.navigate(["bookings/update/" + id]);
-    /*const dialogRef = this.dialog.open(BookingDetailModalComponent, {
+    //this.router.navigate(["bookings/update/" + id]);
+    const dialogRef = this.dialog.open(BookingDetailComponent, {
       width: '100%',
       height: '1200px',
       maxWidth: '90vw',
@@ -2278,7 +2279,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       if (data) {
         this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
       }
-    });*/
+    });
   }
 
   openUserTransfer() {

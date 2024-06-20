@@ -189,8 +189,8 @@
                      style="margin: 10px 0 10px 0"
         ></mat-divider>
 
-        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.client_main_id">
-          <div class="flex-auto" style="width:20%">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="defaults.client_main_id ">
+          <div class="flex-auto" style="width:20%" *ngIf="!externalData">
             <mat-card
               class="custom-card"
               [class.selected-collectif]="courseType === 'collectif'"
@@ -264,7 +264,7 @@
             appearance="outline"
             class="flex-auto"
             style="width: 50%; float:left"
-            *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar"
+            *ngIf="courseType !== null && (courseType === 'privee' || courseType === 'activity') && !loadingCalendar"
           >
             <input
               matInput
@@ -272,7 +272,8 @@
               [matDatepicker]="pickerDateFrom"
               formControlName="fromDate"
               [min]="minDate"
-              [(ngModel)]="selectedDatePrivate"
+              [readonly]="externalData?.date"
+              [(ngModel)]="externalData?.date ? externalData?.date : selectedDatePrivate"
               (dateChange)="emitDateChange($event)"
               (dateInput)="emitDateChange($event, true)"
             />
@@ -282,12 +283,14 @@
             ></mat-datepicker-toggle>
             <mat-datepicker
               #pickerDateFrom
-              [startAt]="selectedDatePrivate"
+              [startAt]="externalData?.date ? externalData?.date : selectedDatePrivate"
               [calendarHeaderComponent]="customHeader"
               (monthSelected)="monthChanged($event, pickerDateFrom)"
               [dateClass]="privateDateClass()"
+              [disabled]="externalData?.date"
             ></mat-datepicker>
           </mat-form-field>
+
 
           <mat-list-item
             class="custom-list-item"
@@ -418,7 +421,7 @@
                   >
                 </div>
                 <div class="flex-auto">
-                  <mat-checkbox *ngIf="courseTypeId !== 3"
+                  <mat-checkbox *ngIf="courseTypeId !== 3 && !externalData"
                                 color="accent"
                                 [(ngModel)]="periodMultiple"
                                 formControlName="periodMultiple"
@@ -451,11 +454,12 @@
                     <input
                       matInput
                       id="dateFromPrivate"
-                      [value]="selectedDatePrivate"
                       [matDatepicker]="pickerDateFrom"
                       (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
                       [min]="minDate"
                       [max]="getMaxDate()"
+                      [readonly]="externalData?.date"
+                      [value]="externalData?.date ? externalData?.date : selectedDatePrivate"
                       [matDatepickerFilter]="inUseDatesFilter"
                     />
                     <mat-datepicker-toggle
@@ -464,7 +468,8 @@
                     ></mat-datepicker-toggle>
                     <mat-datepicker
                       #pickerDateFrom
-                      [startAt]="selectedItem.course_dates[0].date"
+                      [startAt]="getDateFromSelectedDates().date"
+                      [disabled]="externalData?.date"
                     ></mat-datepicker>
 
                     <!--
@@ -484,13 +489,14 @@
                     style="width: 50%;"
                   >
                     <mat-label>{{'hour' | translate}}</mat-label>
-                    <mat-select
-                      (selectionChange)="courseDate.hour_start = $event.value; generateCourseDurations($event.value+':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
+                    <mat-select  [value]="externalData?.hour"
+                                 [disabled]="externalData?.hour"
+                      (selectionChange)="courseDate.hour_start = $event.value; generateCourseDurations($event.value+':00', getDateFromSelectedDates().hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
                     >
                       <mat-option
-                        *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min'); let hI = index"
+                        *ngFor="let time of generateCourseHours(getDateFromSelectedDates().hour_start, getDateFromSelectedDates().hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min'); let hI = index"
                         [value]="time"
-                        [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time, i)"
+                        [disabled]="calculateAvailableHours(getDateFromSelectedDates(), time, i) || externalData?.hour"
                       >
                         {{ time }}
                       </mat-option>
