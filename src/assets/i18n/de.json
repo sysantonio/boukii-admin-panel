@@ -382,6 +382,7 @@
   "snackbar.booking_detail.mandatory": "Füllen Sie die Datums- und Uhrzeitfelder der Kursreservierung aus",
   "snackbar.booking_detail.send_mail": "Die E-Mail wurde erfolgreich gesendet",
   "snackbar.booking_detail.send_mail.error": "Beim Senden der E-Mail ist ein Fehler aufgetreten",
+  "snackbar.booking.payment.error": "Beim Erstellen der Zahlung ist ein Fehler aufgetreten",
   "snackbar.booking_detail.update": "Reservierung erfolgreich aktualisiert",
   "snackbar.booking_detail.notes_client": "Aktualisierte Kundennotizen",
   "snackbar.booking_detail.notes_school": "Aktualisierte Schulnotizen",

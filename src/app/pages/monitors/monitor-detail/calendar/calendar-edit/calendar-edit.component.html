@@ -236,7 +236,7 @@
           </mat-form-field>
         </div>
       </mat-tab>
-      <mat-tab label="{{'bookings_page.creation.title' | translate}}" *ngIf="!event.block_general" >
+      <mat-tab label="{{'bookings_page.creation.title' | translate}}" *ngIf="!event.block_general && calculateIfCanNewBooking()" >
 
       </mat-tab>
     </mat-tab-group>

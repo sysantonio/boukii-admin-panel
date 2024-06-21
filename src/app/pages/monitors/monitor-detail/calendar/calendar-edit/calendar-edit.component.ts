@@ -269,6 +269,24 @@ export class CalendarEditComponent implements OnInit {
 
   }
 
+  calculateIfCanNewBooking() {
+    // Obtener la fecha y hora actuales
+    const now = moment();
+
+    // Convertir la fecha del curso y la hora de inicio/fin a objetos moment
+    const courseDate = moment(this.event.date_param, 'DD-MM-YYYY').format('YYYY-MM-DD')
+    const start = moment(this.event.hour_start, 'HH:mm:ss');
+
+    // Primero, comprueba si es el mismo día
+    if (!now.isSame(courseDate, 'day')) {
+      return false; // Si no es el mismo día, no es necesario comprobar la hora
+    }
+
+    // Si es el mismo día, comprueba si la hora actual es después de la hora proporcionada
+    // y si la hora proporcionada está entre la hora de inicio y fin del curso
+    return now.isBefore(start);
+  }
+
   openCreateBooking() {
     const dialogRef = this.dialog.open(BookingsCreateUpdateComponent, {
       width: '100%',

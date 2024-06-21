@@ -350,11 +350,13 @@ export class BookingsComponent {
   getUniqueBookingUsers(data: any) {
     const clientIds = new Set();
     const uniqueDates = new Set();
+    const uniqueMonitors = new Set();
     this.bookingUsersUnique = [];
     this.bookingUsersUnique = data.filter(item => {
-      if (!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) {
+      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) || !uniqueMonitors.has(item.monitor_id)) {
         clientIds.add(item.client_id);
         uniqueDates.add(item.date);
+        uniqueMonitors.add(item.monitor_id);
         return true;
       }
       return false;

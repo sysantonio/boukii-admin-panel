@@ -2306,7 +2306,8 @@ export class BookingDetailComponent implements OnInit {
 
     let bookingUsers = book.courseDates[0].course.course_type == 1 ?
       this.getBookingUsersByCourse(book.courseDates[0].course_id) :
-      this.getBookingUsersByCourseDateAndHour(book.courseDates[0].course_date_id, book.courseDates[0].hour_start)
+      this.getBookingUsersByCourseDateAndHour(book.courseDates[0].course_date_id, book.courseDates[0].hour_start,
+        book.courseDates[0].hour_end, book.courseDates[0].monitor_id)
     if(book.courseDates[0].course.course_type == 1 && book.courseDates[0].course.is_flexible) {
       bookTotalPrice -= this.getDiscountPrice(book);
     }
@@ -3203,7 +3204,9 @@ export class BookingDetailComponent implements OnInit {
   getCourseExtraForfaitPriceByDateHour(data: any) {
     let bookingUsers = this.getBookingUsersByCourseDateAndHour(
       data.course_date_id,
-      data.hour_start
+      data.hour_start,
+      data.hour_end,
+      data.monitor_id
     );
     let ret = 0;
     this.courseExtra.forEach((c) => {
@@ -3242,7 +3245,9 @@ export class BookingDetailComponent implements OnInit {
   getCourseExtraForfaitByDateHour(data: any) {
     let bookingUsers = this.getBookingUsersByCourseDateAndHour(
       data.course_date_id,
-      data.hour_start
+      data.hour_start,
+      data.hour_end,
+      data.monitor_id
     );
     let ret = [];
     this.courseExtra.forEach((c) => {
@@ -3304,7 +3309,9 @@ export class BookingDetailComponent implements OnInit {
     this.bookingService.editData.booking_users =
       this.getBookingUsersByCourseDateAndHour(
         item?.courseDates[0].course_date_id,
-        item?.courseDates[0].hour_start
+        item?.courseDates[0].hour_start,
+        item?.courseDates[0].hour_end,
+        item?.courseDates[0].monitor_id
       );
     this.bookingService.editData.is_main =
       this.bookingService.editData.client_main_id ===
@@ -3518,9 +3525,9 @@ export class BookingDetailComponent implements OnInit {
     return ret;
   }
 
-  getBookingUsersByCourseDateAndHour(dateId, hour) {
+  getBookingUsersByCourseDateAndHour(dateId, hour_start, hour_end, monitor_id) {
     return this.bookingUsers.filter(
-      (b) => b.course_date_id === dateId && b.hour_start == hour
+      (b) => b.course_date_id === dateId && b.hour_start == hour_start && b.hour_end === hour_end && b.monitor_id == monitor_id
     );
   }
 

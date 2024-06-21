@@ -612,7 +612,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     // Si es el mismo día, comprueba si la hora actual es después de la hora proporcionada
     // y si la hora proporcionada está entre la hora de inicio y fin del curso
-    return now.isAfter(hour) || (hour.isSameOrAfter(start) && hour.isSameOrBefore(end));
+    return now.isAfter(hour) || !(hour.isSameOrAfter(start) && hour.isSameOrBefore(end));
   }
 
   resetCourseDates() {
@@ -655,14 +655,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.bookingsToCreate.forEach(booking => {
         booking.courseDates.forEach(courseDate => {
           if (user.date === courseDate.date) {
-            if ((user.client_id === courseDate.client_id || user.monitor_id === courseDate.monitor_id) &&
-              this.isOverlapping(user.hour_start, user.hour_end, courseDate.hour_start, courseDate.hour_end)) {
+            const isClientOverlap = user.client_id === courseDate.client_id;
+            const isMonitorOverlap = user.monitor_id && user.monitor_id === courseDate.monitor_id;
+            const isTimeOverlap = this.isOverlapping(user.hour_start, user.hour_end, courseDate.hour_start, courseDate.hour_end);
+
+            if ((isClientOverlap || isMonitorOverlap) && isTimeOverlap) {
               overlappingBooking = courseDate;
             }
           }
         });
       });
     });
+
     return overlappingBooking;
   }
 
@@ -1536,6 +1540,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
                 }
                 this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+              }, error => {
+                  if(this.externalData) {
+                    this.closeModal();
+                  } else {
+                    this.goTo('/bookings/update/'+booking.data.id);
+                  }
+                this.snackbar.open(this.translateService.instant('"snackbar.booking.payment.error'), 'OK', {duration: 3000});
               })
           } else if(this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
             this.crudService.update('/bookings', {payment_method_id: this.defaults.payment_method_id,

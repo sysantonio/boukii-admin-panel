@@ -386,6 +386,7 @@
   "snackbar.booking_detail.mandatory": "Complete los campos de fecha y hora de la reserva del curso",
   "snackbar.booking_detail.send_mail": "El email ha sido enviado correctamente",
   "snackbar.booking_detail.send_mail.error": "Ha ocurrido un error al enviar el email",
+  "snackbar.booking.payment.error": "Ha ocurrido un error al creat el pago",
   "snackbar.booking_detail.update": "Reserva actualizada correctamente",
   "snackbar.booking_detail.notes_client": "Notas del cliente actualizadas",
   "snackbar.booking_detail.notes_school": "Notas de la escuela actualizadas",

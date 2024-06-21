@@ -379,6 +379,7 @@
   "snackbar.booking_detail.mandatory": "Remplissez les champs date et heure de la réservation du cours",
   "snackbar.booking_detail.send_mail": "L'e-mail a été envoyé avec succès",
   "snackbar.booking_detail.send_mail.error": "Une erreur s'est produite lors de l'envoi de l'e-mail",
+  "snackbar.booking.payment.error": "Une erreur s'est produite lors de la création du paiement",
   "snackbar.booking_detail.update": "Réservation mise à jour avec succès",
   "snackbar.booking_detail.notes_client": "Notes client mises à jour",
   "snackbar.booking_detail.notes_school": "Notes de l'école mises à jour",
