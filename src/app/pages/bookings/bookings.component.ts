@@ -187,7 +187,7 @@ export class BookingsComponent {
     if (!sportId) {
       return 0;
     }
-    const clientSport = client.client_sports.find(cs => cs.sport_id === sportId);
+    const clientSport = client.client_sports.find(cs => cs.sport_id === sportId && cs.school_id == this.user.schools[0].id);
     if (!clientSport || !clientSport.degree_id) {
       return 0;
     }

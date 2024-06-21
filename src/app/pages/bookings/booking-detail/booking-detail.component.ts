@@ -268,7 +268,7 @@ export class BookingDetailComponent implements OnInit {
     try {
       const data: any = await this.crudService
         .get(
-          "/degrees?perPage=" + 99999 + "&school_id=" + this.schoolSettings.id
+          "/degrees?perPage=" + 99999 + "&school_id=" +  this.user.schools[0].id
         )
         .toPromise();
       this.degreesClient = data.data.sort(
@@ -1372,7 +1372,7 @@ export class BookingDetailComponent implements OnInit {
     if (id && id !== null && sport_id && sport_id !== null) {
       const client = this.clients.find((m) => m.id === id);
       const sportObject = client?.client_sports.find(
-        (obj) => obj.sport_id === sport_id
+        (obj) => obj.sport_id === sport_id && obj.school_id == this.user.schools[0].id
       );
 
       return sportObject?.degree_id;
