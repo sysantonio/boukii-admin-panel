@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -285,6 +285,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router,
               public translateService: TranslateService, private cdr: ChangeDetectorRef,
               private dateAdapter: DateAdapter<Date>,
+              @Optional() public dialogRef: MatDialogRef<BookingsCreateUpdateComponent>,
               @Optional() @Inject(MAT_DIALOG_DATA) public externalData: any) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
@@ -420,6 +421,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       });
     }
 
+  }
+
+  closeModal(): void {
+    this.dialogRef.close();
   }
 
   setCourseType(type: string, id: number) {
@@ -1523,12 +1528,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
                   window.open(result.data, "_self");
                 } else {
-                  this.goTo('/bookings/update/'+booking.data.id);
+                  if(this.externalData) {
+                    this.closeModal();
+                  } else {
+                    this.goTo('/bookings/update/'+booking.data.id);
+                  }
+
                 }
                 this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
               })
           } else if(this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
-
             this.crudService.update('/bookings', {payment_method_id: this.defaults.payment_method_id,
               paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : 0}, booking.data.id)
               .subscribe(() => {
@@ -1540,12 +1549,20 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   .subscribe(() => {
 
                     this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-                    this.goTo('/bookings/update/'+booking.data.id);
+                    if(this.externalData) {
+                      this.closeModal();
+                    } else {
+                      this.goTo('/bookings/update/'+booking.data.id);
+                    }
                   })
               })
           } else {
             this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-            this.goTo('/bookings/update/'+booking.data.id);
+            if(this.externalData) {
+              this.closeModal();
+            } else {
+              this.goTo('/bookings/update/'+booking.data.id);
+            }
           }
 
 
