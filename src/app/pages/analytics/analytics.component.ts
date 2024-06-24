@@ -99,8 +99,8 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
       'price': '3560.00 CHF',
       'subprice': 'Taux d\'occupation',
     }
-   this.setPlotly('orange', collectiveText, 'collective', 350, 500);
-   this.setPlotly('orange', collectiveText, 'collective2', 350, 500);
+   this.setPlotly('orange', collectiveText, 'collective', 358, 500);
+   this.setPlotly('orange', collectiveText, 'collective2', 262, 500);
    this.setPlotly('green',priveText, 'prive', 350, 500);
    this.setPlotly('green',priveText, 'prive2', 350, 500);
    this.setPlotly('blue', activityText, 'activity', 350, 500);
@@ -132,17 +132,27 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
             ticks: "",  // Oculta los ticks
             showline: true,  // Muestra la línea del eje
             linecolor: "black",  // Color de la línea del eje
-            linewidth: 2  // Grosor de la línea del eje
+            linewidth: 1  // Grosor de la línea del eje
           },
+          steps: [
+            {
+              range: [0, value],
+              color: color
+            },
+            {
+              range: [value, maxValue],
+              color: "lightgrey"
+            }
+          ],
           bgcolor: "rgba(0,0,0,0)",  // Fondo transparente
-          borderwidth: 1,  // Grosor del borde
+          borderwidth: 0,  // Grosor del borde
           bordercolor: "black"  // Color del borde
         }
       }
     ];
 
     const layout = {
-      width: 540,
+      width: 400,
       height: 400,
       margin: { t: 60, b: 40, l: 40, r: 40 },  // Aumentamos el margen superior (t) para dar espacio al texto
       paper_bgcolor: "rgba(0,0,0,0)",  // Fondo del gráfico transparente
@@ -150,8 +160,10 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
       annotations: [  {
         text: percent.toFixed(2) + "%",  // Mostrar el porcentaje con dos decimales
         font: {
+          family: "Dinamit, sans-serif",
+          weight: "bold",
           size: 36,
-          color: 'black'
+          color: color
         },
         showarrow: false,
         x: 0.5,
@@ -166,12 +178,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
         {
           text: text.title,
           font: {
+            family: "Dinamit, sans-serif",
+            weight: "bold",
             size: 24,
             color: color
           },
           showarrow: false,
           x: 0,
-          y: 1.10,  // Ajustamos el valor de y para que el texto esté más arriba
+          y: 1.1,  // Ajustamos el valor de y para que el texto esté más arriba
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
@@ -182,12 +196,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
         {
           text: text.subtitle,
           font: {
-            size: 12,
+            family: "Dinamit, sans-serif",
+            weight: 'normal',
+            size: 16,
             color: 'lightgray'
           },
           showarrow: false,
           x: 0,
-          y: 1.05,
+          y: 1,
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
@@ -198,12 +214,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
         {
           text: text.price,
           font: {
+            family: "Dinamit, sans-serif",
+            weight: 'bold',
             size: 26,
             color: 'black'
           },
           showarrow: false,
           x: 0,
-          y: 0.95,  // Ajustamos el valor de y para que el texto esté más arriba
+          y: 0.87,  // Ajustamos el valor de y para que el texto esté más arriba
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
@@ -214,12 +232,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
         {
           text: text.subprice,
           font: {
-            size: 12,
+            family: "Dinamit, sans-serif",
+            size: 16,
+            weight: 'normal',
             color: 'lightgray'
           },
           showarrow: false,
           x: 0,
-          y: 0.9,
+          y: 0.8,
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
