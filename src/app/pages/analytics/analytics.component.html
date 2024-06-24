@@ -8,6 +8,79 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
+    <mat-tab-group>
+      <mat-tab label="Vista General">
+        <div class="card" style="margin: 2% 0 2% 0;">
+          <div class="px-6 py-4 border-b">
+            <h2 class="title m-0">{{'Ventas' | translate }} <span style="float: right">4550chf</span>
+          </h2>
+          </div>
+        </div>
+        <!-- Primera fila de gráficos -->
+        <div class="chart-row">
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="collective"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="prive">
+
+            </div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="activity"></div>
+          </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="voucher"></div>
+          </div>
+          </div>
+
+        </div>
+        <div class="card" style="margin: 2% 0 2% 0;">
+          <div class="px-6 py-4 border-b">
+            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">4550chf</span>
+            </h2>
+          </div>
+        </div>
+        <!-- Segunda fila de gráficos -->
+        <div class="chart-row mt-6">
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="collective2"></div>
+          </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="prive2"></div>
+          </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+            <div id="activity2"></div>
+          </div>
+          </div>
+          <div class="chart-column">
+            <div class="chart-container">
+              <h3>Horas por Tipo de Curso</h3>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Ventas">
+        <!-- Añadir contenido de la pestaña de Ventas -->
+      </mat-tab>
+
+      <mat-tab label="Monitores">
+        <!-- Añadir contenido de la pestaña de Monitores -->
+      </mat-tab>
+    </mat-tab-group>
    <!-- <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'bonus'" [route]="'bonuses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [sectionIcon]="icon"></vex-aio-table>-->
   </vex-page-layout-content>
 </vex-page-layout>

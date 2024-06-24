@@ -17,7 +17,8 @@ import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widg
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AnalyticsComponent } from './analytics.component';
-import { AnalyticsRoutingModule } from './analytics-routing.module';
+import { AnalyticsRoutingModule } from './analytics-routing.module';import {MatTabsModule} from '@angular/material/tabs';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [AnalyticsComponent],
@@ -40,7 +41,9 @@ import { AnalyticsRoutingModule } from './analytics-routing.module';
     WidgetTableModule,
     //LanguageCreateUpdateModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    MatTabsModule,
+    TranslateModule
   ]
 })
 export class AnalyticsModule {

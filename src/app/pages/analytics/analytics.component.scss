@@ -1,0 +1,21 @@
+.chart-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chart-column {
+  flex: 1 1 calc(25% - 1rem);
+  min-width: calc(25% - 1rem);
+}
+
+.chart-container {
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}

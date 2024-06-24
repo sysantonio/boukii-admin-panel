@@ -12,6 +12,7 @@ import { AuthService } from 'src/service/auth.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
