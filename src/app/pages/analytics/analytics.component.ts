@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BonusesCreateUpdateComponent} from '../bonuses/bonuses-create-update/bonuses-create-update.component';
-import {Color, ScaleType} from '@swimlane/ngx-charts';
 import Plotly from 'plotly.js-dist-min'
 
 @Component({
@@ -51,12 +50,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
     { name: 'Activites', value: 3560 }
   ];
 
-  colorScheme: Color = {
-    name: 'myScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
 
   thresholds = {
     '0': { color: '#C7B42C' },
