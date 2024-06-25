@@ -8,39 +8,43 @@
     </button>
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
-    <mat-tab-group>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Vista General">
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
             <h2 class="title m-0">{{'Ventas' | translate }} <span style="float: right">4550chf</span>
-          </h2>
+            </h2>
           </div>
         </div>
         <!-- Primera fila de gráficos -->
         <div class="chart-row">
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-            <div id="collective"></div>
+              <div id="collective"></div>
             </div>
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-            <div id="prive">
+              <div id="prive">
 
-            </div>
+              </div>
             </div>
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-            <div id="activity"></div>
-          </div>
+              <div id="activity"></div>
+            </div>
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-            <div id="voucher"></div>
+              <div id="voucher"></div>
+            </div>
           </div>
+          <div class="chart-column-lines">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="user-session-analytics" style="width: 100%; height: 400px;"></div>
+            </div>
           </div>
-
         </div>
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
@@ -52,22 +56,37 @@
         <div class="chart-row mt-6">
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-            <div id="collective2"></div>
-          </div>
-          </div>
-          <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
-            <div id="prive2"></div>
-          </div>
+              <div id="collective2"></div>
+            </div>
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-            <div id="activity2"></div>
-          </div>
+              <div id="prive2"></div>
+            </div>
           </div>
           <div class="chart-column">
-            <div class="chart-container">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="activity2"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card course-hours" style="padding: 8% 0 0 0;">
               <h3>Horas por Tipo de Curso</h3>
+              <h4>Total: {{ totalHours }} horas</h4>
+              <div *ngFor="let course of courseTypeHoursData" class="course">
+                <div class="course-info">
+                  <div class="course-bar" [style.width.%]="getPercentage(course.value)" [style.backgroundColor]="course.color"></div>
+                  <div class="course-details">
+                    <span class="course-name">{{ course.name }}</span>
+                    <span class="course-value">{{ course.value }} horas</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-column-lines">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="user-session-analytics2" style="width: 100%; height: 400px;"></div>
             </div>
           </div>
         </div>
@@ -78,9 +97,55 @@
       </mat-tab>
 
       <mat-tab label="Monitores">
-        <!-- Añadir contenido de la pestaña de Monitores -->
+        <div class="card" style="margin: 2% 0 2% 0;">
+          <div class="px-6 py-4 border-b">
+            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">4550chf</span>
+            </h2>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="collective3"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="prive3"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="activity3"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card course-hours" style="padding: 8% 0 0 0;">
+              <h3>Horas por Tipo de Curso</h3>
+              <h4>Total: {{ totalHours }} horas</h4>
+              <div *ngFor="let course of courseTypeHoursData" class="course">
+                <div class="course-info">
+                  <div class="course-bar" [style.width.%]="getPercentage(course.value)" [style.backgroundColor]="course.color"></div>
+                  <div class="course-details">
+                    <span class="course-name">{{ course.name }}</span>
+                    <span class="course-value">{{ course.value }} horas</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-column-lines">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="user-session-analytics3" style="width: 100%; height: 400px;"></div>
+            </div>
+          </div>
+        </div>
+        <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'menu.monitors'" [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+                        [with]="'&with[]=sports&with[]=monitorsSchools&with[]=monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                      ></vex-aio-table>
+
       </mat-tab>
     </mat-tab-group>
-   <!-- <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'bonus'" [route]="'bonuses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [sectionIcon]="icon"></vex-aio-table>-->
+    <!-- <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'bonus'" [route]="'bonuses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [sectionIcon]="icon"></vex-aio-table>-->
   </vex-page-layout-content>
 </vex-page-layout>

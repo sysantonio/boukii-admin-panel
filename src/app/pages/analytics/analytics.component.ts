@@ -1,6 +1,10 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BonusesCreateUpdateComponent} from '../bonuses/bonuses-create-update/bonuses-create-update.component';
 import Plotly from 'plotly.js-dist-min'
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import Swiper from 'swiper';
+import {MonitorsCreateUpdateComponent} from '../monitors/monitors-create-update/monitors-create-update.component';
+import {TableColumn} from '../../../@vex/interfaces/table-column.interface';
 
 @Component({
   selector: 'vex-analytics',
@@ -8,60 +12,35 @@ import Plotly from 'plotly.js-dist-min'
   styleUrls: ['./analytics.component.scss']
 })
 export class AnalyticsComponent implements OnInit, AfterViewInit{
-
-  salesData = [
-    { name: 'Cours Collectifs', value: 3560 },
-    { name: 'Cours Privés', value: 3560 },
-    { name: 'Activites', value: 3560 },
-    { name: 'Bonos regalo', value: 3560 }
-  ];
-
-  collectiveCoursesData = [
-    { name: 'Cours Collectifs', value: 3560 }
-  ];
-
-  privateCoursesData = [
-    { name: 'Cours Privés', value: 3560 }
-  ];
-
-  activitiesData = [
-    { name: 'Activites', value: 3560 }
-  ];
-
-  giftVoucherData = [
-    { name: 'Bonos regalo', value: 3560 }
-  ];
-
-  activeMonitorsData = [
-    { name: 'Monitores Activos', value: 23, max:100 }
-  ];
-
-  workedHoursData = [
-    { name: 'Horas trabajadas', value: 6780 }
-  ];
-
-  sportHoursData = [
-    { name: 'Horas por deporte', value: 6780 }
-  ];
-
   courseTypeHoursData = [
-    { name: 'Cours Collectifs', value: 3560 },
-    { name: 'Cours Privés', value: 3560 },
-    { name: 'Activites', value: 3560 }
+    { name: 'Cours Collectifs', value: 3560, color: '#ff5733' },
+    { name: 'Cours Privés', value: 4560, color: '#33c7ff' },
+    { name: 'Activites', value: 2560, color: '#ff33b8' }
   ];
 
 
-  thresholds = {
-    '0': { color: '#C7B42C' },
-    '75': { color: '#5AA454' },
-    '90': { color: '#A10A28' }
-  };
+  user: any;
+  icon = '../../../assets/img/icons/monitores.svg';
+  totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.value, 0);
+  createComponent = MonitorsCreateUpdateComponent;
+  entity = '/admin/statistics/bookings/monitors';
+  deleteEntity = '/monitors';
 
-  valueFormatting = (value: number): string => {
-    return `${value}%`;
+  columns: TableColumn<any>[] = [
+    { label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true },
+    { label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'cost_collective', property: 'cost_collective', type: 'price', visible: true },
+    { label: 'cost_private', property: 'cost_private', type: 'price', visible: true },
+    { label: 'cost_activities', property: 'cost_activities', type: 'price', visible: true },
+    { label: 'total_hours', property: 'total_hours', type: 'text', visible: true },
+    { label: 'total_cost', property: 'total_cost', type: 'price', visible: true },
+  ];
+  constructor() {
+    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
   }
-
-  constructor() { }
 
   ngOnInit(): void {
 
@@ -94,11 +73,44 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
     }
    this.setPlotly('orange', collectiveText, 'collective', 358, 500);
    this.setPlotly('orange', collectiveText, 'collective2', 262, 500);
+
    this.setPlotly('green',priveText, 'prive', 350, 500);
    this.setPlotly('green',priveText, 'prive2', 350, 500);
+
    this.setPlotly('blue', activityText, 'activity', 350, 500);
    this.setPlotly('blue', activityText, 'activity2', 350, 500);
+
    this.setPlotly('magenta', voucherText, 'voucher', 350, 500);
+    this.setUserSessionAnalytics(false);
+    this.setCourseTypeHours();
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    // Si el índice de la pestaña es 1 (No Disponibles)
+    let collectiveText = {
+      'title': 'Cours Collectifs',
+      'subtitle': 'Ventes total',
+      'price': '3560.00 CHF',
+      'subprice': 'Taux d\'occupation',
+    }
+    let priveText = {
+      'title': 'Cours Prive',
+      'subtitle': 'Ventes total',
+      'price': '3560.00 CHF',
+      'subprice': 'Taux d\'occupation',
+    }
+    let activityText = {
+      'title': 'Activities',
+      'subtitle': 'Ventes total',
+      'price': '3560.00 CHF',
+      'subprice': 'Taux d\'occupation',
+    }
+    if (event.index === 2 ) {
+      this.setUserSessionAnalytics(true);
+      this.setPlotly('orange', collectiveText, 'collective3', 262, 500);
+      this.setPlotly('green',priveText, 'prive3', 350, 500);
+      this.setPlotly('blue', activityText, 'activity3', 350, 500);
+    }
   }
 
   setPlotly(color, text, id, value, maxValue) {
@@ -145,8 +157,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
     ];
 
     const layout = {
-      width: 400,
-      height: 400,
+      height: 300,
       margin: { t: 60, b: 40, l: 40, r: 40 },  // Aumentamos el margen superior (t) para dar espacio al texto
       paper_bgcolor: "rgba(0,0,0,0)",  // Fondo del gráfico transparente
       plot_bgcolor: "rgba(0,0,0,0)",   // Fondo del área del gráfico transparente
@@ -250,5 +261,65 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
     }
 
     Plotly.newPlot(id, data, layout, config);
+  }
+
+  setUserSessionAnalytics(monitors) {
+    const trace1 = {
+      x: ['2021-04-28', '2021-04-29', '2021-04-30', '2021-05-01', '2021-05-02', '2021-05-03'],
+      y: [10, 15, 13, 17, 21, 22],
+      mode: 'lines+markers',
+      name: 'Users',
+      line: {color: 'blue'}
+    };
+
+    const trace2 = {
+      x: ['2021-04-28', '2021-04-29', '2021-04-30', '2021-05-01', '2021-05-02', '2021-05-03'],
+      y: [16, 5, 11, 9, 15, 12],
+      mode: 'lines+markers',
+      name: 'Sessions',
+      line: {color: 'green'}
+    };
+
+    const data = [trace1, trace2];
+
+    const layout = {
+      title: 'User & Session Analytics',
+      xaxis: {
+        title: 'Date'
+      },
+      yaxis: {
+        title: 'Count'
+      },
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      showlegend: true,
+    };
+
+    if(monitors) {
+      Plotly.newPlot('user-session-analytics3', data, layout);
+    } else {
+      Plotly.newPlot('user-session-analytics', data, layout);
+      Plotly.newPlot('user-session-analytics2', data, layout);
+    }
+
+  }
+
+  getPercentage(value: number) {
+    return (value / this.totalHours) * 100;
+  }
+
+  setCourseTypeHours() {
+    const data = [{
+      values: [3560, 3560, 3560],
+      labels: ['Cours Collectifs', 'Cours Privés', 'Activites'],
+      type: 'pie'
+    }];
+
+    const layout = {
+      height: 300,
+      title: 'Horas tipo curso'
+    };
+
+    Plotly.newPlot('course-type-hours', data, layout);
   }
 }

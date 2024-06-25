@@ -5,8 +5,13 @@
 }
 
 .chart-column {
-  flex: 1 1 calc(25% - 1rem);
-  min-width: calc(25% - 1rem);
+  flex: 1 1 calc(15% - 1rem);
+  min-width: calc(15% - 1rem);
+}
+
+.chart-column-lines {
+  flex: 1 1 calc(40% - 1rem);
+  min-width: calc(40% - 1rem);
 }
 
 .chart-container {
@@ -18,4 +23,48 @@
 
 .mt-6 {
   margin-top: 1.5rem;
+}
+
+.course-hours {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  h4 {
+    margin-bottom: 20px;
+  }
+
+  .course {
+    margin-bottom: 10px;
+
+    .course-info {
+      display: flex;
+      align-items: center;
+
+      .course-bar {
+        height: 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+      }
+
+      .course-details {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .course-name {
+          font-weight: bold;
+        }
+
+        .course-value {
+          color: #555;
+        }
+      }
+    }
+  }
 }
