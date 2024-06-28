@@ -279,7 +279,7 @@ export class CalendarEditComponent implements OnInit {
 
     // Primero, comprueba si es el mismo día
     if (!now.isSame(courseDate, 'day')) {
-      return false; // Si no es el mismo día, no es necesario comprobar la hora
+      return true; // Si no es el mismo día, no es necesario comprobar la hora
     }
 
     // Si es el mismo día, comprueba si la hora actual es después de la hora proporcionada

@@ -130,38 +130,38 @@
           </button>
         </div>
 
-        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings')">
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="activeBooking = true; finishedBooking=false; allBookings=false;finishedBooking=false;filterData()">
             <span [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
         </div>
-        <div *ngIf="entity.includes('bookings')">
+        <div *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
             <span [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">{{'finished' | translate}}</span>
           </button>
         </div>
-        <div *ngIf="entity.includes('bookings')">
+        <div *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = false; activeBooking=false; allBookings=false; filterData()">
             <span [ngStyle]="{'color': !allBookings && !finishedBooking && !activeBooking ? '#fe3085' : 'black'}">{{'current' | translate}}</span>
           </button>
         </div>
-        <div *ngIf="entity.includes('bookings')">
+        <div *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData()">
             <span [ngStyle]="{'color': allBookings && !finishedBooking ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
           </button>
         </div>
 
-        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('monitor')">
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('monitor') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="activeMonitor = true; inactiveMonitor=false; allMonitors=false; filterData()">
             <span [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
         </div>
-        <div *ngIf="entity.includes('monitor')">
+        <div *ngIf="entity.includes('monitor') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData()">
             <span [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">{{'inactive' | translate}}</span>
           </button>
         </div>
-        <div *ngIf="entity.includes('monitor')">
+        <div *ngIf="entity.includes('monitor') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="allMonitors = true; activeMonitor=false; inactiveMonitor=false; filterData()">
             <span [ngStyle]="{'color': allMonitors ? '#fe3085' : 'black'}">{{'all' | translate}}</span>
           </button>

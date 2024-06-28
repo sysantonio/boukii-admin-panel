@@ -1,21 +1,25 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {BonusesCreateUpdateComponent} from '../bonuses/bonuses-create-update/bonuses-create-update.component';
 import Plotly from 'plotly.js-dist-min'
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import Swiper from 'swiper';
 import {MonitorsCreateUpdateComponent} from '../monitors/monitors-create-update/monitors-create-update.component';
 import {TableColumn} from '../../../@vex/interfaces/table-column.interface';
+import {Router} from '@angular/router';
+import {ApiCrudService} from '../../../service/crud.service';
+import {Observable} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-analytics',
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss']
 })
-export class AnalyticsComponent implements OnInit, AfterViewInit{
+export class AnalyticsComponent implements OnInit, AfterViewInit {
   courseTypeHoursData = [
-    { name: 'Cours Collectifs', value: 3560, color: '#ff5733' },
-    { name: 'Cours Privés', value: 4560, color: '#33c7ff' },
-    { name: 'Activites', value: 2560, color: '#ff33b8' }
+    {name: this.translateService.instant('course_colective'), value: 0, color: '#ff5733'},
+    {name:  this.translateService.instant('course_private'), value: 0, color: '#33c7ff'},
+    {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
   ];
 
 
@@ -23,66 +27,221 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
   icon = '../../../assets/img/icons/monitores.svg';
   totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.value, 0);
   createComponent = MonitorsCreateUpdateComponent;
+  showDetail: boolean = false;
   entity = '/admin/statistics/bookings/monitors';
+  selectedId = 1;
   deleteEntity = '/monitors';
+  totalSportHours: number = 0;
+  totalPriceSell = 0;
+  currency = '';
+  sportHoursData: any[] = [];
 
   columns: TableColumn<any>[] = [
-    { label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium'] },
-    { label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium'] },
-    { label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true },
-    { label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'cost_collective', property: 'cost_collective', type: 'price', visible: true },
-    { label: 'cost_private', property: 'cost_private', type: 'price', visible: true },
-    { label: 'cost_activities', property: 'cost_activities', type: 'price', visible: true },
-    { label: 'total_hours', property: 'total_hours', type: 'text', visible: true },
-    { label: 'total_cost', property: 'total_cost', type: 'price', visible: true },
+    {label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium']},
+    {label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium']},
+    {label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true},
+    {label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
+    {label: 'total_cost', property: 'total_cost', type: 'price', visible: true},
   ];
-  constructor() {
+
+  columnsDetail: TableColumn<any>[] = [
+    {label: 'date', property: 'date', type: 'date', visible: true, cssClasses: ['font-medium']},
+    {label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium']},
+    {label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true},
+    {label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
+    {label: 'total_cost', property: 'total_cost', type: 'price', visible: true},
+  ];
+
+  constructor(private crudService: ApiCrudService, private router: Router, public translateService: TranslateService,
+              private cdr: ChangeDetectorRef) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
   }
 
   ngOnInit(): void {
+    let settings = JSON.parse(this.user.schools[0].settings);
+    this.currency = settings?.taxes?.currency;
+    this.getBookingsTotal(1).subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('course_colective'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.updateCourseValue(0, res.data.total_hours);
+      this.totalPriceSell += res.data.total_price;
+      this.setPlotly('orange', collectiveText, 'collective',
+        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
+    });
+    this.getBookingsTotal(2).subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('course_private'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.updateCourseValue(1, res.data.total_hours);
+      this.totalPriceSell += res.data.total_price;
+      this.setPlotly('green', collectiveText, 'prive',
+        res.data.total_places - res.data.total_available_places, res.data.total_places)
+
+    });
+    this.getBookingsTotal(3).subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('activity'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.updateCourseValue(2, res.data.total_hours);
+      this.totalPriceSell += res.data.total_price;
+      this.setPlotly('blue', collectiveText, 'activity',
+        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
+    });
+
+    this.getActiveMonitors().subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('monitors'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.busy + '/' + res.data.total,
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.setPlotly('blue', collectiveText, 'activeMonitors', res.data.busy, res.data.total)
+    });
+
+    this.getTotalHours().subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('hours_worked'),
+        'subtitle': this.translateService.instant('hours_worked_total'),
+        'price': res.data.totalWorkedHours + 'h',
+        'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
+      }
+      this.setPlotly('blue', collectiveText, 'totalHours', res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
+    });
+
+    this.getTotalHoursBySport().subscribe(res => {
+      this.generateSportPlots(res.data);
+    });
 
   }
 
+  updateTotalHours() {
+    this.totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.value, 0);
+  }
+
+  updateCourseValue(index: number, newValue: number) {
+    this.courseTypeHoursData[index].value = newValue;
+    this.updateTotalHours();
+
+    // Crear una nueva referencia al array
+    this.courseTypeHoursData = [...this.courseTypeHoursData];
+    this.cdr.detectChanges();
+  }
+
+  getBookingsTotal(type): Observable<any> {
+    return this.crudService.list('/admin/statistics/bookings', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type);
+  }
+
+  getActiveMonitors(): Observable<any> {
+    return this.crudService.list('/admin/statistics/bookings/monitors/active', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id);
+  }
+
+  getTotalHours(): Observable<any> {
+    return this.crudService.list('/admin/statistics/bookings/monitors/hours', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id);
+  }
+
+  getTotalHoursBySport(): Observable<any> {
+    return this.crudService.list('/admin/statistics/bookings/monitors/sports', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id);
+  }
+
+  showDetailEvent(event: any) {
+    this.showDetail = true;
+    this.selectedId = event.item.id;
+    let settings = JSON.parse(this.user.schools[0].settings);
+    this.getBookingsTotal(1).subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('course_colective'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.updateCourseValue(0, res.data.total_hours);
+      this.totalPriceSell += res.data.total_price;
+      this.setPlotly('orange', collectiveText, 'collectiveFiltered',
+        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
+    });
+    this.getBookingsTotal(2).subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('course_private'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.updateCourseValue(1, res.data.total_hours);
+      this.totalPriceSell += res.data.total_price;
+      this.setPlotly('green', collectiveText, 'priveFiltered',
+        res.data.total_places - res.data.total_available_places, res.data.total_places)
+
+    });
+    this.getBookingsTotal(3).subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('activity'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.updateCourseValue(2, res.data.total_hours);
+      this.totalPriceSell += res.data.total_price;
+      this.setPlotly('blue', collectiveText, 'activityFiltered',
+        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
+    });
+  }
+
+  closeDetailEvent(event: any) {
+    this.showDetail = false;
+    this.getActiveMonitors().subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('monitors'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': res.data.busy + '/' + res.data.total,
+        'subprice': this.translateService.instant('occupation'),
+      }
+      this.setPlotly('blue', collectiveText, 'activeMonitorsFiltered', res.data.busy, res.data.total)
+    });
+
+    this.getTotalHours().subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('hours_worked'),
+        'subtitle': this.translateService.instant('hours_worked_total'),
+        'price': res.data.totalWorkedHours + 'h',
+        'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
+      }
+      this.setPlotly('blue', collectiveText, 'totalHoursFiltered', res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
+    });
+  }
+
   ngAfterViewInit(): void {
-    let collectiveText = {
-      'title': 'Cours Collectifs',
-      'subtitle': 'Ventes total',
-      'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
-    }
-    let priveText = {
-      'title': 'Cours Prive',
-      'subtitle': 'Ventes total',
-      'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
-    }
-    let activityText = {
-      'title': 'Activities',
-      'subtitle': 'Ventes total',
-      'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
-    }
     let voucherText = {
       'title': 'Bonos',
       'subtitle': 'Ventes total',
       'price': '3560.00 CHF',
       'subprice': 'Taux d\'occupation',
     }
-   this.setPlotly('orange', collectiveText, 'collective', 358, 500);
-   this.setPlotly('orange', collectiveText, 'collective2', 262, 500);
-
-   this.setPlotly('green',priveText, 'prive', 350, 500);
-   this.setPlotly('green',priveText, 'prive2', 350, 500);
-
-   this.setPlotly('blue', activityText, 'activity', 350, 500);
-   this.setPlotly('blue', activityText, 'activity2', 350, 500);
-
-   this.setPlotly('magenta', voucherText, 'voucher', 350, 500);
+    this.setPlotly('magenta', voucherText, 'voucher', 350, 500);
     this.setUserSessionAnalytics(false);
-    this.setCourseTypeHours();
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 
   onTabChange(event: MatTabChangeEvent) {
@@ -105,24 +264,44 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
       'price': '3560.00 CHF',
       'subprice': 'Taux d\'occupation',
     }
-    if (event.index === 2 ) {
+    if (event.index === 2) {
       this.setUserSessionAnalytics(true);
-      this.setPlotly('orange', collectiveText, 'collective3', 262, 500);
-      this.setPlotly('green',priveText, 'prive3', 350, 500);
-      this.setPlotly('blue', activityText, 'activity3', 350, 500);
+      this.getActiveMonitors().subscribe(res => {
+        let collectiveText = {
+          'title': this.translateService.instant('monitors'),
+          'subtitle': this.translateService.instant('sales'),
+          'price': res.data.busy + '/' + res.data.total,
+          'subprice': this.translateService.instant('occupation'),
+        }
+        this.setPlotly('blue', collectiveText, 'activeMonitorsFiltered', res.data.busy, res.data.total)
+      });
+
+      this.getTotalHours().subscribe(res => {
+        let collectiveText = {
+          'title': this.translateService.instant('hours_worked'),
+          'subtitle': this.translateService.instant('hours_worked_total'),
+          'price': res.data.totalWorkedHours + 'h',
+          'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
+        }
+        this.setPlotly('blue', collectiveText, 'totalHoursFiltered', res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
+      });
     }
   }
 
   setPlotly(color, text, id, value, maxValue) {
 
     // Calcular el porcentaje
-    const percent = (value / maxValue) * 100;
+    let percent:any = (value /  maxValue) * 100;
+
+    if (isNaN(percent)) {
+      percent = 0;
+    }
 
     const data = [
       {
-        domain: { x: [0, 1], y: [0, 1] },
-        value: value,  // Valor del medidor
-        title: { text: "Medidor Semi Circular" },
+        domain: {x: [0, 1], y: [0, 1]},
+        value: percent,  // Valor del medidor
+        title: {text: "Medidor Semi Circular"},
         type: "indicator",
         mode: "gauge",
         gauge: {
@@ -132,7 +311,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
             thickness: 1  // Ajusta el grosor de la barra
           },
           axis: {
-            range: [null, maxValue],  // Rango del eje
+            range: [null, 100],  // Rango del eje
             showticklabels: false,  // Oculta las etiquetas de las marcas
             ticks: "",  // Oculta los ticks
             showline: true,  // Muestra la línea del eje
@@ -141,11 +320,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
           },
           steps: [
             {
-              range: [0, value],
+              range: [0, percent],
               color: color
             },
             {
-              range: [value, maxValue],
+              range: [percent, 100],
               color: "lightgrey"
             }
           ],
@@ -157,11 +336,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
     ];
 
     const layout = {
-      height: 300,
-      margin: { t: 60, b: 40, l: 40, r: 40 },  // Aumentamos el margen superior (t) para dar espacio al texto
+      height: 250,
+      margin: {t: 45, b: 10, l: 40, r: 40},  // Aumentamos el margen superior (t) para dar espacio al texto
       paper_bgcolor: "rgba(0,0,0,0)",  // Fondo del gráfico transparente
       plot_bgcolor: "rgba(0,0,0,0)",   // Fondo del área del gráfico transparente
-      annotations: [  {
+      annotations: [{
         text: percent.toFixed(2) + "%",  // Mostrar el porcentaje con dos decimales
         font: {
           family: "Dinamit, sans-serif",
@@ -177,14 +356,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
         xanchor: 'center',
         yanchor: 'middle',
         align: 'center',
-        pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+        pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
       },
         {
           text: text.title,
           font: {
             family: "Dinamit, sans-serif",
             weight: "bold",
-            size: 24,
+            size: 20,
             color: color
           },
           showarrow: false,
@@ -195,14 +374,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
           xanchor: 'left',
           yanchor: 'bottom',
           align: 'left',
-          pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         },
         {
           text: text.subtitle,
           font: {
             family: "Dinamit, sans-serif",
             weight: 'normal',
-            size: 16,
+            size: 14,
             color: 'lightgray'
           },
           showarrow: false,
@@ -213,14 +392,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
           xanchor: 'left',
           yanchor: 'bottom',
           align: 'left',
-          pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         },
         {
           text: text.price,
           font: {
             family: "Dinamit, sans-serif",
             weight: 'bold',
-            size: 26,
+            size: 22,
             color: 'black'
           },
           showarrow: false,
@@ -231,13 +410,13 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
           xanchor: 'left',
           yanchor: 'bottom',
           align: 'left',
-          pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         },
         {
           text: text.subprice,
           font: {
             family: "Dinamit, sans-serif",
-            size: 16,
+            size: 14,
             weight: 'normal',
             color: 'lightgray'
           },
@@ -249,19 +428,47 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
           xanchor: 'left',
           yanchor: 'bottom',
           align: 'left',
-          pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         }
       ],
 
     };
     var config = {
       displayModeBar: false,  // Oculta el modo de visualización que incluye el botón de descarga
-        displaylogo: false,
-        modeBarButtonsToRemove: ['pan2d','lasso2d']// Oculta la etiqueta "Produced by Plotly"
+      displaylogo: false,
+      responsive: true,
+      modeBarButtonsToRemove: ['pan2d', 'lasso2d']// Oculta la etiqueta "Produced by Plotly"
     }
 
     Plotly.newPlot(id, data, layout, config);
+
+    window.onresize = function() {
+      Plotly.Plots.resize(document.getElementById(id));
+    };
   }
+
+  processSportData(data) {
+    this.totalSportHours = 0;
+    this.sportHoursData = Object.keys(data).map(sportId => {
+      const sportData = data[sportId];
+      this.totalSportHours += sportData.hours;
+      return {
+        id: sportData.sport.id,
+        name: sportData.sport.name,
+        value: sportData.hours,
+        icon: sportData.sport.icon_selected,
+        color: 'blue'  // Puedes ajustar para usar colores específicos
+      };
+    });
+  }
+
+
+  generateSportPlots(data) {
+
+    // Llamar al método setPlotly con todos los datos de deportes combinados
+    this.processSportData(data);
+  }
+
 
   setUserSessionAnalytics(monitors) {
     const trace1 = {
@@ -296,7 +503,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
     };
 
     if(monitors) {
-      Plotly.newPlot('user-session-analytics3', data, layout);
+      Plotly.newPlot('user-session-analytics4', data, layout);
     } else {
       Plotly.newPlot('user-session-analytics', data, layout);
       Plotly.newPlot('user-session-analytics2', data, layout);
@@ -304,22 +511,8 @@ export class AnalyticsComponent implements OnInit, AfterViewInit{
 
   }
 
-  getPercentage(value: number) {
-    return (value / this.totalHours) * 100;
+  getPercentage(value: number, total) {
+    return (value / total) * 100;
   }
 
-  setCourseTypeHours() {
-    const data = [{
-      values: [3560, 3560, 3560],
-      labels: ['Cours Collectifs', 'Cours Privés', 'Activites'],
-      type: 'pie'
-    }];
-
-    const layout = {
-      height: 300,
-      title: 'Horas tipo curso'
-    };
-
-    Plotly.newPlot('course-type-hours', data, layout);
-  }
 }

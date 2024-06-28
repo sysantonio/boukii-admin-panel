@@ -1,8 +1,6 @@
 <vex-page-layout>
-
   <vex-secondary-toolbar>
     <vex-breadcrumbs [crumbs]="[{icon: 'stats-2', text: ''}, {text: 'list', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
-
     <button class="ml-2" color="primary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
@@ -12,7 +10,7 @@
       <mat-tab label="Vista General">
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">{{'Ventas' | translate }} <span style="float: right">4550chf</span>
+            <h2 class="title m-0">{{'Ventas' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>
             </h2>
           </div>
         </div>
@@ -25,9 +23,7 @@
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="prive">
-
-              </div>
+              <div id="prive"></div>
             </div>
           </div>
           <div class="chart-column">
@@ -42,13 +38,13 @@
           </div>
           <div class="chart-column-lines">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="user-session-analytics" style="width: 100%; height: 400px;"></div>
+              <div id="user-session-analytics" style="width: 100%; height: 300px;"></div>
             </div>
           </div>
         </div>
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">4550chf</span>
+            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>
             </h2>
           </div>
         </div>
@@ -56,29 +52,48 @@
         <div class="chart-row mt-6">
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="collective2"></div>
+              <div id="activeMonitors"></div>
             </div>
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="prive2"></div>
+              <div id="totalHours"></div>
             </div>
           </div>
           <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
-              <div id="activity2"></div>
+            <div class="card course-hours" style="padding: 8%;">
+              <h3>{{ 'hour' | translate }}s {{'sport' | translate}}</h3>
+              <h4>{{ 'total' | translate }}: {{ totalSportHours }} {{ 'hour' | translate }}s</h4>
+              <div *ngFor="let sport of sportHoursData" class="course">
+                <div class="course-info">
+                  <img style="background-color: darkgrey; margin-right: 5px" [src]="sport.icon" width="30" height="30">
+                  <div class="course-bar-container">
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(sport.value, totalSportHours)"
+                         [style.backgroundColor]="sport.color"></div>
+                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(sport.value, totalSportHours)"></div>
+                  </div>
+                  <div class="course-details">
+                    <span class="course-name"></span>
+                    <span class="course-value">{{ sport.value }} {{ 'hour' | translate }}s</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="chart-column">
-            <div class="card course-hours" style="padding: 8% 0 0 0;">
-              <h3>Horas por Tipo de Curso</h3>
-              <h4>Total: {{ totalHours }} horas</h4>
+            <div class="card course-hours" style="padding: 8%;">
+              <h3>{{ 'hour' | translate }}s</h3>
+              <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
               <div *ngFor="let course of courseTypeHoursData" class="course">
                 <div class="course-info">
-                  <div class="course-bar" [style.width.%]="getPercentage(course.value)" [style.backgroundColor]="course.color"></div>
+                  <div class="course-bar-container">
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
+                         [style.backgroundColor]="course.color"></div>
+                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
+                  </div>
                   <div class="course-details">
                     <span class="course-name">{{ course.name }}</span>
-                    <span class="course-value">{{ course.value }} horas</span>
+                    <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
                   </div>
                 </div>
               </div>
@@ -86,49 +101,106 @@
           </div>
           <div class="chart-column-lines">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="user-session-analytics2" style="width: 100%; height: 400px;"></div>
+              <div id="user-session-analytics2" style="width: 100%; height: 300px;"></div>
             </div>
           </div>
         </div>
       </mat-tab>
-
       <mat-tab label="Ventas">
         <!-- Añadir contenido de la pestaña de Ventas -->
       </mat-tab>
-
       <mat-tab label="Monitores">
-        <div class="card" style="margin: 2% 0 2% 0;">
+        <div class="card" style="margin: 2% 0 2% 0;" *ngIf="!showDetail">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">4550chf</span>
+            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>
             </h2>
           </div>
         </div>
-        <div class="chart-row">
+        <div class="chart-row mt-6" *ngIf="!showDetail">
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="collective3"></div>
+              <div id="activeMonitorsFiltered"></div>
             </div>
           </div>
           <div class="chart-column">
             <div class="card" style="padding: 8% 0 0 0;">
-              <div id="prive3"></div>
+              <div id="totalHoursFiltered"></div>
             </div>
           </div>
           <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
-              <div id="activity3"></div>
+            <div class="card course-hours" style="padding: 8%;">
+              <h3>{{ 'hour' | translate }}s {{'sport' | translate}}</h3>
+              <h4>{{ 'total' | translate }}: {{ totalSportHours }} {{ 'hour' | translate }}s</h4>
+              <div *ngFor="let sport of sportHoursData" class="course">
+                <div class="course-info">
+                  <img style="background-color: darkgrey; margin-right: 5px" [src]="sport.icon" width="30" height="30">
+                  <div class="course-bar-container">
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(sport.value, totalSportHours)"
+                         [style.backgroundColor]="sport.color"></div>
+                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(sport.value, totalSportHours)"></div>
+                  </div>
+                  <div class="course-details">
+                    <span class="course-name"></span>
+                    <span class="course-value">{{ sport.value }} {{ 'hour' | translate }}s</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="chart-column">
-            <div class="card course-hours" style="padding: 8% 0 0 0;">
-              <h3>Horas por Tipo de Curso</h3>
-              <h4>Total: {{ totalHours }} horas</h4>
+            <div class="card course-hours" style="padding: 8%;">
+              <h3>{{ 'hour' | translate }}s</h3>
+              <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
               <div *ngFor="let course of courseTypeHoursData" class="course">
                 <div class="course-info">
-                  <div class="course-bar" [style.width.%]="getPercentage(course.value)" [style.backgroundColor]="course.color"></div>
+                  <div class="course-bar-container">
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
+                         [style.backgroundColor]="course.color"></div>
+                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
+                  </div>
                   <div class="course-details">
                     <span class="course-name">{{ course.name }}</span>
-                    <span class="course-value">{{ course.value }} horas</span>
+                    <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-column-lines">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="user-session-analytics4" style="width: 100%; height: 300px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-row" *ngIf="showDetail">
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="collectiveFiltered"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="priveFiltered"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="activityFiltered"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card course-hours" style="padding: 8%;">
+              <h3>{{ 'hour' | translate }}</h3>
+              <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
+              <div *ngFor="let course of courseTypeHoursData" class="course">
+                <div class="course-info">
+                  <div class="course-bar-container">
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)" [style.backgroundColor]="course.color"></div>
+                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
+                  </div>
+                  <div class="course-details">
+                    <span class="course-name">{{ course.name }}</span>
+                    <span class="course-value">{{ course.value }} {{ totalHours }} {{ 'hour' | translate }}s</span>
                   </div>
                 </div>
               </div>
@@ -140,12 +212,28 @@
             </div>
           </div>
         </div>
-        <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'menu.monitors'" [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-                        [with]="'&with[]=sports&with[]=monitorsSchools&with[]=monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
-                      ></vex-aio-table>
-
+        <vex-aio-table *ngIf="!showDetail" [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity"
+                       [title]="'menu.monitors'"
+                       (showDetailEvent)="showDetailEvent($event)" [showDetail]="showDetail"
+                       [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+                       [with]="'&with[]=sports&with[]=monitorsSchools&with[]=monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+        ></vex-aio-table>
+        <mat-card style="padding: 0 3%;" *ngIf="showDetail">
+          <mat-card-header style="display:block; height: 50px">
+            <div style="width: 100%;float: left;">
+              <mat-icon svgIcon="mat:close" (click)="closeDetailEvent(null)" style="cursor: pointer;float:right"></mat-icon>
+            </div>
+            <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+          </mat-card-header>
+          <mat-card-content>
+            <vex-aio-table [columns]="columnsDetail" [entity]="entity+'/'+selectedId" [deleteEntity]="deleteEntity"
+                           [title]="'menu.monitors'"
+                           [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+                           [with]="'&with[]=sports&with[]=monitorsSchools&with[]=monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+            ></vex-aio-table>
+          </mat-card-content>
+        </mat-card>
       </mat-tab>
     </mat-tab-group>
-    <!-- <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'bonus'" [route]="'bonuses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [sectionIcon]="icon"></vex-aio-table>-->
   </vex-page-layout-content>
 </vex-page-layout>

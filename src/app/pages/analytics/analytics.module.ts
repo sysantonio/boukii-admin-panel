@@ -19,6 +19,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AnalyticsComponent } from './analytics.component';
 import { AnalyticsRoutingModule } from './analytics-routing.module';import {MatTabsModule} from '@angular/material/tabs';
 import {TranslateModule} from '@ngx-translate/core';
+import {MatCardModule} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [AnalyticsComponent],
@@ -43,7 +45,9 @@ import {TranslateModule} from '@ngx-translate/core';
     MatDialogModule,
     ComponentsModule,
     MatTabsModule,
-    TranslateModule
+    TranslateModule,
+    MatCardModule,
+    MatDividerModule
   ]
 })
 export class AnalyticsModule {

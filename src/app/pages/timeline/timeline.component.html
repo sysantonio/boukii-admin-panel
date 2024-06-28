@@ -7,7 +7,7 @@
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
   </vex-secondary-toolbar>
-  <vex-page-layout-content class="-mt-6 fullwidth">
+  <vex-page-layout-content class="-mt-6 fullwidth" style="background-color: white">
     <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
     <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetail || showBlock}" *ngIf="!loading">
       <div class="header-navigation">
