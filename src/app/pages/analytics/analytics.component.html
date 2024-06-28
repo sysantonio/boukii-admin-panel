@@ -216,7 +216,7 @@
                        [title]="'menu.monitors'"
                        (showDetailEvent)="showDetailEvent($event)" [showDetail]="showDetail"
                        [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-                       [with]="'&with[]=sports&with[]=monitorsSchools&with[]=monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                       [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
         ></vex-aio-table>
         <mat-card style="padding: 0 3%;" *ngIf="showDetail">
           <mat-card-header style="display:block; height: 50px">
@@ -229,7 +229,7 @@
             <vex-aio-table [columns]="columnsDetail" [entity]="entity+'/'+selectedId" [deleteEntity]="deleteEntity"
                            [title]="'menu.monitors'"
                            [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-                           [with]="'&with[]=sports&with[]=monitorsSchools&with[]=monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                           [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
             ></vex-aio-table>
           </mat-card-content>
         </mat-card>

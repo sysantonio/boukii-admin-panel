@@ -119,6 +119,9 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   filteredSports: Observable<any[]>;
   selectedSports: any[] = [];
   openFilters: boolean = false;
+  selectedFrom = null;
+  selectedTo = null;
+  today = new Date();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -262,6 +265,14 @@ export class AioTableComponent implements OnInit, AfterViewInit {
           filter = filter + '&school_active=1';
         } else if (!this.activeMonitor && this.inactiveMonitor) {
           filter = filter + '&school_active=0';
+        }
+      }
+      if(this.entity.includes('statistics')) {
+        if (this.selectedFrom) {
+          filter = filter + '&start_date='+moment(this.selectedFrom).format('YYYY-MM-DD');
+        }
+        if (this.selectedTo) {
+          filter = filter + '&start_to='+moment(this.selectedTo).format('YYYY-MM-DD');
         }
       }
     }

@@ -23,7 +23,7 @@
       [canDelete]="false"
       [canDeactivate]="false"
       (showDetailEvent)="showDetailEvent($event)"
-      [with]="'&with[]=bookingusers.course'"
+      [with]="['bookingusers.course']"
       [filterColumn]="'school_id'"
       [filterField]="user.schools[0].id"
       [sectionIcon]="icon"

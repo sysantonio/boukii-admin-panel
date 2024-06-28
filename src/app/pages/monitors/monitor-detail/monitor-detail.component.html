@@ -445,7 +445,7 @@
 
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
               <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-              (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="'&with[]=booking&with[]=course.courseGroups.courseSubgroups'"
+              (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
               [showDetail]="showDetail">
             </vex-aio-table>
           </vex-page-layout-content>
@@ -1779,7 +1779,7 @@
 
           <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
             <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-            (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="'&with[]=booking&with[]=course.courseGroups.courseSubgroups'"
+            (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
             [showDetail]="showDetail">
           </vex-aio-table>
         </vex-page-layout-content>

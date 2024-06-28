@@ -23,7 +23,7 @@
           <mat-checkbox color="primary" [checked]="reservationTypeMultiple">{{'table.filter.multiple' | translate}}</mat-checkbox>
         </div>
 
-        <div style="float:left; width: 30%" *ngIf="entity.includes('bookings') || entity.includes('courses')">
+        <div style="float:left; width: 30%" *ngIf="(entity.includes('bookings') || entity.includes('courses'))">
           <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.course' | translate}}</span>
           <mat-checkbox color="primary" [checked]="courseColective" (change)="courseColective = !courseColective; filterData()"><span style="color:#fac710">{{'course_colective' | translate }}</span></mat-checkbox>
           <mat-checkbox color="primary" [checked]="coursePrivate" (change)="coursePrivate = !coursePrivate;filterData()"><span style="color:#2fca45">{{'course_private' | translate }}</span></mat-checkbox>
@@ -102,6 +102,8 @@
         </div>
 
 
+
+
         <!--Bonuses fake close-->
 
         <div style="margin: 0 0 0 15%" *ngIf="entity.includes('courses')">
@@ -134,6 +136,25 @@
           <button class="ml-4 flex-none" mat-button type="button" (click)="activeBooking = true; finishedBooking=false; allBookings=false;finishedBooking=false;filterData()">
             <span [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">{{'active' | translate}}</span>
           </button>
+        </div>
+
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings') && entity.includes('statistics')">
+          <label for="dateFrom">{{'settings.new_season.start' | translate}}</label>
+          <mat-form-field appearance="outline" style="width: 100%">
+
+            <input matInput id="dateFrom" [matDatepicker]="pickerFrom"   (dateChange)="filterData()" [(ngModel)]="selectedFrom" [value]="selectedFrom" >
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom [startAt]="selectedFrom"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div style="margin: 0 0 0 15%" *ngIf="entity.includes('bookings') && entity.includes('statistics')">
+          <label for="dateTo">{{'settings.new_season.end' | translate}}</label>
+
+          <mat-form-field appearance="outline" style="width: 100%">
+            <input matInput id="dateTo" [matDatepicker]="pickerTo"  (dateChange)="filterData()" [disabled]="selectedFrom === null" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo [startAt]="selectedTo"></mat-datepicker>
+          </mat-form-field>
         </div>
         <div *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
@@ -169,7 +190,7 @@
 
         <span class="flex-1"></span>
 
-        <button class="ml-4 flex-none" (click)="openFilters = !openFilters"
+        <button class="ml-4 flex-none" (click)="openFilters = !openFilters" *ngIf="!entity.includes('statistics')"
                 mat-icon-button
                 matTooltip="Filter Data"
                 type="button">
@@ -184,7 +205,7 @@
           <mat-icon svgIcon="mat:filter_list"></mat-icon>
         </button>
 
-        <button (click)="create()"
+        <button (click)="create()"  *ngIf="!entity.includes('statistics')"
                 class="ml-4 flex-none"
                 color="primary"
                 mat-mini-fab

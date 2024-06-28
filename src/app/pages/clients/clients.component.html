@@ -11,7 +11,7 @@
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
                      [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
       (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
-                     [with]="'&with[]=sports&with[]=clientSports.degree&with[]=clientsSchools&with[]=utilizers'"
+                     [with]="['sports','clientSports.degree','clientsSchools','utilizers']"
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
