@@ -86,15 +86,16 @@
               <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
               <div *ngFor="let course of courseTypeHoursData" class="course">
                 <div class="course-info">
+                  <div class="course-details">
+                    <span class="course-name">{{ course.name }}</span>
+                    <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
+                  </div>
                   <div class="course-bar-container">
                     <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
                          [style.backgroundColor]="course.color"></div>
                     <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
                   </div>
-                  <div class="course-details">
-                    <span class="course-name">{{ course.name }}</span>
-                    <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
-                  </div>
+
                 </div>
               </div>
             </div>

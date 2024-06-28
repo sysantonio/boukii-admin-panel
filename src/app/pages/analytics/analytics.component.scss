@@ -27,9 +27,11 @@
 
 .course-hours {
   padding: 20px;
-  border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 20px;
+  min-height: 275.75px;
+  max-height: 275.75px;
+  overflow-y: scroll;
 }
 
 @media (max-width: 1200px) {
