@@ -21,6 +21,10 @@ import { AnalyticsRoutingModule } from './analytics-routing.module';import {MatT
 import {TranslateModule} from '@ngx-translate/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [AnalyticsComponent],
@@ -47,7 +51,12 @@ import {MatDividerModule} from '@angular/material/divider';
     MatTabsModule,
     TranslateModule,
     MatCardModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class AnalyticsModule {

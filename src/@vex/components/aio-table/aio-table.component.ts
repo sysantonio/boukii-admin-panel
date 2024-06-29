@@ -1,4 +1,16 @@
-import { AfterViewInit, ChangeDetectorRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  inject,
+  SimpleChanges, OnChanges
+} from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
@@ -24,6 +36,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { jsPDF } from 'jspdf';
 import * as QRCode from 'qrcode';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {ExcelExportService} from '../../../service/excel.service';
 
 @UntilDestroy()
 @Component({
@@ -43,7 +56,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     }
   ]
 })
-export class AioTableComponent implements OnInit, AfterViewInit {
+export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
   layoutCtrl = new UntypedFormControl('boxed');
@@ -94,6 +107,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   filterColumn: any = null;
   @Input()
   with: any = '';
+  @Input()
+  search: any = '';
   @Output()
   showDetailEvent = new EventEmitter<any>();
   pageIndex = 1;
@@ -148,7 +163,9 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   inactiveMonitor = false;
   allMonitors = true;
 
-  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService, private cdr: ChangeDetectorRef, private translateService: TranslateService, private snackbar: MatSnackBar) {
+  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService,
+              private excelExportService: ExcelExportService,
+              private cdr: ChangeDetectorRef, private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.schoolId = this.user.schools[0].id;
   }
@@ -157,12 +174,24 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
+  exportTableToExcel(): void {
+    this.excelExportService.exportAsExcelFile(this.dataSource.data, 'YourTableData');
+
+  }
+
   ngOnInit() {
     this.getMonitors();
     this.getClients();
     this.getSports();
     this.getLanguages();
     this.getDegrees();
+  }
+
+  // Detecta cambios en las propiedades de entrada
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['search']) {
+      this.getFilteredData(1, 99999, this.filter);
+    }
   }
 
   getLanguages() {
@@ -292,7 +321,8 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
     this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
-      filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
+      filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + this.search +
+      (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
       '', null, this.searchCtrl.value, this.with)
       .subscribe((response: any) => {
         this.pageIndex = pageIndex;
@@ -317,7 +347,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
     this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
       this.filter + this.searchCtrl.value
-      + '&school_id=' +this.user.schools[0].id+(this.filterField !== null
+      + '&school_id=' +this.user.schools[0].id  + this.search + ( this.filterField !== null
         ? '&'+this.filterColumn +'='+this.filterField : ''), '', null, this.searchCtrl.value,
       this.with)
       .subscribe((response: any) => {
@@ -972,6 +1002,7 @@ export class AioTableComponent implements OnInit, AfterViewInit {
   }
 
   /* END EXPORT QR */
+  @Output() searchChange = new EventEmitter<unknown>();
 
   encontrarPrimeraCombinacionConValores(data: any, course: any) {
     if (data !== null) {

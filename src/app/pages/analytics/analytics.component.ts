@@ -9,6 +9,9 @@ import {Router} from '@angular/router';
 import {ApiCrudService} from '../../../service/crud.service';
 import {Observable} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
+import moment from 'moment/moment';
+import {MOCK_COUNTRIES} from '../../static-data/countries-data';
+import {MOCK_PROVINCES} from '../../static-data/province-data';
 
 @Component({
   selector: 'vex-analytics',
@@ -22,19 +25,25 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
   ];
 
-
+  countries = MOCK_COUNTRIES;
+  provinces = MOCK_PROVINCES;
+  filter = '';
+  monitor= null;
+  imageAvatar = '../../../assets/img/avatar.png';
   user: any;
   icon = '../../../assets/img/icons/monitores.svg';
   totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.value, 0);
   createComponent = MonitorsCreateUpdateComponent;
   showDetail: boolean = false;
   entity = '/admin/statistics/bookings/monitors';
-  selectedId = 1;
+  selectedId = null;
   deleteEntity = '/monitors';
   totalSportHours: number = 0;
   totalPriceSell = 0;
   currency = '';
   sportHoursData: any[] = [];
+  selectedFrom = null;
+  selectedTo = null;
 
   columns: TableColumn<any>[] = [
     {label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium']},
@@ -44,6 +53,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
+    {label: 'base_price', property: 'hour_price', type: 'price', visible: true},
     {label: 'total_cost', property: 'total_cost', type: 'price', visible: true},
   ];
 
@@ -55,7 +65,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
+    {label: 'base_price', property: 'hour_price', type: 'price', visible: true},
     {label: 'total_cost', property: 'total_cost', type: 'price', visible: true},
+
   ];
 
   constructor(private crudService: ApiCrudService, private router: Router, public translateService: TranslateService,
@@ -64,69 +76,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    let settings = JSON.parse(this.user.schools[0].settings);
-    this.currency = settings?.taxes?.currency;
-    this.getBookingsTotal(1).subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('course_colective'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.updateCourseValue(0, res.data.total_hours);
-      this.totalPriceSell += res.data.total_price;
-      this.setPlotly('orange', collectiveText, 'collective',
-        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
-    });
-    this.getBookingsTotal(2).subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('course_private'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.updateCourseValue(1, res.data.total_hours);
-      this.totalPriceSell += res.data.total_price;
-      this.setPlotly('green', collectiveText, 'prive',
-        res.data.total_places - res.data.total_available_places, res.data.total_places)
-
-    });
-    this.getBookingsTotal(3).subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('activity'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.updateCourseValue(2, res.data.total_hours);
-      this.totalPriceSell += res.data.total_price;
-      this.setPlotly('blue', collectiveText, 'activity',
-        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
-    });
-
-    this.getActiveMonitors().subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('monitors'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.busy + '/' + res.data.total,
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.setPlotly('blue', collectiveText, 'activeMonitors', res.data.busy, res.data.total)
-    });
-
-    this.getTotalHours().subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('hours_worked'),
-        'subtitle': this.translateService.instant('hours_worked_total'),
-        'price': res.data.totalWorkedHours + 'h',
-        'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
-      }
-      this.setPlotly('blue', collectiveText, 'totalHours', res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
-    });
-
-    this.getTotalHoursBySport().subscribe(res => {
-      this.generateSportPlots(res.data);
-    });
 
   }
 
@@ -145,88 +94,67 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
 
   getBookingsTotal(type): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type+this.filter);
   }
 
   getActiveMonitors(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/monitors/active', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
   }
 
   getTotalHours(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/monitors/hours', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
   }
 
   getTotalHoursBySport(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/monitors/sports', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
   }
 
   showDetailEvent(event: any) {
     this.showDetail = true;
     this.selectedId = event.item.id;
-    let settings = JSON.parse(this.user.schools[0].settings);
-    this.getBookingsTotal(1).subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('course_colective'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.updateCourseValue(0, res.data.total_hours);
-      this.totalPriceSell += res.data.total_price;
-      this.setPlotly('orange', collectiveText, 'collectiveFiltered',
-        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
-    });
-    this.getBookingsTotal(2).subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('course_private'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.updateCourseValue(1, res.data.total_hours);
-      this.totalPriceSell += res.data.total_price;
-      this.setPlotly('green', collectiveText, 'priveFiltered',
-        res.data.total_places - res.data.total_available_places, res.data.total_places)
+    this.getMonitor().subscribe(res => {
+      this.monitor = res.data;
+      this.filter += '&monitor_id='+this.selectedId;
+      let settings = JSON.parse(this.user.schools[0].settings);
+      this.courseTypeHoursData = [
+        {name: this.translateService.instant('course_colective'), value: 0, color: '#ff5733'},
+        {name:  this.translateService.instant('course_private'), value: 0, color: '#33c7ff'},
+        {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
+      ];
+      this.reloadData(true);
+    })
 
-    });
-    this.getBookingsTotal(3).subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('activity'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.total_price + settings?.taxes?.currency || 'CHF',
-        'subprice': this.translateService.instant('occupation'),
+  }
+
+  calculateAge(birthDateString) {
+    if(birthDateString && birthDateString !== null) {
+      const today = new Date();
+      const birthDate = new Date(birthDateString);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
       }
-      this.updateCourseValue(2, res.data.total_hours);
-      this.totalPriceSell += res.data.total_price;
-      this.setPlotly('blue', collectiveText, 'activityFiltered',
-        res.data.total_places - res.data.total_available_places, res.data.total_available_places)
-    });
+
+      return age;
+    } else {
+      return 0;
+    }
+
+  }
+
+  getMonitor() {
+    return this.crudService.get('/monitors/' + this.selectedId, ['language1']);
   }
 
   closeDetailEvent(event: any) {
     this.showDetail = false;
-    this.getActiveMonitors().subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('monitors'),
-        'subtitle': this.translateService.instant('sales'),
-        'price': res.data.busy + '/' + res.data.total,
-        'subprice': this.translateService.instant('occupation'),
-      }
-      this.setPlotly('blue', collectiveText, 'activeMonitorsFiltered', res.data.busy, res.data.total)
-    });
-
-    this.getTotalHours().subscribe(res => {
-      let collectiveText = {
-        'title': this.translateService.instant('hours_worked'),
-        'subtitle': this.translateService.instant('hours_worked_total'),
-        'price': res.data.totalWorkedHours + 'h',
-        'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
-      }
-      this.setPlotly('blue', collectiveText, 'totalHoursFiltered', res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
-    });
+    this.selectedId = null;
+    this.reloadData(true);
   }
 
   ngAfterViewInit(): void {
@@ -238,34 +166,103 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     }
     this.setPlotly('magenta', voucherText, 'voucher', 350, 500);
     this.setUserSessionAnalytics(false);
+    let settings = JSON.parse(this.user.schools[0].settings);
+    this.currency = settings?.taxes?.currency;
+    this.reloadData(false);
   }
 
   goTo(route: string) {
     this.router.navigate([route]);
   }
 
-  onTabChange(event: MatTabChangeEvent) {
-    // Si el índice de la pestaña es 1 (No Disponibles)
-    let collectiveText = {
-      'title': 'Cours Collectifs',
-      'subtitle': 'Ventes total',
-      'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
+  filterData() {
+
+    this.reloadData(true);
+  }
+
+  reloadData(monitors) {
+    let filter = '';
+
+    if (this.selectedFrom) {
+      filter = filter + '&start_date='+moment(this.selectedFrom).format('YYYY-MM-DD');
     }
-    let priveText = {
-      'title': 'Cours Prive',
-      'subtitle': 'Ventes total',
-      'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
+    if (this.selectedTo) {
+      filter = filter + '&end_date='+moment(this.selectedTo).format('YYYY-MM-DD');
     }
-    let activityText = {
-      'title': 'Activities',
-      'subtitle': 'Ventes total',
-      'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
+
+    if (this.selectedId) {
+      filter = filter + '&monitor_id='+this.selectedId;
     }
-    if (event.index === 2) {
-      this.setUserSessionAnalytics(true);
+
+    this.filter = filter;
+    this.totalPriceSell = 0;
+    this.courseTypeHoursData = [
+      {name: this.translateService.instant('course_colective'), value: 0, color: '#ff5733'},
+      {name:  this.translateService.instant('course_private'), value: 0, color: '#33c7ff'},
+      {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
+    ];
+    this.getBookingsTotal(1).subscribe(res => {
+      const collectiveText = {
+        'title': this.translateService.instant('course_colective'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': `${res.data.total_price}${this.currency}`,
+        'subprice': this.translateService.instant('occupation'),
+      };
+      this.updateCourseValue(0, res.data.total_hours);
+      if(!monitors) {
+        this.setPlotly('orange', collectiveText, 'collective',
+        res.data.total_places - res.data.total_available_places, res.data.total_available_places);
+      }
+
+      this.totalPriceSell += res.data.total_price;
+
+    });
+
+    this.getBookingsTotal(2).subscribe(res => {
+      const collectiveText = {
+        'title': this.translateService.instant('course_private'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': `${res.data.total_price}${this.currency}`,
+        'subprice': this.translateService.instant('occupation'),
+      };
+      this.updateCourseValue(1, res.data.total_hours);
+      if(!monitors) {
+        this.setPlotly('green', collectiveText, 'prive',
+          res.data.total_places - res.data.total_available_places, res.data.total_places);
+
+      }
+      this.totalPriceSell += res.data.total_price;
+
+    });
+
+    this.getBookingsTotal(3).subscribe(res => {
+      const collectiveText = {
+        'title': this.translateService.instant('activity'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': `${res.data.total_price}${this.currency}`,
+        'subprice': this.translateService.instant('occupation'),
+      };
+      this.updateCourseValue(2, res.data.total_hours);
+      if(!monitors) {
+        this.setPlotly('blue', collectiveText, 'activity',
+        res.data.total_places - res.data.total_available_places, res.data.total_places);
+      }
+      this.totalPriceSell += res.data.total_price;
+
+    });
+
+
+    this.getTotalHoursBySport().subscribe(res => {
+      this.processSportData(res.data);
+    });
+    let plotActiveMonitors = 'activeMonitors';
+    let plotTotalHours = 'totalHours';
+    if(monitors) {
+      plotActiveMonitors = 'activeMonitorsFiltered';
+      plotTotalHours = 'totalHoursFiltered';
+    }
+
+    if(!this.showDetail) {
       this.getActiveMonitors().subscribe(res => {
         let collectiveText = {
           'title': this.translateService.instant('monitors'),
@@ -273,18 +270,31 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
           'price': res.data.busy + '/' + res.data.total,
           'subprice': this.translateService.instant('occupation'),
         }
-        this.setPlotly('blue', collectiveText, 'activeMonitorsFiltered', res.data.busy, res.data.total)
+        this.setPlotly('blue', collectiveText, plotActiveMonitors, res.data.busy, res.data.total)
       });
+    }
+    this.getTotalHours().subscribe(res => {
+      let collectiveText = {
+        'title': this.translateService.instant('hours_worked'),
+        'subtitle': this.translateService.instant('hours_worked_total'),
+        'price': res.data.totalWorkedHours + 'h',
+        'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
+      }
+      this.setPlotly('blue', collectiveText, plotTotalHours, res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
+    });
 
-      this.getTotalHours().subscribe(res => {
-        let collectiveText = {
-          'title': this.translateService.instant('hours_worked'),
-          'subtitle': this.translateService.instant('hours_worked_total'),
-          'price': res.data.totalWorkedHours + 'h',
-          'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
-        }
-        this.setPlotly('blue', collectiveText, 'totalHoursFiltered', res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
-      });
+    this.cdr.detectChanges();
+  }
+
+
+  onTabChange(event: MatTabChangeEvent) {
+    if (event.index === 2) {
+      this.reloadData(true);
+      this.setUserSessionAnalytics(true);
+
+    } else if(event.index === 0) {
+      this.filter = '';
+      this.reloadData(false);
     }
   }
 
@@ -462,14 +472,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     });
   }
 
-
-  generateSportPlots(data) {
-
-    // Llamar al método setPlotly con todos los datos de deportes combinados
-    this.processSportData(data);
-  }
-
-
   setUserSessionAnalytics(monitors) {
     const trace1 = {
       x: ['2021-04-28', '2021-04-29', '2021-04-30', '2021-05-01', '2021-05-02', '2021-05-03'],
@@ -509,6 +511,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       Plotly.newPlot('user-session-analytics2', data, layout);
     }
 
+  }
+
+  getCountry(id: any) {
+    const country = this.countries.find((c) => c.id == +id);
+    return country ? country.name : 'NDF';
   }
 
   getPercentage(value: number, total) {

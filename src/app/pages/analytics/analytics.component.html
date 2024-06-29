@@ -44,7 +44,7 @@
         </div>
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>
+            <h2 class="title m-0">{{'monitors' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>
             </h2>
           </div>
         </div>
@@ -85,11 +85,12 @@
               <h3>{{ 'hour' | translate }}s</h3>
               <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
               <div *ngFor="let course of courseTypeHoursData" class="course">
+                <div class="course-details">
+                  <span class="course-name">{{ course.name }}</span>
+                  <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
+                </div>
                 <div class="course-info">
-                  <div class="course-details">
-                    <span class="course-name">{{ course.name }}</span>
-                    <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
-                  </div>
+
                   <div class="course-bar-container">
                     <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
                          [style.backgroundColor]="course.color"></div>
@@ -112,13 +113,34 @@
       </mat-tab>
       <mat-tab label="Monitores">
         <div class="card" style="margin: 2% 0 2% 0;" *ngIf="!showDetail">
-          <div class="px-6 py-4 border-b">
-            <h2 class="title m-0">{{'Monitores' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>
-            </h2>
+          <div class="px-6 border-b d-flex align-items-center justify-content-between">
+            <h2 class="title m-0">{{'monitors' | translate }}</h2>
+            <div class="datepickers-container">
+              <label for="dateFrom">{{'settings.new_season.start' | translate}}</label>
+              <input matInput id="dateFrom" [matDatepicker]="pickerFrom" (dateChange)="filterData()" [(ngModel)]="selectedFrom" [value]="selectedFrom">
+              <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFrom [startAt]="selectedFrom"></mat-datepicker>
+
+              <label for="dateTo">{{'settings.new_season.end' | translate}}</label>
+              <input matInput id="dateTo" [matDatepicker]="pickerTo" (dateChange)="filterData()" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo">
+              <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+              <mat-datepicker #pickerTo [startAt]="selectedTo"></mat-datepicker>
+            </div>
+            <span class="total-price">{{ totalPriceSell }}{{currency}}</span>
           </div>
         </div>
-        <div class="chart-row mt-6" *ngIf="!showDetail">
-          <div class="chart-column">
+        <div class="chart-row mt-6" >
+          <div class="chart-column" *ngIf="showDetail">
+            <div style="padding: 15% 0 0 0;">
+
+              <img [src]="monitor?.image !== null && monitor?.image !== '' ? monitor?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
+              <span style="float: left; width: 50%;font-size:10px">{{monitor?.language1.code}} · {{getCountry(monitor?.country)}} ·
+                {{calculateAge(monitor?.birth_date)}} {{'years' | translate }}</span>
+              <span style="float: left; width: 50%;">{{ monitor?.first_name }} {{ monitor?.last_name }}</span>
+
+            </div>
+          </div>
+          <div class="chart-column" *ngIf="!showDetail">
             <div class="card" style="padding: 8% 0 0 0;">
               <div id="activeMonitorsFiltered"></div>
             </div>
@@ -153,15 +175,15 @@
               <h3>{{ 'hour' | translate }}s</h3>
               <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
               <div *ngFor="let course of courseTypeHoursData" class="course">
+                <div class="course-details">
+                  <span class="course-name">{{ course.name }}</span>
+                  <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
+                </div>
                 <div class="course-info">
                   <div class="course-bar-container">
                     <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
                          [style.backgroundColor]="course.color"></div>
                     <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
-                  </div>
-                  <div class="course-details">
-                    <span class="course-name">{{ course.name }}</span>
-                    <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
                   </div>
                 </div>
               </div>
@@ -173,49 +195,9 @@
             </div>
           </div>
         </div>
-        <div class="chart-row" *ngIf="showDetail">
-          <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
-              <div id="collectiveFiltered"></div>
-            </div>
-          </div>
-          <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
-              <div id="priveFiltered"></div>
-            </div>
-          </div>
-          <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
-              <div id="activityFiltered"></div>
-            </div>
-          </div>
-          <div class="chart-column">
-            <div class="card course-hours" style="padding: 8%;">
-              <h3>{{ 'hour' | translate }}</h3>
-              <h4>{{ 'total' | translate }}: {{ totalHours }} {{ 'hour' | translate }}s</h4>
-              <div *ngFor="let course of courseTypeHoursData" class="course">
-                <div class="course-info">
-                  <div class="course-bar-container">
-                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)" [style.backgroundColor]="course.color"></div>
-                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
-                  </div>
-                  <div class="course-details">
-                    <span class="course-name">{{ course.name }}</span>
-                    <span class="course-value">{{ course.value }} {{ totalHours }} {{ 'hour' | translate }}s</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="chart-column-lines">
-            <div class="card" style="padding: 8% 0 0 0;">
-              <div id="user-session-analytics3" style="width: 100%; height: 400px;"></div>
-            </div>
-          </div>
-        </div>
         <vex-aio-table *ngIf="!showDetail" [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity"
                        [title]="'menu.monitors'"
-                       (showDetailEvent)="showDetailEvent($event)" [showDetail]="showDetail"
+                       (showDetailEvent)="showDetailEvent($event)" [showDetail]="showDetail" [search]="filter"
                        [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
                        [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
         ></vex-aio-table>
@@ -228,7 +210,7 @@
           </mat-card-header>
           <mat-card-content>
             <vex-aio-table [columns]="columnsDetail" [entity]="entity+'/'+selectedId" [deleteEntity]="deleteEntity"
-                           [title]="'menu.monitors'"
+                           [title]="'menu.monitors'" [search]="filter"
                            [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
                            [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
             ></vex-aio-table>

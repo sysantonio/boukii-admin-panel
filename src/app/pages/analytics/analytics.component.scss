@@ -89,6 +89,31 @@
 .course-value {
   color: #555;
 }
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.datepickers-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto; /* Mueve los datepickers a la derecha */
+}
+
+.datepickers-container label {
+  margin: 0 5px;
+  font-size: 0.875rem; /* Ajusta el tamaño del texto si es necesario */
+}
+
+.datepickers-container input {
+  max-width: 150px; /* Ajusta el tamaño del input */
+}
+
+.total-price {
+  margin-left: 10px; /* Espacio entre los datepickers y el precio */
+  font-size: 1.25rem; /* Ajusta el tamaño del texto del precio si es necesario */
+}
 
 ::ng-deep .mdc-tab.mdc-tab--active {
   background-color: var(--color-primary-rgb);
