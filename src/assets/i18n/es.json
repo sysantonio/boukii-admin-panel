@@ -601,5 +601,17 @@
   "all_tasks": "Todas las tareas",
   "currency": "Moneda",
   "not_assigned": "No asignado",
-  "not_required": "No requerido"
+  "not_required": "No requerido",
+
+  "sales": "Ventas totales",
+  "occupation": "Tasa de ocupación",
+  "hours_worked": "Horas trabajadas",
+  "hours_collective": "C.Collectivo",
+  "hours_private": "C.Privado",
+  "hours_activities": "Actividades",
+  "hours_nwd_payed": "B.Pagados",
+  "total_hours": "Total Horas",
+  "hours_worked_total": "Horas trabajadas totales",
+  "hours_by_type": "Horas por tipo de curso",
+  "hours_by_sport": "Horas por deporte"
 }

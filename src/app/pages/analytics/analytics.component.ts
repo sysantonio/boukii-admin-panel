@@ -1,8 +1,6 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {BonusesCreateUpdateComponent} from '../bonuses/bonuses-create-update/bonuses-create-update.component';
-import Plotly from 'plotly.js-dist-min'
+import Plotly from 'plotly.js-dist-min';
 import {MatTabChangeEvent} from '@angular/material/tabs';
-import Swiper from 'swiper';
 import {MonitorsCreateUpdateComponent} from '../monitors/monitors-create-update/monitors-create-update.component';
 import {TableColumn} from '../../../@vex/interfaces/table-column.interface';
 import {Router} from '@angular/router';
@@ -20,10 +18,11 @@ import {MOCK_PROVINCES} from '../../static-data/province-data';
 })
 export class AnalyticsComponent implements OnInit, AfterViewInit {
   courseTypeHoursData = [
-    {name: this.translateService.instant('course_colective'), value: 0, color: '#ff5733'},
-    {name:  this.translateService.instant('course_private'), value: 0, color: '#33c7ff'},
-    {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
+    {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
+    {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
+    {name: this.translateService.instant('activity'), value: 0, max_value:0, color: '#ff33b8'}
   ];
+  allSports: any[] = []; // Array para almacenar todos los deportes
 
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
@@ -36,6 +35,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   createComponent = MonitorsCreateUpdateComponent;
   showDetail: boolean = false;
   entity = '/admin/statistics/bookings/monitors';
+  entitySales = '/admin/statistics/bookings/sells';
   selectedId = null;
   deleteEntity = '/monitors';
   totalSportHours: number = 0;
@@ -43,6 +43,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   currency = '';
   sportHoursData: any[] = [];
   selectedFrom = null;
+  selectedSport = null;
   selectedTo = null;
 
   columns: TableColumn<any>[] = [
@@ -52,9 +53,21 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     {label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
     {label: 'base_price', property: 'hour_price', type: 'price', visible: true},
-    {label: 'total_cost', property: 'total_cost', type: 'price', visible: true},
+    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
+    {label: 'total', property: 'total_cost', type: 'price', visible: true},
+  ];
+
+  columnsSales: TableColumn<any>[] = [
+    {label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium']},
+    {label: 'sold', property: 'booked_places', type: 'text', visible: true},
+    {label: 'cash', property: 'payments.cash', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'other', property: 'payments.other', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'T.Boukii', property: 'payments.boukii', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'online', property: 'payments.online', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'voucher', property: 'payments.voucher', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'total', property: 'total_cost', type: 'price', visible: true},
   ];
 
   columnsDetail: TableColumn<any>[] = [
@@ -64,9 +77,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     {label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
     {label: 'base_price', property: 'hour_price', type: 'price', visible: true},
-    {label: 'total_cost', property: 'total_cost', type: 'price', visible: true},
+    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
+    {label: 'total', property: 'total_cost', type: 'price', visible: true},
 
   ];
 
@@ -80,11 +93,12 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   }
 
   updateTotalHours() {
-    this.totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.value, 0);
+    this.totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.max_value, 0);
   }
 
-  updateCourseValue(index: number, newValue: number) {
+  updateCourseValue(index: number, newValue: number, newMaxValue: number = 0) {
     this.courseTypeHoursData[index].value = newValue;
+    this.courseTypeHoursData[index].max_value = newMaxValue;
     this.updateTotalHours();
 
     // Crear una nueva referencia al array
@@ -95,6 +109,16 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   getBookingsTotal(type): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings', 1, 10000,
       'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type+this.filter);
+  }
+
+  getBookingsByDate(): Observable<any> {
+    return this.crudService.list('/admin/statistics/bookings/dates', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
+  }
+
+  getBookingsByDateSport(): Observable<any> {
+    return this.crudService.list('/admin/statistics/bookings/sports', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
   }
 
   getActiveMonitors(): Observable<any> {
@@ -120,9 +144,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       this.filter += '&monitor_id='+this.selectedId;
       let settings = JSON.parse(this.user.schools[0].settings);
       this.courseTypeHoursData = [
-        {name: this.translateService.instant('course_colective'), value: 0, color: '#ff5733'},
-        {name:  this.translateService.instant('course_private'), value: 0, color: '#33c7ff'},
-        {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
+        {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
+        {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
+        {name: this.translateService.instant('activity'), value: 0, max_value:0, color: '#ff33b8'}
       ];
       this.reloadData(true);
     })
@@ -158,14 +182,34 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.getTotalHoursBySport().subscribe(res => {
+      this.allSports = Object.keys(res.data).map(sportId => {
+        const sportData = res.data[sportId];
+        //  this.totalSportHours += sportData.hours;
+        return {
+          id: sportData.sport.id,
+          name: sportData.sport.name,
+          value: sportData.hours,
+          icon: sportData.sport.icon_selected,
+          color: 'blue'  // Puedes ajustar para usar colores específicos
+        };
+      });
+    });
     let voucherText = {
-      'title': 'Bonos',
-      'subtitle': 'Ventes total',
+      'title': this.translateService.instant('vouchers'),
+      'subtitle': this.translateService.instant('sales'),
       'price': '3560.00 CHF',
-      'subprice': 'Taux d\'occupation',
+      'subprice': this.translateService.instant('occupation'),
     }
     this.setPlotly('magenta', voucherText, 'voucher', 350, 500);
-    this.setUserSessionAnalytics(false);
+    this.getBookingsByDate().subscribe(res => {
+      this.setUserSessionAnalytics(false, res.data);
+    })
+
+    this.getBookingsByDateSport().subscribe(res => {
+      this.updateChartBySport(false, res.data);
+    })
+
     let settings = JSON.parse(this.user.schools[0].settings);
     this.currency = settings?.taxes?.currency;
     this.reloadData(false);
@@ -189,6 +233,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     if (this.selectedTo) {
       filter = filter + '&end_date='+moment(this.selectedTo).format('YYYY-MM-DD');
     }
+    if (this.selectedSport) {
+      filter = filter + '&sport_id='+this.selectedSport;
+    }
 
     if (this.selectedId) {
       filter = filter + '&monitor_id='+this.selectedId;
@@ -197,9 +244,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     this.filter = filter;
     this.totalPriceSell = 0;
     this.courseTypeHoursData = [
-      {name: this.translateService.instant('course_colective'), value: 0, color: '#ff5733'},
-      {name:  this.translateService.instant('course_private'), value: 0, color: '#33c7ff'},
-      {name: this.translateService.instant('activity'), value: 0, color: '#ff33b8'}
+      {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
+      {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
+      {name: this.translateService.instant('activity'), value: 0, max_value:0, color: '#ff33b8'}
     ];
     this.getBookingsTotal(1).subscribe(res => {
       const collectiveText = {
@@ -208,10 +255,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
         'price': `${res.data.total_price}${this.currency}`,
         'subprice': this.translateService.instant('occupation'),
       };
-      this.updateCourseValue(0, res.data.total_hours);
+      this.updateCourseValue(0, res.data.total_hours - res.data.total_available_hours,
+        res.data.total_hours);
       if(!monitors) {
         this.setPlotly('orange', collectiveText, 'collective',
-        res.data.total_places - res.data.total_available_places, res.data.total_available_places);
+          res.data.total_places - res.data.total_available_places, res.data.total_available_places);
       }
 
       this.totalPriceSell += res.data.total_price;
@@ -225,7 +273,8 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
         'price': `${res.data.total_price}${this.currency}`,
         'subprice': this.translateService.instant('occupation'),
       };
-      this.updateCourseValue(1, res.data.total_hours);
+      this.updateCourseValue(1, res.data.total_hours - res.data.total_available_hours,
+        res.data.total_hours);
       if(!monitors) {
         this.setPlotly('green', collectiveText, 'prive',
           res.data.total_places - res.data.total_available_places, res.data.total_places);
@@ -242,10 +291,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
         'price': `${res.data.total_price}${this.currency}`,
         'subprice': this.translateService.instant('occupation'),
       };
-      this.updateCourseValue(2, res.data.total_hours);
+      this.updateCourseValue(2, res.data.total_hours - res.data.total_available_hours,
+        res.data.total_hours);
       if(!monitors) {
         this.setPlotly('blue', collectiveText, 'activity',
-        res.data.total_places - res.data.total_available_places, res.data.total_places);
+          res.data.total_places - res.data.total_available_places, res.data.total_places);
       }
       this.totalPriceSell += res.data.total_price;
 
@@ -286,15 +336,81 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     this.cdr.detectChanges();
   }
 
+  loadSellData() {
+    this.getBookingsTotal(1).subscribe(res => {
+      const collectiveText = {
+        'title': this.translateService.instant('course_colective'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': `${res.data.total_price}${this.currency}`,
+        'subprice': this.translateService.instant('occupation'),
+      };
+
+      this.setPlotly('orange', collectiveText, 'collectiveSales',
+        res.data.total_places - res.data.total_available_places, res.data.total_available_places);
+
+
+      this.totalPriceSell += res.data.total_price;
+
+    });
+
+    this.getBookingsTotal(2).subscribe(res => {
+      const collectiveText = {
+        'title': this.translateService.instant('course_private'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': `${res.data.total_price}${this.currency}`,
+        'subprice': this.translateService.instant('occupation'),
+      };
+
+      this.setPlotly('green', collectiveText, 'priveSales',
+        res.data.total_places - res.data.total_available_places, res.data.total_places);
+
+
+      this.totalPriceSell += res.data.total_price;
+
+    });
+
+    this.getBookingsTotal(3).subscribe(res => {
+      const collectiveText = {
+        'title': this.translateService.instant('activity'),
+        'subtitle': this.translateService.instant('sales'),
+        'price': `${res.data.total_price}${this.currency}`,
+        'subprice': this.translateService.instant('occupation'),
+      };
+
+      this.setPlotly('blue', collectiveText, 'activitySales',
+        res.data.total_places - res.data.total_available_places, res.data.total_places);
+
+      this.totalPriceSell += res.data.total_price;
+
+    });
+
+    let voucherText = {
+      'title': this.translateService.instant('vouchers'),
+      'subtitle': this.translateService.instant('sales'),
+      'price': '3560.00 CHF',
+      'subprice': this.translateService.instant('occupation'),
+    }
+    this.setPlotly('magenta', voucherText, 'voucherSales', 350, 500);
+  }
+
 
   onTabChange(event: MatTabChangeEvent) {
     if (event.index === 2) {
       this.reloadData(true);
-      this.setUserSessionAnalytics(true);
+      this.getBookingsByDate().subscribe(res => {
+        this.setUserSessionAnalytics(true, res.data);
+      })
+
 
     } else if(event.index === 0) {
       this.filter = '';
       this.reloadData(false);
+      this.getBookingsByDate().subscribe(res => {
+        this.setUserSessionAnalytics(false, res.data);
+      })
+    } else if(event.index === 1) {
+      this.filter = '';
+      this.loadSellData();
     }
   }
 
@@ -472,32 +588,47 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  setUserSessionAnalytics(monitors) {
+  setUserSessionAnalytics(monitors, data) {
+    const dates = Object.keys(data);
+    const courseType1 = dates.map(date => data[date][1] || 0);
+    const courseType2 = dates.map(date => data[date][2] || 0);
+    const courseType3 = dates.map(date => data[date][3] || 0);
+
     const trace1 = {
-      x: ['2021-04-28', '2021-04-29', '2021-04-30', '2021-05-01', '2021-05-02', '2021-05-03'],
-      y: [10, 15, 13, 17, 21, 22],
+      x: dates,
+      y: courseType1,
       mode: 'lines+markers',
-      name: 'Users',
-      line: {color: 'blue'}
+      name: this.translateService.instant('course_colective'),
+      line: {color: '#ff5733'}
     };
 
     const trace2 = {
-      x: ['2021-04-28', '2021-04-29', '2021-04-30', '2021-05-01', '2021-05-02', '2021-05-03'],
-      y: [16, 5, 11, 9, 15, 12],
+      x: dates,
+      y: courseType2,
       mode: 'lines+markers',
-      name: 'Sessions',
-      line: {color: 'green'}
+      name:  this.translateService.instant('course_private'),
+      line: {color: '#33c7ff'}
     };
 
-    const data = [trace1, trace2];
+    const trace3 = {
+      x: dates,
+      y: courseType3,
+      mode: 'lines+markers',
+      name: this.translateService.instant('activity'),
+      line: {color: '#ff33b8'}
+    };
+
+    const chartData = [trace1, trace2, trace3];
 
     const layout = {
-      title: 'User & Session Analytics',
+      title:  this.translateService.instant('hours_by_type'),
       xaxis: {
-        title: 'Date'
+        title:  this.translateService.instant('dates'),
+        type: 'date',
+        tickformat: '%Y-%m', // Formato para mostrar solo el año y el mes
       },
       yaxis: {
-        title: 'Count'
+        title:  this.translateService.instant('total'),
       },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
@@ -505,13 +636,61 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     };
 
     if(monitors) {
-      Plotly.newPlot('user-session-analytics4', data, layout);
+      Plotly.newPlot('user-session-analytics4', chartData, layout);
     } else {
-      Plotly.newPlot('user-session-analytics', data, layout);
-      Plotly.newPlot('user-session-analytics2', data, layout);
+      Plotly.newPlot('user-session-analytics', chartData, layout);
     }
 
   }
+
+  updateChartBySport(monitors, data) {
+    const dates = Object.keys(data); // Obtener todas las fechas
+
+    const sports = {};
+
+    // Organizar los datos por deporte
+    dates.forEach(date => {
+      const dayData = data[date];
+      Object.keys(dayData).forEach(sport => {
+        if (!sports[sport]) {
+          sports[sport] = [];
+        }
+        sports[sport].push(dayData[sport]);
+      });
+
+      // Si algún deporte no tiene entrada para esta fecha, agregar 0
+      Object.keys(sports).forEach(sport => {
+        if (!dayData[sport]) {
+          sports[sport].push(0);
+        }
+      });
+    });
+
+    const traces = Object.keys(sports).map(sport => ({
+      x: dates,
+      y: sports[sport],
+      mode: 'lines+markers',
+      name: sport,
+    }));
+
+    const layout = {
+      title: this.translateService.instant('hours_by_sport'),
+      xaxis: {
+        title:  this.translateService.instant('date'),
+        type: 'date',
+        tickformat: '%Y-%m', // Formato para mostrar solo el año y el mes
+      },
+      yaxis: {
+        title:  this.translateService.instant('total'),
+      },
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      showlegend: true,
+    };
+
+    Plotly.newPlot('user-session-analytics2', traces, layout);
+  }
+
 
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id == +id);

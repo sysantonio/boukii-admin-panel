@@ -25,39 +25,43 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatOptionModule} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [AnalyticsComponent],
-  imports: [
-    CommonModule,
-    LayoutModule,
-    PageLayoutModule,
-    BreadcrumbsModule,
-    RouterModule,
-    AnalyticsRoutingModule,
-    SecondaryToolbarModule,
-    MatIconModule,
-    ChartModule,
-    WidgetQuickLineChartModule,
-    WidgetQuickValueCenterModule,
-    WidgetQuickValueStartModule,
-    WidgetLargeGoalChartModule,
-    WidgetAssistantModule,
-    WidgetLargeChartModule,
-    WidgetTableModule,
-    //LanguageCreateUpdateModule,
-    MatDialogModule,
-    ComponentsModule,
-    MatTabsModule,
-    TranslateModule,
-    MatCardModule,
-    MatDividerModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    FormsModule
-  ]
+    imports: [
+        CommonModule,
+        LayoutModule,
+        PageLayoutModule,
+        BreadcrumbsModule,
+        RouterModule,
+        AnalyticsRoutingModule,
+        SecondaryToolbarModule,
+        MatIconModule,
+        ChartModule,
+        WidgetQuickLineChartModule,
+        WidgetQuickValueCenterModule,
+        WidgetQuickValueStartModule,
+        WidgetLargeGoalChartModule,
+        WidgetAssistantModule,
+        WidgetLargeChartModule,
+        WidgetTableModule,
+        //LanguageCreateUpdateModule,
+        MatDialogModule,
+        ComponentsModule,
+        MatTabsModule,
+        TranslateModule,
+        MatCardModule,
+        MatDividerModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatOptionModule,
+        MatSelectModule
+    ]
 })
 export class AnalyticsModule {
 }

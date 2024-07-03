@@ -109,7 +109,24 @@
 .datepickers-container input {
   max-width: 150px; /* Ajusta el tamaño del input */
 }
+.custom-select {
+  background: white; /* Fondo blanco */
+  margin-left: 10px; /* Margen a la izquierda del texto */
+  width: 150px;
+}
 
+.datepickers-container {
+  display: flex;
+  align-items: center;
+}
+
+.datepickers-container label {
+  margin-right: 5px;
+}
+
+.total-price {
+  margin-left: auto; /* Alinea el total a la derecha */
+}
 .total-price {
   margin-left: 10px; /* Espacio entre los datepickers y el precio */
   font-size: 1.25rem; /* Ajusta el tamaño del texto del precio si es necesario */

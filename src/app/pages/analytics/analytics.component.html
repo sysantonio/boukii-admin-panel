@@ -87,16 +87,14 @@
               <div *ngFor="let course of courseTypeHoursData" class="course">
                 <div class="course-details">
                   <span class="course-name">{{ course.name }}</span>
-                  <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
+                  <span class="course-value">{{ course.value }} / {{course.max_value}} {{ 'hour' | translate }}s</span>
                 </div>
                 <div class="course-info">
-
                   <div class="course-bar-container">
-                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, course.max_value)"
                          [style.backgroundColor]="course.color"></div>
-                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
+                    <div class="course-bar-empty" [style.width.%]="getPercentage(course.max_value-course.value, course.max_value )"></div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -108,20 +106,97 @@
           </div>
         </div>
       </mat-tab>
+
       <mat-tab label="Ventas">
         <!-- Añadir contenido de la pestaña de Ventas -->
+        <div class="card" style="margin: 2% 0 2% 0;">
+          <div class="px-6 border-b d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <h2 class="title m-0">{{'sales' | translate }}</h2>
+              <div class="ml-3">
+                <mat-label>{{ 'sport' | translate }}</mat-label>
+                <mat-select [(ngModel)]="selectedSport" (selectionChange)="filterData()" class="custom-select">
+                  <mat-option  [value]="null">
+
+                  </mat-option>
+                  <mat-option  *ngFor="let sport of allSports" [value]="sport.id">
+                    {{ sport.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="datepickers-container d-flex align-items-center">
+              <label for="dateFrom">{{'from' | translate}}</label>
+              <input matInput id="dateFromSales" [matDatepicker]="pickerFromSales" (dateChange)="filterData()" [(ngModel)]="selectedFrom" [value]="selectedFrom">
+              <mat-datepicker-toggle matSuffix [for]="pickerFromSales"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFromSales [startAt]="selectedFrom"></mat-datepicker>
+
+              <label for="dateTo">{{'to' | translate}}</label>
+              <input matInput id="dateToSales" [matDatepicker]="pickerToSales" (dateChange)="filterData()" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo">
+              <mat-datepicker-toggle matSuffix [for]="pickerToSales"></mat-datepicker-toggle>
+              <mat-datepicker #pickerToSales [startAt]="selectedTo"></mat-datepicker>
+            </div>
+            <span class="total-price">{{ totalPriceSell }}{{currency}}</span>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="collectiveSales"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="priveSales"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="activitySales"></div>
+            </div>
+          </div>
+          <div class="chart-column">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="voucherSales"></div>
+            </div>
+          </div>
+          <div class="chart-column-lines">
+            <div class="card" style="padding: 8% 0 0 0;">
+              <div id="user-session-analytics-sales" style="width: 100%; height: 300px;"></div>
+            </div>
+          </div>
+        </div>
+        <vex-aio-table [columns]="columnsSales" [entity]="entitySales" [deleteEntity]="deleteEntity"
+                       [title]="'menu.courses'"
+                       (showDetailEvent)="showDetailEvent($event)" [showDetail]="false" [search]="filter"
+                       [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+                       [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+        ></vex-aio-table>
       </mat-tab>
       <mat-tab label="Monitores">
         <div class="card" style="margin: 2% 0 2% 0;" *ngIf="!showDetail">
           <div class="px-6 border-b d-flex align-items-center justify-content-between">
-            <h2 class="title m-0">{{'monitors' | translate }}</h2>
-            <div class="datepickers-container">
-              <label for="dateFrom">{{'settings.new_season.start' | translate}}</label>
+            <div class="d-flex align-items-center">
+              <h2 class="title m-0">{{'monitors' | translate }}</h2>
+              <div class="ml-3">
+                <mat-label>{{ 'sport' | translate }}</mat-label>
+                <mat-select [(ngModel)]="selectedSport" (selectionChange)="filterData()" class="custom-select">
+                  <mat-option  [value]="null">
+
+                  </mat-option>
+                  <mat-option  *ngFor="let sport of allSports" [value]="sport.id">
+                    {{ sport.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="datepickers-container d-flex align-items-center">
+              <label for="dateFrom">{{'from' | translate}}</label>
               <input matInput id="dateFrom" [matDatepicker]="pickerFrom" (dateChange)="filterData()" [(ngModel)]="selectedFrom" [value]="selectedFrom">
               <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
               <mat-datepicker #pickerFrom [startAt]="selectedFrom"></mat-datepicker>
 
-              <label for="dateTo">{{'settings.new_season.end' | translate}}</label>
+              <label for="dateTo">{{'to' | translate}}</label>
               <input matInput id="dateTo" [matDatepicker]="pickerTo" (dateChange)="filterData()" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo">
               <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
               <mat-datepicker #pickerTo [startAt]="selectedTo"></mat-datepicker>
@@ -134,7 +209,7 @@
             <div style="padding: 15% 0 0 0;">
 
               <img [src]="monitor?.image !== null && monitor?.image !== '' ? monitor?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
-              <span style="float: left; width: 50%;font-size:10px">{{monitor?.language1.code}} · {{getCountry(monitor?.country)}} ·
+              <span style="float: left; width: 50%;font-size:10px">{{monitor?.language1?.code}} · {{getCountry(monitor?.country)}} ·
                 {{calculateAge(monitor?.birth_date)}} {{'years' | translate }}</span>
               <span style="float: left; width: 50%;">{{ monitor?.first_name }} {{ monitor?.last_name }}</span>
 
@@ -177,13 +252,13 @@
               <div *ngFor="let course of courseTypeHoursData" class="course">
                 <div class="course-details">
                   <span class="course-name">{{ course.name }}</span>
-                  <span class="course-value">{{ course.value }} {{ 'hour' | translate }}s</span>
+                  <span class="course-value">{{ course.value }} / {{course.max_value}} {{ 'hour' | translate }}s</span>
                 </div>
                 <div class="course-info">
                   <div class="course-bar-container">
-                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, totalHours)"
+                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, course.max_value)"
                          [style.backgroundColor]="course.color"></div>
-                    <div class="course-bar-empty" [style.width.%]="100 - getPercentage(course.value, totalHours)"></div>
+                    <div class="course-bar-empty" [style.width.%]="getPercentage(course.max_value-course.value, course.max_value )"></div>
                   </div>
                 </div>
               </div>
