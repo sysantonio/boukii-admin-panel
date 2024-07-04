@@ -1,5 +1,6 @@
 .table-show-detail {
-  width: 65%;float:left
+  width: 65%;
+  float:left;
 }
 .dot {
   height: 10px;
@@ -7,4 +8,94 @@
   border-radius: 50%;
   float: left;
   margin: 7px 5px 0 0;
+}
+
+.vex-page-layout-content {
+  &.col-right {
+    width: 35%;
+    float: left;
+    position: fixed;
+    left: calc(66% - 40px);
+    overflow-y: auto;
+    max-height: calc(100vh - 180px);
+    border-radius: 10px;
+    padding: 0px;
+    margin-top: 30px;
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, .25);
+  }
+
+  .mat-mdc-card-header {
+    background-color: #ED297B;
+    padding: 25px 35px!important;
+
+    .mat-mdc-card-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .mat-icon {
+      fill: white!important;
+    }
+  }
+
+  .mat-mdc-card-content {
+    padding: 0px!important;
+
+    .title-status {
+      background-color: #F2F3F3;
+      padding: 10px 35px;
+
+      b {
+        color: #4D4D4D;
+        font-size: 1em;
+        font-weight: 700;
+      }
+
+      .col-left {
+        display: inline-block;
+        width: 50%;
+      }
+
+      .col-right {
+        display: inline-block;
+        width: 50%;
+        text-align: right;
+        font-size: 1em;
+        font-weight: 700;
+      }
+    }
+
+    .title-client {
+      padding: 10px 35px;
+      color: #4D4D4D;
+      font-size: 1em;
+      font-weight: 700;
+    }
+
+    .holder-client {
+      padding-left: 45px;
+
+      .col-left {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .col-right {
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 25px;
+
+        .client-name {
+          font-size: 1.3em;
+          font-weight: 700;
+          color: black;
+          margin-bottom: 2px;
+        }
+
+        .client-dates {
+          font-size: .7em;
+        }
+      }
+    }
+  }
 }
