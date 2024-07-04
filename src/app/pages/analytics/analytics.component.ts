@@ -45,6 +45,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   selectedFrom = null;
   selectedSport = null;
   selectedTo = null;
+  tabActive = 'general';
 
   columns: TableColumn<any>[] = [
     {label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium']},
@@ -62,11 +63,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     {label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'sold', property: 'booked_places', type: 'text', visible: true},
-    {label: 'cash', property: 'payments.cash', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'other', property: 'payments.other', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'T.Boukii', property: 'payments.boukii', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'online', property: 'payments.online', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'voucher', property: 'payments.voucher', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'cash', property: 'cash', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'online', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'voucher', property: 'voucher_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
     {label: 'total', property: 'total_cost', type: 'price', visible: true},
   ];
 
@@ -207,7 +208,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     })
 
     this.getBookingsByDateSport().subscribe(res => {
-      this.updateChartBySport(false, res.data);
+      this.updateChartBySport(res.data);
     })
 
     let settings = JSON.parse(this.user.schools[0].settings);
@@ -312,7 +313,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       plotTotalHours = 'totalHoursFiltered';
     }
 
-    if(!this.showDetail) {
+    if(!this.showDetail && this.tabActive != 'sells') {
       this.getActiveMonitors().subscribe(res => {
         let collectiveText = {
           'title': this.translateService.instant('monitors'),
@@ -322,6 +323,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
         }
         this.setPlotly('blue', collectiveText, plotActiveMonitors, res.data.busy, res.data.total)
       });
+    }
+    if(this.tabActive == 'sells') {
+      this.loadSellData();
     }
     this.getTotalHours().subscribe(res => {
       let collectiveText = {
@@ -396,6 +400,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
 
   onTabChange(event: MatTabChangeEvent) {
     if (event.index === 2) {
+      this.tabActive = 'monitors';
       this.reloadData(true);
       this.getBookingsByDate().subscribe(res => {
         this.setUserSessionAnalytics(true, res.data);
@@ -403,13 +408,20 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
 
 
     } else if(event.index === 0) {
+      this.tabActive = 'general';
       this.filter = '';
+      this.showDetail = false;
       this.reloadData(false);
       this.getBookingsByDate().subscribe(res => {
         this.setUserSessionAnalytics(false, res.data);
       })
     } else if(event.index === 1) {
       this.filter = '';
+      this.tabActive = 'sells';
+      this.showDetail = false;
+      this.getBookingsByDate().subscribe(res => {
+        this.setUserSessionAnalytics(false, res.data);
+      })
       this.loadSellData();
     }
   }
@@ -635,15 +647,17 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       showlegend: true,
     };
 
-    if(monitors) {
+    if(this.tabActive == 'monitors') {
       Plotly.newPlot('user-session-analytics4', chartData, layout);
-    } else {
+    } else if(this.tabActive == 'general') {
       Plotly.newPlot('user-session-analytics', chartData, layout);
+    } else if(this.tabActive == 'sells') {
+      Plotly.newPlot('user-session-analytics-sales', chartData, layout);
     }
 
   }
 
-  updateChartBySport(monitors, data) {
+  updateChartBySport(data, id = 'hours_by_sport') {
     const dates = Object.keys(data); // Obtener todas las fechas
 
     const sports = {};
@@ -674,7 +688,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     }));
 
     const layout = {
-      title: this.translateService.instant('hours_by_sport'),
+      title: this.translateService.instant(id),
       xaxis: {
         title:  this.translateService.instant('date'),
         type: 'date',

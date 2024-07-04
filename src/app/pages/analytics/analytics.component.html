@@ -7,6 +7,7 @@
   </vex-secondary-toolbar>
   <vex-page-layout-content class="-mt-6 fullwidth">
     <mat-tab-group (selectedTabChange)="onTabChange($event)">
+
       <mat-tab label="Vista General">
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
@@ -117,7 +118,7 @@
                 <mat-label>{{ 'sport' | translate }}</mat-label>
                 <mat-select [(ngModel)]="selectedSport" (selectionChange)="filterData()" class="custom-select">
                   <mat-option  [value]="null">
-
+                    {{ 'all' | translate }}
                   </mat-option>
                   <mat-option  *ngFor="let sport of allSports" [value]="sport.id">
                     {{ sport.name }}
@@ -174,7 +175,7 @@
         ></vex-aio-table>
       </mat-tab>
       <mat-tab label="Monitores">
-        <div class="card" style="margin: 2% 0 2% 0;" *ngIf="!showDetail">
+        <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 border-b d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
               <h2 class="title m-0">{{'monitors' | translate }}</h2>
@@ -182,7 +183,7 @@
                 <mat-label>{{ 'sport' | translate }}</mat-label>
                 <mat-select [(ngModel)]="selectedSport" (selectionChange)="filterData()" class="custom-select">
                   <mat-option  [value]="null">
-
+                    {{ 'all' | translate }}
                   </mat-option>
                   <mat-option  *ngFor="let sport of allSports" [value]="sport.id">
                     {{ sport.name }}
