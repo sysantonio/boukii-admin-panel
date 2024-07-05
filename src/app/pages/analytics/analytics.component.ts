@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import Plotly from 'plotly.js-dist-min';
 import {MatTabChangeEvent} from '@angular/material/tabs';
 import {MonitorsCreateUpdateComponent} from '../monitors/monitors-create-update/monitors-create-update.component';
@@ -16,7 +16,7 @@ import {MOCK_PROVINCES} from '../../static-data/province-data';
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss']
 })
-export class AnalyticsComponent implements OnInit, AfterViewInit {
+export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
   courseTypeHoursData = [
     {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
     {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
@@ -46,6 +46,8 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   selectedSport = null;
   selectedTo = null;
   tabActive = 'general';
+  areGraphsVisible: boolean = true;
+  private resizePending = false;
 
   columns: TableColumn<any>[] = [
     {label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium']},
@@ -89,12 +91,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
   }
 
-  ngOnInit(): void {
-
-  }
-
   updateTotalHours() {
     this.totalHours = this.courseTypeHoursData.reduce((acc, course) => acc + course.max_value, 0);
+  }
+
+  toggleGraphsVisibility(): void {
+    this.areGraphsVisible = !this.areGraphsVisible;
+    this.resizePending = true;
+    this.cdr.detectChanges(); // Forzar la detección de cambios
   }
 
   updateCourseValue(index: number, newValue: number, newMaxValue: number = 0) {
@@ -424,6 +428,27 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       })
       this.loadSellData();
     }
+  }
+
+  ngAfterViewChecked() {
+    if (this.resizePending && this.areGraphsVisible) {
+      this.resizePending = false;
+      this.resizeAllCharts();
+    }
+  }
+
+  resizeAllCharts() {
+    const chartIds = [
+      'collectiveSales', 'priveSales', 'activitySales', 'voucher', 'voucherSales', 'user-session-analytics',
+      'activeMonitorsFiltered', 'totalHoursFiltered', 'user-session-analytics2', 'collectiveSales', 'privateSales'
+    ];
+
+    chartIds.forEach(id => {
+      const chartElement = document.getElementById(id);
+      if (chartElement) {
+        Plotly.Plots.resize(chartElement);
+      }
+    });
   }
 
   setPlotly(color, text, id, value, maxValue) {

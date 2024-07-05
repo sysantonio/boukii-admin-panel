@@ -328,6 +328,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;
         this.data = response.data;
+        this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
         this.dataSource.data = response.data;
         this.totalRecords = response.total;
         this.loading = false;
@@ -352,6 +353,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       this.with)
       .subscribe((response: any) => {
         this.data = response.data;
+        this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
         this.dataSource.data = response.data;
         this.totalRecords = response.total; // Total de registros disponibles.
 
