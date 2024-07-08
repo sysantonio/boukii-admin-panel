@@ -107,9 +107,21 @@
   vertical-align: bottom;
 }
 
+.date-course {
+  font-size: .9em;
+  font-weight: 300;
+  color: #4D4D4D;
+
+  i {
+    font-weight: 500;
+  }
+}
+
 .title-actividad {
   background-color: #F2F3F3;
   padding: 15px 35px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 
   .title {
     font-size: 1.2em;
@@ -140,7 +152,27 @@
 }
 
 .holder-content {
-  padding: 15px 35px;
+  padding: 15px 50px;
+
+  .subtitle {
+    position: relative;
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #4D4D4D;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    &:after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 100%;
+      background-color: #523F69;
+      opacity: .06;
+    }
+
+  }
+
 }
 
 .holder-actividad {
@@ -186,6 +218,36 @@
       color: #4D4D4D;
       font-size: 1.4em;
       font-weight: 600;
+    }
+  }
+}
+
+.total-bottom {
+  width: 100%;
+
+  .col-left {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  .col-right {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+  }
+
+  .total {
+    color: #ffffff;
+    font-size: 1.2em;
+    font-weight: 400;
+    background-color: #E91E63;
+    padding: 15px 35px;
+
+    b {
+      font-weight: 700;
     }
   }
 }

@@ -179,12 +179,7 @@
                       <div class="course-label">Prive Flex Ski</div>
                       <ng-container *ngFor="let item of detailData.bookingusers">
                         <div *ngIf="item.client_id == bUsers.client_id">
-                          <ul>
-                            <li>
-                              <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" /> {{item.date |date: 'dd.MM.YYYY'}}
-                              <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i>
-                            </li>
-                          </ul>
+                          <span class="date-course"><img class="icon-calendar" src="assets/img/icons/calendar-1.svg" /> {{item.date |date: 'dd.MM.YYYY'}} <i>{{item?.hour_start}}h</i> - {{item?.hour_end}}h</span>
                         </div>
                       </ng-container>
                     </div>
@@ -201,56 +196,52 @@
                 </div>-->
 
                 <div>
-                  <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/clientes2.svg" /> Participante</div>
-                  <div style="float: left; width: 20%;">
-                    <app-level-user
-                      *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                      [allLevels]="detailData.degrees_sport"
-                      [selectLevel]="getClientDegree(bUsers.client_id)"
-                      [size]="80"
-                      [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
-                    ></app-level-user>
-                  </div>
-                  <div style="float: left; width: 80%;text-wrap: nowrap;">
-                    <p style="margin-left: 1.5em">
-                      <b>{{'participant' | translate}}</b>
-                    </p>
-                    <p style="margin-left: 1.5em">
-                      {{getClient(bUsers?.client_id)?.first_name}}
-                      {{getClient(bUsers?.client_id)?.last_name}}
-                    </p>
-                    <p style="margin-left: 1.5em">
-                      <i>
-                        {{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
-                        ·
-                        {{ getCountry(getClient(bUsers?.client_id)?.country) }}
-                        ·
-                        {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}}
-                        {{'years' | translate }}
-                      </i>
-                    </p>
+                  <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/clientes2.svg" /> {{'participant' | translate}}</div>
+                  <div>
+                    <div style="display:inline-block;vertical-align: top; width: 20%;">
+                      <app-level-user
+                        *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                        [allLevels]="detailData.degrees_sport"
+                        [selectLevel]="getClientDegree(bUsers.client_id)"
+                        [size]="80"
+                        [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
+                      ></app-level-user>
+                    </div>
+                    <div style="display:inline-block;vertical-align: top; width: 80%;text-wrap: nowrap;">
+                      <div style="margin-left: 1.5em">
+                        <div><b>{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}}</b></div>
+                      </div>
+                      <div style="margin-left: 1.5em">
+                        <i>
+                          {{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
+                          ·
+                          {{ getCountry(getClient(bUsers?.client_id)?.country) }}
+                          ·
+                          {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}}
+                          {{'years' | translate }}
+                        </i>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
+                <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> Monitor</div>
                 <div>
-                  <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> Monitor</div>
-                  <div style="float: left; width: 20%;">
+                  <div style="display:inline-block; vertical-align: top; width: 20%;">
                     <!--<img
                       [src]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
                       style="border-radius: 100%;"
                     />-->
                     <app-level-user
+                      [allLevels]="detailData.degrees_sport"
+                      [selectLevel]="getClientDegree(bUsers.client_id)"
                       [size]="80"
-                      [userImage]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
+                      [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
                     ></app-level-user>
                   </div>
-
-                  <div style="width: 80%;float:left;" *ngIf="getMonitor(bUsers.monitor_id)">
+                  <div style="display:inline-block;vertical-align: top;width: 80%;" *ngIf="getMonitor(bUsers.monitor_id)">
                     <p style="margin-left: 1.5em">
-                      <b>
-                        {{getMonitor(bUsers?.monitor_id)?.first_name}}
-                        {{getMonitor(bUsers?.monitor_id)?.last_name}}
-                      </b>
+                      <b>{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</b>
                     </p>
                     <p style="margin-left: 1.5em">
                       <i>
@@ -261,18 +252,19 @@
                       </i>
                     </p>
                   </div>
-
-                  <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
-                    <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
-                  </div>
-                  <div
-                    style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
-                    [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
-                  >
-                    {{getDegree(bUsers?.degree_id)?.annotation}}
-                    {{getDegree(bUsers?.degree_id)?.level}}
-                  </div>
                 </div>
+
+                <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
+                  <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
+                </div>
+                <div
+                  style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
+                  [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
+                >
+                  {{getDegree(bUsers?.degree_id)?.annotation}}
+                  {{getDegree(bUsers?.degree_id)?.level}}
+                </div>
+
               </div>
             </div>
 
@@ -464,8 +456,8 @@
             </ng-container>
           </div>
         </div>-->
-        <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
-          <div style="text-align: left;width: 50%;float:left">
+        <div class="total-bottom">
+          <div class="col-left">
             <ul>
               <li *ngIf="detailData?.has_cancellation_insurance">
                 {{'op_rem' | translate}}
@@ -474,12 +466,12 @@
               <li *ngIf="existExtras()">{{'extras' | translate}}</li>
               <li *ngIf="bonus?.length > 0">{{'bonus' | translate}}</li>
               <li *ngIf="getTVA()">{{'tva' |translate}}</li>
-              <li>
-                <strong>{{'total' | translate | uppercase}}</strong>
+              <li class="total">
+                <b>{{'total' | translate | uppercase}}</b>
               </li>
             </ul>
           </div>
-          <div style="text-align: right;width: 50%;float:left">
+          <div class="col-right">
             <ul>
               <li *ngIf="detailData?.has_cancellation_insurance">
                 {{detailData.price_cancellation_insurance}}
@@ -498,10 +490,8 @@
                 {{(detailData?.price_total * getTVAValue()).toFixed(2)}}
                 {{detailData.currency}}
               </li>
-              <li>
-                <strong
-                >{{detailData?.price_total}} {{detailData.currency}}</strong
-                >
+              <li class="total">
+                {{detailData?.price_total}} {{detailData.currency}}
               </li>
             </ul>
           </div>
