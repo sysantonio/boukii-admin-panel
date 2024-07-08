@@ -44,7 +44,7 @@
 
     .title-status {
       background-color: #F2F3F3;
-      padding: 10px 35px;
+      padding: 15px 35px;
 
       b {
         color: #4D4D4D;
@@ -69,7 +69,7 @@
     .title-client {
       padding: 10px 35px;
       color: #4D4D4D;
-      font-size: 1em;
+      font-size: 1.2em;
       font-weight: 700;
     }
 
@@ -96,6 +96,96 @@
           font-size: .7em;
         }
       }
+    }
+  }
+}
+
+.icon-calendar {
+  display: inline-block;
+  height: 23px;
+  width: 23px;
+  vertical-align: bottom;
+}
+
+.title-actividad {
+  background-color: #F2F3F3;
+  padding: 15px 35px;
+
+  .title {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #4D4D4D;
+  }
+
+  b {
+    font-weight: 700;
+  }
+
+  .col-left {
+    display: inline-block;
+    width: 70%;
+  }
+
+  .col-right {
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+
+    b {
+      color: #4D4D4D;
+      font-size: 1.4em;
+      font-weight: 600;
+    }
+  }
+}
+
+.holder-content {
+  padding: 15px 35px;
+}
+
+.holder-actividad {
+  width: 100%;
+
+  .col-left {
+    display: inline-block;
+    width: 70%;
+
+    .course-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .course-label {
+      font-size: 1em;
+      font-weight: 400;
+      color: #4D4D4D;
+    }
+
+    b {
+      font-weight: 700;
+    }
+
+    .c-l {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .c-r {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  .col-right {
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+
+    b {
+      color: #4D4D4D;
+      font-size: 1.4em;
+      font-weight: 600;
     }
   }
 }
