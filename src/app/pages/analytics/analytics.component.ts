@@ -62,6 +62,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
   ];
 
   columnsSales: TableColumn<any>[] = [
+    {label: 'type', property: 'icon', type: 'booking_users_image', visible: true},
     {label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium']},
     {label: 'sold', property: 'booked_places', type: 'text', visible: true},
@@ -69,7 +70,9 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     {label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium']},
     {label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium']},
     {label: 'online', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'voucher', property: 'voucher_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'vouchers', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'gift_vouchers', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
+    {label: 'discount_code', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
     {label: 'total', property: 'total_cost', type: 'price', visible: true},
   ];
 
@@ -89,6 +92,37 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
   constructor(private crudService: ApiCrudService, private router: Router, public translateService: TranslateService,
               private cdr: ChangeDetectorRef) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+  }
+
+  ngAfterViewInit(): void {
+    let voucherText = {
+      'title': this.translateService.instant('gift_vouchers'),
+      'subtitle': this.translateService.instant('sales'),
+      'price': '0 CHF' ,
+      'subprice': this.translateService.instant('occupation'),
+    }
+    this.setPlotly('magenta', voucherText, 'voucher', 0, 0);
+    this.getBookingsByDate().subscribe(res => {
+      this.setUserSessionAnalytics(false, res.data);
+    })
+
+    this.getBookingsByDateSport().subscribe(res => {
+      this.updateChartBySport(res.data);
+    })
+
+    this.getSchoolSports().subscribe(res => {
+      this.allSports = res.data;
+      let settings = JSON.parse(this.user.schools[0].settings);
+      this.currency = settings?.taxes?.currency;
+      this.reloadData(false);
+    })
+
+
+  }
+
+  getSchoolSports() {
+    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id',
+      '&school_id='+this.user.schools[0].id, '', null, null, ['sport']);
   }
 
   updateTotalHours() {
@@ -186,40 +220,6 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     this.reloadData(true);
   }
 
-  ngAfterViewInit(): void {
-    this.getTotalHoursBySport().subscribe(res => {
-      this.allSports = Object.keys(res.data).map(sportId => {
-        const sportData = res.data[sportId];
-        //  this.totalSportHours += sportData.hours;
-        return {
-          id: sportData.sport.id,
-          name: sportData.sport.name,
-          value: sportData.hours,
-          icon: sportData.sport.icon_selected,
-          color: 'blue'  // Puedes ajustar para usar colores específicos
-        };
-      });
-    });
-    let voucherText = {
-      'title': this.translateService.instant('vouchers'),
-      'subtitle': this.translateService.instant('sales'),
-      'price': '3560.00 CHF',
-      'subprice': this.translateService.instant('occupation'),
-    }
-    this.setPlotly('magenta', voucherText, 'voucher', 350, 500);
-    this.getBookingsByDate().subscribe(res => {
-      this.setUserSessionAnalytics(false, res.data);
-    })
-
-    this.getBookingsByDateSport().subscribe(res => {
-      this.updateChartBySport(res.data);
-    })
-
-    let settings = JSON.parse(this.user.schools[0].settings);
-    this.currency = settings?.taxes?.currency;
-    this.reloadData(false);
-  }
-
   goTo(route: string) {
     this.router.navigate([route]);
   }
@@ -260,11 +260,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'price': `${res.data.total_price}${this.currency}`,
         'subprice': this.translateService.instant('occupation'),
       };
-      this.updateCourseValue(0, res.data.total_hours - res.data.total_available_hours,
+      this.updateCourseValue(0, res.data.total_reservations_hours,
         res.data.total_hours);
       if(!monitors) {
-        this.setPlotly('orange', collectiveText, 'collective',
-          res.data.total_places - res.data.total_available_places, res.data.total_available_places);
+        this.setPlotly('#FAC710', collectiveText, 'collective',
+          res.data.total_reservations_places, res.data.total_available_places);
       }
 
       this.totalPriceSell += res.data.total_price;
@@ -278,11 +278,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'price': `${res.data.total_price}${this.currency}`,
         'subprice': this.translateService.instant('occupation'),
       };
-      this.updateCourseValue(1, res.data.total_hours - res.data.total_available_hours,
+      this.updateCourseValue(1, res.data.total_reservations_hours,
         res.data.total_hours);
       if(!monitors) {
-        this.setPlotly('green', collectiveText, 'prive',
-          res.data.total_places - res.data.total_available_places, res.data.total_places);
+        this.setPlotly('#8FD14F', collectiveText, 'prive',
+          res.data.total_reservations_places, res.data.total_places);
 
       }
       this.totalPriceSell += res.data.total_price;
@@ -296,11 +296,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'price': `${res.data.total_price}${this.currency}`,
         'subprice': this.translateService.instant('occupation'),
       };
-      this.updateCourseValue(2, res.data.total_hours - res.data.total_available_hours,
+      this.updateCourseValue(2, res.data.total_reservations_hours,
         res.data.total_hours);
       if(!monitors) {
-        this.setPlotly('blue', collectiveText, 'activity',
-          res.data.total_places - res.data.total_available_places, res.data.total_places);
+        this.setPlotly('#00beff', collectiveText, 'activity',
+          res.data.total_reservations_places, res.data.total_places);
       }
       this.totalPriceSell += res.data.total_price;
 
@@ -325,7 +325,10 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
           'price': res.data.busy + '/' + res.data.total,
           'subprice': this.translateService.instant('occupation'),
         }
-        this.setPlotly('blue', collectiveText, plotActiveMonitors, res.data.busy, res.data.total)
+        const chartElement = document.getElementById(plotActiveMonitors);
+        if (chartElement) {
+          this.setPlotly('blue', collectiveText, plotActiveMonitors, res.data.busy, res.data.total)
+        }
       });
     }
     if(this.tabActive == 'sells') {
@@ -338,7 +341,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'price': res.data.totalWorkedHours + 'h',
         'subprice': this.translateService.instant('hours_worked') + '/' + this.translateService.instant('blocks'),
       }
-      this.setPlotly('blue', collectiveText, plotTotalHours, res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
+      const chartElement = document.getElementById(plotTotalHours);
+      if (chartElement) {
+        this.setPlotly('blue', collectiveText, plotTotalHours,
+          res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
+      }
     });
 
     this.cdr.detectChanges();
@@ -346,6 +353,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
 
   loadSellData() {
     this.getBookingsTotal(1).subscribe(res => {
+      this.totalPriceSell = 0;
       const collectiveText = {
         'title': this.translateService.instant('course_colective'),
         'subtitle': this.translateService.instant('sales'),
@@ -353,7 +361,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'subprice': this.translateService.instant('occupation'),
       };
 
-      this.setPlotly('orange', collectiveText, 'collectiveSales',
+      this.setPlotly('#FAC710', collectiveText, 'collectiveSales',
         res.data.total_places - res.data.total_available_places, res.data.total_available_places);
 
 
@@ -369,7 +377,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'subprice': this.translateService.instant('occupation'),
       };
 
-      this.setPlotly('green', collectiveText, 'priveSales',
+      this.setPlotly('#8FD14F', collectiveText, 'priveSales',
         res.data.total_places - res.data.total_available_places, res.data.total_places);
 
 
@@ -385,7 +393,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'subprice': this.translateService.instant('occupation'),
       };
 
-      this.setPlotly('blue', collectiveText, 'activitySales',
+      this.setPlotly('#00beff', collectiveText, 'activitySales',
         res.data.total_places - res.data.total_available_places, res.data.total_places);
 
       this.totalPriceSell += res.data.total_price;
@@ -393,12 +401,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     });
 
     let voucherText = {
-      'title': this.translateService.instant('vouchers'),
+      'title': this.translateService.instant('gift_vouchers'),
       'subtitle': this.translateService.instant('sales'),
-      'price': '3560.00 CHF',
+      'price': '0 CHF' ,
       'subprice': this.translateService.instant('occupation'),
     }
-    this.setPlotly('magenta', voucherText, 'voucherSales', 350, 500);
+    this.setPlotly('magenta', voucherText, 'voucherSales', 0, 0);
   }
 
 
@@ -508,7 +516,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         font: {
           family: "Dinamit, sans-serif",
           weight: "bold",
-          size: 36,
+          size: 34,
           color: color
         },
         showarrow: false,
@@ -636,7 +644,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       y: courseType1,
       mode: 'lines+markers',
       name: this.translateService.instant('course_colective'),
-      line: {color: '#ff5733'}
+      line: {color: '#FAC710'}
     };
 
     const trace2 = {
@@ -644,7 +652,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       y: courseType2,
       mode: 'lines+markers',
       name:  this.translateService.instant('course_private'),
-      line: {color: '#33c7ff'}
+      line: {color: '#8FD14F'}
     };
 
     const trace3 = {
@@ -652,7 +660,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       y: courseType3,
       mode: 'lines+markers',
       name: this.translateService.instant('activity'),
-      line: {color: '#ff33b8'}
+      line: {color: '#00beff'}
     };
 
     const chartData = [trace1, trace2, trace3];
@@ -670,6 +678,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
       showlegend: true,
+      height: 250
     };
 
     if(this.tabActive == 'monitors') {
@@ -679,8 +688,8 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     } else if(this.tabActive == 'sells') {
       Plotly.newPlot('user-session-analytics-sales', chartData, layout);
     }
-
   }
+
 
   updateChartBySport(data, id = 'hours_by_sport') {
     const dates = Object.keys(data); // Obtener todas las fechas
@@ -736,8 +745,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     return country ? country.name : 'NDF';
   }
 
-  getPercentage(value: number, total) {
-    return (value / total) * 100;
+  getPercentage(value: number, maxValue: number): number {
+    if (maxValue === 0) {
+      return 0; // Si max_value es 0, no se necesita hacer el cálculo
+    }
+    return (value / maxValue) * 100;
   }
 
 }

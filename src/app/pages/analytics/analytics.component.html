@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="chart-column-lines">
-            <div class="card" style="padding: 8% 0 0 0;">
+            <div class="card" style="height: 275px;">
               <div id="user-session-analytics" style="width: 100%; height: 300px;"></div>
             </div>
           </div>
@@ -92,16 +92,19 @@
                 </div>
                 <div class="course-info">
                   <div class="course-bar-container">
-                    <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, course.max_value)"
+                    <div *ngIf="course.max_value !== 0" class="course-bar-filled"
+                         [style.width.%]="getPercentage(course.value, course.max_value)"
                          [style.backgroundColor]="course.color"></div>
-                    <div class="course-bar-empty" [style.width.%]="getPercentage(course.max_value-course.value, course.max_value )"></div>
+                    <div *ngIf="course.max_value !== 0" class="course-bar-empty"
+                         [style.width.%]="getPercentage(course.max_value - course.value, course.max_value)"></div>
+                    <div *ngIf="course.max_value === 0" class="course-bar-empty" style="width: 100%;"></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="chart-column-lines">
-            <div class="card" style="padding: 8% 0 0 0;">
+            <div class="card" style="height: 275px;">
               <div id="user-session-analytics2" style="width: 100%; height: 300px;"></div>
             </div>
           </div>
@@ -120,8 +123,8 @@
                   <mat-option  [value]="null">
                     {{ 'all' | translate }}
                   </mat-option>
-                  <mat-option  *ngFor="let sport of allSports" [value]="sport.id">
-                    {{ sport.name }}
+                  <mat-option  *ngFor="let sport of allSports" [value]="sport.sport.id">
+                    {{ sport.sport.name }}
                   </mat-option>
                 </mat-select>
               </div>
@@ -166,15 +169,14 @@
               </div>
             </div>
             <div class="chart-column-lines">
-              <div class="card" style="padding: 8% 0 0 0;">
+              <div class="card" style="height: 275px;">
                 <div id="user-session-analytics-sales" style="width: 100%; height: 300px;"></div>
               </div>
             </div>
           </div>
         </div>
         <vex-aio-table *ngIf="tabActive == 'sells'" [columns]="columnsSales" [entity]="entitySales" [deleteEntity]="deleteEntity"
-                       [title]="'menu.courses'"
-                       (showDetailEvent)="showDetailEvent($event)" [showDetail]="false" [search]="filter"
+                       [title]="'menu.courses'" [showDetail]="false" [search]="filter"
                        [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
                        [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
         ></vex-aio-table>
@@ -190,8 +192,8 @@
                   <mat-option  [value]="null">
                     {{ 'all' | translate }}
                   </mat-option>
-                  <mat-option  *ngFor="let sport of allSports" [value]="sport.id">
-                    {{ sport.name }}
+                  <mat-option  *ngFor="let sport of allSports" [value]="sport.sport.id">
+                    {{ sport.sport.name }}
                   </mat-option>
                 </mat-select>
               </div>
@@ -266,16 +268,19 @@
                   </div>
                   <div class="course-info">
                     <div class="course-bar-container">
-                      <div class="course-bar-filled" [style.width.%]="getPercentage(course.value, course.max_value)"
+                      <div *ngIf="course.max_value !== 0" class="course-bar-filled"
+                           [style.width.%]="getPercentage(course.value, course.max_value)"
                            [style.backgroundColor]="course.color"></div>
-                      <div class="course-bar-empty" [style.width.%]="getPercentage(course.max_value-course.value, course.max_value )"></div>
+                      <div *ngIf="course.max_value !== 0" class="course-bar-empty"
+                           [style.width.%]="getPercentage(course.max_value - course.value, course.max_value)"></div>
+                      <div *ngIf="course.max_value === 0" class="course-bar-empty" style="width: 100%;"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="chart-column-lines">
-              <div class="card" style="padding: 8% 0 0 0;">
+              <div class="card" style="height: 275px;">
                 <div id="user-session-analytics4" style="width: 100%; height: 300px;"></div>
               </div>
             </div>

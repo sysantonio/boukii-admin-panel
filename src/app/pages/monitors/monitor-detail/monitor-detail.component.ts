@@ -977,8 +977,8 @@ export class MonitorDetailComponent {
 
   authoriseCurrentLevel(level, element) {
 
-    const index = element.authorisedLevels.findIndex(l => l.degree_id === level.id);
-    const authLevel = element.authorisedLevels.find(l => l.degree_id === level.id);
+    const index = element.authorisedLevels ? element.authorisedLevels.findIndex(l => l.degree_id === level.id) : -1;
+    const authLevel = element.authorisedLevels ?  element.authorisedLevels.find(l => l.degree_id === level.id): null;
     if (index !== -1) {
       this.crudService.delete('/monitor-sport-authorized-degrees', authLevel.id)
         .subscribe(() => {
@@ -986,8 +986,11 @@ export class MonitorDetailComponent {
           this.snackbar.open(this.translateService.instant('snackbar.monitor.delete_auth'), 'OK', {duration: 3000});
         });
     } else {
-      this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: element.authorisedLevels[0].monitor_sport_id, degree_id: level.id})
+      this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: element.monitor_sports_degree_id, degree_id: level.id})
         .subscribe((data) => {
+          if( !element.authorisedLevels) {
+            element.authorisedLevels = [];
+          }
           element.authorisedLevels.push(data.data);
           this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth'), 'OK', {duration: 3000});
 
