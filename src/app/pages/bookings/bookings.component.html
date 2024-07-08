@@ -79,16 +79,16 @@
               <b>{{ 'status' | translate}}:</b>
             </span>
             <span class="col-right">
-              <span style="color:#5ade47" *ngIf="detailData.status === 1 && detailData.paid">
+              <span style="color:#00C32B" *ngIf="detailData.status === 1 && detailData.paid">
                 {{'payed' | translate | uppercase }}
               </span>
-              <span style="color:#dbd616" *ngIf="detailData.status === 1 && !detailData.paid">
+              <span style="color:#FF0000" *ngIf="detailData.status === 1 && !detailData.paid">
                 {{'no_payed' | translate | uppercase }}
               </span>
-              <span style="color:#dbd616" *ngIf="detailData.status === 2">
+              <span style="color:#FF0000" *ngIf="detailData.status === 2">
                 {{'cancelled' | translate | uppercase }}
               </span>
-              <span style="color:#dbd616" *ngIf="detailData.status === 3" >
+              <span style="color:#FA9917" *ngIf="detailData.status === 3" >
                 {{'partial_cancelled' | translate | uppercase }}
               </span>
             </span>
@@ -139,11 +139,21 @@
           </div>
         </div>
 
+
+
         <ng-container>
           <div
             *ngFor="let bUsers of bookingUsersUnique; let buI = index"
             [style.marginTop]="buI > 0 ? '35px' : ''"
           >
+          <!--<div class="title-status">
+            <span class="col-left">
+              Actividad 1 <span>Anulada</span>
+            </span>
+            <span class="col-right">
+              160.00 CHF
+            </span>
+          </div>-->
             <div style="float: left; width: 50%;">
               <div>
                 <p>
@@ -161,14 +171,13 @@
                 <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(bUsers?.degree_id)?.color}">
                   {{getDegree(bUsers?.degree_id)?.league}} - {{getDegree(bUsers?.degree_id)?.annotation}}/{{getDegree(bUsers?.degree_id)?.name}}
                 </div>
-
               </div>-->
 
               <ng-container *ngFor="let item of detailData.bookingusers">
                 <div *ngIf="item.client_id == bUsers.client_id">
                   <ul>
-                    <li >
-                      {{item.date |date: 'dd/MM/YYYY'}}
+                    <li>
+                      <mat-icon svgIcon="mat:calendar_today"></mat-icon> {{item.date |date: 'dd.MM.YYYY'}}
                       <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i>
                     </li>
                   </ul>
@@ -194,15 +203,14 @@
                     {{getClient(bUsers?.client_id)?.last_name}}
                   </p>
                   <p style="margin-left: 1.5em">
-
-                    <i
-                    >{{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
+                    <i>
+                      {{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
                       ·
                       {{ getCountry(getClient(bUsers?.client_id)?.country) }}
                       ·
                       {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}}
-                      {{'years' | translate }}</i
-                    >
+                      {{'years' | translate }}
+                    </i>
                   </p>
                 </div>
               </div>
@@ -376,7 +384,7 @@
 
         </ng-container>
 
-        <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+        <!--<div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
           <h3
             style="font-size: 1.5rem!important;"
             *ngIf="bookingLog.length > 0"
@@ -428,7 +436,7 @@
               </span>
             </ng-container>
           </div>
-        </div>
+        </div>-->
         <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
           <div style="text-align: left;width: 50%;float:left">
             <ul>
