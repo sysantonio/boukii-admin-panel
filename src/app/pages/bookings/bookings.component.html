@@ -207,7 +207,7 @@
                     </div>
                     <div style="display:inline-block;vertical-align: middle; width: 80%;text-wrap: nowrap;">
                       <div style="margin-left: 1em">
-                        <div><b>{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}}</b></div>
+                        <div><b style="font-size: 1.2em;">{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}}</b></div>
                       </div>
                       <div style="margin-left: 1em">
                         <i>
@@ -249,14 +249,14 @@
                     <app-level-user
                       [allLevels]="detailData.degrees_sport"
                       [selectLevel]="getClientDegree(bUsers.client_id)"
-                      [size]="80"
+                      [size]="60"
                       [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
                     ></app-level-user>
                   </div>
                   <div style="display:inline-block;vertical-align: middle;width: 80%;" *ngIf="getMonitor(bUsers.monitor_id)">
                     <div style="margin-left: 1em">
                       <div style="display:inline-block;">
-                        <div><b>{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</b></div>
+                        <div><b style="font-size: 1.2em;">{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</b></div>
                         <div>
                           <i>
                             {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}}
@@ -269,9 +269,9 @@
                       <span class="dot"></span>
                     </div>
                   </div>
-                </div>
-                <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
-                  <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
+                  <div style="display:inline-block;vertical-align: middle;width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
+                    <div style="margin-left: 1em">{{'no_monitor' | translate}}</div>
+                  </div>
                 </div>
               </div>
             </div>
