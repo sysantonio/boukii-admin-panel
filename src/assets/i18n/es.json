@@ -613,5 +613,6 @@
   "total_hours": "Total Horas",
   "hours_worked_total": "Horas trabajadas totales",
   "hours_by_type": "Horas por tipo de curso",
-  "hours_by_sport": "Horas por deporte"
+  "hours_by_sport": "Horas por deporte",
+  "error.max_quantity": "No puede haber más por vender que la cantidad total de códigos descuento"
 }

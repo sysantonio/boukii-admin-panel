@@ -22,6 +22,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
     quantity: null,
     remaining_balance: null,
     payed: false,
+    is_gift: false,
     client_id: null,
     school_id: null,
   };
@@ -44,7 +45,8 @@ export class BonusesCreateUpdateComponent implements OnInit {
       code:[null],
       quantity:[null, Validators.required],
       budget:[null],
-      payed:[false, Validators.required]
+      payed:[false, Validators.required],
+      is_gift:[false, Validators.required]
     });
   }
 
@@ -77,6 +79,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
       quantity: this.defaults.quantity,
       remaining_balance: this.defaults.quantity,
       payed: this.defaults.payed,
+      is_gift: this.defaults.is_gift,
       client_id: this.defaults.client_id.id,
       school_id: this.user.schools[0].id
     };
@@ -95,6 +98,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
       quantity: this.defaults.quantity,
       remaining_balance: this.defaults.payed ? 0 : this.defaults.quantity,
       payed: this.defaults.payed,
+      is_gift: this.defaults.payed,
       client_id: this.defaults.client_id.id,
       school_id: this.user.schools[0].id
     };

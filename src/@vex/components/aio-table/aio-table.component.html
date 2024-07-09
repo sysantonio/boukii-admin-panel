@@ -86,22 +86,36 @@
 
         <!--Bonuses fake -->
         <div *ngIf="entity.includes('vouchers')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="allCourse = true;activeCourse=false;inActiveCourse = false; finishedCourse = false; filterData(true)">
-            <span [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">{{'vouchers' | translate}}</span>
+          <button class="ml-4 flex-none" mat-button type="button" (click)="gift = 0; filterData(true)">
+            <span [ngStyle]="{'color': !gift ? '#fe3085' : 'black'}">{{'vouchers' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('vouchers')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'discount_code' | translate}}</span>
+          <button class="ml-4 flex-none" mat-button type="button" (click)="gift = 1; filterData()">
+            <span [ngStyle]="{'color': gift ? '#fe3085' : 'black'}">{{'gift_vouchers' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('vouchers')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="finishedCourse = false;activeCourse=true;inActiveCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'gift_vouchers' | translate}}</span>
+          <button class="ml-4 flex-none" mat-button type="button" (click)="router.navigate(['./discount-codes'])">
+            <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'discount_code' | translate}}</span>
           </button>
         </div>
 
-
+        <div *ngIf="entity.includes('discount')">
+          <button class="ml-4 flex-none" mat-button type="button"  (click)="navigateWithParam('./bonuses', '0')">
+            <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'vouchers' | translate}}</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('discount')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="navigateWithParam('./bonuses', '1')">
+            <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'gift_vouchers' | translate}}</span>
+          </button>
+        </div>
+        <div *ngIf="entity.includes('discount')">
+          <button class="ml-4 flex-none" mat-button type="button">
+            <span [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">{{'discount_code' | translate}}</span>
+          </button>
+        </div>
 
 
         <!--Bonuses fake close-->
