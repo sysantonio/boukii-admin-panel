@@ -149,9 +149,7 @@
             <div class="col-right">
               <b>160.00 CHF</b>
             </div>
-
           </div>
-
 
           <div
             *ngFor="let bUsers of bookingUsersUnique; let buI = index"
@@ -198,7 +196,7 @@
                 <div>
                   <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/clientes2.svg" /> {{'participant' | translate}}</div>
                   <div>
-                    <div style="display:inline-block;vertical-align: top; width: 20%;">
+                    <div style="display:inline-block;vertical-align: middle; width: 20%;">
                       <app-level-user
                         *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                         [allLevels]="detailData.degrees_sport"
@@ -207,11 +205,11 @@
                         [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
                       ></app-level-user>
                     </div>
-                    <div style="display:inline-block;vertical-align: top; width: 80%;text-wrap: nowrap;">
-                      <div style="margin-left: 1.5em">
+                    <div style="display:inline-block;vertical-align: middle; width: 80%;text-wrap: nowrap;">
+                      <div style="margin-left: 1em">
                         <div><b>{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}}</b></div>
                       </div>
-                      <div style="margin-left: 1.5em">
+                      <div style="margin-left: 1em">
                         <i>
                           {{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
                           ·
@@ -221,13 +219,29 @@
                           {{'years' | translate }}
                         </i>
                       </div>
+                      <div style="margin-left: 1em">
+                        <div
+                          class="label-user"
+                          [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
+                        >
+                          {{getDegree(bUsers?.degree_id)?.annotation}}
+                          {{getDegree(bUsers?.degree_id)?.level}}
+                        </div>
+                      </div>
+                      <div style="margin-left: 1em">
+                        <mat-slide-toggle
+                          [disabled]="true"
+                          [checked]="detailData?.has_cancellation_insurance"
+                        ></mat-slide-toggle>
+                        Op. Rem
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> Monitor</div>
                 <div>
-                  <div style="display:inline-block; vertical-align: top; width: 20%;">
+                  <div style="display:inline-block; vertical-align: middle; width: 20%;">
                     <!--<img
                       [src]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
                       style="border-radius: 100%;"
@@ -239,82 +253,143 @@
                       [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
                     ></app-level-user>
                   </div>
-                  <div style="display:inline-block;vertical-align: top;width: 80%;" *ngIf="getMonitor(bUsers.monitor_id)">
-                    <p style="margin-left: 1.5em">
-                      <b>{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</b>
-                    </p>
-                    <p style="margin-left: 1.5em">
-                      <i>
-                        {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}}
-                        · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} ·
-                        {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}}
-                        &ensp;{{'years' | translate}}
-                      </i>
-                    </p>
+                  <div style="display:inline-block;vertical-align: middle;width: 80%;" *ngIf="getMonitor(bUsers.monitor_id)">
+                    <div style="margin-left: 1em">
+                      <div style="display:inline-block;">
+                        <div><b>{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</b></div>
+                        <div>
+                          <i>
+                            {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}}
+                            · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} ·
+                            {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}}
+                            &ensp;{{'years' | translate}}
+                          </i>
+                        </div>
+                      </div>
+                      <span class="dot"></span>
+                    </div>
                   </div>
                 </div>
-
                 <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
                   <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
                 </div>
-                <div
-                  style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
-                  [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
-                >
-                  {{getDegree(bUsers?.degree_id)?.annotation}}
-                  {{getDegree(bUsers?.degree_id)?.level}}
-                </div>
-
               </div>
             </div>
 
-              <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle
-                  [disabled]="true"
-                  [checked]="detailData?.has_cancellation_insurance"
-                ></mat-slide-toggle>
-                Op. Rem
+            <div class="title-actividad">
+              <div class="col-left">
+                <b class="title">Payé:</b>
               </div>
-              <div style="float: left; width: 100%;margin-top: 5%;">
-                <mat-slide-toggle
-                  [disabled]="true"
-                  [checked]="detailData?.has_boukii_care"
-                ></mat-slide-toggle>
-                Boukii Care
+              <div class="col-right">
+                <b>0.00 CHF</b>
               </div>
-              <div>
-                <div style="float: left; width: 100%;" *ngIf="false">
-                  <mat-slide-toggle></mat-slide-toggle> Alquiler material
+            </div>
+            <div class="subtitle-sub">Opciones de la reservation</div>
+            <div style="padding: 0px 35px;">
+
+              <div class="list-inner-holder">
+                <div class="col-left">
+                  <mat-slide-toggle
+                    [checked]="true"
+                  ></mat-slide-toggle>
+                  Op. Rem
                 </div>
-                <div style="float: left; width: 100%;margin-top: 5%;">
+                <div class="col-right">
+                  15.00 CHF
+                </div>
+              </div>
+
+              <div class="list-inner-holder">
+                <div class="col-left">
+                  <mat-slide-toggle
+                    [disabled]="true"
+                    [checked]="detailData?.has_boukii_care"
+                  ></mat-slide-toggle>
+                  Boukii Care
+                </div>
+                <div class="col-right">
+                  15.00 CHF
+                </div>
+              </div>
+
+              <div class="list-inner-holder">
+                <div class="col-left">
+                  <div style="width: 100%;" *ngIf="true">
+                    <mat-slide-toggle></mat-slide-toggle> Alquiler material
+                  </div>
+                </div>
+                <div class="col-right">
+                  15.00 CHF
+                </div>
+              </div>
+
+              <div class="list-inner-holder">
+                <div class="col-left">
                   <mat-slide-toggle
                     [disabled]="true"
                     [checked]="bUsers?.courseExtras?.length > 0"
                   ></mat-slide-toggle>
                   Fortait
                 </div>
-                <div
-                  style="float: left; width: 100%;margin-top: 5%;"
-                  *ngIf="false"
-                >
-                  <mat-slide-toggle></mat-slide-toggle> Comida
-                </div>
-                <div
-                  style="float: left; width: 100%;margin-top: 5%;"
-                  *ngIf="false"
-                >
-                  <mat-slide-toggle></mat-slide-toggle> Transporte
+                <div class="col-right">
+                  15.00 CHF
                 </div>
               </div>
-              <!--<div style="float: left; width: 20%;">
-                <p style="text-align: right;color:#5ade47" *ngIf="detailData.bookingusers[0]?.status === 1 && detailData.paid">{{'payed' | translate}}</p>
-                <p style="text-align: right;color:#dbd616" *ngIf="detailData.bookingusers[0]?.status === 1 && !detailData.paid">{{'no_payed' | translate }}</p>
-                <p style="text-align: right;color:#dbd616"*ngIf="detailData.bookingusers[0]?.status === 2">{{'cancelled' | translate | uppercase }}</p>
-              </div>-->
-              <mat-divider
-                style="float: left;width: 100%;margin: 5% 0 0% 0;"
-              ></mat-divider>
 
+              <div class="list-inner-holder">
+                <div class="col-left">
+                  <div style="width: 100%;" *ngIf="true">
+                    <mat-slide-toggle></mat-slide-toggle> Comida
+                  </div>
+                </div>
+                <div class="col-right">
+                  15.00 CHF
+                </div>
+              </div>
+
+              <div class="list-inner-holder">
+                <div class="col-left">
+                  <div
+                    style="width: 100%;" *ngIf="true">
+                    <mat-slide-toggle></mat-slide-toggle> Transporte
+                  </div>
+                </div>
+                <div class="col-right">
+                  15.00 CHF
+                </div>
+              </div>
+
+            </div>
+            <div class="subtitle-sub">Méthode de paiment</div>
+            <div class="list-holder">
+              <div class="col-left">
+                Bono
+              </div>
+              <div class="col-right">
+                0.00 CHF
+              </div>
+            </div>
+            <div class="list-holder">
+              <div class="col-left">
+                <div class="col-l">
+                  Link
+                </div>
+                <div class="col-r">
+                  <span style="#FA9917">En attend de paiment</span>
+                </div>
+              </div>
+              <div class="col-right">
+                165.00 CHF
+              </div>
+            </div>
+            <!--<div style="float: left; width: 20%;">
+              <p style="text-align: right;color:#5ade47" *ngIf="detailData.bookingusers[0]?.status === 1 && detailData.paid">{{'payed' | translate}}</p>
+              <p style="text-align: right;color:#dbd616" *ngIf="detailData.bookingusers[0]?.status === 1 && !detailData.paid">{{'no_payed' | translate }}</p>
+              <p style="text-align: right;color:#dbd616"*ngIf="detailData.bookingusers[0]?.status === 2">{{'cancelled' | translate | uppercase }}</p>
+            </div>-->
+            <!--<mat-divider
+              style="float: left;width: 100%;margin: 5% 0 0% 0;"
+            ></mat-divider>-->
           </div>
 
 
@@ -339,66 +414,61 @@
             <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(bUsers?.degree_id)?.color}">
               {{getDegree(bUsers?.degree_id)?.league}} - {{getDegree(bUsers?.degree_id)?.annotation}}/{{getDegree(bUsers?.degree_id)?.name}}
             </div>
-
-          </div>&ndash;&gt;
-          <ng-container *ngIf="bUsers?.course?.course_type === 1">
-            <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
-              <ul>
-                <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
-              </ul>
+            </div>&ndash;&gt;
+            <ng-container *ngIf="bUsers?.course?.course_type === 1">
+              <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
+                <ul>
+                  <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
+                </ul>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="bUsers?.course?.course_type === 2">
+              <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
+                <ul>
+                  <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
+                </ul>
+              </div>
+            </ng-container>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <div style="float: left; width: 20%;">
+                <img [src]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar" style="border-radius: 100%;">
+              </div>
+              <div style="float: left; width: 80%;text-wrap: nowrap;" *ngIf="getMonitor(bUsers.monitor_id)">
+                <p>
+                  <span *ngIf="detailData.color !== ''" class="dot" [ngStyle]="{'background': detailData.color}"></span>
+                  {{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</p>
+                <p style="font-size:8px"><i>{{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} · {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
+              </div>
+              <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
+                <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
+              </div>
+              <div style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
+                  [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}">
+                {{getDegree(bUsers?.degree_id)?.annotation}} {{getDegree(bUsers?.degree_id)?.level}}
+              </div>
             </div>
-          </ng-container>
-          <ng-container *ngIf="bUsers?.course?.course_type === 2">
-            <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
-              <ul>
-                <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
-              </ul>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_cancellation_insurance"></mat-slide-toggle> Op. Rem
             </div>
-          </ng-container>
-          <div style="float: left; width: 100%;margin-top: 5%;">
-            <div style="float: left; width: 20%;">
-              <img [src]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar" style="border-radius: 100%;">
-            </div>
-            <div style="float: left; width: 80%;text-wrap: nowrap;" *ngIf="getMonitor(bUsers.monitor_id)">
-              <p>
-                <span *ngIf="detailData.color !== ''" class="dot" [ngStyle]="{'background': detailData.color}"></span>
-                {{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</p>
-              <p style="font-size:8px"><i>{{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} · {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
-            </div>
-            <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
-              <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
-            </div>
-            <div style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
-                [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}">
-              {{getDegree(bUsers?.degree_id)?.annotation}} {{getDegree(bUsers?.degree_id)?.level}}
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_boukii_care"></mat-slide-toggle> Boukii Care
             </div>
           </div>
-          <div style="float: left; width: 100%;margin-top: 5%;">
-            <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_cancellation_insurance"></mat-slide-toggle> Op. Rem
+          <div style="float: left; width: 50%;">
+            <div style="float: left; width: 100%;" *ngIf="false">
+              <mat-slide-toggle></mat-slide-toggle> Alquiler material
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;">
+              <mat-slide-toggle [disabled]="true" [checked]="bUsers?.courseExtras?.length > 0"></mat-slide-toggle> Fortrait
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
+              <mat-slide-toggle></mat-slide-toggle> Comida
+            </div>
+            <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
+              <mat-slide-toggle></mat-slide-toggle> Transporte
+            </div>
           </div>
-          <div style="float: left; width: 100%;margin-top: 5%;">
-            <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_boukii_care"></mat-slide-toggle> Boukii Care
-          </div>
-        </div>
-        <div style="float: left; width: 50%;">
-          <div style="float: left; width: 100%;" *ngIf="false">
-            <mat-slide-toggle></mat-slide-toggle> Alquiler material
-
-          </div>
-          <div style="float: left; width: 100%;margin-top: 5%;">
-            <mat-slide-toggle [disabled]="true" [checked]="bUsers?.courseExtras?.length > 0"></mat-slide-toggle> Fortrait
-
-          </div>
-          <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
-            <mat-slide-toggle></mat-slide-toggle> Comida
-
-          </div>
-          <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
-            <mat-slide-toggle></mat-slide-toggle> Transporte
-
-          </div>
-        </div>
-      </div>-->
+        </div>-->
 
         </ng-container>
 
