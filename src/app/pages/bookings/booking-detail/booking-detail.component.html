@@ -815,7 +815,7 @@
       <div class="card-container">
         <div @fadeInUp class="card flex-auto">
 
-          <mat-card>
+          <mat-card class="pb-3">
             <mat-card-header class="mat-card-header" style="display:block">
               <mat-card-title>{{ "booking" | translate }}</mat-card-title>
             </mat-card-header>
@@ -1041,10 +1041,18 @@
                   mat-raised-button
                   color="accent"
                   (click)="addReduction()"
-                  [disabled]="booking.status === 2 || booking.paid"
                 >
                 +
                 </button>
+                <!--<button
+                  class="btn-plus"
+                  mat-raised-button
+                  color="accent"
+                  (click)="addReduction()"
+                  [disabled]="booking.status === 2 || booking.paid"
+                >
+                +
+                </button>-->
               </div>
 
               <div *ngIf="booking.has_reduction">

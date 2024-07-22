@@ -2540,7 +2540,7 @@
               <!--<button mat-raised-button color="accent" (click)="addReduction()">
                 {{'apply_reduction' | translate}} ***
               </button>-->
-              <div style="width100%;">
+              <div style="width100%; margin-bottom: 10px;">
                 <span>{{'apply_reduction' | translate}}</span>
                 <button
                   style="width: 25px; height: 25px;"
@@ -2643,17 +2643,11 @@
                   {{bookingsToCreate.length > 0 ? bookingsToCreate[0].currency : ''}}
                 </p>
               </span>
-
-
-
             </div>
 
-            <h3
-              style="font-size: 1.5rem!important;"
-              *ngIf="bonus.length > 0"
-            >
-              {{ "payment_history" | translate }}
-            </h3>
+            <div class="title-summary" *ngIf="bonus.length > 0">
+              <b>{{ "payment_history" | translate }}</b>
+            </div>
             <div class="table-box" >
               <span
                 style="width: 100%; float:left"
@@ -2687,14 +2681,14 @@
               </span>
               <span
                 class="mat-divider"
-                style="margin: 10px 0 5px 0;
+                style="margin: 10px 0 10px 0;
                 !important;border-top-color: white;
                 float: left;
                 width: 100%;"
               ></span>
-              <p style="float:left">
-                {{ "vouchers" | translate }}
-              </p>
+              <span style="margin-bottom:10px;display:inline-block;margin-top:5px;">
+                <b>{{ "vouchers" | translate }}</b>
+              </span>
               <button
                 *ngIf="bookingPendingPrice > 0"
                 style="width: 25px; height: 25px;"
@@ -2738,7 +2732,7 @@
             </div>
             <ng-container *ngIf="bookingPendingPrice == 0">
               <div
-                class="square-buttons-container"
+                class="square-buttons-container sbc-holder pl-6 pr-6 pb-4"
               >
                 <button
                   style="width:100%"
