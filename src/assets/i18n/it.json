@@ -594,5 +594,18 @@
   "all_tasks": "Tutti i compiti",
   "currency": "Valuta",
   "not_assigned": "Non allocato",
-  "not_required": "Non assegnato"
+  "not_required": "Non assegnato",
+  "sales": "Vendite totali",
+  "occupation": "Tasso di occupazione",
+  "hours_worked": "Ore lavorate",
+  "hours_collective": "C.Collettivo",
+  "hours_private": "C.Privato",
+  "hours_activities": "Attività",
+  "hours_nwd_payed": "B.Pagati",
+  "total_hours": "Ore totali",
+  "hours_worked_total": "Ore lavorate totali",
+  "hours_by_type": "Ore per tipo di corso",
+  "hours_by_sport": "Ore per sport",
+  "error.max_quantity": "Non può esserci più da vendere della quantità totale di codici sconto"
+
 }

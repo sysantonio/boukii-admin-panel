@@ -591,5 +591,17 @@
   "settings.bookings.boukii_care_title": "Assurance supplémentaire",
   "currency": "Monnaie",
   "not_assigned": "Non attribué",
-  "not_required": "Non requise"
+  "not_required": "Non requise",
+  "sales": "Ventes totales",
+  "occupation": "Taux d'occupation",
+  "hours_worked": "Heures travaillées",
+  "hours_collective": "C.Collectif",
+  "hours_private": "C.Privé",
+  "hours_activities": "Activités",
+  "hours_nwd_payed": "B.Payés",
+  "total_hours": "Total Heures",
+  "hours_worked_total": "Heures travaillées totales",
+  "hours_by_type": "Heures par type de cours",
+  "hours_by_sport": "Heures par sport",
+  "error.max_quantity": "Il ne peut pas y avoir plus à vendre que la quantité totale de codes de réduction"
 }

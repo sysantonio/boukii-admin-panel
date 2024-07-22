@@ -177,11 +177,28 @@ const childrenRoutes: VexRoutes = [
       {
         path: 'mail',
         loadChildren: () => import('./pages/mail/mail.module').then(m => m.MailModule),
+        canActivate: [AuthGuard],
       },
       {
         path: 'communications',
         loadChildren: () => import('./pages/communications/communications.module').then(m => m.CommunicationsModule),
-      }
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'discount-codes',
+        loadChildren: () => import('./pages/discounts/discounts.module').then(m => m.DiscountsModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'discount-codes/create',
+        loadChildren: () => import('./pages/discounts/discounts-create-update/discounts-create-update.module').then(m => m.DiscountsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'discount-codes/update/:id',
+        loadChildren: () => import('./pages/discounts/discounts-create-update/discounts-create-update.module').then(m => m.DiscountsCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
     ]
   }
 ];

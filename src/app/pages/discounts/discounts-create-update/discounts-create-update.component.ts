@@ -9,12 +9,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'vex-bonuses-create-update',
-  templateUrl: './bonuses-create-update.component.html',
-  styleUrls: ['./bonuses-create-update.component.scss'],
+  selector: 'vex-discounts-create-update',
+  templateUrl: './discounts-create-update.component.html',
+  styleUrls: ['./discounts-create-update.component.scss'],
   animations: [fadeInUp400ms, stagger20ms]
 })
-export class BonusesCreateUpdateComponent implements OnInit {
+export class DiscountsCreateUpdateComponent implements OnInit {
 
   mode: 'create' | 'update' = 'create';
   defaults: any = {
@@ -22,7 +22,6 @@ export class BonusesCreateUpdateComponent implements OnInit {
     quantity: null,
     remaining_balance: null,
     payed: false,
-    is_gift: false,
     client_id: null,
     school_id: null,
   };
@@ -38,15 +37,15 @@ export class BonusesCreateUpdateComponent implements OnInit {
   id: any = null;
 
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private translateService: TranslateService,
-    private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
+              private snackbar: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute) {
 
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.form = this.fb.group({
-      code:[null],
-      quantity:[null, Validators.required],
-      budget:[null],
-      payed:[false, Validators.required],
-      is_gift:[false, Validators.required]
+      code:[null, Validators.required],
+      quantity:[null],
+      percentage:[null],
+      remaining:[null],
+      total:[null],
     });
   }
 
@@ -55,12 +54,11 @@ export class BonusesCreateUpdateComponent implements OnInit {
 
     if (!this.id || this.id === null) {
       this.mode = 'create';
+      this.loading = false;
     } else {
       this.mode = 'update';
       this.getVoucher();
     }
-
-    this.getClients();
   }
 
   save() {
@@ -77,17 +75,16 @@ export class BonusesCreateUpdateComponent implements OnInit {
     const data = {
       code: this.defaults.code === null ? "BOU-"+this.generateRandomNumber() : this.defaults.code,
       quantity: this.defaults.quantity,
-      remaining_balance: this.defaults.quantity,
-      payed: this.defaults.payed,
-      is_gift: this.defaults.is_gift,
-      client_id: this.defaults.client_id.id,
+      percentage: this.defaults.percentage,
+      remaining: this.defaults.total,
+      total: this.defaults.total,
       school_id: this.user.schools[0].id
     };
 
-    this.crudService.create('/vouchers', data)
+    this.crudService.create('/discount-codes', data)
       .subscribe((res) => {
         this.snackbar.open(this.translateService.instant('snackbar.bonus.create'), 'OK', {duration: 3000});
-        this.router.navigate(['/bonuses'])
+        this.router.navigate(['/discount-codes'])
       })
   }
 
@@ -96,29 +93,26 @@ export class BonusesCreateUpdateComponent implements OnInit {
     const data = {
       code: this.defaults.code,
       quantity: this.defaults.quantity,
-      remaining_balance: this.defaults.payed ? 0 : this.defaults.quantity,
-      payed: this.defaults.payed,
-      is_gift: this.defaults.payed,
-      client_id: this.defaults.client_id.id,
+      percentage: this.defaults.percentage,
+      remaining: this.defaults.remaining,
+      total: this.defaults.total,
       school_id: this.user.schools[0].id
     };
 
-    this.crudService.update('/vouchers', data, this.id)
-      .subscribe((res) => {
+    if(this.defaults.remaining > this.defaults.total) {
+      this.snackbar.open(this.translateService.instant('error.max_quantity'), 'OK', {duration: 3000});
+    } else {
 
-        this.snackbar.open(this.translateService.instant('snackbar.bonus.update'), 'OK', {duration: 3000});
-        this.router.navigate(['/bonuses'])
-      })
-
+      this.crudService.update('/discount-codes', data, this.id)
+        .subscribe((res) => {
+          this.snackbar.open(this.translateService.instant('snackbar.bonus.update'), 'OK', {duration: 3000});
+          this.router.navigate(['/discount-codes'])
+        })
+    }
   }
 
   generateRandomCode() {
     this.defaults.code = "BOU-"+this.generateRandomNumber();
-  }
-  // pasar a utils
-  private _filter(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.clients.filter(client => (client.first_name.toLowerCase().includes(filterValue) || client.last_name.toLowerCase().includes(filterValue)));
   }
 
 
@@ -126,40 +120,15 @@ export class BonusesCreateUpdateComponent implements OnInit {
     return client && client?.first_name && client?.last_name ? client?.first_name + ' ' + client?.last_name : client?.first_name;
   }
 
-  getClients() {
-    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((data: any) => {
-        this.clients = data.data;
-        this.filteredOptions = this.clientsForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.name),
-          map(full_name => full_name ? this._filter(full_name) : this.clients.slice(0, 50))
-        );
-
-        if (this.mode === 'update') {
-          this.defaults.client_id = this.clients.find((c) => this.defaults.client_id === c.id);
-        }
-        this.loading = false;
-      })
-  }
 
   getVoucher() {
-    this.crudService.get('/vouchers/'+this.id)
+    this.crudService.get('/discount-codes/'+this.id)
       .subscribe((data: any) => {
         this.defaults = data.data;
-
-        this.getVoucherLogs();
+        this.loading = false;
       })
   }
 
-  getVoucherLogs() {
-    this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&voucher_id='+this.id)
-    .subscribe((vl) => {
-        this.logs = vl.data;
-        this.loading = false;
-      }
-    )
-  }
 
   generateRandomNumber() {
     const min = 10000000; // límite inferior para un número de 5 cifras

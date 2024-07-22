@@ -594,5 +594,18 @@
   "all_tasks": "All tasks",
   "currency": "Currency",
   "not_assigned": "Not assigned",
-  "not_required": "Not required"
+  "not_required": "Not required",
+  "sales": "Total Sales",
+  "occupation": "Occupancy Rate",
+  "hours_worked": "Hours Worked",
+  "hours_collective": "Collective Course",
+  "hours_private": "Private Course",
+  "hours_activities": "Activities",
+  "hours_nwd_payed": "Paid Non-Working Hours",
+  "total_hours": "Total Hours",
+  "hours_worked_total": "Total Hours Worked",
+  "hours_by_type": "Hours by Course Type",
+  "hours_by_sport": "Hours by Sport",
+  "error.max_quantity": "There can't be more for sale than the total amount of discount codes"
+
 }
