@@ -170,11 +170,6 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'user/create',
-        loadChildren: () => import('./pages/user/user-create-update/user-create-update.module').then(m => m.UserCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
         path: 'mail',
         loadChildren: () => import('./pages/mail/mail.module').then(m => m.MailModule),
         canActivate: [AuthGuard],

@@ -1,15 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, onAuthStateChanged, getAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import { User } from '@firebase/auth';
-import { createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { UserService } from './userService';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { getFirestore } from '@angular/fire/firestore';
-import { ApiService } from './api.service';
-import { HttpClient } from '@angular/common/http';
-import { ApiCrudService } from './crud.service';
+
 
 @Injectable({
   providedIn: 'root'
