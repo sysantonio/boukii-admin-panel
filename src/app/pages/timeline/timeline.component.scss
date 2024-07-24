@@ -72,7 +72,13 @@
     display:flex;align-items:center;gap:6px;opacity:0.65;cursor:pointer;
 }
 .monitor-sport img {
-    width:24px;background-color: #fe3085;border-radius: 5px;
+    width:30px;
+    min-width:30px;
+    max-width:30px;
+    background-color: #fe3085;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 4px;
 }
 .monitor-sport div {
     font-size:9px;color:#666;
