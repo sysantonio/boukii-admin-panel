@@ -81,8 +81,7 @@ export class LevelSportUpdateModalComponent {
       sport: {
         id: 1,
         name: "Ski",
-        //icon: "https://school.boukii.com/assets/apps/sports/Ski.png",
-        icon: "assets/img/icons/sky.svg",
+        icon: "https://school.boukii.com/assets/apps/sports/Ski.png",
         sport_type: 1
       },
       degree: {

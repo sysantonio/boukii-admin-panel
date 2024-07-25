@@ -1,5 +1,11 @@
 <vex-page-layout mode="card">
 
+  <vex-secondary-toolbar current="">
+    <i class="icon"><img src="../assets/img/icons/reglages.svg" /></i>
+    <h2 class="title">{{'settings' | translate}}</h2>
+    <h3 class="subtitle">Añadir texto dinámico</h3>
+  </vex-secondary-toolbar>
+
   <!--<vex-page-layout-header class="flex flex-col items-start justify-center" style="background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
     <div class="container" style="max-width: none;">
       <i class="fa fa-cog" style="float: left;font-size: 30px;margin: 0 10px 0 0;color: #f53d7c;"></i>
@@ -7,12 +13,12 @@
     </div>
   </vex-page-layout-header>-->
 
-  <vex-secondary-toolbar current="Settings">
+  <!--<vex-secondary-toolbar current="Settings">
     <vex-breadcrumbs [crumbs]="[{text:'menu.settings', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
-  </vex-secondary-toolbar>
+  </vex-secondary-toolbar>-->
 
   <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
-  <vex-page-layout-content class="container" style="max-width: none !important;" *ngIf="!loading">
+  <vex-page-layout-content class="container pt-6" style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
       <mat-tab-group>
         <mat-tab label="{{'season' | translate}}" [formGroup]="seasonForm">
