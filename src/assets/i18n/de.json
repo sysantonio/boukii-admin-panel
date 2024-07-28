@@ -594,5 +594,17 @@
   "all_tasks": "Alle Aufgaben",
   "currency": "Währung",
   "not_assigned": "Nicht zugewiesen",
-  "not_required": "Nicht erforderlich"
+  "not_required": "Nicht erforderlich",
+  "sales": "Gesamtverkäufe",
+  "occupation": "Belegungsrate",
+  "hours_worked": "Geleistete Stunden",
+  "hours_collective": "Kollektivkurs",
+  "hours_private": "Privatkurs",
+  "hours_activities": "Aktivitäten",
+  "hours_nwd_payed": "Bezahlte Nichtarbeitsstunden",
+  "total_hours": "Gesamtstunden",
+  "hours_worked_total": "Gesamt geleistete Stunden",
+  "hours_by_type": "Stunden nach Kurstyp",
+  "hours_by_sport": "Stunden nach Sportart",
+  "error.max_quantity": "Es kann nicht mehr zum Verkauf stehen, als die Gesamtsumme der Rabattcodes"
 }

@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '@firebase/auth';
-import { createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { UserService } from './userService';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { getFirestore } from '@angular/fire/firestore';
 import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiCrudService } from './crud.service';
@@ -18,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root'
 })
 export class AuthService extends ApiService {
-  user: User | null = null;
+  user: any | null = null;
 
   constructor(private router: Router, http: HttpClient, private crudService: ApiCrudService, private snackbar: MatSnackBar,
     private schoolService: SchoolService, private configService: ConfigService, private translateService: TranslateService) {

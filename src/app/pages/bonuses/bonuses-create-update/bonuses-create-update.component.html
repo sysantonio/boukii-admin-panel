@@ -77,7 +77,15 @@
             color="accent"
             formControlName="payed" [(ngModel)]="defaults.payed">
           </mat-slide-toggle>
+          <div class="flex-auto" *ngIf="mode === 'create'">
+            <mat-label>{{'bookings_page.cancelations.gift_voucher' | translate}}</mat-label><br>
+            <mat-slide-toggle
+              color="accent"
+              formControlName="is_gift" [(ngModel)]="defaults.is_gift">
+            </mat-slide-toggle>
+          </div>
         </div>
+
         <div class="flex items-center justify-end gap-2">
           <button mat-button type="button" (click)="goTo('/bonuses')">{{'cancel' | translate }}</button>
           <!-- Added (click) event here -->

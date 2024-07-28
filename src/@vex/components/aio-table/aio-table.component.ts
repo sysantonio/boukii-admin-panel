@@ -24,7 +24,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { FormControl, UntypedFormControl } from '@angular/forms';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
@@ -136,6 +136,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   openFilters: boolean = false;
   selectedFrom = null;
   selectedTo = null;
+  gift = 0;
   today = new Date();
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -163,8 +164,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   inactiveMonitor = false;
   allMonitors = true;
 
-  constructor(private dialog: MatDialog, private router: Router, private crudService: ApiCrudService,
-              private excelExportService: ExcelExportService,
+  constructor(private dialog: MatDialog, public router: Router, private crudService: ApiCrudService,
+              private excelExportService: ExcelExportService, private routeActive: ActivatedRoute,
               private cdr: ChangeDetectorRef, private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.schoolId = this.user.schools[0].id;
@@ -180,6 +181,14 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit() {
+    this.routeActive.queryParams.subscribe(params => {
+      this.gift = +params['isGift'] || 0; // Valor por defecto
+      if(this.gift){
+        this.filter += '&is_gift=1';
+      } else {
+        this.filter += '&is_gift=0';
+      }
+    });
     this.getMonitors();
     this.getClients();
     this.getSports();
@@ -304,11 +313,22 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           filter = filter + '&start_to='+moment(this.selectedTo).format('YYYY-MM-DD');
         }
       }
+      if(this.entity.includes('vouchers')) {
+        if (this.gift) {
+          filter = filter + '&is_gift=1';
+        } else {
+          filter = filter + '&is_gift=0';
+        }
+      }
     }
 
 
     this.filter = filter;
     this.getFilteredData(1, 10, filter);
+  }
+
+  navigateWithParam(route: string, param: string) {
+    this.router.navigate([route], { queryParams: { isGift: param } });
   }
 
   /**
