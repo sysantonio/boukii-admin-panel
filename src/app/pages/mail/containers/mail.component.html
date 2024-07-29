@@ -1,3 +1,11 @@
+<!--<vex-secondary-toolbar current="">
+  <i class="icon"><img src="../assets/img/icons/comunicacion.svg" /></i>
+  <h2 class="title">{{'mailbox' | translate}}</h2>
+  <h3 class="subtitle">Añadir texto dinámico</h3>
+</vex-secondary-toolbar>-->
+
+*** no detecta > vex-secondary-toolbar ***
+
 <div [class.container]="isVerticalLayout$ | async" class="h-full w-full px-0">
   <mat-drawer-container class="h-full w-full">
     <mat-drawer #drawer
@@ -6,7 +14,7 @@
                 [disableClose]="isDesktop$ | async"
                 class="vex-mail-drawer max-w-3xs w-full bg-base"
                 position="start">
-      <div class="vex-mail-header px-gutter relative flex flex-col" >
+      <!--<div class="vex-mail-header px-gutter relative flex flex-col" >
         <div *ngIf="isDesktop$ | async" class="flex-1 flex items-center">
           <p class="text-2xl font-medium flex items-center">
             <mat-icon @scaleIn class="ltr:mr-4 rtl:ml-4 block icon-2xl" svgIcon="logo:mail" style="color:#FF3085"></mat-icon>
@@ -18,7 +26,7 @@
           <button (click)="openCompose()" class="w-full" color="primary" mat-raised-button type="button">{{'compose' | translate}}
           </button>
         </div>
-      </div>
+      </div>-->
 
       <vex-mail-sidenav [drawer]="drawer"></vex-mail-sidenav>
     </mat-drawer>

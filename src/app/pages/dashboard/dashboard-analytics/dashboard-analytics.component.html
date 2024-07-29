@@ -1,14 +1,20 @@
 <vex-page-layout>
 
-  <vex-secondary-toolbar current="Home">
+  <!--<vex-secondary-toolbar current="Home">
     <vex-breadcrumbs [crumbs]="[{text:'menu.home', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
-
     <button class="ml-2" color="primary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
+  </vex-secondary-toolbar>-->
+
+  <vex-secondary-toolbar current="">
+    <i class="icon"><img src="../assets/img/icons/home.svg" /></i>
+    <h2 class="title">{{'menu.home' | translate}}</h2>
+    <h3 class="subtitle">Añadir texto dinámico</h3>
   </vex-secondary-toolbar>
-  <vex-page-layout-content class="-mt-6 fullwidth" style="background: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
-    <div class="container p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+
+  <vex-page-layout-content class="fullwidth" style="background: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
+    <div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <vex-widget-assistant class="sm:col-span-2" [date]="date" (dateEvent)="emitDate($event)"></vex-widget-assistant>
 
       <!--<vex-widget-quick-line-chart

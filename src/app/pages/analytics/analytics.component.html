@@ -1,11 +1,18 @@
 <vex-page-layout>
-  <vex-secondary-toolbar>
+  <!--<vex-secondary-toolbar>
     <vex-breadcrumbs [crumbs]="[{icon: 'stats-2', text: ''}, {text: 'list', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
     <button class="ml-2" color="primary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
+  </vex-secondary-toolbar>-->
+
+  <vex-secondary-toolbar current="">
+    <i class="icon"><img src="../assets/img/icons/stats.svg" /></i>
+    <h2 class="title">{{'menu.stats' | translate}}</h2>
+    <h3 class="subtitle">Añadir texto dinámico</h3>
   </vex-secondary-toolbar>
-  <vex-page-layout-content class="-mt-6 fullwidth">
+
+  <vex-page-layout-content class="fullwidth">
     <mat-tab-group (selectedTabChange)="onTabChange($event)">
 
       <mat-tab label="Vista General">

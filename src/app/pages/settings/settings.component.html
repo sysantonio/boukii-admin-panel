@@ -1,14 +1,24 @@
 <vex-page-layout mode="card">
 
-  <vex-page-layout-header class="flex flex-col items-start justify-center" style="background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
+  <vex-secondary-toolbar current="">
+    <i class="icon"><img src="../assets/img/icons/reglages.svg" /></i>
+    <h2 class="title">{{'settings' | translate}}</h2>
+    <h3 class="subtitle">Añadir texto dinámico</h3>
+  </vex-secondary-toolbar>
+
+  <!--<vex-page-layout-header class="flex flex-col items-start justify-center" style="background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
     <div class="container" style="max-width: none;">
       <i class="fa fa-cog" style="float: left;font-size: 30px;margin: 0 10px 0 0;color: #f53d7c;"></i>
-      <h2 class="title m-0" style="float: left;font-size: 30px;">{{'settings' | translate}}</h2>
+      <h2 class="title m-0" style="float: left;font-size: 30px;">{{'settings' | translate}} </h2>
     </div>
-  </vex-page-layout-header>
+  </vex-page-layout-header>-->
+
+  <!--<vex-secondary-toolbar current="Settings">
+    <vex-breadcrumbs [crumbs]="[{text:'menu.settings', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar>-->
 
   <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
-  <vex-page-layout-content class="container" style="max-width: none !important;" *ngIf="!loading">
+  <vex-page-layout-content class="container pt-6" style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
       <mat-tab-group>
         <mat-tab label="{{'season' | translate}}" [formGroup]="seasonForm">
@@ -24,7 +34,7 @@
                     <p style="font-weight: bold; color:#808080">{{'settings.new_season.general' | translate}}</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 15%;float: right;color: #fff;" (click)="saveSeason()">{{'settings.new_season.save' | translate}}</button>
+                    <button class="btn-primary-accent" style="float: right;" (click)="saveSeason()">{{'settings.new_season.save' | translate}}</button>
                   </div>
 
                 </div>
@@ -116,7 +126,7 @@
                     <p style="font-weight: bold; color:#808080">{{'settings.school.title' | translate}}</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button mat-raised-button color="accent" style="background: #E91E63;height: 30px;width: 20%;float: right;color: #fff;" (click)="saveContactData()">{{'settings.school.save' | translate}}</button>
+                    <button class="btn-primary-accent" style="float: right;" (click)="saveContactData();">{{'settings.school.save' | translate}}</button>
                   </div>
                 </div>
                 <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
@@ -190,64 +200,61 @@
                       {{'settings.sports.subtitle' | translate }}.<br>
                       {{'settings.sports.subtitle_info' | translate }}
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveSchoolSports()">{{'save_changes' | translate}}</button>
-
-                  </div>
-                  <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'winter' | translate }}</p>
-                    <ng-container *ngFor="let item of sports">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
-
-                        <div style="float: left; width: 100%; border-radius: 10px;"
-                        [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
-                          <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
-                          </div>
-                        </div>
-
-                        <div style="float: left; width: 100%; text-wrap: nowrap;" *ngIf="item.sport_type === 1">
-                          <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
-                        </div>
-                      </div>
-                    </ng-container>
+                    <button class="btn-primary-accent" (click)="saveSchoolSports()">{{'save_changes' | translate}}</button>
                   </div>
 
-                  <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'summer' | translate }}</p>
-                    <ng-container *ngFor="let item of sports">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
-
-                        <div style="float: left; width: 100%;  border-radius: 10px;" *ngIf="item.sport_type === 2"
-                        [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
-                          <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                  <div style="width: 100%;">
+                    <p style="font-size: 30px;font-weight: bold;color: #808080; margin-bottom: 20px;">{{'winter' | translate }}</p>
+                    <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
+                      <ng-container *ngFor="let item of sports">
+                        <div style="cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
+                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
+                            <div style="width: 100%;">
+                              <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                            </div>
+                          </div>
+                          <div style="width: 100%;" *ngIf="item.sport_type === 1">
+                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
                           </div>
                         </div>
-
-                        <div style="float: left; width: 100%; text-wrap: nowrap;" *ngIf="item.sport_type === 2">
-                          <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
-                        </div>
-                      </div>
-                    </ng-container>
+                      </ng-container>
+                    </div>
                   </div>
 
-                  <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
-
-                    <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'settings.sports.all_sessions' | translate}}</p>
-                    <ng-container *ngFor="let item of sports">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" *ngIf="item.sport_type === 3" (click)="setSport(item.id)">
-
-                        <div style="float: left; width: 100%;  border-radius: 10px;" *ngIf="item.sport_type === 3" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
-                          <div style="float: left; width: 100%;">
-                            <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                  <div style="width: 100%;">
+                    <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'summer' | translate }}</p>
+                    <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
+                      <ng-container *ngFor="let item of sports">
+                        <div style="cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
+                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" *ngIf="item.sport_type === 2" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                            <div style="width: 100%;">
+                              <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                            </div>
+                          </div>
+                          <div style="width: 100%;" *ngIf="item.sport_type === 2">
+                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
                           </div>
                         </div>
+                      </ng-container>
+                    </div>
+                  </div>
 
-                        <div style="float: left; width: 100%; text-wrap: nowrap;" *ngIf="item.sport_type === 3">
-                          <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
+                  <div style="width: 100%;">
+                    <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'settings.sports.all_sessions' | translate}}</p>
+                    <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
+                      <ng-container *ngFor="let item of sports">
+                        <div style="cursor:pointer" (click)="setSport(item.id)">
+                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                            <div style="width: 100%;">
+                              <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                            </div>
+                          </div>
+                          <div style="width: 100%;">
+                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
+                          </div>
                         </div>
-                      </div>
-                    </ng-container>
+                      </ng-container>
+                    </div>
                   </div>
 
                 </vex-page-layout-content>
@@ -262,14 +269,12 @@
                       {{'settings.sports.levels.text1' | translate}}<br>
                       {{'settings.sports.levels.text2' | translate}}
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="updateSportDegrees()">{{'save_changes' | translate}}</button>
-
+                    <button class="btn-primary-accent" (click)="updateSportDegrees()">{{'save_changes' | translate}}</button>
                   </div>
 
-                  <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
+                  <div style="float: left; width: 100%;margin-bottom: 20px;margin-top: 10px;">
                     <ng-container *ngFor="let item of schoolSports; let i = index">
-                      <div
-                      style="float: left; width: 5%;margin-left: 6%">
+                      <div style="float: left; width: 5%;margin-left: 6%">
                       <!-- Contenido del div (aplicar estilos selected)-->
                         <div style="float: left; width: 100%; border-radius: 10px;" (click)="selectSport(item.id)"
                           [ngStyle]="{
@@ -280,14 +285,14 @@
                           </div>
                         </div>
 
-                        <div style="float: left; width: 100%; text-wrap: nowrap;">
+                        <div style="float: left; width: 100%;">
                           <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
                         </div>
                       </div>
                     </ng-container>
                   </div>
 
-                  <div style="float: left; width: 100%;padding: 0 5% 5% 3%;">
+                  <div style="float: left; width: 100%;">
                     <!-- añadir mat table de niveles-->
                     <table #reductionTable id="table-level" mat-table [dataSource]="dataSourceLevels" matSort style="border: 1px solid #e6e6e6">
 
@@ -369,8 +374,7 @@
             <p style="padding: 1%; color:#808080;float: left; width: 75%;">
               {{'settings.prices.text' | translate}}<br>
             </p>
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="savePrices()">{{'save_changes' | translate}}</button>
-
+            <button class="btn-primary-accent" (click)="savePrices()">{{'save_changes' | translate}}</button>
           </div>
           <div class="p-6">
 
@@ -413,8 +417,7 @@
                   {{'settings.book_page.text1' | translate}}<br>
                   {{'settings.book_page.text2' | translate}}
                 </p>
-                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="setTheme()">{{'save_changes' | translate}}</button>
-
+                <button class="btn-primary-accent" (click)="setTheme()">{{'save_changes' | translate}}</button>
               </div>
 
               <div style="float: left; width: 100%;margin: 0 0 2% 0;">
@@ -471,8 +474,7 @@
                       {{'settings.blocks.text1' | translate}}<br>
                       {{'settings.blocks.text2' | translate}}<br>
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveBlockages()">{{'save_changes' | translate}}</button>
-
+                    <button class="btn-primary-accent" (click)="saveBlockages()">{{'save_changes' | translate}}</button>
                   </div>
 
                   <div class="p-6">
@@ -486,7 +488,6 @@
                   <div class="p-6">
                     <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
                       <div style="width: 5%; float:left;">
-
                         <button class="add-date" mat-fab (click)="addBlockage()">
                           <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                         </button>
@@ -507,8 +508,7 @@
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.auths.text1' | translate}}
                     </p>
-                    <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveMonitorsAuth()">{{'save_changes' | translate}}</button>
-
+                    <button class="btn-primary-accent" (click)="saveMonitorsAuth()">{{'save_changes' | translate}}</button>
                   </div>
                   <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app' | translate}}</h1>
@@ -555,8 +555,7 @@
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   {{'settings.bookings.text'|translate}}
                 </p>
-                <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;" (click)="saveTaxes()">{{'save_changes' | translate}}</button>
-
+                <button class="btn-primary-accent" (click)="saveTaxes()">{{'save_changes' | translate}}</button>
               </div>
               <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">

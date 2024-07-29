@@ -10,10 +10,11 @@
     <mat-icon svgIcon="mat:close"></mat-icon>
   </button>
 </vex-secondary-toolbar>
+
 <div [@stagger]="true" class="p-gutter container" style="max-width: none;">
   <mat-spinner *ngIf="loading" style="margin:0 auto"></mat-spinner>
   <div
-    class="flex flex-col sm:flex-row gap-4"
+    class="flex flex-col sm:flex-row gap-4 pb-4"
     style="width: 65%;float:left"
     *ngIf="!loading && !bookingComplete"
   >
@@ -863,12 +864,69 @@
   <!-- Ventanas actividades -->
   <ng-container *ngFor="let item of bookingsToCreate; let bookI = index">
     <mat-card
-      style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;"
-      [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}"
+      class="col-right"
+      style="margin: 0 0 0 2%;width: 33%;float: left;padding: 0 0;overflow: hidden;"
+      [ngStyle]="{'margin-top': bookI > 0 ? '1%' : '0'}"
       *ngIf="!loading && !bookingComplete"
     >
       <mat-card-header style="display:block">
-        <div style="width: 100%;float: left;">
+
+        <div style="width: 100%;">
+          <span style="float:right;">
+            <mat-icon
+              svgIcon="mat:close"
+              (click)="deleteBooking(bookI)"
+              style="color:red; cursor:pointer"
+            ></mat-icon>
+            <mat-icon
+              svgIcon="mat:expand_more"
+              *ngIf="showDetail !== bookI"
+              style="float:right"
+              (click)="showDetailFn(bookI)"
+            ></mat-icon>
+            <mat-icon
+              svgIcon="mat:expand_less"
+              *ngIf="showDetail === bookI"
+              style="float:right"
+              (click)="showDetailFn(null)"
+            ></mat-icon>
+          </span>
+
+          <span style="display: inline-block;width: 100%; text-align: left;">
+            <mat-card-title>{{'activity' | translate}} #{{bookI + 1 }} {{item.courseDates[0].course?.name}}</mat-card-title>
+          </span>
+          <!--<span style="display: inline-block;width: 20%; text-align: right;">
+            <mat-icon
+              style="cursor: pointer;"
+              svgIcon="mat:edit"
+              (click)="goTo('/bookings/update/' + detailData.id)"
+            ></mat-icon>
+            <mat-icon
+              style="cursor: pointer;"
+              svgIcon="mat:close"
+              (click)="showDetail = false"
+            ></mat-icon>
+          </span>-->
+        </div>
+
+        <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+          <mat-card-subtitle style="width:100%;">
+            <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+              <b>{{'register' | translate}}:</b>
+              <span style="margin-left: 10px;">
+                <span>{{ minDate | date: 'dd/MM/YYYY'}}</span> <span style="margin-left: 10px;">{{ minDate | date: 'HH:mm'}}</span>
+              </span>
+            </div>
+            <div style="width: 40%;display:inline-block;text-align: right;color: white;">
+              <!--Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>-->
+            </div>
+          </mat-card-subtitle>
+        </div>
+
+      </mat-card-header>
+
+      <!--<mat-card-header style="display:block">
+        <span style="width: 100%;float: left;">
           <mat-icon
             svgIcon="mat:close"
             (click)="deleteBooking(bookI)"
@@ -886,14 +944,15 @@
             style="float:right"
             (click)="showDetailFn(null)"
           ></mat-icon>
-        </div>
+        </span>
         <div style="width: 100%;float:left;">
           <mat-card-title style="float: left;width: 90%;"
-          >{{'activity' | translate}} #{{bookI + 1 }} -
+          >{{'activity' | translate}} *** #{{bookI + 1 }} -
             {{item.courseDates[0].course?.name}}</mat-card-title
           >
         </div>
-        <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
+
+        <div style="width:100%;" *ngIf="showDetail === bookI">
           <div style="width: 100%;">
             <p style="float: left;width: 80%;text-align: left;">
               <b>{{'register' | translate}}</b>
@@ -916,7 +975,8 @@
           style="float: left;width: 100%;margin: 5% 0 5% 0;"
           *ngIf="showDetail === bookI"
         ></mat-divider>
-      </mat-card-header>
+      </mat-card-header>-->
+
       <mat-card-content *ngIf="showDetail === bookI">
         <div style="float: left; width: 100%;">
           <div style="float: left; width: 100%;">
