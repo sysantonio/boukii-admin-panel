@@ -235,15 +235,15 @@
 
                     <p style="padding: 2%;font-size: 30px;font-weight: bold;color: #808080;">{{'settings.sports.all_sessions' | translate}}</p>
                     <ng-container *ngFor="let item of sports">
-                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" (click)="setSport(item.id)">
+                      <div style="float: left; width: 5%; margin: 0 0 1% 6%;cursor:pointer" *ngIf="item.sport_type === 3" (click)="setSport(item.id)">
 
-                        <div style="float: left; width: 100%; border-radius: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                        <div style="float: left; width: 100%;  border-radius: 10px;" *ngIf="item.sport_type === 3" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                           <div style="float: left; width: 100%;">
                             <img style="float: left; width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
                         </div>
 
-                        <div style="float: left; width: 100%; text-wrap: nowrap;">
+                        <div style="float: left; width: 100%; text-wrap: nowrap;" *ngIf="item.sport_type === 3">
                           <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
                         </div>
                       </div>
