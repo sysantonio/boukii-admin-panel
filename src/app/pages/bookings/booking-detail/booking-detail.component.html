@@ -177,7 +177,7 @@
                       mat-icon-button
                       color="warn"
                       class="delete-icon"
-                      (click)="deletePartialBooking(bI, item)"
+                      (click)="bookingsToCreate.length > 1 ? deletePartialBooking(bI, item) : deleteBooking()"
                       style="float: right;"
               >
                 <mat-icon svgIcon="mat:delete"></mat-icon>
