@@ -34,10 +34,10 @@
             <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()" style="font-size:14px;">{{'timeline.reset_filters' | translate}}</button>
             <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()" style="font-size:14px;">{{'timeline.apply_filters' | translate}}</button>
 
-            <mat-form-field appearance="outline" class="flex-auto">
+            <mat-form-field appearance="outline" class="flex-auto" style="max-height: 56px; background-color: white">
               <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (ngModelChange)="onDateChange()">
               <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-              <mat-datepicker #pickerFrom></mat-datepicker>
+              <mat-datepicker  #pickerFrom></mat-datepicker>
             </mat-form-field>
 
             <button (click)="toggleBlockGeneral()" class="filter-button"><mat-icon svgIcon="mat:block"></mat-icon></button>
