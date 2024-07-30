@@ -42,11 +42,11 @@ export class BookingsComponent {
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'options', property: 'options', type: 'text', visible: true },
-    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
     { label: 'op_rem_abr', property: 'has_cancellation_insurance', type: 'light', visible: true },
     { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
     { label: 'price', property: 'price_total', type: 'price', visible: true },
     { label: 'method_paiment', property: 'payment_method_id', type: 'payment_method_id', visible: true },
+    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
     { label: 'paid', property: 'paid', type: 'payment_status', visible: true },
     { label: 'status', property: 'status', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
