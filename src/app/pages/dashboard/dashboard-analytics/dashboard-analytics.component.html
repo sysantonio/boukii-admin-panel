@@ -8,9 +8,10 @@
   </vex-secondary-toolbar>-->
 
   <vex-secondary-toolbar current="">
-    <i class="icon"><img src="../assets/img/icons/home.svg" /></i>
-    <h2 class="title">{{'menu.home' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'home'},
+    {text:'menu.home', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
   <vex-page-layout-content class="fullwidth" style="background: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">

@@ -1,10 +1,9 @@
-<!--<vex-secondary-toolbar current="">
-  <i class="icon"><img src="../assets/img/icons/comunicacion.svg" /></i>
-  <h2 class="title">{{'mailbox' | translate}}</h2>
-  <h3 class="subtitle">Añadir texto dinámico</h3>
-</vex-secondary-toolbar>-->
-
-*** no detecta > vex-secondary-toolbar ***
+<vex-secondary-toolbar current="">
+  <vex-breadcrumbs [crumbs]="[
+    {icon:'comunicacion'},
+    {text:'mailbox', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
+</vex-secondary-toolbar>
 
 <div [class.container]="isVerticalLayout$ | async" class="h-full w-full px-0">
   <mat-drawer-container class="h-full w-full">

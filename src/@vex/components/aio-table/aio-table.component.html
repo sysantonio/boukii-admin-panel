@@ -102,12 +102,12 @@
         </div>
 
         <div *ngIf="entity.includes('discount')">
-          <button class="ml-4 flex-none" mat-button type="button"  (click)="navigateWithParam('./bonuses', '0')">
+          <button class="ml-4 flex-none" mat-button type="button"  (click)="navigateWithParam('./vouchers', '0')">
             <span [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'vouchers' | translate}}</span>
           </button>
         </div>
         <div *ngIf="entity.includes('discount')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="navigateWithParam('./bonuses', '1')">
+          <button class="ml-4 flex-none" mat-button type="button" (click)="navigateWithParam('./vouchers', '1')">
             <span [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'gift_vouchers' | translate}}</span>
           </button>
         </div>

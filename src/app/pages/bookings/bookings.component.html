@@ -11,9 +11,10 @@
   </vex-secondary-toolbar>-->
 
   <vex-secondary-toolbar current="">
-    <i class="icon"><img src="../assets/img/icons/reservas.svg" /></i>
-    <h2 class="title">{{'bookings' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'reservas'},
+    {text:'bookings', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
   <vex-page-layout-content

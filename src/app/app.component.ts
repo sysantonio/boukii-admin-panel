@@ -212,7 +212,7 @@ export class AppComponent {
           {
             type: 'link',
             label: "menu.bonus",
-            route: '/bonuses',
+            route: '/vouchers',
             icon: '../assets/img/icons/bonos-2.svg',
             icon_active: '../assets/img/icons/bonos.svg',
             routerLinkActiveOptions: { exact: true }

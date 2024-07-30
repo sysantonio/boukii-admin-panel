@@ -8,9 +8,10 @@
   </vex-secondary-toolbar>-->
 
   <vex-secondary-toolbar current="">
-    <i class="icon"><img src="../assets/img/icons/planificador.svg" /></i>
-    <h2 class="title">{{'timeline.timeline' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'planificador'},
+    {text:'timeline.timeline', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
 

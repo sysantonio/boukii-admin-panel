@@ -8,11 +8,12 @@
   </vex-secondary-toolbar>-->
 
   <vex-secondary-toolbar current="">
-    <i class="icon"><img src="../assets/img/icons/clientes.svg" /></i>
-    <h2 class="title">{{'clients' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'clientes'},
+    {text:'clients', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
-  
+
   <vex-page-layout-content class="fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
                      [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"

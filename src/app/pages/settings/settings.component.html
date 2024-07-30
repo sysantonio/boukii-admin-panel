@@ -1,11 +1,5 @@
 <vex-page-layout mode="card">
 
-  <vex-secondary-toolbar current="">
-    <i class="icon"><img src="../assets/img/icons/reglages.svg" /></i>
-    <h2 class="title">{{'settings' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
-  </vex-secondary-toolbar>
-
   <!--<vex-page-layout-header class="flex flex-col items-start justify-center" style="background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
     <div class="container" style="max-width: none;">
       <i class="fa fa-cog" style="float: left;font-size: 30px;margin: 0 10px 0 0;color: #f53d7c;"></i>
@@ -13,9 +7,12 @@
     </div>
   </vex-page-layout-header>-->
 
-  <!--<vex-secondary-toolbar current="Settings">
-    <vex-breadcrumbs [crumbs]="[{text:'menu.settings', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
-  </vex-secondary-toolbar>-->
+  <vex-secondary-toolbar current="">
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'reglages'},
+    {text:'menu.settings', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
 
   <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
   <vex-page-layout-content class="container pt-6" style="max-width: none !important;" *ngIf="!loading">
@@ -243,7 +240,7 @@
                     <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'settings.sports.all_sessions' | translate}}</p>
                     <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
                       <ng-container *ngFor="let item of sports">
-                        <div style="cursor:pointer" (click)="setSport(item.id)">
+                        <div style="cursor:pointer"  *ngIf="item.sport_type === 3"  (click)="setSport(item.id)">
                           <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                             <div style="width: 100%;">
                               <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
@@ -835,19 +832,18 @@
                     <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
-                  <div class="flex-auto" style="margin: 1% 0 0 0" *ngIf="dataSourceForfait.data.length < 2">
+                  <div class="flex-auto" style="margin: 1% 0 0 0" >
                     <button class="add-date" mat-fab (click)="createExtra('Forfait', false, null, null)" [disabled]="dataSourceForfait.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
 
-                  <div *ngIf="false" style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Transporte</h1>
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'transport' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
-                      Podrás crear un máximo de 2 variables para sección.<br>
+                      {{'settings.bookings.extras.text7' | translate}}<br>
+                      {{'settings.bookings.extras.text8' | translate}}<br>
                     </p>
-
                   </div>
 
                   <table *ngIf="false" #transportTable id="table-extras-transport" mat-table [dataSource]="dataSourceTransport" matSort style="border: 1px solid #e6e6e6">
@@ -858,29 +854,29 @@
                     </ng-container>
 
                     <ng-container matColumnDef="product">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'product' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - {{ currency || 'CHF' }} / Dia </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/dia </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'tva' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
 
@@ -904,22 +900,21 @@
                     <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
-                  <div *ngIf="false" class="flex-auto" style="margin: 1% 0 0 0">
+                  <div  class="flex-auto" style="margin: 1% 0 0 0">
                     <button class="add-date" mat-fab (click)="createExtra('Transport', false, null, null)" [disabled]="dataSourceTransport.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
 
-                  <div *ngIf="false" style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Comida</h1>
+                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'food' | translate}}</h1>
                     <p style="padding: 1%; color:#808080;float: left; width: 75%;">
-                      Crea los productos que estarán como opción para poderlos alquilar durante la reserva.<br>
-                      Podrás crear un máximo de 2 variables para sección.<br>
+                      {{'settings.bookings.extras.text9' | translate}}<br>
+                      {{'settings.bookings.extras.text10' | translate}}<br>
                     </p>
-
                   </div>
 
-                  <table *ngIf="false" #foodTable id="table-extras-food" mat-table [dataSource]="dataSourceFood" matSort style="border: 1px solid #e6e6e6">
+                  <table #foodTable id="table-extras-food" mat-table [dataSource]="dataSourceFood" matSort style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
@@ -927,29 +922,29 @@
                     </ng-container>
 
                     <ng-container matColumnDef="product">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Producto </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'product' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - {{ currency || 'CHF' }} / Dia </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/dia </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'tva' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
 
@@ -974,7 +969,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
 
-                  <div *ngIf="false" class="flex-auto" style="margin: 1% 0 0 0">
+                  <div  class="flex-auto" style="margin: 1% 0 0 0">
                     <button class="add-date" mat-fab (click)="createExtra('Food', false, null, null)" [disabled]="dataSourceFood.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>

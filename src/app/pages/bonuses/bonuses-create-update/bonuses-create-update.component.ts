@@ -87,7 +87,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
     this.crudService.create('/vouchers', data)
       .subscribe((res) => {
         this.snackbar.open(this.translateService.instant('snackbar.bonus.create'), 'OK', {duration: 3000});
-        this.router.navigate(['/bonuses'])
+        this.router.navigate(['/vouchers'])
       })
   }
 
@@ -107,7 +107,7 @@ export class BonusesCreateUpdateComponent implements OnInit {
       .subscribe((res) => {
 
         this.snackbar.open(this.translateService.instant('snackbar.bonus.update'), 'OK', {duration: 3000});
-        this.router.navigate(['/bonuses'])
+        this.router.navigate(['/vouchers'])
       })
 
   }

@@ -63,7 +63,7 @@ blockquote {
   box-shadow: none!important;
 }
 
-.secondary-toolbar {
+.secondary-toolbar, vex-breadcrumbs {
   /*box-shadow: none!important;
   --tw-shadow: none!important;*/
 
@@ -128,4 +128,8 @@ blockquote {
       margin-bottom: -3px;
     }
   }
+}
+vex-breadcrumbs {
+  align-items: center;
+
 }

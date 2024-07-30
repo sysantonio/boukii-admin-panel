@@ -8,11 +8,12 @@
   </vex-secondary-toolbar>-->
 
   <vex-secondary-toolbar current="">
-    <i class="icon"><img src="../assets/img/icons/Admins.svg" /></i>
-    <h2 class="title">{{'admins' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'Admins'},
+    {text:'admins', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
-  
+
   <vex-page-layout-content class="-mt-6 fullwidth">
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'admins'" [route]="'admins'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false"
       [filterField]="'admin'" [filterColumn]="'type'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"></vex-aio-table>

@@ -32,51 +32,55 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {BreadcrumbsModule} from '../../../@vex/components/breadcrumbs/breadcrumbs.module';
+import {SecondaryToolbarModule} from '../../../@vex/components/secondary-toolbar/secondary-toolbar.module';
 
 
 @NgModule({
   declarations: [MailComponent, MailListComponent, MailListEntryComponent, MailViewComponent, MailViewEmptyComponent, MailSidenavComponent, MailSidenavLinkComponent, MailLabelComponent, MailAttachmentComponent, MailComposeComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MailRoutingModule,
-    MatSidenavModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    ScrollbarModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatRippleModule,
-    RelativeDateTimeModule,
-    MatMenuModule,
-    StripHtmlModule,
-    MatDialogModule,
-    MatInputModule,
-    MatRadioModule,
-    MatTabsModule,
-    MatSelectModule,
-    TranslateModule,
-    MatDatepickerModule,
-    MatProgressSpinnerModule,
-    QuillModule.forRoot({
-      modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MailRoutingModule,
+        MatSidenavModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        ScrollbarModule,
+        MatCheckboxModule,
+        MatIconModule,
+        MatRippleModule,
+        RelativeDateTimeModule,
+        MatMenuModule,
+        StripHtmlModule,
+        MatDialogModule,
+        MatInputModule,
+        MatRadioModule,
+        MatTabsModule,
+        MatSelectModule,
+        TranslateModule,
+        MatDatepickerModule,
+        MatProgressSpinnerModule,
+        QuillModule.forRoot({
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
 
-          [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{list: 'ordered'}, {list: 'bullet'}],
 
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    [{header: [1, 2, 3, 4, 5, 6, false]}],
 
-          ['clean'],
+                    ['clean'],
 
-          ['link', 'image']
-        ]
-      }
-    }),
-    MatTooltipModule,
-    ReactiveFormsModule,
-  ]
+                    ['link', 'image']
+                ]
+            }
+        }),
+        MatTooltipModule,
+        ReactiveFormsModule,
+        BreadcrumbsModule,
+        SecondaryToolbarModule,
+    ]
 })
 export class MailModule {
 }
