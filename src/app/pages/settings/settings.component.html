@@ -205,17 +205,13 @@
 
                   <div style="width: 100%;">
                     <p style="font-size: 30px;font-weight: bold;color: #808080; margin-bottom: 20px;">{{'winter' | translate }}</p>
-                    <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
+                    <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div style="cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
-                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
-                            <div style="width: 100%;">
-                              <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
-                            </div>
+                        <div class="item" *ngIf="item.sport_type === 1" (click)="setSport(item.id)">
+                          <div class="icon" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
+                            <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
-                          <div style="width: 100%;" *ngIf="item.sport_type === 1">
-                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
-                          </div>
+                          <div class="text" *ngIf="item.sport_type === 1">{{ item.name }}</div>
                         </div>
                       </ng-container>
                     </div>
@@ -223,17 +219,13 @@
 
                   <div style="width: 100%;">
                     <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'summer' | translate }}</p>
-                    <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
+                    <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div style="cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
-                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" *ngIf="item.sport_type === 2" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
-                            <div style="width: 100%;">
-                              <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
-                            </div>
+                        <div class="item" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
+                          <div class="icon" *ngIf="item.sport_type === 2" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                            <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
-                          <div style="width: 100%;" *ngIf="item.sport_type === 2">
-                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
-                          </div>
+                          <div class="text" *ngIf="item.sport_type === 2">{{ item.name }}</div>
                         </div>
                       </ng-container>
                     </div>
@@ -241,17 +233,13 @@
 
                   <div style="width: 100%;">
                     <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'settings.sports.all_sessions' | translate}}</p>
-                    <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
+                    <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div style="cursor:pointer" (click)="setSport(item.id)">
-                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
-                            <div style="width: 100%;">
-                              <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
-                            </div>
+                        <div class="item" (click)="setSport(item.id)">
+                          <div class="icon" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                            <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
-                          <div style="width: 100%;">
-                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
-                          </div>
+                          <div class="text">{{ item.name }}</div>
                         </div>
                       </ng-container>
                     </div>

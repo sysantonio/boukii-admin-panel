@@ -129,3 +129,20 @@ blockquote {
     }
   }
 }
+
+.btn-edit {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  vertical-align: bottom;
+  cursor: pointer;
+}
+
+.btn-close {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  vertical-align: bottom;
+  cursor: pointer;
+  margin-left: 10px;
+}

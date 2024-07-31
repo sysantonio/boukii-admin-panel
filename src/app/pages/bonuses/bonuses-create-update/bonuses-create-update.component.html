@@ -28,7 +28,7 @@
           </mat-form-field>
 
           <div class="flex-auto" *ngIf="mode === 'create'" style="width: 20%;">
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%; border-radius: 0; margin: 3% 0 0 0;" (click)="generateRandomCode()">{{'bonus.generate' | translate}}</button>
+            <button color="accent" class="btn-primary-accent" (click)="generateRandomCode()">{{'bonus.generate' | translate}}</button>
           </div>
         </div>
         <mat-form-field appearance="outline" class="flex-auto">

@@ -1,7 +1,7 @@
 {
   "add": "Añadir...",
   "calendar": "Calendario",
-  "vouchers": "Bonos de compra",
+  "vouchers": "Bonos y códigos",
   "gift_vouchers": "Bonos de regalo",
   "discount_code": "Códigos de descuento",
   "add_client": "Añadir cliente",
@@ -366,7 +366,7 @@
   "settings.bookings.extras.text5": "Podrás crear un máximo de 5 items por deporte para sección.",
   "settings.bookings.extras.text6": "Elije que deportes de tu escuela tienen opciones para alquilar",
   "menu.home": "Inicio",
-  "menu.bonus": "Bonos de compra",
+  "menu.bonus": "Bonos y códigos",
   "menu.communication": "Comunicaciones",
   "menu.stats": "Estadísticas",
   "menu.people": "Clientes y Monitores",

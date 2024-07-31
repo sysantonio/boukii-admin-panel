@@ -400,7 +400,11 @@
 
                 </div>
                 <div style="width: 100%;float:left;">
-                <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'course_detail' | translate}} <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon></mat-card-title>
+                <mat-card-title class="font-bold" style="float: left;width: 100%;">
+                  {{'course_detail' | translate}}
+                  <!--<mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>-->
+                  <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
+                </mat-card-title>
 
                 </div>
                 <div style="width:100%; margin-top:5%;float:left">

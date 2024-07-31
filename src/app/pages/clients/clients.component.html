@@ -12,7 +12,7 @@
     <h2 class="title">{{'clients' | translate}}</h2>
     <h3 class="subtitle">Añadir texto dinámico</h3>
   </vex-secondary-toolbar>
-  
+
   <vex-page-layout-content class="fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
                      [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
@@ -25,9 +25,10 @@
     <mat-card style="padding: 0 3%;">
       <mat-card-header style="display:block">
         <div style="width: 100%;float: left;">
-          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
-          <mat-icon svgIcon="mat:edit" style="cursor: pointer;float:right" (click)="goTo('/clients/update/'+detailData.id)"></mat-icon>
-
+          <!--<mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
+          <mat-icon svgIcon="mat:edit" style="cursor: pointer;float:right" (click)="goTo('/clients/update/'+detailData.id)"></mat-icon>-->
+          <img src="assets/img/icons/edit.svg" (click)="goTo('/clients/update/'+detailData.id)" class="btn-edit" />
+          <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
         </div>
         <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
       </mat-card-header>

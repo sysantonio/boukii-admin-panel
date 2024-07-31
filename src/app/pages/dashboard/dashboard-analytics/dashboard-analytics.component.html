@@ -15,7 +15,7 @@
 
   <vex-page-layout-content class="fullwidth" style="background: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));">
     <div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-      <vex-widget-assistant class="sm:col-span-2" [date]="date" (dateEvent)="emitDate($event)"></vex-widget-assistant>
+      <vex-widget-assistant class="sm:col-span-2" style="display: flex;" [date]="date" (dateEvent)="emitDate($event)"></vex-widget-assistant>
 
       <!--<vex-widget-quick-line-chart
         [series]="pageViewsSeries"
@@ -32,53 +32,48 @@
         label="Unique Users"
         value="67.2k"></vex-widget-quick-line-chart>-->
         <div style="width: 100%;float:left;border: 1px solid #e6e6e6; border-radius: 10px;">
-
-          <div style="width: 100%;float:left">
-            <mat-icon svgIcon="mat:check" style="margin:2%; color:#CEE741" *ngIf="getPrivateNoAssigned() === 0 && getColNoAssigned() === 0"></mat-icon>
-            <mat-icon svgIcon="mat:warning" style="margin:2%; color:red" *ngIf="getPrivateNoAssigned() > 0 || getColNoAssigned() > 0"></mat-icon>
-            <p style="text-align: center;font-size: 20px;color: #808080">{{ 'courses.title' | translate }}</p>
-          </div>
-
-          <div style="width: 100%;float:left;">
-            <mat-icon svgIcon="logo:cursos" style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
-            <p style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{ 'courses.title' | translate }}</b></p>
-          </div>
-
-          <div style="width: 100%;float:left;margin: 5% 0 0 0;">
-            <div style="width: 48%;float:left; margin: 0 2% 0 2%; border-right: 2px solid #e6e6e6; height:75px">
-              <p style="float: left;width:100%;text-align: center;color: #808080">{{ 'private' | translate }}</p>
-              <p style="float: left;width:100%;text-align: center;color:#F24726; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getPrivateNoAssigned()}}</p>
-
+          <div class="card" style="height:100%;">
+            <div style="width: 100%;">
+              <mat-icon svgIcon="mat:check" style="margin:2%; color:#CEE741" *ngIf="getPrivateNoAssigned() === 0 && getColNoAssigned() === 0"></mat-icon>
+              <mat-icon svgIcon="mat:warning" style="margin:2%; color:red" *ngIf="getPrivateNoAssigned() > 0 || getColNoAssigned() > 0"></mat-icon>
+              <p style="text-align: center;font-size: 20px;color: #808080">{{ 'courses.title' | translate }}</p>
             </div>
-
-            <div style="width: 48%;float:left;height:75px">
-              <p style="float: left;width:100%;text-align: center;color: #808080">{{ 'colective' | translate }}</p>
-              <p style="float: left;width:100%;text-align: center;color:#CEE741; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getColNoAssigned()}}</p>
-
+            <div style="width: 100%;">
+              <mat-icon svgIcon="logo:cursos" style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
+              <p style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{ 'courses.title' | translate }}</b></p>
+            </div>
+            <div style="width: 100%;margin: 5% 0 0 0;display: inline-flex;">
+              <div style="width: 48%;border-right: 2px solid #e6e6e6; display:inline-block; vertical-align:top;">
+                <p style="width:100%;text-align: center;color: #808080">{{ 'private' | translate }}</p>
+                <p style="width:100%;text-align: center;color:#F24726; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getPrivateNoAssigned()}}</p>
+              </div>
+              <div style="width: 48%;">
+                <p style="width:100%;text-align: center;color: #808080; display:inline-block; vertical-align:top;">{{ 'colective' | translate }}</p>
+                <p style="width:100%;text-align: center;color:#CEE741; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getColNoAssigned()}}</p>
+              </div>
             </div>
           </div>
-
         </div>
+
         <div style="width: 100%;float:left;border: 1px solid #e6e6e6; border-radius: 10px;">
+          <div class="card" style="height:100%;">
+            <div style="width: 100%;">
+              <mat-icon svgIcon="mat:warning" style="margin:2%; color:red" *ngIf="getPaidBookings() > 0"></mat-icon>
+              <mat-icon svgIcon="mat:check" style="margin:2%; color:#CEE741" *ngIf="getPaidBookings() === 0"></mat-icon>
+              <p style="text-align: center;font-size: 20px;color: #808080">{{ 'bookings' | translate }}</p>
+            </div>
 
-          <div style="width: 100%;float:left">
-            <mat-icon svgIcon="mat:warning" style="margin:2%; color:red" *ngIf="getPaidBookings() > 0"></mat-icon>
-            <mat-icon svgIcon="mat:check" style="margin:2%; color:#CEE741" *ngIf="getPaidBookings() === 0"></mat-icon>
-            <p style="text-align: center;font-size: 20px;color: #808080">{{ 'bookings' | translate }}</p>
-          </div>
+            <div style="width: 100%;">
+              <mat-icon svgIcon="logo:reservas" style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
+              <p style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{ 'no_payed' | translate }}</b></p>
+            </div>
 
-          <div style="width: 100%;float:left;">
-            <mat-icon svgIcon="logo:reservas" style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
-            <p style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{ 'no_payed' | translate }}</b></p>
-          </div>
-
-          <div style="width: 100%;float:left;margin: 10% 0 0 0;">
-            <div style="width: 100%;float:left; margin: 0 2% 0 2%; height:75px">
-              <p style="float: left;width:100%;text-align: center;color:#F24726; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getPaidBookings()}}</p>
-
+            <div style="width: 100%;margin: 10% 0 0 0;">
+              <div style="width: 100%;float:left; margin: 0 2% 0 2%; height:75px">
+                <p style="float: left;width:100%;text-align: center;color:#F24726; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getPaidBookings()}}</p>
+              </div>
             </div>
           </div>
-
         </div>
 
       <vex-widget-large-goal-chart

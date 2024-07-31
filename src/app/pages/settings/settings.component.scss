@@ -56,3 +56,34 @@ table caption {
   background: #e91e63;
   border: solid 1px #fff
 }
+
+.items-icons {
+  .item {
+    cursor:pointer;
+    display:inline-block;
+    vertical-align: top;
+    padding: 10px 10px;
+
+    .icon {
+      height: 40px;
+      width:40px;
+      display:inline-block;
+      vertical-align: middle;
+      border-radius: 6px;
+      padding: 5px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .text {
+      display:inline-block;
+      vertical-align: middle;
+      width: 120px;
+      padding-left:10px;
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }
+}
