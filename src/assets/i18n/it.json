@@ -81,6 +81,7 @@
   "no_working_day": "Giornata personale",
   "edit_block": "Modifica Blocca",
   "edit_monitor": "Modifica monitor",
+  "edit_client": "Modifica cliente",
   "active": "Risorsa",
   "go_preview": "Vai all'anteprima",
   "go_list": "Vai alla lista",
@@ -613,6 +614,7 @@
   "hours_worked_total": "Ore lavorate totali",
   "hours_by_type": "Ore per tipo di corso",
   "hours_by_sport": "Ore per sport",
-  "error.max_quantity": "Non può esserci più da vendere della quantità totale di codici sconto"
-
+  "error.max_quantity": "Non può esserci più da vendere della quantità totale di codici sconto",
+  "user.noSportsAssigned.prompt": "All'utente selezionato non sono assegnati sport. Vuoi assegnargli degli sport ora?",
+  "message": "Messaggio"
 }

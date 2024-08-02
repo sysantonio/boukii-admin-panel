@@ -166,7 +166,7 @@ export class AppComponent {
 
       {
         type: 'subheading',
-        label: 'menu.settings',
+        label: 'settings',
         children: [
           {
             type: 'link',

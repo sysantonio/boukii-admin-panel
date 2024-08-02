@@ -10,7 +10,7 @@
   <vex-secondary-toolbar current="">
     <vex-breadcrumbs [crumbs]="[
     {icon:'reglages'},
-    {text:'menu.settings', title: true},
+    {text:'settings', title: true},
     ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
@@ -205,13 +205,13 @@
                     <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
                       <ng-container *ngFor="let item of sports">
                         <div style="cursor:pointer"*ngIf="item.sport_type === 1" (click)="setSport(item.id)">
-                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
+                          <div style="width: 50%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
                             <div style="width: 100%;">
                               <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                             </div>
                           </div>
-                          <div style="width: 100%;" *ngIf="item.sport_type === 1">
-                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
+                          <div style="width: 50%;" *ngIf="item.sport_type === 1">
+                            <p style="width: 50%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
                           </div>
                         </div>
                       </ng-container>
@@ -223,13 +223,13 @@
                     <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
                       <ng-container *ngFor="let item of sports">
                         <div style="cursor:pointer" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
-                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" *ngIf="item.sport_type === 2" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                          <div style="width: 50%; border-radius: 6px; margin-bottom: 10px;" *ngIf="item.sport_type === 2" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                             <div style="width: 100%;">
                               <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                             </div>
                           </div>
-                          <div style="width: 100%;" *ngIf="item.sport_type === 2">
-                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
+                          <div style="width: 50%;" *ngIf="item.sport_type === 2">
+                            <p style="width: 50%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
                           </div>
                         </div>
                       </ng-container>
@@ -241,13 +241,13 @@
                     <div class="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-6 md:grid-cols-12 lg:grid-cols-18 gap-3 xs:gap-4 sm:gap-6">
                       <ng-container *ngFor="let item of sports">
                         <div style="cursor:pointer"  *ngIf="item.sport_type === 3"  (click)="setSport(item.id)">
-                          <div style="width: 100%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                          <div style="width: 50%; border-radius: 6px; margin-bottom: 10px;" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                             <div style="width: 100%;">
                               <img style="width: 100%;" [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                             </div>
                           </div>
-                          <div style="width: 100%;">
-                            <p style="width: 100%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
+                          <div style="width: 50%;">
+                            <p style="width: 50%;text-align: center;line-height: 14px; font-size: 14px;">{{ item.name }}</p>
                           </div>
                         </div>
                       </ng-container>
@@ -978,6 +978,170 @@
               </vex-page-layout>
             </mat-tab>
           </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Mails">
+
+          <vex-page-layout>
+            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+              <h1 style="color:#808080;font-size:24px">{{'mailbox' | translate}}</h1>
+              <p style="padding: 1%; color:#808080">{{'compose' | translate}}</p>
+            <div class="block w-full">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
+                  <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
+                  <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
+                  <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
+                  <mat-option value="payment_link">{{'mails.type4' | translate}}</mat-option>
+                  <mat-option value="payment_confirm">{{'mails.type5' | translate}}</mat-option>
+                  <mat-option value="payment_reminder">{{'mails.type9' | translate}}</mat-option>
+                  <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
+                  <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>
+                  <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!--<input cdkFocusInitial matInput type="text"/>
+
+              <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>-->
+            </div>
+
+            <!--<div [@dropdown]="dropdownOpen" class="overflow-hidden">
+              <mat-form-field appearance="outline" class="block w-full">
+                <mat-label>Cc</mat-label>
+                <input matInput type="text"/>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="block w-full">
+                <mat-label>Bcc</mat-label>
+                <input matInput type="text"/>
+              </mat-form-field>
+            </div>-->
+
+            <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
+              <mat-tab label="{{'france' | translate }}">
+                <mat-form-field appearance="outline" class="block w-full">
+                  <mat-label>{{'subject' | translate}}</mat-label>
+                  <input matInput type="text" [(ngModel)]="subjectFr" [value]="subjectFr"/>
+                </mat-form-field>
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <p>{{ 'title' | translate }}</p>
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="titleFr"></quill-editor>
+                </div>
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <p>Mensaje</p>
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="bodyFr"></quill-editor>
+                </div>
+
+              </mat-tab>
+              <mat-tab label="{{'english' | translate }}">
+                <mat-form-field appearance="outline" class="block w-full">
+                  <mat-label>{{'subject' | translate}}</mat-label>
+                  <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
+                </mat-form-field>
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <p>Título</p>
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="titleEn"></quill-editor>
+                </div>
+
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="bodyEn"></quill-editor>
+                </div>
+              </mat-tab>
+              <mat-tab label="{{'spanish' | translate }}" >
+                <mat-form-field appearance="outline" class="block w-full">
+                  <mat-label>{{'subject' | translate}}</mat-label>
+                  <input matInput type="text" [(ngModel)]="subjectEs" [value]="subjectEs"/>
+                </mat-form-field>
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <p>Título</p>
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="titleEs"></quill-editor>
+                </div>
+
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="bodyEs"></quill-editor>
+                </div>
+              </mat-tab>
+              <mat-tab label="{{'germany' | translate }}">
+                <mat-form-field appearance="outline" class="block w-full">
+                  <mat-label>{{'subject' | translate}}</mat-label>
+                  <input matInput type="text" [(ngModel)]="subjectIt" [value]="subjectIt"/>
+                </mat-form-field>
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <p>Título</p>
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="titleIt"></quill-editor>
+                </div>
+
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="bodyIt"></quill-editor>
+                </div>
+              </mat-tab>
+              <mat-tab label="{{'italian' | translate }}">
+                <mat-form-field appearance="outline" class="block w-full">
+                  <mat-label>{{'subject' | translate}}</mat-label>
+                  <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
+                </mat-form-field>
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <p>Título</p>
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="titleDe"></quill-editor>
+                </div>
+
+
+                <div class="vex-mail-compose-editor flex flex-col">
+                  <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                                class="flex-auto flex flex-col" [(ngModel)]="bodyDe"></quill-editor>
+                </div>
+
+              </mat-tab>
+            </mat-tab-group>
+
+            <!--<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+                 matRipple>
+              <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:picture_as_pdf"></mat-icon>
+              <p class="flex-auto ml-4 text-sm">super-secret-design-document.pdf</p>
+
+              <p class="text-sm text-secondary mr-2 flex-none">54kb</p>
+              <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
+                <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
+              </button>
+            </div>
+
+            <div class="vex-mail-compose-attachment my-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+                 matRipple>
+              <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:image"></mat-icon>
+              <p class="flex-auto ml-4 text-sm">cute-cat-picture.jpg</p>
+
+              <p class="text-sm text-secondary mr-2 flex-none">16kb</p>
+              <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
+                <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
+              </button>
+            </div>-->
+              <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
+                <div style="float:left; width:100%">
+                  <button class="btn-primary-accent" style="float: right;" (click)="saveDefaultMail()">{{'save' | translate}}</button>
+                </div>
+
+              </div>
+            </vex-page-layout-content>
+
+          </vex-page-layout>
+
         </mat-tab>
       </mat-tab-group>
     </div>

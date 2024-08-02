@@ -80,6 +80,7 @@
   "no_working_day": "Personal day",
   "edit_block": "Edit Lock",
   "edit_monitor": "Edit monitor",
+  "edit_client": "Edit Client",
   "active": "Asset",
   "go_preview": "Go to preview",
   "go_list": "Go to list",
@@ -307,7 +308,7 @@
   "settings.school.save": "Save contact details",
   "settings.sports.title": "Active sports",
   "settings.sports.subtitle": "Select your school sports",
-  "settings.sports.all_sessions": "all the stations",
+  "settings.sports.all_sessions": "all the seasons",
   "settings.sports.subtitle_info": "It is not necessary to select all of them now, you can do so later according to your needs.",
   "settings.sports.levels.text1": "Configure the levels as they best suit your school.",
   "settings.sports.levels.text2": "The colors are fixed, they cannot be modified.",
@@ -613,6 +614,8 @@
   "hours_worked_total": "Total Hours Worked",
   "hours_by_type": "Hours by Course Type",
   "hours_by_sport": "Hours by Sport",
-  "error.max_quantity": "There can't be more for sale than the total amount of discount codes"
+  "error.max_quantity": "There can't be more for sale than the total amount of discount codes",
+  "user.noSportsAssigned.prompt": "The selected user has no sports assigned. Would you like to assign sports now?",
+  "message": "Message"
 
 }

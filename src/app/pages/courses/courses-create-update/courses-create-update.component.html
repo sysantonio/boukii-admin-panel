@@ -1,11 +1,10 @@
-<vex-secondary-toolbar current="{{'courses.title' | translate}}">
-  <vex-breadcrumbs
-    [crumbs]="[{text: '', icon: 'cursos-2'}, {text: (mode === 'update' ? 'courses.new' : 'courses.update'), icon: ''}]"
-    class="flex-auto"
-  ></vex-breadcrumbs>
-  <button class="ml-2" color="primary" mat-icon-button type="button">
-    <mat-icon svgIcon="mat:more_vert"></mat-icon>
-  </button>
+<vex-secondary-toolbar current="">
+  <vex-breadcrumbs [crumbs]="[
+    {icon:'cursos'},
+    {text:'courses.title', title: true,  link: '/courses'},
+    {text: defaults.id, subtitle: true,  link: '/courses/detail/'+defaults.id},
+    {text: (mode !== 'update' ? 'courses.new' : 'courses.update'), subtitle: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
 </vex-secondary-toolbar>
 <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 

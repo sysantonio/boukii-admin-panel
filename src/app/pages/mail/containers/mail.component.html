@@ -13,19 +13,12 @@
                 [disableClose]="isDesktop$ | async"
                 class="vex-mail-drawer max-w-3xs w-full bg-base"
                 position="start">
-      <!--<div class="vex-mail-header px-gutter relative flex flex-col" >
-        <div *ngIf="isDesktop$ | async" class="flex-1 flex items-center">
-          <p class="text-2xl font-medium flex items-center">
-            <mat-icon @scaleIn class="ltr:mr-4 rtl:ml-4 block icon-2xl" svgIcon="logo:mail" style="color:#FF3085"></mat-icon>
-            <span @fadeInRight class="block">{{'mailbox' | translate}}</span>
-          </p>
-        </div>
-
+      <div class="vex-mail-header px-gutter relative flex flex-col" >
         <div [class.h-full]="ltLg$ | async" class="vex-mail-header-overflow flex-none flex items-center">
           <button (click)="openCompose()" class="w-full" color="primary" mat-raised-button type="button">{{'compose' | translate}}
           </button>
         </div>
-      </div>-->
+      </div>
 
       <vex-mail-sidenav [drawer]="drawer"></vex-mail-sidenav>
     </mat-drawer>
@@ -36,19 +29,6 @@
           <button (click)="drawer.open()" *ngIf="ltLg$ | async" class="mx-gutter" mat-icon-button type="button">
             <mat-icon class="text-contrast-white" svgIcon="mat:menu"></mat-icon>
           </button>
-          <!--<div class="bg-foreground shadow rounded-full w-full flex items-center ltr:mr-gutter rtl:ml-gutter">
-            <mat-icon [class.p-2]="ltLg$ | async"
-                      [class.px-5]="isDesktop$ | async"
-                      [class.py-4]="isDesktop$ | async"
-                      class="text-secondary"
-                      svgIcon="mat:search"></mat-icon>
-            <input [class.h-14]="isDesktop$ | async"
-                   [class.h-8]="ltLg$ | async"
-                   [formControl]="searchCtrl"
-                   class="w-full outline-none placeholder-black bg-transparent"
-                   placeholder="Search mails..."
-                   type="text"/>
-          </div>-->
         </div>
 
         <div class="vex-mail-header-overflow flex-none"></div>

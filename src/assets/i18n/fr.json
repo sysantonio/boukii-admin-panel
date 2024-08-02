@@ -80,6 +80,7 @@
   "no_working_day": "Journée personnelle",
   "edit_block": "Modifier le blocage",
   "edit_monitor": "Modifier le moniteur",
+  "edit_client": "Modifier le client",
   "active": "Actif",
   "go_preview": "Aller à l'aperçu",
   "go_list": "Aller à la liste",
@@ -307,7 +308,7 @@
   "settings.school.save": "Enregistrer les coordonnées",
   "settings.sports.title": "Sports actifs",
   "settings.sports.subtitle": "Sélectionnez vos sports",
-  "settings.sports.all_sessions": "toutes les saisons",
+  "settings.sports.all_sessions": "Toutes les saisons",
   "settings.sports.subtitle_info": "Il n'est pas nécessaire de tous les sélectionner maintenant, vous pourrez le faire plus tard en fonction de vos besoins.",
   "settings.sports.levels.text1": "Configurez les niveaux comme ils conviennent le mieux à votre école.",
   "settings.sports.levels.text2": "Les couleurs sont fixes, elles ne peuvent être modifiées.",
@@ -610,5 +611,8 @@
   "hours_worked_total": "Heures travaillées totales",
   "hours_by_type": "Heures par type de cours",
   "hours_by_sport": "Heures par sport",
-  "error.max_quantity": "Il ne peut pas y avoir plus à vendre que la quantité totale de codes de réduction"
+  "error.max_quantity": "Il ne peut pas y avoir plus à vendre que la quantité totale de codes de réduction",
+  "user.noSportsAssigned.prompt": "L'utilisateur sélectionné n'a aucun sport attribué. Voulez-vous lui attribuer des sports maintenant?",
+  "message": "Message"
+
 }

@@ -6,7 +6,7 @@
 </div>
 
 <mat-tab-group *ngIf="!loading">
-  <mat-tab label="General">
+  <mat-tab label="{{'observation_general' | translate}}">
     <mat-dialog-content>
       <div class="block w-full">
         <mat-label>{{'mails.type' | translate }}</mat-label><br>
@@ -100,7 +100,7 @@
       </div>
 
       <div class="vex-mail-compose-editor flex flex-col">
-        <p>Mesnaje</p>
+        <p>{{ 'message' | translate }}</p>
         <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                       class="flex-auto flex flex-col" [(ngModel)]="generalBody"></quill-editor>
       </div>
@@ -146,7 +146,7 @@
     </mat-dialog-actions>
 
   </mat-tab>
-  <mat-tab label="Automático">
+ <!-- <mat-tab label="Automático">
     <mat-dialog-content>
       <div class="block w-full">
         <mat-form-field appearance="outline" style="width: 100%">
@@ -162,12 +162,12 @@
             <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <!--<input cdkFocusInitial matInput type="text"/>
+        &lt;!&ndash;<input cdkFocusInitial matInput type="text"/>
 
-        <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>-->
+        <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>&ndash;&gt;
       </div>
 
-      <!--<div [@dropdown]="dropdownOpen" class="overflow-hidden">
+      &lt;!&ndash;<div [@dropdown]="dropdownOpen" class="overflow-hidden">
         <mat-form-field appearance="outline" class="block w-full">
           <mat-label>Cc</mat-label>
           <input matInput type="text"/>
@@ -177,7 +177,7 @@
           <mat-label>Bcc</mat-label>
           <input matInput type="text"/>
         </mat-form-field>
-      </div>-->
+      </div>&ndash;&gt;
 
       <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="{{'france' | translate }}">
@@ -273,7 +273,7 @@
         </mat-tab>
       </mat-tab-group>
 
-      <!--<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
+      &lt;!&ndash;<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
            matRipple>
         <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:picture_as_pdf"></mat-icon>
         <p class="flex-auto ml-4 text-sm">super-secret-design-document.pdf</p>
@@ -293,7 +293,7 @@
         <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
           <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
         </button>
-      </div>-->
+      </div>&ndash;&gt;
     </mat-dialog-content>
 
     <mat-dialog-actions>
@@ -303,9 +303,9 @@
 
       <span class="flex-1"></span>
 
-      <!--<button mat-icon-button matTooltip="Attach File" type="button">
+      &lt;!&ndash;<button mat-icon-button matTooltip="Attach File" type="button">
         <mat-icon svgIcon="mat:attach_file"></mat-icon>
-      </button>-->
+      </button>&ndash;&gt;
 
       <button (click)="saveDefaultMail()" color="primary" mat-flat-button type="button">
         <span>{{'save' | translate}}</span>
@@ -314,5 +314,5 @@
     </mat-dialog-actions>
 
 
-  </mat-tab>
+  </mat-tab>-->
 </mat-tab-group>

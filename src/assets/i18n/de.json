@@ -81,6 +81,7 @@
   "no_working_day": "Persönlicher Tag",
   "edit_block": "Sperre bearbeiten",
   "edit_monitor": "Monitor bearbeiten",
+  "edit_client": "Kunde bearbeiten",
   "active": "Vermögenswert",
   "go_preview": "Gehen Sie zur Vorschau",
   "go_list": "Zur Liste gehen",
@@ -307,7 +308,7 @@
   "settings.school.save": "Kontaktdaten speichern",
   "settings.sports.title": "Aktiver Sport",
   "settings.sports.subtitle": "Wählen Sie Ihren Schulsport aus",
-  "settings.sports.all_sessions": "alle Stationen",
+  "settings.sports.all_sessions": "alle Jahreszeit",
   "settings.sports.subtitle_info": "Es ist nicht notwendig, jetzt alle auszuwählen, Sie können dies später entsprechend Ihren Anforderungen tun.",
   "settings.sports.levels.text1": "Konfigurieren Sie die Level so, wie sie am besten zu Ihrer Schule passen.",
   "settings.sports.levels.text2": "Die Farben sind fest vorgegeben, sie können nicht verändert werden.",
@@ -613,5 +614,7 @@
   "hours_worked_total": "Gesamt geleistete Stunden",
   "hours_by_type": "Stunden nach Kurstyp",
   "hours_by_sport": "Stunden nach Sportart",
-  "error.max_quantity": "Es kann nicht mehr zum Verkauf stehen, als die Gesamtsumme der Rabattcodes"
+  "error.max_quantity": "Es kann nicht mehr zum Verkauf stehen, als die Gesamtsumme der Rabattcodes",
+  "user.noSportsAssigned.prompt": "Dem ausgewählten Benutzer sind keine Sportarten zugewiesen. Möchtest du ihm jetzt Sportarten zuweisen?",
+  "message": "Nachricht"
 }

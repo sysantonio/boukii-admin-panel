@@ -1,3 +1,10 @@
+<vex-secondary-toolbar current="">
+  <vex-breadcrumbs [crumbs]="[
+    {icon:'reservas-2'},
+    {text:'bookings', title: true, link: '/bookings'},
+    {text:'booking_info', subtitle: true}
+    ]" class="flex-auto"></vex-breadcrumbs>
+</vex-secondary-toolbar>
 <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 <div
   [@stagger]="true"
