@@ -864,6 +864,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         return 'AUTRE';
       case 5:
         return 'payment_no_payment';
+        case 6:
+        return 'bonus';
 
       default:
         return 'payment_no_payment'
