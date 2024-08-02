@@ -334,7 +334,7 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
               <img [src]="getCourseType(data[i]) === 'prive' ? data[i].sport.icon_prive : data[i].sport.icon_collective" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
-              <!--<ng-container *ngIf="data[i].bookingusers > 1" >
+              <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
             </td>
@@ -348,7 +348,7 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
               <img *ngIf="row[column.property] != 'multiple'" [src]="row[column.property]" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
-              <!--<ng-container *ngIf="data[i].bookingusers > 1" >
+              <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
             </td>
@@ -362,7 +362,7 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
               <img [src]="row[column.property]?.sport" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
-              <!--<ng-container *ngIf="data[i].bookingusers > 1" >
+              <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
             </td>
@@ -375,9 +375,9 @@
           <ng-container *ngIf="column.type === 'booking_dates'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row;let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <!--Jours {{ getMinMaxDates(data[i].bookingusers).days}}<br>-->
-              <strong>{{ getMinMaxDates(data[i].bookingusers).minDate | date: 'dd/MM/YYYY'}}<br>{{ getMinMaxDates(data[i].bookingusers).maxDate| date: 'dd/MM/YYYY' }}</strong><br>
-              {{getMinMaxHours(data[i].bookingusers).minHour }}h - {{getMinMaxHours(data[i].bookingusers).maxHour}}h
+              <!--Jours {{ getMinMaxDates(data[i].booking_users).days}}<br>-->
+              <strong>{{ getMinMaxDates(data[i].booking_users).minDate | date: 'dd/MM/YYYY'}}<br>{{ getMinMaxDates(data[i].booking_users).maxDate| date: 'dd/MM/YYYY' }}</strong><br>
+              {{getMinMaxHours(data[i].booking_users).minHour }}h - {{getMinMaxHours(data[i].booking_users).maxHour}}h
             </td>
           </ng-container>
         </ng-container>

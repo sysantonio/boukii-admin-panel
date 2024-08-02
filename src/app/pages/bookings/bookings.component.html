@@ -31,7 +31,8 @@
       [canDelete]="false"
       [canDeactivate]="false"
       (showDetailEvent)="showDetailEvent($event)"
-      [with]="['bookingusers.course']"
+      [with]="['bookingUsers.course', 'clientMain', 'user',
+       'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
       [filterColumn]="'school_id'"
       [filterField]="user.schools[0].id"
       [sectionIcon]="icon"
@@ -51,18 +52,10 @@
             <mat-card-title>{{'booking' | translate}} #{{detailData.id}}</mat-card-title>
           </span>
           <span style="display: inline-block;width: 20%; text-align: right;">
-            <!--<mat-icon
-              style="cursor: pointer;"
-              svgIcon="mat:edit"
-              (click)="goTo('/bookings/update/' + detailData.id)"
-            ></mat-icon>
-            <mat-icon
-              style="cursor: pointer;"
-              svgIcon="mat:close"
-              (click)="showDetail = false"
-            ></mat-icon>-->
-            <img src="assets/img/icons/edit.svg" (click)="goTo('/bookings/update/' + detailData.id)" class="btn-edit" />
-            <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+            <img src="assets/img/icons/edit.svg"
+                 (click)="goTo('/bookings/update/' + detailData.id)" class="btn-edit" />
+            <img src="assets/img/icons/close.svg"
+                 (click)="showDetail = false" class="btn-close" />
           </span>
         </div>
 
@@ -75,7 +68,7 @@
               </span>
             </div>
             <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-              Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+              {{ detailData.user.username }} <span style="margin-left: 10px;">({{ detailData.user.first_name + ' ' +  detailData.user.last_name}})</span>
             </div>
           </mat-card-subtitle>
         </div>
@@ -149,31 +142,32 @@
           </div>
         </div>
 
-        <ng-container>
+        <ng-container *ngFor="let bUsers of bookingUsersUnique; let buI = index"
+                      [style.marginTop]="buI > 0 ? '35px' : ''">
           <div class="title-actividad">
             <div class="col-left">
-              <b class="title">Actividad 1: </b>
-              <b style="color:#FF0000;margin-left:10px;">Anulada</b>
+              <b class="title">{{ 'activity' | translate }} {{buI + 1}}: </b>
+              <b style="color:#FF0000;margin-left:10px;" *ngIf="bUsers.status === 2">
+                {{'cancelled' | translate | uppercase }}
+              </b>
+              <b style="color:#FF0000;margin-left:10px;" *ngIf="bUsers.status === 3" >
+                {{'partial_cancelled' | translate | uppercase }}
+              </b>
+              <b style="color:#00C32B;margin-left:10px;" *ngIf="bUsers.status === 1" >
+                {{'active' | translate | uppercase }}
+              </b>
             </div>
             <div class="col-right">
-              <b>160.00 CHF</b>
+              <b>{{bUsers.price}} {{ detailData.currency }}</b>
             </div>
           </div>
 
           <div
-            *ngFor="let bUsers of bookingUsersUnique; let buI = index"
-            [style.marginTop]="buI > 0 ? '35px' : ''"
+
           >
 
             <div class="holder-content">
-            <!--<div class="title-status">
-              <span class="col-left">
-                Actividad 1 <span>Anulada</span>
-              </span>
-              <span class="col-right">
-                160.00 CHF
-              </span>
-            </div>-->
+
               <div>
                 <div class="holder-actividad">
                   <div class="col-left">
@@ -183,7 +177,16 @@
                     </div>
                     <div class="c-r">
                       <div class="course-title">{{bUsers?.course?.name}}</div>
-                      <div class="course-label">Prive Flex Ski</div>
+                      <div class="course-label">
+                        {{
+                          (bUsers?.course?.course_type === 2 ? 'private' :
+                            bUsers?.course?.course_type === 1 ? 'collective' : 'activity') | translate
+                        }}
+                        {{
+                          (bUsers?.course?.isFlexible ? 'flex' : 'fix') | translate
+                        }}
+                        {{bUsers?.course?.sport.name}}
+                      </div>
                       <ng-container *ngFor="let item of detailData.bookingusers">
                         <div *ngIf="item.client_id == bUsers.client_id">
                           <span class="date-course"><img class="icon-calendar" src="assets/img/icons/calendar-1.svg" /> {{item.date |date: 'dd.MM.YYYY'}} <i>{{item?.hour_start}}h</i> - {{item?.hour_end}}h</span>
@@ -237,18 +240,11 @@
                           {{getDegree(bUsers?.degree_id)?.level}}
                         </div>
                       </div>
-                      <div style="margin-left: 1em">
-                        <mat-slide-toggle
-                          [disabled]="true"
-                          [checked]="detailData?.has_cancellation_insurance"
-                        ></mat-slide-toggle>
-                        Op. Rem
-                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> Monitor</div>
+                <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> {{'monitor' | translate}}</div>
                 <div>
                   <div style="display:inline-block; vertical-align: middle; width: 20%;">
                     <!--<img
@@ -284,203 +280,86 @@
                 </div>
               </div>
             </div>
-
-            <div class="title-actividad">
-              <div class="col-left">
-                <b class="title">Payé:</b>
-              </div>
-              <div class="col-right">
-                <b>0.00 CHF</b>
-              </div>
-            </div>
-            <div class="subtitle-sub">Opciones de la reservation</div>
-            <div style="padding: 0px 35px;">
-
-              <div class="list-inner-holder">
-                <div class="col-left">
-                  <mat-slide-toggle
-                    [checked]="true"
-                  ></mat-slide-toggle>
-                  Op. Rem
-                </div>
-                <div class="col-right">
-                  15.00 CHF
-                </div>
-              </div>
-
-              <div class="list-inner-holder">
-                <div class="col-left">
-                  <mat-slide-toggle
-                    [disabled]="true"
-                    [checked]="detailData?.has_boukii_care"
-                  ></mat-slide-toggle>
-                  Boukii Care
-                </div>
-                <div class="col-right">
-                  15.00 CHF
-                </div>
-              </div>
-
-              <div class="list-inner-holder">
-                <div class="col-left">
-                  <div style="width: 100%;" *ngIf="true">
-                    <mat-slide-toggle></mat-slide-toggle> Alquiler material
-                  </div>
-                </div>
-                <div class="col-right">
-                  15.00 CHF
-                </div>
-              </div>
-
-              <div class="list-inner-holder">
-                <div class="col-left">
-                  <mat-slide-toggle
-                    [disabled]="true"
-                    [checked]="bUsers?.courseExtras?.length > 0"
-                  ></mat-slide-toggle>
-                  Fortait
-                </div>
-                <div class="col-right">
-                  15.00 CHF
-                </div>
-              </div>
-
-              <div class="list-inner-holder">
-                <div class="col-left">
-                  <div style="width: 100%;" *ngIf="true">
-                    <mat-slide-toggle></mat-slide-toggle> Comida
-                  </div>
-                </div>
-                <div class="col-right">
-                  15.00 CHF
-                </div>
-              </div>
-
-              <div class="list-inner-holder">
-                <div class="col-left">
-                  <div
-                    style="width: 100%;" *ngIf="true">
-                    <mat-slide-toggle></mat-slide-toggle> Transporte
-                  </div>
-                </div>
-                <div class="col-right">
-                  15.00 CHF
-                </div>
-              </div>
-
-            </div>
-            <div class="subtitle-sub">Méthode de paiment</div>
-            <div class="list-holder">
-              <div class="col-left">
-                Bono
-              </div>
-              <div class="col-right">
-                0.00 CHF
-              </div>
-            </div>
-            <div class="list-holder">
-              <div class="col-left">
-                <div class="col-l">
-                  Link
-                </div>
-                <div class="col-r">
-                  <span style="#FA9917">En attend de paiment</span>
-                </div>
-              </div>
-              <div class="col-right">
-                165.00 CHF
-              </div>
-            </div>
-            <!--<div style="float: left; width: 20%;">
-              <p style="text-align: right;color:#5ade47" *ngIf="detailData.bookingusers[0]?.status === 1 && detailData.paid">{{'payed' | translate}}</p>
-              <p style="text-align: right;color:#dbd616" *ngIf="detailData.bookingusers[0]?.status === 1 && !detailData.paid">{{'no_payed' | translate }}</p>
-              <p style="text-align: right;color:#dbd616"*ngIf="detailData.bookingusers[0]?.status === 2">{{'cancelled' | translate | uppercase }}</p>
-            </div>-->
-            <!--<mat-divider
-              style="float: left;width: 100%;margin: 5% 0 0% 0;"
-            ></mat-divider>-->
           </div>
-
-
-        <!--<div style="float: left; width: 100%;" *ngFor="let bUsers of bookingUsersUnique; let buI = index" [style.marginTop]="buI > 0 ? '35px' : '0'">
-        <div style="float: left; width: 50%;">
-          <div style="float: left; width: 100%;">
-            <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport"
-                            [selectLevel]="getClientDegree(bUsers.client_id)" [size]="44" [userImage]="getClient(bUsers.client_id)?.image !== null
-                         && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"></app-level-user>
-            <div style="float: left; width: 65%;">
-              <p>{{getLanguage(getClient(bUsers?.client_id)?.language1_id)}} · {{ getCountry(getClient(bUsers?.client_id)?.country) }} · {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}} &ensp;{{'years' | translate}}</p>
-              <p>{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}} </p>
-            </div>
-            <p style="float: left; width: 100%; font-size: 18px">
-              <strong>{{bUsers?.course?.name}}</strong>
-            </p>
-            <p style="float: left; width: 100%;">
-              {{(bUsers?.course?.course_type === 1 ? 'colective' : 'private' )| translate}} {{getSportName(bUsers?.course?.sport_id)}} {{bUsers?.price}} {{bUsers?.currency}}
-            </p>
-          </div>
-          &lt;!&ndash;<div style="float: left; width: 100%;" *ngIf="bUsers.course.course_type">
-            <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(bUsers?.degree_id)?.color}">
-              {{getDegree(bUsers?.degree_id)?.league}} - {{getDegree(bUsers?.degree_id)?.annotation}}/{{getDegree(bUsers?.degree_id)?.name}}
-            </div>
-            </div>&ndash;&gt;
-            <ng-container *ngIf="bUsers?.course?.course_type === 1">
-              <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
-                <ul>
-                  <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
-                </ul>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="bUsers?.course?.course_type === 2">
-              <div style="float: left; width: 100%;margin-top: 5%;" *ngFor="let item of detailData.bookingusers">
-                <ul>
-                  <li *ngIf="+item.price > 0">{{item.date |date: 'dd/MM/YYYY'}} <i>{{item?.hour_start}}h - {{item?.hour_end}}h</i></li>
-                </ul>
-              </div>
-            </ng-container>
-            <div style="float: left; width: 100%;margin-top: 5%;">
-              <div style="float: left; width: 20%;">
-                <img [src]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar" style="border-radius: 100%;">
-              </div>
-              <div style="float: left; width: 80%;text-wrap: nowrap;" *ngIf="getMonitor(bUsers.monitor_id)">
-                <p>
-                  <span *ngIf="detailData.color !== ''" class="dot" [ngStyle]="{'background': detailData.color}"></span>
-                  {{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</p>
-                <p style="font-size:8px"><i>{{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} · {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}} {{'years' | translate }}</i></p>
-              </div>
-              <div style="float: left; width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
-                <p style="margin: 5% 0 0 5%;">{{'no_monitor' | translate}}</p>
-              </div>
-              <div style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
-                  [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}">
-                {{getDegree(bUsers?.degree_id)?.annotation}} {{getDegree(bUsers?.degree_id)?.level}}
-              </div>
-            </div>
-            <div style="float: left; width: 100%;margin-top: 5%;">
-              <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_cancellation_insurance"></mat-slide-toggle> Op. Rem
-            </div>
-            <div style="float: left; width: 100%;margin-top: 5%;">
-              <mat-slide-toggle [disabled]="true" [checked]="detailData?.has_boukii_care"></mat-slide-toggle> Boukii Care
-            </div>
-          </div>
-          <div style="float: left; width: 50%;">
-            <div style="float: left; width: 100%;" *ngIf="false">
-              <mat-slide-toggle></mat-slide-toggle> Alquiler material
-            </div>
-            <div style="float: left; width: 100%;margin-top: 5%;">
-              <mat-slide-toggle [disabled]="true" [checked]="bUsers?.courseExtras?.length > 0"></mat-slide-toggle> Fortrait
-            </div>
-            <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
-              <mat-slide-toggle></mat-slide-toggle> Comida
-            </div>
-            <div style="float: left; width: 100%;margin-top: 5%;" *ngIf="false">
-              <mat-slide-toggle></mat-slide-toggle> Transporte
-            </div>
-          </div>
-        </div>-->
 
         </ng-container>
+        <div class="title-actividad">
+          <div class="col-left">
+            <b class="title">{{ 'ispaid' | translate }}:</b>
+          </div>
+          <div class="col-right">
+            <b>{{detailData.paid_total}} {{ detailData.currency }}</b>
+          </div>
+        </div>
+        <div class="subtitle-sub">{{ 'options' | translate }}</div>
+        <div style="padding: 0px 35px;">
 
+          <div class="list-inner-holder">
+            <div class="col-left">
+              <mat-slide-toggle
+                [checked]="detailData?.has_cancellation_insurance"
+                [disabled]="true"
+              ></mat-slide-toggle>
+              {{ 'op_rem_abr' | translate }}
+            </div>
+            <div class="col-right">
+              {{detailData.price_cancellation_insurance}}
+              {{detailData.currency}}
+            </div>
+          </div>
+
+          <div class="list-inner-holder">
+            <div class="col-left">
+              <mat-slide-toggle
+                [disabled]="true"
+                [checked]="detailData?.has_boukii_care"
+              ></mat-slide-toggle>
+              Boukii Care
+            </div>
+            <div class="col-right">
+              {{detailData.price_boukii_care}} {{detailData.currency}}
+            </div>
+          </div>
+
+          <div class="list-inner-holder">
+            <div class="col-left">
+              <div style="width: 100%;" *ngIf="true">
+                <mat-slide-toggle
+                  [disabled]="true"
+                  [checked]="existExtras()"></mat-slide-toggle>
+                {{'extras' | translate}}
+              </div>
+            </div>
+            <div class="col-right">
+              {{getExtrasPrice()}} {{detailData.currency}}
+            </div>
+          </div>
+
+        </div>
+        <div class="subtitle-sub">{{ 'method_paiment' | translate }}</div>
+        <div class="list-holder" *ngIf="bonus?.length > 0">
+          <div class="col-left">
+            {{'bonus' | translate}}
+          </div>
+          <div class="col-right">
+            -{{getBonusPrice()}} {{detailData.currency}}
+          </div>
+        </div>
+        <div class="list-holder" *ngIf="detailData.payment_method != 6">
+          <div class="col-left">
+            <div class="col-l">
+              {{ getPaymentMethod(detailData.payment_method) | translate }}
+            </div>
+            <!--   TODO: revisar metodo de pago cuando hay varios pagos y que estado poner?? -->
+            <!--            <div class="col-r">
+                          <span style="#FA9917">En attend de paiment</span>
+                        </div>
+                      </div>
+                      <div class="col-right">
+                        165.00 CHF
+                      </div>-->
+          </div>
+        </div>
 
         <!--<div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
           <h3
@@ -535,46 +414,6 @@
             </ng-container>
           </div>
         </div>-->
-        <div class="total-bottom">
-          <div class="col-left">
-            <ul>
-              <li *ngIf="detailData?.has_cancellation_insurance">
-                {{'op_rem' | translate}}
-              </li>
-              <li *ngIf="detailData?.has_boukii_care">{{'Boukii Care'}}</li>
-              <li *ngIf="existExtras()">{{'extras' | translate}}</li>
-              <li *ngIf="bonus?.length > 0">{{'bonus' | translate}}</li>
-              <li *ngIf="getTVA()">{{'tva' |translate}}</li>
-              <li class="total">
-                <b>{{'total' | translate | uppercase}}</b>
-              </li>
-            </ul>
-          </div>
-          <div class="col-right">
-            <ul>
-              <li *ngIf="detailData?.has_cancellation_insurance">
-                {{detailData.price_cancellation_insurance}}
-                {{detailData.currency}}
-              </li>
-              <li *ngIf="detailData?.has_boukii_care">
-                {{detailData.price_boukii_care}} {{detailData.currency}}
-              </li>
-              <li *ngIf="existExtras()">
-                {{getExtrasPrice()}} {{detailData.currency}}
-              </li>
-              <li *ngIf="bonus?.length > 0">
-                -{{getBonusPrice()}} {{detailData.currency}}
-              </li>
-              <li *ngIf="getTVA()">
-                {{(detailData?.price_total * getTVAValue()).toFixed(2)}}
-                {{detailData.currency}}
-              </li>
-              <li class="total">
-                {{detailData?.price_total}} {{detailData.currency}}
-              </li>
-            </ul>
-          </div>
-        </div>
       </mat-card-content>
     </mat-card>
   </vex-page-layout-content>

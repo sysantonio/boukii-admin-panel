@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { SchoolService } from 'src/service/school.service';
+import {map} from 'rxjs/operators';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'vex-bookings',
@@ -37,7 +39,7 @@ export class BookingsComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
-    { label: 'course', property: 'bookingusers', type: 'booking_users', visible: true},
+    { label: 'course', property: 'booking_users', type: 'booking_users', visible: true},
     { label: 'client', property: 'client_main_id', type: 'client', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
@@ -71,43 +73,39 @@ export class BookingsComponent {
     this.getLanguages();
   }
 
-  showDetailEvent(event: any) {
+  async showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.bonus = [];
       this.detailData = event.item;
-      this.detailData.bookingusers = this.orderBookingUsers(this.detailData.bookingusers);
+
+      // Ordenar los usuarios de la reserva
+      this.detailData.bookingusers = this.orderBookingUsers(this.detailData.booking_users);
+
+      // Obtener usuarios únicos de la reserva
       this.getUniqueBookingUsers(this.detailData.bookingusers);
-      this.getSchoolSportDegrees();
-      this.getBookingsLogs(this.detailData.id);
-      this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.id)
-          .subscribe((vl) => {
-            if(vl.data.length > 0) {
-              vl.data.forEach(voucherLog => {
-                this.crudService.get('/vouchers/'+voucherLog.id)
-                  .subscribe((v) => {
-                    v.data.currentPay = parseFloat(voucherLog.amount);
-                    this.bonus.push(v.data);
-                  })
-              });
-            }
-          })
 
-          this.detailData.bookingusers.forEach(book => {
-            book.courseExtras = [];
-            this.crudService.list('/booking-user-extras', 1, 10000, 'desc', 'id', '&booking_user_id='+book.id)
-            .subscribe((be) => {
-              this.detailData.courseExtras = [];
-              be.data.forEach(element => {
-                this.crudService.get('/course-extras/' +element.course_extra_id)
-                  .subscribe((ce) => {
-                    book.courseExtras.push(ce.data);
-                })
-              });
+      await this.getSchoolSportDegrees();
 
-          })
+      // Obtener los logs de los vouchers directamente desde detailData
+      if (this.detailData.vouchers_logs.length > 0) {
+        this.detailData.vouchers_logs.forEach(voucherLog => {
+          let voucher = voucherLog.voucher;
+          voucher.currentPay = parseFloat(voucherLog.amount);
+          this.bonus.push(voucher);
         });
-        this.showDetail = true;
+      }
+
+      // Procesar los extras de los usuarios de la reserva
+      this.detailData.bookingusers.forEach(book => {
+        book.courseExtras = [];
+        book.booking_user_extras.forEach(extra => {
+          // Se asume que los extras están directamente en el objeto book
+          book.courseExtras.push(extra);
+        });
+      });
+
+      this.showDetail = true;
     } else {
       this.showDetail = event.showDetail;
     }
@@ -228,35 +226,63 @@ export class BookingsComponent {
       })
   }
 
-  getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((sport) => {
-        this.detailData.sports = sport.data;
-        sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
-          .subscribe((data) => {
-            //For aureola
-            data.data.forEach((degree: any) => {
-              degree.inactive_color = this.lightenColor(degree.color, 30);
-            });
-            this.detailData.sports[idx].degrees = data.data.reverse();
+  async getSchoolSportDegrees(): Promise<void> {
+    try {
+      const sportResponse = await this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).toPromise();
+      this.detailData.sports = sportResponse.data;
+      const degreeRequests = sportResponse.data.map((sport) =>
+        this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', `&school_id=${this.user.schools[0].id}&sport_id=${sport.sport_id}&active=1`)
+          .pipe(
+            map((degreeResponse) => ({
+              sport_id: sport.sport_id,
+              degrees: degreeResponse.data.map((degree: any) => ({
+                ...degree,
+                inactive_color: this.lightenColor(degree.color, 30)
+              })).reverse()
+            }))
+          )
+      );
 
-            //For aureola
-            if (this.detailData.bookingusers && this.detailData.bookingusers.length) {
-              const sportId = this.detailData.bookingusers[0].course.sport_id;
-              const matchingSport = this.detailData.sports.find(sport => sport.sport_id === sportId);
+      const sportsWithDegrees: any = await forkJoin(degreeRequests).toPromise();
+      sportsWithDegrees.forEach((sportWithDegrees, idx) => {
+        const sport = this.detailData.sports.find(s => s.sport_id === sportWithDegrees.sport_id);
+        if (sport) {
+          sport.degrees = sportWithDegrees.degrees;
+        }
+      });
 
-              if (matchingSport && matchingSport.degrees) {
-                  this.detailData.degrees_sport = [...matchingSport.degrees].reverse();
-              } else {
-                  this.detailData.degrees_sport = [];
-              }
-            } else {
-                this.detailData.degrees_sport = [];
-            }
-          });
-        });
-      })
+      // Asignar degrees_sport en función de los bookingusers si es necesario
+      if (this.detailData.bookingusers && this.detailData.bookingusers.length) {
+        const sportId = this.detailData.bookingusers[0].course.sport_id;
+        const matchingSport = this.detailData.sports.find(sport => sport.sport_id === sportId);
+        this.detailData.degrees_sport = matchingSport && matchingSport.degrees ? [...matchingSport.degrees].reverse() : [];
+      } else {
+        this.detailData.degrees_sport = [];
+      }
+
+    } catch (error) {
+      console.error("Error fetching sports and degrees:", error);
+    }
+  }
+
+  getPaymentMethod(id: number) {
+    switch(id) {
+      case 1:
+        return 'CASH';
+      case 2:
+        return 'BOUKII PAY';
+      case 3:
+        return 'ONLINE';
+      case 4:
+        return 'AUTRE';
+      case 5:
+        return 'payment_no_payment';
+      case 6:
+        return 'bonus';
+
+      default:
+        return 'payment_no_payment'
+    }
   }
 
   private lightenColor(hexColor: string, percent: number): string {
