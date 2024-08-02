@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { AuthService } from 'src/service/auth.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-login',
@@ -17,6 +18,7 @@ import { AuthService } from 'src/service/auth.service';
 export class LoginComponent implements OnInit {
 
   form: UntypedFormGroup;
+  flag: any = 'flag:spain';
 
   inputType = 'password';
   visible = false;
@@ -25,7 +27,8 @@ export class LoginComponent implements OnInit {
               private fb: UntypedFormBuilder,
               private cd: ChangeDetectorRef,
               private snackbar: MatSnackBar,
-              private authService: AuthService
+              private authService: AuthService,
+              private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -38,6 +41,21 @@ export class LoginComponent implements OnInit {
   send() {
     this.authService.login(this.form.value.email, this.form.value.password);
 
+  }
+
+  changeLang(flag: string, lang: string) {
+
+    this.flag = flag;
+
+    if (this.translateService.getLangs().indexOf(lang) !== -1) {
+
+      this.translateService.use(lang);
+      this.translateService.currentLang = lang;
+    } else {
+
+      this.translateService.setDefaultLang(lang);
+      this.translateService.currentLang = lang;
+    }
   }
 
   toggleVisibility() {
