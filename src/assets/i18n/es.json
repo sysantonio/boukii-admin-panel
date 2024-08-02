@@ -1,7 +1,7 @@
 {
   "add": "Añadir...",
   "calendar": "Calendario",
-  "vouchers": "Bonos de compra",
+  "vouchers": "Bonos y códigos",
   "gift_vouchers": "Bonos de regalo",
   "discount_code": "Códigos de descuento",
   "add_client": "Añadir cliente",
@@ -374,7 +374,7 @@
   "transport": "Transporte",
   "food": "Comida",
   "menu.home": "Inicio",
-  "menu.bonus": "Bonos de compra",
+  "menu.bonus": "Bonos y códigos",
   "menu.communication": "Comunicaciones",
   "menu.stats": "Estadísticas",
   "menu.people": "Clientes y Monitores",

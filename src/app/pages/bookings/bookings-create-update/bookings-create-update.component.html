@@ -52,6 +52,7 @@
 
           <div class="flex-auto">
             <button
+              style="margin-top: 0px !important;height: 56px;"
               color="primary"
               mat-raised-button
               type="button"
@@ -908,17 +909,22 @@
               (click)="showDetail = false"
             ></mat-icon>
           </span>-->
+
+          <!--
+          <img src="assets/img/icons/edit.svg" (click)="goTo('/bookings/update/' + detailData.id)" class="btn-edit" />
+          <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+          -->
         </div>
 
         <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
           <mat-card-subtitle style="width:100%;">
             <div style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{'register' | translate}}:</b>
-              <span style="margin-left: 10px;">
-                <span>{{ minDate | date: 'dd/MM/YYYY'}}</span> <span style="margin-left: 10px;">{{ minDate | date: 'HH:mm'}}</span>
+              <span style="margin-left: 10px;font-weight: normal;">
+                <span>{{ minDate | date: 'dd/MM/YYYY'}}</span> <span style="margin-left: 10px;font-style: italic;">{{ minDate | date: 'HH:mm'}}</span>
               </span>
             </div>
-            <div style="width: 40%;display:inline-block;text-align: right;color: white;">
+            <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
               <!--Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>-->
             </div>
           </mat-card-subtitle>
