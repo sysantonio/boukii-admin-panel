@@ -9,7 +9,7 @@
   <vex-secondary-toolbar current="">
     <i class="icon"><img src="../assets/img/icons/stats.svg" /></i>
     <h2 class="title">{{'menu.stats' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <h3 class="subtitle">{{'list' | translate}}</h3>
   </vex-secondary-toolbar>
 
   <vex-page-layout-content class="fullwidth">
@@ -25,7 +25,7 @@
         <!-- Primera fila de gráficos -->
         <div class="chart-row">
           <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
+            <div class="card" style="padding: 8% 0px 0px 0px;">
               <div id="collective"></div>
             </div>
           </div>
@@ -50,6 +50,7 @@
             </div>
           </div>
         </div>
+
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
             <h2 class="title m-0">{{'monitors' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>

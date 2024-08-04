@@ -82,8 +82,10 @@ blockquote {
       img {
         width: 36px;
         height: 36px;
+        margin-top: -4px;
 
         @media (max-width: 480px){
+          margin-top: -2px;
           width: 28px;
           height: 28px;
         }
@@ -95,14 +97,16 @@ blockquote {
     font-size: 24px;
     font-weight: 700;
     color: rgba(0, 0, 0, .38);
+    width: auto !important;
+    float: none !important;
 
-    &:before {
+    /*&:before {
       content: "\2022";
       display: inline-block;
       font-size: 12px;
       vertical-align: middle;
       margin-right: 8px;
-    }
+    }*/
 
     @media (max-width: 480px){
       font-size: 16px;

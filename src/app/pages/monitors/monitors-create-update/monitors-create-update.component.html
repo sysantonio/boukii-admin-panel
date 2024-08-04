@@ -1,4 +1,4 @@
-<vex-secondary-toolbar current="Moniteurs">
+<!--<vex-secondary-toolbar current="Moniteurs">
   <vex-breadcrumbs
     [crumbs]="[{text: '', icon: 'monitores-2'}, {text: 'monitors.creation.title', icon: ''}]"
     class="flex-auto"
@@ -6,7 +6,14 @@
   <button class="ml-2" color="primary" mat-icon-button type="button">
     <mat-icon svgIcon="mat:more_vert"></mat-icon>
   </button>
+</vex-secondary-toolbar>-->
+
+<vex-secondary-toolbar current="">
+  <i class="icon"><img src="../assets/img/icons/monitores-2.svg" /></i>
+  <h2 class="title">{{'menu.monitors' | translate}}</h2>
+  <h3 class="subtitle">{{'monitors.creation.title' | translate}}</h3>
 </vex-secondary-toolbar>
+
 <div
   [@stagger]="true"
   class="p-gutter container"

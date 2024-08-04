@@ -10,7 +10,7 @@
   <vex-secondary-toolbar current="">
     <i class="icon"><img src="../assets/img/icons/clientes.svg" /></i>
     <h2 class="title">{{'clients' | translate}}</h2>
-    <h3 class="subtitle">Añadir texto dinámico</h3>
+    <h3 class="subtitle">{{'list' | translate}}</h3>
   </vex-secondary-toolbar>
 
   <vex-page-layout-content class="fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
@@ -21,41 +21,74 @@
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
-  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left;position: fixed;left: 66%;overflow-y: auto; max-height: 100vh;" *ngIf="showDetail">
-    <mat-card style="padding: 0 3%;">
-      <mat-card-header style="display:block">
-        <div style="width: 100%;float: left;">
-          <!--<mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;"></mat-icon>
-          <mat-icon svgIcon="mat:edit" style="cursor: pointer;float:right" (click)="goTo('/clients/update/'+detailData.id)"></mat-icon>-->
-          <img src="assets/img/icons/edit.svg" (click)="goTo('/clients/update/'+detailData.id)" class="btn-edit" />
-          <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+  <vex-page-layout-content
+    class="fullwidth col-right"
+    *ngIf="showDetail"
+  >
+    <mat-card>
+      <mat-card-header class="card-header">
+        <div style="width: 100%;">
+          <span style="display: inline-block;width: 80%; text-align: left;">
+            <mat-card-title>{{'client_detail' | translate}}</mat-card-title>
+          </span>
+          <span style="display: inline-block;width: 20%; text-align: right;">
+            <img src="assets/img/icons/edit.svg" (click)="goTo('/clients/update/'+detailData.id)" class="btn-edit" />
+            <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+          </span>
         </div>
-        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+        <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+          <mat-card-subtitle style="width:100%;">
+            <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+              <b>{{ 'client' | translate}}:</b>
+              <span style="margin-left: 10px;font-weight: normal;">
+                <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+              </span>
+            </div>
+            <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+              Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+            </div>
+          </mat-card-subtitle>
+        </div>
       </mat-card-header>
+
       <mat-card-content>
-        <div style="float: left; width: 100%;" *ngIf="mainIdSelected">
-          <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">{{'client' | translate}} {{detailData.id}}</p>
+        <div *ngIf="mainIdSelected">
+
+          <div class="title-label">
+            <div class="title">
+              <b>{{'client' | translate}} {{detailData.id}}</b>
+            </div>
           </div>
-          <div style="float: left;width: 100%;">
-            <div style="float: left; width: 20%; margin-top: 5%">
+
+          <div class="holder-client">
+            <div class="col-left">
               <app-level-user
                 [allLevels]="clientSport.length ? getSportLevels(clientSport[0]?.sport_id) : []"
                 [selectLevel]=" clientSport.length ? clientSport[0]?.degree_id : null"
                 [size]="100"
                 [userImage]="detailData.image ? detailData.image : imageAvatar">
-
               </app-level-user>
             </div>
-            <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p>{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</p>
-              <p><strong>{{detailData.first_name}} {{detailData.last_name}} </strong></p>
+            <div class="col-right">
+              <div class="client-name">
+                {{detailData.first_name}} {{detailData.last_name}}
+              </div>
+              <div class="client-dates">
+                {{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}
+              </div>
               <div>
-                <mat-icon svgIcon="logo:message-text" ></mat-icon>
-                <a href="mailto:{{detailData?.email}}" style="cursor:pointer" title="{{detailData?.email}}">
+                <mat-icon svgIcon="logo:message-text"></mat-icon>
+                <a
+                  href="mailto:{{detailData?.email}}"
+                  style="cursor:pointer"
+                  title="{{detailData?.email}}"
+                >
                   <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
-                <a href="tel:{{detailData?.phone}}" style="cursor:pointer" title="{{detailData?.phone}}">
+                <a
+                  href="tel:{{detailData?.phone}}"
+                  title="{{detailData?.phone}}"
+                >
                   <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
@@ -63,12 +96,15 @@
           </div>
         </div>
 
-        <div style="float: left; width: 100%;" *ngIf="!mainIdSelected">
-          <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">{{'client' | translate}} {{utilizer.id}}</p>
+        <div *ngIf="!mainIdSelected">
+          <div class="title-label">
+            <div class="title">
+              <b>{{'client' | translate}} {{utilizer.id}}</b>
+            </div>
           </div>
-          <div style="float: left;width: 100%;">
-            <div style="float: left; width: 20%; margin-top: 5%">
+
+          <div class="holder-client">
+            <div class="col-left">
               <app-level-user
                 [allLevels]="clientSportUtilizer?.length ? getSportLevels(clientSportUtilizer[0].sport_id) : []"
                 [selectLevel]="clientSportUtilizer?.length ? clientSportUtilizer[0].degree_id : null"
@@ -76,166 +112,198 @@
                 [userImage]="utilizer.image !== null ? utilizer?.image : imageAvatar">
               </app-level-user>
             </div>
-            <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p>{{getLanguage(utilizer.language1_id)}} · {{getCountry(utilizer.country)}} · {{calculateAge(utilizer.birth_date)}} {{'years' | translate }}</p>
-              <p><strong>{{utilizer.first_name}} {{utilizer.last_name}} </strong></p>
+            <div class="col-right">
+              <div class="client-name">
+                {{utilizer.first_name}} {{utilizer.last_name}}
+              </div>
+              <div class="client-dates">
+                {{getLanguage(utilizer.language1_id)}} · {{getCountry(utilizer.country)}} · {{calculateAge(utilizer.birth_date)}} {{'years' | translate }}
+              </div>
               <div>
                 <mat-icon svgIcon="logo:message-text"></mat-icon>
-                <mat-icon svgIcon="logo:mail"></mat-icon>
-                <mat-icon svgIcon="logo:phone"></mat-icon>
+                <a
+                  href="mailto:{{utilizer?.email}}"
+                  style="cursor:pointer"
+                  title="{{utilizer?.email}}"
+                >
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
+                </a>
+                <a
+                  href="tel:{{utilizer?.phone}}"
+                  title="{{utilizer?.phone}}"
+                >
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
+                </a>
               </div>
             </div>
           </div>
         </div>
-        <div style="float: left; width: 100%;margin-top:5%">
-          <mat-card class="card-users" (click)="mainIdSelected = !mainIdSelected; utilizerSportLoaded = false;" [ngClass]="{'active-border': mainIdSelected}">
-            <mat-card-header>
-              <div mat-card-avatar class="card-avatar">
-                <img [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" style="border-radius: 100%;width: 100%;height: 100%;margin: 0 0 0 50%;"/>
-              </div>
 
-            </mat-card-header>
-            <mat-card-content>
-              <mat-card-subtitle style="text-align: center;">{{ detailData.first_name }} {{ detailData.last_name }}</mat-card-subtitle>
-              <mat-card-subtitle style="text-align: center;">{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</mat-card-subtitle>
-            </mat-card-content>
-            <mat-card-actions>
-              <!-- Botones de acción, si son necesarios -->
-            </mat-card-actions>
-          </mat-card>
-          <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
-            <mat-card-header>
-              <div mat-card-avatar class="card-avatar">
-                <img [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" style="border-radius: 100%;width: 100%;height: 100%;margin: 0 0 0 50%;"/>
-              </div>
-
-            </mat-card-header>
-            <mat-card-content>
-              <mat-card-subtitle style="text-align: center;">{{ item.first_name }} {{ item.last_name }}</mat-card-subtitle>
-              <mat-card-subtitle style="text-align: center;">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} {{'years' | translate }} · {{ getCountry(item.country) }}</mat-card-subtitle>
-            </mat-card-content>
-            <mat-card-actions>
-              <!-- Botones de acción, si son necesarios -->
-            </mat-card-actions>
-          </mat-card>
-        </div>
-        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-        <div style="float: left; width: 100%;" *ngIf="mainIdSelected">
-          <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">{{'sports' | translate}}</p>
+        <div class="cards-user-holder">
+          <div class="cards-user" (click)="mainIdSelected = !mainIdSelected; utilizerSportLoaded = false;" [ngClass]="{'active-border': mainIdSelected}">
+            <div class="image">
+              <img [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
+            </div>
+            <div class="name">{{ detailData.first_name }} {{ detailData.last_name }}</div>
+            <div class="subtitle">{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</div>
           </div>
-          <ng-container *ngFor="let item of clientSport">
-            <div style="float: left; width: 50%;margin: 2% 0 0 0;">
-              <img [src]="item.icon_selected" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080; margin: 0 0 0 37%" [ngStyle]="{
-                'background-color': item?.level?.color,
-                'border-color': item?.level?.color}">
-              <p style="text-align: center;">{{item?.name}}</p>
-              <div style="float: left; width: 90%; margin: 2% 0 0 0">
-                <div >
+          <div *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
+            <div class="cards-user">
+              <img [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" />
+            </div>
+            <div class="name">{{ item.first_name }} {{ item.last_name }}</div>
+            <div class="subtitle">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} {{'years' | translate }} · {{ getCountry(item.country) }}</div>
+          </div>
+        </div>
+
+        <div *ngIf="mainIdSelected">
+          <div class="title-label">
+            <div class="title">
+              <b>{{'sports' | translate}}</b>
+            </div>
+          </div>
+
+          <div class="deportes-holder">
+            <ng-container *ngFor="let item of clientSport">
+              <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
+                <div style="text-align: center;width: 100%;">
+                  <img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': item?.level?.color, 'border-color': item?.level?.color}" />
+                </div>
+                <div style="text-align: center;width: 100%;">{{item?.name}}</div>
+                <div style="text-align: center;width: 100%;">
                   <div [ngStyle]="{
-                    'color': '#fff' ,
+                    'color': '#fff',
                     'background-color': item?.level?.color,
                     'border-color': item?.level?.color,
                     'width': '100%',
-                    'border-radius': '3px',
-                    'margin-left': '2%',
-                    'height': '35px',
-                    'border-style': 'solid',
-                    'border-width': '1px',
-                    'float': 'left'
+                    'padding': '3px'
                   }">
-                    <p style="text-align: center;font-size: 12px;margin: 3% 0 0 0;">{{item?.level?.annotation}} {{item?.level?.name}}</p>
+                    <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.level?.annotation}} {{item?.level?.name}}</div>
                   </div>
                 </div>
               </div>
+            </ng-container>
+
+            <div style="width:100%; margin-top:20px;">
+              <button class="btn-primary-accent" style="width: 100%;" (click)="createBooking();">{{'add_booking' | translate }}</button>
             </div>
-
-          </ng-container>
-          <div style="width:100%; margin-top:5%;float:left">
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%;" (click)="createBooking()">{{'add_booking' | translate }}</button>
-
-          </div>
-        </div>
-        <div style="width:100%; margin-top:5%;float:left" *ngIf="mainIdSelected">
-          <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">{{'data' |translate}}</p>
-          </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>Email</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{detailData.email}}</p>
-          </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{'phone' | translate }}</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{detailData.phone}}</p>
-          </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{'birth_date' | translate }}</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{detailData.birth_date | date: 'dd/MM/YYYYY'}}</p>
-          </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 30%;text-align: left;"><b>{{'address' | translate}}</b></p>
-            <p style="float: left;width: 70%;text-align: right;">{{detailData.address}}, {{detailData.cp}}</p>
           </div>
         </div>
 
-
-        <div style="float: left; width: 100%;" *ngIf="!mainIdSelected && utilizerSportLoaded">
-          <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">{{'sports' | translate}}</p>
+        <div *ngIf="mainIdSelected">
+          <div class="title-label">
+            <div class="title">
+              <b>{{'data' |translate}}</b>
+            </div>
           </div>
+
+          <div class="list-holder">
+            <div class="col-left">
+              <b>Email</b>
+            </div>
+            <div class="col-right">
+              {{detailData.email}}
+            </div>
+          </div>
+          <div class="list-holder">
+            <div class="col-left">
+              <b>{{'phone' | translate }}</b>
+            </div>
+            <div class="col-right">
+              {{detailData.phone}}
+            </div>
+          </div>
+          <div class="list-holder">
+            <div class="col-left">
+              <b>{{'birth_date' | translate }}</b>
+            </div>
+            <div class="col-right">
+              {{detailData.birth_date | date: 'dd/MM/YYYYY'}}
+            </div>
+          </div>
+          <div class="list-holder">
+            <div class="col-left">
+              <b>{{'address' | translate}}</b>
+            </div>
+            <div class="col-right">
+              {{detailData.address}}, {{detailData.cp}}
+            </div>
+          </div>
+        </div>
+
+        <div style="width: 100%;" *ngIf="!mainIdSelected && utilizerSportLoaded">
+          <div class="title-label">
+            <div class="title">
+              <b>{{'sports' | translate}}</b>
+            </div>
+          </div>
+
           <ng-container *ngFor="let item of clientSportUtilizer">
-            <div style="float: left; width: 50%;margin: 2% 0 0 0;">
-              <img [src]="item.icon_selected" width="50" height="50"  style="background: #e6e6e6; border-radius: 10px;border: solid 1px #808080; margin: 0 0 0 37%" [ngStyle]="{
-                'background-color': item?.level?.color,
-                'border-color': item?.level?.color}">
-              <p style="text-align: center;">{{item?.name}}</p>
-              <div style="float: left; width: 90%; margin: 2% 0 0 0">
-                <div >
-                  <div [ngStyle]="{
-                    'color': '#fff' ,
-                    'background-color': item?.level?.color,
-                    'border-color': item?.level?.color,
-                    'width': '100%',
-                    'border-radius': '3px',
-                    'margin-left': '2%',
-                    'height': '35px',
-                    'border-style': 'solid',
-                    'border-width': '1px',
-                    'float': 'left'
-                  }">
-                    <p style="text-align: center;font-size: 12px;margin: 3% 0 0 0;">{{item?.level?.annotation}} {{item?.level?.name}}</p>
-                  </div>
+            <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
+              <div style="text-align: center;width: 100%;">
+                <img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': item?.level?.color,'border-color': item?.level?.color}" />
+              </div>
+              <div style="text-align: center;width: 100%;">{{item?.name}}</div>
+              <div style="text-align: center;width: 100%;">
+                <div [ngStyle]="{
+                  'color': '#fff',
+                  'background-color': item?.level?.color,
+                  'border-color': item?.level?.color,
+                  'width': '100%',
+                  'padding': '3px'
+                }">
+                  <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.level?.annotation}} {{item?.level?.name}}</div>
                 </div>
               </div>
             </div>
-
           </ng-container>
-          <div style="width:100%; margin-top:5%;float:left">
-            <button mat-raised-button color="accent" style="color: #fff;background: #f53d7c;padding: 1%;width: 100%;" (click)="createBooking()">{{'add_booking' | translate }}</button>
 
+          <div style="width:100%; margin-top:20px;">
+            <button class="btn-primary-accent" style="width: 100%;" (click)="createBooking();">{{'add_booking' | translate }}</button>
           </div>
         </div>
-        <div style="width:100%; margin-top:5%;float:left" *ngIf="!mainIdSelected">
-          <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">{{'data' |translate}}</p>
+
+        <div style="width:100%; margin-top:5%;" *ngIf="!mainIdSelected">
+          <div class="title-label">
+            <div class="title">
+              <b>{{'data' | translate}}</b>
+            </div>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>Email</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{utilizer.email}}</p>
+
+          <div class="list-holder">
+            <div class="col-left">
+              <b>Email</b>
+            </div>
+            <div class="col-right">
+              {{utilizer.email}}
+            </div>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{'phone' | translate }}</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{utilizer.phone}}</p>
+          <div class="list-holder">
+            <div class="col-left">
+              <b>{{'phone' | translate }}</b>
+            </div>
+            <div class="col-right">
+              {{utilizer.phone}}
+            </div>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{'birth_date' | translate }}</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{utilizer.birth_date | date: 'dd/MM/YYYYY'}}</p>
+          <div class="list-holder">
+            <div class="col-left">
+              <b>{{'birth_date' | translate }}</b>
+            </div>
+            <div class="col-right">
+              {{utilizer.birth_date | date: 'dd/MM/YYYYY'}}
+            </div>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 30%;text-align: left;"><b>{{'address' | translate}}</b></p>
-            <p style="float: left;width: 70%;text-align: right;">{{utilizer.address}}, {{utilizer.cp}}</p>
+          <div class="list-holder">
+            <div class="col-left">
+              <b>{{'address' | translate}}</b>
+            </div>
+            <div class="col-right">
+              {{utilizer.address}}, {{utilizer.cp}}
+            </div>
           </div>
         </div>
+
       </mat-card-content>
     </mat-card>
   </vex-page-layout-content>

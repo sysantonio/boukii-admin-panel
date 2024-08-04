@@ -562,3 +562,23 @@ img[mat-card-image] {
     }
   }
 }
+
+.card-header {
+  display: block;
+  background-color: #ED297B;
+  padding: 15px 20px !important;
+
+  .mat-mdc-card-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  .mat-icon {
+    fill: white!important;
+  }
+}
+
+mat-card-subtitle {
+  font-family: 'Montserrat', sans-serif;
+}

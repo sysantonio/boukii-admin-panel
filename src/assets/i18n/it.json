@@ -50,6 +50,8 @@
   "season": "Stagione",
   "no_monitor": "Nessun istruttore assegnato",
   "course_detail": "Dettagli del Corso",
+  "monitor_detail": "***",
+  "client_detail": "***",
   "flexidates": "Date flessibili",
   "from": "Da",
   "to": "Fino a",

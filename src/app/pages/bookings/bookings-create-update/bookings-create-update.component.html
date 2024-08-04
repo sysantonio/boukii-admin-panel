@@ -1,4 +1,4 @@
-<vex-secondary-toolbar current="Bookings">
+<!--<vex-secondary-toolbar current="Bookings">
   <vex-breadcrumbs  *ngIf="!externalData"
     [crumbs]="[{text: '', icon: 'reservas-2'}, {text: 'bookings_page.creation.title', icon: ''}]"
     class="flex-auto"
@@ -9,6 +9,12 @@
   <button class="text-secondary" mat-dialog-close mat-icon-button type="button"  *ngIf="externalData">
     <mat-icon svgIcon="mat:close"></mat-icon>
   </button>
+</vex-secondary-toolbar>-->
+
+<vex-secondary-toolbar current="">
+  <i class="icon"><img src="../assets/img/icons/reservas.svg" /></i>
+  <h2 class="title">{{'bookings' | translate}}</h2>
+  <h3 class="subtitle">{{'bookings_page.creation.title' | translate}}</h3>
 </vex-secondary-toolbar>
 
 <div [@stagger]="true" class="p-gutter container" style="max-width: none;">
@@ -873,12 +879,18 @@
       <mat-card-header style="display:block">
 
         <div style="width: 100%;">
-          <span style="float:right;">
-            <mat-icon
+          <span style="display: inline-block;vertical-align:top;text-align: left;">
+            <mat-card-title>{{'activity' | translate}} #{{bookI + 1 }} {{item.courseDates[0].course?.name}}</mat-card-title>
+          </span>
+
+          <span style="display: inline-block;vertical-align:top;text-align: right;float:right;">
+            <!--<mat-icon
               svgIcon="mat:close"
               (click)="deleteBooking(bookI)"
               style="color:red; cursor:pointer"
-            ></mat-icon>
+            ></mat-icon>-->
+            <img src="assets/img/icons/close.svg" (click)="deleteBooking(bookI)" class="btn-close" />
+
             <mat-icon
               svgIcon="mat:expand_more"
               *ngIf="showDetail !== bookI"
@@ -893,9 +905,6 @@
             ></mat-icon>
           </span>
 
-          <span style="display: inline-block;width: 100%; text-align: left;">
-            <mat-card-title>{{'activity' | translate}} #{{bookI + 1 }} {{item.courseDates[0].course?.name}}</mat-card-title>
-          </span>
           <!--<span style="display: inline-block;width: 20%; text-align: right;">
             <mat-icon
               style="cursor: pointer;"
@@ -985,49 +994,50 @@
 
       <mat-card-content *ngIf="showDetail === bookI">
         <div style="float: left; width: 100%;">
-          <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">{{'client' | translate}}</p>
-          </div>
-          <div style="float: left;width: 100%;">
-            <div style="float: left; width: 20%; margin-top: 5%;height: 80px;">
-              <img
-                [src]="getClientAvatar(defaults.client_main_id.id)"
-                width="100"
-                height="100"
-                style="border-radius: 100%;height:100%"
-              />
+
+          <div class="title-client">{{'client' | translate}}</div>
+          <div class="holder-client">
+            <div class="col-left">
+              <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
+              <app-level-user
+                *ngIf="getClientAvatar(defaults.client_main_id.id) && getClientAvatar(defaults.client_main_id.id).length"
+                [allLevels]=""
+                [selectLevel]="getClientAvatar(defaults?.client_main_id.id)"
+                [size]="60"
+                [userImage]="getClientAvatar(defaults.client_main_id.id)?.image !== null && getClientAvatar(defaults.client_main_id.id)?.image !== '' ? getClientAvatar(defaults.client_main_id.id)?.image : imageAvatar"
+              ></app-level-user>
             </div>
-            <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p>
+            <div class="col-right_">
+              <div class="client-name">
+                {{ getClientName(defaults.client_main_id.id)}}
+              </div>
+              <div class="client-dates">
                 {{ getLanguage(getClientLang(defaults.client_main_id.id)) }} ·
                 {{ getCountry(getClientProvince(defaults.client_main_id.id)) }}
                 ·
                 {{calculateAge(defaults.client_main_id.birth_date)
                 }}&ensp;{{'years' | translate}}
-              </p>
-              <p>
-                <strong>{{ getClientName(defaults.client_main_id.id)}}</strong>
-              </p>
-
+              </div>
               <div>
-                <mat-icon
-                  style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                  svgIcon="logo:message-text"
-                ></mat-icon>
+                <mat-icon svgIcon="logo:message-text"></mat-icon>
                 <a
                   href="mailto:{{defaults.email}}"
                   style="cursor:pointer"
                   title="{{defaults.email}}"
                 >
-                  <mat-icon  style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:mail"></mat-icon>
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
-                <a href="tel:{{defaults.phone}}" title="{{defaults.phone}}">
-                  <mat-icon   style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)" svgIcon="logo:phone"></mat-icon>
+                <a
+                  href="tel:{{defaults.phone}}"
+                  title="{{defaults.phone}}"
+                >
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
             </div>
           </div>
         </div>
+
         <mat-divider
           style="float: left;width: 100%;margin: 5% 0 5% 0;"
         ></mat-divider>
@@ -2712,7 +2722,7 @@
             </div>
 
             <div class="title-summary" *ngIf="bonus.length > 0">
-              <b>{{ "payment_history" | translate }}</b>
+              <b>{{ "payment_history" | translate }}</b> ***6
             </div>
             <div class="table-box" >
               <span
@@ -2870,64 +2880,69 @@
                   Boukii Pay
                 </button>
               </div>
-              <mat-divider
-                *ngIf="selectedSubButton==='1' || selectedSubButton==='2'"
-                class="text-border"
-                style="margin: 10px 0 10px 0"
-              ></mat-divider>
-              <div
-                style="width:100%"
-                class="square-buttons-container"
-                *ngIf="selectedSubButton==='1' || selectedSubButton==='2'"
-              >
-                <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
-                <mat-slide-toggle
-                  color="primary"
-                  [(ngModel)]="defaults.paid"
-                  style="float: right;"
-                ></mat-slide-toggle>
-              </div>
-              <mat-divider
-                *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
-                class="text-border"
-                style="margin: 10px 0 10px 0"
-              ></mat-divider>
-              <div
-                style="width:100%"
-                class="square-buttons-container"
-                *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
-              >
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
-                  (click)="create()"
-                  [disabled]="(selectedSubButton==='1' || selectedSubButton==='2') && !defaults.paid"
-                >
-                  {{'confirm_booking' | translate }}
-                </button>
-              </div>
-              <div class="square-buttons-container" *ngIf="selectedButton==='2'">
-                <button
+
+              <div class="sbc-holder pl-6 pr-6 pb-6">
+                <mat-divider
+                  *ngIf="selectedSubButton==='1' || selectedSubButton==='2'"
+                  class="text-border"
+                  style="margin: 10px 0 10px 0"
+                ></mat-divider>
+
+                <div class="square-buttons-container" *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
+                  <div style="width: 100%;">
+                    <p style="float:left;">
+                      {{'is_paid' | translate}}
+                    </p>
+                    <p style="float:right;">
+                      <mat-slide-toggle
+                        color="primary"
+                        [(ngModel)]="defaults.paid"
+                      ></mat-slide-toggle>
+                    </p>
+                  </div>
+                </div>
+                <mat-divider
+                  *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
+                  class="text-border"
+                  style="margin: 10px 0 10px 0"
+                ></mat-divider>
+                <div
                   style="width:100%"
-                  mat-raised-button
-                  color="primary"
-                  class="square-button"
-                  (click)="create()"
+                  class="square-buttons-container"
+                  *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
                 >
-                  {{'confirm_email' |translate}}
-                </button>
-              </div>
-              <div class="square-buttons-container" *ngIf="selectedButton==='3'">
-                <button
-                  style="width:100%"
-                  mat-raised-button
-                  color="primary"
-                  class="square-button"
-                  (click)="create()"
-                >
-                  {{'confirm_booking' | translate }}
-                </button>
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    class="square-button"
+                    (click)="create()"
+                    [disabled]="(selectedSubButton==='1' || selectedSubButton==='2') && !defaults.paid"
+                  >
+                    {{'confirm_booking' | translate }}
+                  </button>
+                </div>
+                <div class="square-buttons-container" *ngIf="selectedButton==='2'">
+                  <button
+                    style="width:100%"
+                    mat-raised-button
+                    color="primary"
+                    class="square-button"
+                    (click)="create()"
+                  >
+                    {{'confirm_email' |translate}}
+                  </button>
+                </div>
+                <div class="square-buttons-container" *ngIf="selectedButton==='3'">
+                  <button
+                    style="width:100%"
+                    mat-raised-button
+                    color="primary"
+                    class="square-button"
+                    (click)="create()"
+                  >
+                    {{'confirm_booking' | translate }}
+                  </button>
+                </div>
               </div>
             </ng-container>
           </mat-card>
