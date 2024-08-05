@@ -49,6 +49,8 @@
   "season": "Season",
   "no_monitor": "No instructor assigned",
   "course_detail": "Course details",
+  "monitor_detail": "***",
+  "client_detail": "***",
   "flexidates": "Flexible dates",
   "from": "From",
   "to": "Until",

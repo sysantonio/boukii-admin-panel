@@ -50,6 +50,8 @@
   "season": "Jahreszeit",
   "no_monitor": "Kein Lehrer zugewiesen",
   "course_detail": "Kursdetails",
+  "monitor_detail": "***",
+  "client_detail": "***",
   "flexidates": "flexible Daten",
   "from": "Aus",
   "to": "Bis",

@@ -6,6 +6,7 @@
     {text: (mode !== 'update' ? 'courses.new' : 'courses.update'), subtitle: true},
     ]" class="flex-auto"></vex-breadcrumbs>
 </vex-secondary-toolbar>
+
 <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
 <div [@stagger]="true"class="p-gutter container"style="max-width: none" *ngIf="!loading && ((defaults.course_type === null || defaults.course_type === 2 && mode === 'create') || (defaults.course_type === 2 && mode === 'update'))">
@@ -2105,6 +2106,3 @@
   </div>
 
 </div>
-
-
-

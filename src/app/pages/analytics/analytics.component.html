@@ -10,6 +10,7 @@
     <vex-breadcrumbs [crumbs]="[
     {icon:'stats'},
     {text:'menu.stats', title: true},
+    {text:'list', subtitle: true},
     ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
@@ -26,7 +27,7 @@
         <!-- Primera fila de gráficos -->
         <div class="chart-row">
           <div class="chart-column">
-            <div class="card" style="padding: 8% 0 0 0;">
+            <div class="card" style="padding: 8% 0px 0px 0px;">
               <div id="collective"></div>
             </div>
           </div>
@@ -51,6 +52,7 @@
             </div>
           </div>
         </div>
+
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-6 py-4 border-b">
             <h2 class="title m-0">{{'monitors' | translate }} <span style="float: right">{{ totalPriceSell }}{{currency}}</span>

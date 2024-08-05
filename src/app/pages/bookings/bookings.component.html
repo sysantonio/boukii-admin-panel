@@ -14,6 +14,7 @@
     <vex-breadcrumbs [crumbs]="[
     {icon:'reservas'},
     {text:'bookings', title: true},
+    {text:'list', subtitle: true},
     ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
@@ -58,13 +59,12 @@
                  (click)="showDetail = false" class="btn-close" />
           </span>
         </div>
-
         <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
           <mat-card-subtitle style="width:100%;">
             <div style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}</span>
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}h</span>
               </span>
             </div>
             <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
@@ -72,7 +72,6 @@
             </div>
           </mat-card-subtitle>
         </div>
-
       </mat-card-header>
 
       <mat-card-content>
@@ -207,31 +206,26 @@
 
                 <div>
                   <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/clientes2.svg" /> {{'participant' | translate}}</div>
-                  <div>
-                    <div style="display:inline-block;vertical-align: middle; width: 20%;">
-                      <app-level-user
-                        *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                        [allLevels]="detailData.degrees_sport"
-                        [selectLevel]="getClientDegree(bUsers.client_id)"
-                        [size]="80"
-                        [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
-                      ></app-level-user>
-                    </div>
-                    <div style="display:inline-block;vertical-align: middle; width: 80%;text-wrap: nowrap;">
-                      <div style="margin-left: 1em">
-                        <div><b style="font-size: 1.2em;">{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}}</b></div>
+                  <div class="holder-participante">
+                    <div class="col-left">
+                      <div class="c-l">
+                        <app-level-user
+                          *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                          [allLevels]="detailData.degrees_sport"
+                          [selectLevel]="getClientDegree(bUsers.client_id)"
+                          [size]="80"
+                          [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
+                        ></app-level-user>
                       </div>
-                      <div style="margin-left: 1em">
-                        <i>
+                      <div class="c-r">
+                        <div class="course-title">{{getClient(bUsers?.client_id)?.first_name}} {{getClient(bUsers?.client_id)?.last_name}}</div>
+                        <div class="course-label">
                           {{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
                           ·
                           {{ getCountry(getClient(bUsers?.client_id)?.country) }}
                           ·
-                          {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}}
-                          {{'years' | translate }}
-                        </i>
-                      </div>
-                      <div style="margin-left: 1em">
+                          {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}} {{'years' | translate }}
+                        </div>
                         <div
                           class="label-user"
                           [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
@@ -414,6 +408,22 @@
             </ng-container>
           </div>
         </div>-->
+        <div class="total-bottom">
+          <div class="col-left">
+            <ul>
+              <li class="total">
+                <b>{{'total' | translate | uppercase}}</b>
+              </li>
+            </ul>
+          </div>
+          <div class="col-right">
+            <ul>
+              <li class="total">
+                {{detailData?.price_total}} {{detailData.currency}}
+              </li>
+            </ul>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
   </vex-page-layout-content>

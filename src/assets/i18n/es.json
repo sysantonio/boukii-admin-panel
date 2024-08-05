@@ -49,8 +49,9 @@
   "season": "Temporada",
   "no_monitor": "No hay instructor asignado",
   "course_detail": "Detalles curso",
+  "monitor_detail": "Detalles monitor",
+  "client_detail": "Detalles cliente",
   "flexidates": "Fechas flexibles",
-
   "from": "Desde",
   "to": "Hasta",
   "in": "en",

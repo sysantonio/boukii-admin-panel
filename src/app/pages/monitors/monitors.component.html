@@ -11,6 +11,7 @@
     <vex-breadcrumbs [crumbs]="[
     {icon:'monitores-2'},
     {text:'menu.monitors', title: true},
+    {text:'list', subtitle: true},
     ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
@@ -22,27 +23,49 @@
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
-  <vex-page-layout-content class="-mt-6 fullwidth" style="width: 35%;float:left;position: fixed;left: 66%;overflow-y: auto; max-height: 100vh;" *ngIf="showDetail">
-    <mat-card style="padding: 0 3%;">
+  <vex-page-layout-content
+    class="fullwidth col-right"
+    *ngIf="showDetail"
+  >
+    <mat-card>
       <mat-card-header style="display:block">
-        <div style="width: 100%;float: left;">
-          <!--<mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float:right"></mat-icon>
-          <mat-icon style="float: left;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/monitors/update/' + detailData.id)"></mat-icon>-->
-          <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
-          <img src="assets/img/icons/edit.svg" (click)="goTo('/monitors/update/' + detailData.id)" class="btn-edit" style="float: right;" />
+        <div style="width: 100%;">
+          <span style="display: inline-block;width: 80%; text-align: left;">
+            <mat-card-title>{{'monitor_detail' | translate}}</mat-card-title>
+          </span>
+          <span style="display: inline-block;width: 20%; text-align: right;">
+            <img src="assets/img/icons/edit.svg" (click)="goTo('/monitors/update/' + detailData.id)" class="btn-edit" />
+            <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+          </span>
         </div>
-        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+        <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+          <mat-card-subtitle style="width:100%;">
+            <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+              <b>{{ 'register' | translate}}:</b>
+              <span style="margin-left: 10px;font-weight: normal;">
+                <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+              </span>
+            </div>
+            <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+              Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+            </div>
+          </mat-card-subtitle>
+        </div>
       </mat-card-header>
+
       <mat-card-content>
-        <div style="float: left; width: 100%;">
-          <div style="float: left; width: 100%;">
-            <p style="font-size: 20px;">{{'monitor' | translate }}</p>
+        <div class="title-label">
+          <div class="title">
+            <b>{{'monitor' | translate }}</b>
           </div>
-          <div style="float: left;width: 100%;">
-            <div style="float: left; width: 20%; margin-top: 5%">
+        </div>
+
+        <!--<div style="width: 100%;">
+          <div style="width: 100%;">
+            <div style="width: 20%; margin-top: 5%">
               <img [src]="detailData.image ? detailData.image : '../../../assets/img/avatar.png'" width="100" height="100" style="border-radius: 100%; height: 100px; width: 100px; object-fit: cover;">
             </div>
-            <div style="float: left; width: 75%;margin:6% 0 0 2%">
+            <div style="width: 75%;margin:6% 0 0 2%">
               <p><strong>{{detailData?.first_name}} {{detailData?.last_name}}</strong></p>
               <p>{{getLanguage(detailData?.language1_id)}} · {{getCountry(detailData?.country)}} · {{calculateAge(detailData?.birth_date)}} {{'years' | translate }}</p>
               <div>
@@ -56,66 +79,118 @@
               </div>
             </div>
           </div>
-        </div>
-        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-        <div style="float: left; width: 100%;">
-          <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">{{'sports' | translate }}</p>
+        </div>-->
+
+        <div class="holder-client">
+          <div class="col-left">
+            <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
+            <!--<app-level-user
+              *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+              [allLevels]="detailData.degrees_sport"
+              [selectLevel]="getClientDegree(detailData?.client_main_id)"
+              [size]="60"
+              [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+            ></app-level-user>-->
+
+            <!-- *** app-level-user da error *** -->
           </div>
+          <div class="col-right">
+            <div class="client-name">
+              {{detailData?.first_name}} {{detailData?.last_name}}
+            </div>
+            <div class="client-dates">
+              {{getLanguage(detailData?.language1_id)}} · {{getCountry(detailData?.country)}} · {{calculateAge(detailData?.birth_date)}} {{'years' | translate }}
+            </div>
+            <div>
+              <mat-icon svgIcon="logo:message-text"></mat-icon>
+              <a
+                href="mailto:{{detailData?.email}}"
+                style="cursor:pointer"
+                title="{{detailData?.email}}"
+              >
+                <mat-icon svgIcon="logo:mail"></mat-icon>
+              </a>
+              <a
+                href="tel:{{detailData?.phone}}"
+                title="{{detailData?.phone}}"
+              >
+                <mat-icon svgIcon="logo:phone"></mat-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="title-label">
+          <div class="title">
+            <b>{{'sports' | translate }}</b>
+          </div>
+        </div>
+
+        <div class="deportes-holder">
           <ng-container *ngFor="let item of monitorSport">
-            <div style="float: left; width: 50%;">
-              <img [src]="item.icon_selected" width="50" height="50" style="border-radius: 10px;border: solid 1px #808080; margin: 0 0 0 37%" [ngStyle]="{'background-color': findHighestDegreeIdElement(item.authorized)?.color}">
-              <p style="text-align: center;">{{item?.name}}</p>
-              <div style="float: left; width: 90%; margin: 2% 0 0 0">
-                <div >
-                  <div [ngStyle]="{
-                    'color': '#fff' ,
-                    'background-color': findHighestDegreeIdElement(item.authorized)?.color,
-                    'border-color': findHighestDegreeIdElement(item.authorized)?.color,
-                    'width': '100%',
-                    'border-radius': '3px',
-                    'margin-left': '2%',
-                    'height': '35px',
-                    'border-style': 'solid',
-                    'border-width': '1px',
-                    'float': 'left'
-                  }">
-                    <p style="text-align: center;font-size: 12px;margin: 3% 0 0 0;">{{findHighestDegreeIdElement(item.authorized)?.annotation}} {{findHighestDegreeIdElement(item.authorized)?.name}}</p>
-                  </div>
+            <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
+              <div style="text-align: center;width: 100%;"><img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': findHighestDegreeIdElement(item.authorized)?.color}" /></div>
+              <div style="text-align: center;width: 100%;">{{item?.name}}</div>
+              <div style="text-align: center;width: 100%;">
+                <div [ngStyle]="{
+                  'color': '#fff',
+                  'background-color': findHighestDegreeIdElement(item.authorized)?.color,
+                  'border-color': findHighestDegreeIdElement(item.authorized)?.color,
+                  'width': '100%',
+                  'padding': '3px'
+                }">
+                  <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{findHighestDegreeIdElement(item.authorized)?.annotation}} {{findHighestDegreeIdElement(item.authorized)?.name}}</div>
                 </div>
               </div>
-
-              <div style="float:left; width: 100%">
-                <div *ngFor="let auth of item.authorized">
-                  <div style="width: 15px; height: 15px; float: left; margin: 4px 0 0 4px" [style.background]="auth?.degree?.color"></div>
-                </div>
+              <div style="text-align: center;width: 100%">
+                <span *ngFor="let auth of item.authorized">
+                  <span style="width: 15px; height: 15px; margin: 4px 0 0 4px" [style.background]="auth?.degree?.color"></span>
+                </span>
               </div>
             </div>
-
           </ng-container>
         </div>
-        <div style="width:100%; margin-top:5%;float:left">
-          <div style="float: left; width: 100%; margin: 0 0 5% 0">
-            <p style="font-size: 20px;">{{'data' | translate}}</p>
+
+        <div class="title-label">
+          <div class="title">
+            <b>{{'data' | translate}}</b>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>Email</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{detailData.email}}</p>
+        </div>
+
+        <div class="list-holder">
+          <div class="col-left">
+            <b>Email</b>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{'mobile' | translate}}</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{detailData.phone}}</p>
+          <div class="col-right">
+            {{detailData.email}}
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{'birth_date' | translate }}</b></p>
-            <p style="float: left;width: 50%;text-align: right;">{{detailData.birth_date | date: 'dd/MM/YYYYY'}}</p>
+        </div>
+        <div class="list-holder">
+          <div class="col-left">
+            <b>{{'mobile' | translate}}</b>
           </div>
-          <div style="width: 100%;float:left;">
-            <p style="float: left;width: 30%;text-align: left;"><b>{{'address' | translate}}</b></p>
-            <p style="float: left;width: 70%;text-align: right;">{{detailData.address}}, {{detailData.cp}}</p>
+          <div class="col-right">
+            {{detailData.phone}}
+          </div>
+        </div>
+        <div class="list-holder">
+          <div class="col-left">
+            <b>{{'birth_date' | translate }}</b>
+          </div>
+          <div class="col-right">
+            {{detailData.birth_date | date: 'dd/MM/YYYYY'}}
+          </div>
+        </div>
+        <div class="list-holder">
+          <div class="col-left">
+            <b>{{'address' | translate}}</b>
+          </div>
+          <div class="col-right">
+            {{detailData.address}}, {{detailData.cp}}
           </div>
         </div>
       </mat-card-content>
+
     </mat-card>
   </vex-page-layout-content>
 </vex-page-layout>

@@ -12,7 +12,7 @@
   style="max-width: none;padding: 0.5%;"
   *ngIf="!loading"
 >
-  <div class="flex flex-col sm:flex-row gap-4">
+  <div class="flex flex-col sm:flex-row">
     <div class="column-container">
       <!-- Aquí añade tu otro contenedor o lo que necesites -->
       <div class="card-container">
@@ -36,7 +36,7 @@
             >
               {{ "bookings_page.cancelations.refund" | translate }}
             </button>
-            <button
+            <!--<button
               mat-raised-button
               color="primary"
               class="button-cancel"
@@ -44,17 +44,16 @@
               (click)="goTo('/bookings')"
             >
               {{ "back" | translate }}
-            </button>
+            </button>-->
 
             <button
-              mat-raised-button
               [disabled]="booking.status === 2"
               color="accent"
               [ngStyle]="{
                 background: booking.status === 2 ? '#ededed' : '#f53d7c'
               }"
-              class="button-cancel"
-              style="color: #fff;padding: 1%;width: 25%; border-radius: 0; margin: 0 0 0 2%;"
+              class="btn-primary-accent"
+              style="min-width: 240px;"
               (click)="deleteBooking()"
             >
               {{ "bookings_page.detail.full_cancel" | translate }}
@@ -818,13 +817,40 @@
       </div>
     </div>
 
-    <div class="column-container" *ngIf="!loading">
+    <div class="column-container" style="flex: 5;" *ngIf="!loading">
       <div class="card-container">
         <div @fadeInUp class="card flex-auto">
 
           <mat-card class="pb-3">
-            <mat-card-header class="mat-card-header" style="display:block">
+
+
+            <!--<mat-card-header class="mat-card-header" style="display:block">
               <mat-card-title>{{ "booking" | translate }}</mat-card-title>
+            </mat-card-header>-->
+
+            <mat-card-header class="card-header">
+              <div style="width: 100%;">
+                <span style="display: inline-block;width: 80%; text-align: left;">
+                  <mat-card-title>{{'booking' | translate}} #2390</mat-card-title>
+                </span>
+                <span style="display: inline-block;width: 20%; text-align: right;">
+                  <!--<img src="assets/img/icons/edit.svg"  (click)="showDetail = false" class="btn-edit" />-->
+                  <img src="assets/img/icons/close.svg" (click)="goTo('/bookings/')" class="btn-close" />
+                </span>
+              </div>
+              <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+                <mat-card-subtitle style="width:100%;">
+                  <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+                    <b>{{ 'register' | translate}}:</b>
+                    <span style="margin-left: 10px;font-weight: normal;">
+                      <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                    </span>
+                  </div>
+                  <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+                    Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+                  </div>
+                </mat-card-subtitle>
+              </div>
             </mat-card-header>
 
             <mat-card-content>
@@ -833,9 +859,13 @@
                   <b>{{ 'register' | translate}}:</b>
                 </span>
                 <span class="col-right">
-                  <span style="color: red;" *ngIf="booking.status == 2">
+                  <!--<span style="color: red;" *ngIf="booking.status == 2">
+                    {{ "cancelled" | translate }}
+                  </span>-->
+                  <span style="color: red; margin-right: 10px;">
                     {{ "cancelled" | translate }}
                   </span>
+
                   <span style="color: rgb(206, 231, 65);" *ngIf="booking.status == 1">
                     {{ "active" | translate }}
                   </span>
@@ -1030,7 +1060,7 @@
               <div class="mat-divider"style="margin: 10px 0 5px 0;!important;border-top-color: #A4A3A3;width: 100%;"></div>
 
               <div style="margin-bottom: 10px;">
-                <div class="col-left">Subtotal</div>
+                <div class="col-left"><b>Subtotal</b></div>
                 <div class="col-right">
                   {{ geBasePriceAndExtraPrice() }}
                   {{
@@ -1154,7 +1184,7 @@
               <div class="mat-divider"style="margin: 10px 0 5px 0;!important;border-top-color: #A4A3A3;width: 100%;"></div>
 
               <div>
-                <div class="col-left">{{ "total" | translate | uppercase }}</div>
+                <div class="col-left"><b>{{ "total" | translate | uppercase }}</b></div>
                 <div class="col-right">
                   {{ finalPrice.toFixed(2) }}
                   {{
@@ -1300,49 +1330,49 @@
               <span  *ngIf="payments.length > 0"
                      style="width: 100%; float:left"
               >
-              <p style="float:left">
-                {{ "method_paiment" | translate }}
-              </p>
+                <div style="float:left">
+                  {{ "method_paiment" | translate }}
+                </div>
               </span>
               <ng-container *ngFor="let item of payments">
-                <span style="width: 100%; float:left" *ngIf="item.amount > 0">
-                  <p style="float:left" *ngIf="item.status == 'refund'">
+                <div style="width: 100%; float:left" *ngIf="item.amount > 0">
+                  <div style="float:left" *ngIf="item.status == 'refund'">
                     {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:
                     {{ "refund" | translate }}
-                  </p>
-                  <p style="float:left" *ngIf="item.status == 'no_refund'">
+                  </div>
+                  <div style="float:left" *ngIf="item.status == 'no_refund'">
                     {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:
                     {{ "no_refund" | translate }}
-                  </p>
-                  <p style="float:left" *ngIf="item.status == 'paid'">
+                  </div>
+                  <div style="float:left" *ngIf="item.status == 'paid'">
                     {{ item.created_at | date: "dd/MM/YYYY hh:mm:ss" }}:
                     {{ "payment" | translate }} -  {{ item.notes | translate }}
-                  </p>
-                  <p style="float:right" *ngIf="item.status === 'refund'">
+                  </div>
+                  <div style="float:right" *ngIf="item.status === 'refund'">
                     {{ item.amount }}
                     {{
                       bookingsToCreate.length > 0
                         ? bookingsToCreate[0].courseDates[0].currency
                         : ""
                     }}
-                  </p>
-                  <p style="float:right" *ngIf="item.status == 'no_refund'">
+                  </div>
+                  <div style="float:right" *ngIf="item.status == 'no_refund'">
                     {{ item.amount }}
                     {{
                       bookingsToCreate.length > 0
                         ? bookingsToCreate[0].courseDates[0].currency
                         : ""
                     }}
-                  </p>
-                  <p style="float:right" *ngIf="item.status == 'paid'">
+                  </div>
+                  <div style="float:right" *ngIf="item.status == 'paid'">
                     {{ item.amount }}
                     {{
                       bookingsToCreate.length > 0
                         ? bookingsToCreate[0].courseDates[0].currency
                         : ""
                     }}
-                  </p>
-                </span>
+                  </div>
+                </div>
               </ng-container>
             </div>
 

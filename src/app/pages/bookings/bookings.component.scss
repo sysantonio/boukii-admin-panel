@@ -2,6 +2,7 @@
   width: 65%;
   float:left;
 }
+
 .dot {
   height: 10px;
   width: 10px;
@@ -54,12 +55,12 @@
 
       .col-left {
         display: inline-block;
-        width: 50%;
+        width: 70px;
       }
 
       .col-right {
         display: inline-block;
-        width: 50%;
+        width: calc(100% - 70px);
         text-align: right;
         font-size: 1em;
         font-weight: 700;
@@ -227,7 +228,7 @@
 }
 
 .holder-content {
-  padding: 15px 50px;
+  padding: 15px 6%;
 
   .subtitle {
     position: relative;
@@ -293,6 +294,7 @@
     }
 
     .course-label {
+      font-family: 'Montserrat', sans-serif;
       font-size: 1em;
       font-weight: 400;
       color: #4D4D4D;
@@ -323,6 +325,44 @@
       color: #4D4D4D;
       font-size: 1.4em;
       font-weight: 600;
+    }
+  }
+}
+
+.holder-participante {
+  width: 100%;
+
+  .col-left {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+
+    .course-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .course-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1em;
+      font-weight: 400;
+      color: #4D4D4D;
+      margin-bottom: 0px;
+    }
+
+    b {
+      font-weight: 700;
+    }
+
+    .c-l {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .c-r {
+      display: inline-block;
+      vertical-align: top;
     }
   }
 }
