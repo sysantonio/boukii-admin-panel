@@ -101,7 +101,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       'price': '0 CHF' ,
       'subprice': this.translateService.instant('occupation'),
     }
-    this.setPlotly('magenta', voucherText, 'voucher', 0, 0);
+    this.setPlotly('#E91E63', voucherText, 'voucher', 0, 0);
     this.getBookingsByDate().subscribe(res => {
       this.setUserSessionAnalytics(false, res.data);
     })
@@ -263,7 +263,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       this.updateCourseValue(0, res.data.total_reservations_hours,
         res.data.total_hours);
       if(!monitors) {
-        this.setPlotly('#FAC710', collectiveText, 'collective',
+        this.setPlotly('#FA9917', collectiveText, 'collective',
           res.data.total_reservations_places, res.data.total_available_places);
       }
 
@@ -281,7 +281,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       this.updateCourseValue(1, res.data.total_reservations_hours,
         res.data.total_hours);
       if(!monitors) {
-        this.setPlotly('#8FD14F', collectiveText, 'prive',
+        this.setPlotly('#2AC940', collectiveText, 'prive',
           res.data.total_reservations_places, res.data.total_places);
 
       }
@@ -299,7 +299,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       this.updateCourseValue(2, res.data.total_reservations_hours,
         res.data.total_hours);
       if(!monitors) {
-        this.setPlotly('#00beff', collectiveText, 'activity',
+        this.setPlotly('#9747FF', collectiveText, 'activity',
           res.data.total_reservations_places, res.data.total_places);
       }
       this.totalPriceSell += res.data.total_price;
@@ -327,7 +327,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         }
         const chartElement = document.getElementById(plotActiveMonitors);
         if (chartElement) {
-          this.setPlotly('blue', collectiveText, plotActiveMonitors, res.data.busy, res.data.total)
+          this.setPlotly('#0547ED', collectiveText, plotActiveMonitors, res.data.busy, res.data.total)
         }
       });
     }
@@ -343,7 +343,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       }
       const chartElement = document.getElementById(plotTotalHours);
       if (chartElement) {
-        this.setPlotly('blue', collectiveText, plotTotalHours,
+        this.setPlotly('#3A57A7', collectiveText, plotTotalHours,
           res.data.totalNwdHours + res.data.totalBookingHours, res.data.totalMonitorHours)
       }
     });
@@ -361,7 +361,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'subprice': this.translateService.instant('occupation'),
       };
 
-      this.setPlotly('#FAC710', collectiveText, 'collectiveSales',
+      this.setPlotly('#FA9917', collectiveText, 'collectiveSales',
         res.data.total_places - res.data.total_available_places, res.data.total_available_places);
 
 
@@ -377,7 +377,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'subprice': this.translateService.instant('occupation'),
       };
 
-      this.setPlotly('#8FD14F', collectiveText, 'priveSales',
+      this.setPlotly('#2AC940', collectiveText, 'priveSales',
         res.data.total_places - res.data.total_available_places, res.data.total_places);
 
 
@@ -393,7 +393,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         'subprice': this.translateService.instant('occupation'),
       };
 
-      this.setPlotly('#00beff', collectiveText, 'activitySales',
+      this.setPlotly('#9747FF', collectiveText, 'activitySales',
         res.data.total_places - res.data.total_available_places, res.data.total_places);
 
       this.totalPriceSell += res.data.total_price;
@@ -406,7 +406,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       'price': '0 CHF' ,
       'subprice': this.translateService.instant('occupation'),
     }
-    this.setPlotly('magenta', voucherText, 'voucherSales', 0, 0);
+    this.setPlotly('#E91E63', voucherText, 'voucherSales', 0, 0);
   }
 
 
@@ -506,22 +506,24 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       }
     ];
 
+    /* *** layout *** */
+
     const layout = {
-      height: 250,
-      margin: {t: 45, b: 10, l: 40, r: 40},  // Aumentamos el margen superior (t) para dar espacio al texto
+      height: 350,
+      margin: {t: 20, b: 10, l: 50, r: 50},  // Aumentamos el margen superior (t) para dar espacio al texto
       paper_bgcolor: "rgba(0,0,0,0)",  // Fondo del gráfico transparente
       plot_bgcolor: "rgba(0,0,0,0)",   // Fondo del área del gráfico transparente
       annotations: [{
         text: percent.toFixed(2) + "%",  // Mostrar el porcentaje con dos decimales
         font: {
           family: "Dinamit, sans-serif",
-          weight: "bold",
-          size: 34,
+          weight: 500,
+          size: 25,
           color: color
         },
         showarrow: false,
-        x: 0.5,
-        y: 0.3,
+        x: .5,
+        y: .4,
         xref: 'paper',
         yref: 'paper',
         xanchor: 'center',
@@ -533,13 +535,13 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
           text: text.title,
           font: {
             family: "Dinamit, sans-serif",
-            weight: "bold",
-            size: 20,
+            weight: 700,
+            size: 17,
             color: color
           },
           showarrow: false,
-          x: 0,
-          y: 1.1,  // Ajustamos el valor de y para que el texto esté más arriba
+          x: -.13,
+          y: .96,  // Ajustamos el valor de y para que el texto esté más arriba
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
@@ -551,17 +553,17 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
           text: text.subtitle,
           font: {
             family: "Dinamit, sans-serif",
-            weight: 'normal',
-            size: 14,
-            color: 'lightgray'
+            weight: 400,
+            size: 10,
+            color: '#87888C'
           },
           showarrow: false,
-          x: 0,
-          y: 1,
+          x: -.13,
+          y: .94,
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
-          yanchor: 'bottom',
+          yanchor: 'top',
           align: 'left',
           pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         },
@@ -569,17 +571,17 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
           text: text.price,
           font: {
             family: "Dinamit, sans-serif",
-            weight: 'bold',
-            size: 22,
-            color: 'black'
+            weight: 700,
+            size: 20,
+            color: '#424242'
           },
           showarrow: false,
-          x: 0,
-          y: 0.87,  // Ajustamos el valor de y para que el texto esté más arriba
+          x: -.13,
+          y: .865,  // Ajustamos el valor de y para que el texto esté más arriba
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
-          yanchor: 'bottom',
+          yanchor: 'top',
           align: 'left',
           pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         },
@@ -587,17 +589,17 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
           text: text.subprice,
           font: {
             family: "Dinamit, sans-serif",
-            size: 14,
-            weight: 'normal',
-            color: 'lightgray'
+            size: 11,
+            weight: 400,
+            color: '#87888C'
           },
           showarrow: false,
-          x: 0,
-          y: 0.8,
+          x: -.13,
+          y: .76,
           xref: 'paper',
           yref: 'paper',
           xanchor: 'left',
-          yanchor: 'bottom',
+          yanchor: 'top',
           align: 'left',
           pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
         }
@@ -628,7 +630,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         name: sportData.sport.name,
         value: sportData.hours,
         icon: sportData.sport.icon_selected,
-        color: 'blue'  // Puedes ajustar para usar colores específicos
+        color: '#FCB859'  // Puedes ajustar para usar colores específicos
       };
     });
   }
