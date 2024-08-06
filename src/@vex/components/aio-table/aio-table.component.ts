@@ -183,10 +183,12 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit() {
     this.routeActive.queryParams.subscribe(params => {
       this.gift = +params['isGift'] || 0; // Valor por defecto
-      if(this.gift){
-        this.filter += '&is_gift=1';
-      } else {
-        this.filter += '&is_gift=0';
+      if(this.entity.includes('vouchers')) {
+        if(this.gift){
+          this.filter += '&is_gift=1';
+        } else {
+          this.filter += '&is_gift=0';
+        }
       }
     });
     this.getMonitors();
@@ -337,13 +339,20 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
    */
   getFilteredData(pageIndex: number, pageSize: number, filter: any) {
     this.loading = true;
-
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
+    this.crudService.list(
+      this.entity,
+      pageIndex,
+      pageSize,
+      'desc',
+      'id',
       filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + this.search +
       (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
-      '', null, this.searchCtrl.value, this.with)
+      '',
+      null,
+      this.searchCtrl.value,
+      this.with)
       .subscribe((response: any) => {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;
@@ -366,10 +375,17 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
-      this.filter + this.searchCtrl.value
-      + '&school_id=' +this.user.schools[0].id  + this.search + ( this.filterField !== null
-        ? '&'+this.filterColumn +'='+this.filterField : ''), '', null, this.searchCtrl.value,
+    this.crudService.list(
+      this.entity,
+      pageIndex,
+      pageSize,
+      'desc',
+      'id',
+      this.filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id
+      + this.search + ( this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
+      '',
+      null,
+      this.searchCtrl.value,
       this.with)
       .subscribe((response: any) => {
         this.data = response.data;

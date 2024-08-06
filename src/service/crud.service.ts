@@ -52,7 +52,7 @@ export class ApiCrudService extends ApiService {
 
     // Construir la URL completa
     const url = this.baseUrl + model + '?perPage=' + perPage + '&page=' + numPage + '&order=' + order
-      + '&orderColumn=' + orderColumn + '&search=' + search + '&exclude=' + exclude + filter + relationsParams;
+      + '&orderColumn=' + orderColumn + '&search=' + search + '&exclude=' + exclude + relationsParams;
 
     return this.http.get<ApiResponse>(url,
       { headers: this.getHeaders() });
