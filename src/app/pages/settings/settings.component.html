@@ -975,7 +975,7 @@
               <p style="padding: 1%; color:#808080">{{'compose' | translate}}</p>
             <div class="block w-full">
               <mat-form-field appearance="outline" style="width: 100%">
-                <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
+                <mat-select placeholder="{{'mails.type' | translate}}" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
                   <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
                   <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
                   <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
@@ -1018,7 +1018,7 @@
                 </div>
 
                 <div class="vex-mail-compose-editor flex flex-col">
-                  <p>Mensaje</p>
+                  <p>{{ 'message' | translate }}</p>
                   <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                                 class="flex-auto flex flex-col" [(ngModel)]="bodyFr"></quill-editor>
                 </div>
@@ -1031,7 +1031,7 @@
                 </mat-form-field>
 
                 <div class="vex-mail-compose-editor flex flex-col">
-                  <p>Título</p>
+                  <p>{{ 'title' | translate }}</p>
                   <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                                 class="flex-auto flex flex-col" [(ngModel)]="titleEn"></quill-editor>
                 </div>
@@ -1049,7 +1049,7 @@
                 </mat-form-field>
 
                 <div class="vex-mail-compose-editor flex flex-col">
-                  <p>Título</p>
+                  <p>{{ 'title' | translate }}</p>
                   <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                                 class="flex-auto flex flex-col" [(ngModel)]="titleEs"></quill-editor>
                 </div>
@@ -1067,7 +1067,7 @@
                 </mat-form-field>
 
                 <div class="vex-mail-compose-editor flex flex-col">
-                  <p>Título</p>
+                  <p>{{ 'title' | translate }}</p>
                   <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                                 class="flex-auto flex flex-col" [(ngModel)]="titleIt"></quill-editor>
                 </div>
@@ -1085,7 +1085,7 @@
                 </mat-form-field>
 
                 <div class="vex-mail-compose-editor flex flex-col">
-                  <p>Título</p>
+                  <p>{{ 'title' | translate }}</p>
                   <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
                                 class="flex-auto flex flex-col" [(ngModel)]="titleDe"></quill-editor>
                 </div>
@@ -1123,6 +1123,8 @@
               <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                 <div style="float:left; width:100%">
                   <button class="btn-primary-accent" style="float: right;" (click)="saveDefaultMail()">{{'save' | translate}}</button>
+                  <button class="btn-primary-accent" style="float: right; margin-right: 10px;" (click)="openPreview()">{{'preview' | translate}}</button>
+
                 </div>
 
               </div>
