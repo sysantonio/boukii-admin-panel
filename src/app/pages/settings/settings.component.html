@@ -232,7 +232,7 @@
                     <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'settings.sports.all_sessions' | translate}}</p>
                     <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div class="item" (click)="setSport(item.id)">
+                        <div class="item" *ngIf="item.sport_type === 3" (click)="setSport(item.id)">
                           <div class="icon" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
                             <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
                           </div>
