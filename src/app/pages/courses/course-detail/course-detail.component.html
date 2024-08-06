@@ -391,7 +391,38 @@
             </vex-page-layout-content>
           </vex-page-layout>
 
-          <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
+          <vex-page-layout-content
+            class="fullwidth col-right"
+            *ngIf="showDetail"
+          >
+            <mat-card>
+
+              <mat-card-header style="display:block">
+                <div style="width: 100%;">
+                  <span style="display: inline-block;width: 80%; text-align: left;">
+                    <mat-card-title>{{'course_detail' | translate}}</mat-card-title>
+                  </span>
+                  <span style="display: inline-block;width: 20%; text-align: right;">
+                    <img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />
+                    <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+                  </span>
+                </div>
+                <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+                  <mat-card-subtitle style="width:100%;">
+                    <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+                      <b>{{ 'register' | translate}}:</b>
+                      <span style="margin-left: 10px;font-weight: normal;">
+                        <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                      </span>
+                    </div>
+                    <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+                      Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+                    </div>
+                  </mat-card-subtitle>
+                </div>
+              </mat-card-header>
+
+          <!--<vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
             <mat-card style="padding: 0 3%;">
             <mat-card-header style="display:block">
                 <div style="width: 100%;float: left;">
@@ -400,7 +431,6 @@
                 <div style="width: 100%;float:left;">
                 <mat-card-title class="font-bold" style="float: left;width: 100%;">
                   {{'course_detail' | translate}}
-                  <!--<mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>-->
                   <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
                 </mat-card-title>
 
@@ -441,31 +471,85 @@
                 </ng-container>
                 <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-            </mat-card-header>
+            </mat-card-header>-->
+
+
+
             <mat-card-content>
-              <div style="float: left; width: 100%;margin-bottom:24px;">
-                <div style="float: left;width: 100%;">
-                    <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
-                    <div style="float: left; width: 20%; margin-top: 5%">
-                        <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                        <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                    </div>
-                    <div style="float: left; width: 75%;margin:6% 0 0 2%">
-                    <p><strong>{{detailData?.course?.name}}</strong></p>
-                    <p>
-                        <ng-container *ngIf="detailData?.course?.course_type == 1">
-                          {{'colective' | translate}}
-                        </ng-container>
-                        <ng-container *ngIf="detailData?.course?.course_type == 2">
-                          {{'private' | translate}}
-                        </ng-container>
-                        <ng-container *ngIf="detailData?.sport">
-                            {{detailData?.sport.name}}
-                        </ng-container>
-                    </p>
-                    </div>
+              <div class="title-status">
+                <div class="col-left">
+                  <b>{{'from' | translate}}</b>
+                </div>
+                <div class="col-right">
+                  <b>{{'to' | translate}}</b>
                 </div>
               </div>
+              <div class="list-holder">
+                <div class="col-left">
+                  <b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b>
+                </div>
+                <div class="col-right">
+                  <b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b>
+                </div>
+              </div>
+              <div class="title-status">
+                <div class="col-left">
+                  <b>{{'price' | translate}}</b>
+                </div>
+                <div class="col-right">
+                  <b>{{'max_pax' | translate}}</b>
+                </div>
+              </div>
+              <div class="list-holder">
+                <div class="col-left">
+                  <div *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</div>
+                  <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</div>
+                </div>
+                <div class="col-right">
+                  <b>{{detailData?.course.max_participants}}</b>
+                </div>
+              </div>
+              <div class="list-holder" *ngIf="detailData.course_type === 1">
+                <ul>
+                  <ng-container *ngFor="let date of detailData?.course.course_dates">
+                      <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
+                  </ng-container>
+                </ul>
+              </div>
+
+              <div class="holder-deporte">
+                <div class="col-left">
+                  <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                  <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                  <!--<app-level-user
+                    *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                    [allLevels]="detailData.degrees_sport"
+                    [selectLevel]="getClientDegree(detailData?.client_main_id)"
+                    [size]="60"
+                    [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+                  ></app-level-user>-->
+                </div>
+                <div class="col-right">
+                  <div class="client-name">
+                    {{detailData?.course?.name}}
+                  </div>
+                  <div class="client-dates">
+                    <ng-container *ngIf="detailData?.course?.course_type == 1">
+                      {{'colective' | translate}}
+                    </ng-container>
+                    <ng-container *ngIf="detailData?.course?.course_type == 2">
+                      {{'private' | translate}}
+                    </ng-container>
+                  </div>
+                  <div class="client-ubicacion">
+                    <ng-container *ngIf="detailData?.sport">
+                        {{detailData?.sport.name}}
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+              ***
               <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
                 <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">

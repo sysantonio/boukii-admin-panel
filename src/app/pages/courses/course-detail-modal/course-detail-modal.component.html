@@ -490,7 +490,7 @@
                 <div class="list-holder">
                   <div class="col-left">
                     <div *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</div>
-                    <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}
+                    <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</div>
                   </div>
                   <div class="col-right">
                     <b>{{detailData?.course.max_participants}}</b>
