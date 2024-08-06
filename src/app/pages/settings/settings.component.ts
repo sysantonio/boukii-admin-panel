@@ -31,6 +31,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {DateAdapter} from '@angular/material/core';
 import {th} from 'date-fns/locale';
 import {dropdownAnimation} from '../../../@vex/animations/dropdown.animation';
+import {PreviewModalComponent} from '../../components/preview-modal/preview-modal.component';
 
 @Component({
   selector: 'vex-settings',
@@ -371,6 +372,36 @@ export class SettingsComponent implements OnInit {
     } else {
       this.bodyIt = '';
       this.subjectIt = '';
+    }
+  }
+
+  openPreview(): void {
+    const data = this.getEmailContent();
+
+    const dialogRef = this.dialog.open(PreviewModalComponent, {
+      width: '80%',
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  getEmailContent() {
+    switch (this.selectedIndex) {
+      case 0: // Pestaña francesa
+        return { language: 'fr', subject: this.subjectFr, title: this.titleFr, body: this.bodyFr };
+      case 1: // Pestaña inglesa
+        return { language: 'en', subject: this.subjectEn, title: this.titleEn, body: this.bodyEn };
+      case 2: // Pestaña española
+        return { language: 'es', subject: this.subjectEs, title: this.titleEs, body: this.bodyEs };
+      case 3: // Pestaña italiana
+        return { language: 'it', subject: this.subjectIt, title: this.titleIt, body: this.bodyIt };
+      case 4: // Pestaña alemana
+        return { language: 'de', subject: this.subjectDe, title: this.titleDe, body: this.bodyDe };
+      default: // Fallback
+        return { language: 'en', subject: '', title: '', body: '' };
     }
   }
 

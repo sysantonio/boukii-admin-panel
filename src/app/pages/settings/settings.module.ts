@@ -41,67 +41,69 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {QuillModule} from 'ngx-quill';
+import {ComponentsCustomModule} from '../../components/components-custom.module';
 @NgModule({
   declarations: [SettingsComponent],
-  imports: [
-    CommonModule,
-    LayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PageLayoutModule,
-    BreadcrumbsModule,
-    RouterModule,
-    SettingsRoutingModule,
-    SecondaryToolbarModule,
-    MatIconModule,
-    ChartModule,
-    MatProgressSpinnerModule,
-    WidgetQuickLineChartModule,
-    WidgetQuickValueCenterModule,
-    WidgetQuickValueStartModule,
-    WidgetLargeGoalChartModule,
-    WidgetAssistantModule,
-    WidgetLargeChartModule,
-    WidgetTableModule,
-    MatTabsModule,
-    MatDialogModule,
-    ComponentsModule,
-    SalaryCreateUpdateModalModule,
-    ExtraCreateUpdateModalModule,
-    LevelGoalsModalModule,
-    WidgetClientsSportsNoSwiperModule,
-    WidgetSportsLevelModule,
-    LevelSportUpdateModalModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatAutocompleteModule,
-    MatSlideToggleModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatRadioModule,
-    TranslateModule,
-    MatButtonModule,
-    MatTooltipModule,
-    QuillModule.forRoot({
-      modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
+    imports: [
+        CommonModule,
+        LayoutModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PageLayoutModule,
+        BreadcrumbsModule,
+        RouterModule,
+        SettingsRoutingModule,
+        SecondaryToolbarModule,
+        MatIconModule,
+        ChartModule,
+        MatProgressSpinnerModule,
+        WidgetQuickLineChartModule,
+        WidgetQuickValueCenterModule,
+        WidgetQuickValueStartModule,
+        WidgetLargeGoalChartModule,
+        WidgetAssistantModule,
+        WidgetLargeChartModule,
+        WidgetTableModule,
+        MatTabsModule,
+        MatDialogModule,
+        ComponentsModule,
+        SalaryCreateUpdateModalModule,
+        ExtraCreateUpdateModalModule,
+        LevelGoalsModalModule,
+        WidgetClientsSportsNoSwiperModule,
+        WidgetSportsLevelModule,
+        LevelSportUpdateModalModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTableModule,
+        MatCardModule,
+        MatDatepickerModule,
+        MatAutocompleteModule,
+        MatSlideToggleModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        MatRadioModule,
+        TranslateModule,
+        MatButtonModule,
+        MatTooltipModule,
+        QuillModule.forRoot({
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
 
-          [{list: 'ordered'}, {list: 'bullet'}],
+                    [{list: 'ordered'}, {list: 'bullet'}],
 
-          [{header: [1, 2, 3, 4, 5, 6, false]}],
+                    [{header: [1, 2, 3, 4, 5, 6, false]}],
 
-          ['clean'],
+                    ['clean'],
 
-          ['link', 'image']
-        ]
-      }
-    }),
-  ]
+                    ['link', 'image']
+                ]
+            }
+        }),
+        ComponentsCustomModule,
+    ]
 })
 export class SettingsModule {
 }
