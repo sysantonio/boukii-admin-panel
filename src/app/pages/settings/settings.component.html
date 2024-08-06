@@ -257,25 +257,32 @@
                     <button class="btn-primary-accent" (click)="updateSportDegrees()">{{'save_changes' | translate}}</button>
                   </div>
 
-                  <div style="float: left; width: 100%;margin-bottom: 20px;margin-top: 10px;">
+                  <div class="items-icons" style="margin-bottom: 20px;">
                     <ng-container *ngFor="let item of schoolSports; let i = index">
-                      <div style="float: left; width: 5%;margin-left: 6%">
-                      <!-- Contenido del div (aplicar estilos selected)-->
-                        <div style="float: left; width: 100%; border-radius: 10px;" (click)="selectSport(item.id)"
-                          [ngStyle]="{
-                            'background': selectedSport === item.id ? '#e91e63' : '#e6e6e6'
-                          }">
-                          <div style="float: left; width: 100%;cursor:pointer" (click)="dataSourceLevels.data = item.degrees">
-                            <img style="float: left; width: 100%;" [src]="item.icon_selected"/>
-                          </div>
+                      <div class="item" (click)="selectSport(item.id)" [ngClass]="selectedSport === item.id ? 'select' : 'unselect'">
+                        <div class="icon">
+                          <img [src]="item.icon_selected"/>
+                          <img [src]="item.icon_unselected"/>
                         </div>
-
-                        <div style="float: left; width: 100%;">
-                          <p style="float: left; width: 100%;text-align: center;">{{ item.name }}</p>
-                        </div>
+                        <div class="text">{{ item.name }}</div>
                       </div>
                     </ng-container>
                   </div>
+
+                  <!--<div style="float: left; width: 100%;margin-bottom: 20px;margin-top: 10px;">
+                    <ng-container *ngFor="let item of schoolSports; let i = index">
+                      <div style="float: left; width: 80px; margin-right: 10px;text-align: center;">
+                        <div style="cursor:pointer;width: 40px;height:40px;border-radius: 6px;" (click)="selectSport(item.id)" [ngStyle]="{'background': selectedSport === item.id ? '#e91e63' : '#e6e6e6'}">
+                          <div (click)="dataSourceLevels.data = item.degrees">
+                            <img style="width: 40px;height:40px;display:inline-block;" [src]="item.icon_selected"/>
+                          </div>
+                        </div>
+                        <div style="font-size:12px;">
+                          {{ item.name }}
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>-->
 
                   <div style="float: left; width: 100%;">
                     <!-- añadir mat table de niveles-->
