@@ -181,8 +181,15 @@
         }
       }
     }
-
   }
+}
+
+.mat-mdc-tab-labels {
+  max-width: 550px;
+}
+
+.mat-mdc-tab-list {
+  flex-grow: initial!important;
 }
 
 @media (max-width: 1200px) {

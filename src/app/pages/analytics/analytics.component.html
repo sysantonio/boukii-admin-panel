@@ -15,7 +15,7 @@
   </vex-secondary-toolbar>
 
   <vex-page-layout-content class="fullwidth">
-    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+    <mat-tab-group (selectedTabChange)="onTabChange($event)" class="tab-group">
 
       <mat-tab label="Vista General">
         <div class="card" style="margin: 2% 0 2% 0;">
@@ -194,6 +194,7 @@
                        [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
         ></vex-aio-table>
       </mat-tab>
+
       <mat-tab label="Monitores">
         <div class="card" style="margin: 2% 0 2% 0;">
           <div class="px-4 border-b d-flex align-items-center justify-content-between">
@@ -321,6 +322,7 @@
           </mat-card-content>
         </mat-card>
       </mat-tab>
+
     </mat-tab-group>
   </vex-page-layout-content>
 </vex-page-layout>
