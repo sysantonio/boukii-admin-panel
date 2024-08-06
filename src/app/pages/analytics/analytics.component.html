@@ -98,9 +98,9 @@
               <h3>{{ 'hour' | translate }}s</h3>
               <h4>{{ 'total' | translate }}</h4>
               <h5>{{ totalHours }} h</h5>
-              <div *ngFor="let course of courseTypeHoursData" class="course">
+              <div *ngFor="let course of courseTypeHoursData; let i = index" class="course">
                 <div class="course-holder">
-                  <div class="course-number">01</div>
+                  <div class="course-number">0{{i+1}}</div>
                   <div class="course-details">
                     <span class="course-name">{{ course.name }}</span>
                     <div class="course-bar-container">
@@ -110,7 +110,11 @@
                     </div>
                   </div>
                   <div class="course-info">
-                    <span class="course-value colectivo">{{course.max_value}}h</span>
+                    <span class="course-value" [ngClass]="{
+                      'colectivo': course.name === translateService.instant('course_colective'),
+                      'privado': course.name === translateService.instant('course_private'),
+                      'actividad': course.name === translateService.instant('activity')
+                    }">{{course.max_value}}h</span>
                   </div>
                 </div>
               </div>
@@ -275,9 +279,9 @@
                 <h3>{{ 'hour' | translate }}s</h3>
                 <h4>{{ 'total' | translate }}</h4>
                 <h5>{{ totalHours }} h</h5>
-                <div *ngFor="let course of courseTypeHoursData" class="course">
+                <div *ngFor="let course of courseTypeHoursData; let i = index"  class="course">
                   <div class="course-holder">
-                    <div class="course-number">01</div>
+                    <div class="course-number">0{{i+1}}</div>
                     <div class="course-details">
                       <span class="course-name">{{ course.name }}</span>
                       <div class="course-bar-container">
@@ -287,7 +291,11 @@
                       </div>
                     </div>
                     <div class="course-info">
-                      <span class="course-value colectivo">{{course.max_value}}h</span>
+                      <span class="course-value" [ngClass]="{
+                      'colectivo': course.name === translateService.instant('course_colective'),
+                      'privado': course.name === translateService.instant('course_private'),
+                      'actividad': course.name === translateService.instant('activity')
+                    }">{{course.max_value}}h</span>
                     </div>
                   </div>
                 </div>
