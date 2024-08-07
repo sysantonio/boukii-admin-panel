@@ -2243,7 +2243,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   addClient() {
 
     const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
-      width: '1000px',  // Asegurarse de que no haya un ancho máximo
+      width: '1000px', // Asegurarse de que no haya un ancho máximo
+      height: '1000px', // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
       data: {id: this.user.schools[0].id}
     });
