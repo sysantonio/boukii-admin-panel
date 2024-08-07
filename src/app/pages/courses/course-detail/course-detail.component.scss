@@ -445,7 +445,6 @@
       padding: 10px 35px;
 
       .item {
-        cursor: pointer;
         width: 100%;
         height: 130px;
         display: inline-flex;
@@ -456,11 +455,15 @@
         flex-direction: column;
         border-radius: 6px;
         padding: 2%;
-        color: #000;
+        color: #000000;
         background: #e6e6e6;
         text-align:center;
         font-size: 12px;
         font-family: 'Montserrat', sans-serif;
+
+        &:first-child {
+          color: #ffffff;
+        }
 
         img {
           display: inline-block;

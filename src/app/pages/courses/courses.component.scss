@@ -186,6 +186,10 @@
         font-size: 12px;
         font-family: 'Montserrat', sans-serif;
 
+        &:first-child {
+          color: #fff;
+        }
+
         img {
           display: inline-block;
           width:24px;
