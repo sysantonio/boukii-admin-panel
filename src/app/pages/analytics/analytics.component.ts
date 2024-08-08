@@ -459,6 +459,17 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     });
   }
 
+
+  getGraphHeight() {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth > 1024) {  // Pantallas pequeñas (móviles, tabletas)
+      return 250;
+    } else {  // Pantallas grandes (escritorios)
+      return 350;
+    }
+  }
+
   setPlotly(color, text, id, value, maxValue) {
 
     // Calcular el porcentaje
@@ -509,8 +520,8 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     /* *** layout *** */
 
     const layout = {
-      height: 350,
-      margin: {t: 20, b: 10, l: 50, r: 50},  // Aumentamos el margen superior (t) para dar espacio al texto
+      height:  window.innerWidth > 1440 ? 250 : 350,
+      margin: {t: 20, b: 10, l: window.innerWidth > 1440 ? 65 : 50, r: window.innerWidth > 1339 ? 50 : 50},  // Aumentamos el margen superior (t) para dar espacio al texto
       paper_bgcolor: "rgba(0,0,0,0)",  // Fondo del gráfico transparente
       plot_bgcolor: "rgba(0,0,0,0)",   // Fondo del área del gráfico transparente
       annotations: [{

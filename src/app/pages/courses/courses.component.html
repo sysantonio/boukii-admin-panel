@@ -122,10 +122,10 @@
         </div>
         <div class="list-holder">
           <div class="col-left">
-            <b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_start}}h
+            <b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_start.substring(0, 5)}}h
           </div>
           <div class="col-right">
-            <b>{{detailData.date_end | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_end}}h
+            <b>{{detailData.date_end | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_end.substring(0, 5)}}h
           </div>
         </div>
         <div class="title-status">
@@ -153,8 +153,8 @@
         </div>
         <div class="list-holder" *ngIf="detailData.course_type ===2">
           <ul>
-            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start}}h - {{detailData.course_dates[0].hour_end}}h</i></li>
-            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[detailData.course_dates.length - 1].hour_start}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end}}h</i></li>
+            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start.substring(0, 5)}}h - {{detailData.course_dates[0].hour_end.substring(0, 5)}}h</i></li>
+            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[detailData.course_dates.length - 1].hour_start.substring(0, 5)}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end.substring(0, 5)}}h</i></li>
           </ul>
         </div>
 
@@ -262,14 +262,6 @@
             <div class="client-ubicacion">
               {{detailData.station.name}}
             </div>
-          </div>
-        </div>
-        <div class="list-holder">
-          <div class="col-left">
-            <b>{{detailData.price}}</b> {{detailData.currency}}
-          </div>
-          <div class="col-right">
-            <b>{{detailData.max_participants}}</b>
           </div>
         </div>
 

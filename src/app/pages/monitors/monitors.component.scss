@@ -1,13 +1,13 @@
 .table-show-detail {
-  width: 65%;float:left
+  width: 64%;float:left
 }
 
 .vex-page-layout-content {
   &.col-right {
-    width: 35%;
+    width: 31%;
     float: left;
     position: fixed;
-    left: calc(66% - 40px);
+    left: calc(69% - 40px);
     overflow-y: auto;
     max-height: calc(100vh - 180px);
     border-radius: 10px;
