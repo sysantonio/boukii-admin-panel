@@ -67,7 +67,7 @@
               <app-level-user
                 [allLevels]="clientSport.length ? getSportLevels(clientSport[0]?.sport_id) : []"
                 [selectLevel]=" clientSport.length ? clientSport[0]?.degree_id : null"
-                [size]="100"
+                [size]="60"
                 [userImage]="detailData.image ? detailData.image : imageAvatar">
               </app-level-user>
             </div>
@@ -110,7 +110,7 @@
               <app-level-user
                 [allLevels]="clientSportUtilizer?.length ? getSportLevels(clientSportUtilizer[0].sport_id) : []"
                 [selectLevel]="clientSportUtilizer?.length ? clientSportUtilizer[0].degree_id : null"
-                [size]="100"
+                [size]="60"
                 [userImage]="utilizer.image !== null ? utilizer?.image : imageAvatar">
               </app-level-user>
             </div>
@@ -178,7 +178,8 @@
                     'background-color': item?.level?.color,
                     'border-color': item?.level?.color,
                     'width': '100%',
-                    'padding': '3px'
+                    'padding': '3px',
+                    'border-radius': '6px'
                   }">
                     <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.level?.annotation}} {{item?.level?.name}}</div>
                   </div>
