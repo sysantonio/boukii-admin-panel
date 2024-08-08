@@ -202,7 +202,7 @@
                         *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                         [allLevels]="detailData.degrees_sport"
                         [selectLevel]="getClientDegree(bUsers.client_id)"
-                        [size]="80"
+                        [size]="60"
                         [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
                       ></app-level-user>
                     </div>

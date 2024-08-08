@@ -403,7 +403,7 @@
                     <mat-card-title>{{'course_detail' | translate}}</mat-card-title>
                   </span>
                   <span style="display: inline-block;width: 20%; text-align: right;">
-                    <img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />
+                    <!--<img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />-->
                     <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
                   </span>
                 </div>
@@ -492,44 +492,15 @@
                   <b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b>
                 </div>
               </div>
-              <div class="title-status">
-                <div class="col-left">
-                  <b>{{'price' | translate}}</b>
-                </div>
-                <div class="col-right">
-                  <b>{{'max_pax' | translate}}</b>
-                </div>
-              </div>
-              <div class="list-holder">
-                <div class="col-left">
-                  <div *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</div>
-                  <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</div>
-                </div>
-                <div class="col-right">
-                  <b>{{detailData?.course.max_participants}}</b>
-                </div>
-              </div>
-              <div class="list-holder" *ngIf="detailData.course_type === 1">
-                <ul>
-                  <ng-container *ngFor="let date of detailData?.course.course_dates">
-                      <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-                  </ng-container>
-                </ul>
-              </div>
 
-              <mat-divider style="margin-top:10px; margin-bottom:10px; border-color: transparent;"></mat-divider>
+              <div style="padding:15px 35px;">
+                <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+              </div>
 
               <div class="holder-deporte">
                 <div class="col-left">
                   <img *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="60" height="60" />
                   <img *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="60" height="60" />
-                  <!--<app-level-user
-                    *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                    [allLevels]="detailData.degrees_sport"
-                    [selectLevel]="getClientDegree(detailData?.client_main_id)"
-                    [size]="60"
-                    [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
-                  ></app-level-user>-->
                 </div>
                 <div class="col-right">
                   <div class="client-name">
@@ -550,6 +521,38 @@
                   </div>
                 </div>
               </div>
+
+
+
+              <div class="list-holder" *ngIf="detailData.course_type === 1">
+                <ul>
+                  <ng-container *ngFor="let date of detailData?.course.course_dates">
+                      <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
+                  </ng-container>
+                </ul>
+              </div>
+
+              <div class="title-status">
+                <div class="col-left">
+                  <b>{{'price' | translate}}</b>
+                </div>
+                <div class="col-right">
+                  <b>{{'max_pax' | translate}}</b>
+                </div>
+              </div>
+              <div class="list-holder">
+                <div class="col-left">
+                  <div *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</div>
+                  <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</div>
+                </div>
+                <div class="col-right">
+                  <b>{{detailData?.course.max_participants}}</b>
+                </div>
+              </div>
+
+              <mat-divider style="margin-top:10px; margin-bottom:10px; border-color: transparent;"></mat-divider>
+
+
 
               <div *ngIf="detailData?.course?.course_type == 1">
                 <div class="grupo-holder">
@@ -633,14 +636,13 @@
                 <div *ngIf="detailData.monitor_id !== null">
                   <div class="holder-deporte">
                     <div class="col-left">
-                      <img [src]="getMonitor(detailData.monitor_id)?.image ? getMonitor(detailData.monitor_id)?.image : 'assets/img/avatar.png'" width="60" height="60" />
-                      <!--<app-level-user
+                      <app-level-user
                         *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                         [allLevels]="detailData.degrees_sport"
-                        [selectLevel]="getClientDegree(detailData?.client_main_id)"
+                        [selectLevel]="getMonitor(detailData.monitor_id)"
                         [size]="60"
-                        [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
-                      ></app-level-user>-->
+                        [userImage]="getMonitor(detailData.monitor_id)?.image !== null && getMonitor(detailData.monitor_id)?.image !== '' ? getMonitor(detailData.monitor_id)?.image : userAvatar"
+                      ></app-level-user>
                     </div>
                     <div class="col-right">
                       <div class="client-name">
@@ -666,7 +668,13 @@
                     <div *ngFor="let client of detailData?.users">
                       <div class="holder-deporte">
                         <div class="col-left">
-                          <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()" [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                          <app-level-user
+                            *ngIf="detailData.sport"
+                            [allLevels]="getAllLevelsBySport()"
+                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
+                            [size]="60"
+                            [userImage]="getClient(client.client_id).image !== null && getClient(client.client_id).image !== '' ? getClient(client.client_id).image : userAvatar"
+                          ></app-level-user>
                         </div>
                         <div class="col-right">
                           <div class="client-name">
