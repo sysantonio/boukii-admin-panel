@@ -16,11 +16,11 @@
   </vex-secondary-toolbar>
 
   <vex-page-layout-content class="fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
-      <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
-                     [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-      (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
-                     [with]="['sports','clientSports.degree','clientsSchools','utilizers']"
-      [showDetail]="showDetail"></vex-aio-table>
+    <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
+                   [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+                   (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                   [with]="['sports','clientSports.degree','clientsSchools','utilizers']"
+                   [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
   <vex-page-layout-content
@@ -41,14 +41,14 @@
         <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
           <mat-card-subtitle style="width:100%;">
             <div style="width: 60%;display:inline-block;text-align: left; color: white;">
-              <b>{{ 'client' | translate}}:</b>
+              <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}h</span>
               </span>
             </div>
-            <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-              Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
-            </div>
+            <!-- <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+               {{ detailData.user.username }} <span style="margin-left: 10px;">({{ detailData.user.first_name + ' ' +  detailData.user.last_name}})</span>
+             </div>-->
           </mat-card-subtitle>
         </div>
       </mat-card-header>
@@ -111,7 +111,7 @@
                 [allLevels]="clientSportUtilizer?.length ? getSportLevels(clientSportUtilizer[0].sport_id) : []"
                 [selectLevel]="clientSportUtilizer?.length ? clientSportUtilizer[0].degree_id : null"
                 [size]="60"
-                [userImage]="utilizer.image !== null ? utilizer?.image : imageAvatar">
+                [userImage]="utilizer.image ? utilizer?.image : imageAvatar">
               </app-level-user>
             </div>
             <div class="col-right">
@@ -142,15 +142,15 @@
         </div>
 
         <div class="cards-user-holder">
-          <div class="cards-user" (click)="mainIdSelected = !mainIdSelected; utilizerSportLoaded = false;" [ngClass]="{'active-border': mainIdSelected}">
+          <div class="cards-user" (click)="mainIdSelected = true; utilizerSportLoaded = false;" [ngClass]="{'active-border': mainIdSelected}">
             <div class="image">
               <img [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
             </div>
             <div class="name">{{ detailData.first_name }} {{ detailData.last_name }}</div>
             <div class="subtitle">{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</div>
           </div>
-          <div *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
-            <div class="cards-user">
+          <div  class="cards-user" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
+            <div class="image">
               <img [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" />
             </div>
             <div class="name">{{ item.first_name }} {{ item.last_name }}</div>
@@ -240,29 +240,30 @@
               <b>{{'sports' | translate}}</b>
             </div>
           </div>
-
-          <ng-container *ngFor="let item of clientSportUtilizer">
-            <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
-              <div style="text-align: center;width: 100%;">
-                <img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': item?.level?.color,'border-color': item?.level?.color}" />
-              </div>
-              <div style="text-align: center;width: 100%;">{{item?.name}}</div>
-              <div style="text-align: center;width: 100%;">
-                <div [ngStyle]="{
+          <div class="deportes-holder">
+            <ng-container *ngFor="let item of clientSportUtilizer">
+              <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
+                <div style="text-align: center;width: 100%;">
+                  <img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': item?.level?.color,'border-color': item?.level?.color}" />
+                </div>
+                <div style="text-align: center;width: 100%;">{{item?.name}}</div>
+                <div style="text-align: center;width: 100%;">
+                  <div [ngStyle]="{
                   'color': '#fff',
                   'background-color': item?.level?.color,
                   'border-color': item?.level?.color,
                   'width': '100%',
                   'padding': '3px'
                 }">
-                  <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.level?.annotation}} {{item?.level?.name}}</div>
+                    <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.level?.annotation}} {{item?.level?.name}}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </ng-container>
+            </ng-container>
 
-          <div style="width:100%; margin-top:20px;">
-            <button class="btn-primary-accent" style="width: 100%;" (click)="createBooking();">{{'add_booking' | translate }}</button>
+            <div style="width:100%; margin-top:20px;">
+              <button class="btn-primary-accent" style="width: 100%;" (click)="createBooking();">{{'add_booking' | translate }}</button>
+            </div>
           </div>
         </div>
 

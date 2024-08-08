@@ -188,7 +188,8 @@
                       </div>
                       <ng-container *ngFor="let item of detailData.bookingusers">
                         <div *ngIf="item.client_id == bUsers.client_id">
-                          <span class="date-course"><img class="icon-calendar" src="assets/img/icons/calendar-1.svg" /> {{item.date |date: 'dd.MM.YYYY'}} <i>{{item?.hour_start}}h</i> - {{item?.hour_end}}h</span>
+                          <span class="date-course"><img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+                            {{item.date |date: 'dd.MM.YYYY'}} <i>{{item?.hour_start.substring(0, 5)}}h</i> - {{item?.hour_end.substring(0, 5)}}h</span>
                         </div>
                       </ng-container>
                     </div>

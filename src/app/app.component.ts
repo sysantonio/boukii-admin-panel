@@ -281,7 +281,7 @@ export class AppComponent {
           type: 'link',
           label: 'Boukii Pay',
           route: 'https://login.pay.boukii.com/fr/',
-          icon: '../assets/img/icons/boukii-pay.png',
+          icon: '../assets/img/icons/boukii_pay.svg',
           routerLinkActiveOptions: { exact: true }
         },
         {

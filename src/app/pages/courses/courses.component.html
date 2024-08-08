@@ -20,6 +20,7 @@
       [ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon" [canDuplicate]="true"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
+                     [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers']"
       [updatePage]="'detail'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
       ></vex-aio-table>
   </vex-page-layout-content>
@@ -44,11 +45,11 @@
             <div style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}h</span>
               </span>
             </div>
             <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-              Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+              {{ detailData.user.username }} <span style="margin-left: 10px;">({{ detailData.user.first_name + ' ' +  detailData.user.last_name}})</span>
             </div>
           </mat-card-subtitle>
         </div>
@@ -88,7 +89,7 @@
         <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type === 1">
           <ul>
             <ng-container *ngFor="let item of detailData.course_dates; let i = index">
-              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
             </ng-container>
           </ul>
         </div>
@@ -146,7 +147,7 @@
         <div class="list-holder" *ngIf="detailData.course_type === 1">
           <ul>
             <ng-container *ngFor="let item of detailData.course_dates; let i = index">
-              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
             </ng-container>
           </ul>
         </div>
@@ -182,7 +183,7 @@
         <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type === 1">
           <ul>
             <ng-container *ngFor="let item of detailData.course_dates; let i = index">
-              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
             </ng-container>
           </ul>
         </div>
