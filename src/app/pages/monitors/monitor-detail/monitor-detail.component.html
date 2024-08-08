@@ -948,7 +948,7 @@
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                       <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="80" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                               <span>
@@ -2234,7 +2234,7 @@
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                     <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="80" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                             <span>

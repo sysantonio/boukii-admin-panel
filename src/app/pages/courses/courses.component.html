@@ -128,6 +128,95 @@
             <b>{{detailData.date_end | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_end}}h
           </div>
         </div>
+
+        <mat-card-content *ngIf="detailData.course_type === 1">
+          <div style="padding: 15px 35px 20px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+
+          <div class="holder-deporte">
+            <div class="col-left">
+              <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
+              <!--<app-level-user
+                *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                [allLevels]="detailData.degrees_sport"
+                [selectLevel]="getClientDegree(detailData?.client_main_id)"
+                [size]="60"
+                [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+              ></app-level-user>-->
+            </div>
+            <div class="col-right">
+              <div class="client-name">
+                {{detailData.name}}
+              </div>
+              <div class="client-dates">
+                {{detailData.course_type === 1 ? 'colective' : 'private' | translate}} {{ detailData.sport.name}}
+              </div>
+              <div class="client-ubicacion">
+                {{detailData.station.name}}
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+        </mat-card-content>
+
+        <mat-card-content *ngIf="detailData.course_type === 2">
+          <div style="padding: 15px 35px 20px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+
+          <div class="holder-deporte">
+            <div class="col-left">
+              <img [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
+              <!--<app-level-user
+                *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                [allLevels]="detailData.degrees_sport"
+                [selectLevel]="getClientDegree(detailData?.client_main_id)"
+                [size]="60"
+                [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+              ></app-level-user>-->
+            </div>
+            <div class="col-right">
+              <div class="client-name">
+                {{detailData.name}}
+              </div>
+              <div class="client-dates">
+                {{detailData.course_type === 1 ? 'Collectif' : 'Privee'}} {{ detailData.sport.name}}
+              </div>
+              <div class="client-ubicacion">
+                {{detailData.station.name}}
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+        </mat-card-content>
+
+        <div class="list-holder" *ngIf="detailData.course_type === 1">
+          <ul>
+            <ng-container *ngFor="let item of detailData.course_dates; let i = index">
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
+            </ng-container>
+          </ul>
+          <div style="padding:10px 35px;">
+            <mat-divider style="border-color: transparent;"></mat-divider>
+          </div>
+        </div>
+        <div class="list-holder" *ngIf="detailData.course_type ===2">
+          <ul>
+            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start}}h - {{detailData.course_dates[0].hour_end}}h</i></li>
+            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[detailData.course_dates.length - 1].hour_start}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end}}h</i></li>
+          </ul>
+          <div style="padding:10px 35px;">
+            <mat-divider style="border-color: transparent;"></mat-divider>
+          </div>
+        </div>
+
         <div class="title-status">
           <div class="col-left">
             <b>{{'price' | translate}}</b>
@@ -143,19 +232,6 @@
           <div class="col-right">
             <b>{{detailData.max_participants}}</b>
           </div>
-        </div>
-        <div class="list-holder" *ngIf="detailData.course_type === 1">
-          <ul>
-            <ng-container *ngFor="let item of detailData.course_dates; let i = index">
-              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
-            </ng-container>
-          </ul>
-        </div>
-        <div class="list-holder" *ngIf="detailData.course_type ===2">
-          <ul>
-            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start}}h - {{detailData.course_dates[0].hour_end}}h</i></li>
-            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[detailData.course_dates.length - 1].hour_start}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end}}h</i></li>
-          </ul>
         </div>
 
         <!--<div style="width:100%; margin-top:5%;float:left">
@@ -213,66 +289,7 @@
         </div>
       </mat-card-content>-->
 
-      <mat-card-content *ngIf="detailData.course_type === 2">
-        <div class="holder-deporte">
-          <div class="col-left">
-            <img [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
-            <!--<app-level-user
-              *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-              [allLevels]="detailData.degrees_sport"
-              [selectLevel]="getClientDegree(detailData?.client_main_id)"
-              [size]="60"
-              [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
-            ></app-level-user>-->
-          </div>
-          <div class="col-right">
-            <div class="client-name">
-              {{detailData.name}}
-            </div>
-            <div class="client-dates">
-              {{detailData.course_type === 1 ? 'Collectif' : 'Privee'}} {{ detailData.sport.name}}
-            </div>
-            <div class="client-ubicacion">
-              {{detailData.station.name}}
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-
       <mat-card-content *ngIf="detailData.course_type === 1">
-
-        <div class="holder-deporte">
-          <div class="col-left">
-            <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
-            <!--<app-level-user
-              *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-              [allLevels]="detailData.degrees_sport"
-              [selectLevel]="getClientDegree(detailData?.client_main_id)"
-              [size]="60"
-              [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
-            ></app-level-user>-->
-          </div>
-          <div class="col-right">
-            <div class="client-name">
-              {{detailData.name}}
-            </div>
-            <div class="client-dates">
-              {{detailData.course_type === 1 ? 'colective' : 'private' | translate}} {{ detailData.sport.name}}
-            </div>
-            <div class="client-ubicacion">
-              {{detailData.station.name}}
-            </div>
-          </div>
-        </div>
-        <div class="list-holder">
-          <div class="col-left">
-            <b>{{detailData.price}}</b> {{detailData.currency}}
-          </div>
-          <div class="col-right">
-            <b>{{detailData.max_participants}}</b>
-          </div>
-        </div>
-
         <div class="title-grupos">
           <div class="col-left">
             <b>{{'courses.levels_and_groups' | translate }}</b>
@@ -307,6 +324,7 @@
                   <div><b>{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</b></div>
                 </div>
                 <div class="item">
+                  <div><img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" /></div>
                   <div>{{'students' | translate}}</div>
                   <div><b>{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</b></div>
                 </div>

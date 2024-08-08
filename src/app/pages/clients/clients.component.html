@@ -143,16 +143,28 @@
 
         <div class="cards-user-holder">
           <div class="cards-user" (click)="mainIdSelected = true; utilizerSportLoaded = false;" [ngClass]="{'active-border': mainIdSelected}">
-            <div class="image">
+            <!--<div class="image">
               <img [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
-            </div>
+            </div>-->
+            <app-level-user
+              [allLevels]="detailData?.length ? getSportLevels(detailData[0].id) : []"
+              [selectLevel]="detailData?.length ? detailData[0].degree_id : null"
+              [size]="60"
+              [userImage]="detailData.image ? detailData?.image : imageAvatar">
+            </app-level-user>
             <div class="name">{{ detailData.first_name }} {{ detailData.last_name }}</div>
             <div class="subtitle">{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</div>
           </div>
           <div  class="cards-user" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
-            <div class="image">
+            <!--<div class="image">
               <img [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" />
-            </div>
+            </div>-->
+            <app-level-user
+              [allLevels]="item?.length ? getSportLevels(item[0].id) : []"
+              [selectLevel]="item?.length ? item[0].degree_id : null"
+              [size]="60"
+              [userImage]="item.image ? item?.image : imageAvatar">
+            </app-level-user>
             <div class="name">{{ item.first_name }} {{ item.last_name }}</div>
             <div class="subtitle">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} {{'years' | translate }} · {{ getCountry(item.country) }}</div>
           </div>
@@ -253,7 +265,8 @@
                   'background-color': item?.level?.color,
                   'border-color': item?.level?.color,
                   'width': '100%',
-                  'padding': '3px'
+                  'padding': '3px',
+                  'border-radius': '6px'
                 }">
                     <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.level?.annotation}} {{item?.level?.name}}</div>
                   </div>

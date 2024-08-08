@@ -83,15 +83,14 @@
 
         <div class="holder-client">
           <div class="col-left">
-            <img [src]="detailData.image ? detailData.image : '../../../assets/img/avatar.png'" width="100" height="100" style="border-radius: 100%; height: 100px; width: 100px; object-fit: cover;">
-<!--            <app-level-user
+            <img [src]="detailData.image ? detailData.image : '../../../assets/img/avatar.png'" width="60" height="60" style="border-radius: 100%;">
+            <!-- <app-level-user
               *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
               [allLevels]="detailData.degrees_sport"
               [selectLevel]="getClientDegree(detailData?.client_main_id)"
               [size]="60"
               [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
             ></app-level-user>-->
-
             <!-- *** app-level-user da error *** -->
           </div>
           <div class="col-right">
@@ -148,7 +147,7 @@
               </div>
               <div style="text-align: center;width: 100%; float: left">
                 <span *ngFor="let auth of item.monitor_sport_authorized_degrees">
-                  <span style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left" [style.background]="auth?.degree?.color"></span>
+                  <span style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left; border-radius: 3px;" [style.background]="auth?.degree?.color"></span>
                 </span>
               </div>
             </div>
