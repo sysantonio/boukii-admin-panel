@@ -19,7 +19,7 @@
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'menu.monitors'"
                      [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
       (showDetailEvent)="showDetailEvent($event)"
-                     [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                     [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree', 'user']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
@@ -43,12 +43,12 @@
             <div style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}h</span>
               </span>
             </div>
-            <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-              Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
-            </div>
+           <!-- <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+              {{ detailData.user.username }} <span style="margin-left: 10px;">({{ detailData.user.first_name + ' ' +  detailData.user.last_name}})</span>
+            </div>-->
           </mat-card-subtitle>
         </div>
       </mat-card-header>
@@ -83,8 +83,8 @@
 
         <div class="holder-client">
           <div class="col-left">
-            <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="60" height="60" style="border-radius: 100%">-->
-            <!--<app-level-user
+            <img [src]="detailData.image ? detailData.image : '../../../assets/img/avatar.png'" width="100" height="100" style="border-radius: 100%; height: 100px; width: 100px; object-fit: cover;">
+<!--            <app-level-user
               *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
               [allLevels]="detailData.degrees_sport"
               [selectLevel]="getClientDegree(detailData?.client_main_id)"
@@ -127,25 +127,28 @@
         </div>
 
         <div class="deportes-holder">
-          <ng-container *ngFor="let item of monitorSport">
+          <ng-container *ngFor="let item of detailData.monitor_sports_degrees">
             <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
-              <div style="text-align: center;width: 100%;"><img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': findHighestDegreeIdElement(item.authorized)?.color}" /></div>
+              <div style="text-align: center;width: 100%;"><img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                                                                [ngStyle]="{'background-color': item.level?.color}" /></div>
               <div style="text-align: center;width: 100%;">{{item?.name}}</div>
               <div style="text-align: center;width: 100%;">
                 <div [ngStyle]="{
                   'color': '#fff',
-                  'background-color': findHighestDegreeIdElement(item.authorized)?.color,
-                  'border-color': findHighestDegreeIdElement(item.authorized)?.color,
+                  'background-color':item.level?.color,
+                  'border-color': item.level?.color,
                   'width': '100%',
                   'padding': '3px',
                   'border-radius': '6px'
                 }">
-                  <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{findHighestDegreeIdElement(item.authorized)?.annotation}} {{findHighestDegreeIdElement(item.authorized)?.name}}</div>
+                  <div style="text-align: center;padding: 0px 3px; font-size:12px;">
+                    {{item.level?.annotation}}
+                    {{item.level?.name}}</div>
                 </div>
               </div>
-              <div style="text-align: center;width: 100%">
-                <span *ngFor="let auth of item.authorized">
-                  <span style="width: 15px; height: 15px; margin: 4px 0 0 4px;" [style.background]="auth?.degree?.color"></span>
+              <div style="text-align: center;width: 100%; float: left">
+                <span *ngFor="let auth of item.monitor_sport_authorized_degrees">
+                  <span style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left" [style.background]="auth?.degree?.color"></span>
                 </span>
               </div>
             </div>

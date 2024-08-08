@@ -43,9 +43,9 @@ export class MonitorsComponent {
 
 
     this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-    .subscribe((sport) => {
-      this.sports = sport.data;
-    })
+      .subscribe((sport) => {
+        this.sports = sport.data;
+      })
   }
 
   createComponent = MonitorsCreateUpdateComponent;
@@ -67,45 +67,27 @@ export class MonitorsComponent {
   showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
-      this.crudService.get('/monitors/'+event.item.id, ['monitorSportsDegrees.monitorSportAuthorizedDegrees.degree'])
-      .subscribe((data) => {
-        this.detailData = data.data;
+      this.detailData = event.item;
+      this.detailData.monitor_sports_degrees.forEach(element => {
 
-        this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id', '&monitor_id='+event.item.id+'&school_id='+this.user.schools[0].id)
-          .subscribe((mn) => {
-            this.monitorSport = mn.data;
-            this.monitorSport.forEach(element => {
-              this.crudService.list('/monitor-sport-authorized-degrees', 1, 10000, 'desc', 'id', '&monitor_sport_id=' + element.id,
-                null, null, null , ['degree'])
-                .subscribe((msad) => {
-                  element.authorized = msad.data.reverse();
+        element.monitor_sport_authorized_degrees = element.monitor_sport_authorized_degrees.reverse();
 
-                  element.authorized.forEach(au => {
-                    this.crudService.get('/degrees/'+au.degree_id)
-                      .subscribe((level) => {
-                        au.degree = level.data;
+        this.crudService.get('/sports/'+element.sport_id)
+          .subscribe((sport) => {
+            element.name = sport.data.name;
+            element.icon_selected = sport.data.icon_selected;
+            element.icon_unselected = sport.data.icon_unselected;
+          });
 
-                    });
-                  });
-                });
+        this.crudService.get('/degrees/'+element.degree_id)
+          .subscribe((level) => {
+            element.level = level.data;
 
-                this.crudService.get('/sports/'+element.sport_id)
-                  .subscribe((sport) => {
-                    element.name = sport.data.name;
-                    element.icon_selected = sport.data.icon_selected;
-                    element.icon_unselected = sport.data.icon_unselected;
-                  });
+          });
+      });
 
-                  this.crudService.get('/degrees/'+element.degree_id)
-                  .subscribe((level) => {
-                    element.level = level.data;
+      this.showDetail = true;
 
-                });
-            });
-
-            this.showDetail = true;
-          })
-      })
     } else {
       this.showDetail = event.showDetail;
     }
@@ -155,7 +137,7 @@ export class MonitorsComponent {
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;

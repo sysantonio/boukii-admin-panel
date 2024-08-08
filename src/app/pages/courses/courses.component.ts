@@ -93,6 +93,7 @@ export class CoursesComponent {
           });
 
           this.colorKeys = Object.keys(this.groupedByColor);
+          this.showDetail = true;
         });
 
         this.crudService.list('/stations', 1, 10000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
@@ -155,7 +156,7 @@ export class CoursesComponent {
   getStudents(levelId: any) {
     let ret = 0;
 
-    this.detailData.users.forEach(element => {
+    this.detailData.booking_users.forEach(element => {
       if (element.degree_id === levelId) {
         ret = ret + 1;
       }

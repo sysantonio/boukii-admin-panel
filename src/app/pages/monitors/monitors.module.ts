@@ -23,34 +23,36 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
+import {ComponentsCustomModule} from '../../components/components-custom.module';
 
 @NgModule({
   declarations: [MonitorsComponent],
-  imports: [
-    CommonModule,
-    LayoutModule,
-    PageLayoutModule,
-    BreadcrumbsModule,
-    RouterModule,
-    MonitorsRoutingModule,
-    SecondaryToolbarModule,
-    MatIconModule,
-    ChartModule,
-    WidgetQuickLineChartModule,
-    WidgetQuickValueCenterModule,
-    WidgetQuickValueStartModule,
-    WidgetLargeGoalChartModule,
-    WidgetAssistantModule,
-    WidgetLargeChartModule,
-    WidgetTableModule,
-    TranslateModule,
-    MatDialogModule,
-    ComponentsModule,
-    MonitorDetailModule,
-    MatDividerModule,
-    MatCardModule,
-    MatSlideToggleModule
-  ]
+    imports: [
+        CommonModule,
+        LayoutModule,
+        PageLayoutModule,
+        BreadcrumbsModule,
+        RouterModule,
+        MonitorsRoutingModule,
+        SecondaryToolbarModule,
+        MatIconModule,
+        ChartModule,
+        WidgetQuickLineChartModule,
+        WidgetQuickValueCenterModule,
+        WidgetQuickValueStartModule,
+        WidgetLargeGoalChartModule,
+        WidgetAssistantModule,
+        WidgetLargeChartModule,
+        WidgetTableModule,
+        TranslateModule,
+        MatDialogModule,
+        ComponentsModule,
+        MonitorDetailModule,
+        MatDividerModule,
+        MatCardModule,
+        MatSlideToggleModule,
+        ComponentsCustomModule
+    ]
 })
 export class MonitorsModule {
 }

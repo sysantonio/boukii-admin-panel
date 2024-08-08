@@ -86,6 +86,7 @@ export class ClientsComponent {
   showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
+      this.mainIdSelected = true;
       this.crudService.get('/clients/'+event.item.id)
       .subscribe((data) => {
         this.detailData = data.data;
