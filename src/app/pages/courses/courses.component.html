@@ -20,7 +20,7 @@
       [ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon" [canDuplicate]="true"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
-                     [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers']"
+                     [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers', 'sport']"
       [updatePage]="'detail'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
       ></vex-aio-table>
   </vex-page-layout-content>
@@ -291,16 +291,16 @@
 
       <mat-card-content *ngIf="detailData.course_type === 1">
 
-        <div class="holder-deporte">
+<!--        <div class="holder-deporte">
           <div class="col-left">
             <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
-            <!--<app-level-user
+            &lt;!&ndash;<app-level-user
               *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
               [allLevels]="detailData.degrees_sport"
               [selectLevel]="getClientDegree(detailData?.client_main_id)"
               [size]="60"
               [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
-            ></app-level-user>-->
+            ></app-level-user>&ndash;&gt;
           </div>
           <div class="col-right">
             <div class="client-name">
@@ -313,7 +313,7 @@
               {{detailData.station.name}}
             </div>
           </div>
-        </div>
+        </div>-->
 
         <div class="title-grupos">
           <div class="col-left">
