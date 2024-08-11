@@ -141,8 +141,7 @@
           </div>
         </div>
 
-        <ng-container *ngFor="let bUsers of bookingUsersUnique; let buI = index"
-                      [style.marginTop]="buI > 0 ? '35px' : ''">
+        <ng-container *ngFor="let bUsers of bookingUsersUnique; let buI = index" [style.marginTop]="buI > 0 ? '35px' : ''">
           <div class="title-actividad">
             <div class="col-left">
               <b class="title">{{ 'activity' | translate }} {{buI + 1}}: </b>
@@ -161,10 +160,7 @@
             </div>
           </div>
 
-          <div
-
-          >
-
+          <div>
             <div class="holder-content">
 
               <div>
@@ -239,40 +235,43 @@
                   </div>
                 </div>
 
-                <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> {{'monitor' | translate}}</div>
                 <div>
-                  <div style="display:inline-block; vertical-align: middle; width: 20%;">
-                    <!--<img
-                      [src]="getMonitor(bUsers?.monitor_id) ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
-                      style="border-radius: 100%;"
-                    />-->
-                    <app-level-user
-                      [allLevels]="detailData.degrees_sport"
-                      [selectLevel]="getClientDegree(bUsers.client_id)"
-                      [size]="60"
-                      [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
-                    ></app-level-user>
-                  </div>
-                  <div style="display:inline-block;vertical-align: middle;width: 80%;" *ngIf="getMonitor(bUsers.monitor_id)">
-                    <div style="margin-left: 1em">
-                      <div style="display:inline-block;">
-                        <div><b style="font-size: 1.2em;">{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</b></div>
-                        <div>
-                          <i>
-                            {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}}
-                            · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} ·
-                            {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}}
-                            &ensp;{{'years' | translate}}
-                          </i>
+                  <div class="subtitle"><img class="icon-calendar" src="assets/img/icons/monitores-3.svg" /> {{'monitor' | translate}}</div>
+                  <div class="holder-participante">
+                    <div class="col-left">
+                      <div class="c-l">
+                        <app-level-user
+                          [allLevels]="detailData.degrees_sport"
+                          [selectLevel]="getClientDegree(bUsers.client_id)"
+                          [size]="60"
+                          [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
+                        ></app-level-user>
+                      </div>
+                      <div class="c-r">
+                        <div *ngIf="getMonitor(bUsers.monitor_id)">
+                          <div class="course-title">{{getMonitor(bUsers?.monitor_id)?.first_name}} {{getMonitor(bUsers?.monitor_id)?.last_name}}</div>
+                          <span class="dot"></span>
+                          <div class="course-label">
+                            {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} · {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}} {{'years' | translate}}
+                          </div>
+                          <div
+                            class="label-user"
+                            [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
+                          >
+                            {{getDegree(bUsers?.degree_id)?.annotation}}
+                            {{getDegree(bUsers?.degree_id)?.level}}
+                          </div>
+                        </div>
+                        <div *ngIf="!getMonitor(bUsers.monitor_id)">
+                          <div class="course-label">
+                            {{'no_monitor' | translate}}
+                          </div>
                         </div>
                       </div>
-                      <span class="dot"></span>
                     </div>
                   </div>
-                  <div style="display:inline-block;vertical-align: middle;width: 80%;" *ngIf="!getMonitor(bUsers?.monitor_id)">
-                    <div style="margin-left: 1em">{{'no_monitor' | translate}}</div>
-                  </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -288,7 +287,6 @@
         </div>
         <div class="subtitle-sub">{{ 'options' | translate }}</div>
         <div style="padding: 0px 35px;">
-
           <div class="list-inner-holder">
             <div class="col-left">
               <mat-slide-toggle
