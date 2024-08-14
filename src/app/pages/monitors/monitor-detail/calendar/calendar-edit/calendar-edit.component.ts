@@ -289,10 +289,9 @@ export class CalendarEditComponent implements OnInit {
 
   openCreateBooking() {
     const dialogRef = this.dialog.open(BookingsCreateUpdateComponent, {
-      width: '100%',
+      width: '50%',
       height: '1200px',
       maxWidth: '90vw',
-      panelClass: 'full-screen-dialog',
       data: {
         onlyPrivate: true,
         monitorId: this.event.monitor_id,

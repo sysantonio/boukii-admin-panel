@@ -1,9 +1,12 @@
-<vex-secondary-toolbar current="">
-  <vex-breadcrumbs  *ngIf="!externalData" [crumbs]="[
+<vex-secondary-toolbar [isModal]="externalData" current="">
+  <vex-breadcrumbs  *ngIf="!externalData"  [crumbs]="[
     {icon:'reservas-2'},
     {text:'bookings', title: true, link: '/bookings'},
     {text:'bookings_page.creation.title', subtitle: true}
     ]" class="flex-auto"></vex-breadcrumbs>
+  <button *ngIf="externalData" style="margin-left: auto;" color="primary" mat-dialog-close mat-icon-button type="button">
+    <mat-icon svgIcon="mat:close"></mat-icon>
+  </button>
 </vex-secondary-toolbar>
 
 <div [@stagger]="true" class="p-gutter container" style="max-width: none;">

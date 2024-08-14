@@ -240,10 +240,20 @@ export class MonitorDetailComponent {
   }
 
   ngOnInit() {
-    this.getInitialData().pipe(
-      switchMap(() => this.getData())
-    ).subscribe(() => {
-      // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
+    this.activatedRoute.params.pipe(
+      switchMap(params => {
+        this.getInitialData().pipe(
+          switchMap(() => this.getData())
+        ).subscribe(() => {
+          // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
+        });
+        return this.activatedRoute.queryParams; // Para obtener los parámetros de consulta (pestaña)
+      })
+    ).subscribe(queryParams => {
+      if (queryParams['tab'] === 'timeline') {
+        this.selectedTabPreviewIndex = 2; // Establecer el índice de la pestaña deseada
+      }
+      // Aquí puedes realizar cualquier lógica adicional después de obtener los parámetros
     });
   }
 

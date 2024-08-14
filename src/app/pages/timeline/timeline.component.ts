@@ -194,6 +194,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   }
 
+  goToTimeline(monitor: any) {
+    // Navegar a la página de detalle del monitor con un parámetro adicional en la URL para seleccionar la pestaña
+    this.router.navigate(['/monitors/update', monitor.id],  { queryParams: { tab: 'timeline' } });
+  }
+
 
   async getData() {
     this.loading = true;

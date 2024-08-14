@@ -37,7 +37,11 @@
 
             <mat-form-field appearance="outline" class="flex-auto" style="max-height: 56px; background-color: white">
               <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (ngModelChange)="onDateChange()">
-              <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="pickerFrom">
+                <mat-icon matDatepickerToggleIcon>
+                  <img src="assets/img/icons/icon-calendar-grey.png">
+                </mat-icon>
+              </mat-datepicker-toggle>
               <mat-datepicker  #pickerFrom></mat-datepicker>
             </mat-form-field>
 
@@ -152,7 +156,7 @@
                         <img src="assets/img/icons/icon-message-grey.png" />
                         <a href="mailto:{{monitor.email}}" title="{{monitor.email}}"><img src="assets/img/icons/icon-mail-grey.png" /></a>
                         <a href="tel:{{monitor.phone}}" title="{{monitor.phone}}"><img src="assets/img/icons/icon-phone-grey.png" /></a>
-                        <img src="assets/img/icons/icon-calendar-grey.png" />
+                        <img src="assets/img/icons/icon-calendar-grey.png" (click)="goToTimeline(monitor)" style="cursor: pointer;"/>
                       </div>
                     </div>
                   </div>
