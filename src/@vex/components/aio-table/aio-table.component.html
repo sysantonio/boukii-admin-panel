@@ -27,6 +27,7 @@
           <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.course' | translate}}</span>
           <mat-checkbox color="primary" [checked]="courseColective" (change)="courseColective = !courseColective; filterData()"><span style="color:#fac710">{{'course_colective' | translate }}</span></mat-checkbox>
           <mat-checkbox color="primary" [checked]="coursePrivate" (change)="coursePrivate = !coursePrivate;filterData()"><span style="color:#2fca45">{{'course_private' | translate }}</span></mat-checkbox>
+          <mat-checkbox color="primary" [checked]="courseActivity" (change)="courseActivity = !courseActivity;filterData()"><span style="color:#00BEFFFF">{{'activity' | translate }}</span></mat-checkbox>
         </div>
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
@@ -45,7 +46,7 @@
                 <div *ngIf="sportsControl.value?.length > 0 && sportsControl.value?.length !== sports.length;">
                   {{ getSelectedSportsNames() }}
                 </div>
-                <div *ngIf="sportsControl.value?.length === sports.length;">
+                <div *ngIf="sportsControl.value?.length === sports.length || !sportsControl.value?.length;">
                   {{ 'ALL' }}
                 </div>
               </mat-select-trigger>

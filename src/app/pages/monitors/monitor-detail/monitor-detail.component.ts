@@ -336,8 +336,10 @@ export class MonitorDetailComponent {
       );
 
       this.myControlCountries.valueChanges.subscribe(country => {
-        this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-        this.filteredProvinces = this._filterProvinces(country.id);
+        if(country) {
+          this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+          this.filteredProvinces = this._filterProvinces(country.id);
+        }
       });
 
     }));
@@ -1164,7 +1166,7 @@ export class MonitorDetailComponent {
 
   updateSalary(monitorDegree, salary) {
     this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
-      degree_id: monitorDegree.level.id, salary_level: salary.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+      degree_id: monitorDegree.level.id, salary_level: salary.id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000});      })
   }
