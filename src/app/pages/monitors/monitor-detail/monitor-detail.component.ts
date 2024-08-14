@@ -1121,7 +1121,7 @@ export class MonitorDetailComponent {
 
         this.crudService.update('/monitors', this.defaults, this.id)
           .subscribe((monitor) => {
-            this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+            //this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
 
             const schoolRel = {
               monitor_id: monitor.data.id,
@@ -1150,8 +1150,8 @@ export class MonitorDetailComponent {
                 })
             });
             setTimeout(() => {
-              this.router.navigate(['/monitors']);
-
+              this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+              window.location.reload();
             }, 3000);
           })
       })

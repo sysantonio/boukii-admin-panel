@@ -1291,6 +1291,9 @@
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
                 <button (click)="stepper.reset()" [disabled]="formInfoAccount.pristine" color="primary" mat-button type="button">Reset</button>
+                <button  color="primary" mat-raised-button matStepperNext (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button color="primary" mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>
@@ -1395,7 +1398,9 @@
 
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
-
+                <button  color="primary" mat-raised-button matStepperNext (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button  color="primary" mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>
@@ -1496,7 +1501,9 @@
                 <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
-
+                <button  color="primary" mat-raised-button matStepperNext (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button  color="primary" mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>
@@ -1536,7 +1543,7 @@
                   <caption style="width: 100%;float: left;text-align: left;"> {{'current_sport' | translate }}</caption>
                     <!-- Otros contenedores según tu descripción -->
                     <ng-container matColumnDef="delete">
-                    <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">Eliminar</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef class="delete-column" style="width: 6% !important;float: left;">{{'delete_title' | translate}}</mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = index" class="delete-column" style="width: 20%;float: left;">
                       <mat-icon svgIcon="mat:delete" (click)="removeSport(i, element)"></mat-icon>
                     </mat-cell>
@@ -1662,7 +1669,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="auth">
-                  <mat-header-cell *matHeaderCellDef style="width: 100%;float: left;" [hidden]="true"> Authorised Levels </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef style="width: 100%;float: left;" [hidden]="true"> {{'authorized_levels' | translate}} </mat-header-cell>
                   <mat-cell *matCellDef="let element" style="width: 100%;float: left;">
                     <div style="width: 100%; float:left">
                       <div *ngFor="let item of element.degrees" class="chip-level" [style.border]="'2px solid ' + item.color"
@@ -1706,7 +1713,9 @@
                 <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
-
+                <button  color="primary" mat-raised-button matStepperNext (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button  color="primary" mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>

@@ -618,6 +618,7 @@
   "hours_by_sport": "Hours by Sport",
   "error.max_quantity": "There can't be more for sale than the total amount of discount codes",
   "user.noSportsAssigned.prompt": "The selected user has no sports assigned. Would you like to assign sports now?",
-  "message": "Message"
+  "message": "Message",
+  "authorized_levels": "Authorised Levels"
 
 }

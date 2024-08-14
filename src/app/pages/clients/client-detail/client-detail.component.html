@@ -850,6 +850,9 @@
               <div class="actions flex items-center justify-end gap-2">
                 <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>
@@ -944,6 +947,9 @@
               <div class="actions flex items-center justify-end gap-2">
                 <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
                   {{'next' |translate}}
                 </button>
@@ -1077,7 +1083,7 @@
               <div class="actions flex items-center justify-end gap-2">
                 <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button>
                   {{'save' |translate}}
                 </button>
               </div>
@@ -1113,7 +1119,7 @@
               <div class="actions flex items-center justify-end gap-2">
                 <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
+                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="save()">
                   {{'save' | translate}}
                 </button>
               </div>

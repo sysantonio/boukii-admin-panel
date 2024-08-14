@@ -749,7 +749,7 @@ export class ClientDetailComponent {
 
         this.crudService.update('/clients', this.defaults, this.id)
           .subscribe((client) => {
-            this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
+
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -783,7 +783,8 @@ export class ClientDetailComponent {
               });
 
               setTimeout(() => {
-                this.router.navigate(['/clients']);
+                this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
+                window.location.reload();
 
               }, 2000);
           })

@@ -625,6 +625,7 @@
   "hours_by_sport": "Horas por deporte",
   "error.max_quantity": "No puede haber más por vender que la cantidad total de códigos descuento",
   "user.noSportsAssigned.prompt":"El usuario seleccionado no tiene deportes asignados. ¿Te gustaría asignarle deportes ahora?",
-  "message": "Mensaje"
+  "message": "Mensaje",
+  "authorized_levels": "Níveles Autorizados"
 
 }
