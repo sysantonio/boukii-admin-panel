@@ -136,7 +136,7 @@
 
           <div class="holder-deporte">
             <div class="col-left">
-              <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
+              <img style="width: 75px; height: 75px;" *ngIf="detailData?.course_type == 1" [src]="detailData?.sport?.icon_collective" width="60" height="60" />
               <!--<app-level-user
                 *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                 [allLevels]="detailData.degrees_sport"
@@ -150,7 +150,8 @@
                 {{detailData.name}}
               </div>
               <div class="client-dates">
-                {{detailData.course_type === 1 ? 'colective' : 'private' | translate}} {{ detailData.sport.name}}
+                {{detailData.course_type === 1 ? 'colective' : detailData.course_type === 1 ? 'private' : 'activity' | translate}}
+                {{ detailData.sport.name}}
               </div>
               <div class="client-ubicacion">
                 {{detailData.station.name}}
@@ -170,7 +171,8 @@
 
           <div class="holder-deporte">
             <div class="col-left">
-              <img [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
+              <img style="width: 75px; height: 75px;" *ngIf="detailData?.course_type == 2" [src]="detailData?.sport?.icon_prive" width="60" height="60" />
+
               <!--<app-level-user
                 *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                 [allLevels]="detailData.degrees_sport"
@@ -226,8 +228,14 @@
           </div>
         </div>
         <div class="list-holder">
-          <div class="col-left">
+          <div class="col-left" *ngIf="!detailData.is_flexible">
             <b>{{detailData.price}}</b> {{detailData.currency}}
+          </div>
+          <div class="col-left" *ngIf="detailData.is_flexible">
+            <b *ngIf="detailData.is_flexible
+            && detailData.price_range !== null">{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(detailData.price_range, detailData)) }} </b>
+            {{detailData.currency}}
+            <strong *ngIf="detailData.is_flexible && detailData.course_type === 2 && detailData.price_range === null">NO PRICE RANGE SET</strong>
           </div>
           <div class="col-right">
             <b>{{detailData.max_participants}}</b>

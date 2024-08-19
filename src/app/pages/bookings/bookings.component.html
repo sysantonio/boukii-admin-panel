@@ -225,10 +225,10 @@
                         </div>
                         <div
                           class="label-user"
-                          [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
+                          [ngStyle]="{'background': getDegree(getClientDegree(bUsers.client_id))?.color !== null ? getDegree(getClientDegree(bUsers.client_id))?.color : ''}"
                         >
-                          {{getDegree(bUsers?.degree_id)?.annotation}}
-                          {{getDegree(bUsers?.degree_id)?.level}}
+                          {{getDegree(getClientDegree(bUsers.client_id))?.annotation}}
+                          {{getDegree(getClientDegree(bUsers.client_id))?.level}}
                         </div>
                       </div>
                     </div>
@@ -240,12 +240,7 @@
                   <div class="holder-participante">
                     <div class="col-left">
                       <div class="c-l">
-                        <app-level-user
-                          [allLevels]="detailData.degrees_sport"
-                          [selectLevel]="getClientDegree(bUsers.client_id)"
-                          [size]="60"
-                          [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
-                        ></app-level-user>
+                        <img [src]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar" width="60" height="60" style="border-radius: 100%;">
                       </div>
                       <div class="c-r">
                         <div *ngIf="getMonitor(bUsers.monitor_id)">
@@ -254,13 +249,43 @@
                           <div class="course-label">
                             {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}} · {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }} · {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}} {{'years' | translate}}
                           </div>
-                          <div
+                          <ng-container *ngFor="let item of getMonitor(bUsers?.monitor_id).monitor_sports_degrees_details">
+                            <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;"
+                                 *ngIf="item.school_id === user?.schools[0]?.id && bUsers?.course?.sport_id === item.sport_id">
+                              <div style="text-align: center;width: 100%;">
+                                <img [src]="item.sport_icon_selected" width="50" height="50"
+                                     style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                                     [ngStyle]="{'background-color': item.degree?.color}" />
+                              </div>
+                              <div style="text-align: center;width: 100%;">{{item?.sport_name}}</div>
+                              <div style="text-align: center;width: 100%;">
+                                <div [ngStyle]="{
+                  'color': '#fff',
+                  'background-color':item.degree?.color,
+                  'border-color': item.degree?.color,
+                  'width': '100%',
+                  'padding': '3px',
+                  'border-radius': '6px'
+                }">
+                                  <div style="text-align: center;padding: 0px 3px; font-size:12px;">
+                                    {{item.degree?.annotation}}
+                                    {{item.degree?.name}}</div>
+                                </div>
+                              </div>
+                              <div style="text-align: center;width: 100%; float: left">
+                <span *ngFor="let auth of item.monitor_sport_authorized_degrees">
+                  <span style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left; border-radius: 3px;" [style.background]="auth?.degree?.color"></span>
+                </span>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <!--<div
                             class="label-user"
                             [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
                           >
                             {{getDegree(bUsers?.degree_id)?.annotation}}
                             {{getDegree(bUsers?.degree_id)?.level}}
-                          </div>
+                          </div>-->
                         </div>
                         <div *ngIf="!getMonitor(bUsers.monitor_id)">
                           <div class="course-label">

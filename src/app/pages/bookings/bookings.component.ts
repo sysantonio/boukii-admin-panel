@@ -212,7 +212,9 @@ export class BookingsComponent {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc',
+      'id', '&school_id='+this.user.schools[0].id, '', null, '',
+      ['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree', 'user'])
       .subscribe((monitor) => {
         this.monitors = monitor.data;
       })

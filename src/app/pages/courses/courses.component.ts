@@ -152,6 +152,30 @@ export class CoursesComponent {
       return monitor;
     }
   }
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    if (obj !== null) {
+      for (const clave of Object.keys(obj)) {
+        if (obj[clave] !== null && clave !== 'intervalo') {
+          return obj[clave];
+        }
+      }
+      return null;
+    }
+
+  }
+
+  encontrarPrimeraCombinacionConValores(data: any, course: any) {
+    if (data !== null) {
+      for (const intervalo of data) {
+        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+          return intervalo;
+        }
+      }
+      return null; // Devuelve null si no encuentra ninguna combinación válida
+    }
+
+  }
 
   getStudents(levelId: any) {
     let ret = 0;

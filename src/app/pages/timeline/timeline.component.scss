@@ -299,11 +299,11 @@
 /* *** */
 .vex-page-layout-content {
   &.col-right {
-    width: 35%;
+    width: 30%;
     float: left;
     position: fixed;
     top: 112px;
-    left: calc(66% - 40px);
+    left: calc(70% - 40px);
     overflow-y: auto;
     max-height: calc(100vh - 180px);
     border-radius: 10px;

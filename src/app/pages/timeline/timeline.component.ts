@@ -708,6 +708,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
+          created_at: booking.booking.created_at,
           date_end: moment(booking.course.date_end).format('DD/MM/YYYY'),
           hour_start: booking.hour_start.substring(0, 5),
           hour_end: booking.hour_end ? booking.hour_end.substring(0, 5) : this.hoursRange[this.hoursRange.length-1],
@@ -730,6 +731,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           total_subgroups: booking.total_subgroups,
           course: booking.course,
           paid: booking?.booking?.paid,
+          user: booking?.booking?.user,
           ...dateTotalAndIndex
         };
       }),

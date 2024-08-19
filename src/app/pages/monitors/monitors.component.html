@@ -19,7 +19,8 @@
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'menu.monitors'"
                      [route]="'monitors'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
       (showDetailEvent)="showDetailEvent($event)"
-                     [with]="['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree', 'user']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
+                     [with]="['sports', 'monitorsSchools', 'monitorsSchools',
+                      'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree', 'user']" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
       [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
@@ -128,8 +129,11 @@
         <div class="deportes-holder">
           <ng-container *ngFor="let item of detailData.monitor_sports_degrees">
             <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
-              <div style="text-align: center;width: 100%;"><img [src]="item.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
-                                                                [ngStyle]="{'background-color': item.level?.color}" /></div>
+              <div style="text-align: center;width: 100%;">
+                <img [src]="item.icon_selected" width="50" height="50"
+                     style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                     [ngStyle]="{'background-color': item.level?.color}" />
+              </div>
               <div style="text-align: center;width: 100%;">{{item?.name}}</div>
               <div style="text-align: center;width: 100%;">
                 <div [ngStyle]="{

@@ -460,11 +460,12 @@
               <div style="width: 60%;display:inline-block;text-align: left; color: white;">
                 <b>{{ 'register' | translate}}:</b>
                 <span style="margin-left: 10px;font-weight: normal;">
-                  <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                  <span>{{taskDetail.created_at | date: 'dd/MM/YYYY'}}</span>
+                  <span style="margin-left: 10px;font-style: italic;">{{taskDetail.created_at | date: 'HH:mm'}}h</span>
                 </span>
               </div>
-              <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-                username <span style="margin-left: 10px;">(first_name last_name)</span>
+              <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;" *ngIf="taskDetail.user">
+                {{ taskDetail.user?.username }} <span style="margin-left: 10px;">({{ taskDetail.user?.first_name + ' ' +  taskDetail.user.last_name}})</span>
               </div>
             </mat-card-subtitle>
           </div>
@@ -545,6 +546,19 @@
             <div class="col-left">{{taskDetail.date_start}}</div>
             <div class="col-right">{{taskDetail.date_end}}</div>
           </div>
+          <ng-container *ngIf="taskDetail.type == 'collective'">
+            <div class="title-status" style="background-color: white; ">
+              <span class="col-left">
+              <b>{{ 'dates' | translate}}:</b>
+            </span>
+            </div>
+            <div class="list-holder">
+                <ng-container *ngFor="let date of taskDetail.course.course_dates">
+                  <div class="col-left" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getDateFormatLong(date.date)}}</div>
+                  <div class="col-right" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</div>
+                </ng-container>
+            </div>
+          </ng-container>
 
           <div style="padding: 0px 35px 20px 35px;"><mat-divider></mat-divider></div>
 
@@ -571,7 +585,15 @@
                   {{taskDetail.sport.name}}
                 </ng-container>
               </div>
+              <div
+                *ngIf="taskDetail.degree && taskDetail.type == 'private'"
+                class="label-user"
+                [ngStyle]="{'background': taskDetail.degree.color}"
+              >
+                {{taskDetail.degree.name}}
+              </div>
             </div>
+
           </div>
 
           <div style="padding:10px 35px;"><mat-divider style="border-color:transparent;"></mat-divider></div>
@@ -625,13 +647,10 @@
                 <div class="holder-participante">
                   <div class="col-left">
                     <div class="c-l">
-                      <app-level-user
-                        *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length"
-                        [allLevels]="taskDetail.degrees_sport"
-                        [selectLevel]="taskDetail.degree.id"
-                        [size]="60"
-                        [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"
-                      ></app-level-user>
+                      <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length"
+                                      [allLevels]="taskDetail.degrees_sport"
+                                      [selectLevel]="getClientDegree(taskDetail.sport_id,client.client.sports)" [size]="60"
+                                      [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                     </div>
                     <div class="c-r">
                       <div class="course-title">{{ client.client.first_name }} {{ client.client.last_name }}</div>
@@ -647,13 +666,6 @@
                         </ng-container>
                         {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
                         · {{client.client.phone}} · {{client.client.email}}
-                      </div>
-                      <div
-                        *ngIf="taskDetail.degree"
-                        class="label-user"
-                        [ngStyle]="{'background': taskDetail.degree.color}"
-                      >
-                        {{taskDetail.degree.name}}
                       </div>
                     </div>
                   </div>

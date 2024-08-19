@@ -880,8 +880,9 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  selectSport(id: number ) {
-    this.selectedSport = id;
+  selectSport(item: any ) {
+    this.selectedSport = item.id;
+    this.dataSourceLevels.data = item.degrees
   }
 
   addForfait(data: any, isEdit: any, idx: number) {

@@ -259,7 +259,7 @@
 
                   <div class="items-icons" style="margin-bottom: 20px;">
                     <ng-container *ngFor="let item of schoolSports; let i = index">
-                      <div class="item" (click)="selectSport(item.id)" [ngClass]="selectedSport === item.id ? 'select' : 'unselect'">
+                      <div class="item" (click)="selectSport(item)" [ngClass]="selectedSport === item.id ? 'select' : 'unselect'">
                         <div class="icon">
                           <img [src]="item.icon_selected"/>
                           <img [src]="item.icon_unselected"/>
