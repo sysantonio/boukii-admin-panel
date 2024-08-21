@@ -101,6 +101,7 @@
             <span>{{"timeline.event_type" | translate | uppercase }}</span>
             <mat-checkbox color="primary" [(ngModel)]="filterCollective">{{ 'course_colective' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterPrivate">{{ 'course_private' | translate}}</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="filterActivity">{{ 'activity' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterNwd">{{ 'no_disponible' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterBlockPayed">{{ 'paid_block' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterBlockNotPayed">{{ 'no_paid_block' | translate}}</mat-checkbox>
@@ -363,10 +364,21 @@
             </div>
             <div class="grid-container">
               <ng-container *ngFor="let monitor of filteredMonitors; let monitorIndex = index">
-                <div class="grid-row" *ngFor="let week of weeksInMonth;let weekIndex = index" [ngClass]="{'select-row': moveTask && monitor.id !== taskMoved.monitor_id,
-                            'bg-linear-no-match': moveTask && isMatch(monitor.id)}" (click)="moveMonitor(monitor,$event)">
-                  <div class="grid-cell-day" *ngFor="let day of weekDays;let dayIndex = index" [ngClass]="{'outside-month': !isDayInMonth(dayIndex, weekIndex),'big-border': weekIndex === 0 && monitorIndex !== 0}">
-                    <div class="grid-cell-inside" *ngFor="let hour of hoursRangeMinusLast" (dblclick)="handleDbClickEvent('Clicked', $event, 'month', dayIndex, monitor.id, hour, weekIndex)"></div>
+                <div class="grid-row" *ngFor="let week of weeksInMonth; let weekIndex = index"
+                     [ngClass]="{'select-row': moveTask && monitor.id !== taskMoved.monitor_id,
+                   'bg-linear-no-match': moveTask && isMatch(monitor.id)}"
+                     (click)="moveMonitor(monitor, $event)">
+                  <div class="grid-cell-day" *ngFor="let day of weekDays; let dayIndex = index"
+                       [ngClass]="{'outside-month': !isDayInMonth(dayIndex, weekIndex),
+                     'big-border': weekIndex === 0 && monitorIndex !== 0}">
+                    <div class="watermark-day">
+                      {{ isDayInMonth(dayIndex, weekIndex) ? calculateDayNumber(dayIndex, weekIndex, week.startDayInt) : '' }}
+                    </div>
+                    <div class="grid-cell-inside"
+                         *ngFor="let hour of hoursRangeMinusLast;"
+                         (dblclick)="handleDbClickEvent('Clicked', $event, 'month', dayIndex, monitor.id, hour, weekIndex)">
+                    </div>
+
                     <div *ngIf="weekIndex === 0 && monitorIndex !== 0" class="hour-day-scroll">{{ day }}</div>
                   </div>
                 </div>
@@ -459,7 +471,7 @@
             <mat-card-subtitle style="width:100%;">
               <div style="width: 60%;display:inline-block;text-align: left; color: white;">
                 <b>{{ 'register' | translate}}:</b>
-                <span style="margin-left: 10px;font-weight: normal;">
+                <span style="margin-left: 10px;font-weight: normal;" *ngIf="taskDetail.created_at">
                   <span>{{taskDetail.created_at | date: 'dd/MM/YYYY'}}</span>
                   <span style="margin-left: 10px;font-style: italic;">{{taskDetail.created_at | date: 'HH:mm'}}h</span>
                 </span>
@@ -533,36 +545,15 @@
               <div *ngIf="taskDetail.type == 'activity'"><span [style.color]="taskDetail.paid ? '#66E055' : '#DFDB32'"> {{(taskDetail.paid ? 'payed' : 'no_paid') | translate }}</span></div>
             </span>
           </div>
-
-          <div class="title-status">
+          <div class="title-status" *ngIf="taskDetail.type != 'collective'">
             <div class="col-left">
-              <b class="title">{{ 'from' | translate}}:</b>
+              <b class="title">{{'booking' | translate}}</b>
             </div>
             <div class="col-right">
-              <b>{{ 'to' | translate}}</b>
+              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="detailBooking()"></mat-icon>
             </div>
           </div>
-          <div class="list-holder">
-            <div class="col-left">{{taskDetail.date_start}}</div>
-            <div class="col-right">{{taskDetail.date_end}}</div>
-          </div>
-          <ng-container *ngIf="taskDetail.type == 'collective'">
-            <div class="title-status" style="background-color: white; ">
-              <span class="col-left">
-              <b>{{ 'dates' | translate}}:</b>
-            </span>
-            </div>
-            <div class="list-holder">
-                <ng-container *ngFor="let date of taskDetail.course.course_dates">
-                  <div class="col-left" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getDateFormatLong(date.date)}}</div>
-                  <div class="col-right" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</div>
-                </ng-container>
-            </div>
-          </ng-container>
-
-          <div style="padding: 0px 35px 20px 35px;"><mat-divider></mat-divider></div>
-
-          <div class="holder-client">
+          <div class="holder-client" style="margin-top: 10px">
             <div class="col-left">
               <img *ngIf="taskDetail.type == 'collective'" src="https://school.boukii.com/assets/icons/collectif_ski2x.png" width="60" height="60" />
               <img *ngIf="taskDetail.type == 'private'" src="https://school.boukii.com/assets/icons/prive_ski2x.png" width="60" height="60" />
@@ -595,6 +586,22 @@
             </div>
 
           </div>
+          <ng-container *ngIf="taskDetail.type == 'collective'">
+
+
+            <div class="title-status" style="background-color: white; ">
+              <span class="col-left">
+              <b>{{ 'dates' | translate}}:</b>
+            </span>
+            </div>
+            <div class="list-holder">
+                <ng-container *ngFor="let date of taskDetail.course.course_dates">
+                  <div class="col-left" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getDateFormatLong(date.date)}}</div>
+                  <div class="col-right" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</div>
+                </ng-container>
+            </div>
+          </ng-container>
+
 
           <div style="padding:10px 35px;"><mat-divider style="border-color:transparent;"></mat-divider></div>
 
@@ -624,14 +631,6 @@
 
           <ng-container *ngIf="taskDetail.type == 'private'">
 
-            <div class="title-status">
-              <div class="col-left">
-                <b class="title">{{'booking' | translate}}</b>
-              </div>
-              <div class="col-right">
-                <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="detailBooking()"></mat-icon>
-              </div>
-            </div>
             <div class="list-holder">
               <div class="col-left">
                 {{getDateFormatLong(taskDetail.date_full)}}
@@ -665,8 +664,23 @@
                             {{getLanguageById(client.client.language3_id)}} ·
                         </ng-container>
                         {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
-                        · {{client.client.phone}} · {{client.client.email}}
                       </div>
+                      <div>
+                      <mat-icon svgIcon="logo:message-text"></mat-icon>
+                      <a
+                        href="mailto:{{client.client.email}}"
+                        style="cursor:pointer"
+                        title="{{client.client.email}}"
+                      >
+                        <mat-icon svgIcon="logo:mail"></mat-icon>
+                      </a>
+                      <a
+                        href="tel:{{client.client.phone}}"
+                        title="{{client.client.phone}}"
+                      >
+                        <mat-icon svgIcon="logo:phone"></mat-icon>
+                      </a>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -710,8 +724,23 @@
                                         {{getLanguageById(client.client.language3_id)}} ·
                                     </ng-container>
                     {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
-                    · {{client.client.phone}} · {{client.client.email}}
                                 </span>
+                  <div>
+                    <mat-icon svgIcon="logo:message-text"></mat-icon>
+                    <a
+                      href="mailto:{{client.client.email}}"
+                      style="cursor:pointer"
+                      title="{{client.client.email}}"
+                    >
+                      <mat-icon svgIcon="logo:mail"></mat-icon>
+                    </a>
+                    <a
+                      href="tel:{{client.client.phone}}"
+                      title="{{client.client.phone}}"
+                    >
+                      <mat-icon svgIcon="logo:phone"></mat-icon>
+                    </a>
+                  </div>
                   <div *ngIf="taskDetail.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetail.degree.color}">
                     {{taskDetail.degree.name}}
                   </div>
@@ -752,14 +781,22 @@
                           {{getLanguageById(taskDetail.monitor.language1_id)}} ·
                       </ng-container>
                       {{getCountryById(taskDetail.monitor.country)}} · {{getBirthYears(taskDetail.monitor.birth_date)}} {{'years' | translate }}
-                      · {{taskDetail.monitor.phone}} · {{taskDetail.monitor.email}}
                     </div>
-                    <div
-                      *ngIf="taskDetail.degree"
-                      class="label-user"
-                      [ngStyle]="{'background': taskDetail.degree.color}"
-                    >
-                      {{taskDetail.degree.name}}
+                    <div>
+                      <mat-icon svgIcon="logo:message-text"></mat-icon>
+                      <a
+                        href="mailto:{{taskDetail.monitor.email}}"
+                        style="cursor:pointer"
+                        title="{{taskDetail.monitor.email}}"
+                      >
+                        <mat-icon svgIcon="logo:mail"></mat-icon>
+                      </a>
+                      <a
+                        href="tel:{{taskDetail.monitor.phone}}"
+                        title="{{taskDetail.monitor.phone}}"
+                      >
+                        <mat-icon svgIcon="logo:phone"></mat-icon>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -827,7 +864,22 @@
                             {{getLanguageById(client.client.language3_id)}} ·
                         </ng-container>
                         {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
-                        · {{client.client.phone}} · {{client.client.email}}
+                      </div>
+                      <div>
+                        <mat-icon svgIcon="logo:message-text"></mat-icon>
+                        <a
+                          href="mailto:{{client.client.email}}"
+                          style="cursor:pointer"
+                          title="{{client.client.email}}"
+                        >
+                          <mat-icon svgIcon="logo:mail"></mat-icon>
+                        </a>
+                        <a
+                          href="tel:{{client.client.phone}}"
+                          title="{{client.client.phone}}"
+                        >
+                          <mat-icon svgIcon="logo:phone"></mat-icon>
+                        </a>
                       </div>
                       <div>
                         <span style="float:left;cursor:pointer" (click)="detailBooking(client.booking_id)"><img src="../assets/img/icons/reservas-2.svg"/></span>
@@ -972,8 +1024,24 @@
                                   {{getLanguageById(blockDetail.monitor.language1_id)}} ·
                               </ng-container>
                   {{getCountryById(blockDetail.monitor.country)}} · {{getBirthYears(blockDetail.monitor.birth_date)}} &ensp;{{'years' | translate}}
-                  · {{blockDetail.monitor.phone}} · {{blockDetail.monitor.email}}
+
                           </span>
+              </div>
+              <div>
+                <mat-icon svgIcon="logo:message-text"></mat-icon>
+                <a
+                  href="mailto:{{taskDetail.monitor.email}}"
+                  style="cursor:pointer"
+                  title="{{taskDetail.monitor.email}}"
+                >
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
+                </a>
+                <a
+                  href="tel:{{taskDetail.monitor.phone}}"
+                  title="{{taskDetail.monitor.phone}}"
+                >
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
+                </a>
               </div>
             </div>
           </div>
