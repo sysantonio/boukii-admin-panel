@@ -199,6 +199,97 @@ export class BookingsComponent {
     return clientSport.degree_id;
   }
 
+  get isActive(): boolean {
+    if (!this.detailData.booking_users || this.detailData.booking_users.length === 0) {
+      return false;
+    }
+
+    // Encuentra la fecha más futura en booking_users
+    const maxDate = this.detailData.booking_users.reduce((latest, user) => {
+      const userDate = new Date(user.date); // Asumiendo que cada `user` tiene una propiedad `date`
+      return userDate > latest ? userDate : latest;
+    }, new Date(0)); // Inicializamos con una fecha muy pasada
+
+    // Compara la fecha más futura con la fecha actual
+    return this.detailData.status === 1 &&
+      maxDate > new Date();
+  }
+
+  isActiveBookingUser(bu:any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) > new Date();
+  }
+
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    if (obj !== null) {
+      for (const clave of Object.keys(obj)) {
+        if (obj[clave] !== null && clave !== 'intervalo') {
+          return obj[clave];
+        }
+      }
+      return null;
+    }
+
+  }
+
+  encontrarPrimeraCombinacionConValores(data: any, course: any) {
+    if (data !== null) {
+      for (const intervalo of data) {
+        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+          return intervalo;
+        }
+      }
+      return null; // Devuelve null si no encuentra ninguna combinación válida
+    }
+
+  }
+
+
+  getHighestAuthorizedDegree(monitor, sport_id: number): any | null {
+    // Encuentra los deportes asociados al monitor
+    const degrees = monitor.monitor_sports_degrees
+      .filter(degree =>
+        degree.sport_id === sport_id &&
+        degree.school_id === this.user?.schools[0]?.id
+      )
+      .map(degree => degree.monitor_sport_authorized_degrees)
+      .flat(); // Aplanamos el array para obtener todos los grados autorizados
+
+    if (degrees.length === 0) {
+      return null; // Si no hay grados autorizados, retornamos null
+    }
+
+    // Buscamos el degree autorizado con el degree_order más alto
+    const highestDegree = degrees.reduce((prev, current) => {
+      return current.degree.degree_order > prev.degree.degree_order ? current : prev;
+    });
+
+    return highestDegree;
+  }
+
+  get isFinished(): boolean {
+    if (!this.detailData.booking_users || this.detailData.booking_users.length === 0) {
+      return false;
+    }
+
+    // Encuentra la fecha más futura en booking_users
+    const maxDate = this.detailData.booking_users.reduce((latest, user) => {
+      const userDate = new Date(user.date); // Asumiendo que cada `user` tiene una propiedad `date`
+      return userDate > latest ? userDate : latest;
+    }, new Date(0)); // Inicializamos con una fecha muy pasada
+
+    // Compara la fecha más futura con la fecha actual
+    return this.detailData.status === 1 &&
+      maxDate < new Date();
+  }
+
+  isFinishedBookingUser(bu:any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) < new Date();
+  }
 
   getSportName(id) {
     return this.sports.find((s) => s.id === id).name
@@ -350,7 +441,7 @@ export class BookingsComponent {
     let ret = false;
 
     this.detailData.bookingusers.forEach(element => {
-      if (element.courseExtras.length > 0 && !ret) {
+      if (element.courseExtras && element.courseExtras.length > 0 && !ret) {
         ret = true;
       }
     });
@@ -362,7 +453,7 @@ export class BookingsComponent {
     let ret = 0;
 
     this.detailData.bookingusers.forEach(element => {
-      if (element.courseExtras.length > 0 && !ret) {
+      if (element.courseExtras && element.courseExtras.length > 0 && !ret) {
         element.courseExtras.forEach(ce => {
           ret = ret + parseFloat(ce.price);
         });
@@ -382,11 +473,12 @@ export class BookingsComponent {
     return ret.toFixed(2);
   }
 
-  getUniqueBookingUsers(data: any) {
+/*  getUniqueBookingUsers(data: any) {
     const clientIds = new Set();
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
     this.bookingUsersUnique = [];
+    debugger;
     this.bookingUsersUnique = data.filter(item => {
       if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
         (item.course.course_type != 1  && !uniqueMonitors.has(item.monitor_id))) {
@@ -397,7 +489,53 @@ export class BookingsComponent {
       }
       return false;
     });
+  }*/
+
+  getUniqueBookingUsers(data: any) {
+    const uniqueGroups = new Map<string, any>();
+
+    data.forEach(item => {
+      // Crear una clave única por fecha y monitor
+      const key = `${item.date}-${item.monitor_id}`;
+
+      if (uniqueGroups.has(key)) {
+        const existingItem = uniqueGroups.get(key);
+        // Si el precio actual es mayor que el del existente, reemplázalo
+        if (item.price > existingItem.price) {
+          uniqueGroups.set(key, item);
+        }
+      } else {
+        // Si no existe el grupo, lo añadimos al Map
+        uniqueGroups.set(key, item);
+      }
+    });
+
+    // Convertimos el Map en un array de los valores
+    this.bookingUsersUnique = Array.from(uniqueGroups.values());
   }
+
+  /*getUniqueBookingUsers(data: any) {
+    const uniqueGroups = new Map<string, any>();
+
+    data.forEach(item => {
+      // Crear una clave única para cada combinación de client_id, date y monitor_id
+      const key = `${item.client_id}-${item.date}-${item.monitor_id}`;
+
+      // Si el grupo ya existe, comparamos los precios y nos quedamos con el más alto
+      if (uniqueGroups.has(key)) {
+        const existingItem = uniqueGroups.get(key);
+        if (item.price > existingItem.price) {
+          uniqueGroups.set(key, item);
+        }
+      } else {
+        // Si el grupo no existe, lo añadimos
+        uniqueGroups.set(key, item);
+      }
+    });
+
+    // Convertimos el map en un array de los valores
+    this.bookingUsersUnique = Array.from(uniqueGroups.values());
+  }*/
 
   orderBookingUsers(users: any[]) {
     return users.sort((a, b) => {
