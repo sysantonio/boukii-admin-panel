@@ -509,6 +509,24 @@ img[mat-card-image] {
 
 /* lucho */
 
+.subtitle {
+  position: relative;
+  font-size: 1.1em;
+  font-weight: 400;
+  color: #4D4D4D;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  &:after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: #523F69;
+    opacity: .06;
+  }
+}
+
 .mdc-card {
   &.col-right {
     border-radius: var(--border-radius);
@@ -572,14 +590,14 @@ img[mat-card-image] {
     }
 
     .title-client {
-      padding: 10px 20px;
+      padding: 10px 1px;
       color: #4D4D4D;
       font-size: 1.1em;
       font-weight: 700;
     }
 
     .holder-client {
-      padding-left: 45px;
+      //padding-left: 45px;
 
       .col-left {
         display: inline-block;
@@ -625,6 +643,14 @@ img[mat-card-image] {
       padding-top: 20px;
     }
   }
+}
+
+.course-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  color: #4D4D4D;
+  margin-bottom: 10px;
 }
 
 .holder-participante {

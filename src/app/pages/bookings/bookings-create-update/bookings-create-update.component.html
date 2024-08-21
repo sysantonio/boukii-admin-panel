@@ -938,11 +938,10 @@
           <div class="col-left">
             <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
             <app-level-user
-              *ngIf="getClientAvatar(defaults.client_main_id.id) && getClientAvatar(defaults.client_main_id.id).length"
-              [allLevels]=""
-              [selectLevel]="getClientAvatar(defaults?.client_main_id.id)"
+              [allLevels]="getDegreesBySportId(item.course.sport_id)"
+              [selectLevel]="getClientDegree(defaults?.client_main_id.id, item.course.sport_id)"
               [size]="60"
-              [userImage]="getClientAvatar(defaults.client_main_id.id)?.image !== null && getClientAvatar(defaults.client_main_id.id)?.image !== '' ? getClientAvatar(defaults.client_main_id.id)?.image : imageAvatar"
+              [userImage]="getClientAvatar(defaults.client_main_id.id) !== null && getClientAvatar(defaults.client_main_id.id) !== '' ? getClientAvatar(defaults.client_main_id.id) : imageAvatar"
             ></app-level-user>
           </div>
           <div class="col-right_">
@@ -959,15 +958,15 @@
             <div>
               <mat-icon svgIcon="logo:message-text"></mat-icon>
               <a
-                href="mailto:{{defaults.email}}"
+                href="mailto:{{getClient(defaults.client_main_id.id)?.email}}"
                 style="cursor:pointer"
-                title="{{defaults.email}}"
+                title="{{getClient(defaults.client_main_id.id)?.email}}"
               >
                 <mat-icon svgIcon="logo:mail"></mat-icon>
               </a>
               <a
-                href="tel:{{defaults.phone}}"
-                title="{{defaults.phone}}"
+                href="tel:{{getClient(defaults.client_main_id.id)?.phone}}"
+                title="{{getClient(defaults.client_main_id.id)?.phone}}"
               >
                 <mat-icon svgIcon="logo:phone"></mat-icon>
               </a>
@@ -979,6 +978,13 @@
 
         <div>
           <div *ngIf="item.courseDates[0].course.course_type === 2">
+            <div class="subtitle">
+              <img
+                class="icon-calendar"
+                src="assets/img/icons/clientes2.svg"
+              />
+              {{'participants' | translate}}
+            </div>
             <div *ngFor="let people of item.people">
               <div class="holder-participante">
                 <div class="col-left">
@@ -988,8 +994,8 @@
                       style="height:100%;border-radius: 100%;width: 35px;height: 35px;"
                     />-->
                     <app-level-user
-                      [allLevels]=""
-                      [selectLevel]="people.id"
+                      [allLevels]="getDegreesBySportId(item.course.sport_id)"
+                      [selectLevel]="getClientDegree(people.id, item.course.sport_id)"
                       [size]="60"
                       [userImage]="getClientAvatar(people.id)"
                     ></app-level-user>
@@ -998,6 +1004,22 @@
                     <div class="course-title" style="font-size: 1em;">{{getClientName(people.id)}}</div>
                     <div class="course-label">
                       {{ getLanguage(people.language1_id) }} · {{ getCountry(people.country) }} · {{calculateAge(people.birth_date) }} &ensp;{{'years' | translate}}
+                    </div>
+                    <div>
+                      <mat-icon svgIcon="logo:message-text"></mat-icon>
+                      <a
+                        href="mailto:{{getClient(people.id)?.email}}"
+                        style="cursor:pointer"
+                        title="{{getClient(people.id)?.email}}"
+                      >
+                        <mat-icon svgIcon="logo:mail"></mat-icon>
+                      </a>
+                      <a
+                        href="tel:{{getClient(people.id)?.phone}}"
+                        title="{{getClient(people.id)?.phone}}"
+                      >
+                        <mat-icon svgIcon="logo:phone"></mat-icon>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -1013,6 +1035,16 @@
               <div *ngIf="item.courseDates[0].course.course_type === 1" style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px; display:inline-block;vertical-align:top;"></div>
               <div style="display:inline-block;vertical-align:top;padding-left:10px;font-size: 14px;" >
                 <b>{{ item.courseDates[0].course?.name}}</b>
+              </div>
+              <div class="course-label">
+                {{
+                  (item.courseDates[0]?.course?.course_type === 2 ? 'private' :
+                    item.courseDates[0]?.course?.course_type === 1 ? 'collective' : 'activity') | translate
+                }}
+                {{
+                  (item.courseDates[0]?.course?.isFlexible ? 'flex' : 'fix') | translate
+                }}
+                {{item.courseDates[0]?.course?.sport.name}}
               </div>
               <!--<p style="float: left; width: 100%;">
                 {{courseDate.course?.course_type === 1 ? 'Collectif' : 'Privee'}} {{courseDate.course?.sport.name}} {{!courseDate.course?.is_flexible ? courseDate.course?.price : courseDate.price}} {{courseDate.course?.currency}}
@@ -1038,15 +1070,26 @@
             </ng-container>
 
             <mat-divider style="width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+            <div class="subtitle">
+              <img
+                class="icon-calendar"
+                src="assets/img/icons/monitores-3.svg"
+              />
+              {{'monitor' | translate}}
+            </div>
 
             <div class="holder-participante">
               <div class="col-left">
                 <div class="c-l">
-                  <app-level-user
-                    [allLevels]="item.courseDates[0].monitor_id"
-                    [selectLevel]="item.courseDates[0].monitor_id"
+                  <app-level-user *ngIf="getMonitor(item?.courseDates[0]?.monitor_id)"
+                    [allLevels]="getDegreesBySportId(item.course.sport_id)"
+                    [selectLevel]="getHighestAuthorizedDegree(getMonitor(item?.courseDates[0]?.monitor_id),
+                    item.course.sport_id).degree_id"
                     [size]="60"
-                    [userImage]="item.courseDates[0].monitor_id ? getMonitorAvatar(item.courseDates[0].monitor_id) : userAvatar"
+                    [userImage]="getMonitorAvatar(item?.courseDates[0]?.monitor_id)?.image !== null
+                     && getMonitorAvatar(item?.courseDates[0]?.monitor_id) !== ''
+                     ? getMonitorAvatar(item?.courseDates[0]?.monitor_id)
+                     : userAvatar"
                   ></app-level-user>
                 </div>
                 <div class="c-r">
@@ -1054,6 +1097,22 @@
                   <div *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null">
                     <div class="course-label">
                       {{ getLanguage(getMonitorLang(item.courseDates[0].monitor_id)) }} · {{ getCountry(getMonitorProvince(item.courseDates[0].monitor_id)) }} · {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id)) }} {{'years' | translate }}
+                    </div>
+                    <div>
+                      <mat-icon svgIcon="logo:message-text"></mat-icon>
+                      <a
+                        href="mailto:{{getMonitor(item.courseDates[0].monitor_id)?.email}}"
+                        style="cursor:pointer"
+                        title="{{getMonitor(item.courseDates[0].monitor_id)?.email}}"
+                      >
+                        <mat-icon svgIcon="logo:mail"></mat-icon>
+                      </a>
+                      <a
+                        href="tel:{{getMonitor(item.courseDates[0].monitor_id)?.phone}}"
+                        title="{{getMonitor(item.courseDates[0].monitor_id)?.phone}}"
+                      >
+                        <mat-icon svgIcon="logo:phone"></mat-icon>
+                      </a>
                     </div>
                   </div>
                   <div *ngIf="item.courseDates[0].course?.course_type === 1">
@@ -1365,11 +1424,8 @@
               <mat-card-header *ngIf="item.courseDates[0].course.course_type !== 3">
                 <app-level-user
                   mat-card-avatar
-                  *ngIf="levels"
-                  [allLevels]="levels"
-                  [selectLevel]="
-                      getDegree(item.courseDates[0].degree_id)
-                    "
+                  [allLevels]="getDegreesBySportId(item.course.sport_id)"
+                  [selectLevel]="getClientDegree(item.courseDates[0].client_id, item.course.sport_id)"
                   [size]="40"
                   [userImage]="
                       getClientAvatar(item.courseDates[0].client_id) !== null &&
@@ -1390,19 +1446,8 @@
                 >
               </mat-card-header>
 
-              <div *ngIf="item.courseDates[0].course.course_type !== 3"
-                   style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff"
-                   [ngStyle]="{
-                    background:
-                      getDegree(item.courseDates[0].degree_id)?.color !== null
-                        ? getDegree(item.courseDates[0].degree_id)?.color
-                        : ''
-                  }"
-              >
-                {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
-                {{ getDegree(item.courseDates[0].degree_id)?.level }}
-              </div>
-              <ng-container *ngIf="item.courseDates[0].course.course_type === 2 && item.courseDates[0].course.options">
+              <ng-container *ngIf="item.courseDates[0].course.course_type === 2 ">
+                <ng-container *ngIf="item.courseDates[0].course.options">
                 <p
                   (click)="item.courseDates[0].showOptions = !item.courseDates[0].showOptions"
                   style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
@@ -1417,6 +1462,7 @@
                              svgIcon="mat:remove"
                   ></mat-icon>
                 </p>
+
 
                 <div
                   style="width: 100%; float:left; color: #868686;"
@@ -1457,6 +1503,7 @@
                     </div>
                   </div>
                 </div>
+                </ng-container>
                 <ng-container *ngFor="let people of item.people">
                   <div style="float:left; width: 100%">
                     <p
@@ -1468,11 +1515,8 @@
                   <mat-card-header>
                     <app-level-user
                       mat-card-avatar
-                      *ngIf="levels"
-                      [allLevels]="levels"
-                      [selectLevel]="
-                      getDegree(item.courseDates[0].degree_id)
-                    "
+                      [allLevels]="getDegreesBySportId(item.course.sport_id)"
+                      [selectLevel]="getClientDegree(people.id, item.course.sport_id)"
                       [size]="40"
                       [userImage]="
                       getClientAvatar(people.id) !== null &&
@@ -1493,18 +1537,6 @@
                     >
                   </mat-card-header>
 
-                  <div
-                    style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff"
-                    [ngStyle]="{
-                    background:
-                      getDegree(item.courseDates[0].degree_id)?.color !== null
-                        ? getDegree(item.courseDates[0].degree_id)?.color
-                        : ''
-                  }"
-                  >
-                    {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
-                    {{ getDegree(item.courseDates[0].degree_id)?.level }}
-                  </div>
                   <ng-container *ngIf="item.courseDates[0].course.options">
                     <p
                       (click)="people.showOptions = !people.showOptions"

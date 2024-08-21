@@ -2168,6 +2168,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
   }
 
+  getHighestAuthorizedDegree(monitor, sport_id: number): any | null {
+    // Encuentra los deportes asociados al monitor
+    const degrees = monitor.monitor_sports_degrees
+      .filter(degree =>
+        degree.sport_id === sport_id &&
+        degree.school_id === this.user?.schools[0]?.id
+      )
+      .map(degree => degree.monitor_sport_authorized_degrees)
+      .flat(); // Aplanamos el array para obtener todos los grados autorizados
+
+    if (degrees.length === 0) {
+      return null; // Si no hay grados autorizados, retornamos null
+    }
+
+    // Buscamos el degree autorizado con el degree_order más alto
+    const highestDegree = degrees.reduce((prev, current) => {
+      return current.degree.degree_order > prev.degree.degree_order ? current : prev;
+    });
+
+    return highestDegree;
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
+    }
+  }
+
   getMonitorAvatar(id: number) {
 
     if (id && id === null) {
@@ -2230,6 +2260,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const monitor = this.monitors.find((m) => m.id === id);
 
       return monitor?.birth_date;
+    }
+  }
+
+  getClientDegree(id: number, sport_id: number) {
+    if (id && id !== null && sport_id && sport_id !== null) {
+      const client = this.clients.find((m) => m.id === id);
+      const sportObject = client?.client_sports.find(
+        (obj) => obj.sport_id === sport_id && obj.school_id == this.user.schools[0].id
+      );
+
+      return sportObject?.degree_id;
     }
   }
 
@@ -3331,7 +3372,28 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data;
+        this.allLevels.forEach((degree: any) => {
+          degree.inactive_color = this.lightenColor(degree.color, 30);
+        });
       })
+  }
+
+  private lightenColor(hexColor: string, percent: number): string {
+    let r: any = parseInt(hexColor.substring(1, 3), 16);
+    let g: any = parseInt(hexColor.substring(3, 5), 16);
+    let b: any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + ((255 - r) * percent) / 100);
+    g = Math.round(g + ((255 - g) * percent) / 100);
+    b = Math.round(b + ((255 - b) * percent) / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, "0");
+    g = g.toString(16).padStart(2, "0");
+    b = b.toString(16).padStart(2, "0");
+
+    return "#" + r + g + b;
   }
 
   getDegree(id: any) {
@@ -3339,6 +3401,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return this.allLevels.find((l) => l.id === id);
 
     }
+  }
+
+  getDegreesBySportId(sportId: any) {
+    return this.allLevels.filter((l) => l.sport_id === sportId);
   }
 
   protected readonly Math = Math;

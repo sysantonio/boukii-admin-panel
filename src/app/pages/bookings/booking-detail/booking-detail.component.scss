@@ -499,6 +499,8 @@ img[mat-card-image] {
   .title-status {
     background-color: #F2F3F3;
     padding: 15px 35px;
+    display: flex;
+    align-items: center;
 
     b {
       color: #4D4D4D;
@@ -507,13 +509,17 @@ img[mat-card-image] {
     }
 
     .col-left {
-      display: inline-block;
-      width: 50%;
+      width: 25%; /* Ajusta el porcentaje según sea necesario */
+      text-align: left;
+    }
+
+    .col-center {
+      width: 50%; /* Ajusta el porcentaje según sea necesario */
+      text-align: center;
     }
 
     .col-right {
-      display: inline-block;
-      width: 50%;
+      width: 25%; /* Ajusta el porcentaje según sea necesario */
       text-align: right;
       font-size: 1em;
       font-weight: 700;

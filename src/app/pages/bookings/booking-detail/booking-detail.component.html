@@ -98,20 +98,18 @@
               </div>
               <div style="width: 50%;float: left;">
                 <p
-                  style="padding: 5% 5% 0 0;width: 60%;float: right;font-size: 13px;text-align: center;font-weight: 500;color:#fac710"
-                  *ngIf="!booking.paid && item.courseDates[0].status === 1"
+                  style="padding: 5% 5% 0 0;width: 60%;float: right;font-size: 13px;
+                  text-align: center;font-weight: 500;color:#A4A3A3"
+                  *ngIf="isFinishedBookingUser(item.courseDates[0])"
                 >
-                  {{ "no_paid" | translate | uppercase }}
+                  {{'finished' | translate | uppercase }}
                 </p>
                 <p
-                  style="padding: 5% 5% 0 0;width: 60%;float: right;font-size: 13px;text-align: center;font-weight: 500;color:#8fd14f"
-                  *ngIf="
-                    (booking.status === 1 || booking.status === 3) &&
-                    booking.paid &&
-                    item.courseDates[0].status === 1
-                  "
+                  style="padding: 5% 5% 0 0;width: 60%;float: right;font-size: 13px;text-align:
+                  center;font-weight: 500;color:#00C32B"
+                  *ngIf="isActiveBookingUser(item.courseDates[0])"
                 >
-                  {{ "ispaid" | translate | uppercase }}
+                  {{ "active" | translate | uppercase }}
                 </p>
                 <p
                   style="padding: 5% 5% 0 0;width: 60%;float: right;font-size: 13px;text-align: center;font-weight: 500;color:#fac710"
@@ -257,8 +255,8 @@
             </mat-card-content>
 
             <mat-divider *ngIf="courses[bI].course_type !== 3"
-              style="float: left;width: 100%;"
-              class="text-border"
+                         style="float: left;width: 100%;"
+                         class="text-border"
             ></mat-divider>
             <div style="float:left; width: 100%"  *ngIf="courses[bI].course_type !== 3">
               <p
@@ -545,7 +543,7 @@
             <mat-card-content>
               <div style="float: left;width: 100%;margin: 2% 0 2% 0;">
                 <div style="float: left;width: 15%;">
-                  <img
+<!--                  <img
                     style="float: left;width: 100%;height: 60px;"
                     [src]="
                       item?.courseDates[0]?.monitor_id !== null
@@ -554,7 +552,17 @@
                     "
                     alt="Avatar de usuario"
                     class="user-avatar"
-                  />
+                  />-->
+                  <app-level-user
+                    *ngIf="item.degrees_sport && item.degrees_sport.length"
+                    [allLevels]="item.degrees_sport"
+                    [selectLevel]="getHighestAuthorizedDegree(getMonitor(item?.courseDates[0]?.monitor_id),  item.sport_id).degree_id"
+                    [size]="60"
+                    [userImage]="getMonitorAvatar(item?.courseDates[0]?.monitor_id)?.image !== null
+                     && getMonitorAvatar(item?.courseDates[0]?.monitor_id) !== ''
+                     ? getMonitorAvatar(item?.courseDates[0]?.monitor_id)
+                     : userAvatar"
+                  ></app-level-user>
                 </div>
                 <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
                   <span style="float: left;width: 100%;">{{
@@ -665,7 +673,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  </div>
+                </div>
 
                 <!--<div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -817,7 +825,7 @@
       </div>
     </div>
 
-    <div class="column-container" style="flex: 5;" *ngIf="!loading">
+    <div class="column-container" style="flex: 3;" *ngIf="!loading">
       <div class="card-container">
         <div @fadeInUp class="card flex-auto">
 
@@ -831,7 +839,7 @@
             <mat-card-header class="card-header">
               <div style="width: 100%;">
                 <span style="display: inline-block;width: 80%; text-align: left;">
-                  <mat-card-title>{{'booking' | translate}} #2390</mat-card-title>
+                  <mat-card-title>{{'booking' | translate}} #{{ id }}</mat-card-title>
                 </span>
                 <span style="display: inline-block;width: 20%; text-align: right;">
                   <!--<img src="assets/img/icons/edit.svg"  (click)="showDetail = false" class="btn-edit" />-->
@@ -843,11 +851,18 @@
                   <div style="width: 60%;display:inline-block;text-align: left; color: white;">
                     <b>{{ 'register' | translate}}:</b>
                     <span style="margin-left: 10px;font-weight: normal;">
-                      <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
-                    </span>
+                <span>{{booking.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{booking.created_at | date: 'HH:mm'}}h</span>
+              </span>
                   </div>
-                  <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-                    Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+
+                  <div
+                    style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;"
+                  >
+                    {{ booking.user.username }}
+                    <span style="margin-left: 10px;"
+                    >({{ booking.user.first_name + ' ' +  booking.user.last_name
+                      }})</span
+                    >
                   </div>
                 </mat-card-subtitle>
               </div>
@@ -855,33 +870,51 @@
 
             <mat-card-content>
               <div class="title-status">
-                <span class="col-left">
-                  <b>{{ 'register' | translate}}:</b>
-                </span>
-                <span class="col-right">
-                  <!--<span style="color: red;" *ngIf="booking.status == 2">
-                    {{ "cancelled" | translate }}
-                  </span>-->
-                  <span style="color: red; margin-right: 10px;">
-                    {{ "cancelled" | translate }}
-                  </span>
+            <span class="col-left">
+              <b>{{ 'status' | translate}}:</b>
+            </span>
 
-                  <span style="color: rgb(206, 231, 65);" *ngIf="booking.status == 1">
-                    {{ "active" | translate }}
-                  </span>
-                  <span style="color: rgb(250, 199, 16);" *ngIf="booking.status == 3">
-                    {{ "partial_cancelled" | translate }}
-                  </span>
-                </span>
+                <span class="col-center">
+              <span style="color:#00C32B" *ngIf="isActive">
+                {{'active' | translate | uppercase }}
+              </span>
+              <span style="color:#A4A3A3" *ngIf="isFinished">
+                {{'finished' | translate | uppercase }}
+              </span>
+              <span style="color:#FF0000" *ngIf="booking.status === 2">
+                {{'cancelled' | translate | uppercase }}
+              </span>
+              <span style="color:#FA9917" *ngIf="booking.status === 3">
+                {{'partial_cancelled' | translate | uppercase }}
+              </span>
+            </span>
+
+                <span class="col-right">
+              <span
+                style="color:#00C32B"
+                *ngIf="booking.status === 1 && booking.paid"
+              >
+                {{'payed' | translate | uppercase }}
+              </span>
+              <span
+                style="color:#FF0000"
+                *ngIf="booking.status === 1 && !booking.paid"
+              >
+                {{'no_payed' | translate | uppercase }}
+              </span>
+            </span>
               </div>
 
               <div class="holder-client">
-                <div style="display: inline-block; width: 70%;">
-                  <div style="display:inline-block; vertical-align: top;">
+                <div style="display: inline-block; width: 80%;">
+                  <div style="display:inline-block; vertical-align: top; margin-right: 5px">
                     <app-level-user
                       [size]="60"
+                      [allLevels]="degreesClient"
+                      [selectLevel]="getClientDegree(booking?.client_main_id, booking.booking_users[0].course.sport_id)"
                       [userImage]="
                         getClientAvatar(booking.client_main_id) !== null
+                        && getClientAvatar(booking.client_main_id) !== ''
                           ? getClientAvatar(booking.client_main_id)
                           : userAvatar
                       "
@@ -930,7 +963,7 @@
                     </mat-card-subtitle>
                   </div>
                 </div>
-                <div style="display: inline-block;width: 30%; text-align: right;">
+                <div style="display: inline-block;width: 20%; text-align: right;">
                   <button
                     *ngIf="booking.status !== 2"
                     style="width: 55px;height: 55px;padding: 0px;min-width: 55px;"
@@ -945,7 +978,7 @@
               </div>
             </mat-card-content>
 
-            <div
+            <!--<div
               style="width: 100%;"
               *ngIf="!isNanValue(this.boukiiCarePrice) && boukiiCarePrice > 0"
             >
@@ -958,7 +991,7 @@
                 [disabled]="booking.status === 2"
                 style="float: right;"
               ></mat-slide-toggle>
-            </div>
+            </div>-->
 
             <div class="title-actividad">
               <b class="title">{{ "summary" | translate }}</b>
@@ -1077,9 +1110,10 @@
                   class="btn-plus"
                   mat-raised-button
                   color="accent"
+                  [disabled]="booking.status === 2 || booking.paid || isFinished"
                   (click)="addReduction()"
                 >
-                +
+                  +
                 </button>
                 <!--<button
                   class="btn-plus"
@@ -1138,7 +1172,7 @@
                     [(ngModel)]="booking.has_cancellation_insurance"
                     *ngIf="cancellationInsurance"
                     (change)="addCancellationInsurance($event)"
-                    [disabled]="booking.status === 2 || booking.paid || hasOneCancelled()"
+                    [disabled]="booking.status === 2 || booking.paid || hasOneCancelled() || isFinished"
                     style="float: left; margin-left: 10px"
                   ></mat-slide-toggle>
                 </div>
@@ -1294,7 +1328,7 @@
                           (click)="addBonus()"
                           [disabled]="booking.status === 2 || bookingPendingPrice <= 0"
                   >
-                   +
+                    +
                   </button>
                 </div>
               </div>
