@@ -90,8 +90,10 @@ export class ClientsComponent {
       this.crudService.get('/clients/'+event.item.id)
       .subscribe((data) => {
         this.detailData = data.data;
-
-        this.crudService.get('/admin/clients/' + event.item.id +'/utilizers')
+        this.utilizers = data.data.utilizers_data;
+        this.clientSport = data.data.client_sports_data;
+        this.showDetail = true;
+  /*      this.crudService.get('/admin/clients/' + event.item.id +'/utilizers')
           .subscribe((uti) => {
             this.utilizers = uti.data;
           })
@@ -114,8 +116,8 @@ export class ClientsComponent {
 
             });
 
-            this.showDetail = true;
-          })
+
+          })*/
       })
     } else {
       this.showDetail = event.showDetail;
