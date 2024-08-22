@@ -317,30 +317,6 @@
                   >
                 </mat-card-header>
 
-                <div
-                  style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff"
-                  *ngIf="
-                    booking.old_id === null &&
-                    courses[bI].course_type === 2 &&
-                    courses[bI].id === bu.course_id &&
-                    (bookingUsers.length === bookingUsersUnique.length
-                      ? bu.course_date_id === item.courseDates[0].course_date_id
-                      : findCourseDateIdAndHour(
-                          bu.course_date_id,
-                          bu.hour_start,
-                          bookingUsers
-                        ))
-                  "
-                  [ngStyle]="{
-                    background:
-                      getDegree(item.courseDates[0].degree_id)?.color !== null
-                        ? getDegree(item.courseDates[0].degree_id)?.color
-                        : ''
-                  }"
-                >
-                  {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
-                  {{ getDegree(item.courseDates[0].degree_id)?.level }}
-                </div>
                 <p *ngIf="item.courseDates[0].course.options"
                    (click)="bu.showOptions = !bu.showOptions"
                    style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold; cursor: pointer"
@@ -447,26 +423,7 @@
                   >
                 </mat-card-header>
 
-                <div
-                  style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff"
-                  *ngIf="
-                    booking.old_id === null &&
-                    courses[bI].course_type === 2 &&
-                    courses[bI].id === bu.course_id &&
-                    (bookingUsers.length === bookingUsersUnique.length
-                      ? bu.course_date_id === item.courseDates[0].course_date_id
-                      : findCourseDateId(bu.course_date_id, bookingUsers))
-                  "
-                  [ngStyle]="{
-                    background:
-                      getDegree(item.courseDates[0].degree_id)?.color !== null
-                        ? getDegree(item.courseDates[0].degree_id)?.color
-                        : ''
-                  }"
-                >
-                  {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
-                  {{ getDegree(item.courseDates[0].degree_id)?.level }}
-                </div>
+
               </ng-container>
             </ng-container>
             <mat-card-header
@@ -518,22 +475,6 @@
                 {{ "years" | translate }}</mat-card-subtitle
               >
             </mat-card-header>
-            <div
-              style="float: left;width: 50%;margin: 0 auto; padding:2%; color: #fff"
-              *ngIf="
-                (booking.old_id === null || booking.old_id !== null) &&
-                courses[bI].course_type === 1
-              "
-              [ngStyle]="{
-                background:
-                  getDegree(item.courseDates[0].degree_id)?.color !== null
-                    ? getDegree(item.courseDates[0].degree_id)?.color
-                    : ''
-              }"
-            >
-              {{ getDegree(item.courseDates[0].degree_id)?.annotation }}
-              {{ getDegree(item.courseDates[0].degree_id)?.level }}
-            </div>
 
             <mat-divider
               style="float: left;width: 100%;margin-top: 10px"
@@ -542,19 +483,16 @@
 
             <mat-card-content>
               <div style="float: left;width: 100%;margin: 2% 0 2% 0;">
-                <div style="float: left;width: 15%;">
-<!--                  <img
-                    style="float: left;width: 100%;height: 60px;"
-                    [src]="
-                      item?.courseDates[0]?.monitor_id !== null
-                        ? getMonitorAvatar(item?.courseDates[0]?.monitor_id)
-                        : userAvatar
-                    "
-                    alt="Avatar de usuario"
-                    class="user-avatar"
-                  />-->
+                <div style="float:left; width: 100%" >
+                  <p
+                    style="padding: 3%;width: 40%;float: left;font-size: 13px; font-weight: bold;"
+                  >
+                    {{ "monitor" | translate }}
+                  </p>
+                </div>
+                <div style="float: left;width: 15%;margin-left: 3%;">
                   <app-level-user
-                    *ngIf="item.degrees_sport && item.degrees_sport.length"
+                    *ngIf="getMonitor(item?.courseDates[0]?.monitor_id)"
                     [allLevels]="item.degrees_sport"
                     [selectLevel]="getHighestAuthorizedDegree(getMonitor(item?.courseDates[0]?.monitor_id),  item.sport_id).degree_id"
                     [size]="60"
@@ -564,14 +502,14 @@
                      : userAvatar"
                   ></app-level-user>
                 </div>
-                <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
+                <div style="float: left;width: 80%;margin.left: 3%" >
                   <span style="float: left;width: 100%;">{{
                       item?.courseDates[0]?.monitor_id !== null
                         ? getMonitorName(item?.courseDates[0]?.monitor_id)
                         : "No monitor asigned"
                     }}</span
                   ><br />
-                  <span style="float: left;width: 100%;"
+                  <span style="float: left;width: 100%;" *ngIf="getMonitor(item?.courseDates[0]?.monitor_id)"
                   >{{
                       getLanguage(
                         getMonitorLang(item?.courseDates[0]?.monitor_id)
@@ -719,7 +657,7 @@
                   </div>
                 </div>-->
               </div>
-              <div style="width: 100%;float:left; margin-top: 10px">
+              <div style="width: 100%;float:left; margin-top: 10px;margin-left: 3%;">
                 <div *ngIf="courses[bI].course_type == 2">
                   <p style="width: 60%;float: left;">
                     {{ "options_total" | translate }}
@@ -746,7 +684,7 @@
                 class="text-border"
               ></mat-divider>
 
-              <div style="width: 100%;float:left;">
+              <div style="width: 100%;float:left;margin-top: 10px;margin-left: 3%;">
                 <div *ngIf="courses[bI].course_type == 1">
                   <p style="width: 60%;font-size: 21px;float:left">
                     {{ "booking_total" | translate }}
