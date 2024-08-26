@@ -35,7 +35,7 @@
       [canDelete]="false"
       [canDeactivate]="false"
       (showDetailEvent)="showDetailEvent($event)"
-      [with]="['bookingUsers.course', 'clientMain', 'user',
+      [with]="['bookingUsers.course.sport', 'clientMain', 'user',
        'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
       [filterColumn]="'school_id'"
       [filterField]="user.schools[0].id"
