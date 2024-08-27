@@ -16,6 +16,16 @@
   cursor: pointer;
 }
 
+.mat-mdc-card {
+  border-radius: 0px;
+  background-color: transparent;
+  box-shadow: none;
+  --mdc-elevated-card-container-shape: 0px;
+  --mdc-outlined-card-container-shape: 0px;
+  --mdc-outlined-card-outline-width: 0px;
+}
+
+
 .selected-collectif {
   background-color: #FAC710; /* Color de fondo ligero para mejorar la selección */
   color: #fff
@@ -432,15 +442,6 @@ img[mat-card-image] {
     font-size: 1.5rem;
     color: #fff;
   }
-}
-
-.mat-mdc-card {
-  border-radius: 0px;
-  background-color: transparent;
-  box-shadow: none;
-  --mdc-elevated-card-container-shape: 0px;
-  --mdc-outlined-card-container-shape: 0px;
-  --mdc-outlined-card-outline-width: 0px;
 }
 
 /*.mdc-switch {

@@ -390,12 +390,20 @@ export class ClientDetailComponent {
                 element.icon_selected = sport.icon_selected;
                 element.icon_unselected = sport.icon_unselected;
                 element.degrees = sport.degrees;
+                element.degrees = element.degrees.filter(level => {
+                  const age = this.calculateAge(this.defaults.birth_date);
+                  return age >= level.age_min && age <= level.age_max;
+                });
               }
             });
           });
           this.sportsCurrentData.data = this.clientSport;
           const availableSports = [];
           this.schoolSports.forEach(element => {
+            element.degrees = element.degrees.filter(level => {
+              const age = this.calculateAge(this.defaults.birth_date);
+              return age >= level.age_min && age <= level.age_max;
+            });
             if (!this.sportsCurrentData.data.find((s) => s.sport_id === element.sport_id)) {
               availableSports.push(element);
             }
@@ -719,7 +727,7 @@ export class ClientDetailComponent {
   }
 
   updateLevel(clientSport, level) {
-    this.crudService.update('/client-sports', {client_id: clientSport.id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
+    this.crudService.update('/client-sports', {client_id: clientSport.client_id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', {duration: 3000});
       })
