@@ -59,10 +59,10 @@ export class BookingsComponent {
 
     this.schoolService.getSchoolData(this.user).subscribe((school) => {
       this.school = school.data;
-      if(!JSON.parse(this.school.settings).taxes.cancellation_insurance_percent) {
+      if(!JSON.parse(this.school.settings).taxes?.cancellation_insurance_percent) {
         this.columns = this.columns.filter(column => column.property !== 'has_cancellation_insurance');
       }
-      if(!JSON.parse(this.school.settings).taxes.boukii_care_price) {
+      if(!JSON.parse(this.school.settings).taxes?.boukii_care_price) {
         this.columns = this.columns.filter(column => column.property !== 'has_boukii_care');
 
       }

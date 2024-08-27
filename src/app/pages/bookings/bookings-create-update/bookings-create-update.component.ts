@@ -419,6 +419,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.getCourses(level, this.monthAndYear);
         }
       });
+      if(!client.client_sports.length) {
+        this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+      }
     }
 
   }
@@ -427,7 +430,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  setCourseType(type: string, id: number) {
+  setCourseType(type: string, id: number, levelSelected = null) {
     this.monthAndYear = new Date();
     if(this.externalData) {
       this.monthAndYear = new Date(this.externalData.date);
@@ -445,27 +448,43 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let hasSport = false;
 
     if (client) {
-      client.client_sports.forEach(sport => {
-
-        if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
-          const level = this.levels.find((l) => l.id === sport.degree_id);
+      if(client.client_sports.length) {
+        client.client_sports.forEach(sport => {
+          if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
+            const level = this.levels.find((l) => l.id === sport.degree_id);
+            this.levelForm.patchValue(level);
+            this.defaultsBookingUser.degree_id = level.id;
+            hasSport = true;
+            this.getCourses(level, this.monthAndYear);
+          }
+        });
+      } else {
+        const level = levelSelected ? levelSelected : this.levelForm.value;
+        if(level) {
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
-          hasSport = true;
           this.getCourses(level, this.monthAndYear);
+        } else {
+          this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration:6000});
         }
-      });
+
+      }
+
     } else {
-      const level = this.levelForm.value;
-      this.levelForm.patchValue(level);
-      this.defaultsBookingUser.degree_id = level.id;
-      this.getCourses(level, this.monthAndYear);
+      const level = levelSelected ? levelSelected : this.levelForm.value;
+      if(level) {
+        this.levelForm.patchValue(level);
+        this.defaultsBookingUser.degree_id = level.id;
+        this.getCourses(level, this.monthAndYear);
+      } else {
+        this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration:6000});
+      }
     }
 
 
-    if (!hasSport) {
+/*    if (!hasSport) {
       this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
-    }
+    }*/
   }
 
   inUseDatesFilter = (d: Date): boolean => {
@@ -1738,6 +1757,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.getCourses(level, this.monthAndYear);
       }
     });
+    if(!client.client_sports.length) {
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+    }
   }
 
   toggleBorder(index: number, utilizer: any) {
@@ -1877,7 +1899,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
               }
             }
           });
+          if(!client.client_sports.length) {
+            this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+            if(this.courseTypeId && this.levelForm.value) {
+              this.getCourses(this.levelForm.value, this.monthAndYear);
+            }
+          }
         }
+
 
 
         /*if (!hasSport && client.client_sports.length === 0) {
@@ -1959,6 +1988,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
               let index = this.utilizers.findIndex((utilizer: any) => utilizer.id === selectedClient.id);
               this.toggleBorder(index, this.utilizers[index]);
             } else {
+              if(!client.client_sports.length) {
+                this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+              }
               client.client_sports.forEach(sport => {
                 if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
                   const level = this.levels.find((l) => l.id === sport.degree_id);
@@ -1970,7 +2002,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     if(this.courseTypeId) {
                       this.getCourses(level, this.monthAndYear)
                     }
-                  };
+                  } else {
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+                  }
+
                 }
               });
             }
@@ -1985,7 +2020,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
   getCourses(level: any, date: any, fromPrivate = false) {
     if(!this.courseTypeId) {
-      this.setCourseType('private', 2);
+      this.setCourseType('private', 2, level);
     }
     this.loadingCalendar = true;
     this.dateClass();
