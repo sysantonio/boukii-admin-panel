@@ -1046,8 +1046,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
             group.teachers_min = level.id;
-            group.age_min = 5;
-            group.age_max = 50;
+            group.age_min = level.age_min;
+            group.age_max = level.age_max;
             group.subgroups.push({
               degree_id: level.id,
               monitor_id: null,

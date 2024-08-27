@@ -497,8 +497,8 @@ export class CourseDetailComponent implements OnInit {
             group.degree_id = level.id;
             group.course_date_id = prevGroup.course_date_id;
             group.course_id = prevGroup.course_id;
-            group.age_min = 5;
-            group.age_max = 50;
+            group.age_min = level.age_min;
+            group.age_max = level.age_max;
             group.course_subgroups.push({
               degree_id: level.id,
               monitor_id: null,
