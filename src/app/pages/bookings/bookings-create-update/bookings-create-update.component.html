@@ -462,7 +462,7 @@
                       [min]="minDate"
                       [max]="getMaxDate()"
                       [readonly]="externalData?.date"
-                      [value]="externalData?.date ? externalData?.date : selectedDatePrivate"
+                      [value]="externalData?.date ? externalData?.date : getDateFromSelectedDates().date"
                       [matDatepickerFilter]="inUseDatesFilter"
                     />
                     <mat-datepicker-toggle
@@ -603,7 +603,7 @@
                   </mat-form-field>
                 </div>
 
-                <mat-divider class="text-border"></mat-divider>
+                <mat-divider class="text-border" style="margin-bottom: 2%"></mat-divider>
               </ng-container>
 
               <div

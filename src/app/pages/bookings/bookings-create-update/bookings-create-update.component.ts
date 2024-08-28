@@ -436,6 +436,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.monthAndYear = new Date(this.externalData.date);
     }
 
+    if(this.selectedDatePrivate && !this.externalData && type == 'privee') {
+      this.monthAndYear = new Date(this.selectedDatePrivate);
+    }
+
     if(this.snackBarRef!==null) {
 
       this.snackBarRef.dismiss();
@@ -2199,7 +2203,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   getLevelOrder(id: any) {
     if (id && id !== null) {
-      return this.levels.find((l) => l.id === id).degree_order;
+      return this.levels.find((l) => l.id === id) ? this.levels.find((l) => l.id === id).degree_order : null;
 
     }
   }
@@ -2998,7 +3002,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
-  getDateFromSelectedDates() {
+/*  getDateFromSelectedDates() {
     let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
 
     const formattedDate = new Date(date).toISOString().split('T')[0];
@@ -3008,7 +3012,72 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
     });
 
+  }*/
+
+  getDateFromSelectedDates() {
+    // Obtén la fecha de externalData o selectedDatePrivate
+    let date = this.externalData?.date ? this.externalData.date : this.selectedDatePrivate;
+
+    // Convertir la fecha a UTC eliminando la diferencia de la zona horaria
+    const targetDateUTC = new Date(date);
+    const targetYear = targetDateUTC.getUTCFullYear();
+    const targetMonth = targetDateUTC.getUTCMonth();
+    const targetDay = targetDateUTC.getUTCDate();
+
+    const formattedDate = new Date(Date.UTC(targetYear, targetMonth, targetDay)).toISOString().split('T')[0];
+
+    // Buscar una coincidencia exacta de la fecha
+    const exactMatch = this.selectedItem.course_dates.find(i => {
+      const courseDateUTC = new Date(i.date);
+      const courseYear = courseDateUTC.getUTCFullYear();
+      const courseMonth = courseDateUTC.getUTCMonth();
+      const courseDay = courseDateUTC.getUTCDate();
+
+      const courseFormattedDate = new Date(Date.UTC(courseYear, courseMonth, courseDay)).toISOString().split('T')[0];
+      return courseFormattedDate === formattedDate;
+    });
+
+    if (exactMatch) {
+      return exactMatch;
+    }
+
+    // Si no se encuentra una coincidencia exacta, buscar la fecha más cercana en el mismo mes
+    const searchDate = new Date(targetDateUTC);
+    const searchMonth = searchDate.getMonth();
+    const searchYear = searchDate.getFullYear();
+
+    let closestDate = null;
+    let closestDifference = Infinity;
+
+    this.selectedItem.course_dates.forEach(i => {
+      const courseDateUTC = new Date(i.date);
+      const courseMonth = courseDateUTC.getMonth();
+      const courseYear = courseDateUTC.getFullYear();
+
+      if (courseMonth === searchMonth && courseYear === searchYear) {
+        const difference = Math.abs(courseDateUTC.getTime() - searchDate.getTime());
+        if (difference < closestDifference) {
+          closestDifference = difference;
+          closestDate = i;
+        }
+      }
+    });
+
+    // Si no se encuentra una fecha cercana en el mismo mes, retorna la más próxima en general
+    if (!closestDate && this.selectedItem.course_dates.length > 0) {
+      this.selectedItem.course_dates.forEach(i => {
+        const courseDateUTC = new Date(i.date);
+        const difference = Math.abs(courseDateUTC.getTime() - searchDate.getTime());
+        if (difference < closestDifference) {
+          closestDifference = difference;
+          closestDate = i;
+        }
+      });
+    }
+
+    return closestDate;
   }
+
 
   generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
