@@ -422,11 +422,13 @@ export class CourseDetailComponent implements OnInit {
 
             this.defaults.course_dates.forEach(cs => {
               cs.course_groups.forEach(group => {
+                level.visible = false;
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
+                  level.visible = true;
                 }
-                level.visible = false;
+
               });
             });
             this.selectedItem = this.daysDatesLevels[0].dateString;
@@ -435,6 +437,7 @@ export class CourseDetailComponent implements OnInit {
           });
 
           this.colorKeys = Object.keys(this.groupedByColor);
+          this.loadingMonitors = false;
         }
 
       })
