@@ -274,7 +274,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
               private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService,
-              private dateAdapter: DateAdapter<Date>, private translationService: TranslationService) {
+              private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -2448,7 +2448,7 @@ this.activityDatesTable.renderRows();
         const targetField = this.getField(targetLang, field);
           // Realizar la traducción
           let newValue = this.decodeHtmlEntities(sourceText)
-          this.translationService.translateText(newValue, targetLang.toUpperCase())
+          this.crudService.translateText(newValue, targetLang.toUpperCase())
             .subscribe((response: any) => {
               const translatedValue = this.encodeHtmlEntities(response.translations[0].text)
               this.defaults.translations[targetLang][field] = translatedValue;
