@@ -92,11 +92,11 @@ export class ApiCrudService extends ApiService {
   }
 
   translateText(text: string, targetLanguage: string): Observable<any> {
-    const params = new HttpParams()
-      .set('text', text)
-      .set('target_lang', targetLanguage);
-
-    return this.http.post( this.baseUrl, params, { headers: this.getHeaders() });
+      const params = {
+        'text' : text,
+        'target_lang': targetLanguage
+      }
+    return this.http.post( this.baseUrl + '/translate', params, { headers: this.getHeaders() });
   }
 
 }
