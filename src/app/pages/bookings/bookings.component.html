@@ -81,7 +81,7 @@
               >
               </span>
             </div>
-            <div
+            <div *ngIf="detailData.user"
               style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;"
             >
               {{ detailData.user.username }}
