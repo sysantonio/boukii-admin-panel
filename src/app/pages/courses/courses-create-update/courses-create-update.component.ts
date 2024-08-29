@@ -19,7 +19,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
-import {TranslationService} from '../../../../service/translation.service';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -2450,7 +2449,7 @@ this.activityDatesTable.renderRows();
           let newValue = this.decodeHtmlEntities(sourceText)
           this.crudService.translateText(newValue, targetLang.toUpperCase())
             .subscribe((response: any) => {
-              const translatedValue = this.encodeHtmlEntities(response.translations[0].text)
+              const translatedValue = this.encodeHtmlEntities(response.data.translations[0].text)
               this.defaults.translations[targetLang][field] = translatedValue;
               this.courseInfoFormGroup.controls[targetField].setValue(translatedValue);
             });
