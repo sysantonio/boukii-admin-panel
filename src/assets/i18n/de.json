@@ -619,5 +619,6 @@
   "error.max_quantity": "Es kann nicht mehr zum Verkauf stehen, als die Gesamtsumme der Rabattcodes",
   "user.noSportsAssigned.prompt": "Dem ausgewählten Benutzer sind keine Sportarten zugewiesen. Möchtest du ihm jetzt Sportarten zuweisen?",
   "message": "Nachricht",
-  "authorized_levels": "Autorisierte Stufen"
+  "authorized_levels": "Autorisierte Stufen",
+  "translate_ia": "Automatisch übersetzen"
 }

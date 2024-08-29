@@ -317,11 +317,21 @@
 
             </div>
           </div>
-          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
-            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button color="primary" (click)="checkStep2PrivateNoFlex(stepper)" mat-raised-button>
-              {{'next' | translate}}
+          <div class="actions flex items-center justify-between gap-2" style="width: 100%">
+            <!-- Botón de traducción a la izquierda -->
+            <button mat-raised-button color="primary" (click)="translateCurrentTabToOthers()">
+              {{ 'translate_ia' | translate }}
             </button>
+
+            <!-- Contenedor para alinear los botones restantes a la derecha -->
+            <div class="flex items-center gap-2">
+              <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">
+                Reset
+              </button>
+              <button color="primary" (click)="checkStep2PrivateNoFlex(stepper)" mat-raised-button>
+                {{'next' | translate}}
+              </button>
+            </div>
           </div>
         </mat-step>
 
@@ -1013,17 +1023,29 @@
           </div>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
-            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button color="primary" mat-raised-button (click)="checkStep2ColectiveNoFlex(stepper)">
+            <div class="actions flex items-center justify-between gap-2" style="width: 100%">
+              <!-- Botón de traducción a la izquierda -->
+              <button mat-raised-button color="primary" (click)="translateCurrentTabToOthers()">
+                {{ 'translate_ia' | translate }}
+              </button>
+
+              <!-- Contenedor para alinear los botones restantes a la derecha -->
+              <div class="flex items-center gap-2">
+                <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">
+                  Reset
+                </button>
+                <button color="primary" mat-raised-button (click)="checkStep2ColectiveNoFlex(stepper)">
               <span *ngIf="mode === 'create'">
                 {{ 'next'| translate}}
 
               </span>
-              <span *ngIf="mode !== 'create'">
+                  <span *ngIf="mode !== 'create'">
                 {{ 'save'| translate}}
 
               </span>
-            </button>
+                </button>
+              </div>
+            </div>
           </div>
         </mat-step>
 
@@ -1643,7 +1665,7 @@
               <mat-tab-group style="width: 100%" [(selectedIndex)]="selectedTabDescIndex" (selectedTabChange)="onTabDesChanged($event);">
                 <mat-tab label="FR">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
-                    <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
+                    <label for="summary-fr" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
                     <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                       {{'courses.errors.summary' | translate}}
@@ -1651,7 +1673,7 @@
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
-                    <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
+                    <label for="desc-fr" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
                     <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                       {{'courses.errors.desc' | translate}}
@@ -1706,11 +1728,20 @@
 
             </div>
           </div>
-          <div class="actions flex items-center justify-end gap-2" style="width: 100%">
-            <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>
-            <button color="primary" (click)="checkStep2PrivateNoFlex(stepper)" mat-raised-button>
-              {{'next' | translate}}
+          <div class="actions flex items-center justify-between gap-2" style="width: 100%">
+            <!-- Botón de traducción a la izquierda -->
+            <button mat-raised-button color="primary" (click)="translateCurrentTabToOthers()">
+              {{ 'translate_ia' | translate }}
             </button>
+            <!-- Contenedor para alinear los botones restantes a la derecha -->
+            <div class="flex items-center gap-2">
+              <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">
+                Reset
+              </button>
+              <button color="primary" (click)="checkStep2PrivateNoFlex(stepper)" mat-raised-button>
+                {{'next' | translate}}
+              </button>
+            </div>
           </div>
         </mat-step>
 
@@ -1999,48 +2030,48 @@
 
           </div>
           <div class="px-6 py-4 flex flex-col" *ngIf="this.defaults.options">
-          <ng-container *ngFor="let group of groups; let i = index">
-            <div class="flex flex-wrap gap-4 mb-4">
-              <div class="flex-auto" style="flex-basis: 20%;">
-                <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>{{'group_name' | translate}}</mat-label>
-                  <input type="text" matInput [(ngModel)]="groups[i].groupName" id="groupName{{i}}" name="groupName{{i}}"/>
-                </mat-form-field>
+            <ng-container *ngFor="let group of groups; let i = index">
+              <div class="flex flex-wrap gap-4 mb-4">
+                <div class="flex-auto" style="flex-basis: 20%;">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>{{'group_name' | translate}}</mat-label>
+                    <input type="text" matInput [(ngModel)]="groups[i].groupName" id="groupName{{i}}" name="groupName{{i}}"/>
+                  </mat-form-field>
+                </div>
+                <div class="flex-auto" style="flex-basis: 15%;">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>{{'age_min' | translate}}</mat-label>
+                    <input type="number" placeholder="Min." aria-label="Number" matInput  id="ageMin{{i}}"
+                           [min]="0" [(ngModel)]="groups[i].ageMin" name="ageMin{{i}}"/>
+                  </mat-form-field>
+                </div>
+                <div class="flex-auto" style="flex-basis: 15%;">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>{{'age_max' | translate}}</mat-label>
+                    <input type="number" placeholder="Max" aria-label="Number" matInput
+                           [min]="group.ageMin ?? 0" [(ngModel)]="groups[i].ageMax" id="ageMax{{i}}" name="ageMax{{i}}"/>
+                  </mat-form-field>
+                </div>
+                <div class="flex-auto" style="flex-basis: 20%;">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>{{'option_name' | translate}}</mat-label>
+                    <input type="text" matInput [(ngModel)]="groups[i].optionName" id="optionName{{i}}" name="optionName{{i}}"/>
+                  </mat-form-field>
+                </div>
+                <div class="flex-auto" style="flex-basis: 15%;">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>{{'option_price' | translate}}</mat-label>
+                    <input type="number" placeholder="Price" aria-label="Number"
+                           matInput [min]="1" [(ngModel)]="groups[i].price" id="price{{i}}" name="price{{i}}"/>
+                  </mat-form-field>
+                </div>
+                <div class="flex-auto" style="flex-basis: 10%; display: flex; align-items: center;">
+                  <button mat-icon-button (click)="removeGroup(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
               </div>
-              <div class="flex-auto" style="flex-basis: 15%;">
-                <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>{{'age_min' | translate}}</mat-label>
-                  <input type="number" placeholder="Min." aria-label="Number" matInput  id="ageMin{{i}}"
-                         [min]="0" [(ngModel)]="groups[i].ageMin" name="ageMin{{i}}"/>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto" style="flex-basis: 15%;">
-                <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>{{'age_max' | translate}}</mat-label>
-                  <input type="number" placeholder="Max" aria-label="Number" matInput
-                         [min]="group.ageMin ?? 0" [(ngModel)]="groups[i].ageMax" id="ageMax{{i}}" name="ageMax{{i}}"/>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto" style="flex-basis: 20%;">
-                <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>{{'option_name' | translate}}</mat-label>
-                  <input type="text" matInput [(ngModel)]="groups[i].optionName" id="optionName{{i}}" name="optionName{{i}}"/>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto" style="flex-basis: 15%;">
-                <mat-form-field appearance="outline" class="w-full">
-                  <mat-label>{{'option_price' | translate}}</mat-label>
-                  <input type="number" placeholder="Price" aria-label="Number"
-                         matInput [min]="1" [(ngModel)]="groups[i].price" id="price{{i}}" name="price{{i}}"/>
-                </mat-form-field>
-              </div>
-              <div class="flex-auto" style="flex-basis: 10%; display: flex; align-items: center;">
-                <button mat-icon-button (click)="removeGroup(i)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            </div>
-          </ng-container>
+            </ng-container>
           </div>
           <div class="actions flex items-center justify-end gap-2" style="width: 100%">
             <button (click)="stepper.reset()" [disabled]="courseInfoPriveFormGroup.pristine" color="primary" mat-button type="button">Reset</button>

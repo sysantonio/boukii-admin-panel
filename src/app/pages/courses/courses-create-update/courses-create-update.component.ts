@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
+import {TranslationService} from '../../../../service/translation.service';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -273,7 +274,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
               private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService,
-              private dateAdapter: DateAdapter<Date>) {
+              private dateAdapter: DateAdapter<Date>, private translationService: TranslationService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -2431,6 +2432,48 @@ this.activityDatesTable.renderRows();
       })
   }
 
+  translateCurrentTabToOthers() {
+    const fieldsToTranslate = ['short_description', 'description', 'name'];
+    const languages = ['fr', 'en', 'de', 'es', 'it'];
+    const sourceLang = languages[this.selectedTabDescIndex];  // Determina el idioma de origen basado en el índice de la pestaña seleccionada
+
+
+    fieldsToTranslate.forEach(field => {
+      const sourceText = this.defaults.translations[sourceLang][field];
+      if (!sourceText) return; // No traducir si el campo de origen está vacío
+
+      const targetLanguages = languages.filter(lang => lang !== sourceLang);
+
+      targetLanguages.forEach(targetLang => {
+        const targetField = this.getField(targetLang, field);
+          // Realizar la traducción
+          let newValue = this.decodeHtmlEntities(sourceText)
+          this.translationService.translateText(newValue, targetLang.toUpperCase())
+            .subscribe((response: any) => {
+              const translatedValue = this.encodeHtmlEntities(response.translations[0].text)
+              this.defaults.translations[targetLang][field] = translatedValue;
+              this.courseInfoFormGroup.controls[targetField].setValue(translatedValue);
+            });
+      });
+    });
+  }
+
+  decodeHtmlEntities(encodedString: string): string {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = encodedString;
+    return textarea.value;
+  }
+
+  encodeHtmlEntities(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  getField(language: string, field: string): string {
+    return `${field}_${language}`;
+  }
+
   checkStep2PrivateNoFlex(stepper: MatStepper) {
     if(this.defaults.translations.fr.name === null) {
       this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
@@ -2608,10 +2651,12 @@ this.activityDatesTable.renderRows();
 
   onTabNameChanged(event: any) {
     this.selectedTabNameIndex = event.index;
+    this.selectedTabDescIndex = event.index;
   }
 
   onTabDesChanged(event: any) {
     this.selectedTabDescIndex = event.index;
+    this.selectedTabNameIndex = event.index;
   }
 
   checkAvailableMonitors(level: any) {

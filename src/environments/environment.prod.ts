@@ -3,6 +3,8 @@ export const environment = {
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   baseUrl: 'https://api.boukii.golembyte.com/api',
+  deepApiKey: '34222665-307b-451e-9996-1fdb10e8afec:fx',
+  deepApiUrl: 'https://api-free.deepl.com/v2/translate',
   firebaseConfig: {
     apiKey: "AIzaSyAVqgEm3-_sMPLqxySQpyHKEfLtQ1_7pHI",
     authDomain: "boukii-test.firebaseapp.com",

@@ -616,6 +616,7 @@
   "error.max_quantity": "Il ne peut pas y avoir plus à vendre que la quantité totale de codes de réduction",
   "user.noSportsAssigned.prompt": "L'utilisateur sélectionné n'a aucun sport attribué. Voulez-vous lui attribuer des sports maintenant?",
   "message": "Message",
-  "authorized_levels": "Niveaux Autorisés"
+  "authorized_levels": "Niveaux Autorisés",
+  "translate_ia": "Traduire automatiquement"
 
 }
