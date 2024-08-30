@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {Observable, map, of, startWith, forkJoin, mergeMap} from 'rxjs';
@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
+import {AngularEditorConfig} from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -72,6 +73,24 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   ];
 
   filteredToHours = [];
+
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
+    toolbarPosition: 'top',
+    outline: true,
+  }
 
   summary = ``;
   description = ``;
@@ -142,6 +161,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       price: ''
     }
   ];
+  isAngularHtmlEditing = false;
   defaults: any = {
     unique: false,
     course_type: null,
@@ -272,7 +292,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-              private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService,
+              private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, private cdRef: ChangeDetectorRef,
               private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
@@ -1376,6 +1396,7 @@ this.activityDatesTable.renderRows();
       this.daysDates = [];
       this.daysDatesLevels = [];
     }
+    //this.isAngularHtmlEditing = false;
   }
 
   setFlexibility(event: any) {
@@ -2430,31 +2451,74 @@ this.activityDatesTable.renderRows();
         this.snackbar.open(error.error.message, 'OK', {duration: 5000})
       })
   }
-
-  translateCurrentTabToOthers() {
-    const fieldsToTranslate = ['short_description', 'description', 'name'];
+  async translateCurrentTabToOthers() {
+    const fieldsToTranslate = ['name', 'short_description', 'description'];
     const languages = ['fr', 'en', 'de', 'es', 'it'];
-    const sourceLang = languages[this.selectedTabDescIndex];  // Determina el idioma de origen basado en el índice de la pestaña seleccionada
 
+    for (let index = 0; index < languages.length; index++) {
+      this.selectedTabDescIndex = index;
+      this.cdRef.detectChanges();
 
-    fieldsToTranslate.forEach(field => {
-      const sourceText = this.defaults.translations[sourceLang][field];
-      if (!sourceText) return; // No traducir si el campo de origen está vacío
+      // Esperar a que la pestaña se renderice completamente
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      const targetLanguages = languages.filter(lang => lang !== sourceLang);
+      this.cdRef.detectChanges();
 
-      targetLanguages.forEach(targetLang => {
-        const targetField = this.getField(targetLang, field);
-          // Realizar la traducción
-          let newValue = this.decodeHtmlEntities(sourceText)
-          this.crudService.translateText(newValue, targetLang.toUpperCase())
-            .subscribe((response: any) => {
-              const translatedValue = this.encodeHtmlEntities(response.data.translations[0].text)
-              this.defaults.translations[targetLang][field] = translatedValue;
-              this.courseInfoFormGroup.controls[targetField].setValue(translatedValue);
-            });
-      });
-    });
+      const sourceLang = languages[index];
+
+      for (const field of fieldsToTranslate) {
+        const sourceText = this.defaults.translations[sourceLang][field];
+        if (!sourceText) continue;
+
+        const targetLanguages = languages.filter(lang => lang !== sourceLang);
+
+        const translationObservables = targetLanguages.map(targetLang => {
+          const newValue = this.decodeHtmlEntities(sourceText);
+          return this.crudService.translateText(newValue, targetLang.toUpperCase())
+            .pipe(
+              map((response: any) => ({
+                lang: targetLang,
+                field: field,
+                translatedText: response.data.translations[0].text
+              }))
+            );
+        });
+
+        forkJoin(translationObservables).subscribe(translations => {
+          translations.forEach(translation => {
+            const { lang, field, translatedText } = translation;
+
+            if (field !== 'name') {
+              // Cambiar al modo de edición de HTML
+              const toggleEditorModeButton = document.getElementById('toggleEditorMode-' + field + '_' + lang);
+              if (toggleEditorModeButton) {
+                toggleEditorModeButton.click();
+              }
+
+              this.defaults.translations[lang][field] = translatedText;
+
+              // Insertar el texto traducido
+              const editorElement = document.getElementById('sourceText' + field + '_' + lang);
+              if (editorElement) {
+                editorElement.innerHTML = this.encodeHtmlEntities(translatedText);
+
+                // Regresar al modo de edición de WYSIWYG
+                if (toggleEditorModeButton) {
+                  toggleEditorModeButton.click();
+                }
+              }
+            } else {
+              this.defaults.translations[lang][field] = translatedText;
+            }
+          });
+
+          this.cdRef.detectChanges();
+        });
+      }
+
+      // Esperar antes de pasar a la siguiente pestaña
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
   }
 
   decodeHtmlEntities(encodedString: string): string {
