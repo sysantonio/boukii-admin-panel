@@ -8,5 +8,5 @@
     z-index: 2;position: relative;
 }
 .level-image {
-    position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);z-index: 1;border-radius:100%;
+    position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);z-index: 1;border-radius:100%;object-fit: contain;
 }
