@@ -392,7 +392,7 @@
             </div>
           </div>
 
-          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid #ededed; padding:5%">
+          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid #ededed; padding:5%;justify-content: space-between;">
             <div class="py-4 flex items-center">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:100%;">
@@ -402,7 +402,7 @@
                   </div>
                   <div style="float: left; width:80%;">
 
-                    <p style="float: left; width:100%;font-size: 12px;position: relative;left: 5%;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore()}}%</p>
+                    <p style="float: left; width:100%;font-size: 12px;position: relative;left: 5%;">{{selectedSport?.level?.league}} - {{calculateGoalsScore()}}%</p>
                     <h1 style="float: left; width:100%;font-size: 20px;position: relative;left: -5%;">
                       <mat-icon svgIcon="mat:chevron_left" class="icon-sm flex-none" style="float:left;position: relative;left: -30%;cursor:pointer;height: 2rem;width:2rem;" (click)="changeLevel(-1)"></mat-icon>
                       {{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}
@@ -425,21 +425,20 @@
                     </div>
 
                     <div style="float: left; width:70%;">
-                      <p>{{goal.name}} </p>
+                      <p> {{goal.name}} </p>
                     </div>
 
                     <div style="float: left; width:5%;margin-right: 15px;">
-                      <mat-icon svgIcon="mat:radio_button_unchecked"  style="color: red"></mat-icon>
-
+                      <mat-icon svgIcon="mat:radio_button_unchecked" [style.color]="getDegreeScore(goal.id)>0?'':'red'"></mat-icon>
                     </div>
 
                     <div style="float: left; width:5%;margin-right: 15px;">
-                      <mat-icon svgIcon="mat:star_half" style="color: yellow"></mat-icon>
+                      <mat-icon svgIcon="mat:star_half" [style.color]="getDegreeScore(goal.id)===5?'yellow':''"></mat-icon>
 
                     </div>
 
                     <div style="float: left; width:5%;">
-                      <mat-icon svgIcon="mat:check" style="color: green"></mat-icon>
+                      <mat-icon svgIcon="mat:check" [style.color]="getDegreeScore(goal.id)===10?'green':''"></mat-icon>
 
                     </div>
                   </div>

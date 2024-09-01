@@ -201,6 +201,7 @@ export class ClientDetailComponent {
     this.getInitialData().pipe(
       switchMap(() => this.getData())
     ).subscribe(() => {
+      this.crudService.get('/evaluation-fulfilled-goals').subscribe((data) => this.evaluationFullfiled = data.data)
       // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
     });
   }
@@ -279,17 +280,15 @@ export class ClientDetailComponent {
       'evaluations.evaluationFulfilledGoals.degreeSchoolSportGoal', 'evaluations.degree', 'observations'])
       .pipe(
         tap((data) => {
-          console.log(data)
           this.defaults = data.data;
           this.evaluations = data.data.evaluations;
-          console.log(this.evaluations)
-          this.evaluationFullfiled = [];
-          this.evaluations.forEach(ev => {
-            ev.evaluation_fulfilled_goals.forEach(element => {
-              ;
-              this.evaluationFullfiled.push(element);
-            });
-          });
+          //this.evaluationFullfiled = [];
+          //this.evaluations.forEach(ev => {
+          //  ev.evaluation_fulfilled_goals.forEach(element => {
+          //    ;
+          //    this.evaluationFullfiled.push(element);
+          //  });
+          //});
           if (data.data.observations.length > 0) {
             this.defaultsObservations = data.data[0];
           } else {
@@ -386,7 +385,6 @@ export class ClientDetailComponent {
                 this.goals.push(goal);
               });
             });
-
             this.clientSport.forEach(element => {
               if (element.sport_id === sport.sport_id) {
                 element.name = sport.name;
@@ -435,9 +433,7 @@ export class ClientDetailComponent {
 
           this.clientSport.forEach(element => {
             element.level = element.degree;
-
           });
-          console.log(this.clientSport)
           return this.getSchoolSportDegrees();
         })
       );
@@ -844,16 +840,12 @@ export class ClientDetailComponent {
     }
     this.allLevels.sort((a: any, b: any) => a.degree_order - b.degree_order);
     this.selectedSport.level = this.allLevels[this.sportIdx];
-    console.log(this.selectedSport)
-    console.log(this.goals)
     this.goals.forEach((element: any) => {
       if (element.degree_id === this.allLevels[this.sportIdx].id) {
 
         this.selectedGoal.push(element);
       }
     });
-    console.log(this.selectedGoal)
-
     this.coloring = false;
   }
 
@@ -1013,28 +1005,26 @@ export class ClientDetailComponent {
 
   calculateGoalsScore() {
     let ret = 0;
-    return this.selectedSport.level.progress
     if (this.selectedSport?.level) {
-      console.log(this.selectedSport)
       const goals = this.goals.filter((g) => g.degree_id == this.selectedSport.level.id);
-
-      if (goals.length > 0) {
-        const maxPoints = goals.length * 10;
+      const maxPoints = goals.length * 10;
+      for (const goal of goals) {
         this.evaluationFullfiled.forEach(element => {
-          if (element.score) {
-
-            ret = ret + element.score;
+          if (element.degrees_school_sport_goals_id === goal.id) {
+            ret += element.score;
           }
         });
         ret = ret > maxPoints ? maxPoints : ret
-        return (ret / maxPoints) * 100;
       }
-      return ret;
-
-    } else {
-      return ret;
+      return (ret / maxPoints) * 100 || 0;
     }
+    return ret;
+  }
 
+  getDegreeScore(goal: any) {
+    const d = this.evaluationFullfiled.find(element => element.degrees_school_sport_goals_id === goal)
+    if (d) return d.score
+    return 0
   }
 
   showInfoEvent(event: boolean) {
