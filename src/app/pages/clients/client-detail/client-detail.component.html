@@ -369,15 +369,15 @@
       </mat-tab>
 
       <mat-tab label="{{'sports' | translate }}">
-        <div class="card" style="margin: 3% 0 0 0;">
-          <div class="px-6 py-4 border-b">
+        <div class="card" style="margin: 3% 0 0 0;text-align: -webkit-center;">
+          <div class="px-6 py-4 border-b" style="width: 100%;max-width:1700px;text-align: start;">
             <h2 class="title m-0">{{'sport_evolution' | translate }}
             <mat-icon svgIcon="mat:delete" style="float:right;cursor:pointer"  ></mat-icon>
             <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"></mat-icon>
-          </h2>
+            </h2>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 gap-4" style="border-bottom: 1px solid #ededed; padding:30px">
+          <div class="px-6 py-4 grid grid-cols-1 gap-4" style="border-bottom: 1px solid #ededed; padding:30px;width: 100%;max-width:1700px;text-align: start;">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
                 <div style="float: left; text-align: -webkit-center;" *ngFor="let item of clientSport" (click)="selectSportEvo(item)">
@@ -391,28 +391,20 @@
               </div>
             </div>
           </div>
-          30px maximo
-          ancho: 1700px
-          600px
-
-          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid #ededed; padding:30px;justify-content: space-between;">
-            <div class="py-4 flex items-center">
+          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid #ededed; padding:30px;justify-content: space-between;width: 100%;max-width:1700px;min-height: 400px;text-align: start;">
+            <div class="py-4 flex" style="width: 100%;max-width:1500px;margin: 0 30px;">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:100%;">
-
-                  <div style="float: left; width:20%;">
+                  <div style="float: left; width:100%;display:flex;align-items: center;">
+                    <mat-icon svgIcon="mat:chevron_left" class="icon-sm flex-none" style="float:left;position: relative;cursor:pointer;height: 2rem;width:2rem;align-content: center;" (click)="changeLevel(-1)"></mat-icon>
                     <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
-                  </div>
-                  <div style="float: left; width:80%;">
-
-                    <p style="float: left; width:100%;font-size: 12px;position: relative;left: 5%;">{{selectedSport?.level?.league}} - {{calculateGoalsScore()}}%</p>
-                    <h1 style="float: left; width:100%;font-size: 20px;position: relative;left: -5%;">
-                      <mat-icon svgIcon="mat:chevron_left" class="icon-sm flex-none" style="float:left;position: relative;left: -30%;cursor:pointer;height: 2rem;width:2rem;" (click)="changeLevel(-1)"></mat-icon>
-                      {{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}
-                      <mat-icon svgIcon="mat:chevron_right" class="icon-sm flex-none" style="float:right;position: relative;left: 10%;cursor:pointer;height: 2rem;width:2rem;"(click)="changeLevel(1)"></mat-icon>
-                    </h1>
-
-
+                    <div style="max-width: 1500px;width:100%;padding:0 30px">
+                      <p style="float: left; width:100%;font-size: 12px;position: relative;">{{selectedSport?.level?.league}} - {{calculateGoalsScore()}}%</p>
+                      <h1 style="float: left; width:100%;font-size: 20px;position: relative;">
+                        {{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}
+                      </h1>
+                    </div>
+                    <mat-icon svgIcon="mat:chevron_right" class="icon-sm flex-none" style="float:right;position: relative;cursor:pointer;height: 2rem;width:2rem;align-content: center;"(click)="changeLevel(1)"></mat-icon>
                   </div>
 
                   <div style="float: left; width:100%;margin: 2% 0 0 0;">
@@ -421,28 +413,23 @@
 
                   </div>
 
-                  <div style="float: left; width:100%;margin: 4% 0 0 0;" *ngFor="let goal of selectedGoal">
+                  <div style="float: left; width:100%;margin: 30px 0 0 0;" *ngFor="let goal of selectedGoal">
 
-                    <div style="float: left; width:3%;margin-right: 15px;">
+                    <div style="float: left; width:3%;margin-right: 2%;">
                       <mat-icon svgIcon="mat:settings" style="color: gray"></mat-icon>
                     </div>
 
-                    <div style="float: left; width:70%;">
+                    <div style="float: left; width:88%;">
                       <p> {{goal.name}} </p>
                     </div>
-
-                    <div style="float: left; width:5%;margin-right: 15px;">
-                      <mat-icon svgIcon="mat:radio_button_unchecked" [style.color]="getDegreeScore(goal.id)>0?'':'red'"></mat-icon>
-                    </div>
-
-                    <div style="float: left; width:5%;margin-right: 15px;">
-                      <mat-icon svgIcon="mat:star_half" [style.color]="getDegreeScore(goal.id)===5?'yellow':''"></mat-icon>
-
-                    </div>
-
-                    <div style="float: left; width:5%;">
-                      <mat-icon svgIcon="mat:check" [style.color]="getDegreeScore(goal.id)===10?'green':''"></mat-icon>
-
+                    <div style="float: left; width:5%;margin-left: 2%;">
+                      <div 
+                      [style.backgroundColor]="getDegreeScore(goal.id)>0?getDegreeScore(goal.id)>5?'green':'yellow':'#E6E6E6'"
+                      style="width: 25px;
+                      border-radius: 100%;
+                      height: 25px;
+                      margin: 0 auto;">
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -454,7 +441,7 @@
               </div>
             </div>
           </div>
-          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid #ededed; padding:30px">
+          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid #ededed; padding:30px;width: 100%;max-width:1700px;text-align: start;">
             <div class="py-6 flex items-center">
                 <!--<div style="float: left; width:100%;margin-top: 5%" >
                   <h1 style="float: left; width:100%;font-size: 20px;">{{'historical' | translate }}</h1>
@@ -1160,7 +1147,7 @@
 
                   </div>
 
-                  <div style="float: left; width:100%;margin: 4% 0 0 0;" *ngFor="let goal of selectedGoal">
+                  <div style="float: left; width:100%;margin: 30px 0 0 0;" *ngFor="let goal of selectedGoal">
 
                     <div style="float: left; width:3%;margin-right: 15px;">
                       <mat-icon svgIcon="mat:donut_large"></mat-icon>

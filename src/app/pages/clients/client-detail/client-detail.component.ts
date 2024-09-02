@@ -834,9 +834,9 @@ export class ClientDetailComponent {
     this.sportIdx = this.sportIdx + nextLevel;
 
     if (this.sportIdx < 0) {
-      this.sportIdx = 0;
-    } else if (this.sportIdx >= this.allLevels.length) {
       this.sportIdx = this.allLevels.length - 1;
+    } else if (this.sportIdx >= this.allLevels.length) {
+      this.sportIdx = 0;
     }
     this.allLevels.sort((a: any, b: any) => a.degree_order - b.degree_order);
     this.selectedSport.level = this.allLevels[this.sportIdx];
