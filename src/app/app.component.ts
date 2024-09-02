@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
 import { ConfigService } from '../@vex/config/config.service';
 import { Settings } from 'luxon';
-import {DOCUMENT, registerLocaleData} from '@angular/common';
+import { DOCUMENT, registerLocaleData } from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
 import { NavigationService } from '../@vex/services/navigation.service';
 import { LayoutService } from '../@vex/services/layout.service';
@@ -29,44 +29,52 @@ import localeFr from '@angular/common/locales/fr';
 })
 export class AppComponent {
   user: any;
+  locales: { locale: any, lan: string }[] =
+    [
+      { locale: localeEs, lan: 'es' },
+      { locale: localeIt, lan: 'it-IT' },
+      { locale: localeEnGb, lan: 'en-GB' },
+      { locale: localeDe, lan: 'de' },
+      { locale: localeFr, lan: 'fr' },
+    ]
 
   constructor(private configService: ConfigService,
-              private renderer: Renderer2,
-              private platform: Platform,
-              @Inject(DOCUMENT) private document: Document,
-              @Inject(LOCALE_ID) private localeId: string,
-              private layoutService: LayoutService,
-              private route: ActivatedRoute,
-              private translateService: TranslateService,
-              private navigationService: NavigationService,
-              private splashScreenService: SplashScreenService,
-              private schoolService: SchoolService,
-              private readonly matIconRegistry: MatIconRegistry,
-              private readonly domSanitizer: DomSanitizer) {
-
-    registerLocaleData(localeIt, 'it-IT');
-    registerLocaleData(localeEnGb, 'en-GB');
-    registerLocaleData(localeEs, 'es');
-    registerLocaleData(localeDe, 'de');
-    registerLocaleData(localeFr, 'fr');
-    Settings.defaultLocale = this.localeId;
+    private renderer: Renderer2,
+    private platform: Platform,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(LOCALE_ID) private localeId: string,
+    private layoutService: LayoutService,
+    private route: ActivatedRoute,
+    private translateService: TranslateService,
+    private navigationService: NavigationService,
+    private splashScreenService: SplashScreenService,
+    private schoolService: SchoolService,
+    private readonly matIconRegistry: MatIconRegistry,
+    private readonly domSanitizer: DomSanitizer) {
+    for (const locale of this.locales) registerLocaleData(locale.locale, locale.lan)
+    if (this.locales.find((a: any) => a.lan === this.localeId)) Settings.defaultLocale = this.localeId;
+    else Settings.defaultLocale = this.locales[0].lan;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    this.translateService.setDefaultLang(navigator.language.split('-')[0]);
-    this.translateService.currentLang = navigator.language.split('-')[0];
-
+    if (this.locales.find((a: any) => a.lan === navigator.language.split('-')[0])) {
+      this.translateService.setDefaultLang(navigator.language.split('-')[0]);
+      this.translateService.currentLang = navigator.language.split('-')[0];
+    } else {
+      this.translateService.setDefaultLang(this.locales[0].lan);
+      this.translateService.currentLang = this.locales[0].lan;
+    }
     setTimeout(() => {
       if (this.user) {
         this.schoolService.getSchoolData()
-        .subscribe((data) => {
-          defaultConfig.imgSrc = data.data.logo;
-          this.configService.updateConfig({
-            sidenav: {
-              imageUrl: data.data.logo,
-              title: data.data.name,
-              showCollapsePin: true
-            }
-          });
-        })
+          .subscribe((data) => {
+            defaultConfig.imgSrc = data.data.logo;
+            this.configService.updateConfig({
+              sidenav: {
+                imageUrl: data.data.logo,
+                title: data.data.name,
+                showCollapsePin: true
+              }
+            });
+          })
       }
     }, 150);
 
@@ -185,14 +193,14 @@ export class AppComponent {
 
             routerLinkActiveOptions: { exact: true }
           },
-/*          {
-            type: 'link',
-            label: 'calendar',
-            route: '/calendar',
-            icon: '../assets/img/icons/calendar-2.svg',
-            icon_active: '../assets/img/icons/calendar.svg',
-            routerLinkActiveOptions: { exact: true }
-          },*/
+          /*          {
+                      type: 'link',
+                      label: 'calendar',
+                      route: '/calendar',
+                      icon: '../assets/img/icons/calendar-2.svg',
+                      icon_active: '../assets/img/icons/calendar.svg',
+                      routerLinkActiveOptions: { exact: true }
+                    },*/
           {
             type: 'link',
             label: 'bookings',
