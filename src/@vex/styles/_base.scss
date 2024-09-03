@@ -154,3 +154,17 @@ vex-breadcrumbs {
   cursor: pointer;
   margin-left: 10px;
 }
+
+div[style*="65%"]{
+  @media (max-width: 1280px){
+    width: 100%!important;
+  }
+}
+
+mat-card[style*="33%"]{
+  @media (max-width: 1280px){
+    width: 100%!important;
+    margin-left: 0px!important;
+    margin-top: 20px!important;
+  }
+}
