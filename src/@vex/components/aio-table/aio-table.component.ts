@@ -192,11 +192,13 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     });
-    this.getMonitors();
-    this.getClients();
-    this.getSports();
     this.getLanguages();
     this.getDegrees();
+/*    this.getMonitors();
+    this.getClients();
+    this.getSports();
+
+    */
   }
 
   // Detecta cambios en las propiedades de entrada
@@ -836,15 +838,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       const client = this.clients.find((m) => m.id === id);
 
       return client;
-    }
-  }
-
-  getMonitor(id: number) {
-    if (id && id !== null) {
-
-      const monitor = this.monitors.find((m) => m.id === id);
-
-      return monitor;
     }
   }
 

@@ -31,7 +31,7 @@ const routes: VexRoutes = [
   },
   {
     path: 'detail/:id',
-    component: CourseDetailNewComponent,
+    component: CourseDetailComponent,
     data: {
       toolbarShadowEnabled: true
     }

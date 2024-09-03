@@ -162,7 +162,7 @@ export class ClientDetailComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
     { label: 'course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },

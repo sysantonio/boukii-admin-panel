@@ -15,6 +15,8 @@ export class WidgetTableComponent<T> implements OnInit, OnChanges, AfterViewInit
   @Input() data: any;
   @Input() columns: TableColumn<T>[];
   @Input() pageSize = 6;
+  @Input()
+  with: any = '';
 
   visibleColumns: Array<keyof T | string>;
   dataSource = new MatTableDataSource<T>();
@@ -32,7 +34,7 @@ export class WidgetTableComponent<T> implements OnInit, OnChanges, AfterViewInit
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    this.getClients();
+/*    this.getClients();*/
     this.getLanguages();
     this.getSports();
   }
@@ -68,15 +70,6 @@ export class WidgetTableComponent<T> implements OnInit, OnChanges, AfterViewInit
       return 0;
     }
 
-  }
-
-  getClient(id: number) {
-    if (id && id !== null) {
-
-      const client = this.clients.find((m) => m.id === id);
-
-      return client;
-    }
   }
 
   getLanguages() {

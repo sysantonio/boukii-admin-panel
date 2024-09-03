@@ -128,6 +128,7 @@
 
         <div class="deportes-holder">
           <ng-container *ngFor="let item of detailData.monitor_sports_degrees">
+            <ng-container *ngIf="item.school_id == user.schools[0].id">
             <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
               <div style="text-align: center;width: 100%;">
                 <img [src]="item.icon_selected" width="50" height="50"
@@ -155,6 +156,7 @@
                 </span>
               </div>
             </div>
+          </ng-container>
           </ng-container>
         </div>
 

@@ -24,8 +24,8 @@ export class DashboardAnalyticsComponent implements OnInit {
       property: 'type',
       type: 'booking_users_image'
     },
-    { label: 'course', property: 'bookingusers', type: 'booking_users'},
-    { label: 'client', property: 'client_main_id', type: 'client' },
+    { label: 'course', property: 'booking_users', type: 'booking_users'},
+    { label: 'client', property: 'client_main', type: 'client' },
 
   ];
 
@@ -124,7 +124,8 @@ export class DashboardAnalyticsComponent implements OnInit {
 
   getBookings() {
     this.bookingList = [];
-    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&date='+this.date.format('YYYY-MM-DD'))
+    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id',
+      '&school_id='+this.user.schools[0].id + '&date='+this.date.format('YYYY-MM-DD'), '', null, null, ['client'])
       .subscribe((data) => {
         this.bookings = data.data.length;
 
@@ -139,7 +140,8 @@ export class DashboardAnalyticsComponent implements OnInit {
       let uniqueBookingIds = Array.from(bookingIds);
 
       uniqueBookingIds.forEach(element => {
-        this.crudService.list('/bookings', 1, 10000, 'desc', 'id', '&id='+element, '&with[]=bookingusers.course')
+        this.crudService.list('/bookings', 1, 10000, 'desc', 'id', '&id='+element,
+          '', null, null, ['clientMain', 'bookingUsers.course'])
           .subscribe((bo) => {
             this.bookingList = this.bookingList.concat(bo.data);
           })
@@ -156,7 +158,7 @@ export class DashboardAnalyticsComponent implements OnInit {
     let ret = 0;
     this.bookingList.forEach(element => {
 
-      element.bookingusers.forEach(bu => {
+      element.booking_users.forEach(bu => {
         if (bu.course.course_type === 2 && bu.monitor_id === null) {
           ret = ret + 1;
 
@@ -172,7 +174,7 @@ export class DashboardAnalyticsComponent implements OnInit {
     let ret = 0;
     this.bookingList.forEach(element => {
 
-      element.bookingusers.forEach(bu => {
+      element.booking_users.forEach(bu => {
         if (bu.course.course_type === 1 && bu.monitor_id === null) {
           ret = ret + 1;
 

@@ -385,7 +385,8 @@
 
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
                 <vex-aio-table [columns]="columns" [entity]="entity" [title]="'bookings'" [route]="'bookings'"
-                (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'course_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+                (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'course_id'"
+                               [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
                 [showDetail]="showDetail">
               </vex-aio-table>
             </vex-page-layout-content>

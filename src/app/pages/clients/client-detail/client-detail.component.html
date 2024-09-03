@@ -505,7 +505,8 @@
 
                 <vex-page-layout-content class="-mt-6 fullwidth" >
                   <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'"
+                                 [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
@@ -1227,7 +1228,8 @@
 
                 <vex-page-layout-content class="-mt-6 fullwidth" >
                   <vex-aio-table [columns]="columns" [entity]="entity" [title]="'bookings'" [route]="'bookings'"
-                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'"
+                                 [with]="['booking','course.courseGroups.courseSubgroups', 'clientMain']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
