@@ -196,50 +196,6 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">{{'sports' | translate }}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
-              </h2>
-            </div>
-
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
-
-              <div *ngFor="let item of clientSport">
-                <div class="py-3 flex items-center">
-                  <div
-                    @scaleIn
-                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item?.level?.color">
-                  </div>
-
-                  <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">Sport</p>
-                    <p class="m-0 body-1">{{item?.name}}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="py-3 flex items-center">
-                  <div
-                    @scaleIn
-                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <mat-icon class="icon-sm" svgIcon="logo:task"></mat-icon>
-                  </div>
-
-                  <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">Level</p>
-                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
-                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card" style="margin: 3% 0 0 0;">
-            <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'address' | translate}}
                 <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
@@ -300,6 +256,50 @@
                   <p class="m-0 caption text-hint">{{'province' | translate }}</p>
                   <p class="m-0 body-1">{{getCountry(defaults.country)}}
                   </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">{{'sports' | translate }}
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
+
+              <div *ngFor="let item of clientSport">
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item?.level?.color">
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">Sport</p>
+                    <p class="m-0 body-1">{{item?.name}}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <mat-icon class="icon-sm" svgIcon="logo:task"></mat-icon>
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">Level</p>
+                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
+                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -849,7 +849,7 @@
                 </div>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
                 <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
                   {{'save' | translate}}
@@ -946,7 +946,7 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
                 <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
                   {{'save' | translate}}
@@ -1082,7 +1082,7 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
                 <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button>
                   {{'save' |translate}}
@@ -1118,7 +1118,7 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
                 <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="save()">
                   {{'save' | translate}}
