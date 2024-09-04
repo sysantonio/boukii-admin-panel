@@ -631,21 +631,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                         <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                           <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                                   <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
                                       {{detailData?.degree.name}}
@@ -687,21 +687,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                           <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                               <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                               </div>
                           </div>
@@ -1352,21 +1352,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                         <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                           <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                                   <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
                                       {{detailData?.degree.name}}
@@ -1408,21 +1408,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                           <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                               <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                               </div>
                           </div>

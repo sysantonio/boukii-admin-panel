@@ -455,7 +455,9 @@
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
               <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
               (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'"
-                             [with]="['booking.bookingUsers.client','course.courseGroups.courseSubgroups', 'client', 'degree']"
+                             [with]="['booking.bookingUsers.client.clientSports.sport', 'booking.bookingUsers.client.clientSports.degree',
+                             'course.courseGroups.courseSubgroups',
+                              'client.clientSports.degree', 'client.clientSports.degree', 'degree']"
               [showDetail]="showDetail">
             </vex-aio-table>
           </vex-page-layout-content>
@@ -582,7 +584,7 @@
                     <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
                       <ng-container *ngIf="client.monitor_id == id">
                       <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                        [selectLevel]="getClientDegree(detailData?.sport.id, client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                        [selectLevel]="getClientDegree(detailData?.sport.id, client.client.client_sports)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                               <span>
@@ -640,7 +642,7 @@
                       <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
                         <ng-container *ngIf="client.monitor_id == id">
                           <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                            [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                               <span>
@@ -955,7 +957,7 @@
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                       <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                               <span>
@@ -1013,7 +1015,7 @@
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                       <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                               <span>
@@ -1929,7 +1931,7 @@
                   <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
                     <ng-container *ngIf="client.monitor_id == id">
                     <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                      [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                      [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                             <span>
@@ -1987,7 +1989,7 @@
                     <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
                       <ng-container *ngIf="client.monitor_id == id">
                         <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                          [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                          [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                             <span>
@@ -2255,7 +2257,7 @@
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                     <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                             <span>
@@ -2313,7 +2315,7 @@
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                     <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                             <span>

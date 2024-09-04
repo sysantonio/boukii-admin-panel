@@ -1225,7 +1225,6 @@ export class MonitorDetailComponent {
 
 
   showDetailEvent(event: any) {
-    debugger;
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.detailData = event.item;

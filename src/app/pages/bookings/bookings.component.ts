@@ -478,7 +478,7 @@ export class BookingsComponent {
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
     this.bookingUsersUnique = [];
-    debugger;
+
     this.bookingUsersUnique = data.filter(item => {
       if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
         (item.course.course_type != 1  && !uniqueMonitors.has(item.monitor_id))) {

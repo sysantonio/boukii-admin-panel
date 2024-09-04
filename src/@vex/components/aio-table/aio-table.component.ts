@@ -554,7 +554,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   deactivate(item: any) {
-    debugger;
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo

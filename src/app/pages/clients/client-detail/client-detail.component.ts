@@ -216,10 +216,10 @@ export class ClientDetailComponent {
         console.error('Error fetching stations:', error);
         return of([]); // Devuelve un array vacío en caso de error
       })),
-      clients: this.getClients().pipe(retry(3), catchError(error => {
+/*      clients: this.getClients().pipe(retry(3), catchError(error => {
         console.error('Error fetching clients:', error);
         return of([]); // Devuelve un array vacío en caso de error
-      })),
+      })),*/
     };
 
     return forkJoin(requestsInitial).pipe(tap((results) => {

@@ -111,13 +111,13 @@
 
           <div class="holder-client">
             <div class="col-left">
-              <div class="image" *ngIf="!utilizer?.client_sports_data?.length">
+              <div class="image" *ngIf="!utilizer?.client_sports?.length">
                 <img [src]="utilizer.image !== null && utilizer.image !== '' ? utilizer.image : imageAvatar" />
               </div>
 
-              <app-level-user *ngIf="utilizer?.client_sports_data?.length"
-                [allLevels]="utilizer?.client_sports_data?.length ? getSportLevels(utilizer?.client_sports_data[0].sport.id) : []"
-                [selectLevel]="clientSportUtilizer?.length ? utilizer?.client_sports_data[0].degree_id : null"
+              <app-level-user *ngIf="utilizer?.client_sports?.length"
+                [allLevels]="utilizer?.client_sports?.length ? getSportLevels(utilizer?.client_sports[0].sport.id) : []"
+                [selectLevel]="clientSportUtilizer?.length ? utilizer?.client_sports[0].degree_id : null"
                 [size]="60"
                 [userImage]="utilizer.image ? utilizer?.image : imageAvatar">
               </app-level-user>
@@ -165,13 +165,13 @@
             <div class="subtitle">{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</div>
           </div>
           <div  class="cards-user" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
-            <div class="image" *ngIf="!item?.client_sports_data?.length">
+            <div class="image" *ngIf="!item?.client_sports?.length">
               <img [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" />
             </div>
 
-            <app-level-user *ngIf="item?.client_sports_data?.length"
-              [allLevels]="item?.client_sports_data?.length ? getSportLevels(item?.client_sports_data[0].sport.id) : []"
-              [selectLevel]="item?.client_sports_data[0].degree_id"
+            <app-level-user *ngIf="item?.client_sports?.length"
+              [allLevels]="item?.client_sports?.length ? getSportLevels(item?.client_sports[0].sport.id) : []"
+              [selectLevel]="item?.client_sports[0].degree_id"
               [size]="60"
               [userImage]="item.image ? item?.image : imageAvatar">
             </app-level-user>
@@ -265,7 +265,7 @@
             </div>
           </div>
           <div class="deportes-holder">
-            <ng-container *ngFor="let item of utilizer?.client_sports_data">
+            <ng-container *ngFor="let item of utilizer?.client_sports">
               <ng-container *ngIf="item.school_id == user.schools[0].id">
               <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
                 <div style="text-align: center;width: 100%;">
