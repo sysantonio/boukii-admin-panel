@@ -2541,14 +2541,14 @@
               </ng-container>
               <div
                 style="float: left;width: 100%;"
-                *ngIf="!isNanValue(this.cancellationInsurance)"
+                *ngIf="!isNanOrZero(this.cancellationInsurance)"
               >
                 <p style="float: left;">{{'op_rem' | translate}}</p>
                 <mat-slide-toggle
                   color="accent"
                   [(ngModel)]="defaults.has_cancellation_insurance"
                   (change)="calculateRem($event)"
-                  [disabled]="isNanValue(this.cancellationInsurance)"
+                  [disabled]="isNanOrZero(this.cancellationInsurance)"
                   style="float: left; margin-left: 10px"
                 ></mat-slide-toggle>
                 <p style="float:right" *ngIf="defaults.has_cancellation_insurance">

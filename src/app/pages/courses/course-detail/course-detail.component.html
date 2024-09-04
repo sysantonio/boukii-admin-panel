@@ -333,7 +333,7 @@
                                     <!-- n iteraciones por alumno-->
                                     <div style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%" *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index" >
                                       <p *ngIf="courseUserIndex === 0" style="font-size: 20px;margin: 0 0 2% 0;">
-                                        <img (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1)" src="../../../../assets/img/icons/change.svg" style="float:left;cursor: pointer;">{{'students' | translate }}</p>
+                                        <img (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1, groupLevel)" src="../../../../assets/img/icons/change.svg" style="float:left;cursor: pointer;">{{'students' | translate }}</p>
 
                                       <ng-container>
 
@@ -385,7 +385,8 @@
 
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
                 <vex-aio-table [columns]="columns" [entity]="entity" [title]="'bookings'" [route]="'bookings'"
-                (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'course_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+                (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'course_id'"
+                               [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
                 [showDetail]="showDetail">
               </vex-aio-table>
             </vex-page-layout-content>

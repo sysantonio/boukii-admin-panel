@@ -3477,6 +3477,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return isNaN(value);
   }
 
+  isNanOrZero(value: any): boolean {
+    return isNaN(value) || value === 0;
+  }
+
   getMaxDate() {
     return moment(this.selectedItem.course_dates[this.selectedItem.course_dates.length - 1].date).toDate();
   }

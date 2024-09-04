@@ -566,10 +566,10 @@
           <ng-container *ngIf="column.type === 'client'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <img [src]="getClient(row[column.property])?.image !== null && getClient(row[column.property])?.image !== '' ? getClient(row[column.property])?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
-              <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getClient(row[column.property])?.language1_id)}} · {{getCountry(getClient(row[column.property])?.country)}} ·
-                {{calculateAge(getClient(row[column.property])?.birth_date)}} {{'years' | translate }}</span>
-              <span style="float: left; width: 50%;">{{ getClient(row[column.property])?.first_name }} {{ getClient(row[column.property])?.last_name }}</span>
+              <img [src]="row[column.property]?.image !== null && row[column.property]?.image !== '' ? row[column.property]?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
+              <span style="float: left; width: 50%;font-size:10px">{{getLanguage(row[column.property]?.language1_id)}} · {{getCountry(row[column.property]?.country)}} ·
+                {{calculateAge(row[column.property]?.birth_date)}} {{'years' | translate }}</span>
+              <span style="float: left; width: 50%;">{{ row[column.property]?.first_name }} {{ row[column.property]?.last_name }}</span>
             </td>
           </ng-container>
         </ng-container>
@@ -579,10 +579,10 @@
           <ng-container *ngIf="column.type === 'client_2'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <img [src]="getClient(data[i]?.id)?.image !== null && getClient(data[i]?.id)?.image !== '' ? getClient(data[i]?.id)?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
-              <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getClient(data[i]?.id)?.language1_id)}} · {{getCountry(getClient(data[i]?.id)?.country)}} ·
-                {{calculateAge(getClient(data[i]?.id)?.birth_date)}} {{'years' | translate }}</span>
-              <span style="float: left; width: 50%;">{{ getClient(data[i]?.id)?.first_name }} {{ getClient(data[i]?.id)?.last_name }}</span>
+              <img [src]="data[i]?.image !== null && data[i]?.image !== '' ? data[i]?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
+              <span style="float: left; width: 50%;font-size:10px">{{getLanguage(data[i]?.language1_id)}} · {{getCountry(data[i]?.country)}} ·
+                {{calculateAge(data[i]?.birth_date)}} {{'years' | translate }}</span>
+              <span style="float: left; width: 50%;">{{ data[i]?.first_name }} {{ data[i]?.last_name }}</span>
             </td>
           </ng-container>
         </ng-container>
@@ -593,10 +593,10 @@
           <ng-container *ngIf="column.type === 'monitor'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell style="width: 70px;">
-              <img [src]="getMonitor(data[i]?.id)?.image !== null && getMonitor(data[i]?.id)?.image !== '' ? getMonitor(data[i]?.id)?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
-              <span style="float: left; width: 50%;font-size:10px">{{getLanguage(getMonitor(data[i]?.id)?.language1_id)}} · {{getCountry(getMonitor(data[i]?.id)?.country)}} ·
-                {{calculateAge(getMonitor(data[i]?.id)?.birth_date)}} {{'years' | translate }}</span>
-              <span style="float: left; width: 50%;">{{ getMonitor(data[i]?.id)?.first_name }} {{ getMonitor(data[i]?.id)?.last_name }}</span>
+              <img [src]="data[i]?.image !== null && data[i]?.image !== '' ? data[i]?.image : imageAvatar" style="float: left;width: 40px;height: 40px;border-radius: 100%;margin: 0 5px 0 0;object-fit: cover;">
+              <span style="float: left; width: 50%;font-size:10px">{{getLanguage(data[i]?.language1_id)}} · {{getCountry(data[i]?.country)}} ·
+                {{calculateAge(data[i]?.birth_date)}} {{'years' | translate }}</span>
+              <span style="float: left; width: 50%;">{{ data[i]?.first_name }} {{ data[i]?.last_name }}</span>
             </td>
           </ng-container>
         </ng-container>
@@ -798,7 +798,12 @@
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>{{'delete_title' | translate}}</span>
     </button>
-    <button (click)="deactivate(item)" mat-menu-item *ngIf="canDeactivate">
+    <button (click)="deactivate(item)" mat-menu-item *ngIf="canDeactivate && entity.includes('monitors')">
+      <mat-icon svgIcon="mat:delete"></mat-icon>
+      <span *ngIf="item.active">{{'deactivate' | translate }}</span>
+      <span *ngIf="!item.active">{{'activate' | translate }}</span>
+    </button>
+    <button (click)="deactivate(item)" mat-menu-item *ngIf="canDeactivate && !entity.includes('monitors')">
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>{{'deactivate' | translate }}</span>
     </button>

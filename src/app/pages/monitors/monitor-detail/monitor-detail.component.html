@@ -172,73 +172,7 @@
             </div>
           </div>
 
-          <div class="card" style="margin: 3% 0 0 0;">
-            <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">{{'sports' | translate }}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
-              </h2>
-            </div>
 
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
-
-              <div *ngFor="let item of sportsCurrentData.data">
-                <div class="py-3 flex items-center">
-                  <div
-                    @scaleIn
-                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: contain !important; " [style.background-color]="item.level.color">
-                  </div>
-
-                  <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">{{'sport' | translate}}</p>
-                    <p class="m-0 body-1">{{item.name}}
-                    </p>
-                  </div>
-
-                </div>
-
-                <div class="py-3 flex items-center">
-
-                  <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">{{'level' | translate}}</p>
-                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item.level.color">
-                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
-                    </div>
-                  </div>
-
-
-                </div>
-
-                <div class="py-3 flex items-center ">
-                  <ng-container *ngFor="let degree of item.degrees">
-                    <div *ngIf="checkMonitorAuth(item, degree)" class="chip-level" [style.border]="'cursor:auto; 2px solid ' + item.color"
-                    [ngStyle]="{
-                      'background': checkMonitorAuth(item, degree) ? degree.color : '#fff'
-                    }">
-                      <p style="color: #000;text-align: center"
-                      [ngStyle]="{
-                        'color': checkMonitorAuth(item, degree) ? '#fff': '#000'
-                      }"
-                      >{{ degree.annotation }}</p>
-                  </div>
-
-                </ng-container>
-                  <div class="chip-level" style="border: 2px black solid"  (click)="item.allowAdults = !item.allowAdults" [ngStyle]="{
-                    'background': checkMonitorAuthAdults(item) ? 'black' : '#fff'
-                  }" (click)="authoriseAudlts(item)">
-                    <p style="text-align: center"
-                    [ngStyle]="{
-                      'color': checkMonitorAuthAdults(item) ? '#fff' : 'black'
-                    }"
-                    >A</p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
@@ -351,6 +285,74 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">{{'sports' | translate }}
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
+
+              <div *ngFor="let item of sportsCurrentData.data">
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: contain !important; " [style.background-color]="item.level.color">
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">{{'sport' | translate}}</p>
+                    <p class="m-0 body-1">{{item.name}}
+                    </p>
+                  </div>
+
+                </div>
+
+                <div class="py-3 flex items-center">
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">{{'level' | translate}}</p>
+                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item.level.color">
+                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <div class="py-3 flex items-center ">
+                  <ng-container *ngFor="let degree of item.degrees">
+                    <div *ngIf="checkMonitorAuth(item, degree)" class="chip-level" [style.border]="'cursor:auto; 2px solid ' + item.color"
+                         [ngStyle]="{
+                      'background': checkMonitorAuth(item, degree) ? degree.color : '#fff'
+                    }">
+                      <p style="color: #000;text-align: center"
+                         [ngStyle]="{
+                        'color': checkMonitorAuth(item, degree) ? '#fff': '#000'
+                      }"
+                      >{{ degree.annotation }}</p>
+                    </div>
+
+                  </ng-container>
+                  <div class="chip-level" style="border: 2px black solid"  (click)="item.allowAdults = !item.allowAdults" [ngStyle]="{
+                    'background': checkMonitorAuthAdults(item) ? 'black' : '#fff'
+                  }" (click)="authoriseAudlts(item)">
+                    <p style="text-align: center"
+                       [ngStyle]="{
+                      'color': checkMonitorAuthAdults(item) ? '#fff' : 'black'
+                    }"
+                    >A</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'family_data' | translate }}
                 <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showFamilyInfo" (click)="showFamilyInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showFamilyInfo" (click)="showFamilyInfoEvent(false)"></mat-icon>
@@ -452,7 +454,8 @@
 
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
               <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-              (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+              (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'"
+                             [with]="['booking.bookingUsers.client','course.courseGroups.courseSubgroups', 'client', 'degree']"
               [showDetail]="showDetail">
             </vex-aio-table>
           </vex-page-layout-content>
@@ -565,7 +568,7 @@
 
                   <div style="float: left; width: 100%;">
                       <ul>
-                          <li class="font-bold">{{getDateFormatLong(detailData?.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
+                          <li class="font-bold">{{getDateFormatLong(detailData?.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
                       </ul>
                   </div>
 
@@ -576,28 +579,30 @@
                   </div>
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                    <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                    <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
+                      <ng-container *ngIf="client.monitor_id == id">
                       <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                        [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                        [selectLevel]="getClientDegree(detailData?.sport.id, client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
-                              <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                              <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                               <span>
-                                  <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                      {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                  <ng-container *ngIf=" client.client?.language1_id">
+                                      {{getLanguageById( client.client?.language1_id)}} ·
                                   </ng-container>
-                                  <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                      {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                  <ng-container *ngIf=" client.client?.language2_id">
+                                      {{getLanguageById( client.client?.language2_id)}} ·
                                   </ng-container>
-                                  <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                      {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                  <ng-container *ngIf=" client.client?.language3_id">
+                                      {{getLanguageById( client.client?.language3_id)}} ·
                                   </ng-container>
-                                  {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                  · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                  {{getCountryById( client.client?.country)}} · {{getBirthYears( client.client?.birth_date)}} {{'years' | translate }}
+                                  · {{ client.client?.phone}} · {{ client.client?.email}}
                               </span>
                               <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
                                   {{detailData?.degree.name}}
                               </div>
                           </div>
+                      </ng-container>
                       </div>
                   </div>
 
@@ -627,30 +632,32 @@
 
               <ng-container *ngIf="detailData?.course.course_type == 1">
                   <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' |translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' |translate}} {{detailData?.booking?.booking_users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
                       <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
                   </div>
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                      <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                      <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
+                        <ng-container *ngIf="client.monitor_id == id">
                           <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                            [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
-                              <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                              <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                               <span>
-                                  <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                      {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                  <ng-container *ngIf=" client.client?.language1_id">
+                                      {{getLanguageById( client.client?.language1_id)}} ·
                                   </ng-container>
-                                  <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                      {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                  <ng-container *ngIf=" client.client?.language2_id">
+                                      {{getLanguageById( client.client?.language2_id)}} ·
                                   </ng-container>
-                                  <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                      {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                  <ng-container *ngIf=" client.client?.language3_id">
+                                      {{getLanguageById( client.client?.language3_id)}} ·
                                   </ng-container>
-                                  {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                  · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                  {{getCountryById( client.client?.country)}} · {{getBirthYears( client.client?.birth_date)}} {{'years' | translate }}
+                                  · {{ client.client?.phone}} · {{ client.client?.email}}
                               </span>
                           </div>
+                        </ng-container>
                       </div>
                   </div>
               </ng-container>
@@ -902,10 +909,10 @@
               </div>
 
               <div *ngIf="taskDetailTimeline.type == 'collective'" class="box-detail-boxes">
-                  <div class="box-detail-box" [ngStyle]="{'background': taskDetailTimeline.degree.color}">
+                  <div class="box-detail-box" [ngStyle]="{'background': taskDetailTimeline.degree?.color}">
                       <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
-                      <div class="font-bold font-white">{{taskDetailTimeline.degree.annotation}}</div>
-                      <div class="font-bold font-white">{{taskDetailTimeline.degree.name}}</div>
+                      <div class="font-bold font-white">{{taskDetailTimeline.degree?.annotation}}</div>
+                      <div class="font-bold font-white">{{taskDetailTimeline.degree?.name}}</div>
                       <div class="font-bold font-white">{{taskDetailTimeline.subgroup_number}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
@@ -948,7 +955,7 @@
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                       <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                               <span>
@@ -964,8 +971,8 @@
                                   {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}}{{'years' | translate }}
                                   · {{client.client.phone}} · {{client.client.email}}
                               </span>
-                              <div *ngIf="taskDetailTimeline.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetailTimeline.degree.color}">
-                                  {{taskDetailTimeline.degree.name}}
+                              <div *ngIf="taskDetailTimeline.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetailTimeline.degree?.color}">
+                                  {{taskDetailTimeline.degree?.name}}
                               </div>
                           </div>
                       </div>
@@ -1006,7 +1013,7 @@
 
                   <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                       <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                          <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                           <div class="box-detail-user-block-text">
                               <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                               <span>
@@ -1286,7 +1293,7 @@
                 </mat-form-field>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false;">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false;">{{'cancel' | translate }}</button>
 
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
@@ -1394,7 +1401,7 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false">{{'cancel' | translate }}</button>
 
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
@@ -1498,7 +1505,7 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
                 <button  color="primary" mat-raised-button matStepperNext (click)="save()">
@@ -1710,7 +1717,7 @@
 
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
                 <button  color="primary" mat-raised-button matStepperNext (click)="save()">
@@ -1776,7 +1783,7 @@
                 </mat-form-field>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/monitors')">{{'go_list' | translate }}</button>
 
 
@@ -1795,7 +1802,8 @@
 
           <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
             <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-            (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+            (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'monitor_id'"
+                           [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
             [showDetail]="showDetail">
           </vex-aio-table>
         </vex-page-layout-content>
@@ -1907,7 +1915,7 @@
 
                 <div style="float: left; width: 100%;">
                     <ul>
-                        <li class="font-bold">{{getDateFormatLong(detailData?.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
+                        <li class="font-bold">{{getDateFormatLong(detailData?.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
                     </ul>
                 </div>
 
@@ -1918,28 +1926,30 @@
                 </div>
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                  <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                  <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
+                    <ng-container *ngIf="client.monitor_id == id">
                     <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                      [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                      [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
-                            <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                            <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                             <span>
-                                <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                    {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                <ng-container *ngIf=" client.client?.language1_id">
+                                    {{getLanguageById( client.client?.language1_id)}} ·
                                 </ng-container>
-                                <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                    {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                <ng-container *ngIf=" client.client?.language2_id">
+                                    {{getLanguageById( client.client?.language2_id)}} ·
                                 </ng-container>
-                                <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                    {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                <ng-container *ngIf=" client.client?.language3_id">
+                                    {{getLanguageById( client.client?.language3_id)}} ·
                                 </ng-container>
-                                {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
-                                · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                {{getCountryById( client.client?.country)}} · {{getBirthYears( client.client?.birth_date)}}{{'years' | translate }}
+                                · {{ client.client?.phone}} · {{ client.client?.email}}
                             </span>
                             <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
                                 {{detailData?.degree.name}}
                             </div>
                         </div>
+                    </ng-container>
                     </div>
                 </div>
 
@@ -1969,30 +1979,32 @@
 
             <ng-container *ngIf="detailData?.course.course_type == 1">
                 <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                    <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                    <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{detailData?.booking?.booking_users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
                     <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
                 </div>
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                    <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                    <div *ngFor="let client of detailData?.booking?.booking_users" class="box-detail-user-block">
+                      <ng-container *ngIf="client.monitor_id == id">
                         <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                          [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                          [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports_data)" [size]="60" [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
-                            <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                            <div>{{  client.client?.first_name }} {{  client.client?.last_name }}</div>
                             <span>
-                                <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                    {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                <ng-container *ngIf=" client.client?.language1_id">
+                                    {{getLanguageById( client.client?.language1_id)}} ·
                                 </ng-container>
-                                <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                    {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                <ng-container *ngIf=" client.client?.language2_id">
+                                    {{getLanguageById( client.client?.language2_id)}} ·
                                 </ng-container>
-                                <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                    {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                <ng-container *ngIf=" client.client?.language3_id">
+                                    {{getLanguageById( client.client?.language3_id)}} ·
                                 </ng-container>
-                                {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
-                                · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                {{getCountryById( client.client?.country)}} · {{getBirthYears( client.client?.birth_date)}}{{'years' | translate }}
+                                · {{ client.client?.phone}} · {{ client.client?.email}}
                             </span>
                         </div>
+                      </ng-container>
                     </div>
                 </div>
             </ng-container>
@@ -2197,10 +2209,10 @@
             </div>
 
             <div *ngIf="taskDetailTimeline.type == 'collective'" class="box-detail-boxes">
-                <div class="box-detail-box" [ngStyle]="{'background': taskDetailTimeline.degree.color}">
+                <div class="box-detail-box" [ngStyle]="{'background': taskDetailTimeline.degree?.color}">
                     <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
-                    <div class="font-bold font-white">{{taskDetailTimeline.degree.annotation}}</div>
-                    <div class="font-bold font-white">{{taskDetailTimeline.degree.name}}</div>
+                    <div class="font-bold font-white">{{taskDetailTimeline.degree?.annotation}}</div>
+                    <div class="font-bold font-white">{{taskDetailTimeline.degree?.name}}</div>
                     <div class="font-bold font-white">{{taskDetailTimeline.subgroup_number}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
@@ -2243,7 +2255,7 @@
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                     <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                             <span>
@@ -2259,8 +2271,8 @@
                                 {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}}{{'years' | translate }}
                                 · {{client.client.phone}} · {{client.client.email}}
                             </span>
-                            <div *ngIf="taskDetailTimeline.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetailTimeline.degree.color}">
-                                {{taskDetailTimeline.degree.name}}
+                            <div *ngIf="taskDetailTimeline.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetailTimeline.degree?.color}">
+                                {{taskDetailTimeline.degree?.name}}
                             </div>
                         </div>
                     </div>
@@ -2301,7 +2313,7 @@
 
                 <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                     <div *ngFor="let client of taskDetailTimeline.all_clients" class="box-detail-user-block">
-                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <app-level-user *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length" [allLevels]="taskDetailTimeline.degrees_sport" [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports_data)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                         <div class="box-detail-user-block-text">
                             <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                             <span>

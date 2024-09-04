@@ -25,7 +25,6 @@ export class UserCreateUpdateComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    debugger;
     this.userForm = this.fb.group({
       name: ['', Validators.required],
       surname: [''],

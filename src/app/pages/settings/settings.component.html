@@ -555,7 +555,7 @@
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.op_rem_text'|translate}}</p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput placeholder="Percentaje" type="number" [value]="cancellationInsurancePercent * 100" (blur)="updateInsuranceValue($event)">
+                    <input matInput placeholder="Percentaje" [disabled]="!hasCancellationInsurance" type="number" [value]="hasCancellationInsurance ? cancellationInsurancePercent * 100 : 0" (blur)="updateInsuranceValue($event)">
 
                   </mat-form-field>
                 </div>
