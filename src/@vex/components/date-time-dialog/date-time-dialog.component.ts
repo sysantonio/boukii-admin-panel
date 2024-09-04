@@ -21,8 +21,14 @@ export class DateTimeDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateDurations();
-
     this.generateHours();
+
+    if (this.data.dates && this.data.dates.length > 0) {
+      const lastDate = this.data.dates[this.data.dates.length - 1];
+      this.selectedDate = new Date(lastDate.date);
+      this.selectedHour = lastDate.hour;
+      this.selectedDuration = lastDate.duration;
+    }
   }
 
   generateHours() {

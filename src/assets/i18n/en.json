@@ -291,6 +291,7 @@
   "clients.creation.errors.mobile": "The client mobile is mandatory",
   "clients.add.title": "Select an existing user",
   "clients.add.search": "Search for a user",
+  "search": "Search",
   "clients.add.create": "Or create a new user",
   "admins": "Administrators",
   "admins.new": "New administrator",

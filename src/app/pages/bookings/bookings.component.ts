@@ -67,8 +67,7 @@ export class BookingsComponent {
 
       }
     })
-    this.getMonitors();
-    this.getClients();
+
     this.getSports();
     this.getLanguages();
   }
@@ -180,11 +179,7 @@ export class BookingsComponent {
     }
   }
 
-  getClientDegree(id: any) {
-    if (!id) {
-      return 0;
-    }
-    const client = this.clients.find(c => c.id === id);
+  getClientDegree(client: any) {
     if (!client || !client.client_sports || !client.client_sports.length) {
       return 0;
     }

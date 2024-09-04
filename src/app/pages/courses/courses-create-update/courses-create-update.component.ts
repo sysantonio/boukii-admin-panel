@@ -1016,7 +1016,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays},
+      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, dates: this.dataSource.data},
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -291,6 +291,7 @@
   "clients.creation.errors.mobile": "Das Client-Handy ist obligatorisch",
   "clients.add.title": "Wählen Sie einen vorhandenen Benutzer aus",
   "clients.add.search": "Nach einem Benutzer suchen",
+  "search": "Suchen",
   "clients.add.create": "Oder erstellen Sie einen neuen Benutzer",
   "admins": "Administratoren",
   "admins.new": "Neu verwaltet",

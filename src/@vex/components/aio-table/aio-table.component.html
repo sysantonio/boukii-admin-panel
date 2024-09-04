@@ -80,7 +80,7 @@
           <mat-icon class="icon-sm text-secondary" svgIcon="mat:search"></mat-icon>
           <input [formControl]="searchCtrl"
                  class="px-4 py-2 border-0 outline-none w-full bg-transparent"
-                 placeholder="Buscar..."
+                 placeholder="{{'search' | translate}}..."
                  type="search"
                  (input)="getFilteredData(pageIndex, pageSize, filter)">
         </div>
@@ -195,7 +195,9 @@
           <mat-icon svgIcon="mat:file_download"></mat-icon>
         </button>
 
-        <button class="ml-4 flex-none" (click)="openFilters = !openFilters" *ngIf="!entity.includes('statistics')"
+        <button class="ml-4 flex-none" (click)="openFilters = !openFilters"
+                *ngIf="!entity.includes('statistics') && !entity.includes('vouchers') &&
+                !entity.includes('users') && !entity.includes('clients')"
                 mat-icon-button
                 matTooltip="Filter Data"
                 type="button">
