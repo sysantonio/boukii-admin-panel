@@ -8,15 +8,16 @@
     </booking-step-one>
   </div>
 
-  <!--  
   <div *ngIf="currentStep === 1">
     <booking-step-two
       [initialData]="stepperForm.get('step2')?.value"
-      (stepTwoCompleted)="handleStepCompletion(2, $event)"
+      [client]="stepperForm.get('step1')?.value?.client"
+      (stepCompleted)="handleStepCompletion(2, $event)"
+      (prevStep)="previousStep()"
     >
     </booking-step-two>
   </div>
-
+  <!--  
 
   <div *ngIf="currentStep === 2">
     <booking-step-three

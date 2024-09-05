@@ -5,9 +5,14 @@ import { CommonModule } from "@angular/common";
 
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatCardModule } from "@angular/material/card";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+
 import { BookingFormStepper } from "./form-stepper/form-stepper.component";
 import { StepOneComponent } from "./step-one/step-one.component";
+import { StepTwoComponent } from "./step-two/step-two.component";
+
 import { MatButtonModule } from "@angular/material/button";
 @NgModule({
   imports: [
@@ -18,9 +23,11 @@ import { MatButtonModule } from "@angular/material/button";
     MatInputModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
     TranslateModule,
   ],
-  declarations: [BookingFormStepper, StepOneComponent],
-  exports: [BookingFormStepper, StepOneComponent],
+  declarations: [BookingFormStepper, StepOneComponent, StepTwoComponent],
+  exports: [BookingFormStepper, StepOneComponent, StepTwoComponent],
 })
 export class BookingComponentsModule {}

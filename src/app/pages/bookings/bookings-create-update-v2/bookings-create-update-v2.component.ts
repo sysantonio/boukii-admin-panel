@@ -14,10 +14,4 @@ export class BookingsCreateUpdateV2Component {
   };
 
   constructor(public translateService: TranslateService) {}
-
-  displayFn(client: any): string {
-    return client && client?.first_name && client?.last_name
-      ? client?.first_name + " " + client?.last_name
-      : client?.first_name;
-  }
 }

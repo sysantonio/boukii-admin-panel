@@ -234,6 +234,7 @@
   "bookings_page.same_date": "Date unique",
   "bookings_page.same_monitor": "Même professeur",
   "bookings_page.multiple_date": "Diverses dates",
+  "bookings_page.select_utilizers": "Sélectionnez un ou plusieurs participants",
   "courses.title": "Cours",
   "courses.levels_and_groups": "Niveaux / Groupes",
   "courses.new": "Nouveau cours",
@@ -618,5 +619,4 @@
   "message": "Message",
   "authorized_levels": "Niveaux Autorisés",
   "translate_ia": "Traduire automatiquement"
-
 }

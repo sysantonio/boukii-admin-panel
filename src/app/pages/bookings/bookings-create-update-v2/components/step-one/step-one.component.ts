@@ -34,10 +34,7 @@ export class StepOneComponent implements OnInit {
     });
 
     this.stepOneForm = this.fb.group({
-      client: [
-        this.selectedClient ? this.displayFn(this.selectedClient) : "",
-        Validators.required,
-      ],
+      client: [this.selectedClient || "", Validators.required],
     });
 
     this.filteredOptions = this.stepOneForm.get("client")!.valueChanges.pipe(

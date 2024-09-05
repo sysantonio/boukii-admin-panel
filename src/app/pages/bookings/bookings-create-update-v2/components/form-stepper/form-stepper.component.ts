@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
-  selector: 'booking-form-stepper',
-  templateUrl: './form-stepper.component.html',
-  styleUrls: ['./form-stepper.component.scss']
+  selector: "booking-form-stepper",
+  templateUrl: "./form-stepper.component.html",
+  styleUrls: ["./form-stepper.component.scss"],
 })
 export class BookingFormStepper {
   stepperForm: FormGroup;
@@ -13,9 +13,9 @@ export class BookingFormStepper {
   constructor(private fb: FormBuilder) {
     // Inicializa el formulario vacío
     this.stepperForm = this.fb.group({
-      step1: null,
-      step2: null,
-      step3: null
+      step1: {},
+      step2: {},
+      step3: {},
     });
   }
 
@@ -35,15 +35,15 @@ export class BookingFormStepper {
   // Manejar la finalización de cada paso
   handleStepCompletion(step: number, formGroup: FormGroup) {
     this.stepperForm.setControl(`step${step}`, formGroup);
-    console.log(step, formGroup)
+    console.log(formGroup);
     this.nextStep();
   }
 
   submit() {
     if (this.stepperForm.valid) {
-      console.log('Form Submitted:', this.stepperForm.value);
+      console.log("Form Submitted:", this.stepperForm.value);
     } else {
-      console.log('Form is invalid');
+      console.log("Form is invalid");
     }
   }
 }
