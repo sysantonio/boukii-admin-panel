@@ -12,6 +12,9 @@ import { AuthService } from 'src/service/auth.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import {PreviewModalComponent} from './components/preview-modal/preview-modal.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {ComponentsCustomModule} from './components/components-custom.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -19,7 +22,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent],
+  declarations: [AppComponent, DashboardComponent, PreviewModalComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -27,15 +30,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
       }
-  }),
+    }),
     // Vex
     VexModule,
     CustomLayoutModule,
-    ComponentsModule
+    ComponentsModule,
+    MatDialogModule,
+    ComponentsCustomModule
   ],
   providers: [AuthService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
   bootstrap: [AppComponent]

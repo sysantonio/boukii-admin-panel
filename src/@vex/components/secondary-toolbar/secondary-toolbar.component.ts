@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
   template: `
     <div class="secondary-toolbar-placeholder">&nbsp;</div>
 
-    <div [ngClass]="{ 'fixed': fixed$ | async, 'w-full': !(fixed$ | async) }" class="secondary-toolbar shadow-b py-1 z-40 border-t flex">
+    <div [ngClass]="{ 'fixed': fixed$ | async, 'w-full': !(fixed$ | async) }" [ngStyle]="isModal ? { width: '50%' } : {}"
+         class="secondary-toolbar shadow-b py-1 z-40 border-t flex">
       <div class="px-gutter flex items-center flex-auto" [class.container]="isVerticalLayout$ | async">
         <h1 *ngIf="current"
             class="subheading-2 font-medium m-0 ltr:pr-3 rtl:pl-3 ltr:border-r rtl:border-l ltr:mr-3 rtl:ml-3 flex-none">{{ current }}</h1>
@@ -23,6 +24,7 @@ export class SecondaryToolbarComponent {
 
   @Input() current: string;
   @Input() crumbs: string[];
+  @Input() isModal: boolean;
 
   fixed$ = this.configService.config$.pipe(
     map(config => config.toolbar.fixed)

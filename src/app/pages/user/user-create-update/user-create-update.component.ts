@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from
 import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
-import { LangService } from 'src/service/langService';
 import { UserService } from 'src/service/userService';
 
 @Component({
@@ -23,7 +22,6 @@ export class UserCreateUpdateComponent {
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -42,17 +40,11 @@ export class UserCreateUpdateComponent {
     // and load the lang details using getLangById()
     this.userId = this.route.snapshot.paramMap.get('id');
     if (this.userId !== null) {
+
       this.mode = 'update';
-      const langData = await this.userService.getLangById(this.userId);
-      if (langData) {
-        this.userForm.patchValue({
-          name: langData.name,
-          surname: langData.surname,
-          email: langData.email
-        });
-      }
-    } else {
+
       this.defaults = {} as any;
+
 
     }
   }
@@ -79,7 +71,7 @@ export class UserCreateUpdateComponent {
   }
 
   save() {
-    this.userService.createUser(this.userForm.value);
+
   }
 
   // Custom Validator

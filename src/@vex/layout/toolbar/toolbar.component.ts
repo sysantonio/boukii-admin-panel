@@ -75,7 +75,8 @@ export class ToolbarComponent {
   }
 
   getThemePreference(): string {
-    return sessionStorage.getItem('themePreference') || 'light';
+    //return sessionStorage.getItem('themePreference') || 'light';
+    return 'light';
   }
 
   toggleDarkMode(): void {

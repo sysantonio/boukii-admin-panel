@@ -102,8 +102,27 @@ export class LevelUserComponent implements OnInit {
     if (index <= selectLevel) {
       return this.allLevels[index].color;
     } else {
-      return this.allLevels[index].inactive_color;
+      return this.allLevels[index].inactive_color ?
+        this.allLevels[index].inactive_color : this.lightenColor(this.allLevels[index].color, 30);;
     }
+  }
+
+  lightenColor(hexColor: string, percent: number): string {
+    let r:any = parseInt(hexColor.substring(1, 3), 16);
+    let g:any = parseInt(hexColor.substring(3, 5), 16);
+    let b:any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + (255 - r) * percent / 100);
+    g = Math.round(g + (255 - g) * percent / 100);
+    b = Math.round(b + (255 - b) * percent / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, '0');
+    g = g.toString(16).padStart(2, '0');
+    b = b.toString(16).padStart(2, '0');
+
+    return '#'+r+g+b;
   }
 
 }

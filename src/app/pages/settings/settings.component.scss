@@ -50,9 +50,102 @@ table caption {
 
 .unselected-icon {
   background: #e6e6e6;
-  border: solid 1px #808080
+  border: solid 1px #808080;
 }
 .selected-icon {
   background: #e91e63;
-  border: solid 1px #fff
+  border: solid 1px #e91e63;
+}
+
+$border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Input Border
+
+.vex-mail-compose-editor {
+  min-height: 250px;
+
+  .ql-toolbar.ql-snow {
+    border-color: $border-color;
+    @apply rounded-t;
+  }
+
+  .ql-container.ql-snow {
+    border-color: $border-color;
+    @apply rounded-b;
+  }
+
+  .ql-editor {
+    @apply flex-auto;
+
+    &.ql-blank::before {
+      font-style: normal;
+      @apply text-sm text-secondary;
+    }
+  }
+}
+
+.vex-mail-compose-attachment {
+  border-color: $border-color;
+}
+
+.selected-item {
+  border: 1px solid #E01D5F;
+  background-color: #f0f0f4;
+}
+
+.items-icons {
+  .item {
+    cursor:pointer;
+    display:inline-block;
+    vertical-align: top;
+    padding: 10px 10px;
+
+    &.select {
+      .icon {
+        background-color: #e91e63;
+        border: solid 1px #e91e63;
+
+        img {
+          &:nth-child(1){
+            display: inline-block;
+          }
+          &:nth-child(2){
+            display: none;
+          }
+        }
+      }
+    }
+
+    &.unselect {
+      .icon {
+        background-color: #e6e6e6;
+        border: solid 1px #e6e6e6;
+
+        img {
+          &:nth-child(1){
+            display: none;
+          }
+          &:nth-child(2){
+            display: inline-block;
+          }
+        }
+      }
+    }
+
+    .icon {
+      height: 40px;
+      width:40px;
+      display:inline-block;
+      vertical-align: middle;
+      border-radius: 6px;
+      padding: 5px;
+    }
+
+    .text {
+      display:inline-block;
+      vertical-align: middle;
+      width: 120px;
+      padding-left:10px;
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }
 }

@@ -42,7 +42,7 @@ export class MonitorDetailComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
     { label: 'course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
@@ -240,10 +240,20 @@ export class MonitorDetailComponent {
   }
 
   ngOnInit() {
-    this.getInitialData().pipe(
-      switchMap(() => this.getData())
-    ).subscribe(() => {
-      // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
+    this.activatedRoute.params.pipe(
+      switchMap(params => {
+        this.getInitialData().pipe(
+          switchMap(() => this.getData())
+        ).subscribe(() => {
+          // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
+        });
+        return this.activatedRoute.queryParams; // Para obtener los parámetros de consulta (pestaña)
+      })
+    ).subscribe(queryParams => {
+      if (queryParams['tab'] === 'timeline') {
+        this.selectedTabPreviewIndex = 2; // Establecer el índice de la pestaña deseada
+      }
+      // Aquí puedes realizar cualquier lógica adicional después de obtener los parámetros
     });
   }
 
@@ -260,16 +270,16 @@ export class MonitorDetailComponent {
         console.error('Error fetching stations:', error);
         return of([]); // Devuelve un array vacío en caso de error
       })),
-      clients: this.getClients().pipe(retry(3), catchError(error => {
-        console.error('Error fetching clients:', error);
-        return of([]); // Devuelve un array vacío en caso de error
-      })),
       salary: this.getSalarySchoolData().pipe(retry(3), catchError(error => {
         console.error('Error fetching clients:', error);
         return of([]); // Devuelve un array vacío en caso de error
       })),
       schoolRel: this.getSchoolRel().pipe(retry(3), catchError(error => {
         console.error('Error fetching clients:', error);
+        return of([]); // Devuelve un array vacío en caso de error
+      })),
+      degrees: this.getDegrees().pipe(retry(3), catchError(error => {
+        console.error('Error fetching degrees:', error);
         return of([]); // Devuelve un array vacío en caso de error
       }))
 
@@ -336,8 +346,10 @@ export class MonitorDetailComponent {
       );
 
       this.myControlCountries.valueChanges.subscribe(country => {
-        this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-        this.filteredProvinces = this._filterProvinces(country.id);
+        if(country) {
+          this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+          this.filteredProvinces = this._filterProvinces(country.id);
+        }
       });
 
     }));
@@ -345,13 +357,10 @@ export class MonitorDetailComponent {
   }
 
   getData() {
-
-
-    //this.getClients();
-
     return this.crudService.get('/monitors/'+this.id, ['user'])
       .pipe(
         tap((data) => {
+
           this.defaults = data.data;
           console.log(this.defaults);
           this.defaultsUser = data.data.user;
@@ -411,7 +420,7 @@ export class MonitorDetailComponent {
             this.activeSchool = this.user.schools.find(school => school.active === true) || 0;
 
             this.getSportsTimeline();
-            this.getDegrees();
+
 
             this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
               .subscribe((season) => {
@@ -471,7 +480,7 @@ export class MonitorDetailComponent {
 
   showPersonalInfoEditEvent(event: boolean) {
     this.editPersonalInfo = event;
-    this.selectedTabIndex = 3;
+    this.selectedTabIndex = 2;
     this.editing = true;
   }
 
@@ -522,7 +531,7 @@ export class MonitorDetailComponent {
 
   showAddressInfoEditEvent(event: boolean) {
     this.editAddressInfo = event;
-    this.selectedTabIndex = 2;
+    this.selectedTabIndex = 1;
     this.editing = true;
   }
 
@@ -1119,7 +1128,7 @@ export class MonitorDetailComponent {
 
         this.crudService.update('/monitors', this.defaults, this.id)
           .subscribe((monitor) => {
-            this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+            //this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
 
             const schoolRel = {
               monitor_id: monitor.data.id,
@@ -1148,8 +1157,8 @@ export class MonitorDetailComponent {
                 })
             });
             setTimeout(() => {
-              this.router.navigate(['/monitors']);
-
+              this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+              window.location.reload();
             }, 3000);
           })
       })
@@ -1164,7 +1173,7 @@ export class MonitorDetailComponent {
 
   updateSalary(monitorDegree, salary) {
     this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
-      degree_id: monitorDegree.level.id, salary_level: salary.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+      degree_id: monitorDegree.level.id, salary_level: salary.id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000});      })
   }
@@ -1219,10 +1228,13 @@ export class MonitorDetailComponent {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.detailData = event.item;
-
-      this.crudService.get('/admin/courses/'+this.detailData.course_id)
+      this.detailData.sport = this.detailData.course.sport;
+      if(this.detailData.course.course_type == 2) {
+        //this.detailData.date_full =
+      }
+/*      this.crudService.get('/admin/courses/'+this.detailData.course_id)
         .subscribe((course) => {
-          this.detailData.course = course.data;
+
           this.crudService.get('/sports/'+this.detailData.course.sport_id)
             .subscribe((sport) => {
               this.detailData.sport = sport.data;
@@ -1235,9 +1247,9 @@ export class MonitorDetailComponent {
               })
           }
 
-        })
-
-      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+        })*/
+      this.showDetail = true;
+/*      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
         .subscribe((booking) => {
           this.detailData.users = [];
 
@@ -1263,7 +1275,7 @@ export class MonitorDetailComponent {
           });
           this.showDetail = true;
 
-        });
+        });*/
 
 
     } else {
@@ -1290,11 +1302,6 @@ export class MonitorDetailComponent {
     return ret;
   }
 
-  getClient(id: any) {
-    if (id && id !== null) {
-      return this.clients.find((c) => c.id === id);
-    }
-  }
 
   getClients() {
     return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
@@ -1350,8 +1357,8 @@ export class MonitorDetailComponent {
     return ret;
   }
 
-  getDateFormatLong(date:string) {
-    return moment(date).format('dddd, D MMMM YYYY');
+  getDateFormatLong(date: string) {
+    return moment.utc(date).format('dddd, D MMMM YYYY');
   }
 
   getHoursMinutes(hour_start:string, hour_end:string) {

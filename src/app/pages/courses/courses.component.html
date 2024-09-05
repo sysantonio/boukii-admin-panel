@@ -1,31 +1,68 @@
 <vex-page-layout>
 
-  <vex-secondary-toolbar>
+  <!--<vex-secondary-toolbar>
     <vex-breadcrumbs [crumbs]="[{text: '', icon: 'cursos-2'}, {text: 'list', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
-
     <button class="ml-2" color="primary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
+  </vex-secondary-toolbar>-->
+
+  <vex-secondary-toolbar current="">
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'cursos'},
+    {text:'courses.title', title: true},
+    {text:'list', subtitle: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
+
   <vex-page-layout-content class="-mt-6 fullwidth">
       <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'courses.title'" [route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
       [ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon" [canDuplicate]="true"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
+                     [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers', 'sport']"
       [updatePage]="'detail'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
       ></vex-aio-table>
   </vex-page-layout-content>
 
-  <vex-page-layout-content class="-mt-6 fullwidth" style="   width: 35%;float:left;position: fixed;left: 66%;overflow-y: auto; max-height: 100vh;" *ngIf="showDetail">
-    <mat-card style="padding: 0 3%;">
+  <vex-page-layout-content
+    class="fullwidth col-right"
+    *ngIf="showDetail"
+  >
+    <mat-card>
       <mat-card-header style="display:block">
+        <div style="width: 100%;">
+          <span style="display: inline-block;width: 80%; text-align: left;">
+            <mat-card-title>{{'course_detail' | translate}}</mat-card-title>
+          </span>
+          <span style="display: inline-block;width: 20%; text-align: right;">
+            <img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />
+            <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+          </span>
+        </div>
+        <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+          <mat-card-subtitle style="width:100%;">
+            <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+              <b>{{ 'register' | translate}}:</b>
+              <span style="margin-left: 10px;font-weight: normal;">
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}h</span>
+              </span>
+            </div>
+            <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;" *ngIf="detailData.user">
+              {{ detailData.user?.username }} <span style="margin-left: 10px;">({{ detailData.user?.first_name + ' ' +  detailData.user?.last_name}})</span>
+            </div>
+          </mat-card-subtitle>
+        </div>
+      </mat-card-header>
+
+      <!--<mat-card-header style="display:block">
         <div style="width: 100%;float:left;">
           <mat-card-title style="float: left;width: 35%;">{{'course_detail' | translate}}</mat-card-title>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0;" [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"></div>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0 0 0 25px;" [ngStyle]="{'background-color': detailData.options ? '#CEE741' : '#e6e6e6'}"></div>
           <div style="float: left;width: 25px;border-radius: 100%;height: 25px;margin: 0  25px;"  [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>
-          <mat-icon svgIcon="mat:close" (click)="showDetail = false" style="cursor: pointer;float: right;"></mat-icon>
-          <mat-icon style="float: right;cursor: pointer;" svgIcon="mat:edit" (click)="goTo('/courses/detail/'+detailData.id)"></mat-icon>
+          <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
+          <img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" style="float: right;" />
         </div>
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">
@@ -38,7 +75,6 @@
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-
         <div style="width:100%; margin-top:5%;float:left">
           <div style="width: 100%;">
             <p style="float: left;width: 80%;text-align: left;"><b>{{'price' | translate}}</b></p>
@@ -53,7 +89,7 @@
         <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type === 1">
           <ul>
             <ng-container *ngFor="let item of detailData.course_dates; let i = index">
-              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item.hour_start}}h - {{item.hour_end}}h</i></li>
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
             </ng-container>
           </ul>
         </div>
@@ -67,9 +103,190 @@
           </ul>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+      </mat-card-header>-->
 
-      </mat-card-header>
-      <mat-card-content *ngIf="detailData.course_type === 2">
+      <mat-card-content>
+        <div class="dots">
+          <div class="dot" [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"></div>
+          <div class="dot" [ngStyle]="{'background-color': detailData.options ? '#CEE741' : '#e6e6e6'}"></div>
+          <div class="dot" [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>
+        </div>
+
+        <div class="title-status">
+          <div class="col-left">
+            <b>{{'from' | translate}}</b>
+          </div>
+          <div class="col-right">
+            <b>{{'to' | translate}}</b>
+          </div>
+        </div>
+        <div class="list-holder">
+          <div class="col-left">
+            <b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_start.substring(0, 5)}}h
+          </div>
+          <div class="col-right">
+            <b>{{detailData.date_end | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_end.substring(0, 5)}}h
+          </div>
+        </div>
+
+        <mat-card-content *ngIf="detailData.course_type === 1">
+          <div style="padding: 15px 35px 20px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+
+          <div class="holder-deporte">
+            <div class="col-left">
+              <img style="width: 75px; height: 75px;" *ngIf="detailData?.course_type == 1" [src]="detailData?.sport?.icon_collective" width="60" height="60" />
+              <!--<app-level-user
+                *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                [allLevels]="detailData.degrees_sport"
+                [selectLevel]="getClientDegree(detailData?.client_main_id)"
+                [size]="60"
+                [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+              ></app-level-user>-->
+            </div>
+            <div class="col-right">
+              <div class="client-name">
+                {{detailData.name}}
+              </div>
+              <div class="client-dates">
+                {{detailData.course_type === 1 ? 'colective' : detailData.course_type === 1 ? 'private' : 'activity' | translate}}
+                {{detailData.is_flexible ? 'flex' : 'fix'}}
+                {{ detailData.sport.name}}
+              </div>
+              <div class="client-ubicacion">
+                {{detailData.station.name}}
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+        </mat-card-content>
+
+        <mat-card-content *ngIf="detailData.course_type === 2">
+          <div style="padding: 15px 35px 20px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+
+          <div class="holder-deporte">
+            <div class="col-left">
+              <img style="width: 75px; height: 75px;" *ngIf="detailData?.course_type == 2" [src]="detailData?.sport?.icon_prive" width="60" height="60" />
+
+              <!--<app-level-user
+                *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                [allLevels]="detailData.degrees_sport"
+                [selectLevel]="getClientDegree(detailData?.client_main_id)"
+                [size]="60"
+                [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+              ></app-level-user>-->
+            </div>
+            <div class="col-right">
+              <div class="client-name">
+                {{detailData.name}}
+              </div>
+              <div class="client-dates">
+                {{detailData.course_type === 1 ? 'Collectif' : 'Privee'}}  {{detailData.is_flexible ? 'flex' : 'fix'}} {{ detailData.sport.name}}
+              </div>
+              <div class="client-ubicacion">
+                {{detailData.station.name}}
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0px 35px;">
+            <mat-divider style="border-color: #e6e6e6;"></mat-divider>
+          </div>
+        </mat-card-content>
+
+        <div class="list-holder" *ngIf="detailData.course_type === 1">
+          <ul>
+            <ng-container *ngFor="let item of detailData.course_dates; let i = index">
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
+            </ng-container>
+          </ul>
+          <div style="padding:10px 35px;">
+            <mat-divider style="border-color: transparent;"></mat-divider>
+          </div>
+        </div>
+        <div class="list-holder" *ngIf="detailData.course_type ===2">
+          <ul>
+            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start.substring(0, 5)}}h - {{detailData.course_dates[0].hour_end.substring(0, 5)}}h</i></li>
+            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[detailData.course_dates.length - 1].hour_start.substring(0, 5)}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end.substring(0, 5)}}h</i></li>
+          </ul>
+          <div style="padding:10px 35px;">
+            <mat-divider style="border-color: transparent;"></mat-divider>
+          </div>
+        </div>
+
+        <div class="title-status">
+          <div class="col-left">
+            <b>{{'price' | translate}}</b>
+          </div>
+          <div class="col-right">
+            <b>{{'participants' | translate}}</b>
+          </div>
+        </div>
+        <div class="list-holder">
+          <div class="col-left" *ngIf="!detailData.is_flexible">
+            <b>{{detailData.price}}</b> {{detailData.currency}}
+          </div>
+          <div class="col-left" *ngIf="detailData.is_flexible">
+            <b *ngIf="detailData.is_flexible
+            && detailData.price_range !== null">{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(detailData.price_range, detailData)) }} </b>
+            <b *ngIf="detailData.is_flexible
+            && detailData.price_range == null">{{detailData.price}}</b>
+            {{detailData.currency}} <span  *ngIf="detailData.is_flexible
+            && detailData.price_range == null"> / {{'day' | translate }}</span>
+            <strong *ngIf="detailData.is_flexible && detailData.course_type === 2 && detailData.price_range === null">NO PRICE RANGE SET</strong>
+          </div>
+          <div class="col-right">
+            <b>{{detailData.max_participants}}</b>
+          </div>
+        </div>
+
+        <!--<div style="width:100%; margin-top:5%;float:left">
+          <div style="width: 100%;">
+            <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate}}</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate}}</b></p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.date_end | date: 'dd/MM/YYYY'}}</b> {{detailData.course_dates[0].hour_end}}h</p>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+        <div style="width:100%; margin-top:5%;float:left">
+          <div style="width: 100%;">
+            <p style="float: left;width: 80%;text-align: left;"><b>{{'price' | translate}}</b></p>
+            <p style="float: left;width: 20%;text-align: right;"><b>{{'participants' | translate}}</b></p>
+          </div>
+          <div style="width: 100%;">
+            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.price}}</b> {{detailData.currency}}</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.max_participants}}</b></p>
+          </div>
+        </div>
+        <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+        <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type === 1">
+          <ul>
+            <ng-container *ngFor="let item of detailData.course_dates; let i = index">
+              <li *ngIf="item.active || item.active === 1">{{parseDateToText(item.date)}} <i style="text-align: right;float:right">{{item?.hour_start.substring(0, 5)}}h - {{item?.hour_end.substring(0, 5)}}h</i></li>
+            </ng-container>
+          </ul>
+        </div>
+        <div style="float: left; width: 100%;margin-top: 5%;"  *ngIf="detailData.course_type ===2">
+          <ul>
+            <li>{{parseDateToText(detailData.course_dates[0].date)}} <i style="text-align: right;float:right">{{detailData.course_dates[0].hour_start}}h - {{detailData.course_dates[0].hour_end}}h</i></li>
+            <li>{{parseDateToText(detailData.course_dates[detailData.course_dates.length - 1].date)}} <i style="text-align: right;float:right">
+              {{detailData.course_dates[detailData.course_dates.length - 1].hour_start}}h - {{detailData.course_dates[detailData.course_dates.length - 1].hour_end}}h
+              </i>
+            </li>
+          </ul>
+        </div>-->
+      </mat-card-content>
+
+      <!--<mat-card-content *ngIf="detailData.course_type === 2">
         <div style="float: left; width: 100%;">
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
@@ -82,66 +299,98 @@
             </div>
           </div>
         </div>
-      </mat-card-content>
+      </mat-card-content>-->
+
       <mat-card-content *ngIf="detailData.course_type === 1">
-        <div style="float: left; width: 100%;">
-          <div style="float: left;width: 100%;">
-            <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
+
+<!--        <div class="holder-deporte">
+          <div class="col-left">
+            <img [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
+            &lt;!&ndash;<app-level-user
+              *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+              [allLevels]="detailData.degrees_sport"
+              [selectLevel]="getClientDegree(detailData?.client_main_id)"
+              [size]="60"
+              [userImage]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar"
+            ></app-level-user>&ndash;&gt;
+          </div>
+          <div class="col-right">
+            <div class="client-name">
+              {{detailData.name}}
             </div>
-            <div style="float: left; width: 75%;margin:6% 0 0 2%">
-              <p><strong>{{detailData.name}}</strong></p>
-              <p> {{detailData.course_type === 1 ? 'colective' : 'private' | translate}} {{ detailData.sport.name}}</p>
-              <p>{{detailData.station.name}}</p>
+            <div class="client-dates">
+              {{detailData.course_type === 1 ? 'colective' : 'private' | translate}} {{ detailData.sport.name}}
+            </div>
+            <div class="client-ubicacion">
+              {{detailData.station.name}}
             </div>
           </div>
+        </div>-->
+
+        <div class="title-grupos">
+          <div class="col-left">
+            <b>{{'courses.levels_and_groups' | translate }}</b>
+          </div>
+          <div class="col-right">
+            <mat-icon svgIcon="mat:print" style="cursor: pointer;" (click)="exportQR(detailData.id)"></mat-icon>
+          </div>
         </div>
-        <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-        <div style="float: left; width: 100%;">
-          <p><strong>{{'courses.levels_and_groups' | translate }}</strong> <mat-icon svgIcon="mat:cloud_download" style="cursor: pointer;float:right" (click)="exportQR(detailData.id)"></mat-icon></p>
 
-          <ng-container *ngFor="let colorKey of colorKeys">
-            <ng-container *ngFor="let level of groupedByColor[colorKey]">
-              <div style="float: left; width: 100%;margin-top:3%;cursor: pointer;" *ngIf="getSubGroups(level.id) > 0" (click)="selectGroup(level)">
-                <div  style="float: left;width: 22%;border-radius: 11%;height: 110px;padding: 2%;color: #fff;" [style.background-color]="colorKey">
-                  <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;margin: 0 auto;" />
+        <ng-container *ngFor="let colorKey of colorKeys">
+          <ng-container *ngFor="let level of groupedByColor[colorKey]">
+            <div *ngIf="getSubGroups(level.id) > 0">
+              <div class="grupo-holder" (click)="selectGroup(level)">
+                <div class="item" [style.background-color]="colorKey">
+                  <div><img src="https://school.boukii.com/assets/icons/award_icon.svg" /></div>
+                  <div>{{level.league}}</div>
+                  <div>{{level.annotation}} - {{level.name}}</div>
+                </div>
+                <div class="item">
+                  <div><img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" /></div>
+                  <div>{{'groups' | translate}}</div>
+                  <div><b>{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</b></div>
+                </div>
+                <div class="item">
+                  <div><img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" /></div>
+                  <div>{{'days' | translate}}</div>
+                  <div><b>{{detailData.course_dates.length}}</b></div>
+                </div>
+                <div class="item">
+                  <div><img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" /></div>
+                  <div>{{'duration' | translate}}</div>
+                  <div><b>{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</b></div>
+                </div>
+                <div class="item">
+                  <div><img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" /></div>
+                  <div>{{'students' | translate}}</div>
+                  <div><b>{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</b></div>
+                </div>
+              </div>
 
-                  <p style="font-size: 12px;text-align: center">{{level.league}}</p>
-                  <p style="font-size: 12px;text-align: center">{{level.annotation}} - {{level.name}}</p>
-                </div>
-                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-                  <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                  {{'groups' | translate}} <strong style="text-align: center;">{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</strong>
-                </div>
-                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-                  <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                  {{'days' | translate}} <br><strong style="text-align: center;">{{detailData.course_dates.length}}</strong>
-                </div>
-                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-                  <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;margin: 0 auto;" />
-                  {{'duration' | translate}} <strong style="text-align: center;">{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</strong>
-                </div>
-                <div  style="float: left;width: 17%;border-radius: 11%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;margin: 0 0 0 2%;text-align:center">
-
-                  {{'students' | translate}} <strong style="text-align: center;">{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</strong>
-                </div>
-                <div *ngFor="let item of selectedGroup; let i = index">
-                  <div *ngIf="level.id === item.degree_id" style="float: left; width: 100%; padding: 5%;">
-                    <p style="float: left; width: 100%;">{{'groups' | translate}} {{i+1}}</p>
-                    <div style="float: left;width: 70%;">
-                      <img [src]="getMonitor(item.monitor_id)?.image ? getMonitor(item.monitor_id)?.image : imageAvatar" style="width: 50px;height: 50px;float: left;margin: 5% 0 0 0; border-radius: 100%">
-                      <span style="float: left;width: 70%;margin: 9% 0 0 5%;"> {{getMonitor(item.monitor_id)?.first_name ? getMonitor(item.monitor_id)?.first_name + ' ' + getMonitor(item.monitor_id)?.last_name : 'No monitor asigned'}}</span>
-                    </div>
-                    <div style="float: left;width: 30%;margin: 6% 0 0 0;">
-                      <strong style="text-align: right;float: right;">{{getActiveBookingUsers(item.booking_users)}}/{{item.max_participants}} {{'users' | translate}}</strong>
+              <div class="grupo-bottom-holder">
+                <div class="item" *ngFor="let item of selectedGroup; let i = index">
+                  <div class="holder" *ngIf="level.id === item.degree_id">
+                    <div style="width: 100%;background-color: #f5f4f6;padding: 10px;">{{'groups' | translate}} {{i+1}}</div>
+                    <div style="width: 100%; border: 1px solid #f5f4f6;padding: 10px 20px;">
+                      <div style="width: 70%;display: inline-block; vertical-align: middle;">
+                        <img [src]="getMonitor(item.monitor_id)?.image ? getMonitor(item.monitor_id)?.image : imageAvatar" style="width: 50px;height: 50px;border-radius: 100%; display: inline-block; vertical-align: middle;" />
+                        <div style="display: inline-block; vertical-align: middle;padding-left: 20px;"> {{getMonitor(item.monitor_id)?.first_name ? getMonitor(item.monitor_id)?.first_name + ' ' + getMonitor(item.monitor_id)?.last_name : 'No monitor asigned'}}</div>
+                      </div>
+                      <div style="width: 30%;text-align: right;display: inline-block; vertical-align: middle;">
+                        <b>{{getActiveBookingUsers(item.booking_users)}}/{{item.max_participants}} {{'users' | translate}}</b>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </ng-container>
+
+            </div>
+
           </ng-container>
-        </div>
+        </ng-container>
+
       </mat-card-content>
+
     </mat-card>
   </vex-page-layout-content>
 </vex-page-layout>

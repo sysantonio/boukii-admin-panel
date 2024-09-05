@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { SchoolService } from 'src/service/school.service';
+import {map} from 'rxjs/operators';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'vex-bookings',
@@ -37,16 +39,16 @@ export class BookingsComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
-    { label: 'course', property: 'bookingusers', type: 'booking_users', visible: true},
-    { label: 'client', property: 'client_main_id', type: 'client', visible: true },
+    { label: 'course', property: 'booking_users', type: 'booking_users', visible: true},
+    { label: 'client', property: 'client_main', type: 'client', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'options', property: 'options', type: 'text', visible: true },
-    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
     { label: 'op_rem_abr', property: 'has_cancellation_insurance', type: 'light', visible: true },
     { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
     { label: 'price', property: 'price_total', type: 'price', visible: true },
-    { label: 'method_paiment', property: 'payment_method_id', type: 'payment_method_id', visible: true },
+    { label: 'method_paiment', property: 'payment_method', type: 'payment_method', visible: true },
+    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
     { label: 'paid', property: 'paid', type: 'payment_status', visible: true },
     { label: 'status', property: 'status', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
@@ -57,50 +59,52 @@ export class BookingsComponent {
 
     this.schoolService.getSchoolData(this.user).subscribe((school) => {
       this.school = school.data;
+      if(!JSON.parse(this.school.settings).taxes?.cancellation_insurance_percent) {
+        this.columns = this.columns.filter(column => column.property !== 'has_cancellation_insurance');
+      }
+      if(!JSON.parse(this.school.settings).taxes?.boukii_care_price) {
+        this.columns = this.columns.filter(column => column.property !== 'has_boukii_care');
+
+      }
     })
-    this.getMonitors();
-    this.getClients();
+
     this.getSports();
     this.getLanguages();
   }
 
-  showDetailEvent(event: any) {
+  async showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.bonus = [];
       this.detailData = event.item;
-      this.detailData.bookingusers = this.orderBookingUsers(this.detailData.bookingusers);
+
+      // Ordenar los usuarios de la reserva
+      this.detailData.bookingusers = this.orderBookingUsers(this.detailData.booking_users);
+
+      // Obtener usuarios únicos de la reserva
       this.getUniqueBookingUsers(this.detailData.bookingusers);
-      this.getSchoolSportDegrees();
-      this.getBookingsLogs(this.detailData.id);
-      this.crudService.list('/vouchers-logs', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.id)
-          .subscribe((vl) => {
-            if(vl.data.length > 0) {
-              vl.data.forEach(voucherLog => {
-                this.crudService.get('/vouchers/'+voucherLog.id)
-                  .subscribe((v) => {
-                    v.data.currentPay = parseFloat(voucherLog.amount);
-                    this.bonus.push(v.data);
-                  })
-              });
-            }
-          })
 
-          this.detailData.bookingusers.forEach(book => {
-            book.courseExtras = [];
-            this.crudService.list('/booking-user-extras', 1, 10000, 'desc', 'id', '&booking_user_id='+book.id)
-            .subscribe((be) => {
-              this.detailData.courseExtras = [];
-              be.data.forEach(element => {
-                this.crudService.get('/course-extras/' +element.course_extra_id)
-                  .subscribe((ce) => {
-                    book.courseExtras.push(ce.data);
-                })
-              });
+      await this.getSchoolSportDegrees();
 
-          })
+      // Obtener los logs de los vouchers directamente desde detailData
+      if (this.detailData.vouchers_logs.length > 0) {
+        this.detailData.vouchers_logs.forEach(voucherLog => {
+          let voucher = voucherLog.voucher;
+          voucher.currentPay = parseFloat(voucherLog.amount);
+          this.bonus.push(voucher);
         });
-        this.showDetail = true;
+      }
+
+      // Procesar los extras de los usuarios de la reserva
+      this.detailData.bookingusers.forEach(book => {
+        book.courseExtras = [];
+        book.booking_user_extras.forEach(extra => {
+          // Se asume que los extras están directamente en el objeto book
+          book.courseExtras.push(extra);
+        });
+      });
+
+      this.showDetail = true;
     } else {
       this.showDetail = event.showDetail;
     }
@@ -175,11 +179,7 @@ export class BookingsComponent {
     }
   }
 
-  getClientDegree(id: any) {
-    if (!id) {
-      return 0;
-    }
-    const client = this.clients.find(c => c.id === id);
+  getClientDegree(client: any) {
     if (!client || !client.client_sports || !client.client_sports.length) {
       return 0;
     }
@@ -194,6 +194,97 @@ export class BookingsComponent {
     return clientSport.degree_id;
   }
 
+  get isActive(): boolean {
+    if (!this.detailData.booking_users || this.detailData.booking_users.length === 0) {
+      return false;
+    }
+
+    // Encuentra la fecha más futura en booking_users
+    const maxDate = this.detailData.booking_users.reduce((latest, user) => {
+      const userDate = new Date(user.date); // Asumiendo que cada `user` tiene una propiedad `date`
+      return userDate > latest ? userDate : latest;
+    }, new Date(0)); // Inicializamos con una fecha muy pasada
+
+    // Compara la fecha más futura con la fecha actual
+    return this.detailData.status === 1 &&
+      maxDate > new Date();
+  }
+
+  isActiveBookingUser(bu:any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) > new Date();
+  }
+
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    if (obj !== null) {
+      for (const clave of Object.keys(obj)) {
+        if (obj[clave] !== null && clave !== 'intervalo') {
+          return obj[clave];
+        }
+      }
+      return null;
+    }
+
+  }
+
+  encontrarPrimeraCombinacionConValores(data: any, course: any) {
+    if (data !== null) {
+      for (const intervalo of data) {
+        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+          return intervalo;
+        }
+      }
+      return null; // Devuelve null si no encuentra ninguna combinación válida
+    }
+
+  }
+
+
+  getHighestAuthorizedDegree(monitor, sport_id: number): any | null {
+    // Encuentra los deportes asociados al monitor
+    const degrees = monitor.monitor_sports_degrees
+      .filter(degree =>
+        degree.sport_id === sport_id &&
+        degree.school_id === this.user?.schools[0]?.id
+      )
+      .map(degree => degree.monitor_sport_authorized_degrees)
+      .flat(); // Aplanamos el array para obtener todos los grados autorizados
+
+    if (degrees.length === 0) {
+      return null; // Si no hay grados autorizados, retornamos null
+    }
+
+    // Buscamos el degree autorizado con el degree_order más alto
+    const highestDegree = degrees.reduce((prev, current) => {
+      return current.degree.degree_order > prev.degree.degree_order ? current : prev;
+    });
+
+    return highestDegree;
+  }
+
+  get isFinished(): boolean {
+    if (!this.detailData.booking_users || this.detailData.booking_users.length === 0) {
+      return false;
+    }
+
+    // Encuentra la fecha más futura en booking_users
+    const maxDate = this.detailData.booking_users.reduce((latest, user) => {
+      const userDate = new Date(user.date); // Asumiendo que cada `user` tiene una propiedad `date`
+      return userDate > latest ? userDate : latest;
+    }, new Date(0)); // Inicializamos con una fecha muy pasada
+
+    // Compara la fecha más futura con la fecha actual
+    return this.detailData.status === 1 &&
+      maxDate < new Date();
+  }
+
+  isFinishedBookingUser(bu:any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) < new Date();
+  }
 
   getSportName(id) {
     return this.sports.find((s) => s.id === id).name
@@ -207,7 +298,9 @@ export class BookingsComponent {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc',
+      'id', '&school_id='+this.user.schools[0].id, '', null, '',
+      ['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree', 'user'])
       .subscribe((monitor) => {
         this.monitors = monitor.data;
       })
@@ -221,35 +314,63 @@ export class BookingsComponent {
       })
   }
 
-  getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
-      .subscribe((sport) => {
-        this.detailData.sports = sport.data;
-        sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
-          .subscribe((data) => {
-            //For aureola
-            data.data.forEach((degree: any) => {
-              degree.inactive_color = this.lightenColor(degree.color, 30);
-            });
-            this.detailData.sports[idx].degrees = data.data.reverse();
+  async getSchoolSportDegrees(): Promise<void> {
+    try {
+      const sportResponse = await this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).toPromise();
+      this.detailData.sports = sportResponse.data;
+      const degreeRequests = sportResponse.data.map((sport) =>
+        this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', `&school_id=${this.user.schools[0].id}&sport_id=${sport.sport_id}&active=1`)
+          .pipe(
+            map((degreeResponse) => ({
+              sport_id: sport.sport_id,
+              degrees: degreeResponse.data.map((degree: any) => ({
+                ...degree,
+                inactive_color: this.lightenColor(degree.color, 30)
+              })).reverse()
+            }))
+          )
+      );
 
-            //For aureola
-            if (this.detailData.bookingusers && this.detailData.bookingusers.length) {
-              const sportId = this.detailData.bookingusers[0].course.sport_id;
-              const matchingSport = this.detailData.sports.find(sport => sport.sport_id === sportId);
+      const sportsWithDegrees: any = await forkJoin(degreeRequests).toPromise();
+      sportsWithDegrees.forEach((sportWithDegrees, idx) => {
+        const sport = this.detailData.sports.find(s => s.sport_id === sportWithDegrees.sport_id);
+        if (sport) {
+          sport.degrees = sportWithDegrees.degrees;
+        }
+      });
 
-              if (matchingSport && matchingSport.degrees) {
-                  this.detailData.degrees_sport = [...matchingSport.degrees].reverse();
-              } else {
-                  this.detailData.degrees_sport = [];
-              }
-            } else {
-                this.detailData.degrees_sport = [];
-            }
-          });
-        });
-      })
+      // Asignar degrees_sport en función de los bookingusers si es necesario
+      if (this.detailData.bookingusers && this.detailData.bookingusers.length) {
+        const sportId = this.detailData.bookingusers[0].course.sport_id;
+        const matchingSport = this.detailData.sports.find(sport => sport.sport_id === sportId);
+        this.detailData.degrees_sport = matchingSport && matchingSport.degrees ? [...matchingSport.degrees].reverse() : [];
+      } else {
+        this.detailData.degrees_sport = [];
+      }
+
+    } catch (error) {
+      console.error("Error fetching sports and degrees:", error);
+    }
+  }
+
+  getPaymentMethod(id: number) {
+    switch(id) {
+      case 1:
+        return 'CASH';
+      case 2:
+        return 'BOUKII PAY';
+      case 3:
+        return 'ONLINE';
+      case 4:
+        return 'AUTRE';
+      case 5:
+        return 'payment_no_payment';
+      case 6:
+        return 'bonus';
+
+      default:
+        return 'payment_no_payment'
+    }
   }
 
   private lightenColor(hexColor: string, percent: number): string {
@@ -315,7 +436,7 @@ export class BookingsComponent {
     let ret = false;
 
     this.detailData.bookingusers.forEach(element => {
-      if (element.courseExtras.length > 0 && !ret) {
+      if (element.courseExtras && element.courseExtras.length > 0 && !ret) {
         ret = true;
       }
     });
@@ -327,7 +448,7 @@ export class BookingsComponent {
     let ret = 0;
 
     this.detailData.bookingusers.forEach(element => {
-      if (element.courseExtras.length > 0 && !ret) {
+      if (element.courseExtras && element.courseExtras.length > 0 && !ret) {
         element.courseExtras.forEach(ce => {
           ret = ret + parseFloat(ce.price);
         });
@@ -347,13 +468,15 @@ export class BookingsComponent {
     return ret.toFixed(2);
   }
 
-  getUniqueBookingUsers(data: any) {
+/*  getUniqueBookingUsers(data: any) {
     const clientIds = new Set();
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
     this.bookingUsersUnique = [];
+
     this.bookingUsersUnique = data.filter(item => {
-      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) || !uniqueMonitors.has(item.monitor_id)) {
+      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
+        (item.course.course_type != 1  && !uniqueMonitors.has(item.monitor_id))) {
         clientIds.add(item.client_id);
         uniqueDates.add(item.date);
         uniqueMonitors.add(item.monitor_id);
@@ -361,7 +484,53 @@ export class BookingsComponent {
       }
       return false;
     });
+  }*/
+
+  getUniqueBookingUsers(data: any) {
+    const uniqueGroups = new Map<string, any>();
+
+    data.forEach(item => {
+      // Crear una clave única por fecha y monitor
+      const key = `${item.date}-${item.monitor_id}`;
+
+      if (uniqueGroups.has(key)) {
+        const existingItem = uniqueGroups.get(key);
+        // Si el precio actual es mayor que el del existente, reemplázalo
+        if (item.price > existingItem.price) {
+          uniqueGroups.set(key, item);
+        }
+      } else {
+        // Si no existe el grupo, lo añadimos al Map
+        uniqueGroups.set(key, item);
+      }
+    });
+
+    // Convertimos el Map en un array de los valores
+    this.bookingUsersUnique = Array.from(uniqueGroups.values());
   }
+
+  /*getUniqueBookingUsers(data: any) {
+    const uniqueGroups = new Map<string, any>();
+
+    data.forEach(item => {
+      // Crear una clave única para cada combinación de client_id, date y monitor_id
+      const key = `${item.client_id}-${item.date}-${item.monitor_id}`;
+
+      // Si el grupo ya existe, comparamos los precios y nos quedamos con el más alto
+      if (uniqueGroups.has(key)) {
+        const existingItem = uniqueGroups.get(key);
+        if (item.price > existingItem.price) {
+          uniqueGroups.set(key, item);
+        }
+      } else {
+        // Si el grupo no existe, lo añadimos
+        uniqueGroups.set(key, item);
+      }
+    });
+
+    // Convertimos el map en un array de los valores
+    this.bookingUsersUnique = Array.from(uniqueGroups.values());
+  }*/
 
   orderBookingUsers(users: any[]) {
     return users.sort((a, b) => {

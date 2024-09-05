@@ -4,23 +4,38 @@ import { trackByValue } from '../../utils/track-by';
 @Component({
   selector: 'vex-breadcrumbs',
   template: `
-    <div class="flex items-center">
-      <vex-breadcrumb>
-        <a [routerLink]="['/']">
-          <mat-icon svgIcon="mat:home" class="icon-sm"></mat-icon>
+
+    <ng-container *ngFor="let crumb of crumbs; trackBy: trackByValue">
+      <ng-container *ngIf="crumb.link; else noLink">
+        <a [routerLink]="crumb.link" class="breadcrumb-link">
+          <ng-container *ngIf="crumb.title">
+            <h2 class="title">{{crumb.text | translate}}</h2>
+          </ng-container>
+          <ng-container *ngIf="crumb.subtitle">
+            <h3 class="subtitle">{{crumb.text | translate}}</h3>
+          </ng-container>
+          <ng-container *ngIf="crumb.icon">
+            <i class="icon">
+              <img src="../assets/img/icons/{{crumb.icon}}.svg" />
+            </i>
+          </ng-container>
         </a>
-      </vex-breadcrumb>
-      <ng-container *ngFor="let crumb of crumbs; trackBy: trackByValue">
-        <div class="w-1 h-1 bg-gray rounded-full ltr:mr-2 rtl:ml-2"></div>
-        <vex-breadcrumb>
-          <a [routerLink]="[]">
-          <span *ngIf="crumb.text !== ''">
-            {{ crumb.text | translate }}
-          </span>
-          <mat-icon *ngIf="crumb.icon !== ''" svgIcon="logo:{{crumb.icon}}" class="icon-sm"></mat-icon></a>
-        </vex-breadcrumb>
       </ng-container>
-    </div>
+      <ng-template #noLink>
+        <ng-container *ngIf="crumb.title">
+          <h2 class="title">{{crumb.text | translate}}</h2>
+        </ng-container>
+        <ng-container *ngIf="crumb.subtitle">
+          <h3 class="subtitle">{{crumb.text | translate}}</h3>
+        </ng-container>
+        <ng-container *ngIf="crumb.icon">
+          <i class="icon">
+            <img src="../assets/img/icons/{{crumb.icon}}.svg" />
+          </i>
+        </ng-container>
+      </ng-template>
+    </ng-container>
+
   `
 })
 export class BreadcrumbsComponent implements OnInit {

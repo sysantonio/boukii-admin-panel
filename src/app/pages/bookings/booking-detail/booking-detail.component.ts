@@ -341,6 +341,7 @@ export class BookingDetailComponent implements OnInit {
           this.detailClient = this.clients[0];
           this.crudService
             .get("/bookings/" + this.id, [
+              "user",
               "vouchersLogs.voucher",
               "bookingUsers.course.courseDates",
               "bookingUsers.bookingUserExtras.courseExtra",
@@ -528,6 +529,50 @@ export class BookingDetailComponent implements OnInit {
     } else {
       return this.courses[index].price;
     }
+  }
+
+  get isActive(): boolean {
+    if (!this.booking.booking_users || this.booking.booking_users.length === 0) {
+      return false;
+    }
+
+    // Encuentra la fecha más futura en booking_users
+    const maxDate = this.booking.booking_users.reduce((latest, user) => {
+      const userDate = new Date(user.date); // Asumiendo que cada `user` tiene una propiedad `date`
+      return userDate > latest ? userDate : latest;
+    }, new Date(0)); // Inicializamos con una fecha muy pasada
+
+    // Compara la fecha más futura con la fecha actual
+    return this.booking.status === 1 &&
+      maxDate > new Date();
+  }
+
+  get isFinished(): boolean {
+    if (!this.booking.booking_users || this.booking.booking_users.length === 0) {
+      return false;
+    }
+
+    // Encuentra la fecha más futura en booking_users
+    const maxDate = this.booking.booking_users.reduce((latest, user) => {
+      const userDate = new Date(user.date); // Asumiendo que cada `user` tiene una propiedad `date`
+      return userDate > latest ? userDate : latest;
+    }, new Date(0)); // Inicializamos con una fecha muy pasada
+
+    // Compara la fecha más futura con la fecha actual
+    return this.booking.status === 1 &&
+      maxDate < new Date();
+  }
+
+  isFinishedBookingUser(bu:any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) < new Date();
+  }
+
+  isActiveBookingUser(bu:any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) > new Date();
   }
 
   findPaxesByCourseExtra(group) {
@@ -1340,6 +1385,14 @@ export class BookingDetailComponent implements OnInit {
     } else {
       const monitor = this.monitors.find((m) => m.id === id);
       return monitor?.image ? monitor.image : this.userAvatar;
+    }
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
     }
   }
 
@@ -3455,6 +3508,28 @@ export class BookingDetailComponent implements OnInit {
       });
   }
 
+  getHighestAuthorizedDegree(monitor, sport_id: number): any | null {
+    // Encuentra los deportes asociados al monitor
+    const degrees = monitor.monitor_sports_degrees
+      .filter(degree =>
+        degree.sport_id === sport_id &&
+        degree.school_id === this.user?.schools[0]?.id
+      )
+      .map(degree => degree.monitor_sport_authorized_degrees)
+      .flat(); // Aplanamos el array para obtener todos los grados autorizados
+
+    if (degrees.length === 0) {
+      return null; // Si no hay grados autorizados, retornamos null
+    }
+
+    // Buscamos el degree autorizado con el degree_order más alto
+    const highestDegree = degrees.reduce((prev, current) => {
+      return current.degree.degree_order > prev.degree.degree_order ? current : prev;
+    });
+
+    return highestDegree;
+  }
+
   getBookingsLogs() {
     this.crudService
       .list("/booking-logs", 1, 10000, "desc", "id", "&booking_id=" + this.id)
@@ -3467,7 +3542,11 @@ export class BookingDetailComponent implements OnInit {
     const today = moment();
     const dateFormat = moment(date);
 
-    return today.isSameOrBefore(dateFormat) || !this.booking.paid;
+    if (!today.isSameOrBefore(dateFormat)) {
+      return false;
+    }
+
+    return !this.booking.paid;
   }
 
   encontrarPrimeraCombinacionConValores(data: any) {

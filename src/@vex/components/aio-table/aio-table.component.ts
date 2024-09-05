@@ -147,6 +147,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   courseColective = false;
   coursePrivate = false;
+  courseActivity = false;
 
   bookingPayed = false;
   bookingNoPayed = false;
@@ -160,9 +161,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   finishedBooking = false;
   allBookings = false;
 
-  activeMonitor = false;
+  activeMonitor = true;
   inactiveMonitor = false;
-  allMonitors = true;
+  allMonitors = false;
 
   constructor(private dialog: MatDialog, public router: Router, private crudService: ApiCrudService,
               private excelExportService: ExcelExportService, private routeActive: ActivatedRoute,
@@ -183,17 +184,22 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit() {
     this.routeActive.queryParams.subscribe(params => {
       this.gift = +params['isGift'] || 0; // Valor por defecto
-      if(this.gift){
-        this.filter += '&is_gift=1';
-      } else {
-        this.filter += '&is_gift=0';
+      if(this.entity.includes('vouchers')) {
+        if(this.gift){
+          this.filter += '&is_gift=1';
+        } else {
+          this.filter += '&is_gift=0';
+        }
       }
     });
-    this.getMonitors();
-    this.getClients();
-    this.getSports();
     this.getLanguages();
     this.getDegrees();
+    this.getSports();
+/*    this.getMonitors();
+    this.getClients();
+
+
+    */
   }
 
   // Detecta cambios en las propiedades de entrada
@@ -233,54 +239,90 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     if (!all) {
       if(this.entity.includes('booking')) {
 
-        if (this.courseColective && !this.coursePrivate) {
-          filter = filter + '&course_type=1';
-        } else if (!this.courseColective && this.coursePrivate) {
-          filter = filter + '&course_type=2';
-        }
+        // Filtrar por tipo de curso (colectivo, privado, actividad)
+        const courseTypes = [];
 
+        // Filtrar por tipo de curso (colectivo, privado, actividad)
+        if (this.courseColective && !this.coursePrivate && !this.courseActivity) {
+          filter = filter + '&course_type=1';
+        } else if (!this.courseColective && this.coursePrivate && !this.courseActivity) {
+          filter = filter + '&course_type=2';
+        } else if (!this.courseColective && !this.coursePrivate && this.courseActivity) {
+          filter = filter + '&course_type=3';
+        } else {
+          if (this.courseColective) {
+            courseTypes.push(1); // Colectivo
+          }
+          if (this.coursePrivate) {
+            courseTypes.push(2); // Privado
+          }
+          if (this.courseActivity) {
+            courseTypes.push(3); // Actividad
+          }
+          // Añadir los tipos de curso al filtro si existen
+          if (courseTypes.length > 0) {
+            filter = filter + '&course_types[]=' + courseTypes.join('&course_types[]=');
+          }
+        }
+        // Filtrar por estado de pago
         if (this.bookingPayed && !this.bookingNoPayed) {
           filter = filter + '&paid=1';
         } else if (!this.bookingPayed && this.bookingNoPayed) {
           filter = filter + '&paid=0';
         }
 
-        if (this.courseColective && !this.coursePrivate) {
-          filter = filter + '&courseType=1';
-        } else if (!this.courseColective && this.coursePrivate) {
-          filter = filter + '&courseType=2';
-        }
-
+        // Filtrar por tipo de reserva (individual o múltiple)
         if (this.reservationTypeSingle && !this.reservationTypeMultiple) {
           filter = filter + '&isMultiple=0';
         } else if (!this.reservationTypeSingle && this.reservationTypeMultiple) {
           filter = filter + '&isMultiple=1';
         }
 
+        // Filtrar por estado de finalización
         if (this.finishedBooking) {
           filter = filter + '&finished=0';
         } else {
           filter = filter + '&finished=1';
         }
 
+        // Filtrar por todas las reservas
         if (this.allBookings) {
-          filter = filter + '&all=1'
+          filter = filter + '&all=1';
         }
 
       }
 
       if(this.entity.includes('courses')) {
+        const courseTypes = [];
 
-        if (this.courseColective && !this.coursePrivate) {
+        // Filtrar por tipo de curso (colectivo, privado, actividad)
+        if (this.courseColective && !this.coursePrivate && !this.courseActivity) {
           filter = filter + '&course_type=1';
-        } else if (!this.courseColective && this.coursePrivate) {
+        } else if (!this.courseColective && this.coursePrivate && !this.courseActivity) {
           filter = filter + '&course_type=2';
-        }
-
-        if (this.finishedCourse) {
-          filter = filter + '&finished=1';
+        } else if (!this.courseColective && !this.coursePrivate && this.courseActivity) {
+          filter = filter + '&course_type=3';
         } else {
-          filter = filter + '&finished=0';
+          if (this.courseColective) {
+            courseTypes.push(1); // Colectivo
+          }
+          if (this.coursePrivate) {
+            courseTypes.push(2); // Privado
+          }
+          if (this.courseActivity) {
+            courseTypes.push(3); // Actividad
+          }
+          // Añadir los tipos de curso al filtro si existen
+          if (courseTypes.length > 0) {
+            filter = filter + '&course_types[]=' + courseTypes.join('&course_types[]=');
+          }
+        }
+        if(!this.allCourse) {
+          if (this.finishedCourse) {
+            filter = filter + '&finished=1';
+          } else {
+            filter = filter + '&finished=0';
+          }
         }
 
         if (this.activeCourse && !this.inActiveCourse) {
@@ -294,7 +336,11 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           this.sportsControl.value.forEach(element => {
             ids.push(element.id);
           });
-          filter = filter + '&sport_id='+ids.toString();
+          if(ids.length>1) {
+            filter = filter + '&sports_id[]=' + ids.join('&sports_id[]=');
+          } else if(ids.length == 1) {
+            filter = filter + '&sport_id='+ids[0];
+          }
         }
       }
 
@@ -303,6 +349,15 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           filter = filter + '&school_active=1';
         } else if (!this.activeMonitor && this.inactiveMonitor) {
           filter = filter + '&school_active=0';
+        }
+        if(this.sportsControl.value.length !== this.sports.length) {
+          const ids = [];
+          this.sportsControl.value.forEach(element => {
+            ids.push(element.id);
+          });
+
+            filter = filter + '&sports_id[]=' + ids.join('&sports_id[]=');
+
         }
       }
       if(this.entity.includes('statistics')) {
@@ -337,13 +392,20 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
    */
   getFilteredData(pageIndex: number, pageSize: number, filter: any) {
     this.loading = true;
-
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
+    this.crudService.list(
+      this.entity,
+      pageIndex,
+      pageSize,
+      'desc',
+      'id',
       filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + this.search +
       (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
-      '', null, this.searchCtrl.value, this.with)
+      '',
+      null,
+      this.searchCtrl.value,
+      this.with)
       .subscribe((response: any) => {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;
@@ -366,10 +428,17 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(this.entity, pageIndex, pageSize, 'desc', 'id',
-      this.filter + this.searchCtrl.value
-      + '&school_id=' +this.user.schools[0].id  + this.search + ( this.filterField !== null
-        ? '&'+this.filterColumn +'='+this.filterField : ''), '', null, this.searchCtrl.value,
+    this.crudService.list(
+      this.entity,
+      pageIndex,
+      pageSize,
+      'desc',
+      'id',
+      this.filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id
+      + this.search + ( this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
+      '',
+      null,
+      this.searchCtrl.value,
       this.with)
       .subscribe((response: any) => {
         this.data = response.data;
@@ -496,7 +565,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       if (data) {
 
         if (this.entity.includes('monitor')) {
-          this.crudService.update(this.deleteEntity, {active: false}, item.id)
+          this.crudService.update(this.deleteEntity, {active: !item.active}, item.id)
           .subscribe(() => {
             this.getData(1, 10);
           })
@@ -773,15 +842,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  getMonitor(id: number) {
-    if (id && id !== null) {
-
-      const monitor = this.monitors.find((m) => m.id === id);
-
-      return monitor;
-    }
-  }
-
   getMonitors() {
     this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((monitor) => {
@@ -799,10 +859,11 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   getSports() {
-    this.crudService.list('/sports', 1, 10000, 'asc', 'name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id',
+      '&school_id='+this.user.schools[0].id, '', null, null, ['sport'])
       .subscribe((data) => {
-        this.sports = data.data;
-        this.sportsControl.patchValue(data.data);
+        this.sports = data.data.map(item => item.sport);
+        this.sportsControl.patchValue(this.sports);
 
         this.filteredSports = this.sportsControl.valueChanges.pipe(
           startWith(''),
@@ -864,6 +925,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         return 'AUTRE';
       case 5:
         return 'payment_no_payment';
+        case 6:
+        return 'bonus';
 
       default:
         return 'payment_no_payment'

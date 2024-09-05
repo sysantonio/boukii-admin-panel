@@ -161,8 +161,8 @@ export class ClientDetailComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
-    { label: 'course', property: 'course', type: 'course_type_data', visible: true },
-    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'course', property: 'course', type: 'course_type_data', visible: true},
+    { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
@@ -177,8 +177,8 @@ export class ClientDetailComponent {
 
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-    private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
-    private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
+             private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
+             private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -217,10 +217,10 @@ export class ClientDetailComponent {
         console.error('Error fetching stations:', error);
         return of([]); // Devuelve un array vacío en caso de error
       })),
-      clients: this.getClients().pipe(retry(3), catchError(error => {
-        console.error('Error fetching clients:', error);
-        return of([]); // Devuelve un array vacío en caso de error
-      })),
+      /*      clients: this.getClients().pipe(retry(3), catchError(error => {
+              console.error('Error fetching clients:', error);
+              return of([]); // Devuelve un array vacío en caso de error
+            })),*/
     };
 
     return forkJoin(requestsInitial).pipe(tap((results) => {
@@ -280,31 +280,31 @@ export class ClientDetailComponent {
       'evaluations.evaluationFulfilledGoals.degreeSchoolSportGoal', 'evaluations.degree', 'observations'])
       .pipe(
         tap((data) => {
+
           this.defaults = data.data;
-          this.evaluations = data.data.evaluations;
-          //this.evaluationFullfiled = [];
-          //this.evaluations.forEach(ev => {
-          //  ev.evaluation_fulfilled_goals.forEach(element => {
-          //    ;
-          //    this.evaluationFullfiled.push(element);
-          //  });
-          //});
-          if (data.data.observations.length > 0) {
-            this.defaultsObservations = data.data[0];
-          } else {
-            this.defaultsObservations = {
-              id: null,
-              general: '',
-              notes: '',
-              historical: '',
-              client_id: null,
-              school_id: null
-            };
-          }
-          this.currentImage = data.data.image;
-          if (!onChangeUser) {
-            this.mainClient = data.data;
-          }
+        this.evaluations = data.data.evaluations;
+        this.evaluationFullfiled = [];
+        this.evaluations.forEach(ev => {
+          ev.evaluation_fulfilled_goals.forEach(element => {;
+            this.evaluationFullfiled.push(element);
+          });
+        });
+        if (data.data.observations.length > 0) {
+          this.defaultsObservations = data.data[0];
+        } else {
+          this.defaultsObservations = {
+            id: null,
+            general: '',
+            notes: '',
+            historical: '',
+            client_id: null,
+            school_id: null
+          };
+        }
+        this.currentImage = data.data.image;
+        if (!onChangeUser) {
+          this.mainClient = data.data;
+        }
 
           const requestsClient = {
             clientSchool: this.getClientSchool().pipe(retry(3), catchError(error => {
@@ -335,7 +335,7 @@ export class ClientDetailComponent {
 
             this.languagesControl.setValue(langs);
 
-            if (!onChangeUser) {
+          if(!onChangeUser) {
 
               this.filteredCountries = this.myControlCountries.valueChanges.pipe(
                 startWith(''),
@@ -391,12 +391,20 @@ export class ClientDetailComponent {
                 element.icon_selected = sport.icon_selected;
                 element.icon_unselected = sport.icon_unselected;
                 element.degrees = sport.degrees;
+                element.degrees = element.degrees.filter(level => {
+                  const age = this.calculateAge(this.defaults.birth_date);
+                  return age >= level.age_min && age <= level.age_max;
+                });
               }
             });
           });
           this.sportsCurrentData.data = this.clientSport;
           const availableSports = [];
           this.schoolSports.forEach(element => {
+            element.degrees = element.degrees.filter(level => {
+              const age = this.calculateAge(this.defaults.birth_date);
+              return age >= level.age_min && age <= level.age_max;
+            });
             if (!this.sportsCurrentData.data.find((s) => s.sport_id === element.sport_id)) {
               availableSports.push(element);
             }
@@ -462,7 +470,7 @@ export class ClientDetailComponent {
     return this.crudService.list('/languages', 1, 1000).pipe(
       tap((data) => {
         this.languages = data.data.reverse();
-        this.setInitLanguages();
+
       })
     );
   }
@@ -610,15 +618,15 @@ export class ClientDetailComponent {
       .subscribe((data) => {
         this.clientUsers = data.data;
         this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id', '&main_id=' + this.id)
-          .subscribe((data) => {
-            data.data.forEach(element => {
-              this.clientUsers.forEach(cl => {
-                if (element.client_id === cl.id) {
-                  cl.utilizer_id = element.id;
-                }
+            .subscribe((data) => {
+              data.data.forEach(element => {
+                this.clientUsers.forEach(cl => {
+                  if (element.client_id === cl.id) {
+                    cl.utilizer_id = element.id;
+                  }
+                });
               });
-            });
-          })
+            })
 
       })
   }
@@ -719,7 +727,7 @@ export class ClientDetailComponent {
   }
 
   updateLevel(clientSport, level) {
-    this.crudService.update('/client-sports', { client_id: clientSport.id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id }, clientSport.id)
+    this.crudService.update('/client-sports', { client_id: clientSport.client_id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id }, clientSport.id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', { duration: 3000 });
       })
@@ -749,7 +757,7 @@ export class ClientDetailComponent {
 
         this.crudService.update('/clients', this.defaults, this.id)
           .subscribe((client) => {
-            this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', { duration: 3000 });
+            this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -768,7 +776,7 @@ export class ClientDetailComponent {
 
             this.sportsData.data.forEach(element => {
 
-              this.crudService.create('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
+              this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
                 .subscribe(() => {
                   console.log('client sport created');
                 })
@@ -776,14 +784,14 @@ export class ClientDetailComponent {
 
             this.sportsCurrentData.data.forEach(element => {
 
-              this.crudService.update('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id }, element.id)
-                .subscribe(() => {
-                  console.log('client sport updated');
-                })
-            });
+                this.crudService.update('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id}, element.id)
+                  .subscribe(() => {
+                    console.log('client sport updated');
+                  })
+              });
 
-            setTimeout(() => {
-              this.router.navigate(['/clients']);
+              setTimeout(() => {
+                this.router.navigate(['/clients']);
 
             }, 2000);
           })
@@ -888,11 +896,11 @@ export class ClientDetailComponent {
       dialogRef.afterClosed().subscribe((data: any) => {
         if (data) {
 
-          if (data.action === 'add') {
-            this.crudService.create('/clients-utilizers', { client_id: data.ret, main_id: parseInt(this.id) })
-              .subscribe((res) => {
-                this.getClientUtilisateurs();
-              })
+          if(data.action === 'add') {
+            this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: parseInt(this.id)})
+            .subscribe((res) => {
+              this.getClientUtilisateurs();
+            })
           } else {
             const user = {
               username: data.data.name,
@@ -934,20 +942,19 @@ export class ClientDetailComponent {
 
                 this.crudService.create('/clients', client)
                   .subscribe((clientCreated) => {
-                    this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', { duration: 3000 });
+                    this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
-                    this.crudService.create('/clients-schools', { client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
+                    this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
                       .subscribe((clientSchool) => {
 
-                        setTimeout(() => {
-                          this.crudService.create('/clients-utilizers', { client_id: clientCreated.data.id, main_id: this.id })
-                            .subscribe((res) => {
-                              this.getClientUtilisateurs();
-                            })
-                        }, 1000);
-                      });
-                  })
-              })
+                      setTimeout(() => {
+                        this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
+                        .subscribe((res) => {
+                          this.getClientUtilisateurs();
+                        })}, 1000);
+                    });
+                })
+            })
           }
         }
       });
@@ -1015,11 +1022,13 @@ export class ClientDetailComponent {
           }
         });
         ret = ret > maxPoints ? maxPoints : ret
+        return (ret / maxPoints) * 100;
       }
-      return (ret / maxPoints) * 100 || 0;
+      return ret;
+
+    } else {
+      return ret;
     }
-    return ret;
-  }
 
   getDegreeScore(goal: any) {
     const d = this.evaluationFullfiled.find(element => element.degrees_school_sport_goals_id === goal)
@@ -1108,13 +1117,13 @@ export class ClientDetailComponent {
       this.crudService.get('/admin/courses/' + this.detailData.course_id)
         .subscribe((course) => {
           this.detailData.course = course.data;
-          this.crudService.get('/sports/' + this.detailData.course.sport_id)
+          this.crudService.get('/sports/'+this.detailData.course.sport_id)
             .subscribe((sport) => {
               this.detailData.sport = sport.data;
             });
 
           if (this.detailData.degree_id !== null) {
-            this.crudService.get('/degrees/' + this.detailData.degree_id)
+            this.crudService.get('/degrees/'+this.detailData.degree_id)
               .subscribe((degree) => {
                 this.detailData.degree = degree.data;
               })
@@ -1130,7 +1139,7 @@ export class ClientDetailComponent {
             if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
-              this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id=' + element.client_id + "&school_id=" + this.user.schools[0].id)
+                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
                 .subscribe((cd) => {
 
                   if (cd.data.length > 0) {

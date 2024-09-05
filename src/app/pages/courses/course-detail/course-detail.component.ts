@@ -119,6 +119,7 @@ export class CourseDetailComponent implements OnInit {
   subGroupSelectedIndex: any = 0;
   selectedDate: string;
   selectedItem: any;
+  selectedDateId: any;
   daysDates = [];
   daysDatesLevels = [];
   monitors = [];
@@ -138,7 +139,7 @@ export class CourseDetailComponent implements OnInit {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
     { label: 'course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
@@ -353,13 +354,14 @@ export class CourseDetailComponent implements OnInit {
     this.router.navigate([route]);
   }
 
-  openUserTransfer(group, subgroup, subgroupNumber) {
+  openUserTransfer(group, subgroup, subgroupNumber, degree) {
     const dialogRef = this.dialog.open(CourseUserTransferComponent, {
       width: '800px',
       height: '800px',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
-      data: {group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor, id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
+      data: {degree: degree, group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor,
+        id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -422,11 +424,13 @@ export class CourseDetailComponent implements OnInit {
 
             this.defaults.course_dates.forEach(cs => {
               cs.course_groups.forEach(group => {
+                level.visible = false;
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
+                  level.visible = true;
                 }
-                level.visible = false;
+
               });
             });
             this.selectedItem = this.daysDatesLevels[0].dateString;
@@ -435,6 +439,7 @@ export class CourseDetailComponent implements OnInit {
           });
 
           this.colorKeys = Object.keys(this.groupedByColor);
+          this.loadingMonitors = false;
         }
 
       })
@@ -497,8 +502,8 @@ export class CourseDetailComponent implements OnInit {
             group.degree_id = level.id;
             group.course_date_id = prevGroup.course_date_id;
             group.course_id = prevGroup.course_id;
-            group.age_min = 5;
-            group.age_max = 50;
+            group.age_min = level.age_min;
+            group.age_max = level.age_max;
             group.course_subgroups.push({
               degree_id: level.id,
               monitor_id: null,
@@ -844,6 +849,7 @@ export class CourseDetailComponent implements OnInit {
   selectItem(item: any, index: any, subGroupIndex: any, subgroup) {
     this.subGroupSelectedIndex = null;
     this.selectedItem = item.dateString;
+    this.selectedDateId = item.id;
     this.selectedDate = item.date;
     this.daySelectedIndex = index;
     this.subGroupSelectedIndex = subGroupIndex;
@@ -1047,7 +1053,9 @@ export class CourseDetailComponent implements OnInit {
           })
         }
       } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
+        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+          dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''),
+          active: element.active, id: element.id});
       }
 
     });
@@ -1077,7 +1085,9 @@ export class CourseDetailComponent implements OnInit {
     let ret = [];
 
     this.courseUsers.forEach(courseUser => {
-      if(courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id && courseUser.status === 1) {
+      if(courseUser.course_group_id === subGroup.course_group_id
+        && courseUser.course_subgroup_id === subGroup.id
+        && courseUser.status === 1) {
         ret.push(courseUser);
       }
     });

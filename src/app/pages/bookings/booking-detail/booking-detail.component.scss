@@ -1,4 +1,5 @@
 .full-screen-dialog .mat-dialog-container {
+  overflow-y: scroll !important;
   width: 90vw;
   height: 90vh;
   max-width: 100vw;
@@ -152,9 +153,9 @@ mat-card-avatar {
   background-repeat: no-repeat;
 }
 
-::ng-deep .mat-mdc-card-header-text {
-  width: 100%; float: left;
-}
+/*::ng-deep .mat-mdc-card-header-text {
+  display: none;
+}*/
 /* Estilos para el contenido de la tarjeta */
 .content-title {
   margin: 16px 0;  /* Esto añade un poco de espacio arriba y abajo del título, ajusta según lo que necesites */
@@ -291,7 +292,7 @@ mat-card-avatar {
 /* Puedes ajustar los estilos de título y subtítulo según tus preferencias */
 .card-users mat-card-title,
 mat-card-subtitle {
-  margin-left: 8px;
+  margin-left: 0px;
 }
 
 .card-users mat-card-content {
@@ -412,4 +413,179 @@ img[mat-card-image] {
   display: flex;
   flex: 1;
   justify-content: center;
+}
+
+
+/* lucho */
+.title-actividad {
+  background-color: #F2F3F3;
+  padding: 15px 35px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  .title {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #4D4D4D;
+
+    b {
+      font-weight: 700;
+    }
+  }
+}
+
+.list-box {
+  padding: 0px 35px;
+  font-size: .9em;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 10px;
+
+  .col-left {
+    width: 70%;
+    display: inline-block;
+    vertical-align: middle;
+
+    .col-l {
+      width: 50%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .col-r {
+      width: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: right;
+
+      span {
+        color: #FA9917;
+      }
+    }
+  }
+  .col-right {
+    width: 30%;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+  }
+}
+
+.btn-plus {
+  max-width: 26px;
+  min-width: auto;
+  padding: 0px 9px;
+  height: 26px;
+}
+
+.mat-mdc-card {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.mat-card-header {
+  background-color: #ED297B;
+  padding: 25px 35px!important;
+
+  .mat-mdc-card-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #fff;
+  }
+}
+
+.mat-mdc-card-content {
+  padding: 0px!important;
+
+  .title-status {
+    background-color: #F2F3F3;
+    padding: 15px 35px;
+    display: flex;
+    align-items: center;
+
+    b {
+      color: #4D4D4D;
+      font-size: 1em;
+      font-weight: 700;
+    }
+
+    .col-left {
+      width: 25%; /* Ajusta el porcentaje según sea necesario */
+      text-align: left;
+    }
+
+    .col-center {
+      width: 50%; /* Ajusta el porcentaje según sea necesario */
+      text-align: center;
+    }
+
+    .col-right {
+      width: 25%; /* Ajusta el porcentaje según sea necesario */
+      text-align: right;
+      font-size: 1em;
+      font-weight: 700;
+    }
+  }
+
+  .icon-send-mail {
+    width: 30px;
+    height: 30px;
+    left: -2px;
+    top: 1px;
+    position: relative;
+  }
+
+  .title-client {
+    padding: 10px 35px;
+    color: #4D4D4D;
+    font-size: 1.1em;
+    font-weight: 700;
+  }
+
+  .holder-client {
+    padding-left: 33px;
+    padding-right: 33px;
+    margin-top: 20px;
+
+    .col-left {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .col-right {
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 15px;
+
+      .client-name {
+        font-size: 1.3em;
+        font-weight: 700;
+        color: black;
+        margin-bottom: 2px;
+      }
+
+      .client-dates {
+        font-family: 'Montserrat', sans-serif;
+        font-size: .9em;
+      }
+    }
+  }
+}
+
+.card-header {
+  display: block;
+  background-color: #ED297B;
+  padding: 15px 20px !important;
+
+  .mat-mdc-card-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  .mat-icon {
+    fill: white!important;
+  }
+}
+
+mat-card-subtitle {
+  font-family: 'Montserrat', sans-serif;
 }

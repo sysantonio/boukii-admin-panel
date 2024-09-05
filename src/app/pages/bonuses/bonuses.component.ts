@@ -16,7 +16,7 @@ export class BonusesComponent {
 
   columns: TableColumn<any>[] = [
     { label: 'code', property: 'code', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'quantity', property: 'quantity', type: 'text', visible: true },
     { label: 'remaining_balance', property: 'remaining_balance', type: 'text', visible: true },
     { label: 'used', property: 'payed', type: 'status', visible: true },

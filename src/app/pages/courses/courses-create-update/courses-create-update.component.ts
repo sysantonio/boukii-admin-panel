@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {Observable, map, of, startWith, forkJoin, mergeMap} from 'rxjs';
@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
+import {AngularEditorConfig} from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -72,6 +73,24 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   ];
 
   filteredToHours = [];
+
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
+    toolbarPosition: 'top',
+    outline: true,
+  }
 
   summary = ``;
   description = ``;
@@ -142,6 +161,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       price: ''
     }
   ];
+  isAngularHtmlEditing = false;
   defaults: any = {
     unique: false,
     course_type: null,
@@ -272,7 +292,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-              private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService,
+              private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, private cdRef: ChangeDetectorRef,
               private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
@@ -996,7 +1016,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays},
+      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, dates: this.dataSource.data},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -1046,8 +1066,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
             group.teachers_min = level.id;
-            group.age_min = 5;
-            group.age_max = 50;
+            group.age_min = level.age_min;
+            group.age_max = level.age_max;
             group.subgroups.push({
               degree_id: level.id,
               monitor_id: null,
@@ -1376,6 +1396,7 @@ this.activityDatesTable.renderRows();
       this.daysDates = [];
       this.daysDatesLevels = [];
     }
+    //this.isAngularHtmlEditing = false;
   }
 
   setFlexibility(event: any) {
@@ -2430,6 +2451,91 @@ this.activityDatesTable.renderRows();
         this.snackbar.open(error.error.message, 'OK', {duration: 5000})
       })
   }
+  async translateCurrentTabToOthers() {
+    const fieldsToTranslate = ['name', 'short_description', 'description'];
+    const languages = ['fr', 'en', 'de', 'es', 'it'];
+
+    for (let index = 0; index < languages.length; index++) {
+      this.selectedTabDescIndex = index;
+      this.cdRef.detectChanges();
+
+      // Esperar a que la pestaña se renderice completamente
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      this.cdRef.detectChanges();
+
+      const sourceLang = languages[index];
+
+      for (const field of fieldsToTranslate) {
+        const sourceText = this.defaults.translations[sourceLang][field];
+        if (!sourceText) continue;
+
+        const targetLanguages = languages.filter(lang => lang !== sourceLang);
+
+        const translationObservables = targetLanguages.map(targetLang => {
+          const newValue = this.decodeHtmlEntities(sourceText);
+          return this.crudService.translateText(newValue, targetLang.toUpperCase())
+            .pipe(
+              map((response: any) => ({
+                lang: targetLang,
+                field: field,
+                translatedText: response.data.translations[0].text
+              }))
+            );
+        });
+
+        forkJoin(translationObservables).subscribe(translations => {
+          translations.forEach(translation => {
+            const { lang, field, translatedText } = translation;
+
+            if (field !== 'name') {
+              // Cambiar al modo de edición de HTML
+              const toggleEditorModeButton = document.getElementById('toggleEditorMode-' + field + '_' + lang);
+              if (toggleEditorModeButton) {
+                toggleEditorModeButton.click();
+              }
+
+              this.defaults.translations[lang][field] = translatedText;
+
+              // Insertar el texto traducido
+              const editorElement = document.getElementById('sourceText' + field + '_' + lang);
+              if (editorElement) {
+                editorElement.innerHTML = this.encodeHtmlEntities(translatedText);
+
+                // Regresar al modo de edición de WYSIWYG
+                if (toggleEditorModeButton) {
+                  toggleEditorModeButton.click();
+                }
+              }
+            } else {
+              this.defaults.translations[lang][field] = translatedText;
+            }
+          });
+
+          this.cdRef.detectChanges();
+        });
+      }
+
+      // Esperar antes de pasar a la siguiente pestaña
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  }
+
+  decodeHtmlEntities(encodedString: string): string {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = encodedString;
+    return textarea.value;
+  }
+
+  encodeHtmlEntities(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  getField(language: string, field: string): string {
+    return `${field}_${language}`;
+  }
 
   checkStep2PrivateNoFlex(stepper: MatStepper) {
     if(this.defaults.translations.fr.name === null) {
@@ -2608,10 +2714,12 @@ this.activityDatesTable.renderRows();
 
   onTabNameChanged(event: any) {
     this.selectedTabNameIndex = event.index;
+    this.selectedTabDescIndex = event.index;
   }
 
   onTabDesChanged(event: any) {
     this.selectedTabDescIndex = event.index;
+    this.selectedTabNameIndex = event.index;
   }
 
   checkAvailableMonitors(level: any) {

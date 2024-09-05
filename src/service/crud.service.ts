@@ -1,5 +1,5 @@
 
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
@@ -52,7 +52,7 @@ export class ApiCrudService extends ApiService {
 
     // Construir la URL completa
     const url = this.baseUrl + model + '?perPage=' + perPage + '&page=' + numPage + '&order=' + order
-      + '&orderColumn=' + orderColumn + '&search=' + search + '&exclude=' + exclude + filter + relationsParams;
+      + '&orderColumn=' + orderColumn + '&search=' + search + '&exclude=' + exclude + relationsParams;
 
     return this.http.get<ApiResponse>(url,
       { headers: this.getHeaders() });
@@ -89,6 +89,14 @@ export class ApiCrudService extends ApiService {
 
   getById(model: string, id: any): Observable < ApiResponse > {
     return this.http.get<ApiResponse>(this.baseUrl + model + '/' + id, { headers: this.getHeaders() });
+  }
+
+  translateText(text: string, targetLanguage: string): Observable<any> {
+      const params = {
+        'text' : text,
+        'target_lang': targetLanguage
+      }
+    return this.http.post( this.baseUrl + '/translate', params, { headers: this.getHeaders() });
   }
 
 }

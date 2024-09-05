@@ -86,11 +86,16 @@ export class ClientsComponent {
   showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
-      this.crudService.get('/clients/'+event.item.id)
+      this.mainIdSelected = true;
+      this.crudService.get('/clients/'+event.item.id,
+        ['clientSports.sport', 'clientSports.degree',
+          'utilizers.clientSports.sport', 'utilizers.clientSports.degree'])
       .subscribe((data) => {
         this.detailData = data.data;
-
-        this.crudService.get('/admin/clients/' + event.item.id +'/utilizers')
+        this.utilizers = data.data.utilizers;
+        this.clientSport = data.data.client_sports;
+        this.showDetail = true;
+  /*      this.crudService.get('/admin/clients/' + event.item.id +'/utilizers')
           .subscribe((uti) => {
             this.utilizers = uti.data;
           })
@@ -113,8 +118,8 @@ export class ClientsComponent {
 
             });
 
-            this.showDetail = true;
-          })
+
+          })*/
       })
     } else {
       this.showDetail = event.showDetail;

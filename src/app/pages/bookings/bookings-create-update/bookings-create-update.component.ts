@@ -419,6 +419,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.getCourses(level, this.monthAndYear);
         }
       });
+      if(!client.client_sports.length) {
+        this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+      }
     }
 
   }
@@ -427,10 +430,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  setCourseType(type: string, id: number) {
+  setCourseType(type: string, id: number, levelSelected = null) {
     this.monthAndYear = new Date();
     if(this.externalData) {
       this.monthAndYear = new Date(this.externalData.date);
+    }
+
+    if(this.selectedDatePrivate && !this.externalData && type == 'privee') {
+      this.monthAndYear = new Date(this.selectedDatePrivate);
     }
 
     if(this.snackBarRef!==null) {
@@ -445,27 +452,43 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let hasSport = false;
 
     if (client) {
-      client.client_sports.forEach(sport => {
-
-        if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
-          const level = this.levels.find((l) => l.id === sport.degree_id);
+      if(client.client_sports.length) {
+        client.client_sports.forEach(sport => {
+          if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
+            const level = this.levels.find((l) => l.id === sport.degree_id);
+            this.levelForm.patchValue(level);
+            this.defaultsBookingUser.degree_id = level.id;
+            hasSport = true;
+            this.getCourses(level, this.monthAndYear);
+          }
+        });
+      } else {
+        const level = levelSelected ? levelSelected : this.levelForm.value;
+        if(level) {
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
-          hasSport = true;
           this.getCourses(level, this.monthAndYear);
+        } else {
+          this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration:6000});
         }
-      });
+
+      }
+
     } else {
-      const level = this.levelForm.value;
-      this.levelForm.patchValue(level);
-      this.defaultsBookingUser.degree_id = level.id;
-      this.getCourses(level, this.monthAndYear);
+      const level = levelSelected ? levelSelected : this.levelForm.value;
+      if(level) {
+        this.levelForm.patchValue(level);
+        this.defaultsBookingUser.degree_id = level.id;
+        this.getCourses(level, this.monthAndYear);
+      } else {
+        this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration:6000});
+      }
     }
 
 
-    if (!hasSport) {
+/*    if (!hasSport) {
       this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
-    }
+    }*/
   }
 
   inUseDatesFilter = (d: Date): boolean => {
@@ -1738,6 +1761,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.getCourses(level, this.monthAndYear);
       }
     });
+    if(!client.client_sports.length) {
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+    }
   }
 
   toggleBorder(index: number, utilizer: any) {
@@ -1866,6 +1892,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
         let hasSport = false;
         const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
         if (client) {
+          this.levels = this.levels.filter(level => {
+            const age = this.calculateAge(client.birth_date);
+            return age >= level.age_min && age <= level.age_max;
+          });
           client.client_sports.forEach(sport => {
             if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
               const level = this.levels.find((l) => l.id === sport.degree_id);
@@ -1877,7 +1907,16 @@ export class BookingsCreateUpdateComponent implements OnInit {
               }
             }
           });
+          if(!client.client_sports.length) {
+            this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+            if(this.courseTypeId && this.levelForm.value) {
+              this.getCourses(this.levelForm.value, this.monthAndYear);
+            }
+          }
         }
+
+
+
 
 
         /*if (!hasSport && client.client_sports.length === 0) {
@@ -1958,7 +1997,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
               this.clientsForm.patchValue(client);
               let index = this.utilizers.findIndex((utilizer: any) => utilizer.id === selectedClient.id);
               this.toggleBorder(index, this.utilizers[index]);
+              this.selectSport(this.sportDataList[0]);
             } else {
+              this.selectSport(this.sportDataList[0]);
+              if(!client.client_sports.length) {
+                this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+              }
               client.client_sports.forEach(sport => {
                 if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
                   const level = this.levels.find((l) => l.id === sport.degree_id);
@@ -1970,7 +2014,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     if(this.courseTypeId) {
                       this.getCourses(level, this.monthAndYear)
                     }
-                  };
+                  } else {
+                    this.clientsForm.patchValue(client);
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+                  }
+
                 }
               });
             }
@@ -1985,7 +2033,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
   getCourses(level: any, date: any, fromPrivate = false) {
     if(!this.courseTypeId) {
-      this.setCourseType('private', 2);
+      this.setCourseType('private', 2, level);
     }
     this.loadingCalendar = true;
     this.dateClass();
@@ -2155,7 +2203,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   getLevelOrder(id: any) {
     if (id && id !== null) {
-      return this.levels.find((l) => l.id === id).degree_order;
+      return this.levels.find((l) => l.id === id) ? this.levels.find((l) => l.id === id).degree_order : null;
 
     }
   }
@@ -2165,6 +2213,36 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       const level = this.levels.find((l) => l.id === id);
       return level?.annotation + ' - ' + level?.name;
+    }
+  }
+
+  getHighestAuthorizedDegree(monitor, sport_id: number): any | null {
+    // Encuentra los deportes asociados al monitor
+    const degrees = monitor.monitor_sports_degrees
+      .filter(degree =>
+        degree.sport_id === sport_id &&
+        degree.school_id === this.user?.schools[0]?.id
+      )
+      .map(degree => degree.monitor_sport_authorized_degrees)
+      .flat(); // Aplanamos el array para obtener todos los grados autorizados
+
+    if (degrees.length === 0) {
+      return null; // Si no hay grados autorizados, retornamos null
+    }
+
+    // Buscamos el degree autorizado con el degree_order más alto
+    const highestDegree = degrees.reduce((prev, current) => {
+      return current.degree.degree_order > prev.degree.degree_order ? current : prev;
+    });
+
+    return highestDegree;
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
     }
   }
 
@@ -2230,6 +2308,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const monitor = this.monitors.find((m) => m.id === id);
 
       return monitor?.birth_date;
+    }
+  }
+
+  getClientDegree(id: number, sport_id: number) {
+    if (id && id !== null && sport_id && sport_id !== null) {
+      const client = this.clients.find((m) => m.id === id);
+      const sportObject = client?.client_sports.find(
+        (obj) => obj.sport_id === sport_id && obj.school_id == this.user.schools[0].id
+      );
+
+      return sportObject?.degree_id;
     }
   }
 
@@ -2675,7 +2764,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   addClient() {
 
     const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
-      width: '1000px',  // Asegurarse de que no haya un ancho máximo
+      width: '1000px', // Asegurarse de que no haya un ancho máximo
+      height: '1000px', // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
       data: {id: this.user.schools[0].id}
     });
@@ -2912,7 +3002,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
-  getDateFromSelectedDates() {
+/*  getDateFromSelectedDates() {
     let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
 
     const formattedDate = new Date(date).toISOString().split('T')[0];
@@ -2922,7 +3012,72 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
     });
 
+  }*/
+
+  getDateFromSelectedDates() {
+    // Obtén la fecha de externalData o selectedDatePrivate
+    let date = this.externalData?.date ? this.externalData.date : this.selectedDatePrivate;
+
+    // Convertir la fecha a UTC eliminando la diferencia de la zona horaria
+    const targetDateUTC = new Date(date);
+    const targetYear = targetDateUTC.getUTCFullYear();
+    const targetMonth = targetDateUTC.getUTCMonth();
+    const targetDay = targetDateUTC.getUTCDate();
+
+    const formattedDate = new Date(Date.UTC(targetYear, targetMonth, targetDay)).toISOString().split('T')[0];
+
+    // Buscar una coincidencia exacta de la fecha
+    const exactMatch = this.selectedItem.course_dates.find(i => {
+      const courseDateUTC = new Date(i.date);
+      const courseYear = courseDateUTC.getUTCFullYear();
+      const courseMonth = courseDateUTC.getUTCMonth();
+      const courseDay = courseDateUTC.getUTCDate();
+
+      const courseFormattedDate = new Date(Date.UTC(courseYear, courseMonth, courseDay)).toISOString().split('T')[0];
+      return courseFormattedDate === formattedDate;
+    });
+
+    if (exactMatch) {
+      return exactMatch;
+    }
+
+    // Si no se encuentra una coincidencia exacta, buscar la fecha más cercana en el mismo mes
+    const searchDate = new Date(targetDateUTC);
+    const searchMonth = searchDate.getMonth();
+    const searchYear = searchDate.getFullYear();
+
+    let closestDate = null;
+    let closestDifference = Infinity;
+
+    this.selectedItem.course_dates.forEach(i => {
+      const courseDateUTC = new Date(i.date);
+      const courseMonth = courseDateUTC.getMonth();
+      const courseYear = courseDateUTC.getFullYear();
+
+      if (courseMonth === searchMonth && courseYear === searchYear) {
+        const difference = Math.abs(courseDateUTC.getTime() - searchDate.getTime());
+        if (difference < closestDifference) {
+          closestDifference = difference;
+          closestDate = i;
+        }
+      }
+    });
+
+    // Si no se encuentra una fecha cercana en el mismo mes, retorna la más próxima en general
+    if (!closestDate && this.selectedItem.course_dates.length > 0) {
+      this.selectedItem.course_dates.forEach(i => {
+        const courseDateUTC = new Date(i.date);
+        const difference = Math.abs(courseDateUTC.getTime() - searchDate.getTime());
+        if (difference < closestDifference) {
+          closestDifference = difference;
+          closestDate = i;
+        }
+      });
+    }
+
+    return closestDate;
   }
+
 
   generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
@@ -3322,6 +3477,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return isNaN(value);
   }
 
+  isNanOrZero(value: any): boolean {
+    return isNaN(value) || value === 0;
+  }
+
   getMaxDate() {
     return moment(this.selectedItem.course_dates[this.selectedItem.course_dates.length - 1].date).toDate();
   }
@@ -3330,7 +3489,28 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data;
+        this.allLevels.forEach((degree: any) => {
+          degree.inactive_color = this.lightenColor(degree.color, 30);
+        });
       })
+  }
+
+  private lightenColor(hexColor: string, percent: number): string {
+    let r: any = parseInt(hexColor.substring(1, 3), 16);
+    let g: any = parseInt(hexColor.substring(3, 5), 16);
+    let b: any = parseInt(hexColor.substring(5, 7), 16);
+
+    // Increase the lightness
+    r = Math.round(r + ((255 - r) * percent) / 100);
+    g = Math.round(g + ((255 - g) * percent) / 100);
+    b = Math.round(b + ((255 - b) * percent) / 100);
+
+    // Convert RGB back to hex
+    r = r.toString(16).padStart(2, "0");
+    g = g.toString(16).padStart(2, "0");
+    b = b.toString(16).padStart(2, "0");
+
+    return "#" + r + g + b;
   }
 
   getDegree(id: any) {
@@ -3338,6 +3518,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       return this.allLevels.find((l) => l.id === id);
 
     }
+  }
+
+  getDegreesBySportId(sportId: any) {
+    return this.allLevels.filter((l) => l.sport_id === sportId);
   }
 
   protected readonly Math = Math;

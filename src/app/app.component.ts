@@ -174,7 +174,7 @@ export class AppComponent {
 
       {
         type: 'subheading',
-        label: 'menu.settings',
+        label: 'settings',
         children: [
           {
             type: 'link',
@@ -220,7 +220,7 @@ export class AppComponent {
           {
             type: 'link',
             label: "menu.bonus",
-            route: '/bonuses',
+            route: '/vouchers',
             icon: '../assets/img/icons/bonos-2.svg',
             icon_active: '../assets/img/icons/bonos.svg',
             routerLinkActiveOptions: { exact: true }
@@ -237,8 +237,8 @@ export class AppComponent {
             type: 'link',
             label: 'Chat',
             route: '/communications',
-            icon: '../assets/img/icons/comunicacion-2.svg',
-            icon_active: '../assets/img/icons/comunicacion.svg',
+            icon: '../assets/img/icons/chat-2.svg',
+            icon_active: '../assets/img/icons/chat.svg',
             routerLinkActiveOptions: { exact: true }
           },
           {
@@ -289,7 +289,7 @@ export class AppComponent {
           type: 'link',
           label: 'Boukii Pay',
           route: 'https://login.pay.boukii.com/fr/',
-          icon: '../assets/img/icons/boukii-pay.png',
+          icon: '../assets/img/icons/boukii_pay.svg',
           routerLinkActiveOptions: { exact: true }
         },
         {

@@ -4,9 +4,21 @@
   gap: 1rem;
 }
 
+.card {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, .25)!important;
+}
+
 .chart-column {
-  flex: 1 1 calc(15% - 1rem);
-  min-width: calc(15% - 1rem);
+  .card {
+    min-height: 280px;
+    max-height: 280px;
+    padding-top: 10px;
+  }
+}
+
+.chart-column {
+  flex: 1 1 calc(25% - 1rem);
+  min-width: calc(25% - 1rem);
 }
 
 .chart-column-lines {
@@ -26,12 +38,158 @@
 }
 
 .course-hours {
-  padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  min-height: 275.75px;
-  max-height: 275.75px;
-  overflow-y: scroll;
+  padding: 20px 20px 15px 20px!important;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  min-height: 280px;
+  max-height: 280px;
+  //overflow-y: scroll;
+
+  h3 {
+    font-family: 'Dinamit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #E91E63;
+    font-style: normal;
+    font-variant: normal;
+    margin-bottom: -4px;
+  }
+
+  h4 {
+    font-family: 'Dinamit', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #87888C;
+    font-style: normal;
+    font-variant: normal;
+    margin-bottom: 3px;
+  }
+
+  h5 {
+    font-family: 'Dinamit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #424242;
+    font-style: normal;
+    font-variant: normal;
+  }
+
+  .course {
+    border-bottom: 1px solid #C8C8C8;
+    padding-bottom: 15px;
+    margin-bottom: 0px;
+
+    /*&:last-child {
+      border-bottom: 0px;
+    }*/
+
+    .course-holder {
+      width: 100%;
+      display: flex;
+      gap: 15px;
+      margin-top: 13px;
+
+      .course-img {
+        min-width: 36px;
+        min-height: 36px;
+
+        img {
+          border-radius: 6px;
+          background-color: #E91E63;
+          padding: 4px;
+          width: 36px;
+          height: 36px;
+        }
+      }
+
+      .course-number {
+        font-family: 'Dinamit', sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+        color: #424242;
+      }
+
+      .course-details {
+        width: 100%;
+
+        .course-name {
+          width: 100%;
+          font-family: 'Dinamit', sans-serif;
+          font-size: 10px;
+          font-weight: 500;
+          color: #424242;
+        }
+
+        .course-bar-container {
+          width: 66px;
+          height: 3px;
+          border-radius: 3px;
+          overflow: hidden;
+          background-color: #ccc;
+          margin-top: 5px;
+
+          .course-bar {
+            height: 3px;
+
+            &.course-bar-filled {
+              transition: width 0.5s;
+            }
+
+            &.course-bar-empty {
+              width: 100%;
+            }
+          }
+        }
+      }
+
+      .course-info {
+        width: 100%;
+        text-align: right;
+        top: 4px;
+        position: relative;
+
+        .course-value {
+          width: 45px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 10px;
+          font-weight: 600;
+          border-width: 1px;
+          border-style: solid;
+          border-radius: 6px;
+
+          &.colectivo {
+            color: #FCB859;
+            border-color: #FCB859;
+            background-color: rgba(252, 184, 89, .12);
+          }
+
+          &.privado {
+            color: #2AC940;
+            border-color: #2AC940;
+            background-color: rgba(89, 252, 115, .12);
+          }
+
+          &.actividad {
+            color: #652CB3;
+            border-color: #652CB3;
+            background-color: rgba(101, 44, 179, .12);
+          }
+        }
+      }
+    }
+  }
+}
+
+.mat-mdc-tab-labels {
+  max-width: 550px;
+}
+
+.mat-mdc-tab-list {
+  flex-grow: initial!important;
 }
 
 @media (max-width: 1200px) {
@@ -42,7 +200,7 @@
 }
 
 /* Additional styles for course details */
-.course {
+/*.course {
   margin-bottom: 10px;
 }
 
@@ -73,7 +231,7 @@
 
 .course-bar-empty {
   height: 100%;
-  background-color: #ccc; /* Color gris */
+  background-color: #ccc;
 }
 
 .course-details {
@@ -88,7 +246,8 @@
 
 .course-value {
   color: #555;
-}
+}*/
+
 .d-flex {
   display: flex;
   align-items: center;
@@ -138,4 +297,19 @@
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: white !important;
+}
+
+
+/* *** */
+
+
+.title {
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  color: #424242;
+
+  span {
+    color: #E91E63;
+  }
 }

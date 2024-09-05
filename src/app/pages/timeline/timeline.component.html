@@ -1,12 +1,20 @@
 <vex-page-layout>
 
-  <vex-secondary-toolbar>
+  <!--<vex-secondary-toolbar>
     <vex-breadcrumbs [crumbs]="[{text: '', icon: 'planificador'}, {text: 'list', icon: ''}]" class="flex-auto"></vex-breadcrumbs>
-
     <button class="ml-2" color="primary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>
+  </vex-secondary-toolbar>-->
+
+  <vex-secondary-toolbar current="">
+    <vex-breadcrumbs [crumbs]="[
+    {icon:'planificador'},
+    {text:'timeline.timeline', title: true},
+    ]" class="flex-auto"></vex-breadcrumbs>
   </vex-secondary-toolbar>
+
+
   <vex-page-layout-content class="-mt-6 fullwidth" style="background-color: white">
     <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
     <div class="full-page-timeline" [ngClass]="{'timeline-with-detail': showDetail || showBlock}" *ngIf="!loading">
@@ -27,10 +35,14 @@
             <button *ngIf="showResetFilters()" mat-button type="button" (click)="resetFilters()" style="font-size:14px;">{{'timeline.reset_filters' | translate}}</button>
             <button *ngIf="showFilter" color="primary" mat-raised-button (click)="applyFilters()" style="font-size:14px;">{{'timeline.apply_filters' | translate}}</button>
 
-            <mat-form-field appearance="outline" class="flex-auto">
+            <mat-form-field appearance="outline" class="flex-auto" style="max-height: 56px; background-color: white">
               <input matInput [matDatepicker]="pickerFrom" placeholder="{{'date' | translate }}" [(ngModel)]="searchDate" (ngModelChange)="onDateChange()">
-              <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-              <mat-datepicker #pickerFrom></mat-datepicker>
+              <mat-datepicker-toggle matSuffix [for]="pickerFrom">
+                <mat-icon matDatepickerToggleIcon>
+                  <img src="assets/img/icons/icon-calendar-grey.png">
+                </mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker  #pickerFrom></mat-datepicker>
             </mat-form-field>
 
             <button (click)="toggleBlockGeneral()" class="filter-button"><mat-icon svgIcon="mat:block"></mat-icon></button>
@@ -89,6 +101,7 @@
             <span>{{"timeline.event_type" | translate | uppercase }}</span>
             <mat-checkbox color="primary" [(ngModel)]="filterCollective">{{ 'course_colective' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterPrivate">{{ 'course_private' | translate}}</mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="filterActivity">{{ 'activity' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterNwd">{{ 'no_disponible' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterBlockPayed">{{ 'paid_block' | translate}}</mat-checkbox>
             <mat-checkbox color="primary" [(ngModel)]="filterBlockNotPayed">{{ 'no_paid_block' | translate}}</mat-checkbox>
@@ -144,7 +157,7 @@
                         <img src="assets/img/icons/icon-message-grey.png" />
                         <a href="mailto:{{monitor.email}}" title="{{monitor.email}}"><img src="assets/img/icons/icon-mail-grey.png" /></a>
                         <a href="tel:{{monitor.phone}}" title="{{monitor.phone}}"><img src="assets/img/icons/icon-phone-grey.png" /></a>
-                        <img src="assets/img/icons/icon-calendar-grey.png" />
+                        <img src="assets/img/icons/icon-calendar-grey.png" (click)="goToTimeline(monitor)" style="cursor: pointer;"/>
                       </div>
                     </div>
                   </div>
@@ -351,10 +364,21 @@
             </div>
             <div class="grid-container">
               <ng-container *ngFor="let monitor of filteredMonitors; let monitorIndex = index">
-                <div class="grid-row" *ngFor="let week of weeksInMonth;let weekIndex = index" [ngClass]="{'select-row': moveTask && monitor.id !== taskMoved.monitor_id,
-                            'bg-linear-no-match': moveTask && isMatch(monitor.id)}" (click)="moveMonitor(monitor,$event)">
-                  <div class="grid-cell-day" *ngFor="let day of weekDays;let dayIndex = index" [ngClass]="{'outside-month': !isDayInMonth(dayIndex, weekIndex),'big-border': weekIndex === 0 && monitorIndex !== 0}">
-                    <div class="grid-cell-inside" *ngFor="let hour of hoursRangeMinusLast" (dblclick)="handleDbClickEvent('Clicked', $event, 'month', dayIndex, monitor.id, hour, weekIndex)"></div>
+                <div class="grid-row" *ngFor="let week of weeksInMonth; let weekIndex = index"
+                     [ngClass]="{'select-row': moveTask && monitor.id !== taskMoved.monitor_id,
+                   'bg-linear-no-match': moveTask && isMatch(monitor.id)}"
+                     (click)="moveMonitor(monitor, $event)">
+                  <div class="grid-cell-day" *ngFor="let day of weekDays; let dayIndex = index"
+                       [ngClass]="{'outside-month': !isDayInMonth(dayIndex, weekIndex),
+                     'big-border': weekIndex === 0 && monitorIndex !== 0}">
+                    <div class="watermark-day">
+                      {{ isDayInMonth(dayIndex, weekIndex) ? calculateDayNumber(dayIndex, weekIndex, week.startDayInt) : '' }}
+                    </div>
+                    <div class="grid-cell-inside"
+                         *ngFor="let hour of hoursRangeMinusLast;"
+                         (dblclick)="handleDbClickEvent('Clicked', $event, 'month', dayIndex, monitor.id, hour, weekIndex)">
+                    </div>
+
                     <div *ngIf="weekIndex === 0 && monitorIndex !== 0" class="hour-day-scroll">{{ day }}</div>
                   </div>
                 </div>
@@ -427,13 +451,44 @@
     </div>
 
 
-    <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail && taskDetail">
-      <mat-card style="padding: 0 3%;">
+      <vex-page-layout-content
+        class="fullwidth col-right"
+        *ngIf="showDetail && taskDetail"
+      >
+
+      <mat-card>
+        <mat-card-header style="display:block">
+          <div style="width: 100%;">
+            <span style="display: inline-block;width: 80%; text-align: left;">
+              <mat-card-title>{{ 'course_detail' | translate}}</mat-card-title>
+            </span>
+            <span style="display: inline-block;width: 20%; text-align: right;">
+              <img src="assets/img/icons/edit.svg"  (click)="goToEditCourse()" class="btn-edit" />
+              <img src="assets/img/icons/close.svg" (click)="hideDetail()" class="btn-close" />
+            </span>
+          </div>
+          <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+            <mat-card-subtitle style="width:100%;">
+              <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+                <b>{{ 'register' | translate}}:</b>
+                <span style="margin-left: 10px;font-weight: normal;" *ngIf="taskDetail.created_at">
+                  <span>{{taskDetail.created_at | date: 'dd/MM/YYYY'}}</span>
+                  <span style="margin-left: 10px;font-style: italic;">{{taskDetail.created_at | date: 'HH:mm'}}h</span>
+                </span>
+              </div>
+              <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;" *ngIf="taskDetail.user">
+                {{ taskDetail.user?.username }} <span style="margin-left: 10px;">({{ taskDetail.user?.first_name + ' ' +  taskDetail.user.last_name}})</span>
+              </div>
+            </mat-card-subtitle>
+          </div>
+        </mat-card-header>
+
+
+      <!--<mat-card>
         <mat-card-header style="display:block">
           <div style="width: 100%;float: left;">
             <mat-icon class="cursor-pointer" svgIcon="mat:close" (click)="hideDetail()"></mat-icon>
             <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="goToEditCourse()"></mat-icon>
-
           </div>
           <div style="width: 100%;float:left;">
             <mat-card-title class="font-bold" style="float: left;width: 100%;" *ngIf="taskDetail.type == 'private'">{{ 'course_detail' | translate}}
@@ -454,7 +509,6 @@
             </div>
           </div>
           <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-
           <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
               <p style="float: left;width: 35%;text-align: left;"><b>{{ 'price' | translate}}</b></p>
@@ -478,35 +532,78 @@
             </div>
           </ng-container>
           <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+        </mat-card-header>-->
 
-        </mat-card-header>
+
         <mat-card-content>
-          <div style="float: left; width: 100%;margin-bottom:24px;">
-            <div style="float: left;width: 100%;">
-              <!--ESTAS IMAGENES VENDRAN DEL TASKDETAIL.SPORT -> icon box -->
-              <div style="float: left; width: 20%; margin-top: 5%">
-                <img *ngIf="taskDetail.type == 'collective'" src="https://school.boukii.com/assets/icons/collectif_ski2x.png" width="100" height="100" />
-                <img *ngIf="taskDetail.type == 'private'" src="https://school.boukii.com/assets/icons/prive_ski2x.png" width="100" height="100" />
-              </div>
-              <div style="float: left; width: 75%;margin:6% 0 0 2%">
-                <p><strong>{{taskDetail.name}}</strong></p>
-                <p>
-                  <ng-container *ngIf="taskDetail.type == 'collective'">
-                    {{ 'colective' | translate}}
-                  </ng-container>
-                  <ng-container *ngIf="taskDetail.type == 'private'">
-                    {{ 'private' | translate}}
-                  </ng-container>
-                  <ng-container *ngIf="taskDetail.type == 'activity'">
-                    {{ 'activity' | translate}}
-                  </ng-container>
-                  <ng-container *ngIf="taskDetail.sport">
-                    {{taskDetail.sport.name}}
-                  </ng-container>
-                </p>
-              </div>
+          <div class="title-status" style="background-color: white; ">
+            <span class="col-left">
+              <b>{{ 'status' | translate}}:</b>
+            </span>
+            <span class="col-right">
+              <div *ngIf="taskDetail.type == 'private'"><span [style.color]="taskDetail.paid ? '#66E055' : '#DFDB32'"> {{(taskDetail.paid ? 'payed' : 'no_paid') | translate }}</span></div>
+              <div *ngIf="taskDetail.type == 'activity'"><span [style.color]="taskDetail.paid ? '#66E055' : '#DFDB32'"> {{(taskDetail.paid ? 'payed' : 'no_paid') | translate }}</span></div>
+            </span>
+          </div>
+          <div class="title-status" *ngIf="taskDetail.type != 'collective'">
+            <div class="col-left">
+              <b class="title">{{'booking' | translate}}</b>
+            </div>
+            <div class="col-right">
+              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="detailBooking()"></mat-icon>
             </div>
           </div>
+          <div class="holder-client" style="margin-top: 10px">
+            <div class="col-left">
+              <img *ngIf="taskDetail.type == 'collective'" src="https://school.boukii.com/assets/icons/collectif_ski2x.png" width="60" height="60" />
+              <img *ngIf="taskDetail.type == 'private'" src="https://school.boukii.com/assets/icons/prive_ski2x.png" width="60" height="60" />
+            </div>
+            <div class="col-right">
+              <div class="client-name">
+                {{taskDetail.name}}
+              </div>
+              <div class="client-dates">
+                <ng-container *ngIf="taskDetail.type == 'collective'">
+                  {{ 'colective' | translate}}
+                </ng-container>
+                <ng-container *ngIf="taskDetail.type == 'private'">
+                  {{ 'private' | translate}}
+                </ng-container>
+                <ng-container *ngIf="taskDetail.type == 'activity'">
+                  {{ 'activity' | translate}}
+                </ng-container>
+                <ng-container *ngIf="taskDetail.sport">
+                  {{taskDetail.sport.name}}
+                </ng-container>
+              </div>
+              <div
+                *ngIf="taskDetail.degree && taskDetail.type == 'private'"
+                class="label-user"
+                [ngStyle]="{'background': taskDetail.degree.color}"
+              >
+                {{taskDetail.degree.name}}
+              </div>
+            </div>
+
+          </div>
+          <ng-container *ngIf="taskDetail.type == 'collective'">
+
+
+            <div class="title-status" style="background-color: white; ">
+              <span class="col-left">
+              <b>{{ 'dates' | translate}}:</b>
+            </span>
+            </div>
+            <div class="list-holder">
+                <ng-container *ngFor="let date of taskDetail.course.course_dates">
+                  <div class="col-left" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getDateFormatLong(date.date)}}</div>
+                  <div class="col-right" [ngClass]="{'font-bold': date.id == taskDetail.course_date_id}">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</div>
+                </ng-container>
+            </div>
+          </ng-container>
+
+
+          <div style="padding:10px 35px;"><mat-divider style="border-color:transparent;"></mat-divider></div>
 
           <div *ngIf="taskDetail.type == 'collective'" class="box-detail-boxes">
             <div class="box-detail-box" [ngStyle]="{'background': taskDetail.degree.color}">
@@ -532,55 +629,63 @@
             </div>
           </div>
 
-          <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-
           <ng-container *ngIf="taskDetail.type == 'private'">
 
-            <div style="width: 100%;float:left;margin-bottom:12px;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' | translate}}</mat-card-title>
-              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit" (click)="detailBooking()"></mat-icon>
+            <div class="list-holder">
+              <div class="col-left">
+                {{getDateFormatLong(taskDetail.date_full)}}
+              </div>
+              <div class="col-right">
+                {{getHourRangeFormat(taskDetail.hour_start,taskDetail.hour_end)}}
+              </div>
             </div>
 
-            <div style="float: left; width: 100%;">
-              <ul>
-                <li class="font-bold">{{getDateFormatLong(taskDetail.date_full)}} <i style="text-align: right;float:right">{{getHourRangeFormat(taskDetail.hour_start,taskDetail.hour_end)}}</i></li>
-              </ul>
-            </div>
-
-            <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-
-            <div style="width: 100%;float:left;margin-bottom:12px;">
-              <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'users' | translate }}</mat-card-title>
-            </div>
-
-            <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-              <div *ngFor="let client of taskDetail.all_clients" class="box-detail-user-block">
-                <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length" [allLevels]="taskDetail.degrees_sport"
-                                [selectLevel]="taskDetail.degree.id" [size]="80" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
-                <div class="box-detail-user-block-text">
-                  <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
-                  <span>
-                                    <ng-container *ngIf="client.client.language1_id">
-                                        {{getLanguageById(client.client.language1_id)}} ·
-                                    </ng-container>
-                                    <ng-container *ngIf="client.client.language2_id">
-                                        {{getLanguageById(client.client.language2_id)}} ·
-                                    </ng-container>
-                                    <ng-container *ngIf="client.client.language3_id">
-                                        {{getLanguageById(client.client.language3_id)}} ·
-                                    </ng-container>
-                    {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
-                    · {{client.client.phone}} · {{client.client.email}}
-                                </span>
-                  <div *ngIf="taskDetail.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetail.degree.color}">
-                    {{taskDetail.degree.name}}
+            <div class="holder-content" style="padding-top: 0px;">
+              <div class="subtitle">{{'users' | translate }}</div>
+              <div *ngFor="let client of taskDetail.all_clients">
+                <div class="holder-participante">
+                  <div class="col-left">
+                    <div class="c-l">
+                      <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length"
+                                      [allLevels]="taskDetail.degrees_sport"
+                                      [selectLevel]="getClientDegree(taskDetail.sport_id,client.client.sports)" [size]="60"
+                                      [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                    </div>
+                    <div class="c-r">
+                      <div class="course-title">{{ client.client.first_name }} {{ client.client.last_name }}</div>
+                      <div class="course-label">
+                        <ng-container *ngIf="client.client.language1_id">
+                            {{getLanguageById(client.client.language1_id)}} ·
+                        </ng-container>
+                        <ng-container *ngIf="client.client.language2_id">
+                            {{getLanguageById(client.client.language2_id)}} ·
+                        </ng-container>
+                        <ng-container *ngIf="client.client.language3_id">
+                            {{getLanguageById(client.client.language3_id)}} ·
+                        </ng-container>
+                        {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
+                      </div>
+                      <div>
+                      <mat-icon svgIcon="logo:message-text"></mat-icon>
+                      <a
+                        href="mailto:{{client.client.email}}"
+                        style="cursor:pointer"
+                        title="{{client.client.email}}"
+                      >
+                        <mat-icon svgIcon="logo:mail"></mat-icon>
+                      </a>
+                      <a
+                        href="tel:{{client.client.phone}}"
+                        title="{{client.client.phone}}"
+                      >
+                        <mat-icon svgIcon="logo:phone"></mat-icon>
+                      </a>
+                    </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
-
           </ng-container>
 
           <ng-container *ngIf="taskDetail.type == 'activity'">
@@ -605,7 +710,7 @@
             <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
               <div *ngFor="let client of taskDetail.all_clients" class="box-detail-user-block">
                 <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length" [allLevels]="taskDetail.degrees_sport"
-                                [selectLevel]="taskDetail.degree.id" [size]="80" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                                [selectLevel]="taskDetail.degree.id" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
                 <div class="box-detail-user-block-text">
                   <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
                   <span>
@@ -619,8 +724,23 @@
                                         {{getLanguageById(client.client.language3_id)}} ·
                                     </ng-container>
                     {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
-                    · {{client.client.phone}} · {{client.client.email}}
                                 </span>
+                  <div>
+                    <mat-icon svgIcon="logo:message-text"></mat-icon>
+                    <a
+                      href="mailto:{{client.client.email}}"
+                      style="cursor:pointer"
+                      title="{{client.client.email}}"
+                    >
+                      <mat-icon svgIcon="logo:mail"></mat-icon>
+                    </a>
+                    <a
+                      href="tel:{{client.client.phone}}"
+                      title="{{client.client.phone}}"
+                    >
+                      <mat-icon svgIcon="logo:phone"></mat-icon>
+                    </a>
+                  </div>
                   <div *ngIf="taskDetail.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': taskDetail.degree.color}">
                     {{taskDetail.degree.name}}
                   </div>
@@ -632,90 +752,145 @@
 
           </ng-container>
 
-          <div style="width: 100%;float:left;margin-bottom:12px;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' |translate}}</mat-card-title>
-            <mat-icon (click)="openEditMonitor()" class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
-          </div>
-
-          <div *ngIf="taskDetail.monitor" class="box-detail-user-block">
-            <div class="box-detail-user-block-img">
-              <img [src]="taskDetail.monitor.image ? taskDetail.monitor.image : 'assets/img/avatar.png'" />
+          <div class="title-status">
+            <div class="col-left">
+              <b class="title">{{'monitor' |translate}}</b>
             </div>
-            <div class="box-detail-user-block-text">
-              <div>{{ taskDetail.monitor.first_name }} {{ taskDetail.monitor.last_name }}</div>
-              <span>
-                            <ng-container *ngIf="taskDetail.monitor.language1_id">
-                                {{getLanguageById(taskDetail.monitor.language1_id)}} ·
-                            </ng-container>
-                {{getCountryById(taskDetail.monitor.country)}} · {{getBirthYears(taskDetail.monitor.birth_date)}} {{'years' | translate }}
-                · {{taskDetail.monitor.phone}} · {{taskDetail.monitor.email}}
-                        </span>
+            <div class="col-right">
+              <mat-icon (click)="openEditMonitor()" class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:edit"></mat-icon>
             </div>
           </div>
-          <div *ngIf="!taskDetail.monitor">
-            {{'no_monitor' | translate}}
-          </div>
-
-          <ng-container *ngIf="showEditMonitor">
-            <mat-spinner *ngIf="loadingMonitors"></mat-spinner>
-
-            <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
-              <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'new_monitor' | translate}}</mat-card-title>
+          <div class="holder-content">
+            <div *ngIf="taskDetail.monitor">
+              <div class="holder-participante">
+                <div class="col-left">
+                  <div class="c-l">
+                    <!--<img [src]="taskDetail.monitor.image ? taskDetail.monitor.image : 'assets/img/avatar.png'" />-->
+                    <app-level-user
+                      *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length"
+                      [allLevels]="taskDetail.degrees_sport"
+                      [selectLevel]="taskDetail.degree.id"
+                      [size]="60"
+                      [userImage]="taskDetail.monitor.image ? taskDetail.monitor.image : 'assets/img/avatar.png'"
+                    ></app-level-user>
+                  </div>
+                  <div class="c-r">
+                    <div class="course-title">{{ taskDetail.monitor.first_name }} {{ taskDetail.monitor.last_name }}</div>
+                    <div class="course-label">
+                      <ng-container *ngIf="taskDetail.monitor.language1_id">
+                          {{getLanguageById(taskDetail.monitor.language1_id)}} ·
+                      </ng-container>
+                      {{getCountryById(taskDetail.monitor.country)}} · {{getBirthYears(taskDetail.monitor.birth_date)}} {{'years' | translate }}
+                    </div>
+                    <div>
+                      <mat-icon svgIcon="logo:message-text"></mat-icon>
+                      <a
+                        href="mailto:{{taskDetail.monitor.email}}"
+                        style="cursor:pointer"
+                        title="{{taskDetail.monitor.email}}"
+                      >
+                        <mat-icon svgIcon="logo:mail"></mat-icon>
+                      </a>
+                      <a
+                        href="tel:{{taskDetail.monitor.phone}}"
+                        title="{{taskDetail.monitor.phone}}"
+                      >
+                        <mat-icon svgIcon="logo:phone"></mat-icon>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;" *ngIf="!loadingMonitors">
-              <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor">
-                <mat-option *ngIf="taskDetail.monitor_id" [value]="nullMonitor">
-                  {{'no_monitor_choose' | translate}}
-                </mat-option>
-                <ng-container *ngFor="let monitor of monitorsForm" >
-                  <mat-option *ngIf="monitor.id != taskDetail.monitor_id" [value]="monitor">
-                    {{ monitor.first_name }} {{ monitor.last_name }}
+            <div *ngIf="!taskDetail.monitor">
+              {{'no_monitor' | translate}}
+            </div>
+
+            <ng-container *ngIf="showEditMonitor">
+              <mat-spinner *ngIf="loadingMonitors"></mat-spinner>
+              <div style="width: 100%;float:left;margin-top:16px;margin-bottom:12px;">
+                <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'new_monitor' | translate}}</mat-card-title>
+              </div>
+              <mat-form-field appearance="outline" class="flex-auto" style="width: 100%;" *ngIf="!loadingMonitors">
+                <mat-select placeholder="{{'new_monitor' | translate}}" [(ngModel)]="editedMonitor">
+                  <mat-option *ngIf="taskDetail.monitor_id" [value]="nullMonitor">
+                    {{'no_monitor_choose' | translate}}
                   </mat-option>
-                </ng-container>
-              </mat-select>
-            </mat-form-field>
+                  <ng-container *ngFor="let monitor of monitorsForm" >
+                    <mat-option *ngIf="monitor.id != taskDetail.monitor_id" [value]="monitor">
+                      {{ monitor.first_name }} {{ monitor.last_name }}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
 
-            <div class="actions flex items-center justify-end gap-2">
-              <button (click)="hideEditMonitor()" mat-button type="button">{{'cancel' | translate}}</button>
-              <button (click)="saveEditedMonitor()" [disabled]="!editedMonitor" color="primary" mat-raised-button matStepperNext>
-                {{'save' | translate}}
-              </button>
-            </div>
-          </ng-container>
+              <div class="actions flex items-center justify-end gap-2">
+                <button (click)="hideEditMonitor()" mat-button type="button">{{'cancel' | translate}}</button>
+                <button (click)="saveEditedMonitor()" [disabled]="!editedMonitor" color="primary" mat-raised-button matStepperNext>
+                  {{'save' | translate}}
+                </button>
+              </div>
+            </ng-container>
+          </div>
 
           <ng-container *ngIf="taskDetail.type == 'collective'">
-            <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{taskDetail.clients_number}}/{{taskDetail.max_participants}}</mat-card-title>
-              <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz" (click)="openUserTransfer()"></mat-icon>
+            <div class="title-status">
+              <div class="col-left">
+                <b class="title">{{'students' | translate}} {{taskDetail.clients_number}}/{{taskDetail.max_participants}}</b>
+              </div>
+              <div class="col-right">
+                <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz" (click)="openUserTransfer()"></mat-icon>
+              </div>
             </div>
+            <div class="holder-content">
+              <div *ngFor="let client of taskDetail.all_clients">
 
-            <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-              <div *ngFor="let client of taskDetail.all_clients" class="box-detail-user-block">
-                <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length" [allLevels]="taskDetail.degrees_sport" [selectLevel]="getClientDegree(taskDetail.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
-                <div class="box-detail-user-block-text">
-                  <div>{{ client.client.first_name }} {{ client.client.last_name }}</div>
-                  <span style="float:left;width:80%;">
-                                    <ng-container *ngIf="client.client.language1_id">
-                                        {{getLanguageById(client.client.language1_id)}} ·
-                                    </ng-container>
-                                    <ng-container *ngIf="client.client.language2_id">
-                                        {{getLanguageById(client.client.language2_id)}} ·
-                                    </ng-container>
-                                    <ng-container *ngIf="client.client.language3_id">
-                                        {{getLanguageById(client.client.language3_id)}} ·
-                                    </ng-container>
-                    {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
-                    · {{client.client.phone}} · {{client.client.email}}
-                                </span>
-                  <span style="float:left;cursor:pointer" (click)="detailBooking(client.booking_id)">
-                                  <img src="../assets/img/icons/reservas-2.svg"/>
-                                </span>
-                  <span style="float:right; text-align: right;" [style.color]="taskDetail.paid ? '#66E055' : '#DFDB32'"> {{(client.booking.paid ? 'payed' : 'no_paid') | translate }}</span>
+                <div class="holder-participante">
+                  <div class="col-left">
+                    <div class="c-l">
+                      <!--<img [src]="taskDetail.monitor.image ? taskDetail.monitor.image : 'assets/img/avatar.png'" />-->
+                      <app-level-user *ngIf="taskDetail.degrees_sport && taskDetail.degrees_sport.length" [allLevels]="taskDetail.degrees_sport" [selectLevel]="getClientDegree(taskDetail.sport_id,client.client.sports)" [size]="60" [userImage]="client.client.image ? client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                    </div>
+                    <div class="c-r">
+                      <div class="course-title">{{ client.client.first_name }} {{ client.client.last_name }}</div>
+                      <div class="course-label">
+                        <ng-container *ngIf="client.client.language1_id">
+                            {{getLanguageById(client.client.language1_id)}} ·
+                        </ng-container>
+                        <ng-container *ngIf="client.client.language2_id">
+                            {{getLanguageById(client.client.language2_id)}} ·
+                        </ng-container>
+                        <ng-container *ngIf="client.client.language3_id">
+                            {{getLanguageById(client.client.language3_id)}} ·
+                        </ng-container>
+                        {{getCountryById(client.client.country)}} · {{getBirthYears(client.client.birth_date)}} {{'years' |translate}}
+                      </div>
+                      <div>
+                        <mat-icon svgIcon="logo:message-text"></mat-icon>
+                        <a
+                          href="mailto:{{client.client.email}}"
+                          style="cursor:pointer"
+                          title="{{client.client.email}}"
+                        >
+                          <mat-icon svgIcon="logo:mail"></mat-icon>
+                        </a>
+                        <a
+                          href="tel:{{client.client.phone}}"
+                          title="{{client.client.phone}}"
+                        >
+                          <mat-icon svgIcon="logo:phone"></mat-icon>
+                        </a>
+                      </div>
+                      <div>
+                        <span style="float:left;cursor:pointer" (click)="detailBooking(client.booking_id)"><img src="../assets/img/icons/reservas-2.svg"/></span>
+                        <span style="float:right; text-align: right;" [style.color]="taskDetail.paid ? '#66E055' : '#DFDB32'"> {{(client.booking.paid ? 'payed' : 'no_paid') | translate }}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </ng-container>
-
         </mat-card-content>
       </mat-card>
     </vex-page-layout-content>
@@ -726,7 +901,6 @@
         <mat-card-header style="display:block">
           <div style="width: 100%;float: left;">
             <mat-icon class="cursor-pointer" svgIcon="mat:close" (click)="hideBlock()"></mat-icon>
-
           </div>
           <div style="width: 100%;float:left;">
             <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'block_detail' | translate }}</mat-card-title>
@@ -834,28 +1008,46 @@
 
         </mat-card-header>
         <mat-card-content>
-
-          <div style="width: 100%;float:left;margin-bottom:12px;">
-            <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' |translate}}</mat-card-title>
-          </div>
-
-          <div *ngIf="blockDetail.monitor" class="box-detail-user-block">
-            <div class="box-detail-user-block-img">
-              <img [src]="blockDetail.monitor.image ? blockDetail.monitor.image : 'assets/img/avatar.png'" />
+          <div class="holder-content">
+            <div style="width: 100%;float:left;margin-bottom:12px;">
+              <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' |translate}}</mat-card-title>
             </div>
-            <div class="box-detail-user-block-text">
-              <div>{{ blockDetail.monitor.first_name }} {{ blockDetail.monitor.last_name }}</div>
-              <span>
-                            <ng-container *ngIf="blockDetail.monitor.language1_id">
-                                {{getLanguageById(blockDetail.monitor.language1_id)}} ·
-                            </ng-container>
-                {{getCountryById(blockDetail.monitor.country)}} · {{getBirthYears(blockDetail.monitor.birth_date)}} &ensp;{{'years' | translate}}
-                · {{blockDetail.monitor.phone}} · {{blockDetail.monitor.email}}
-                        </span>
+
+            <div *ngIf="blockDetail.monitor" class="box-detail-user-block">
+              <div class="box-detail-user-block-img">
+                <img [src]="blockDetail.monitor.image ? blockDetail.monitor.image : 'assets/img/avatar.png'" />
+              </div>
+              <div class="box-detail-user-block-text">
+                <div>{{ blockDetail.monitor.first_name }} {{ blockDetail.monitor.last_name }}</div>
+                <span>
+                              <ng-container *ngIf="blockDetail.monitor.language1_id">
+                                  {{getLanguageById(blockDetail.monitor.language1_id)}} ·
+                              </ng-container>
+                  {{getCountryById(blockDetail.monitor.country)}} · {{getBirthYears(blockDetail.monitor.birth_date)}} &ensp;{{'years' | translate}}
+
+                          </span>
+              </div>
+              <div>
+                <mat-icon svgIcon="logo:message-text"></mat-icon>
+                <a
+                  href="mailto:{{taskDetail.monitor.email}}"
+                  style="cursor:pointer"
+                  title="{{taskDetail.monitor.email}}"
+                >
+                  <mat-icon svgIcon="logo:mail"></mat-icon>
+                </a>
+                <a
+                  href="tel:{{taskDetail.monitor.phone}}"
+                  title="{{taskDetail.monitor.phone}}"
+                >
+                  <mat-icon svgIcon="logo:phone"></mat-icon>
+                </a>
+              </div>
             </div>
           </div>
-
         </mat-card-content>
+
+
       </mat-card>
     </vex-page-layout-content>
 

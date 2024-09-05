@@ -1,4 +1,13 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, QueryList, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  NgZone,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal/salary-create-update-modal.component';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -14,18 +23,27 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
 import { ConfigService } from 'src/@vex/config/config.service';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
 import { SchoolService } from 'src/service/school.service';
 import { TranslateService } from '@ngx-translate/core';
 import {DateAdapter} from '@angular/material/core';
 import {th} from 'date-fns/locale';
+import {dropdownAnimation} from '../../../@vex/animations/dropdown.animation';
+import {PreviewModalComponent} from '../../components/preview-modal/preview-modal.component';
+
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
-  animations: [stagger20ms]
+  styleUrls: [
+    '../../../../node_modules/quill/dist/quill.snow.css',
+    './settings.component.scss'],
+  animations: [
+    dropdownAnimation,
+    stagger20ms
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class SettingsComponent implements OnInit {
   @ViewChild(MatDatepicker) pickers: QueryList<MatDatepicker<any>>;
@@ -37,6 +55,24 @@ export class SettingsComponent implements OnInit {
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
 
   loading: boolean = true;
+  mailType: any = 'booking_confirm';
+  subjectFr: any = '';
+  subjectEn: any = '';
+  subjectEs: any = '';
+  subjectIt: any = '';
+  subjectDe: any = '';
+  bodyFr: any = '';
+  bodyEn: any = '';
+  bodyEs: any = '';
+  bodyIt: any = '';
+  bodyDe: any = '';
+  titleFr: any = '';
+  titleEn: any = '';
+  titleEs: any = '';
+  titleIt: any = '';
+  titleDe: any = '';
+  currentMails: any = [];
+  selectedIndex = 0;
 
   filteredHours: string[];
 
@@ -288,6 +324,175 @@ export class SettingsComponent implements OnInit {
             this.loading = false;
           });
       });
+  }
+
+  setCurrentMailType() {
+    const mail = this.currentMails.find((m) => m.type === this.mailType);
+
+    if (mail) {
+      const frMail = this.currentMails.find((m) => m.lang === 'fr');
+
+      this.bodyFr = frMail?.body;
+      this.subjectFr = frMail?.subject;
+    } else {
+      this.bodyFr = '';
+      this.subjectFr = '';
+    }
+    if (mail) {
+      const enMail = this.currentMails.find((m) => m.lang === 'en');
+
+      this.bodyEn = enMail?.body;
+      this.subjectEn = enMail?.subject;
+    } else {
+      this.bodyEn = '';
+      this.subjectEn = '';
+    }
+    if (mail) {
+      const esMail = this.currentMails.find((m) => m.lang === 'es');
+
+      this.bodyEs = esMail?.body;
+      this.subjectEs = esMail?.subject;
+    } else {
+      this.bodyEs = '';
+      this.subjectEs = '';
+    }
+    if (mail) {
+      const deMail = this.currentMails.find((m) => m.lang === 'de');
+      this.bodyDe = deMail?.body;
+      this.subjectDe = deMail?.subject;
+    } else {
+      this.bodyDe = '';
+      this.subjectDe = '';
+    }
+    if (mail) {
+      const itMail = this.currentMails.find((m) => m.lang === 'it');
+
+      this.bodyIt = itMail?.body;
+      this.subjectIt = itMail?.subject;
+    } else {
+      this.bodyIt = '';
+      this.subjectIt = '';
+    }
+  }
+
+  openPreview(): void {
+    const data = this.getEmailContent();
+
+    const dialogRef = this.dialog.open(PreviewModalComponent, {
+      width: '80%',
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  getEmailContent() {
+    switch (this.selectedIndex) {
+      case 0: // Pestaña francesa
+        return { language: 'fr', subject: this.subjectFr, title: this.titleFr, body: this.bodyFr };
+      case 1: // Pestaña inglesa
+        return { language: 'en', subject: this.subjectEn, title: this.titleEn, body: this.bodyEn };
+      case 2: // Pestaña española
+        return { language: 'es', subject: this.subjectEs, title: this.titleEs, body: this.bodyEs };
+      case 3: // Pestaña italiana
+        return { language: 'it', subject: this.subjectIt, title: this.titleIt, body: this.bodyIt };
+      case 4: // Pestaña alemana
+        return { language: 'de', subject: this.subjectDe, title: this.titleDe, body: this.bodyDe };
+      default: // Fallback
+        return { language: 'en', subject: '', title: '', body: '' };
+    }
+  }
+
+  saveDefaultMail() {
+    const data = [
+      [{
+        type: this.mailType,
+        subject: this.subjectFr,
+        body: this.bodyFr,
+        title: this.titleFr,
+        school_id: this.school.id,
+        lang:'fr'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectEn,
+        body: this.bodyEn,
+        title: this.titleEn,
+        school_id: this.school.id,
+        lang:'en'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectEs,
+        body: this.bodyEs,
+        title: this.titleEs,
+        school_id: this.school.id,
+        lang:'es'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectDe,
+        body: this.bodyDe,
+        title: this.titleIt,
+        school_id: this.school.id,
+        lang:'de'
+      }],
+      [{
+        type: this.mailType,
+        subject: this.subjectIt,
+        body: this.bodyIt,
+        title: this.titleDe,
+        school_id: this.school.id,
+        lang:'it'
+      }]
+    ];
+
+    for (let i = 0; i<5; i++) {
+
+      const existMail = this.currentMails.find((c) => c.lang === data[i][0].lang && c.type === data[i][0].type);
+
+      if (existMail) {
+
+        const updateData = {
+          type: this.mailType,
+          subject: data[i][0].subject,
+          body: data[i][0].body,
+          title: data[i][0].title,
+          school_id: this.school.id,
+          lang: data[i][0].lang
+        }
+
+        this.crudService.update('/mails', updateData, existMail.id)
+          .subscribe((res) => {
+
+            if (i === 4) {
+
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+
+            }
+
+          })
+      } else {
+        this.crudService.post('/mails', data[i][0])
+          .subscribe((res) => {
+
+            if (i === 4) {
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+
+            }
+
+          })
+      }
+
+    }
+
+  }
+
+  onTabChange(event: any) {
+    this.selectedIndex = event.index;
+    this.setCurrentMailType();
   }
 
   addHoliday() {
@@ -675,8 +880,9 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  selectSport(id: number ) {
-    this.selectedSport = id;
+  selectSport(item: any ) {
+    this.selectedSport = item.id;
+    this.dataSourceLevels.data = item.degrees
   }
 
   addForfait(data: any, isEdit: any, idx: number) {

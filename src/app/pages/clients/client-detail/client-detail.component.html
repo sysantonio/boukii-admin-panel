@@ -1,3 +1,10 @@
+<vex-secondary-toolbar current="">
+  <vex-breadcrumbs  [crumbs]="[
+    {icon:'clientes'},
+    {text:'clients', title: true, link: '/clients'},
+    {text:'client_info', subtitle: true}
+    ]" class="flex-auto"></vex-breadcrumbs>
+</vex-secondary-toolbar>
 <div class="container py-6" style="max-width: none;">
   <div class="card overflow-hidden">
     <div class="h-64 relative overflow-hidden">
@@ -189,50 +196,6 @@
 
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
-              <h2 class="title m-0">{{'sports' | translate }}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
-              </h2>
-            </div>
-
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
-
-              <div *ngFor="let item of clientSport">
-                <div class="py-3 flex items-center">
-                  <div
-                    @scaleIn
-                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item?.level?.color">
-                  </div>
-
-                  <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">Sport</p>
-                    <p class="m-0 body-1">{{item?.name}}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="py-3 flex items-center">
-                  <div
-                    @scaleIn
-                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <mat-icon class="icon-sm" svgIcon="logo:task"></mat-icon>
-                  </div>
-
-                  <div @fadeInRight *ngIf="!editSportInfo">
-                    <p class="m-0 caption text-hint">Level</p>
-                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
-                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card" style="margin: 3% 0 0 0;">
-            <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'address' | translate}}
                 <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
                 <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
@@ -293,6 +256,50 @@
                   <p class="m-0 caption text-hint">{{'province' | translate }}</p>
                   <p class="m-0 body-1">{{getCountry(defaults.country)}}
                   </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin: 3% 0 0 0;">
+            <div class="px-6 py-4 border-b">
+              <h2 class="title m-0">{{'sports' | translate }}
+                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
+              </h2>
+            </div>
+
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
+
+              <div *ngFor="let item of clientSport">
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item?.level?.color">
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">Sport</p>
+                    <p class="m-0 body-1">{{item?.name}}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="py-3 flex items-center">
+                  <div
+                    @scaleIn
+                    class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
+                    <mat-icon class="icon-sm" svgIcon="logo:task"></mat-icon>
+                  </div>
+
+                  <div @fadeInRight *ngIf="!editSportInfo">
+                    <p class="m-0 caption text-hint">Level</p>
+                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
+                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -487,7 +494,8 @@
 
                 <vex-page-layout-content class="-mt-6 fullwidth" >
                   <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'"
+                                 [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
@@ -612,21 +620,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                         <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                           <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                                   <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
                                       {{detailData?.degree.name}}
@@ -668,21 +676,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                           <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                               <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                               </div>
                           </div>
@@ -830,8 +838,11 @@
                 </div>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>
@@ -924,8 +935,11 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
+                  {{'save' | translate}}
+                </button>
                 <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
                   {{'next' |translate}}
                 </button>
@@ -1057,9 +1071,9 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button>
                   {{'save' |translate}}
                 </button>
               </div>
@@ -1093,9 +1107,9 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'go_preview' | translate }}</button>
+                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
                 <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext (click)="save()">
+                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="save()">
                   {{'save' | translate}}
                 </button>
               </div>
@@ -1203,7 +1217,8 @@
 
                 <vex-page-layout-content class="-mt-6 fullwidth" >
                   <vex-aio-table [columns]="columns" [entity]="entity" [title]="'bookings'" [route]="'bookings'"
-                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
+                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'"
+                                 [with]="['booking','course.courseGroups.courseSubgroups', 'clientMain']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
@@ -1326,21 +1341,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                         <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                           <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                                   <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
                                       {{detailData?.degree.name}}
@@ -1382,21 +1397,21 @@
                       <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
                           <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
                               <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
                               <div class="box-detail-user-block-text">
-                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
                                   <span>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      <ng-container *ngIf="client?.language1_id">
+                                          {{getLanguageById(client?.language1_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      <ng-container *ngIf="client?.language2_id">
+                                          {{getLanguageById(client?.language2_id)}} ·
                                       </ng-container>
-                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      <ng-container *ngIf="client?.language3_id">
+                                          {{getLanguageById(client?.language3_id)}} ·
                                       </ng-container>
-                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}} {{'years' | translate }}
-                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
+                                      · {{client?.phone}} · {{client?.email}}
                                   </span>
                               </div>
                           </div>

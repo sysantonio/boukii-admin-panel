@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
 import { UserMenuComponent } from '../../components/user-menu/user-menu.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
-import { collection, getDocs, getFirestore } from '@angular/fire/firestore';
+
 
 @Component({
   selector: 'vex-sidenav',

@@ -73,17 +73,17 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'bonuses',
+        path: 'vouchers',
         loadChildren: () => import('./pages/bonuses/bonuses.module').then(m => m.BonusesModule),
         canActivate: [AuthGuard],
       },
       {
-        path: 'bonuses/create',
+        path: 'vouchers/create',
         loadChildren: () => import('./pages/bonuses/bonuses-create-update/bonuses-create-update.module').then(m => m.BonusesCreateUpdateModule),
         canActivate: [AuthGuard],
       },
       {
-        path: 'bonuses/update/:id',
+        path: 'vouchers/update/:id',
         loadChildren: () => import('./pages/bonuses/bonuses-create-update/bonuses-create-update.module').then(m => m.BonusesCreateUpdateModule),
         canActivate: [AuthGuard],
       },
@@ -145,11 +145,6 @@ const childrenRoutes: VexRoutes = [
       {
         path: 'settings',
         loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'user/create',
-        loadChildren: () => import('./pages/user/user-create-update/user-create-update.module').then(m => m.UserCreateUpdateModule),
         canActivate: [AuthGuard],
       },
       {

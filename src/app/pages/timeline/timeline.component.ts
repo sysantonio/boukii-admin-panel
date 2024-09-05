@@ -53,6 +53,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   weekDays: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
   currentMonth: string = '';
   weeksInMonth: any[] = [];
+  firstDayOfMonth: number;
 
   allMonitors:any[] =[];
   allMonitorsTimeline:any[] =[];
@@ -99,6 +100,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   filterFree:boolean=true;
   filterOccupied:boolean=false;
   filterCollective:boolean=true;
+  filterActivity:boolean=true;
   filterPrivate:boolean=true;
   filterNwd:boolean=true;
   filterBlockPayed:boolean=true;
@@ -193,6 +195,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
       this.filterMonitor = user.id;
     }
   }
+
+  goToTimeline(monitor: any) {
+    // Navegar a la página de detalle del monitor con un parámetro adicional en la URL para seleccionar la pestaña
+    this.router.navigate(['/monitors/update', monitor.id],  { queryParams: { tab: 'timeline' } });
+  }
+
+
 
 
   async getData() {
@@ -543,19 +552,20 @@ export class TimelineComponent implements OnInit, OnDestroy {
                     if(!this.areAllChecked()){
                       hasAtLeastOneBooking = this.checkedSports.has(groupedBookingArray[0].course.sport_id);
                     }
-                    if(this.filterMonitor && hasAtLeastOne && hasAtLeastOneBooking){
-                      if(groupedBookingArray[0].monitor_id == this.filterMonitor){
+                    if (this.filterMonitor && hasAtLeastOne && hasAtLeastOneBooking) {
+                      if (groupedBookingArray[0].monitor_id === this.filterMonitor) {
                         if ((this.filterCollective || groupedBookingArray[0].course.course_type !== 1) &&
-                            (this.filterPrivate || groupedBookingArray[0].course.course_type !== 2)) {
+                          (this.filterPrivate || groupedBookingArray[0].course.course_type !== 2) &&
+                          (this.filterActivity || groupedBookingArray[0].course.course_type === 3)) {
                           const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
                           allBookings.push(firstBooking);
                         }
                       }
-                    }
-                    else{
-                      if(hasAtLeastOne && hasAtLeastOneBooking){
+                    } else {
+                      if (hasAtLeastOne && hasAtLeastOneBooking) {
                         if ((this.filterCollective || groupedBookingArray[0].course.course_type !== 1) &&
-                            (this.filterPrivate || groupedBookingArray[0].course.course_type !== 2)) {
+                          (this.filterPrivate || groupedBookingArray[0].course.course_type !== 2) &&
+                          (this.filterActivity || groupedBookingArray[0].course.course_type === 3)) {
                           const firstBooking = { ...groupedBookingArray[0], bookings_number: groupedBookingArray.length, bookings_clients: groupedBookingArray };
                           allBookings.push(firstBooking);
                         }
@@ -703,6 +713,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
+          created_at: booking.booking.created_at,
           date_end: moment(booking.course.date_end).format('DD/MM/YYYY'),
           hour_start: booking.hour_start.substring(0, 5),
           hour_end: booking.hour_end ? booking.hour_end.substring(0, 5) : this.hoursRange[this.hoursRange.length-1],
@@ -725,6 +736,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           total_subgroups: booking.total_subgroups,
           course: booking.course,
           paid: booking?.booking?.paid,
+          user: booking?.booking?.user,
           ...dateTotalAndIndex
         };
       }),
@@ -783,25 +795,45 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   async calculateWeeksInMonth() {
-    const startMonth = startOfWeek(startOfMonth(this.currentDate), { weekStartsOn: 1 });
-    const endMonth = endOfWeek(endOfMonth(this.currentDate), { weekStartsOn: 1 });
+    const startMonth = startOfMonth(this.currentDate);
+    const endMonth = endOfMonth(this.currentDate);
+    this.firstDayOfMonth = startMonth.getDay(); // Devuelve el día de la semana (0 para domingo, 1 para lunes, etc.)
 
     this.weeksInMonth = [];
-    let currentWeekStart = startMonth;
+    let currentWeekStart = startOfWeek(startMonth, { weekStartsOn: 1 });
 
     while (currentWeekStart <= endMonth) {
       const currentWeekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 1 });
 
+      const adjustedStart = max([startMonth, currentWeekStart]);
+      const adjustedEnd = min([endMonth, currentWeekEnd]);
+
       const week = {
         startWeek: format(currentWeekStart, 'yyyy-MM-dd'),
-        startDay: this.formatDayWithFrenchInitial(max([startOfMonth(this.currentDate), currentWeekStart])),
-        endDay: this.formatDayWithFrenchInitial(min([endOfMonth(this.currentDate), currentWeekEnd]))
+        startDayInt: adjustedStart.getDate(),
+        startDay: this.formatDayWithFrenchInitial(adjustedStart),
+        endDay: this.formatDayWithFrenchInitial(adjustedEnd)
       };
 
       this.weeksInMonth.push(week);
       currentWeekStart = addWeeks(currentWeekStart, 1);
     }
   }
+
+  calculateDayNumber(dayIndex: number, weekIndex: number, starDayWeek: number): number {
+    //isDayInMonth(dayIndex, weekIndex) ? (week.startDayInt + dayIndex - (weekIndex === 0 && firstDayOfMonth !== 0 ? firstDayOfMonth - 1 : 0)) : ''
+    if (weekIndex === 0 && this.firstDayOfMonth === 0) {
+      // Si el primer día del mes es domingo y estamos en la primera semana, ajustar el cálculo
+      return 1; // Añadir 1 ya que el primer día debe ser 1
+    } else if (weekIndex === 0) {
+      // Si estamos en la primera semana pero el primer día no es domingo, ajustar según el primer día
+      return starDayWeek + dayIndex - this.firstDayOfMonth + 1
+    } else {
+      // Para semanas después de la primera
+      return starDayWeek + dayIndex
+    }
+  }
+
 
   formatDayWithFrenchInitial(date: Date): string {
     const frenchDayInitials = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
@@ -2008,7 +2040,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   showResetFilters() {
     return !(this.areAllChecked() && this.filterMonitor == null && this.filterBookingUser == null &&
              this.filterFree && !this.filterOccupied &&
-             this.filterCollective && this.filterPrivate && this.filterNwd &&
+             this.filterCollective && this.filterPrivate && this.filterNwd && this.filterActivity &&
              this.filterBlockPayed && this.filterBlockNotPayed);
   }
 
@@ -2026,6 +2058,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       filterFree: this.filterFree,
       filterOccupied: this.filterOccupied,
       filterCollective: this.filterCollective,
+      filterActivity: this.filterActivity,
       filterPrivate: this.filterPrivate,
       filterNwd: this.filterNwd,
       filterBlockPayed: this.filterBlockPayed,
@@ -2046,6 +2079,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       this.filterFree = options.filterFree;
       this.filterOccupied = options.filterOccupied;
       this.filterCollective = options.filterCollective;
+      this.filterActivity = options.filterActivity;
       this.filterPrivate = options.filterPrivate;
       this.filterNwd = options.filterNwd;
       this.filterBlockPayed = options.filterBlockPayed;
@@ -2061,6 +2095,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.filterFree=true;
     this.filterOccupied=false;
     this.filterCollective=true;
+    this.filterActivity=true;
     this.filterPrivate=true;
     this.filterNwd=true;
     this.filterBlockPayed=true;
@@ -2430,4 +2465,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
 
   }
+
+  protected readonly parseInt = parseInt;
 }

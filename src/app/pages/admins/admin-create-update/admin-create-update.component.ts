@@ -81,7 +81,7 @@ export class AdminCreateUpdateComponent implements OnInit {
         surname: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         username: [''],
-        password: [''],
+        password: ['', Validators.required],
 
       });
 

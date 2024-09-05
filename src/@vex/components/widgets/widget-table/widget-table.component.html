@@ -1,4 +1,4 @@
-<div class="card overflow-hidden w-full flex flex-col">
+<div class="card overflow-hidden w-full flex flex-col" style="height:100%;">
   <div class="border-b py-4 px-6 flex items-center">
     <h2 class="m-0 title flex-auto">{{'bookings' | translate }}</h2>
 
@@ -41,7 +41,7 @@
         <ng-container *ngIf="column.type === 'booking_users_image'" [matColumnDef]="column.property">
           <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
           <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-            <img [src]="'https://school.boukii.com/assets/icons/'+ getBookingType(data[i].bookingusers[0])+'_' + getBookingImage(data[i].bookingusers[0]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 40px; width: 40px;">
+            <img [src]="'https://school.boukii.com/assets/icons/'+ getBookingType(data[i].booking_users[0])+'_' + getBookingImage(data[i].booking_users[0]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 40px; width: 40px;">
             <!--<ng-container *ngIf="data[i].bookingusers > 1" >
               <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
             </ng-container>-->
@@ -56,9 +56,9 @@
           <ng-container *ngIf="column.type === 'client'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <span style="float: left; width: 100%;font-size:10px">{{getLanguage(getClient(row[column.property])?.language1_id)}} · {{getCountry(getClient(row[column.property])?.country)}} ·
-                {{calculateAge(getClient(row[column.property])?.birth_date)}} {{'years' | translate }}</span>
-              <span style="float: left; width: 100%;">{{ getClient(row[column.property])?.first_name }} {{ getClient(row[column.property])?.last_name }}</span>
+              <span style="float: left; width: 100%;font-size:10px">{{getLanguage(row[column.property]?.language1_id)}} · {{getCountry(row[column.property]?.country)}} ·
+                {{calculateAge(row[column.property]?.birth_date)}} {{'years' | translate }}</span>
+              <span style="float: left; width: 100%;">{{ row[column.property]?.first_name }} {{ row[column.property]?.last_name }}</span>
             </td>
           </ng-container>
       </ng-container>

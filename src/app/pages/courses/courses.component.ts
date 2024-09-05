@@ -93,6 +93,7 @@ export class CoursesComponent {
           });
 
           this.colorKeys = Object.keys(this.groupedByColor);
+          this.showDetail = true;
         });
 
         this.crudService.list('/stations', 1, 10000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
@@ -151,11 +152,35 @@ export class CoursesComponent {
       return monitor;
     }
   }
+  encontrarPrimeraClaveConValor(obj: any): string | null {
+    if (obj !== null) {
+      for (const clave of Object.keys(obj)) {
+        if (obj[clave] !== null && clave !== 'intervalo') {
+          return obj[clave];
+        }
+      }
+      return null;
+    }
+
+  }
+
+  encontrarPrimeraCombinacionConValores(data: any, course: any) {
+    if (data !== null) {
+      for (const intervalo of data) {
+        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
+          return intervalo;
+        }
+      }
+      return null; // Devuelve null si no encuentra ninguna combinación válida
+    }
+
+  }
 
   getStudents(levelId: any) {
     let ret = 0;
 
-    this.detailData.users.forEach(element => {
+    this.detailData.booking_users.forEach(element => {
       if (element.degree_id === levelId) {
         ret = ret + 1;
       }
