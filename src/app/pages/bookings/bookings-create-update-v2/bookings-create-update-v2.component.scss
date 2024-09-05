@@ -1,0 +1,43 @@
+.bookingContainer {
+  width: 100%;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+
+  .mat-mdc-card-content {
+    padding: 1.25rem;
+  }
+}
+
+.left-column {
+  width: 100%;
+}
+
+.right-column {
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (min-width: 768px) {
+  .bookingContainer {
+    padding: 1.875rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .bookingContainer {
+    flex-direction: row;
+    gap: 1.875rem;
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+
+  .left-column {
+    flex: 1 1 0;
+  }
+
+  .right-column {
+    flex: 400px 1 0;
+  }
+}
+
