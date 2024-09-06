@@ -555,8 +555,8 @@
           </div>
           <div class="holder-client" style="margin-top: 10px">
             <div class="col-left">
-              <img *ngIf="taskDetail.type == 'collective'" src="https://school.boukii.com/assets/icons/collectif_ski2x.png" width="60" height="60" />
-              <img *ngIf="taskDetail.type == 'private'" src="https://school.boukii.com/assets/icons/prive_ski2x.png" width="60" height="60" />
+              <img *ngIf="taskDetail.type == 'collective'" src="{{taskDetail.sport.icon_collective}}" width="60" height="60" />
+              <img *ngIf="taskDetail.type == 'private'" src="{{taskDetail.sport.icon_prive}}" width="60" height="60" />
             </div>
             <div class="col-right">
               <div class="client-name">

@@ -430,6 +430,7 @@
   "snackbar.course.max_age": "El campo edad maxima es obligatorio",
   "snackbar.course.summary": "El campo resumen es obligatorio",
   "snackbar.course.desc": "El campo descripcion es obligatorio",
+  "snackbar.course.dates": "El curso debe tener al menos una fecha activa",
   "snackbar.course.date_from": "El campo fecha desde es obligatorio",
   "snackbar.course.date_to": "El campo fecha hasta es obligatorio",
   "snackbar.course.duration": "El campo duracion es obligatorio",

@@ -427,6 +427,7 @@
   "snackbar.course.max_age": "The maximum age field is mandatory",
   "snackbar.course.summary": "The summary field is required",
   "snackbar.course.desc": "The description field is required",
+  "snackbar.course.dates": "The course must have at least one active date",
   "snackbar.course.date_from": "The date since field is required",
   "snackbar.course.date_to": "The date until field is required",
   "snackbar.course.duration": "The duration field is mandatory",

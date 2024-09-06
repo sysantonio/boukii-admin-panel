@@ -427,6 +427,7 @@
   "snackbar.course.max_age": "Das Feld „Höchstalter“ ist Pflichtfeld",
   "snackbar.course.summary": "Das Zusammenfassungsfeld ist erforderlich",
   "snackbar.course.desc": "Das Beschreibungsfeld ist erforderlich",
+  "snackbar.course.dates": "Der Kurs muss mindestens ein aktives Datum haben",
   "snackbar.course.date_from": "Das Feld „Datum seit“ ist erforderlich",
   "snackbar.course.date_to": "Das Feld „Datum bis“ ist erforderlich",
   "snackbar.course.duration": "Das Feld „Dauer“ ist obligatorisch",

@@ -21,8 +21,6 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class CourseDetailComponent implements OnInit {
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
-  imagePathPrivate = 'https://school.boukii.com/assets/icons/prive_ski2x.png';
   userAvatar = '../../../../assets/img/avatar.png';
 
   mode: 'create' | 'update' = 'update';
