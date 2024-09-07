@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Observable, debounceTime, map, skip, startWith } from "rxjs";
+import { Observable, debounceTime, map, skip } from "rxjs";
 import { ApiCrudService } from "src/service/crud.service";
 import { ApiResponse } from "src/app/interface/api-response";
 
@@ -10,13 +10,14 @@ import { ApiResponse } from "src/app/interface/api-response";
   styleUrls: ["./step-one.component.scss"],
 })
 export class StepOneComponent implements OnInit {
-  @Input() initialData: any; // Recibe datos iniciales
+  @Input() initialData: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
 
   stepOneForm: FormGroup;
   user: any;
   filteredOptions: Observable<any[]>;
   selectedClient: any;
+  mainClient: any;
   expandClients: any[];
 
   constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
@@ -24,6 +25,7 @@ export class StepOneComponent implements OnInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.selectedClient = this.initialData?.client;
+    this.mainClient = this.initialData?.mainClient;
     this.getClients().subscribe({
       next: (response) => {
         this.expandClients = this.getExpandClients(response.data);
@@ -35,6 +37,7 @@ export class StepOneComponent implements OnInit {
 
     this.stepOneForm = this.fb.group({
       client: [this.selectedClient || "", Validators.required],
+      mainClient: [this.mainClient, Validators.required],
     });
 
     this.filteredOptions = this.stepOneForm.get("client")!.valueChanges.pipe(
@@ -51,6 +54,10 @@ export class StepOneComponent implements OnInit {
 
   setClient(ev) {
     this.selectedClient = ev.source.value;
+    this.stepOneForm.patchValue({
+      client: ev.source.value,
+      mainClient: this.selectedClient.main_client || this.selectedClient,
+    });
   }
 
   displayFn(client: any): string {
@@ -73,8 +80,7 @@ export class StepOneComponent implements OnInit {
       10000,
       "desc",
       "id",
-      "&school_id=" + this.user.schools[0].id + "&active=1",
-      /* null, null, null, ["client_sports"] */
+      "&school_id=" + this.user.schools[0].id + "&active=1"
     );
   }
 

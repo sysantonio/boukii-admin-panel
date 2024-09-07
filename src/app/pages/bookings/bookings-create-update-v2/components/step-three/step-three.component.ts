@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import moment from "moment";
-import { map, skip, startWith } from "rxjs";
+import { debounceTime, map, skip } from "rxjs";
 import { ApiCrudService } from "src/service/crud.service";
+import { UtilsService } from "src/service/utils.service";
 
 @Component({
   selector: "booking-step-three",
@@ -24,7 +25,11 @@ export class StepThreeComponent implements OnInit {
   filteredLevel: any;
   utilizersComplete: any[] = [];
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
+  constructor(
+    private fb: FormBuilder,
+    private crudService: ApiCrudService,
+    protected utilsService: UtilsService
+  ) {}
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
@@ -44,6 +49,7 @@ export class StepThreeComponent implements OnInit {
 
     this.filteredLevel = this.stepForm.get("sportLevel").valueChanges.pipe(
       skip(1),
+      debounceTime(300),
       map((value: any) =>
         typeof value === "string" ? value : value?.annotation
       ),
@@ -117,26 +123,37 @@ export class StepThreeComponent implements OnInit {
       )
       .subscribe((data) => {
         this.levels = data.data;
-        // vamos a utilizar solo al primer participantes para las comprobaciones, esto podria cambiar a hacer calculos entre todos los participantes
-        const mainUtilizer = this.utilizersComplete[0];
-        const age = mainUtilizer.birth_date
-          ? this.calculateAge(mainUtilizer.birth_date)
-          : 0;
-        let foundSport = false;
+        // almacenara los niveles de todos los utilizers para luego devolver el superior
+        const posibleLevels = [];
+        const biggestAge = this.utilizersComplete
+          .map((utilizer) =>
+            utilizer.birth_date
+              ? this.utilsService.calculateYears(utilizer.birth_date)
+              : 0
+          )
+          .sort((a, b) => b - a)[0];
+
         this.levels = this.levels.filter((level) => {
-          return age >= level.age_min && age <= level.age_max;
+          return biggestAge >= level.age_min && biggestAge <= level.age_max;
         });
-        mainUtilizer.client_sports.forEach((sport) => {
-          if (
-            sport.sport_id === this.stepForm.get("sport").value.sport_id &&
-            sport.school_id === this.user.schools[0].id
-          ) {
-            const level = this.levels.find((l) => l.id === sport.degree_id);
-            this.stepForm.get("sportLevel").patchValue(level);
-            foundSport = true;
-          }
-        });
-        if (!foundSport) {
+        this.utilizersComplete.forEach((utilizer) =>
+          utilizer.client_sports.forEach((sport) => {
+            if (
+              sport.sport_id === this.stepForm.get("sport").value.sport_id &&
+              sport.school_id === this.user.schools[0].id
+            ) {
+              const level = this.levels.find((l) => l.id === sport.degree_id);
+              posibleLevels.push(level);
+            }
+          })
+        );
+
+        if (posibleLevels.length) {
+          const correctLevel = posibleLevels
+            .filter(Boolean)
+            .sort((a, b) => b.degree_order - a.degree_order)[0];
+          this.stepForm.get("sportLevel").patchValue(correctLevel);
+        } else {
           this.stepForm.get("sportLevel").patchValue(null);
         }
       });
@@ -147,16 +164,6 @@ export class StepThreeComponent implements OnInit {
       ? level?.annotation + " " + level?.name
       : level?.name;
   }
-
-  calculateAge(birthDateString) {
-    const fechaActual = moment();
-    const age = fechaActual.diff(
-      moment(birthDateString, "YYYY-MM-DD"),
-      "years"
-    );
-    return age;
-  }
-
   private _filterLevel(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.levels.filter((level) =>

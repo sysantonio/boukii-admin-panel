@@ -16,9 +16,11 @@
       <div class="utilizerCard__description">
         <h4>{{ item.first_name }} {{ item.last_name }}</h4>
         <span
-          >{{ getLanguage(item.language1_id) }} ·
-          {{ calculateAge(item.birth_date) }} &ensp;{{ "years" | translate }} ·
-          {{ getCountry(item.country) }}</span
+          >{{ langService.getLanguage(item.language1_id) }} ·
+          {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
+            "years" | translate
+          }}
+          · {{ utilsService.getCountry(item.country) }}</span
         >
       </div>
     </label>

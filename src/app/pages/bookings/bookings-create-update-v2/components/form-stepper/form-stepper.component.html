@@ -11,7 +11,7 @@
   <div *ngIf="currentStep === 1">
     <booking-step-two
       [initialData]="stepperForm.get('step2')?.value"
-      [client]="stepperForm.get('step1')?.value?.client"
+      [client]="stepperForm.get('step1')?.value?.mainClient"
       (stepCompleted)="handleStepCompletion(2, $event)"
       (prevStep)="previousStep()"
     >

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
-import { ApiCrudService } from "src/service/crud.service";
 
-import { MOCK_COUNTRIES } from "src/app/static-data/countries-data";
+import { LangService } from "src/service/langService";
+import { UtilsService } from "src/service/utils.service";
 
 @Component({
   selector: "booking-step-two",
@@ -16,21 +16,23 @@ export class StepTwoComponent implements OnInit {
   @Output() prevStep = new EventEmitter();
   stepForm: FormGroup;
   languages = [];
-  countries = MOCK_COUNTRIES;
+
   selectedUtilizers;
   utilizers;
   userAvatar = "../../../../assets/img/booking-avatar.svg";
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
+  constructor(
+    private fb: FormBuilder,
+    protected langService: LangService,
+    protected utilsService: UtilsService
+  ) {}
 
   ngOnInit(): void {
-    this.utilizers = this.client.utilizers;
+    this.utilizers = [this.client, ...this.client.utilizers];
     this.selectedUtilizers = this.initialData.utilizers || [];
     this.stepForm = this.fb.group({
       utilizers: this.fb.array(this.selectedUtilizers, Validators.required),
     });
-
-    this.getLanguages();
   }
 
   isFormValid() {
@@ -45,39 +47,6 @@ export class StepTwoComponent implements OnInit {
     if (this.isFormValid()) {
       this.stepCompleted.emit(this.stepForm);
     }
-  }
-
-  getLanguages() {
-    this.crudService.list("/languages", 1, 1000).subscribe((data) => {
-      this.languages = data.data.reverse();
-    });
-  }
-
-  getLanguage(id: any) {
-    const lang = this.languages.find((c) => c.id == +id);
-    return lang ? lang.code.toUpperCase() : "NDF";
-  }
-
-  calculateAge(birthDateString) {
-    if (birthDateString && birthDateString !== null) {
-      const today = new Date();
-      const birthDate = new Date(birthDateString);
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-
-      return age;
-    } else {
-      return 0;
-    }
-  }
-
-  getCountry(id: any) {
-    const country = this.countries.find((c) => c.id == id);
-    return country ? country.name : "NDF";
   }
 
   // Manejar el cambio de los checkboxes

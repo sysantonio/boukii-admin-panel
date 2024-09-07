@@ -9,13 +9,17 @@ import { MatCardModule } from "@angular/material/card";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
 import { BookingFormStepper } from "./form-stepper/form-stepper.component";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
 import { StepThreeComponent } from "./step-three/step-three.component";
 
-import { MatButtonModule } from "@angular/material/button";
+import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
+import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -29,18 +33,23 @@ import { MatButtonModule } from "@angular/material/button";
     MatCheckboxModule,
     MatRadioModule,
     TranslateModule,
+    MatDialogModule,
   ],
   declarations: [
     BookingFormStepper,
     StepOneComponent,
     StepTwoComponent,
     StepThreeComponent,
+    BookingDescriptionCard,
+    BookingDialogComponent,
   ],
   exports: [
     BookingFormStepper,
     StepOneComponent,
     StepTwoComponent,
     StepThreeComponent,
+    BookingDescriptionCard,
+    BookingDialogComponent,
   ],
 })
 export class BookingComponentsModule {}
