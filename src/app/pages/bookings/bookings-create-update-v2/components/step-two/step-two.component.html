@@ -5,6 +5,7 @@
     <label class="utilizerCard" *ngFor="let item of utilizers">
       <mat-checkbox
         [value]="item"
+        [checked]="isChecked(item)"
         (change)="onCheckboxChange($event)"
       ></mat-checkbox>
       <img

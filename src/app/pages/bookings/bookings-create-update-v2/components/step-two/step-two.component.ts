@@ -97,4 +97,9 @@ export class StepTwoComponent implements OnInit {
       }
     }
   }
+
+  isChecked(utilizer) {
+    const currentUtilizers = this.stepForm.get("utilizers").value;
+    return !!currentUtilizers.find((u) => u.id === utilizer.id);
+  }
 }

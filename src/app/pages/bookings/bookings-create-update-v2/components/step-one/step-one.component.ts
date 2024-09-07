@@ -11,13 +11,13 @@ import { ApiResponse } from "src/app/interface/api-response";
 })
 export class StepOneComponent implements OnInit {
   @Input() initialData: any; // Recibe datos iniciales
-  @Output() stepOneCompleted = new EventEmitter<FormGroup>();
+  @Output() stepCompleted = new EventEmitter<FormGroup>();
 
   stepOneForm: FormGroup;
   user: any;
   filteredOptions: Observable<any[]>;
-  $clients: any;
   selectedClient: any;
+  expandClients: any[];
 
   constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
 
@@ -26,7 +26,7 @@ export class StepOneComponent implements OnInit {
     this.selectedClient = this.initialData?.client;
     this.getClients().subscribe({
       next: (response) => {
-        this.$clients = response.data;
+        this.expandClients = this.getExpandClients(response.data);
       },
       error: (err) => {
         console.error("Error en la petición getClients", err);
@@ -44,9 +44,7 @@ export class StepOneComponent implements OnInit {
         typeof value === "string" ? value : this.displayFn(value)
       ),
       map((name) =>
-        name
-          ? this._filter(name)
-          : this.expandClients(this.$clients).slice(0, 50)
+        name ? this._filter(name) : this.expandClients.slice(0, 50)
       )
     );
   }
@@ -75,33 +73,32 @@ export class StepOneComponent implements OnInit {
       10000,
       "desc",
       "id",
-      "&school_id=" + this.user.schools[0].id + "&active=1"
+      "&school_id=" + this.user.schools[0].id + "&active=1",
+      /* null, null, null, ["client_sports"] */
     );
   }
 
   completeStep() {
     if (this.isFormValid()) {
-      this.stepOneCompleted.emit(this.stepOneForm);
+      this.stepCompleted.emit(this.stepOneForm);
     }
   }
 
-  private expandClients(clients: any[]): any[] {
+  private getExpandClients(clients: any[]): any[] {
     let expandedClients = [];
     clients.forEach((client) => {
       expandedClients.push(client);
-      if (client.utilizers && client.utilizers.length > 0) {
-        client.utilizers.forEach((utilizer) => {
-          let expandedUtilizer = { ...utilizer, main_client: client };
-          expandedClients.push(expandedUtilizer);
-        });
-      }
+      client.utilizers?.forEach((utilizer) => {
+        let expandedUtilizer = { ...utilizer, main_client: client };
+        expandedClients.push(expandedUtilizer);
+      });
     });
     return expandedClients;
   }
 
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.expandClients(this.$clients).filter(
+    return this.expandClients.filter(
       (client) =>
         client.first_name.toLowerCase().includes(filterValue) ||
         client.last_name.toLowerCase().includes(filterValue)

@@ -3,7 +3,7 @@
   <div *ngIf="currentStep === 0">
     <booking-step-one
       [initialData]="stepperForm.get('step1')?.value"
-      (stepOneCompleted)="handleStepCompletion(1, $event)"
+      (stepCompleted)="handleStepCompletion(1, $event)"
     >
     </booking-step-one>
   </div>
@@ -17,13 +17,14 @@
     >
     </booking-step-two>
   </div>
-  <!--  
 
   <div *ngIf="currentStep === 2">
     <booking-step-three
       [initialData]="stepperForm.get('step3')?.value"
-      (stepThreeCompleted)="handleStepCompletion(3, $event)"
+      [utilizers]="stepperForm.get('step2')?.value?.utilizers"
+      (stepCompleted)="handleStepCompletion(3, $event)"
+      (prevStep)="previousStep()"
     >
     </booking-step-three>
-  </div> -->
+  </div>
 </div>

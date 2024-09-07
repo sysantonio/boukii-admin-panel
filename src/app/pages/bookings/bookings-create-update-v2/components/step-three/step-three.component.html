@@ -1,0 +1,53 @@
+<form [formGroup]="stepForm">
+  <mat-radio-group
+    aria-label="Select an option"
+    formControlName="sport"
+    class="cards-wrapper"
+  >
+    <label
+      class="sportCard"
+      [ngClass]="{ active: stepForm.get('sport').value === item }"
+      *ngFor="let item of sportData"
+    >
+      <mat-radio-button [value]="item"> </mat-radio-button>
+      <img class="sportImg" [src]="item.icon" />
+      <span class="sportTitle">{{ item.name }}</span>
+    </label>
+  </mat-radio-group>
+
+  <mat-form-field appearance="outline" class="searchInput">
+    <input
+      type="text"
+      placeholder="{{ 'choose_level' | translate }}"
+      aria-label="Number"
+      matInput
+      formControlName="sportLevel"
+      [matAutocomplete]="autoLevel"
+    />
+    <mat-autocomplete
+      #autoLevel="matAutocomplete"
+      [displayWith]="displayFnLevel"
+    >
+      <mat-option *ngFor="let level of filteredLevel | async" [value]="level">
+        {{ level.annotation }} - {{ level.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
+
+<div class="stepButtonsWrapper">
+  <button mat-button type="button" (click)="handlePrevStep()">
+    <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
+    {{ "back" | translate }}
+  </button>
+  <div>
+    <button
+      mat-flat-button
+      type="button"
+      (click)="completeStep()"
+      [disabled]="!isFormValid()"
+    >
+      {{ "confirm" | translate }}
+    </button>
+  </div>
+</div>
