@@ -1128,8 +1128,10 @@
                     <th mat-header-cell *matHeaderCellDef>  </th>
                     <td mat-cell *matCellDef="let element; let i = index">
                       <mat-icon svgIcon="mat:delete" style="cursor:pointer" *ngIf="(element.active || element.active === 1) || !element.id" (click)="removeteDate(i)"></mat-icon>
+                      <mat-icon svgIcon="mat:add" style="cursor:pointer" *ngIf="!element.active" (click)="activateDate(i)"></mat-icon>
                     </td>
                   </ng-container>
+
 
                   <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef>  </th>

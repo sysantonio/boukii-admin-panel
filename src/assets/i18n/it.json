@@ -115,8 +115,8 @@
   "extras": "Caratteristiche aggiuntive",
   "course_options": "Opzioni del corso",
   "rent": "Affitto",
-  "op_rem": "Op.Ri.",
-  "op_rem_abr": "Opzione di rimborso",
+  "op_rem_abr": "Op.Ri.",
+  "op_rem": "Opzione di rimborso",
   "total": "Quantità totale",
   "tva": "I.V.A.",
   "type": "Tipo",
@@ -426,6 +426,7 @@
   "snackbar.course.max_age": "Il campo dell'età massima è obbligatorio",
   "snackbar.course.summary": "Il campo Riepilogo è obbligatorio",
   "snackbar.course.desc": "Il campo descrizione è obbligatorio",
+  "snackbar.course.dates": "Il corso deve avere almeno una data attiva",
   "snackbar.course.date_from": "Il campo Data dal è obbligatorio",
   "snackbar.course.date_to": "Il campo dalla data fino al è obbligatorio",
   "snackbar.course.duration": "Il campo durata è obbligatorio",
@@ -584,6 +585,7 @@
   "refund_cash": "Rimborso in contanti o altro",
   "voucher_refund": "Rimborso con bonus",
   "deactivate": "Disattivare",
+  "activate": "Attivare",
   "monitor_comments": "Monitorare i commenti",
   "multimedia": "Multimedia",
   "no_data": "Non ci sono dati da mostrare",
@@ -620,5 +622,7 @@
   "user.noSportsAssigned.prompt": "All'utente selezionato non sono assegnati sport. Vuoi assegnargli degli sport ora?",
   "message": "Messaggio",
   "authorized_levels": "Livelli Autorizzati",
-  "translate_ia": "Traduci automaticamente"
+  "translate_ia": "Traduci automaticamente",
+  "search": "Cerca"
+
 }

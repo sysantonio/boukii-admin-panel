@@ -82,7 +82,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
   showBlock:boolean=false;
   idBlock:any;
   blockDetail:any;
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
   mockLevels = LEVELS;

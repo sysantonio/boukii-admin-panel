@@ -936,7 +936,7 @@
         <div class="title-client">{{'client' | translate}}</div>
         <div class="holder-client">
           <div class="col-left">
-            <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
+            <!--<img [src]="detailData.client_main?.image !== null ? detailData.client_main?.image : imageAvatar" width="100" height="100" style="border-radius: 100%">-->
             <app-level-user
               [allLevels]="getDegreesBySportId(item.course? item.course.sport_id : item.courseDates[0].course.sport_id)"
               [selectLevel]="getClientDegree(defaults?.client_main_id.id, item.course? item.course.sport_id : item.courseDates[0].course.sport_id)"

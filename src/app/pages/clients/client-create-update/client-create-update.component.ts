@@ -352,7 +352,7 @@ export class ClientCreateUpdateComponent implements OnInit {
     this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
-        debugger;
+
         sport.data.forEach((element, idx) => {
           this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
           .subscribe((data) => {

@@ -40,7 +40,7 @@ export class BookingsComponent {
     { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
     { label: 'course', property: 'booking_users', type: 'booking_users', visible: true},
-    { label: 'client', property: 'client_main_id', type: 'client', visible: true },
+    { label: 'client', property: 'client_main', type: 'client', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'options', property: 'options', type: 'text', visible: true },
@@ -67,8 +67,7 @@ export class BookingsComponent {
 
       }
     })
-    this.getMonitors();
-    this.getClients();
+
     this.getSports();
     this.getLanguages();
   }
@@ -180,11 +179,7 @@ export class BookingsComponent {
     }
   }
 
-  getClientDegree(id: any) {
-    if (!id) {
-      return 0;
-    }
-    const client = this.clients.find(c => c.id === id);
+  getClientDegree(client: any) {
     if (!client || !client.client_sports || !client.client_sports.length) {
       return 0;
     }
@@ -478,7 +473,7 @@ export class BookingsComponent {
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
     this.bookingUsersUnique = [];
-    debugger;
+
     this.bookingUsersUnique = data.filter(item => {
       if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
         (item.course.course_type != 1  && !uniqueMonitors.has(item.monitor_id))) {

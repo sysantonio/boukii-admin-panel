@@ -35,7 +35,9 @@
       [canDelete]="false"
       [canDeactivate]="false"
       (showDetailEvent)="showDetailEvent($event)"
-      [with]="['bookingUsers.course.sport', 'clientMain', 'user',
+      [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
+      'bookingUsers.client.clientSports.degree',
+       'clientMain.clientSports.degree', 'user',
        'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
       [filterColumn]="'school_id'"
       [filterField]="user.schools[0].id"
@@ -135,40 +137,40 @@
           <div class="title-client">{{'client' | translate}}</div>
           <div class="holder-client">
             <div class="col-left">
-              <!--<img [src]="getClient(detailData.client_main_id)?.image !== null ? getClient(detailData.client_main_id)?.image : imageAvatar" width="60" height="60" style="border-radius: 100%">-->
+              <!--<img [src]="detailData.client_main?.image !== null ? detailData.client_main?.image : imageAvatar" width="60" height="60" style="border-radius: 100%">-->
               <app-level-user
                 *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                 [allLevels]="detailData.degrees_sport"
                 [selectLevel]="getClientDegree(detailData?.client_main_id)"
                 [size]="60"
-                [userImage]="getClient(detailData.client_main_id)?.image !== null && getClient(detailData.client_main_id)?.image !== '' ? getClient(detailData.client_main_id)?.image : imageAvatar"
+                [userImage]="detailData.client_main?.image !== null && detailData.client_main?.image !== '' ? detailData.client_main?.image : imageAvatar"
               ></app-level-user>
             </div>
             <div class="col-right">
               <div class="client-name">
-                {{getClient(detailData?.client_main_id)?.first_name}}
-                {{getClient(detailData?.client_main_id)?.last_name}}
+                {{detailData?.client_main?.first_name}}
+                {{detailData?.client_main?.last_name}}
               </div>
               <div class="client-dates">
-                {{getLanguage(getClient(detailData?.client_main_id)?.language1_id)}}
+                {{getLanguage(detailData?.client_main?.language1_id)}}
                 ·
-                {{getCountry(getClient(detailData?.client_main_id)?.country) }}
+                {{getCountry(detailData?.client_main?.country) }}
                 ·
-                {{calculateAge(getClient(detailData?.client_main_id)?.birth_date)}}
+                {{calculateAge(detailData?.client_main?.birth_date)}}
                 &ensp;{{'years' | translate}}
               </div>
               <div>
                 <mat-icon svgIcon="logo:message-text"></mat-icon>
                 <a
-                  href="mailto:{{getClient(detailData?.client_main_id)?.email}}"
+                  href="mailto:{{detailData?.client_main?.email}}"
                   style="cursor:pointer"
-                  title="{{getClient(detailData?.client_main_id)?.email}}"
+                  title="{{detailData?.client_main?.email}}"
                 >
                   <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
                 <a
-                  href="tel:{{getClient(detailData?.client_main_id)?.phone}}"
-                  title="{{getClient(detailData?.client_main_id)?.phone}}"
+                  href="tel:{{detailData?.client_main?.phone}}"
+                  title="{{detailData?.client_main?.phone}}"
                 >
                   <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
@@ -282,36 +284,36 @@
                         <app-level-user
                           *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                           [allLevels]="detailData.degrees_sport"
-                          [selectLevel]="getClientDegree(bUsers.client_id)"
+                          [selectLevel]="getClientDegree(bUsers.client)"
                           [size]="60"
-                          [userImage]="getClient(bUsers.client_id)?.image !== null && getClient(bUsers.client_id)?.image !== '' ? getClient(bUsers.client_id)?.image : imageAvatar"
+                          [userImage]="bUsers?.client?.image !== null && bUsers?.client?.image !== '' ? bUsers?.client?.image : imageAvatar"
                         ></app-level-user>
                       </div>
                       <div class="c-r">
                         <div class="course-title">
-                          {{getClient(bUsers?.client_id)?.first_name}}
-                          {{getClient(bUsers?.client_id)?.last_name}}
+                          {{bUsers?.client?.first_name}}
+                          {{bUsers?.client?.last_name}}
                         </div>
                         <div class="course-label">
-                          {{getLanguage(getClient(bUsers?.client_id)?.language1_id)}}
+                          {{getLanguage(bUsers?.client?.language1_id)}}
                           ·
-                          {{ getCountry(getClient(bUsers?.client_id)?.country) }}
+                          {{ getCountry(bUsers?.client?.country) }}
                           ·
-                          {{calculateAge(getClient(bUsers?.client_id)?.birth_date)}}
+                          {{calculateAge(bUsers?.client?.birth_date)}}
                           {{'years' | translate }}
                         </div>
                         <div>
                           <mat-icon svgIcon="logo:message-text"></mat-icon>
                           <a
-                            href="mailto:{{getClient(bUsers?.client_id)?.email}}"
+                            href="mailto:{{bUsers?.client?.email}}"
                             style="cursor:pointer"
-                            title="{{getClient(bUsers?.client_id)?.email}}"
+                            title="{{bUsers?.client?.email}}"
                           >
                             <mat-icon svgIcon="logo:mail"></mat-icon>
                           </a>
                           <a
-                            href="tel:{{getClient(bUsers?.client_id)?.phone}}"
-                            title="{{getClient(bUsers?.client_id)?.phone}}"
+                            href="tel:{{bUsers?.client?.phone}}"
+                            title="{{bUsers?.client?.phone}}"
                           >
                             <mat-icon svgIcon="logo:phone"></mat-icon>
                           </a>
@@ -331,48 +333,48 @@
                   </div>
                   <div class="holder-participante">
                     <div class="col-left">
-                      <div class="c-l" *ngIf="getMonitor(bUsers.monitor_id)">
+                      <div class="c-l" *ngIf="bUsers?.monitor">
                         <app-level-user
                           *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                           [allLevels]="detailData.degrees_sport"
-                          [selectLevel]="getHighestAuthorizedDegree(getMonitor(bUsers?.monitor_id), bUsers?.course?.sport_id).degree_id"
+                          [selectLevel]="getHighestAuthorizedDegree(bUsers?.monitor, bUsers?.course?.sport_id).degree_id"
                           [size]="60"
-                          [userImage]="getMonitor(bUsers?.monitor_id)?.image !== null && getMonitor(bUsers?.monitor_id)?.image !== '' ? getMonitor(bUsers?.monitor_id)?.image : imageAvatar"
+                          [userImage]="bUsers?.monitor?.image !== null && bUsers?.monitor?.image !== '' ? bUsers?.monitor?.image : imageAvatar"
                         ></app-level-user>
                       </div>
                       <div class="c-r">
-                        <div *ngIf="getMonitor(bUsers.monitor_id)">
+                        <div *ngIf="bUsers?.monitor">
                           <div class="course-title">
-                            {{getMonitor(bUsers?.monitor_id)?.first_name}}
-                            {{getMonitor(bUsers?.monitor_id)?.last_name}}
+                            {{bUsers?.monitor?.first_name}}
+                            {{bUsers?.monitor?.last_name}}
                           </div>
                           <span class="dot"></span>
                           <div class="course-label">
-                            {{getLanguage(getMonitor(bUsers?.monitor_id)?.language1_id)}}
+                            {{getLanguage(bUsers?.monitor?.language1_id)}}
                             ·
-                            {{ getCountry(getMonitor(bUsers?.monitor_id)?.country) }}
+                            {{ getCountry(bUsers?.monitor?.country) }}
                             ·
-                            {{calculateAge(getMonitor(bUsers?.monitor_id)?.birth_date)}}
+                            {{calculateAge(bUsers?.monitor?.birth_date)}}
                             {{'years' | translate}}
                           </div>
                           <div>
                             <mat-icon svgIcon="logo:message-text"></mat-icon>
                             <a
-                              href="mailto:{{getMonitor(bUsers?.monitor_id)?.email}}"
+                              href="mailto:{{bUsers?.monitor?.email}}"
                               style="cursor:pointer"
-                              title="{{getMonitor(bUsers?.monitor_id)?.email}}"
+                              title="{{bUsers?.monitor?.email}}"
                             >
                               <mat-icon svgIcon="logo:mail"></mat-icon>
                             </a>
                             <a
-                              href="tel:{{getMonitor(bUsers?.monitor_id)?.phone}}"
-                              title="{{getMonitor(bUsers?.monitor_id)?.phone}}"
+                              href="tel:{{bUsers?.monitor?.phone}}"
+                              title="{{bUsers?.monitor?.phone}}"
                             >
                               <mat-icon svgIcon="logo:phone"></mat-icon>
                             </a>
                           </div>
                       <!--    <ng-container
-                            *ngFor="let item of getMonitor(bUsers?.monitor_id).monitor_sports_degrees_details"
+                            *ngFor="let item of bUsers?.monitor.monitor_sports_degrees_details"
                           >
                             <div
                               style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;"
@@ -431,7 +433,7 @@
                             {{getDegree(bUsers?.degree_id)?.level}}
                           </div>-->
                         </div>
-                        <div *ngIf="!getMonitor(bUsers.monitor_id)">
+                        <div *ngIf="!bUsers?.monitor">
                           <div class="course-label">
                             {{'no_monitor' | translate}}
                           </div>

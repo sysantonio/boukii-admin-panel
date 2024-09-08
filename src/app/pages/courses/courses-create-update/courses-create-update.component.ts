@@ -654,7 +654,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
             }
             if (this.defaults.course_type === 1) {
               this.defaults.course_dates.forEach(element => {
-                this.dataSource.data.push({date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start + ' - ' + element.hour_end,
+                this.dataSource.data.push({date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start,
                   duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id});
               });
 
@@ -1016,7 +1016,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays},
+      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, dates: this.dataSource.data},
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -1127,8 +1127,9 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
               this.defaults.course_dates[index].date = moment(result.date).format('YYYY-MM-DD');
               this.defaults.course_dates[index].hour_start = result.hour;
               this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
+            }
 
-            } else if(this.dataSource.data[index]) {
+            if(this.dataSource.data[index]) {
               this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
               this.dataSource.data[index].hour = result.hour;
               this.dataSource.data[index].duration = result.duration;
@@ -1248,11 +1249,25 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
 
     if (this.mode === 'update') {
-      this.dataSource.data[index].active = false;
-      this.defaults.course_dates[index].active = false;
-      this.dateTable.renderRows();
+      if (this.dataSource.data.length <= 1 || this.dataSource.data.filter(i => i.active).length <= 1) {
+        this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', {duration: 3000});
+      } else {
+        this.dataSource.data[index].active = false;
+        this.defaults.course_dates[index].active = false;
+        this.dateTable.renderRows();
+      }
     } else {
       this.dataSource.data.splice(index, 1);
+      this.dateTable.renderRows();
+    }
+
+    // Aquí también puedes deseleccionar el chip correspondiente
+  }
+
+  activateDate(index: any) {
+    if (this.mode === 'update') {
+      this.dataSource.data[index].active = true;
+      this.defaults.course_dates[index].active = true;
       this.dateTable.renderRows();
     }
 
@@ -2706,6 +2721,11 @@ this.activityDatesTable.renderRows();
 
     if (this.defaults.max_participants === null) {
       this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
+      return;
+    }
+
+    if (this.dataSource.data.length < 1) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', {duration: 3000});
       return;
     }
 

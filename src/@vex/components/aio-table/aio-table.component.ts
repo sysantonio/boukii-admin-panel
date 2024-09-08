@@ -161,9 +161,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   finishedBooking = false;
   allBookings = false;
 
-  activeMonitor = false;
+  activeMonitor = true;
   inactiveMonitor = false;
-  allMonitors = true;
+  allMonitors = false;
 
   constructor(private dialog: MatDialog, public router: Router, private crudService: ApiCrudService,
               private excelExportService: ExcelExportService, private routeActive: ActivatedRoute,
@@ -192,11 +192,14 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     });
-    this.getMonitors();
-    this.getClients();
-    this.getSports();
     this.getLanguages();
     this.getDegrees();
+    this.getSports();
+/*    this.getMonitors();
+    this.getClients();
+
+
+    */
   }
 
   // Detecta cambios en las propiedades de entrada
@@ -562,7 +565,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       if (data) {
 
         if (this.entity.includes('monitor')) {
-          this.crudService.update(this.deleteEntity, {active: false}, item.id)
+          this.crudService.update(this.deleteEntity, {active: !item.active}, item.id)
           .subscribe(() => {
             this.getData(1, 10);
           })
@@ -836,15 +839,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       const client = this.clients.find((m) => m.id === id);
 
       return client;
-    }
-  }
-
-  getMonitor(id: number) {
-    if (id && id !== null) {
-
-      const monitor = this.monitors.find((m) => m.id === id);
-
-      return monitor;
     }
   }
 

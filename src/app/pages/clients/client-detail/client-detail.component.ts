@@ -162,7 +162,7 @@ export class ClientDetailComponent {
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
     { label: 'course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'client', property: 'client_id', type: 'client', visible: true },
+    { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
@@ -177,8 +177,8 @@ export class ClientDetailComponent {
 
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-     private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
-     private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
+              private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
+              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -216,10 +216,10 @@ export class ClientDetailComponent {
         console.error('Error fetching stations:', error);
         return of([]); // Devuelve un array vacío en caso de error
       })),
-      clients: this.getClients().pipe(retry(3), catchError(error => {
-        console.error('Error fetching clients:', error);
-        return of([]); // Devuelve un array vacío en caso de error
-      })),
+      /*      clients: this.getClients().pipe(retry(3), catchError(error => {
+              console.error('Error fetching clients:', error);
+              return of([]); // Devuelve un array vacío en caso de error
+            })),*/
     };
 
     return forkJoin(requestsInitial).pipe(tap((results) => {
@@ -279,93 +279,95 @@ export class ClientDetailComponent {
       'evaluations.evaluationFulfilledGoals.degreeSchoolSportGoal', 'evaluations.degree', 'observations'])
       .pipe(
         tap((data) => {
+
           this.defaults = data.data;
-        this.evaluations = data.data.evaluations;
-        this.evaluationFullfiled = [];
-        this.evaluations.forEach(ev => {
-          ev.evaluation_fulfilled_goals.forEach(element => {;
-            this.evaluationFullfiled.push(element);
+          this.setInitLanguages();
+          this.evaluations = data.data.evaluations;
+          this.evaluationFullfiled = [];
+          this.evaluations.forEach(ev => {
+            ev.evaluation_fulfilled_goals.forEach(element => {;
+              this.evaluationFullfiled.push(element);
+            });
           });
-        });
-        if (data.data.observations.length > 0) {
-          this.defaultsObservations = data.data[0];
-        } else {
-          this.defaultsObservations = {
-            id: null,
-            general: '',
-            notes: '',
-            historical: '',
-            client_id: null,
-            school_id: null
-          };
-        }
-        this.currentImage = data.data.image;
-        if (!onChangeUser) {
-          this.mainClient = data.data;
-        }
-
-        const requestsClient = {
-          clientSchool: this.getClientSchool().pipe(retry(3), catchError(error => {
-            console.error('Error fetching client school:', error);
-            return of([]); // Devuelve un array vacío en caso de error
-          })),
-          clientSport: this.getClientSport().pipe(retry(3), catchError(error => {
-            console.error('Error fetching client sport:', error);
-            return of([]); // Devuelve un array vacío en caso de error
-          }))
-        };
-
-        forkJoin(requestsClient).subscribe((results) => {
-          console.log('All data loaded', results);
+          if (data.data.observations.length > 0) {
+            this.defaultsObservations = data.data[0];
+          } else {
+            this.defaultsObservations = {
+              id: null,
+              general: '',
+              notes: '',
+              historical: '',
+              client_id: null,
+              school_id: null
+            };
+          }
+          this.currentImage = data.data.image;
           if (!onChangeUser) {
-            this.getClientUtilisateurs();
+            this.mainClient = data.data;
           }
 
-          this.defaultsUser = data.data.user;
+          const requestsClient = {
+            clientSchool: this.getClientSchool().pipe(retry(3), catchError(error => {
+              console.error('Error fetching client school:', error);
+              return of([]); // Devuelve un array vacío en caso de error
+            })),
+            clientSport: this.getClientSport().pipe(retry(3), catchError(error => {
+              console.error('Error fetching client sport:', error);
+              return of([]); // Devuelve un array vacío en caso de error
+            }))
+          };
 
-          const langs = [];
-          this.languages.forEach(element => {
-            if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
-              element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
-              langs.push(element);
+          forkJoin(requestsClient).subscribe((results) => {
+            console.log('All data loaded', results);
+            if (!onChangeUser) {
+              this.getClientUtilisateurs();
             }
-          });
 
-          this.languagesControl.setValue(langs);
+            this.defaultsUser = data.data.user;
 
-          if(!onChangeUser) {
-
-            this.filteredCountries = this.myControlCountries.valueChanges.pipe(
-              startWith(''),
-              map(value => typeof value === 'string' ? value : value.name),
-              map(name => name ? this._filterCountries(name) : this.countries.slice())
-            );
-
-            this.myControlCountries.valueChanges.subscribe(country => {
-              this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
-              this.filteredProvinces = this._filterProvinces(country?.id);
+            const langs = [];
+            this.languages.forEach(element => {
+              if (element.id === this.defaults?.language1_id || element.id === this.defaults?.language2_id || element.id === this.defaults?.language3_id ||
+                element.id === this.defaults?.language4_id || element.id === this.defaults?.language5_id || element.id === this.defaults?.language6_id) {
+                langs.push(element);
+              }
             });
 
-            this.filteredLevel = this.levelForm.valueChanges.pipe(
-              startWith(''),
-              map((value: any) => typeof value === 'string' ? value : value?.annotation),
-              map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
-            );
+            this.languagesControl.setValue(langs);
 
-            this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-              startWith(''),
-              map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-            );
+            if(!onChangeUser) {
 
-          }
+              this.filteredCountries = this.myControlCountries.valueChanges.pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filterCountries(name) : this.countries.slice())
+              );
 
-          this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
-          this.myControlCountries.setValue(this.countries.find((c) => c.id === +this.defaults.country));
-          this.myControlProvinces.setValue(this.provinces.find((c) => c.id === +this.defaults.province));
+              this.myControlCountries.valueChanges.subscribe(country => {
+                this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
+                this.filteredProvinces = this._filterProvinces(country?.id);
+              });
 
-          this.loading = false;
-        });
-    }))
+              this.filteredLevel = this.levelForm.valueChanges.pipe(
+                startWith(''),
+                map((value: any) => typeof value === 'string' ? value : value?.annotation),
+                map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
+              );
+
+              this.filteredLanguages = this.languagesControl.valueChanges.pipe(
+                startWith(''),
+                map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
+              );
+
+            }
+
+            this.myControlStations.setValue(this.stations.find((s) => s.id === this.defaults.active_station)?.name);
+            this.myControlCountries.setValue(this.countries.find((c) => c.id === +this.defaults.country));
+            this.myControlProvinces.setValue(this.provinces.find((c) => c.id === +this.defaults.province));
+
+            this.loading = false;
+          });
+        }))
   }
 
   getSchoolSportDegrees() {
@@ -470,7 +472,7 @@ export class ClientDetailComponent {
     return this.crudService.list('/languages', 1, 1000).pipe(
       tap((data) => {
         this.languages = data.data.reverse();
-        this.setInitLanguages();
+
       })
     );
   }
@@ -618,15 +620,15 @@ export class ClientDetailComponent {
       .subscribe((data) => {
         this.clientUsers = data.data;
         this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id','&main_id='+this.id)
-        .subscribe((data) => {
-          data.data.forEach(element => {
-            this.clientUsers.forEach(cl => {
-              if (element.client_id === cl.id) {
-                cl.utilizer_id = element.id;
-              }
+          .subscribe((data) => {
+            data.data.forEach(element => {
+              this.clientUsers.forEach(cl => {
+                if (element.client_id === cl.id) {
+                  cl.utilizer_id = element.id;
+                }
+              });
             });
-          });
-        })
+          })
 
       })
   }
@@ -679,8 +681,8 @@ export class ClientDetailComponent {
     this.languages.forEach(element => {
       if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
         || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
-          this.selectedLanguages.push(element);
-        }
+        this.selectedLanguages.push(element);
+      }
     });
   }
 
@@ -745,8 +747,8 @@ export class ClientDetailComponent {
       delete this.defaultsUser.image;
     } else {
 
-    this.defaultsUser.image = this.imagePreviewUrl;
-    this.defaults.image = this.imagePreviewUrl;
+      this.defaultsUser.image = this.imagePreviewUrl;
+      this.defaults.image = this.imagePreviewUrl;
     }
 
     this.defaultsUser.email = this.defaults.email;
@@ -763,38 +765,38 @@ export class ClientDetailComponent {
             this.defaultsObservations.school_id = this.user.schools[0].id;
             if (this.defaultsObservations.id) {
               this.crudService.update('/client-observations', this.defaultsObservations, this.defaultsObservations.id)
-              .subscribe((obs) => {
-                console.log('client observation created');
-              })
+                .subscribe((obs) => {
+                  console.log('client observation created');
+                })
 
             } else {
               this.crudService.create('/client-observations', this.defaultsObservations)
-              .subscribe((obs) => {
-                console.log('client observation created');
-              })
+                .subscribe((obs) => {
+                  console.log('client observation created');
+                })
             }
 
-              this.sportsData.data.forEach(element => {
+            this.sportsData.data.forEach(element => {
 
-                this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
-                  .subscribe(() => {
-                    console.log('client sport created');
-                  })
-              });
+              this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+                .subscribe(() => {
+                  console.log('client sport created');
+                })
+            });
 
-              this.sportsCurrentData.data.forEach(element => {
+            this.sportsCurrentData.data.forEach(element => {
 
-                this.crudService.update('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id}, element.id)
-                  .subscribe(() => {
-                    console.log('client sport updated');
-                  })
-              });
+              this.crudService.update('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id}, element.id)
+                .subscribe(() => {
+                  console.log('client sport updated');
+                })
+            });
 
-              setTimeout(() => {
-                this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
-                window.location.reload();
+            setTimeout(() => {
+              this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
+              window.location.reload();
 
-              }, 2000);
+            }, 2000);
           })
       })
   }
@@ -883,7 +885,7 @@ export class ClientDetailComponent {
     const diff = today.diff(dateBirth, 'years');
 
     return diff >= 18;
-}
+  }
 
   addUtilisateur() {
 
@@ -899,9 +901,9 @@ export class ClientDetailComponent {
 
           if(data.action === 'add') {
             this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: parseInt(this.id)})
-            .subscribe((res) => {
-              this.getClientUtilisateurs();
-            })
+              .subscribe((res) => {
+                this.getClientUtilisateurs();
+              })
           } else {
             const user = {
               username: data.data.name,
@@ -938,24 +940,24 @@ export class ClientDetailComponent {
             this.setLanguagesUtilizateur(data.data.languages, client);
 
             this.crudService.create('/users', user)
-            .subscribe((user) => {
-              client.user_id = user.data.id;
+              .subscribe((user) => {
+                client.user_id = user.data.id;
 
-              this.crudService.create('/clients', client)
-                .subscribe((clientCreated) => {
-                  this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
+                this.crudService.create('/clients', client)
+                  .subscribe((clientCreated) => {
+                    this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
 
-                  this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
-                    .subscribe((clientSchool) => {
+                    this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
+                      .subscribe((clientSchool) => {
 
-                      setTimeout(() => {
-                        this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
-                        .subscribe((res) => {
-                          this.getClientUtilisateurs();
-                        })}, 1000);
-                    });
-                })
-            })
+                        setTimeout(() => {
+                          this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
+                            .subscribe((res) => {
+                              this.getClientUtilisateurs();
+                            })}, 1000);
+                      });
+                  })
+              })
           }
         }
       });
@@ -1027,7 +1029,7 @@ export class ClientDetailComponent {
         });
         ret = ret > maxPoints ? maxPoints : ret
         return (ret / maxPoints) * 100;
-    }
+      }
       return ret;
 
     } else {
@@ -1099,7 +1101,7 @@ export class ClientDetailComponent {
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
@@ -1118,18 +1120,18 @@ export class ClientDetailComponent {
         .subscribe((course) => {
           this.detailData.course = course.data;
           this.crudService.get('/sports/'+this.detailData.course.sport_id)
-          .subscribe((sport) => {
-            this.detailData.sport = sport.data;
-          });
+            .subscribe((sport) => {
+              this.detailData.sport = sport.data;
+            });
 
           if (this.detailData.degree_id !== null) {
             this.crudService.get('/degrees/'+this.detailData.degree_id)
-            .subscribe((degree) => {
-              this.detailData.degree = degree.data;
-            })
+              .subscribe((degree) => {
+                this.detailData.degree = degree.data;
+              })
           }
 
-      })
+        })
 
       this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
         .subscribe((booking) => {
@@ -1139,7 +1141,7 @@ export class ClientDetailComponent {
             if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
-                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
+              this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
                 .subscribe((cd) => {
 
                   if (cd.data.length > 0) {
