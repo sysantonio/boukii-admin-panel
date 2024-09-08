@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Observable, map, startWith, forkJoin, tap, from, mergeMap, toArray, retry, catchError, of} from 'rxjs';
+import { Observable, map, startWith, forkJoin, tap, from, mergeMap, toArray, retry, catchError, of } from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
@@ -22,8 +22,8 @@ import { PasswordService } from 'src/service/password.service';
 import { MatStepper } from '@angular/material/stepper';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { TranslateService } from '@ngx-translate/core';
-import {DateAdapter} from '@angular/material/core';
-import {switchMap} from 'rxjs/operators';
+import { DateAdapter } from '@angular/material/core';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -72,7 +72,7 @@ export class ClientDetailComponent {
   selectedSports: any[] = [];
   sportsData = new _MatTableDataSource([]);
   sportsCurrentData = new _MatTableDataSource([]);
-  stations:any = [];
+  stations: any = [];
 
   languagesControl = new FormControl([]);
   languages = [];
@@ -112,12 +112,12 @@ export class ClientDetailComponent {
     province: null,
     country: null,
     image: null,
-    language1_id:null,
-    language2_id:null,
-    language3_id:null,
-    language4_id:null,
-    language5_id:null,
-    language6_id:null,
+    language1_id: null,
+    language2_id: null,
+    language3_id: null,
+    language4_id: null,
+    language5_id: null,
+    language6_id: null,
     user_id: null,
     station_id: null,
     active_station: null
@@ -161,7 +161,7 @@ export class ClientDetailComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
-    { label: 'course', property: 'course', type: 'course_type_data', visible: true},
+    { label: 'course', property: 'course', type: 'course_type_data', visible: true },
     { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
@@ -177,8 +177,8 @@ export class ClientDetailComponent {
 
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
-              private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
-              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
+    private activatedRoute: ActivatedRoute, private snackbar: MatSnackBar, private dialog: MatDialog, private passwordGen: PasswordService,
+    private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.today = new Date();
     this.minDate = new Date(this.today);
     this.minDate.setFullYear(this.today.getFullYear() - 18);
@@ -201,6 +201,7 @@ export class ClientDetailComponent {
     this.getInitialData().pipe(
       switchMap(() => this.getData())
     ).subscribe(() => {
+      this.crudService.get('/evaluation-fulfilled-goals').subscribe((data) => this.evaluationFullfiled = data.data)
       // Aquí puedes realizar cualquier lógica adicional después de obtener los datos iniciales y los datos principales.
     });
   }
@@ -275,17 +276,17 @@ export class ClientDetailComponent {
     const getId = id === null ? this.mainId : id;
 
 
-    return this.crudService.get('/clients/'+ getId, ['user', 'clientSports.degree', 'clientSports.sport',
+    return this.crudService.get('/clients/' + getId, ['user', 'clientSports.degree', 'clientSports.sport',
       'evaluations.evaluationFulfilledGoals.degreeSchoolSportGoal', 'evaluations.degree', 'observations'])
       .pipe(
         tap((data) => {
 
           this.defaults = data.data;
-          this.setInitLanguages();
           this.evaluations = data.data.evaluations;
           this.evaluationFullfiled = [];
           this.evaluations.forEach(ev => {
-            ev.evaluation_fulfilled_goals.forEach(element => {;
+            ev.evaluation_fulfilled_goals.forEach(element => {
+              ;
               this.evaluationFullfiled.push(element);
             });
           });
@@ -335,7 +336,7 @@ export class ClientDetailComponent {
 
             this.languagesControl.setValue(langs);
 
-            if(!onChangeUser) {
+            if (!onChangeUser) {
 
               this.filteredCountries = this.myControlCountries.valueChanges.pipe(
                 startWith(''),
@@ -385,7 +386,6 @@ export class ClientDetailComponent {
                 this.goals.push(goal);
               });
             });
-
             this.clientSport.forEach(element => {
               if (element.sport_id === sport.sport_id) {
                 element.name = sport.name;
@@ -442,7 +442,6 @@ export class ClientDetailComponent {
 
           this.clientSport.forEach(element => {
             element.level = element.degree;
-
           });
           return this.getSchoolSportDegrees();
         })
@@ -606,7 +605,7 @@ export class ClientDetailComponent {
           this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
         }
       } else {
-        this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', { duration: 3000 });
       }
     }
   }
@@ -616,10 +615,10 @@ export class ClientDetailComponent {
   }
 
   getClientUtilisateurs() {
-    this.crudService.list('/admin/clients/' + this.id +'/utilizers', 1, 10000, 'desc', 'id','&client_id='+this.id)
+    this.crudService.list('/admin/clients/' + this.id + '/utilizers', 1, 10000, 'desc', 'id', '&client_id=' + this.id)
       .subscribe((data) => {
         this.clientUsers = data.data;
-        this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id','&main_id='+this.id)
+        this.crudService.list('/clients-utilizers', 1, 10000, 'desc', 'id', '&main_id=' + this.id)
           .subscribe((data) => {
             data.data.forEach(element => {
               this.clientUsers.forEach(cl => {
@@ -679,7 +678,7 @@ export class ClientDetailComponent {
   setInitLanguages() {
     this.selectedLanguages = [];
     this.languages.forEach(element => {
-      if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
+      if (element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
         || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
         this.selectedLanguages.push(element);
       }
@@ -691,7 +690,7 @@ export class ClientDetailComponent {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -712,7 +711,7 @@ export class ClientDetailComponent {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
 
@@ -722,16 +721,16 @@ export class ClientDetailComponent {
         this.crudService.delete('/clients-utilizers', id)
           .subscribe(() => {
             this.getClientUtilisateurs();
-            this.snackbar.open(this.translateService.instant('snackbar.client.removed_user'), 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.client.removed_user'), 'OK', { duration: 3000 });
           })
       }
     });
   }
 
   updateLevel(clientSport, level) {
-    this.crudService.update('/client-sports', {client_id: clientSport.client_id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id}, clientSport.id)
+    this.crudService.update('/client-sports', { client_id: clientSport.client_id, sport_id: clientSport.sport_id, degree_id: level.id, school_id: this.user.schools[0].id }, clientSport.id)
       .subscribe((data) => {
-        this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', { duration: 3000 });
       })
   }
 
@@ -759,7 +758,7 @@ export class ClientDetailComponent {
 
         this.crudService.update('/clients', this.defaults, this.id)
           .subscribe((client) => {
-
+            this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', { duration: 3000 });
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -778,7 +777,7 @@ export class ClientDetailComponent {
 
             this.sportsData.data.forEach(element => {
 
-              this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+              this.crudService.create('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
                 .subscribe(() => {
                   console.log('client sport created');
                 })
@@ -786,15 +785,14 @@ export class ClientDetailComponent {
 
             this.sportsCurrentData.data.forEach(element => {
 
-              this.crudService.update('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id}, element.id)
+              this.crudService.update('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id }, element.id)
                 .subscribe(() => {
                   console.log('client sport updated');
                 })
             });
 
             setTimeout(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', {duration: 3000});
-              window.location.reload();
+              this.router.navigate(['/clients']);
 
             }, 2000);
           })
@@ -802,7 +800,7 @@ export class ClientDetailComponent {
   }
 
   onTabChange(event: any) {
-    if(event.index === 1) {
+    if (event.index === 1) {
       this.selectedSport = this.clientSport[0];
       this.selectSportEvo(this.selectedSport);
       this.selectedTabIndex = 0;
@@ -845,9 +843,9 @@ export class ClientDetailComponent {
     this.sportIdx = this.sportIdx + nextLevel;
 
     if (this.sportIdx < 0) {
-      this.sportIdx = 0;
-    } else if (this.sportIdx >= this.allLevels.length) {
       this.sportIdx = this.allLevels.length - 1;
+    } else if (this.sportIdx >= this.allLevels.length) {
+      this.sportIdx = 0;
     }
     this.allLevels.sort((a: any, b: any) => a.degree_order - b.degree_order);
     this.selectedSport.level = this.allLevels[this.sportIdx];
@@ -860,11 +858,11 @@ export class ClientDetailComponent {
     this.coloring = false;
   }
 
-  lightenColor(hexColor:any, percent:any) {
+  lightenColor(hexColor: any, percent: any) {
 
-    let r:any = parseInt(hexColor.substring(1, 3), 16);
-    let g:any = parseInt(hexColor.substring(3, 5), 16);
-    let b:any = parseInt(hexColor.substring(5, 7), 16);
+    let r: any = parseInt(hexColor.substring(1, 3), 16);
+    let g: any = parseInt(hexColor.substring(3, 5), 16);
+    let b: any = parseInt(hexColor.substring(5, 7), 16);
 
     // Increase the lightness
     r = Math.round(r + (255 - r) * percent / 100);
@@ -893,14 +891,14 @@ export class ClientDetailComponent {
       const dialogRef = this.dialog.open(AddClientUserModalComponent, {
         width: '600px',  // Asegurarse de que no haya un ancho máximo
         panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-        data: {id: this.user.schools[0].id}
+        data: { id: this.user.schools[0].id }
       });
 
       dialogRef.afterClosed().subscribe((data: any) => {
         if (data) {
 
-          if(data.action === 'add') {
-            this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: parseInt(this.id)})
+          if (data.action === 'add') {
+            this.crudService.create('/clients-utilizers', { client_id: data.ret, main_id: parseInt(this.id) })
               .subscribe((res) => {
                 this.getClientUtilisateurs();
               })
@@ -927,12 +925,12 @@ export class ClientDetailComponent {
               province: this.defaults.province,
               country: this.defaults.country,
               image: null,
-              language1_id:null,
-              language2_id:null,
-              language3_id:null,
-              language4_id:null,
-              language5_id:null,
-              language6_id:null,
+              language1_id: null,
+              language2_id: null,
+              language3_id: null,
+              language4_id: null,
+              language5_id: null,
+              language6_id: null,
               user_id: null,
               station_id: this.defaults.station_id
             }
@@ -945,16 +943,17 @@ export class ClientDetailComponent {
 
                 this.crudService.create('/clients', client)
                   .subscribe((clientCreated) => {
-                    this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
+                    this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', { duration: 3000 });
 
-                    this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
+                    this.crudService.create('/clients-schools', { client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
                       .subscribe((clientSchool) => {
 
                         setTimeout(() => {
-                          this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.id})
+                          this.crudService.create('/clients-utilizers', { client_id: clientCreated.data.id, main_id: this.id })
                             .subscribe((res) => {
                               this.getClientUtilisateurs();
-                            })}, 1000);
+                            })
+                        }, 1000);
                       });
                   })
               })
@@ -962,7 +961,7 @@ export class ClientDetailComponent {
         }
       });
     } else {
-      this.snackbar.open(this.translateService.instant('snackbar.client.no_age'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.client.no_age'), 'OK', { duration: 3000 });
     }
 
   }
@@ -990,8 +989,8 @@ export class ClientDetailComponent {
   }
 
   goToStep3(stepper: MatStepper) {
-    if(this.selectedLanguages.length === 0) {
-      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', {duration: 3000});
+    if (this.selectedLanguages.length === 0) {
+      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', { duration: 3000 });
       return;
     }
 
@@ -1001,7 +1000,7 @@ export class ClientDetailComponent {
   getGoals() {
     return from(this.clientSport).pipe(
       mergeMap(cs => from(cs.degrees || []).pipe(
-        mergeMap((dg:any) => this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id=' + dg.id)),
+        mergeMap((dg: any) => this.crudService.list('/degrees-school-sport-goals', 1, 10000, 'desc', 'id', '&degree_id=' + dg.id)),
         map(response => response.data)
       )),
       toArray(),
@@ -1015,27 +1014,26 @@ export class ClientDetailComponent {
 
   calculateGoalsScore() {
     let ret = 0;
-
-    if(this.selectedSport?.level) {
+    if (this.selectedSport?.level) {
       const goals = this.goals.filter((g) => g.degree_id == this.selectedSport.level.id);
-
-      if (goals.length > 0) {
-        const maxPoints = goals.length * 10;
+      const maxPoints = goals.length * 10;
+      for (const goal of goals) {
         this.evaluationFullfiled.forEach(element => {
-          if (element.score) {
-
-            ret = ret + element.score;
+          if (element.degrees_school_sport_goals_id === goal.id) {
+            ret += element.score;
           }
         });
         ret = ret > maxPoints ? maxPoints : ret
         return (ret / maxPoints) * 100;
       }
-      return ret;
-
-    } else {
-      return ret;
     }
+    return ret;
+  }
 
+  getDegreeScore(goal: any) {
+    const d = this.evaluationFullfiled.find(element => element.degrees_school_sport_goals_id === goal)
+    if (d) return d.score
+    return 0
   }
 
   showInfoEvent(event: boolean) {
@@ -1094,7 +1092,7 @@ export class ClientDetailComponent {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -1116,16 +1114,16 @@ export class ClientDetailComponent {
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.detailData = event.item;
 
-      this.crudService.get('/admin/courses/'+this.detailData.course_id)
+      this.crudService.get('/admin/courses/' + this.detailData.course_id)
         .subscribe((course) => {
           this.detailData.course = course.data;
-          this.crudService.get('/sports/'+this.detailData.course.sport_id)
+          this.crudService.get('/sports/' + this.detailData.course.sport_id)
             .subscribe((sport) => {
               this.detailData.sport = sport.data;
             });
 
           if (this.detailData.degree_id !== null) {
-            this.crudService.get('/degrees/'+this.detailData.degree_id)
+            this.crudService.get('/degrees/' + this.detailData.degree_id)
               .subscribe((degree) => {
                 this.detailData.degree = degree.data;
               })
@@ -1133,7 +1131,7 @@ export class ClientDetailComponent {
 
         })
 
-      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id=' + this.detailData.booking.id)
         .subscribe((booking) => {
           this.detailData.users = [];
 
@@ -1141,11 +1139,11 @@ export class ClientDetailComponent {
             if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
-              this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
+              this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id=' + element.client_id + "&school_id=" + this.user.schools[0].id)
                 .subscribe((cd) => {
 
                   if (cd.data.length > 0) {
-                    element.sports= [];
+                    element.sports = [];
 
                     cd.data.forEach(c => {
                       element.sports.push(c);
@@ -1200,7 +1198,7 @@ export class ClientDetailComponent {
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
         if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-          ret = idx +1;
+          ret = idx + 1;
         }
       });
     }
@@ -1229,7 +1227,7 @@ export class ClientDetailComponent {
       this.detailData.course.course_dates.forEach((element, idx) => {
         const group = element.course_groups.find((g) => g.id === this.detailData.course_group_id);
 
-        if (group){
+        if (group) {
           group.course_subgroups.forEach((s, sindex) => {
             if (s.id === this.detailData.course_subgroup_id) {
               ret = sindex + 1;
@@ -1241,12 +1239,12 @@ export class ClientDetailComponent {
     return ret;
   }
 
-  getDateFormatLong(date:string) {
+  getDateFormatLong(date: string) {
     return moment(date).format('dddd, D MMMM YYYY');
   }
 
-  getHoursMinutes(hour_start:string, hour_end:string) {
-    const parseTime = (time:string) => {
+  getHoursMinutes(hour_start: string, hour_end: string) {
+    const parseTime = (time: string) => {
       const [hours, minutes] = time.split(':').map(Number);
       return { hours, minutes };
     };
@@ -1265,21 +1263,21 @@ export class ClientDetailComponent {
     return `${durationHours}h${durationMinutes}m`;
   }
 
-  getHourRangeFormat(hour_start:string,hour_end:string) {
-    return hour_start.substring(0, 5)+' - '+hour_end.substring(0, 5);
+  getHourRangeFormat(hour_start: string, hour_end: string) {
+    return hour_start.substring(0, 5) + ' - ' + hour_end.substring(0, 5);
   }
 
-  getClientDegree(sport_id:any,sports:any) {
+  getClientDegree(sport_id: any, sports: any) {
     const sportObject = sports.find(sport => sport.sport_id === sport_id);
     if (sportObject) {
       return sportObject.degree_id;
     }
-    else{
+    else {
       return 0;
     }
   }
 
-  getBirthYears(date:string) {
+  getBirthYears(date: string) {
     const birthDate = moment(date);
     return moment().diff(birthDate, 'years');
   }
@@ -1295,12 +1293,12 @@ export class ClientDetailComponent {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -1327,8 +1325,7 @@ export class ClientDetailComponent {
       });
     }
 
-
-    return ret;
+    return ret || "assets/img/medalla.jpg";
   }
 
 
@@ -1336,7 +1333,7 @@ export class ClientDetailComponent {
   getEvaluationsData(): any {
     let ret: any = [];
 
-    if(this.selectedSport?.level) {
+    if (this.selectedSport?.level) {
       this.evaluations.forEach(element => {
         if (element.degree_id === this.selectedSport.level.id) {
           ret.push(element);
