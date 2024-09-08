@@ -3,7 +3,7 @@
         <ng-container *ngFor="let item of Modal; index as i">
             <span
                 [ngClass]="Flux===item.Modal?'Selected':Flux>item.Modal?'Past':''">
-                {{item.Name}}
+                {{item.Name | translate }}
             </span>
             <span *ngIf="i<Modal.length-1" class="Dir">
                 >

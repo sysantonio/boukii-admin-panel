@@ -6,16 +6,41 @@
     ]" class="flex"></vex-breadcrumbs>
 </vex-secondary-toolbar>
 
-<mat-spinner *ngIf="loading" style="margin: 5% auto"></mat-spinner>
-
 <vex-flux-toolbad [Modal]="ModalProgress" [Flux]="ModalFlux"></vex-flux-toolbad>
 
-<div [@stagger]="true" style="max-width: none"
-  *ngIf="!loading && ((defaults.course_type === null || defaults.course_type === 2 && mode === 'create') || (defaults.course_type === 2 && mode === 'update'))">
-  <div class="flex flex-col sm:flex-row gap-4"
-    style="width: 100%;float:left; margin: 0 2% 0 0">
-    <div @fadeInUp class="card flex-auto" style="width: 100%;">
-
+<div [@stagger]="true" class="p-gutter container" style="max-width: none;">
+  <mat-spinner *ngIf="loading" style="margin:0 auto"></mat-spinner>
+  <div
+    class="flex flex-col sm:flex-row gap-4 pb-4"
+    style="width: 65%;float:left;"
+    *ngIf="!loading">
+    <div @fadeInUp class="card flex-auto" style="width: 65%">
+      <div class="flex flex-col" style="padding: 4px;">
+        <mat-radio-group class="flex" style="flex-wrap: wrap;">
+          <mat-radio-button
+            class="sport_checkbox"
+            *ngFor="let item of sportData"
+            [value]="item.id">
+            <div style="display: flex;align-items: center;">
+              <img [src]="item.icon_selected"
+                class="sport_icon selected">
+              <!--<img [src]="item.icon_unselected"
+              class="sport_icon noselected">-->
+              {{item.name}}
+            </div>
+          </mat-radio-button>
+        </mat-radio-group>
+        <div class="flex-auto" style="align-self: self-end;margin: 16px;">
+          <button
+            style="margin-top: 0px !important;height: 38px; width: 128px;"
+            color="primary"
+            mat-raised-button
+            type="button"
+            class="client-button">
+            {{'Confirmar' | translate }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

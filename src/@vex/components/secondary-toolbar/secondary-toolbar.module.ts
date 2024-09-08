@@ -10,7 +10,6 @@ import { BreadcrumbsModule } from '../breadcrumbs/breadcrumbs.module';
   declarations: [SecondaryToolbarComponent],
   imports: [
     CommonModule,
-
     RouterModule,
     MatButtonModule,
     MatIconModule,

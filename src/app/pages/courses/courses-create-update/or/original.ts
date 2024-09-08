@@ -17,7 +17,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
-import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { ConfirmModalComponent } from '../../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
@@ -380,7 +380,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     }).subscribe(({ sportTypes, sports, stations, monitors }) => {
       this.sportTypeData = sportTypes;
       this.sportData = sports;
-      console.log(this.sportData)
       this.stations = stations;
       this.monitors = monitors;
 

@@ -69,7 +69,7 @@ import { FluxToolbarModule } from 'src/@vex/components/flux-component/flux-toolb
     MatProgressSpinnerModule,
     MatTabsModule,
     TranslateModule,
-    FluxToolbarModule
+    FluxToolbarModule,
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

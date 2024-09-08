@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SecondaryToolbarModule } from '../../secondary-toolbar/secondary-toolbar.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { SecondaryToolbarModule } from '../../secondary-toolbar/secondary-toolba
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    SecondaryToolbarModule
+    SecondaryToolbarModule,
+    TranslateModule
   ],
   exports: [FluxToolbarComponent]
 })
