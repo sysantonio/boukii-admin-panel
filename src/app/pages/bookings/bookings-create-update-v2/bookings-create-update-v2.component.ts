@@ -16,6 +16,8 @@ export class BookingsCreateUpdateV2Component {
   sport: any;
   sportLevel: any;
   forceStep;
+  date;
+  course;
   constructor(
     public translateService: TranslateService,
     public dialog: MatDialog,
@@ -27,6 +29,7 @@ export class BookingsCreateUpdateV2Component {
       step1: { client, mainClient },
       step2: { utilizers },
       step3: { sport, sportLevel },
+      step4: { date, course },
     } = formData.value;
 
     this.client = client;
@@ -34,6 +37,8 @@ export class BookingsCreateUpdateV2Component {
     this.utilizers = utilizers;
     this.sport = sport;
     this.sportLevel = sportLevel;
+    this.course = course;
+    this.date = date;
   }
 
   openBookingDialog() {
@@ -48,6 +53,8 @@ export class BookingsCreateUpdateV2Component {
         utilizers: this.utilizers,
         sport: this.sport,
         sportLevel: this.sportLevel,
+        course: this.course,
+        date: this.date,
       },
     });
   }

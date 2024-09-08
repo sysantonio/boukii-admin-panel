@@ -6,7 +6,7 @@
   >
     <label
       class="sportCard"
-      [ngClass]="{ active: stepForm.get('sport').value === item }"
+      [ngClass]="{ active: stepForm.get('sport').value.id === item.id }"
       *ngFor="let item of sportData"
     >
       <mat-radio-button [value]="item"> </mat-radio-button>

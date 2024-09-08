@@ -12,10 +12,12 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { BookingFormStepper } from "./form-stepper/form-stepper.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
 import { StepThreeComponent } from "./step-three/step-three.component";
+import { StepFourComponent } from "./step-four/step-four.component";
 
 import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
 import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
@@ -34,6 +36,7 @@ import { BookingDialogComponent } from "./booking-dialog/booking-dialog.componen
     MatRadioModule,
     TranslateModule,
     MatDialogModule,
+    MatDatepickerModule,
   ],
   declarations: [
     BookingFormStepper,
@@ -42,6 +45,7 @@ import { BookingDialogComponent } from "./booking-dialog/booking-dialog.componen
     StepThreeComponent,
     BookingDescriptionCard,
     BookingDialogComponent,
+    StepFourComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -50,6 +54,7 @@ import { BookingDialogComponent } from "./booking-dialog/booking-dialog.componen
     StepThreeComponent,
     BookingDescriptionCard,
     BookingDialogComponent,
+    StepFourComponent,
   ],
 })
 export class BookingComponentsModule {}

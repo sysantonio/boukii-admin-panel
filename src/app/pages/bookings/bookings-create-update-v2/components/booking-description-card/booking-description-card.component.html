@@ -1,10 +1,14 @@
 <div class="wrapper">
   <div class="headerWrapper">
     <span class="sportTitle">01.</span>
-    <div *ngIf="sport">
-      <img class="sportImg" [src]="sport.icon" [alt]="sport.name" />
+    <div *ngIf="sport || course">
+      <img
+        [class]="{ sportImg: !course, courseImg: course }"
+        [src]="course?.icon || sport.icon"
+        [alt]="sport.name"
+      />
     </div>
-    <div class="sportSkeletonsWrapper" *ngIf="sport">
+    <div class="sportSkeletonsWrapper" *ngIf="sport && !course">
       <div class="skeleton"></div>
       <div class="skeleton small"></div>
     </div>
@@ -13,6 +17,12 @@
       <div class="sportSkeletonsWrapper">
         <div class="skeleton"></div>
         <div class="skeleton small"></div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="course">
+      <div class="flex flex-col">
+        <h4 class="courseTitle">{{ course.name }}</h4>
+        <span class="courseSubtitle"> {{ course.description }} </span>
       </div>
     </ng-container>
   </div>

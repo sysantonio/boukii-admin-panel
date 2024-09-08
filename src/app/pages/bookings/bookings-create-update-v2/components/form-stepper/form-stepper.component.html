@@ -27,4 +27,15 @@
     >
     </booking-step-three>
   </div>
+
+  <div *ngIf="currentStep === 3">
+    <booking-step-four
+      [initialData]="stepperForm.get('step4')?.value"
+      [client]="stepperForm.get('step1')?.value?.mainClient"
+      [sportLevel]="stepperForm.get('step3')?.value?.sportLevel"
+      (stepCompleted)="handleStepCompletion(4, $event)"
+      (prevStep)="previousStep()"
+    >
+    </booking-step-four>
+  </div>
 </div>

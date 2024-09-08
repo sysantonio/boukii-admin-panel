@@ -112,12 +112,40 @@
   margin-bottom: 1rem;
 }
 
-.sportImg {
+.sportImg,
+.courseImg {
   width: 2.5rem;
   height: 2.5rem;
+  min-width: 2.5rem;
   background-color: var(--color-dark2);
   padding: 10px;
   border-radius: 3px;
+}
+
+.courseImg {
+  background-color: transparent;
+  padding: 0;
+}
+
+.courseTitle {
+  font-family: var(--font-dm);
+  font-size: 14px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2; /* Limitar a 2 líneas */
+  line-clamp: 2; /* Específicamente para navegadores que soportan esta propiedad */
+  max-height: 36px; /* Controlar la altura para limitar el número de líneas visibles */
+  line-height: 18px;
+}
+
+.courseSubtitle {
+  font-family: var(--font-dm);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
 }
 
 .utilizersWrapper__description {

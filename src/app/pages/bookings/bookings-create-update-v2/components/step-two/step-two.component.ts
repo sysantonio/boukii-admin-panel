@@ -15,7 +15,6 @@ export class StepTwoComponent implements OnInit {
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   stepForm: FormGroup;
-  languages = [];
 
   selectedUtilizers;
   utilizers;

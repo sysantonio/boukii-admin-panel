@@ -5,7 +5,6 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  ChangeDetectorRef,
 } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
@@ -20,7 +19,7 @@ export class BookingFormStepper implements OnChanges {
   @Input() forceStep: number;
   stepperForm: FormGroup;
   currentStep = 0;
-  STEPS_LENGTH = 3;
+  STEPS_LENGTH = 4;
 
   constructor(private fb: FormBuilder) {
     // Inicializa el formulario vacío
@@ -28,6 +27,7 @@ export class BookingFormStepper implements OnChanges {
       step1: {},
       step2: {},
       step3: {},
+      step4: {},
     });
   }
 
@@ -44,9 +44,8 @@ export class BookingFormStepper implements OnChanges {
 
   // Métodos para cambiar de paso
   nextStep() {
-    if (this.currentStep < 2) {
+    if (this.currentStep < this.STEPS_LENGTH - 1) {
       this.currentStep++;
-      this.forceStep++;
     }
     this.changedCurrentStep.emit(this.currentStep);
   }
@@ -54,7 +53,6 @@ export class BookingFormStepper implements OnChanges {
   previousStep() {
     if (this.currentStep > 0) {
       this.currentStep--;
-      this.forceStep--;
     }
     this.changedCurrentStep.emit(this.currentStep);
   }
@@ -70,13 +68,5 @@ export class BookingFormStepper implements OnChanges {
 
     this.nextStep();
     this.changedFormData.emit(this.stepperForm);
-  }
-
-  submit() {
-    if (this.stepperForm.valid) {
-      console.log("Form Submitted:", this.stepperForm.value);
-    } else {
-      console.log("Form is invalid");
-    }
   }
 }

@@ -11,6 +11,7 @@ export class BookingDescriptionCard {
   @Input() utilizers: any;
   @Input() sport: any;
   @Input() sportLevel: any;
+  @Input() course: any;
   @Input() date: any;
   @Input() monitor: any;
   @Input() total: any;
