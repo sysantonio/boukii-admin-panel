@@ -1,7 +1,7 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import {Observable, map, of, startWith, forkJoin, mergeMap} from 'rxjs';
+import { Observable, map, of, startWith, forkJoin, mergeMap } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { DateTimeDialogComponent } from 'src/@vex/components/date-time-dialog/date-time-dialog.component';
@@ -19,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
-import {AngularEditorConfig} from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -28,9 +28,37 @@ import {AngularEditorConfig} from '@kolkov/angular-editor';
     '../../../../../node_modules/quill/dist/quill.snow.css',
     '../../../../@vex/styles/partials/plugins/quill/_quill.scss'
   ],
-  animations: [fadeInUp400ms,stagger20ms]
+  animations: [fadeInUp400ms, stagger20ms]
 })
 export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
+
+  ModalFlux: number = 0
+  ModalProgress: { Name: string, Modal: number }[] = [
+    {
+      Name: "DEPORTE",
+      Modal: 0
+    },
+    {
+      Name: "DETALLES",
+      Modal: 1
+    },
+    {
+      Name: "FECHAS",
+      Modal: 2
+    },
+    {
+      Name: "NIVELES",
+      Modal: 3
+    },
+    {
+      Name: "EXTRAS",
+      Modal: 4
+    },
+    {
+      Name: "IDIOMAS",
+      Modal: 5
+    },
+  ]
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('dateTable') dateTable: MatTable<any>;
@@ -119,7 +147,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   myControlStations = new FormControl(Validators.required);
   monitorsForm = new FormControl();
 
-  options: any[] = [{id: 1, name:'Cours collectif'}, {id:2, name: 'Cours privés'}];
+  options: any[] = [{ id: 1, name: 'Cours collectif' }, { id: 2, name: 'Cours privés' }];
   stations: any = [];
 
   filteredOptions: Observable<any[]>;
@@ -180,33 +208,33 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     online: true,
     image: this.imagePreviewUrl,
     translations:
-      {
-        es: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        en: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        fr: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        it: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        de: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
+    {
+      es: {
+        name: '',
+        short_description: '',
+        description: ''
       },
+      en: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+      fr: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+      it: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+      de: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+    },
     price_range: null,
     discounts: null,
     settings: {
@@ -258,7 +286,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     degree_id: null,
     course_group_id: null,
     monitor_id: null,
-    max_participants:null,
+    max_participants: null,
   }
 
   sportTypeSelected: number = -1;
@@ -292,8 +320,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-              private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, private cdRef: ChangeDetectorRef,
-              private dateAdapter: DateAdapter<Date>) {
+    private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, private cdRef: ChangeDetectorRef,
+    private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -358,7 +386,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       this.schoolService.getSchoolData()
         .subscribe((data) => {
           this.schoolData = data.data;
-          this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id='+data.data.id + '&is_active=1')
+          this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id=' + data.data.id + '&is_active=1')
             .subscribe((season) => {
               this.season = season.data[0];
               this.minDate = moment(this.season.start_date, 'YYYY-MM-DD').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'YYYY-MM-DD').toDate() : this.minDate;
@@ -392,7 +420,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         })
 
       if (this.mode === 'update') {
-        this.crudService.get('/admin/courses/'+this.id)
+        this.crudService.get('/admin/courses/' + this.id)
           .subscribe((course) => {
             this.defaults = course.data;
             if (this.defaults.translations === null) {
@@ -496,7 +524,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
               minDuration: [null],
               maxDuration: [null],
               fromHour: [this.defaults.course_dates[0].hour_start.replace(': 00', ''), Validators.required],
-              toHour: [this.defaults.course_dates[0].hour_end.replace(': 00', '') , Validators.required],
+              toHour: [this.defaults.course_dates[0].hour_end.replace(': 00', ''), Validators.required],
               participants: [this.defaults.max_participants, Validators.required],
               fromDate: [this.defaults.date_start],
               toDate: [this.defaults.date_end],
@@ -509,7 +537,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
               periodeMultiple: [!this.defaults.unique]
             });
 
-            if(this.defaults?.settings?.groups) {
+            if (this.defaults?.settings?.groups) {
               this.groups = this.defaults.settings.groups;
             }
 
@@ -634,7 +662,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
                 this.defaults.settings.periods.forEach((period, periodIdx) => {
 
-                  this.dataSourceDatePrivate.data.push({dateFrom: period.from, dateTo: period.to, active: period.active, id: period.id, main: true, mainPeriod: periodIdx});
+                  this.dataSourceDatePrivate.data.push({ dateFrom: period.from, dateTo: period.to, active: period.active, id: period.id, main: true, mainPeriod: periodIdx });
 
                   const from = moment(period.from, 'DD-MM-YYYY').startOf('day');
                   const to = moment(period.to, 'DD-MM-YYYY').startOf('day');
@@ -643,7 +671,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
                     const current = moment(element.date).startOf('day');
 
                     if (current.isSame(from) || current.isSame(to) || current.isBetween(from, to)) {
-                      this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('DD-MM-YYYY'), dateTo: moment(element.date).format('DD-MM-YYYY'), active: element.active, id: element.id, main: false, period: periodIdx})
+                      this.dataSourceDatePrivate.data.push({ dateFrom: moment(element.date).format('DD-MM-YYYY'), dateTo: moment(element.date).format('DD-MM-YYYY'), active: element.active, id: element.id, main: false, period: periodIdx })
                     }
                   })
                 });
@@ -654,8 +682,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
             }
             if (this.defaults.course_type === 1) {
               this.defaults.course_dates.forEach(element => {
-                this.dataSource.data.push({date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start,
-                  duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id});
+                this.dataSource.data.push({
+                  date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start,
+                  duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id
+                });
               });
 
               if (this.defaults.is_flexible) {
@@ -665,7 +695,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
 
             setTimeout(() => {
-              if(this.mode == 'create') {
+              if (this.mode == 'create') {
                 this.filterSportsByType();
               }
               this.defaults.station_id = this.stations.filter((s) => s.id === this.defaults.station_id)[0];
@@ -998,8 +1028,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   myHolidayFilter = (d: Date): boolean => {
     if (d !== null) {
 
-      const time=d.getTime();
-      return !this.myHolidayDates.find(x=>x.getTime()==time);
+      const time = d.getTime();
+      return !this.myHolidayDates.find(x => x.getTime() == time);
     }
   }
 
@@ -1016,12 +1046,12 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(DateTimeDialogComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, dates: this.dataSource.data},
+      data: { minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, dates: this.dataSource.data },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data.push({date: moment(result.date).format('YYYY-MM-DD'), duration: result.duration, hour: result.hour, active: true});
+        this.dataSource.data.push({ date: moment(result.date).format('YYYY-MM-DD'), duration: result.duration, hour: result.hour, active: true });
         this.dateTable?.renderRows();
 
         /*if (this.mode === 'update') {
@@ -1056,7 +1086,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     this.selectedDate = this.defaults.course_dates[0]?.date;
     level.active = event.source.checked;
 
-    if(event.source.checked) {
+    if (event.source.checked) {
       this.defaults.course_dates.forEach(element => {
         element.groups.push(this.generateGroups(level));
       });
@@ -1109,7 +1139,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(DateTimeDialogEditComponent, {
       width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, selectedDate: item.date, selectedHour: item.hour.replace(' ', '').split('-')[0], selectedDuration: item.duration},
+      data: { minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, selectedDate: item.date, selectedHour: item.hour.replace(' ', '').split('-')[0], selectedDuration: item.duration },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -1118,18 +1148,18 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
           maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
           panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-          data: {message: this.translateService.instant('update_date_warning'), title: this.translateService.instant('update_date_warning_title')}
+          data: { message: this.translateService.instant('update_date_warning'), title: this.translateService.instant('update_date_warning_title') }
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
           if (data) {
-            if( this.defaults.course_dates[index]) {
+            if (this.defaults.course_dates[index]) {
               this.defaults.course_dates[index].date = moment(result.date).format('YYYY-MM-DD');
               this.defaults.course_dates[index].hour_start = result.hour;
               this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
             }
 
-            if(this.dataSource.data[index]) {
+            if (this.dataSource.data[index]) {
               this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
               this.dataSource.data[index].hour = result.hour;
               this.dataSource.data[index].duration = result.duration;
@@ -1147,12 +1177,12 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   openDialogReductions(): void {
     const dialogRef = this.dialog.open(ReductionDialogComponent, {
       width: '300px',
-      data: {iterations: this.dataSource.data.length}
+      data: { iterations: this.dataSource.data.length }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceReductions.data.push({date: result.dateIndex, percentage: result.percentage});
+        this.dataSourceReductions.data.push({ date: result.dateIndex, percentage: result.percentage });
         this.reductionTable?.renderRows();
       }
     });
@@ -1161,12 +1191,12 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   openDialogPrivateReductions(): void {
     const dialogRef = this.dialog.open(ReductionDialogComponent, {
       width: '300px',
-      data: {iterations: this.dataSourceDatePrivate.data.length}
+      data: { iterations: this.dataSourceDatePrivate.data.length }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceReductionsPrivate.data.push({date: result.dateIndex, percentage: result.percentage});
+        this.dataSourceReductionsPrivate.data.push({ date: result.dateIndex, percentage: result.percentage });
         this.privateReductionTable?.renderRows();
       }
     });
@@ -1195,8 +1225,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.defaults.settings.periods.push({from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true})
-        this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true});
+        this.defaults.settings.periods.push({ from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true })
+        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true });
         this.privateDatesTable?.renderRows();
         this.activityDatesTable?.renderRows();
         this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
@@ -1250,7 +1280,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     if (this.mode === 'update') {
       if (this.dataSource.data.length <= 1 || this.dataSource.data.filter(i => i.active).length <= 1) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', { duration: 3000 });
       } else {
         this.dataSource.data[index].active = false;
         this.defaults.course_dates[index].active = false;
@@ -1297,19 +1327,19 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           }
         });
         this.privateDatesTable.renderRows();
-this.activityDatesTable.renderRows();
+        this.activityDatesTable.renderRows();
       } else {
-        this.defaults.course_dates[index - (period+1)].active = false;
+        this.defaults.course_dates[index - (period + 1)].active = false;
         this.dataSourceDatePrivate.data[index].active = false;
         this.privateDatesTable.renderRows();
-this.activityDatesTable.renderRows();
+        this.activityDatesTable.renderRows();
       }
 
     } else {
       this.defaults.settings.periods.splice(index, 1);
       this.dataSourceDatePrivate.data.splice(index, 1);
       this.privateDatesTable.renderRows();
-this.activityDatesTable.renderRows();
+      this.activityDatesTable.renderRows();
     }
 
 
@@ -1342,33 +1372,33 @@ this.activityDatesTable.renderRows();
       online: true,
       image: this.imagePreviewUrl,
       translations:
-        {
-          es: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          en: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          fr: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          it: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          de: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
+      {
+        es: {
+          name: '',
+          short_description: '',
+          description: ''
         },
+        en: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        fr: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        it: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+        de: {
+          name: '',
+          short_description: '',
+          description: ''
+        },
+      },
       price_range: this.dataSourceFlexiblePrices,
       discounts: null,
       settings: {
@@ -1406,7 +1436,7 @@ this.activityDatesTable.renderRows();
     this.courseInfoCollecDateSplitFormGroup.reset();
     this.courseLevelFormGroup.reset();
     this.courseInfoPriveFormGroup.get("periodeUnique").patchValue(true);
-    if(id ===3) {
+    if (id === 3) {
       this.defaults.is_flexible = true
       this.daysDates = [];
       this.daysDatesLevels = [];
@@ -1483,11 +1513,11 @@ this.activityDatesTable.renderRows();
 
   getDegrees() {
     this.groupedByColor = {};
-    this.colorKeys= [];
-    this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
+    this.colorKeys = [];
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.defaults.sport_id)
       .subscribe((data) => {
         data.data.forEach(element => {
-          if(element.active) {
+          if (element.active) {
             this.levels.push(element);
           }
         });
@@ -1517,12 +1547,12 @@ this.activityDatesTable.renderRows();
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -1580,7 +1610,7 @@ this.activityDatesTable.renderRows();
           daysOfWeekAdded.add(dayOfWeek);
         }
 
-        this.daysDatesLevels.push({date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '')});
+        this.daysDatesLevels.push({ date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '') });
 
         if (this.mode === 'update') {
           const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
@@ -1634,7 +1664,7 @@ this.activityDatesTable.renderRows();
     if (this.mode === 'update') {
       this.dataSource.data.forEach(element => {
         const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
-        if(!existDate) {
+        if (!existDate) {
 
           const dataNew = {
             date: moment(element.date).format('YYYY-MM-DD'),
@@ -1667,7 +1697,7 @@ this.activityDatesTable.renderRows();
             return acc;
           }, [0, 0]);
 
-          this.daysDatesLevels.push({date: moment(element.date).format('YYYY-MM-DD'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
+          this.daysDatesLevels.push({ date: moment(element.date).format('YYYY-MM-DD'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
           if (this.courseType === 'collectif') {
 
             this.defaults.course_dates.push({
@@ -1687,7 +1717,7 @@ this.activityDatesTable.renderRows();
 
           }
         } else {
-          this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
+          this.daysDatesLevels.push({ date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
         }
 
       });
@@ -1753,7 +1783,7 @@ this.activityDatesTable.renderRows();
   generateGroups(level: any) {
     let ret = {};
     this.levels.forEach(element => {
-      if (element.id === level.id){
+      if (element.id === level.id) {
         ret = {
           course_id: null,
           course_date_id: null,
@@ -1863,10 +1893,10 @@ this.activityDatesTable.renderRows();
   getMonitorValue(level: any, subGroupIndex: number, daySelectedIndex: number) {
 
     let ret = null;
-    if(!level.old) {
+    if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+        if (moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
           courseDate.groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.subgroups[subGroupIndex]?.monitor;
@@ -1943,9 +1973,9 @@ this.activityDatesTable.renderRows();
 
       if (!level.old) {
         this.defaults.course_dates.forEach(courseDate => {
-          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+          if (moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
             courseDate.groups.forEach(group => {
-              if(group.degree_id === level.id && !monitorSet) {
+              if (group.degree_id === level.id && !monitorSet) {
 
                 group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
                 group.subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
@@ -1983,7 +2013,7 @@ this.activityDatesTable.renderRows();
   setSubGroupPax(event: any, level: any) {
 
     if (+event.target.value > this.defaults.max_participants) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', { duration: 3000 });
       this.defaults.course_dates.forEach(element => {
         element.groups.forEach(group => {
           if (level.id === group.degree_id) {
@@ -2001,7 +2031,7 @@ this.activityDatesTable.renderRows();
       element.groups.forEach(group => {
         if (level.id === group.degree_id) {
           group.subgroups.forEach(subGroup => {
-            subGroup.max_participants =level.max_participants;
+            subGroup.max_participants = level.max_participants;
           });
         }
       });
@@ -2050,7 +2080,7 @@ this.activityDatesTable.renderRows();
 
   create() {
 
-    if (this.defaults.course_type  !== 1) {
+    if (this.defaults.course_type !== 1) {
       this.checkStep3PrivateNoFlex();
       this.setDebut(this.defaults.hour_min);
       this.setHourEnd(this.defaults.hour_max);
@@ -2111,7 +2141,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency:  settings?.taxes?.currency || 'CHF',//poner currency de reglajes
+        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2129,7 +2159,7 @@ this.activityDatesTable.renderRows();
         course_dates: this.defaults.course_dates
       }
       console.log(data);
-    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
+    } else if (this.defaults.course_type === 2 && this.defaults.is_flexible) {
 
       if (this.periodeUnique) {
 
@@ -2142,7 +2172,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: 0,
-        currency:  settings?.taxes?.currency || 'CHF',
+        currency: settings?.taxes?.currency || 'CHF',
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2178,7 +2208,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
-        currency:  settings?.taxes?.currency || 'CHF',
+        currency: settings?.taxes?.currency || 'CHF',
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2202,13 +2232,13 @@ this.activityDatesTable.renderRows();
         hour_max: this.defaults.hour_max,
         settings: JSON.stringify(this.defaults.settings)
       };
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
+    } else if (this.defaults.course_type === 3 && this.defaults.is_flexible) {
 
       if (this.periodeUnique) {
 
         this.getDatesBetween(this.defaults.date_start, this.defaults.date_end, true, this.defaults.hour_min, this.defaults.hour_max);
       }
-      if(this.groups) {
+      if (this.groups) {
         this.defaults.settings.groups = this.groups;
       }
       data = {
@@ -2218,7 +2248,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.translations.fr.short_description,
         description: this.defaults.translations.fr.description,
         price: 0,
-        currency:  settings?.taxes?.currency || 'CHF',
+        currency: settings?.taxes?.currency || 'CHF',
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2252,16 +2282,16 @@ this.activityDatesTable.renderRows();
       .subscribe((res) => {
         console.log(res);
         this.goTo('/courses');
-      },error => {
+      }, error => {
         console.log(error);
-        this.snackbar.open(error.error.message, 'OK', {duration: 5000})
+        this.snackbar.open(error.error.message, 'OK', { duration: 5000 })
 
       })
 
   }
 
   update() {
-    if (this.defaults.course_type  === 2 ) {
+    if (this.defaults.course_type === 2) {
       this.checkStep3PrivateNoFlex();
       this.setDebut(this.defaults.hour_min);
       this.setHourEnd(this.defaults.hour_max);
@@ -2295,7 +2325,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency:  this.defaults.currency,//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2326,7 +2356,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency:  this.defaults.currency,//poner currency de reglajes
+        currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2344,7 +2374,7 @@ this.activityDatesTable.renderRows();
         course_dates: this.defaults.course_dates
       }
       console.log(data);
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
+    } else if (this.defaults.course_type === 3 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
         is_flexible: this.defaults.is_flexible,
@@ -2352,7 +2382,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: 0,
-        currency:  this.defaults.currency,
+        currency: this.defaults.currency,
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2393,7 +2423,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: this.defaults.price,
-        currency:  this.defaults.currency,
+        currency: this.defaults.currency,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start: lowestDateP,
@@ -2417,8 +2447,8 @@ this.activityDatesTable.renderRows();
         hour_max: this.defaults.hour_max,
         settings: JSON.stringify(this.defaults.settings)
       };
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
-      if(this.groups) {
+    } else if (this.defaults.course_type === 3 && this.defaults.is_flexible) {
+      if (this.groups) {
         this.defaults.settings.groups = this.groups;
       }
       data = {
@@ -2428,7 +2458,7 @@ this.activityDatesTable.renderRows();
         short_description: this.defaults.short_description,
         description: this.defaults.description,
         price: 0,
-        currency:  this.defaults.currency,
+        currency: this.defaults.currency,
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
@@ -2463,7 +2493,7 @@ this.activityDatesTable.renderRows();
         console.log(res);
         this.goTo('/courses');
       }, (error) => {
-        this.snackbar.open(error.error.message, 'OK', {duration: 5000})
+        this.snackbar.open(error.error.message, 'OK', { duration: 5000 })
       })
   }
   async translateCurrentTabToOthers() {
@@ -2553,38 +2583,38 @@ this.activityDatesTable.renderRows();
   }
 
   checkStep2PrivateNoFlex(stepper: MatStepper) {
-    if(this.defaults.translations.fr.name === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
+    if (this.defaults.translations.fr.name === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', { duration: 3000 })
       return;
     }
 
-    if(this.defaults.price === null && !this.defaults.is_flexible) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', {duration: 3000})
+    if (this.defaults.price === null && !this.defaults.is_flexible) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', { duration: 3000 })
       return;
     }
 
-    if(this.myControlStations.value === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', {duration: 3000})
+    if (this.myControlStations.value === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', { duration: 3000 })
       return;
     }
 
-    if(this.defaults.age_min === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.min_age'), 'OK', {duration: 3000})
+    if (this.defaults.age_min === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.min_age'), 'OK', { duration: 3000 })
       return;
     }
 
-    if(this.defaults.age_max=== null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.max_age'), 'OK', {duration: 3000})
+    if (this.defaults.age_max === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.max_age'), 'OK', { duration: 3000 })
       return;
     }
 
-    if(this.defaults.translations.fr.short_description === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', {duration: 3000})
+    if (this.defaults.translations.fr.short_description === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', { duration: 3000 })
       return;
     }
 
-    if(this.defaults.translations.fr.description === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', {duration: 3000})
+    if (this.defaults.translations.fr.description === null) {
+      this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', { duration: 3000 })
       return;
     }
 
@@ -2594,32 +2624,32 @@ this.activityDatesTable.renderRows();
 
   checkStep3PrivateNoFlex() {
     if (this.defaults.date_start_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.date_end_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.duration === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.max_participants === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.hour_min === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.hour_max === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', { duration: 3000 });
       return;
     }
 
@@ -2628,42 +2658,42 @@ this.activityDatesTable.renderRows();
 
   checkStep3PrivateFlex(stepper: MatStepper) {
     if (this.defaults.date_start_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_from'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_from'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.date_end_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_to'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_to'), 'OK', { duration: 3000 });
       return;
     }
     if (!this.periodeMultiple && this.defaults.date_start === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', { duration: 3000 });
       return;
     }
 
     if (!this.periodeMultiple && this.defaults.date_end === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', { duration: 3000 });
       return;
     }
 
 
     if (this.defaults.duration === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.max_participants === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.hour_min === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.hour_max === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', { duration: 3000 });
       return;
     }
 
@@ -2675,28 +2705,28 @@ this.activityDatesTable.renderRows();
 
   checkStep2ColectiveNoFlex(stepper: MatStepper) {
     if (this.mode === 'create') {
-      if(this.defaults.translations.fr.name === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
+      if (this.defaults.translations.fr.name === null) {
+        this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', { duration: 3000 })
         return;
       }
 
-      if(this.defaults.price === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', {duration: 3000})
+      if (this.defaults.price === null) {
+        this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', { duration: 3000 })
         return;
       }
 
-      if(this.myControlStations.value === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', {duration: 3000})
+      if (this.myControlStations.value === null) {
+        this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', { duration: 3000 })
         return;
       }
 
-      if(this.defaults.translations.fr.short_description === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', {duration: 3000})
+      if (this.defaults.translations.fr.short_description === null) {
+        this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', { duration: 3000 })
         return;
       }
 
-      if(this.defaults.translations.fr.description === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', {duration: 3000})
+      if (this.defaults.translations.fr.description === null) {
+        this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', { duration: 3000 })
         return;
       }
 
@@ -2710,22 +2740,22 @@ this.activityDatesTable.renderRows();
   checkStep3ColectiveNoFlex(stepper: MatStepper) {
 
     if (this.defaults.date_start_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.date_end_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.defaults.max_participants === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.dataSource.data.length < 1) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', { duration: 3000 });
       return;
     }
 

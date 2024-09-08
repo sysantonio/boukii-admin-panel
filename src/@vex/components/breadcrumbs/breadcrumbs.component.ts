@@ -4,7 +4,6 @@ import { trackByValue } from '../../utils/track-by';
 @Component({
   selector: 'vex-breadcrumbs',
   template: `
-
     <ng-container *ngFor="let crumb of crumbs; trackBy: trackByValue">
       <ng-container *ngIf="crumb.link; else noLink">
         <a [routerLink]="crumb.link" class="breadcrumb-link">
@@ -22,6 +21,7 @@ import { trackByValue } from '../../utils/track-by';
         </a>
       </ng-container>
       <ng-template #noLink>
+      <a class="breadcrumb-link">
         <ng-container *ngIf="crumb.title">
           <h2 class="title">{{crumb.text | translate}}</h2>
         </ng-container>
@@ -33,20 +33,15 @@ import { trackByValue } from '../../utils/track-by';
             <img src="../assets/img/icons/{{crumb.icon}}.svg" />
           </i>
         </ng-container>
+      </a>
       </ng-template>
     </ng-container>
-
   `
 })
-export class BreadcrumbsComponent implements OnInit {
+export class BreadcrumbsComponent {
 
   @Input() crumbs: any[] = [];
 
   trackByValue = trackByValue;
 
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 }

@@ -22,7 +22,6 @@
 
 ::ng-deep {
   vex-breadcrumbs {
-    @apply hidden;
   }
 
   @screen sm {
@@ -31,5 +30,4 @@
     }
   }
 }
-
 

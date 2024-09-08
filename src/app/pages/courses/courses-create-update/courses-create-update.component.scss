@@ -1,12 +1,11 @@
-
-
 .custom-card {
   transition: all 0.3s ease;
   box-shadow: none;
   border: 2px solid transparent; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
 }
 
-.custom-card:hover, .custom-card.selected {
+.custom-card:hover,
+.custom-card.selected {
   transform: translateY(-5px);
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.12);
   border: 2px solid #e6e6e6; /* Añade un borde del color deseado */
@@ -14,7 +13,12 @@
 }
 
 .selected {
-  background-color: rgba(255, 48, 133, 0.1); /* Color de fondo ligero para mejorar la selección */
+  background-color: rgba(
+    255,
+    48,
+    133,
+    0.1
+  ); /* Color de fondo ligero para mejorar la selección */
 }
 
 .smaller-calendar {
@@ -28,17 +32,15 @@
 }
 
 .columns-container {
-  display: flex;  /* Establecemos un contenedor flex */
-  width: 100%;    /* Aseguramos que tome todo el ancho disponible */
+  display: flex; /* Establecemos un contenedor flex */
+  width: 100%; /* Aseguramos que tome todo el ancho disponible */
   height: 100%; /* Asegura que ocupe toda la altura disponible */
-
 }
 
 .calendar-column {
   flex: 0 0 30%; /* No crecerá, no se reducirá y se establece en un ancho base de 30% */
   padding-right: 16px; /* Agregar un pequeño espacio entre las columnas */
   height: 100%; /* Establece una altura del 100% */
-
 }
 
 .list-column {
@@ -53,7 +55,6 @@
   max-height: 100%; /* Cambia esto para que ocupe toda la altura disponible */
   overflow-y: auto;
 }
-
 
 .custom-list-item {
   display: flex;
@@ -81,7 +82,7 @@
   flex-direction: column;
   justify-content: center; /* Alinea el contenido verticalmente al centro */
   flex-grow: 1; /* Ocupa el espacio restante */
-  padding: 10px 0 0 15px;/* Espacio entre la imagen y el contenido */
+  padding: 10px 0 0 15px; /* Espacio entre la imagen y el contenido */
   float: left;
   width: 90%;
 }
@@ -115,13 +116,13 @@ mat-list {
 }
 
 [type="file"] + label {
-  background: #FF3085;
+  background: #ff3085;
   border: none;
   color: #fff;
   cursor: pointer;
   display: inline-block;
-	font-family: 'Rubik', sans-serif;
-	font-size: inherit;
+  font-family: "Rubik", sans-serif;
+  font-size: inherit;
   font-weight: 500;
   margin-bottom: 1rem;
   outline: none;
@@ -131,34 +132,39 @@ mat-list {
   vertical-align: middle;
 
   &:hover {
-    background-color: darken(#FF3085, 10%);
+    background-color: darken(#ff3085, 10%);
   }
 
   &.btn-1 {
-    background-color: #FF3085;
+    background-color: #ff3085;
     transition: none;
 
     &:hover {
-      box-shadow: 0 4px darken(#FF3085, 10%);
+      box-shadow: 0 4px darken(#ff3085, 10%);
       top: 2px;
     }
   }
-
 }
 
 .add-date {
-  box-shadow: none;background: #fff;border: 1px solid #e6e6e6;
+  box-shadow: none;
+  background: #fff;
+  border: 1px solid #e6e6e6;
 }
 
 .icon-date {
-  color: #e6e6e6; font-size: 10px;width: 50px;height: 50px;
+  color: #e6e6e6;
+  font-size: 10px;
+  width: 50px;
+  height: 50px;
 }
 
-.add-date:hover   {
-  box-shadow: none;background: #e6e6e6;border: 1px solid #e6e6e6;
-
+.add-date:hover {
+  box-shadow: none;
+  background: #e6e6e6;
+  border: 1px solid #e6e6e6;
 }
-.add-date:hover .icon-date  {
+.add-date:hover .icon-date {
   color: #fff;
 }
 
@@ -167,8 +173,9 @@ mat-list {
   width: 50%;
 }
 
-.image-container, .input-container {
-  float:left;
+.image-container,
+.input-container {
+  float: left;
 }
 
 ::ng-deep .mat-step {
@@ -184,8 +191,8 @@ mat-list {
 .custom-card {
   transition: all 0.3s ease;
   box-shadow: none;
-  border: 1px solid #E6E6E6; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
-  color: #E6E6E6;
+  border: 1px solid #e6e6e6; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
+  color: #e6e6e6;
   text-align: center;
   cursor: pointer;
   float: left;
@@ -193,18 +200,18 @@ mat-list {
 }
 
 .selected-collectif {
-  background-color: #FAC710; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #fac710; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .selected-prive {
-  background-color: #8FD14F; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #8fd14f; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .selected-activity {
-  background-color: #00BEFFFF; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #00beffff; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .square-prefix {
@@ -245,7 +252,8 @@ table caption {
 }
 .icon-bike:hover #icon,
 .icon-bike:focus #icon {
-  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg)
+    brightness(104%) contrast(97%);
 }
 
 svg {

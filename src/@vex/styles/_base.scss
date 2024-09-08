@@ -17,7 +17,8 @@ div {
   box-sizing: border-box;
 }
 
-input, textarea {
+input,
+textarea {
   box-sizing: content-box;
   line-height: 1.5;
 }
@@ -32,13 +33,13 @@ code {
   color: var(--text-color);
   //font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
   font-size: 85%;
-  padding: .2em .4em;
+  padding: 0.2em 0.4em;
 }
 
 blockquote {
   background: rgba(var(--color-primary), 0.1);
-  border-left: 3px solid theme('backgroundColor.primary');
-  color: rgba(0, 0, 0, .87);
+  border-left: 3px solid theme("backgroundColor.primary");
+  color: rgba(0, 0, 0, 0.87);
   font-style: normal;
   margin: 1em 0 1.5em;
   padding: 1em 1.5em;
@@ -56,14 +57,15 @@ blockquote {
   background-color: var(--color-accent-rgb);
   padding: 10px;
   border-radius: 4px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 }
 
 .vex-toolbar {
-  box-shadow: none!important;
+  box-shadow: none !important;
 }
 
-.secondary-toolbar, vex-breadcrumbs {
+.secondary-toolbar,
+vex-breadcrumbs {
   /*box-shadow: none!important;
   --tw-shadow: none!important;*/
 
@@ -74,7 +76,7 @@ blockquote {
       display: inline-flex;
       align-items: center;
 
-      @media (max-width: 480px){
+      @media (max-width: 480px) {
         width: 38px;
         height: 38px;
       }
@@ -84,7 +86,7 @@ blockquote {
         height: 36px;
         margin-top: -4px;
 
-        @media (max-width: 480px){
+        @media (max-width: 480px) {
           margin-top: -2px;
           width: 28px;
           height: 28px;
@@ -96,7 +98,9 @@ blockquote {
   .title {
     font-size: 24px;
     font-weight: 700;
-    color: rgba(0, 0, 0, .38);
+    line-height: 28px;
+
+    color: rgba(0, 0, 0, 1);
     width: auto !important;
     float: none !important;
 
@@ -108,7 +112,7 @@ blockquote {
       margin-right: 8px;
     }*/
 
-    @media (max-width: 480px){
+    @media (max-width: 480px) {
       font-size: 16px;
     }
   }
@@ -116,26 +120,24 @@ blockquote {
   .subtitle {
     font-size: 20px;
     font-weight: 400;
-    color: rgba(0, 0, 0, .38);
+    line-height: 28px;
+    color: rgba(0, 0, 0, 1);
 
-    @media (max-width: 480px){
+    @media (max-width: 480px) {
       font-size: 12px;
     }
 
     &:before {
-      content: "-";
+      content: "·";
       display: inline-block;
-      font-size: 20px;
+      font-size: 40px;
       vertical-align: middle;
-      margin-left: 8px;
-      margin-right: 5px;
-      margin-bottom: -3px;
+      margin: 0px 10px;
     }
   }
 }
 vex-breadcrumbs {
   align-items: center;
-
 }
 
 .btn-edit {
@@ -155,16 +157,16 @@ vex-breadcrumbs {
   margin-left: 10px;
 }
 
-div[style*="65%"]{
-  @media (max-width: 1280px){
-    width: 100%!important;
+div[style*="65%"] {
+  @media (max-width: 1280px) {
+    width: 100% !important;
   }
 }
 
-mat-card[style*="33%"]{
-  @media (max-width: 1280px){
-    width: 100%!important;
-    margin-left: 0px!important;
-    margin-top: 20px!important;
+mat-card[style*="33%"] {
+  @media (max-width: 1280px) {
+    width: 100% !important;
+    margin-left: 0px !important;
+    margin-top: 20px !important;
   }
 }

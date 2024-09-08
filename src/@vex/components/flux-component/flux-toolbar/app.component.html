@@ -1,0 +1,13 @@
+<vex-secondary-toolbar current>
+    <div class="fluxbar">
+        <ng-container *ngFor="let item of Modal; index as i">
+            <span
+                [ngClass]="Flux===item.Modal?'Selected':Flux>item.Modal?'Past':''">
+                {{item.Name}}
+            </span>
+            <span *ngIf="i<Modal.length-1" class="Dir">
+                >
+            </span>
+        </ng-container>
+    </div>
+</vex-secondary-toolbar>
