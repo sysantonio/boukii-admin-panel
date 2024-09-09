@@ -16,23 +16,94 @@
     *ngIf="!loading">
     <div @fadeInUp class="card flex-auto" style="width: 65%">
       <div class="flex flex-col" style="padding: 4px;">
-        <mat-radio-group class="flex" style="flex-wrap: wrap;">
-          <mat-radio-button
-            class="sport_checkbox"
-            *ngFor="let item of sportData"
-            [value]="item.id">
-            <div style="display: flex;align-items: center;">
-              <img [src]="item.icon_selected"
-                class="sport_icon selected">
-              <!--<img [src]="item.icon_unselected"
-              class="sport_icon noselected">-->
-              {{item.name}}
-            </div>
-          </mat-radio-button>
-        </mat-radio-group>
-        <div class="flex-auto" style="align-self: self-end;margin: 16px;">
+        <ng-container *ngIf="ModalFlux===0" [formGroup]="courseTypeFormGroup">
+          <mat-radio-group class="flex" style="flex-wrap: wrap;"
+            formControlName="sportType">
+            <mat-radio-button
+              class="sport_checkbox"
+              *ngFor="let item of sportData"
+              [value]="item.id">
+              <div style="display: flex;align-items: center;">
+                <img [src]="item.icon_selected"
+                  *ngIf="courseTypeFormGroup.controls['sportType'].value===item.id"
+                  class="sport_icon selected">
+                <img [src]="item.icon_unselected"
+                  *ngIf="courseTypeFormGroup.controls['sportType'].value!==item.id"
+                  class="sport_icon noselected">
+                {{item.name}}
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+        </ng-container>
+      </div>
+      <div class="flex flex-col" style="padding: 20px;">
+        <ng-container *ngIf="ModalFlux===1" [formGroup]="courseInfoFormGroup">
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon style="color: #E5962A;">circle</mat-icon>
+                Curso Colectivo
+              </ng-template>
+              <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
+              <vex-flux-upload-img
+                (upload)="defaults.image=$event"></vex-flux-upload-img>
+
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-label>{{'courses.coursename' | translate}}</mat-label>
+                <input id="courseName" formControlName="course_name"
+                  matInput required type="text">
+              </mat-form-field>
+              <angular-editor id="summary" style="width: 100%"
+                [placeholder]="'courses.summary' | translate"
+                formControlName="summary" [config]="editorConfig">
+              </angular-editor>
+              <angular-editor id="description" style="width: 100%"
+                [placeholder]="'courses.desc' | translate"
+                formControlName="description" [config]="editorConfig">
+              </angular-editor>
+              <mat-form-field appearance="outline" style="width: 50%">
+                <mat-label>{{'courses.price' | translate}}</mat-label>
+                <input id="price" formControlName="price"
+                  matInput required type="number">
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="width: 50%">
+                <mat-label>{{'courses.participants' | translate}}</mat-label>
+                <input id="participants" formControlName="participants"
+                  matInput required type="number">
+              </mat-form-field>
+
+            </mat-tab>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon style="color: #2FAA41;">circle</mat-icon>
+                Curso Privado
+              </ng-template>
+              Content 2
+            </mat-tab>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon style="color: #0AB0BC;">circle</mat-icon>
+                Actividad
+              </ng-template>
+              Content 3
+            </mat-tab>
+          </mat-tab-group>
+        </ng-container>
+        <div style="margin: 16px;display: flex;justify-content: space-between;">
           <button
+            *ngIf="ModalFlux>0"
+            (click)="ModalFlux=ModalFlux-1"
             style="margin-top: 0px !important;height: 38px; width: 128px;"
+            color="primary"
+            mat-button
+            type="button"
+            class="client-button">
+            <mat-icon>arrow_back</mat-icon>
+            {{'Atrás' | translate }}
+          </button>
+          <button
+            (click)="ModalFlux=ModalFlux+1"
+            style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
             color="primary"
             mat-raised-button
             type="button"

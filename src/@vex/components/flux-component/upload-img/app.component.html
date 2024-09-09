@@ -1,0 +1,26 @@
+<div
+    style="text-align-last: center;margin-bottom: 20px;display: flex;align-items: flex-end;justify-content: center;"
+    [style]="imagePreviewUrl?'':'border: 1px #C7D0D3;border-style: dashed;padding: 20px;'">
+    <label class="btn-1" for="file" *ngIf="!imagePreviewUrl">
+        <mat-icon svgIcon="mat:cloud_upload"></mat-icon>
+        <p style="font-size: 12px">{{'image_max' | translate}}</p>
+        <p style="font-size: 12px">{{'image_format' |
+            translate}}</p>
+        <p style="font-size: 12px">{{'image_recomendation' |
+            translate}}</p>
+    </label>
+    <div class="image-container" style="float: left;width: 50%;"
+        *ngIf="imagePreviewUrl">
+        <img
+            [src]="imagePreviewUrl"
+            alt="Image Preview" width="400" height="290"
+            style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
+    </div>
+    <label for="file" class="custom-file-upload"
+        *ngIf="imagePreviewUrl">
+        Custom Upload
+    </label>
+    <input type="file" formControlName="image"
+        style="display: none;"
+        (change)="onFileChanged($event)" id="file" />
+</div>

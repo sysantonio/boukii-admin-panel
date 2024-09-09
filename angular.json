@@ -60,7 +60,12 @@
               "lodash.memoize",
               "lodash.throttle",
               "luxon",
-              "quill"
+              "quill",
+              "raf",
+              "rgbcolor",
+              "qrcode",
+              "moment",
+              "plotly.js-dist-min"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

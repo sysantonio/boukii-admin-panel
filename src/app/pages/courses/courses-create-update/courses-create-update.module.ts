@@ -32,6 +32,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateModule } from '@ngx-translate/core';
 import { FluxToolbarModule } from 'src/@vex/components/flux-component/flux-toolbar/app.module';
+import { FluxUploadImgModule } from 'src/@vex/components/flux-component/upload-img/app.module';
 
 @NgModule({
   imports: [
@@ -70,6 +71,7 @@ import { FluxToolbarModule } from 'src/@vex/components/flux-component/flux-toolb
     MatTabsModule,
     TranslateModule,
     FluxToolbarModule,
+    FluxUploadImgModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

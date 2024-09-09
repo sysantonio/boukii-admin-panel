@@ -60,6 +60,11 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     },
   ]
 
+
+
+
+
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('dateTable') dateTable: MatTable<any>;
   @ViewChild('reductionTable') reductionTable: MatTable<any>;
@@ -116,8 +121,20 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     defaultParagraphSeparator: '',
     defaultFontName: '',
     sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
-    toolbarPosition: 'top',
+    toolbarPosition: 'bottom',
     outline: true,
+    toolbarHiddenButtons: [
+      [
+        'justifyLeft',
+        'justifyCenter',
+        'justifyRight',
+        'justifyFull',
+        'indent',
+        'outdent',
+        'insertUnorderedList',
+        'insertOrderedList',
+        'heading',
+      ]],
   }
 
   summary = ``;
@@ -206,7 +223,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     confirm_attendance: false,
     active: true,
     online: true,
-    image: this.imagePreviewUrl,
+    image: "",
     translations:
     {
       es: {
@@ -497,22 +514,23 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
             this.courseInfoFormGroup = this.fb.group({
 
               course_name: [null, Validators.required],
-              course_name_en: [null],
-              course_name_de: [null],
-              course_name_es: [null],
-              course_name_it: [null],
+              //course_name_en: [null],
+              //course_name_de: [null],
+              //course_name_es: [null],
+              //course_name_it: [null],
               price: [null],
               station: [null, Validators.required],
               summary: [null, Validators.required],
               description: [null, Validators.required],
-              summary_en: [null],
-              description_en: [null],
-              summary_de: [null],
-              description_de: [null],
-              summary_es: [null],
-              description_es: [null],
-              summary_it: [null],
-              description_it: [null],
+              participants: [this.defaults.max_participants, Validators.required],
+              //summary_en: [null],
+              //description_en: [null],
+              //summary_de: [null],
+              //description_de: [null],
+              //summary_es: [null],
+              //description_es: [null],
+              //summary_it: [null],
+              //description_it: [null],
               image: [null],
               ageFrom: [null],
               ageTo: [null],
