@@ -37,41 +37,49 @@
         </ng-container>
       </div>
       <div class="flex flex-col" style="padding: 20px;">
-        <ng-container *ngIf="ModalFlux===1" [formGroup]="courseInfoFormGroup">
+        <ng-container *ngIf="ModalFlux===1"
+          [formGroup]="courseInfoCollecDateSplitFormGroup">
           <mat-tab-group>
             <mat-tab>
               <ng-template mat-tab-label>
                 <mat-icon style="color: #E5962A;">circle</mat-icon>
                 Curso Colectivo
               </ng-template>
-              <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
+              <mat-checkbox style="margin: 20px 0;"> {{'Fechas flexibles' |
+                translate }} </mat-checkbox>
               <vex-flux-upload-img
                 (upload)="defaults.image=$event"></vex-flux-upload-img>
-
               <mat-form-field appearance="outline" style="width: 100%">
                 <mat-label>{{'courses.coursename' | translate}}</mat-label>
                 <input id="courseName" formControlName="course_name"
                   matInput required type="text">
               </mat-form-field>
-              <angular-editor id="summary" style="width: 100%"
-                [placeholder]="'courses.summary' | translate"
-                formControlName="summary" [config]="editorConfig">
-              </angular-editor>
-              <angular-editor id="description" style="width: 100%"
-                [placeholder]="'courses.desc' | translate"
-                formControlName="description" [config]="editorConfig">
-              </angular-editor>
-              <mat-form-field appearance="outline" style="width: 50%">
-                <mat-label>{{'courses.price' | translate}}</mat-label>
-                <input id="price" formControlName="price"
-                  matInput required type="number">
-              </mat-form-field>
-              <mat-form-field appearance="outline" style="width: 50%">
-                <mat-label>{{'courses.participants' | translate}}</mat-label>
-                <input id="participants" formControlName="participants"
-                  matInput required type="number">
-              </mat-form-field>
-
+              <div style="margin: 10px 0;">
+                <angular-editor id="summary" style="width: 100%"
+                  [placeholder]="'courses.summary' | translate"
+                  formControlName="summary" [config]="editorConfig">
+                </angular-editor>
+              </div>
+              <div style="margin: 20px 0;">
+                <angular-editor id="description" style="width: 100%"
+                  [placeholder]="'courses.desc' | translate"
+                  formControlName="description" [config]="editorConfig">
+                </angular-editor>
+              </div>
+              <div style="margin: 10px 0;">
+                <mat-form-field appearance="outline"
+                  style="width: 49%;margin-right: 1%;">
+                  <mat-label>{{'courses.price' | translate}}</mat-label>
+                  <input id="price" formControlName="price"
+                    matInput required type="number">
+                </mat-form-field>
+                <mat-form-field appearance="outline"
+                  style="width: 49%;margin-left: 1%;">
+                  <mat-label>{{'courses.participants' | translate}}</mat-label>
+                  <input id="participants" formControlName="participants"
+                    matInput required type="number">
+                </mat-form-field>
+              </div>
             </mat-tab>
             <mat-tab>
               <ng-template mat-tab-label>
@@ -89,6 +97,10 @@
             </mat-tab>
           </mat-tab-group>
         </ng-container>
+        <ng-container *ngIf="ModalFlux===2">
+
+        </ng-container>
+
         <div style="margin: 16px;display: flex;justify-content: space-between;">
           <button
             *ngIf="ModalFlux>0"
