@@ -1,8 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatCalendarCellCssClasses } from "@angular/material/datepicker";
+import {MatCalendar, MatCalendarCellCssClasses} from '@angular/material/datepicker';
 import moment from "moment";
 import { ApiCrudService } from "src/service/crud.service";
+import {CustomHeader} from '../calendar/custom-header/custom-header.component';
+import {CalendarService} from '../../../../../../service/calendar.service';
 
 @Component({
   selector: "booking-step-four",
@@ -15,8 +17,11 @@ export class StepFourComponent {
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
+  @ViewChild('secondCalendar') secondCalendar: MatCalendar<Date>;
+
   stepForm: FormGroup;
   selectedDate;
+  nextMonthDate: Date;
   selectedCourse;
   courseTypeId: number = 2;
   user;
@@ -26,14 +31,18 @@ export class StepFourComponent {
   cursesInSelectedDate = [];
   isLoading = true;
   selectedDateMoment;
+  showTwoMonths: boolean = true;
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService) {
+  constructor(private fb: FormBuilder, private crudService: ApiCrudService,
+              private calendarService: CalendarService) {
     this.selectedCourse = this.initialData?.selectedCourse;
     this.selectedDate = this.initialData?.selectedDate;
     this.selectedDateMoment = this.selectedDate
       ? moment(this.selectedDate)
       : null;
     this.minDate = new Date();
+    this.updateNextMonth();
+    this.autoSelectFirstDayIfCurrentMonth();
   }
 
   ngOnInit(): void {
@@ -43,6 +52,12 @@ export class StepFourComponent {
       course: [this.selectedCourse, Validators.required],
     });
     this.getCourses(this.sportLevel);
+    this.calendarService.monthChanged$.subscribe((newDate: Date) => {
+      this.selectedDate = newDate;
+      this.updateNextMonth();
+      this.autoSelectFirstDayIfCurrentMonth();
+      this.getCourses(this.sportLevel);
+    });
   }
 
   isFormValid() {
@@ -56,6 +71,22 @@ export class StepFourComponent {
   completeStep() {
     if (this.isFormValid()) {
       this.stepCompleted.emit(this.stepForm);
+    }
+  }
+
+  autoSelectFirstDayIfCurrentMonth() {
+    const currentMonth = moment();
+    const selectedMonth = moment(this.selectedDate);
+
+    if (selectedMonth.isSame(currentMonth, 'month')) {
+      this.selectedDate =  new Date();
+    }
+  }
+
+  updateNextMonth() {
+    this.nextMonthDate = moment(this.selectedDate).add(1, 'month').toDate();
+    if(this.secondCalendar) {
+      this.secondCalendar.activeDate = this.nextMonthDate;
     }
   }
 
@@ -97,10 +128,10 @@ export class StepFourComponent {
     };
   }
 
-  getCourses(sportLevel: any, date?: any) {
+  getCourses(sportLevel: any) {
     let minDate, maxDate;
-    minDate = date ? moment(date) : moment();
-    maxDate = moment().endOf("month");
+    minDate = moment(this.selectedDate);
+    maxDate = moment(this.nextMonthDate);
     const rq = {
       start_date: minDate.format("YYYY-MM-DD"),
       end_date: maxDate.format("YYYY-MM-DD"),
@@ -114,8 +145,11 @@ export class StepFourComponent {
     this.isLoading = true;
     this.crudService.post("/availability", rq).subscribe((data) => {
       this.courses = data.data;
+      this.cursesInSelectedDate = null;
       this.compareCourseDates();
       this.isLoading = false;
     });
   }
+
+  protected readonly CustomHeader = CustomHeader;
 }

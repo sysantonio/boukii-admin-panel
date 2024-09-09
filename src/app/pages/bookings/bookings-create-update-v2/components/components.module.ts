@@ -21,6 +21,7 @@ import { StepFourComponent } from "./step-four/step-four.component";
 
 import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
 import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
+import {CustomHeader} from './calendar/custom-header/custom-header.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { BookingDialogComponent } from "./booking-dialog/booking-dialog.componen
     BookingDescriptionCard,
     BookingDialogComponent,
     StepFourComponent,
+    CustomHeader
   ],
   exports: [
     BookingFormStepper,
@@ -55,6 +57,7 @@ import { BookingDialogComponent } from "./booking-dialog/booking-dialog.componen
     BookingDescriptionCard,
     BookingDialogComponent,
     StepFourComponent,
+    CustomHeader
   ],
 })
 export class BookingComponentsModule {}
