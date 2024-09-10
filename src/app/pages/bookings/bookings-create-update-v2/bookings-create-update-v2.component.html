@@ -1,0 +1,92 @@
+<div class="barWrapper">
+  <vex-breadcrumbs
+    class="booking-breadcrumb"
+    [crumbs]="[
+      { icon: 'reservas' },
+      { text: 'bookings', title: true, link: '/bookings' },
+      { text: 'bookings_page.creation.title', subtitle: true }
+    ]"
+  ></vex-breadcrumbs>
+</div>
+<div class="barWrapper">
+  <div>
+    <button
+      class="crumb"
+      [ngClass]="{ active: currentStep === 0, prev: currentStep > 0 }"
+      (click)="forceChange(0)"
+    >
+      {{ "bookings_page.crumbs.client" | translate }}
+    </button>
+    <button
+      class="crumb"
+      [ngClass]="{ active: currentStep === 1, prev: currentStep > 1 }"
+      (click)="forceChange(1)"
+    >
+      {{ "bookings_page.crumbs.utilizers" | translate }}
+    </button>
+    <button
+      class="crumb"
+      [ngClass]="{ active: currentStep === 2, prev: currentStep > 2 }"
+      (click)="forceChange(2)"
+    >
+      {{ "bookings_page.crumbs.sport" | translate }}
+    </button>
+    <button
+      class="crumb"
+      [ngClass]="{ active: currentStep === 3, prev: currentStep > 3 }"
+      (click)="forceChange(3)"
+    >
+      {{ "bookings_page.crumbs.course" | translate }}
+    </button>
+    <button
+      class="crumb"
+      [ngClass]="{ active: currentStep === 4, prev: currentStep > 4 }"
+      (click)="forceChange(4)"
+    >
+      {{ "bookings_page.crumbs.details" | translate }}
+    </button>
+    <button
+      class="crumb last"
+      [ngClass]="{ active: currentStep === 5, prev: currentStep > 5 }"
+      (click)="forceChange(5)"
+    >
+      {{ "bookings_page.crumbs.observations" | translate }}
+    </button>
+  </div>
+  <div *ngIf="mainClient" class="clientDescription">
+    <span> {{ "bookings_page.crumbs.client" | translate }} </span>
+    {{ mainClient.first_name }} {{ mainClient.last_name }}
+  </div>
+</div>
+
+<div class="bookingContainer">
+  <button
+    mat-button
+    type="button"
+    class="modalButton"
+    (click)="openBookingDialog()"
+  >
+    {{ "bookings_page_descriptionModal_button" | translate }}
+  </button>
+
+  <mat-card class="left-column">
+    <mat-card-content>
+      <booking-form-stepper
+        [forceStep]="forceStep"
+        (changedCurrentStep)="currentStep = $event; forceStep = $event"
+        (changedFormData)="handleFormChange($event)"
+      ></booking-form-stepper>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="right-column">
+    <booking-description-card
+      [utilizers]="utilizers"
+      [sport]="sport"
+      [sportLevel]="sportLevel"
+      [course]="course"
+      [date]="date"
+    >
+    </booking-description-card>
+  </mat-card>
+</div>

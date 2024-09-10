@@ -1,0 +1,183 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.headerWrapper {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--color-grey3);
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.sportTitle {
+  font-family: var(--font-dm);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--color-dark1);
+  margin-top: 12px;
+}
+
+.sportIconSkeleton {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--color-grey3);
+  border-radius: 3px;
+  display: inline-block;
+  margin-left: 2px;
+}
+
+.sportSkeletonsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.dateSkeletonsWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  gap: 0.5rem;
+  .skeleton {
+    height: 0.5rem;
+  }
+  .last {
+    margin-left: auto;
+  }
+}
+
+.skeleton {
+  background-color: var(--color-grey3);
+  border-radius: 12px;
+  height: 12px;
+  width: 150px;
+  animation: pulse 1.5s infinite;
+
+  &.medium {
+    width: 100px;
+    height: 8px;
+  }
+  &.small {
+    width: 80px;
+    height: 6px;
+  }
+}
+
+.bodyWrapper {
+  padding: 20px;
+  border-bottom: 1px solid var(--color-grey3);
+}
+
+.footerWrapper {
+  padding: 20px;
+  font-family: var(--font-dm);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section {
+  margin-bottom: 1.25rem;
+}
+
+.sectionTitle {
+  display: flex;
+  gap: 0.5rem;
+  font-family: var(--font-dm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  text-transform: uppercase;
+  align-items: center;
+  color: var(--color-grey1);
+  margin-bottom: 0.5rem;
+}
+
+.avatarImg {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+
+.utilizersWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sportImg,
+.courseImg {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  background-color: var(--color-dark2);
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.courseImg {
+  background-color: transparent;
+  padding: 0;
+}
+
+.courseTitle {
+  font-family: var(--font-dm);
+  font-size: 14px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2; /* Limitar a 2 líneas */
+  line-clamp: 2; /* Específicamente para navegadores que soportan esta propiedad */
+  max-height: 36px; /* Controlar la altura para limitar el número de líneas visibles */
+  line-height: 18px;
+}
+
+.courseSubtitle {
+  font-family: var(--font-dm);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.utilizersWrapper__description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h4 {
+    font-family: var(--font-dm);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--color-dark1);
+  }
+
+  span {
+    font-family: var(--font-dm);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1rem;
+    color: var(--color-grey1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,40 @@
+<form [formGroup]="stepOneForm">
+  <mat-form-field appearance="outline" class="stepOneSearchInput">
+    <mat-label>{{ "client" | translate }}</mat-label>
+    <input
+      type="text"
+      placeholder="{{ 'choose_client' | translate }}"
+      aria-label="Number"
+      matInput
+      [matAutocomplete]="auto"
+      formControlName="client"
+    />
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option
+        *ngFor="let filteredClient of filteredOptions | async"
+        [value]="filteredClient"
+        (onSelectionChange)="setClient($event)"
+      >
+        {{ filteredClient.first_name }} {{ filteredClient.last_name }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
+  </mat-form-field>
+
+  <div class="stepOneButtonsWrapper">
+    <button mat-stroked-button type="button">
+      <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
+      {{ "new_client" | translate }}
+    </button>
+
+    <button
+      mat-flat-button
+      type="button"
+      (click)="completeStep()"
+      [disabled]="!isFormValid()"
+    >
+      {{ "confirm" | translate }}
+    </button>
+  </div>
+</form>

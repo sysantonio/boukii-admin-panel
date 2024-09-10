@@ -1,4 +1,3 @@
-
 {
   "add": "Hinzufügen...",
   "calendar": "Kalender",
@@ -234,6 +233,7 @@
   "bookings_page.same_date": "Einzeldatum",
   "bookings_page.same_monitor": "Gleicher Lehrer",
   "bookings_page.multiple_date": "Verschiedene Termine",
+  "bookings_page.select_utilizers": "Wähle einen oder mehrere Teilnehmer aus",
   "courses.title": "Kurse",
   "courses.levels_and_groups": "Ebenen / Gruppen",
   "courses.new": "Neuer Kurs",
