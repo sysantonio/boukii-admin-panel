@@ -42,7 +42,8 @@
           <mat-tab-group>
             <mat-tab>
               <ng-template mat-tab-label>
-                <mat-icon style="color: #E5962A;">circle</mat-icon>
+                <mat-icon style="color: #E5962A;"
+                  class="tab_icon">circle</mat-icon>
                 Curso Colectivo
               </ng-template>
               <mat-checkbox style="margin: 20px 0;"> {{'Fechas flexibles' |
@@ -57,25 +58,25 @@
               <div style="margin: 10px 0;">
                 <angular-editor id="summary" style="width: 100%"
                   [placeholder]="'courses.summary' | translate"
-                  formControlName="summary" [config]="editorConfig">
+                  formControlName="summary" [config]="editor1Config">
                 </angular-editor>
               </div>
               <div style="margin: 20px 0;">
                 <angular-editor id="description" style="width: 100%"
                   [placeholder]="'courses.desc' | translate"
-                  formControlName="description" [config]="editorConfig">
+                  formControlName="description" [config]="editor2Config">
                 </angular-editor>
               </div>
               <div style="margin: 10px 0;">
                 <mat-form-field appearance="outline"
                   style="width: 49%;margin-right: 1%;">
-                  <mat-label>{{'courses.price' | translate}}</mat-label>
+                  <mat-label>{{'prices' | translate}}</mat-label>
                   <input id="price" formControlName="price"
                     matInput required type="number">
                 </mat-form-field>
                 <mat-form-field appearance="outline"
                   style="width: 49%;margin-left: 1%;">
-                  <mat-label>{{'courses.participants' | translate}}</mat-label>
+                  <mat-label>{{'max_pax' | translate}}</mat-label>
                   <input id="participants" formControlName="participants"
                     matInput required type="number">
                 </mat-form-field>
@@ -83,14 +84,16 @@
             </mat-tab>
             <mat-tab>
               <ng-template mat-tab-label>
-                <mat-icon style="color: #2FAA41;">circle</mat-icon>
+                <mat-icon style="color: #2FAA41;"
+                  class="tab_icon">circle</mat-icon>
                 Curso Privado
               </ng-template>
               Content 2
             </mat-tab>
             <mat-tab>
               <ng-template mat-tab-label>
-                <mat-icon style="color: #0AB0BC;">circle</mat-icon>
+                <mat-icon style="color: #0AB0BC;"
+                  class="tab_icon">circle</mat-icon>
                 Actividad
               </ng-template>
               Content 3
@@ -98,9 +101,149 @@
           </mat-tab-group>
         </ng-container>
         <ng-container *ngIf="ModalFlux===2">
+          <span style="margin: 20px 0;">
+            {{'Fechas de reservas' | translate}}
+          </span>
+          <div>
+            <mat-form-field
+              appearance="outline"
+              style="width: 49%;margin-right: 1%;">
+              <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+              <input
+                matInput
+                id="dateFromPrivate"
+                [matDatepicker]="pickerDateFrom"
+                [min]="minDate"
+                [max]="maxDate"
+                [value] />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerDateFrom"></mat-datepicker-toggle>
+              <mat-datepicker
+                #pickerDateFrom
+                [startAt]="minDate"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              style="width: 49%;margin-left: 1%;">
+              <mat-label>{{'courses.date_reservable_to' |
+                translate}}</mat-label>
+              <input
+                matInput
+                id="dateFromPrivate"
+                [matDatepicker]="pickerDateFrom"
+                [min]="minDate"
+                [max]="maxDate"
+                [value] />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerDateFrom"></mat-datepicker-toggle>
+              <mat-datepicker
+                #pickerDateFrom
+                [startAt]="minDate"></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div *ngFor="let item of FechaReserva, index as i">
+            <div style="width: 100%;background-color: #C7D0D3;height: 60px;">
+              {{'Fecha '+ (i+1)| translate}}
+              <mat-icon *ngIf="i!==0" (click)="FechaReserva.splice(i,1)"
+                style="cursor: pointer;">delete</mat-icon>
+            </div>
+            <mat-form-field
+              appearance="outline"
+              style="width: 32%;margin-right: 1%;">
+              <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+              <input
+                matInput
+                id="dateFromPrivate"
+                [matDatepicker]="pickerDateFrom"
+                [min]="minDate"
+                [max]="maxDate"
+                [value] />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerDateFrom"></mat-datepicker-toggle>
+              <mat-datepicker
+                #pickerDateFrom
+                [startAt]="minDate"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: 32%;margin:0 1%;">
+              <mat-label>{{'hour' | translate}}</mat-label>
+              <input
+                type="text"
+                placeholder="{{'hour' | translate}}"
+                aria-label="Number"
+                matInput
+                [matAutocomplete]="auto" />
+              <mat-autocomplete #auto="matAutocomplete"
+                [displayWith]="displayFn">
+                <mat-option
+                  *ngFor="let hour of hours"
+                  [value]="hour">
+                  {{hour}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: 32%;margin-left: 1%;">
+              <mat-label>{{'courses.when' | translate}}</mat-label>
+              <input id="courses.when"
+                matInput required type="number">
+            </mat-form-field>
+          </div>
+          <button
+            type="button"
+            (click)="FechaReserva.push({ Fecha:  minDate, Hora: '08:00', Duracion: 1 })"
+            class="client-button">
+            {{'Añadir fecha' | translate }}
+          </button>
+          <div>
+            <span style="margin: 20px 0;">
+              {{'Descuentos según cantidad de fechas reservadas' | translate}}
+            </span>
+            <mat-form-field appearance="outline"
+              style="width: 49%;margin-right: 1%;">
+              <mat-label>{{'hour' | translate}}</mat-label>
+              <input
+                type="text"
+                placeholder="{{'hour' | translate}}"
+                aria-label="Number"
+                matInput
+                [matAutocomplete]="auto" />
+              <mat-autocomplete #auto="matAutocomplete"
+                [displayWith]="displayFn">
+                <mat-option
+                  *ngFor="let day of ndays"
+                  [value]="day">
+                  {{day}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: 49%;margin-left:1%;">
+              <mat-label>{{'hour' | translate}}</mat-label>
+              <input
+                type="text"
+                placeholder="{{'hour' | translate}}"
+                aria-label="Number"
+                matInput
+                [matAutocomplete]="auto" />
+              <mat-autocomplete #auto="matAutocomplete"
+                [displayWith]="displayFn">
+                <mat-option
+                  *ngFor="let reduccion of reduccions"
+                  [value]="reduccion">
+                  {{reduccion}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-icon matSuffix svgIcon="mat:unfold_more"></mat-icon>
+            </mat-form-field>
+          </div>
 
         </ng-container>
-
         <div style="margin: 16px;display: flex;justify-content: space-between;">
           <button
             *ngIf="ModalFlux>0"

@@ -32,7 +32,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 })
 export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
-  ModalFlux: number = 0
+  ModalFlux: number = 2
   ModalProgress: { Name: string, Modal: number }[] = [
     {
       Name: "DEPORTE",
@@ -59,7 +59,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       Modal: 5
     },
   ]
-
+  FechaReserva: { Fecha: Date, Hora: string, Duracion: number }[] = [{ Fecha: new Date(), Hora: "08:00", Duracion: 1 }]
+  Descuento: { NFecha: number, Reduccion: string }[] = [{ NFecha: 2, Reduccion: "10%" }]
 
 
 
@@ -104,13 +105,27 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     '22:00', '22:15', '22:30', '22:45',
     '23:00'
   ];
+  reduccions: string[] = [
+    "0%", "10%",
+    "20%", "30%",
+    "40%", "50%",
+    "60%", "70%",
+    "80%", "90%",
+    "100%",
+  ];
+  ndays: number[] = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+  ];
+
+
+
 
   filteredToHours = [];
 
-  editorConfig: AngularEditorConfig = {
+  editor1Config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    height: 'auto',
+    height: '56px',
     minHeight: '0',
     maxHeight: 'auto',
     width: 'auto',
@@ -136,6 +151,37 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         'heading',
       ]],
   }
+  editor2Config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '112px',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
+    toolbarPosition: 'bottom',
+    outline: true,
+    toolbarHiddenButtons: [
+      [
+        'justifyLeft',
+        'justifyCenter',
+        'justifyRight',
+        'justifyFull',
+        'indent',
+        'outdent',
+        'insertUnorderedList',
+        'insertOrderedList',
+        'heading',
+      ]],
+  }
+
+
 
   summary = ``;
   description = ``;
