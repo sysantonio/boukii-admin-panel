@@ -1,15 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, map, of, startWith, forkJoin, mergeMap } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { DateTimeDialogComponent } from 'src/@vex/components/date-time-dialog/date-time-dialog.component';
-import { MatSort } from '@angular/material/sort';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'moment';
-import { ReductionDialogComponent } from 'src/@vex/components/reduction-dialog/reduction-dialog.component';
-import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-dialog/private-dates-dialog.component';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
@@ -30,9 +27,9 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   ],
   animations: [fadeInUp400ms, stagger20ms]
 })
-export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
+export class CoursesCreateUpdateComponent implements OnInit {
 
-  ModalFlux: number = 5
+  ModalFlux: number = 0
   ModalProgress: { Name: string, Modal: number }[] = [
     {
       Name: "DEPORTE",
@@ -61,21 +58,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   ]
   FechaReserva: { Fecha: Date, Hora: string, Duracion: number }[] = [{ Fecha: new Date(), Hora: "08:00", Duracion: 1 }]
   Descuentos: { NFecha: number, Reduccion: string }[] = [{ NFecha: 2, Reduccion: "10%" }]
-
-
-  readonly panelOpenState = signal(false);
-
-
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild('dateTable') dateTable: MatTable<any>;
-  @ViewChild('reductionTable') reductionTable: MatTable<any>;
-  @ViewChild('privateDatesTable') privateDatesTable: MatTable<any>;
-  @ViewChild('activityDatesTable') activityDatesTable: MatTable<any>;
-  @ViewChild('privateReductionTable') privateReductionTable: MatTable<any>;
-  @ViewChild('levelTable') table: MatTable<any>;
-
-  userAvatar = '../../../../assets/img/avatar.png';
 
   people = 6; // Aquí puedes cambiar el número de personas
   intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
@@ -424,9 +406,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     return this.rangeForm.get('maxAge');
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
 
   ngOnInit() {
 
@@ -444,7 +423,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     }).subscribe(({ sportTypes, sports, stations, monitors }) => {
       this.sportTypeData = sportTypes;
       this.sportData = sports;
-      console.log(this.sportData)
       this.stations = stations;
       this.monitors = monitors;
 
@@ -955,9 +933,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     if (type === 'unique') {
       this.courseInfoPriveFormGroup.patchValue({ periodeMultiple: false });
       this.dataSourceDatePrivate.data = [];
-      this.privateDatesTable?.renderRows();
-      this.activityDatesTable?.renderRows();
-
     } else {
       this.courseInfoPriveFormGroup.patchValue({ periodeUnique: false });
     }
@@ -1118,12 +1093,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.dataSource.data.push({ date: moment(result.date).format('YYYY-MM-DD'), duration: result.duration, hour: result.hour, active: true });
-        this.dateTable?.renderRows();
-
-        /*if (this.mode === 'update') {
-          this.defaults.course_dates.push({date: moment(result.date).format('YYYY-MM-DD'), hour_start: result.hour, hour_end: this.calculateHourEnd(result.hour, result.duration)});
-          this.activeGroupWhenEdit(this.defaults.course_dates[this.defaults.course_dates.length - 1]);
-        }*/
       }
     });
   }
@@ -1229,7 +1198,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
               this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
               this.dataSource.data[index].hour = result.hour;
               this.dataSource.data[index].duration = result.duration;
-              this.dateTable?.renderRows();
             }
 
           }
@@ -1240,183 +1208,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
   }
 
-  openDialogReductions(): void {
-    const dialogRef = this.dialog.open(ReductionDialogComponent, {
-      width: '300px',
-      data: { iterations: this.dataSource.data.length }
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSourceReductions.data.push({ date: result.dateIndex, percentage: result.percentage });
-        this.reductionTable?.renderRows();
-      }
-    });
-  }
-
-  openDialogPrivateReductions(): void {
-    const dialogRef = this.dialog.open(ReductionDialogComponent, {
-      width: '300px',
-      data: { iterations: this.dataSourceDatePrivate.data.length }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSourceReductionsPrivate.data.push({ date: result.dateIndex, percentage: result.percentage });
-        this.privateReductionTable?.renderRows();
-      }
-    });
-  }
-
-  openDialogPrivateDate(): void {
-
-    let blockedDays = this.myHolidayDates;
-    if (this.mode === 'update') {
-
-      this.dataSourceDatePrivate.data.forEach(element => {
-        if (element.active || element.active === 1) {
-          blockedDays.push(moment(element.dateFrom).toDate())
-        }
-      });
-    }
-    const dialogRef = this.dialog.open(PrivateDatesDialogComponent, {
-      width: '300px',
-      data: {
-        iterations: this.dataSource.data.length,
-        minDate: this.minDate,
-        maxDate: this.maxDate,
-        holidays: blockedDays
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.defaults.settings.periods.push({ from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true })
-        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true });
-        this.privateDatesTable?.renderRows();
-        this.activityDatesTable?.renderRows();
-        this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
-      }
-    });
-  }
-
-  onChipClick(level: any) {
-    const selectedCourse: any = {
-      annotation: level.annotation,
-      name: level.name
-    };
-    this.selectedCourses.data.push(selectedCourse);
-    this.table.renderRows();
-
-  }
-
-  removeCourse(course: any) {
-
-    let index = -1;
-
-    this.selectedCourses.data.forEach((element, idx) => {
-      if (course.annotation === element.annotation && course.name === element.name) {
-        index = idx;
-      }
-    });
-    if (index > -1) {
-      this.selectedCourses.data.splice(index, 1);
-      this.table.renderRows();
-
-    }
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removeReduction(redcution: any, index: any) {
-    this.dataSourceReductions.data.splice(index, 1);
-    this.reductionTable.renderRows();
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removePrivateReduction(redcution: any, index: any) {
-    this.dataSourceReductionsPrivate.data.splice(index, 1);
-    this.privateReductionTable.renderRows();
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removeteDate(index: any) {
-
-
-    if (this.mode === 'update') {
-      if (this.dataSource.data.length <= 1 || this.dataSource.data.filter(i => i.active).length <= 1) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', { duration: 3000 });
-      } else {
-        this.dataSource.data[index].active = false;
-        this.defaults.course_dates[index].active = false;
-        this.dateTable.renderRows();
-      }
-    } else {
-      this.dataSource.data.splice(index, 1);
-      this.dateTable.renderRows();
-    }
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  activateDate(index: any) {
-    if (this.mode === 'update') {
-      this.dataSource.data[index].active = true;
-      this.defaults.course_dates[index].active = true;
-      this.dateTable.renderRows();
-    }
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removePrivateDate(index: any, main: any, period: any) {
-
-    if (this.mode === 'update') {
-
-      if (main) {
-        this.dataSourceDatePrivate.data[index].active = false;
-        this.defaults.settings.periods[index].active = false;
-        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'DD-MM-YYYY').add(-1, 'd');
-        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'DD-MM-YYYY').add(1, 'd');
-        this.defaults.course_dates.forEach(element => {
-          if (moment(element.date).isBetween(from, to)) {
-
-            element.active = false;
-          }
-        });
-
-        this.dataSourceDatePrivate.data.forEach(element => {
-          if (element.period === period) {
-
-            element.active = false;
-          }
-        });
-        this.privateDatesTable.renderRows();
-        this.activityDatesTable.renderRows();
-      } else {
-        this.defaults.course_dates[index - (period + 1)].active = false;
-        this.dataSourceDatePrivate.data[index].active = false;
-        this.privateDatesTable.renderRows();
-        this.activityDatesTable.renderRows();
-      }
-
-    } else {
-      this.defaults.settings.periods.splice(index, 1);
-      this.dataSourceDatePrivate.data.splice(index, 1);
-      this.privateDatesTable.renderRows();
-      this.activityDatesTable.renderRows();
-    }
-
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  selectSport(sport: any) {
-    this.defaults.sport_id = sport.sport_id;
-    this.courseTypeFormGroup.get("sport").patchValue(sport.sport_id);
-    this.getDegrees();
-  }
 
   setCourseType(type: string, id: number) {
 
@@ -1580,7 +1372,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   getDegrees() {
     this.groupedByColor = {};
     this.colorKeys = [];
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.defaults.sport_id)
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseTypeFormGroup.controls['sportType'].value)
       .subscribe((data) => {
         data.data.forEach(element => {
           if (element.active) {
@@ -2903,6 +2695,14 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       } else {
         this.selectedPeriod = -1;
       }
+    }
+
+  }
+
+
+  Confirm() {
+    if (this.ModalFlux === 0) {
+      this.getDegrees();
     }
 
   }
