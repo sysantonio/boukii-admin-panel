@@ -33,6 +33,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateModule } from '@ngx-translate/core';
 import { FluxToolbarModule } from 'src/@vex/components/flux-component/flux-toolbar/app.module';
 import { FluxUploadImgModule } from 'src/@vex/components/flux-component/upload-img/app.module';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   imports: [
@@ -71,7 +72,7 @@ import { FluxUploadImgModule } from 'src/@vex/components/flux-component/upload-i
     MatTabsModule,
     TranslateModule,
     FluxToolbarModule,
-    FluxUploadImgModule
+    FluxUploadImgModule, MatExpansionModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

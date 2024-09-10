@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, map, of, startWith, forkJoin, mergeMap } from 'rxjs';
@@ -32,7 +32,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 })
 export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
-  ModalFlux: number = 2
+  ModalFlux: number = 5
   ModalProgress: { Name: string, Modal: number }[] = [
     {
       Name: "DEPORTE",
@@ -60,9 +60,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     },
   ]
   FechaReserva: { Fecha: Date, Hora: string, Duracion: number }[] = [{ Fecha: new Date(), Hora: "08:00", Duracion: 1 }]
-  Descuento: { NFecha: number, Reduccion: string }[] = [{ NFecha: 2, Reduccion: "10%" }]
+  Descuentos: { NFecha: number, Reduccion: string }[] = [{ NFecha: 2, Reduccion: "10%" }]
 
 
+  readonly panelOpenState = signal(false);
 
 
 

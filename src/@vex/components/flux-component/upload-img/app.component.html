@@ -1,6 +1,6 @@
 <div
-    style="text-align-last: center;margin-bottom: 20px;display: flex;align-items: flex-end;justify-content: center;"
-    [style]="imagePreviewUrl?'':'border: 1px #C7D0D3;border-style: dashed;padding: 20px;'">
+    class="outside"
+    [style]="imagePreviewUrl?'':'border: 1px #C7D0D3;border-style: dashed;padding: 20px;border-radius: 8px;'">
     <label class="btn-1" for="file" *ngIf="!imagePreviewUrl">
         <mat-icon svgIcon="mat:cloud_upload"></mat-icon>
         <p style="font-size: 12px">{{'image_max' | translate}}</p>
