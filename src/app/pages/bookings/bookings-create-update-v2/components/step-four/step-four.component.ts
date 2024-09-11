@@ -23,7 +23,7 @@ export class StepFourComponent {
   selectedDate;
   nextMonthDate: Date;
   selectedCourse;
-  courseTypeId: number = 2;
+  courseTypeId: number = 0;
   user;
   courses = [];
   minDate;

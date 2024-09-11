@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { MOCK_COURSE_PRIVATE } from "../../mocks/course";
+import { MOCK_COURSE_PRIVATE, MOCK_COURSE_COLECTIVE } from "../../mocks/course";
 import { MOCK_USER1, MOCK_USER2 } from "../../mocks/user";
 
 @Component({
@@ -14,7 +14,7 @@ export class StepDetailsComponent {
   @Input() utilizers: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
-
+  utilizer;
   dates = [
     {
       date: "",
@@ -35,6 +35,11 @@ export class StepDetailsComponent {
       utilizers: [MOCK_USER1, MOCK_USER2],
     },
   ];
+  constructor() {
+    // ESTO se debera recibir del padre y trabajar con ello
+    this.course = MOCK_COURSE_COLECTIVE;
+    this.utilizer = this.utilizers?.[0] || MOCK_USER1;
+  }
 
   isFormValid() {
     return true;
@@ -49,10 +54,5 @@ export class StepDetailsComponent {
     if (this.isFormValid()) {
       //this.stepCompleted.emit(this.stepForm);
     }
-  }
-
-  constructor() {
-    // ESTO se debera recibir del padre y trabajar con ello
-    this.course = MOCK_COURSE_PRIVATE;
   }
 }
