@@ -9,7 +9,7 @@
 <vex-flux-toolbad [Modal]="ModalProgress" [Flux]="ModalFlux"></vex-flux-toolbad>
 <vex-flux-layout>
   <mat-spinner loading *ngIf="loading" style="margin:0 auto"></mat-spinner>
-  <ng-container body *ngIf="!loading">
+  <div body *ngIf="!loading">
     <div class="flex flex-col" style="padding: 20px 20px 0;"
       *ngIf="ModalFlux===0"
       [formGroup]="courseTypeFormGroup">
@@ -347,11 +347,11 @@
         {{'Confirmar' | translate }}
       </button>
     </div>
-  </ng-container>
-  <ng-container card *ngIf="!loading">
+  </div>
+  <div card *ngIf="!loading">
     Hi, i am the card
-  </ng-container>
-  <ng-container card2 *ngIf="!loading">
+  </div>
+  <div card2 *ngIf="!loading">
     Hi, i am the card
-  </ng-container>
+  </div>
 </vex-flux-layout>
