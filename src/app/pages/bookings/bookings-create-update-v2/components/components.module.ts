@@ -27,6 +27,9 @@ import { BookingDialogComponent } from "./booking-dialog/booking-dialog.componen
 import { CustomHeader } from "./calendar/custom-header/custom-header.component";
 import { FormDetailsPrivateComponent } from "./form-details-private/form-details-private.component";
 
+import { FormDetailsColectiveFixComponent } from "./form-details-colective-fix/form-details-colective-fix.component";
+import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex/form-details-colective-flex.component";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -56,6 +59,8 @@ import { FormDetailsPrivateComponent } from "./form-details-private/form-details
     StepDetailsComponent,
     FormDetailsPrivateComponent,
     StepObservationsComponent,
+    FormDetailsColectiveFixComponent,
+    FormDetailsColectiveFlexComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -68,7 +73,9 @@ import { FormDetailsPrivateComponent } from "./form-details-private/form-details
     CustomHeader,
     StepDetailsComponent,
     FormDetailsPrivateComponent,
-    StepObservationsComponent
+    StepObservationsComponent,
+    FormDetailsColectiveFixComponent,
+    FormDetailsColectiveFlexComponent,
   ],
 })
 export class BookingComponentsModule {}
