@@ -1375,9 +1375,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseTypeFormGroup.controls['sportType'].value)
       .subscribe((data) => {
         data.data.forEach(element => {
-          if (element.active) {
-            this.levels.push(element);
-          }
+          if (element.active) this.levels.push(element);
         });
         this.levels.forEach(level => {
           if (!this.groupedByColor[level.color]) {

@@ -18,13 +18,13 @@
         <mat-radio-button
           class="sport_checkbox"
           *ngFor="let item of sportData"
-          [value]="item.id">
+          [value]="item.sport_id">
           <div style="display: flex;align-items: center;">
             <img [src]="item.icon_selected"
-              *ngIf="courseTypeFormGroup.controls['sportType'].value===item.id"
+              *ngIf="courseTypeFormGroup.controls['sportType'].value===item.sport_id"
               class="sport_icon selected">
             <img [src]="item.icon_unselected"
-              *ngIf="courseTypeFormGroup.controls['sportType'].value!==item.id"
+              *ngIf="courseTypeFormGroup.controls['sportType'].value!==item.sport_id"
               class="sport_icon noselected">
             {{item.name}}
           </div>
@@ -271,14 +271,24 @@
     </div>
     <div class="flex flex-col" *ngIf="ModalFlux===3"
       [formGroup]="courseInfoCollecDateSplitFormGroup">
-      <div style="background-color: D2EFFF;">
-        <mat-icon style="color: #006FCB;">info</mat-icon>
+      <div style="background-color: #D2EFFF; border-radius: 8px;height: 44px;">
+        <mat-icon style="color: #006fcb;">info</mat-icon>
         Elije los niveles aquí. Podrás asignar los monitores en un segundo
         momento.
       </div>
-      <div>
-        <mat-checkbox
-          style="height: 36px;border: 1px solid #008A40; border-radius: 3px;color: #008A40;width: 225px;">Checked</mat-checkbox>
+      <div style="width: 100%;height: 20px;"> </div>
+      <div
+        style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px;">
+        <ng-container *ngFor="let level of levels">
+          <mat-checkbox
+            style="height: 36px; border-radius: 3px;width: 225px;margin: 5px 0;font-size: 12px;"
+            [style.backgroundColor]="level.color+'CC'"
+            [style.color]="level.color"
+            [style.border]="'1px solid '+level.color">
+            {{level.annotation}} {{level.level}}
+          </mat-checkbox>
+        </ng-container>
+
       </div>
     </div>
     <div class="flex flex-col" *ngIf="ModalFlux===4"
