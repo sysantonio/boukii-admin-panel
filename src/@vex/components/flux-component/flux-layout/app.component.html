@@ -1,0 +1,20 @@
+<div class="screen">
+    <ng-content select="[loading]"></ng-content>
+    <div class="show"
+        style="margin-bottom: 20px;width: 100%;text-align-last: end;">
+        <button (click)="ShowCard=!ShowCard"
+            style="color: #E91E63;">
+            Ver resumen actividad
+        </button>
+    </div>
+    <div class="card body">
+        <ng-content select="[body]"></ng-content>
+    </div>
+    <div class="hide" style="width: 30px;"> </div>
+    <div class="card resum hide">
+        <ng-content select="[card]"></ng-content>
+    </div>
+    <div class="modal card resum" *ngIf="ShowCard">
+        <ng-content select="[card]"></ng-content>
+    </div>
+</div>

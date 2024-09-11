@@ -7,351 +7,348 @@
 </vex-secondary-toolbar>
 
 <vex-flux-toolbad [Modal]="ModalProgress" [Flux]="ModalFlux"></vex-flux-toolbad>
-
-<div [@stagger]="true" class="p-gutter container" style="max-width: none;">
-  <mat-spinner *ngIf="loading" style="margin:0 auto"></mat-spinner>
-  <div
-    class="flex flex-col sm:flex-row gap-4 pb-4"
-    style="width: 65%;float:left;"
-    *ngIf="!loading">
-    <div @fadeInUp class="card flex-auto" style="width: 65%">
-      <div class="flex flex-col" style="padding: 20px 20px 0;"
-        *ngIf="ModalFlux===0"
-        [formGroup]="courseTypeFormGroup">
-        <mat-radio-group class="flex" style="flex-wrap: wrap;"
-          formControlName="sportType">
-          <mat-radio-button
-            class="sport_checkbox"
-            *ngFor="let item of sportData"
-            [value]="item.id">
-            <div style="display: flex;align-items: center;">
-              <img [src]="item.icon_selected"
-                *ngIf="courseTypeFormGroup.controls['sportType'].value===item.id"
-                class="sport_icon selected">
-              <img [src]="item.icon_unselected"
-                *ngIf="courseTypeFormGroup.controls['sportType'].value!==item.id"
-                class="sport_icon noselected">
-              {{item.name}}
+<vex-flux-layout>
+  <mat-spinner loading *ngIf="loading" style="margin:0 auto"></mat-spinner>
+  <ng-container body *ngIf="!loading">
+    <div class="flex flex-col" style="padding: 20px 20px 0;"
+      *ngIf="ModalFlux===0"
+      [formGroup]="courseTypeFormGroup">
+      <mat-radio-group class="flex" style="flex-wrap: wrap;"
+        formControlName="sportType">
+        <mat-radio-button
+          class="sport_checkbox"
+          *ngFor="let item of sportData"
+          [value]="item.id">
+          <div style="display: flex;align-items: center;">
+            <img [src]="item.icon_selected"
+              *ngIf="courseTypeFormGroup.controls['sportType'].value===item.id"
+              class="sport_icon selected">
+            <img [src]="item.icon_unselected"
+              *ngIf="courseTypeFormGroup.controls['sportType'].value!==item.id"
+              class="sport_icon noselected">
+            {{item.name}}
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="flex flex-col"
+      *ngIf="ModalFlux===1"
+      [formGroup]="courseInfoCollecDateSplitFormGroup">
+      <mat-tab-group>
+        <mat-tab>
+          <div style="padding: 20px 20px 0;">
+            <ng-template mat-tab-label>
+              <mat-icon style="color: #E5962A;"
+                class="icon16">circle</mat-icon>
+              Curso Colectivo
+            </ng-template>
+            <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
+            <vex-flux-upload-img style="margin-top: 10px;"
+              (upload)="defaults.image=$event"></vex-flux-upload-img>
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>{{'courses.coursename' | translate}}</mat-label>
+              <input id="courseName" formControlName="course_name"
+                matInput required type="text">
+            </mat-form-field>
+            <div style="margin: 10px 0;">
+              <angular-editor id="summary" style="width: 100%"
+                [placeholder]="'courses.summary' | translate"
+                formControlName="summary" [config]="editor1Config">
+              </angular-editor>
             </div>
-          </mat-radio-button>
-        </mat-radio-group>
-      </div>
-      <div class="flex flex-col"
-        *ngIf="ModalFlux===1"
-        [formGroup]="courseInfoCollecDateSplitFormGroup">
-        <mat-tab-group>
-          <mat-tab>
-            <div style="padding: 20px 20px 0;">
-              <ng-template mat-tab-label>
-                <mat-icon style="color: #E5962A;"
-                  class="icon16">circle</mat-icon>
-                Curso Colectivo
-              </ng-template>
-              <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
-              <vex-flux-upload-img style="margin-top: 10px;"
-                (upload)="defaults.image=$event"></vex-flux-upload-img>
-              <mat-form-field appearance="outline" style="width: 100%">
-                <mat-label>{{'courses.coursename' | translate}}</mat-label>
-                <input id="courseName" formControlName="course_name"
-                  matInput required type="text">
+            <div style="margin: 20px 0;">
+              <angular-editor id="description" style="width: 100%"
+                [placeholder]="'courses.desc' | translate"
+                formControlName="description" [config]="editor2Config">
+              </angular-editor>
+            </div>
+            <div style="margin: 10px 0;">
+              <mat-form-field appearance="outline"
+                style="width: 49%;margin-right: 1%;">
+                <mat-label>{{'prices' | translate}}</mat-label>
+                <input id="price" formControlName="price"
+                  matInput required type="number">
               </mat-form-field>
-              <div style="margin: 10px 0;">
-                <angular-editor id="summary" style="width: 100%"
-                  [placeholder]="'courses.summary' | translate"
-                  formControlName="summary" [config]="editor1Config">
-                </angular-editor>
-              </div>
-              <div style="margin: 20px 0;">
-                <angular-editor id="description" style="width: 100%"
-                  [placeholder]="'courses.desc' | translate"
-                  formControlName="description" [config]="editor2Config">
-                </angular-editor>
-              </div>
-              <div style="margin: 10px 0;">
-                <mat-form-field appearance="outline"
-                  style="width: 49%;margin-right: 1%;">
-                  <mat-label>{{'prices' | translate}}</mat-label>
-                  <input id="price" formControlName="price"
-                    matInput required type="number">
-                </mat-form-field>
-                <mat-form-field appearance="outline"
-                  style="width: 49%;margin-left: 1%;">
-                  <mat-label>{{'max_pax' | translate}}</mat-label>
-                  <input id="participants" formControlName="participants"
-                    matInput required type="number">
-                </mat-form-field>
-              </div>
+              <mat-form-field appearance="outline"
+                style="width: 49%;margin-left: 1%;">
+                <mat-label>{{'max_pax' | translate}}</mat-label>
+                <input id="participants" formControlName="participants"
+                  matInput required type="number">
+              </mat-form-field>
             </div>
-          </mat-tab>
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon style="color: #2FAA41;"
-                class="icon16">circle</mat-icon>
-              Curso Privado
-            </ng-template>
-            Content 2
-          </mat-tab>
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon style="color: #0AB0BC;"
-                class="icon16">circle</mat-icon>
-              Actividad
-            </ng-template>
-            Content 3
-          </mat-tab>
-        </mat-tab-group>
+          </div>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon style="color: #2FAA41;"
+              class="icon16">circle</mat-icon>
+            Curso Privado
+          </ng-template>
+          Content 2
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon style="color: #0AB0BC;"
+              class="icon16">circle</mat-icon>
+            Actividad
+          </ng-template>
+          Content 3
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div class="flex flex-col" *ngIf="ModalFlux===2">
+      <span style="margin: 20px;">
+        {{'Fechas de reservas' | translate}}
+      </span>
+      <div style="margin: 0 20px;">
+        <mat-form-field
+          appearance="outline"
+          style="width: 49%;margin-right: 1%;">
+          <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+          <input
+            matInput
+            id="dateFromPrivate"
+            [matDatepicker]="pickerDateFrom1"
+            [min]="minDate"
+            [max]="maxDate"
+            [value] />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="pickerDateFrom1"></mat-datepicker-toggle>
+          <mat-datepicker
+            #pickerDateFrom1
+            [startAt]="minDate"></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          style="width: 49%;margin-left: 1%;">
+          <mat-label>{{'courses.date_reservable_to' |
+            translate}}</mat-label>
+          <input
+            matInput
+            id="dateFromPrivate"
+            [matDatepicker]="pickerDateFrom2"
+            [min]="minDate"
+            [max]="maxDate"
+            [value] />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="pickerDateFrom2"></mat-datepicker-toggle>
+          <mat-datepicker
+            #pickerDateFrom2
+            [startAt]="minDate"></mat-datepicker>
+        </mat-form-field>
       </div>
-      <div class="flex flex-col" *ngIf="ModalFlux===2">
-        <span style="margin: 20px;">
-          {{'Fechas de reservas' | translate}}
-        </span>
-        <div style="margin: 0 20px;">
+      <div *ngFor="let item of FechaReserva, index as i">
+        <div
+          style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+          <span>
+            {{'Fecha '+ (i+1)| translate}}
+          </span>
+          <mat-icon *ngIf="i!==0" (click)="FechaReserva.splice(i,1)"
+            style="cursor: pointer;float: inline-end;">delete</mat-icon>
+        </div>
+        <div style="margin: 20px 20px 0px;">
           <mat-form-field
             appearance="outline"
-            style="width: 49%;margin-right: 1%;">
+            style="width: 32%;margin-right: 1%;">
             <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
             <input
               matInput
               id="dateFromPrivate"
-              [matDatepicker]="pickerDateFrom1"
+              [matDatepicker]="pickerDateFrom3"
               [min]="minDate"
               [max]="maxDate"
               [value] />
             <mat-datepicker-toggle
               matSuffix
-              [for]="pickerDateFrom1"></mat-datepicker-toggle>
+              [for]="pickerDateFrom3"></mat-datepicker-toggle>
             <mat-datepicker
-              #pickerDateFrom1
+              #pickerDateFrom3
               [startAt]="minDate"></mat-datepicker>
           </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            style="width: 49%;margin-left: 1%;">
-            <mat-label>{{'courses.date_reservable_to' |
-              translate}}</mat-label>
+          <mat-form-field appearance="outline"
+            style="width: 32%;margin:0 1%;">
+            <mat-label>{{'hour' | translate}}</mat-label>
             <input
+              type="text"
+              placeholder="{{'hour' | translate}}"
+              aria-label="Number"
               matInput
-              id="dateFromPrivate"
-              [matDatepicker]="pickerDateFrom2"
-              [min]="minDate"
-              [max]="maxDate"
-              [value] />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="pickerDateFrom2"></mat-datepicker-toggle>
-            <mat-datepicker
-              #pickerDateFrom2
-              [startAt]="minDate"></mat-datepicker>
+              [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete"
+              [displayWith]="displayFn">
+              <mat-option
+                *ngFor="let hour of hours"
+                [value]="hour">
+                {{hour}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline"
+            style="width: 32%;margin-left: 1%;">
+            <mat-label>{{'courses.when' | translate}}</mat-label>
+            <input id="courses.when"
+              matInput required type="number">
           </mat-form-field>
         </div>
-        <div *ngFor="let item of FechaReserva, index as i">
-          <div
-            style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
-            <span>
-              {{'Fecha '+ (i+1)| translate}}
-            </span>
-            <mat-icon *ngIf="i!==0" (click)="FechaReserva.splice(i,1)"
-              style="cursor: pointer;float: inline-end;">delete</mat-icon>
-          </div>
-          <div style="margin: 20px 20px 0px;">
-            <mat-form-field
-              appearance="outline"
-              style="width: 32%;margin-right: 1%;">
-              <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
-              <input
-                matInput
-                id="dateFromPrivate"
-                [matDatepicker]="pickerDateFrom3"
-                [min]="minDate"
-                [max]="maxDate"
-                [value] />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="pickerDateFrom3"></mat-datepicker-toggle>
-              <mat-datepicker
-                #pickerDateFrom3
-                [startAt]="minDate"></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field appearance="outline"
-              style="width: 32%;margin:0 1%;">
-              <mat-label>{{'hour' | translate}}</mat-label>
-              <input
-                type="text"
-                placeholder="{{'hour' | translate}}"
-                aria-label="Number"
-                matInput
-                [matAutocomplete]="auto" />
-              <mat-autocomplete #auto="matAutocomplete"
-                [displayWith]="displayFn">
-                <mat-option
-                  *ngFor="let hour of hours"
-                  [value]="hour">
-                  {{hour}}
-                </mat-option>
-              </mat-autocomplete>
-              <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
-            </mat-form-field>
-            <mat-form-field appearance="outline"
-              style="width: 32%;margin-left: 1%;">
-              <mat-label>{{'courses.when' | translate}}</mat-label>
-              <input id="courses.when"
-                matInput required type="number">
-            </mat-form-field>
-          </div>
+      </div>
+      <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
+        <button
+          style="border: 1px solid #222222; border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
+          type="button"
+          (click)="FechaReserva.push({ Fecha:  minDate, Hora: '08:00', Duracion: 1 })"
+          class="client-button">
+          {{'Añadir fecha' | translate }}
+        </button>
+      </div>
+      <div style="background-color: #E9E9E9;height: 20px;width: 100%;"> </div>
+      <div>
+        <div style="margin: 20px;">
+          <span>
+            {{'Descuentos según cantidad de fechas reservadas' | translate}}
+          </span>
         </div>
-        <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
+        <div style="margin: 0 20px;"
+          *ngFor="let item of Descuentos, index as i">
+          <mat-form-field appearance="outline"
+            style="width: calc(49% - 20px);margin-right: 1%;">
+            <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+            <input
+              type="text"
+              placeholder="{{'courses.date_reservable' | translate}}"
+              matInput
+              [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete"
+              [displayWith]="displayFn">
+              <mat-option
+                *ngFor="let day of ndays"
+                [value]="day">
+                {{day}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline"
+            style="width: calc(49% - 20px);margin-left:1%;">
+            <mat-label>{{'courses.reduction_title' | translate}}</mat-label>
+            <input
+              type="text"
+              placeholder="{{'courses.reduction_title' | translate}}"
+              matInput
+              [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete"
+              [displayWith]="displayFn">
+              <mat-option
+                *ngFor="let reduccion of reduccions"
+                [value]="reduccion">
+                {{reduccion}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix svgIcon="mat:unfold_more"></mat-icon>
+          </mat-form-field>
+          <mat-icon
+            class="icon24"
+            style="margin-left: 16px"
+            [style.color]="i===0?'gray':'black'"
+            [style.cursor]="i===0?'':'pointer'"
+            (click)="Descuentos.splice(i,1)">delete</mat-icon>
+        </div>
+        <div style="margin: 0 20px;">
           <button
-            style="border: 1px solid #222222; border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
+            (click)="Descuentos.push({ NFecha: 2, Reduccion: '10%' })"
+            style="margin-top: 0px !important;height: 38px;"
+            color="primary"
+            mat-button
             type="button"
-            (click)="FechaReserva.push({ Fecha:  minDate, Hora: '08:00', Duracion: 1 })"
             class="client-button">
-            {{'Añadir fecha' | translate }}
+            <mat-icon>add</mat-icon>
+            {{'Añadir descuento por fecha' | translate }}
           </button>
         </div>
-        <div style="background-color: #E9E9E9;height: 20px;width: 100%;"> </div>
-        <div>
-          <div style="margin: 20px;">
-            <span>
-              {{'Descuentos según cantidad de fechas reservadas' | translate}}
-            </span>
-          </div>
-          <div style="margin: 0 20px;"
-            *ngFor="let item of Descuentos, index as i">
-            <mat-form-field appearance="outline"
-              style="width: calc(49% - 20px);margin-right: 1%;">
-              <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
-              <input
-                type="text"
-                placeholder="{{'courses.date_reservable' | translate}}"
-                matInput
-                [matAutocomplete]="auto" />
-              <mat-autocomplete #auto="matAutocomplete"
-                [displayWith]="displayFn">
-                <mat-option
-                  *ngFor="let day of ndays"
-                  [value]="day">
-                  {{day}}
-                </mat-option>
-              </mat-autocomplete>
-              <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
-            </mat-form-field>
-            <mat-form-field appearance="outline"
-              style="width: calc(49% - 20px);margin-left:1%;">
-              <mat-label>{{'courses.reduction_title' | translate}}</mat-label>
-              <input
-                type="text"
-                placeholder="{{'courses.reduction_title' | translate}}"
-                matInput
-                [matAutocomplete]="auto" />
-              <mat-autocomplete #auto="matAutocomplete"
-                [displayWith]="displayFn">
-                <mat-option
-                  *ngFor="let reduccion of reduccions"
-                  [value]="reduccion">
-                  {{reduccion}}
-                </mat-option>
-              </mat-autocomplete>
-              <mat-icon matSuffix svgIcon="mat:unfold_more"></mat-icon>
-            </mat-form-field>
-            <mat-icon
-              class="icon24"
-              style="margin-left: 16px"
-              [style.color]="i===0?'gray':'black'"
-              [style.cursor]="i===0?'':'pointer'"
-              (click)="Descuentos.splice(i,1)">delete</mat-icon>
-          </div>
-          <div style="margin: 0 20px;">
-            <button
-              (click)="Descuentos.push({ NFecha: 2, Reduccion: '10%' })"
-              style="margin-top: 0px !important;height: 38px;"
-              color="primary"
-              mat-button
-              type="button"
-              class="client-button">
-              <mat-icon>add</mat-icon>
-              {{'Añadir descuento por fecha' | translate }}
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col" *ngIf="ModalFlux===3"
-        [formGroup]="courseInfoCollecDateSplitFormGroup">
-        <div style="background-color: D2EFFF;">
-          <mat-icon style="color: #006FCB;">info</mat-icon>
-          Elije los niveles aquí. Podrás asignar los monitores en un segundo
-          momento.
-        </div>
-        <div>
-          <mat-checkbox
-            style="height: 36px;border: 1px solid #008A40; border-radius: 3px;color: #008A40;width: 225px;">Checked</mat-checkbox>
-        </div>
-      </div>
-      <div class="flex flex-col" *ngIf="ModalFlux===4"
-        [formGroup]="courseInfoCollecDateSplitFormGroup">
-        <span>
-          Seleccionar los extras que pueden ser añadidos haciendo la reserva
-        </span>
-
-      </div>
-      <div class="flex flex-col" *ngIf="ModalFlux===5"
-        [formGroup]="courseInfoCollecDateSplitFormGroup">
-        <mat-accordion>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> FRANCÉS </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>This is the primary content of the panel.</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> INGLÉS </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>This is the primary content of the panel.</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> ALEMÁN </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>This is the primary content of the panel.</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> ESPAÑOL </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>This is the primary content of the panel.</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> ITALIANO </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>This is the primary content of the panel.</p>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-      </div>
-
-      <div style="margin: 20px;display: flex;justify-content: space-between;">
-        <button
-          *ngIf="ModalFlux>0"
-          (click)="ModalFlux=ModalFlux-1"
-          style="margin-top: 0px !important;height: 38px; width: 128px;"
-          color="primary"
-          mat-button
-          type="button"
-          class="client-button">
-          <mat-icon>arrow_back</mat-icon>
-          {{'Atrás' | translate }}
-        </button>
-        <button
-          (click)="Confirm();ModalFlux=ModalFlux+1;"
-          style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-          color="primary"
-          mat-raised-button
-          type="button"
-          class="client-button">
-          {{'Confirmar' | translate }}
-        </button>
       </div>
     </div>
-  </div>
-</div>
+    <div class="flex flex-col" *ngIf="ModalFlux===3"
+      [formGroup]="courseInfoCollecDateSplitFormGroup">
+      <div style="background-color: D2EFFF;">
+        <mat-icon style="color: #006FCB;">info</mat-icon>
+        Elije los niveles aquí. Podrás asignar los monitores en un segundo
+        momento.
+      </div>
+      <div>
+        <mat-checkbox
+          style="height: 36px;border: 1px solid #008A40; border-radius: 3px;color: #008A40;width: 225px;">Checked</mat-checkbox>
+      </div>
+    </div>
+    <div class="flex flex-col" *ngIf="ModalFlux===4"
+      [formGroup]="courseInfoCollecDateSplitFormGroup">
+      <span>
+        Seleccionar los extras que pueden ser añadidos haciendo la reserva
+      </span>
+
+    </div>
+    <div class="flex flex-col" *ngIf="ModalFlux===5"
+      [formGroup]="courseInfoCollecDateSplitFormGroup">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> FRANCÉS </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>This is the primary content of the panel.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> INGLÉS </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>This is the primary content of the panel.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> ALEMÁN </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>This is the primary content of the panel.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> ESPAÑOL </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>This is the primary content of the panel.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> ITALIANO </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>This is the primary content of the panel.</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </div>
+
+    <div style="margin: 20px;display: flex;justify-content: space-between;">
+      <button
+        *ngIf="ModalFlux>0"
+        (click)="ModalFlux=ModalFlux-1"
+        style="margin-top: 0px !important;height: 38px; width: 128px;"
+        color="primary"
+        mat-button
+        type="button"
+        class="client-button">
+        <mat-icon>arrow_back</mat-icon>
+        {{'Atrás' | translate }}
+      </button>
+      <button
+        (click)="Confirm();ModalFlux=ModalFlux+1;"
+        style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+        color="primary"
+        mat-raised-button
+        type="button"
+        class="client-button">
+        {{'Confirmar' | translate }}
+      </button>
+    </div>
+  </ng-container>
+  <ng-container card *ngIf="!loading">
+    Hi, i am the card
+  </ng-container>
+</vex-flux-layout>

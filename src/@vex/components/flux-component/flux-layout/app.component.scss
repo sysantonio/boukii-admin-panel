@@ -1,0 +1,35 @@
+.screen {
+  max-width: none;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  flex-wrap: nowrap;
+  @media only screen and (max-width: 834px) {
+    flex-wrap: wrap;
+  }
+}
+.body {
+  width: 65%;
+  float: left;
+  max-width: 1100px;
+  @media only screen and (max-width: 834px) {
+    width: 100%;
+  }
+}
+.resum {
+  width: 35%;
+  float: left;
+  max-width: 600px;
+}
+
+.show {
+  @media only screen and (min-width: 834px) {
+    display: none;
+  }
+}
+
+.hide {
+  @media only screen and (max-width: 834px) {
+    display: none;
+  }
+}
