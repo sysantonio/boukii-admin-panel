@@ -1,0 +1,89 @@
+<div class="dialogHeader">
+  <h5>
+    {{ "add_participant" | translate }}
+  </h5>
+  <mat-icon
+    fontSet="material-icons-outlined"
+    mat-dialog-close
+    class="closeButton"
+    >close</mat-icon
+  >
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="stepForm">
+    <mat-form-field appearance="outline" class="searchInput">
+      <mat-label>{{ "choose_user" | translate }}</mat-label>
+      <input
+        type="text"
+        placeholder="{{ 'choose_user' | translate }}"
+        aria-label="Number"
+        matInput
+        [matAutocomplete]="auto"
+        formControlName="client"
+      />
+
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option
+          *ngFor="let filteredClient of filteredOptions | async"
+          [value]="filteredClient"
+          (onSelectionChange)="setClient($event)"
+        >
+          {{ filteredClient.first_name }} {{ filteredClient.last_name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div class="newUtilizerSection">
+      <h5 class="mb-5">
+        {{ "createUtilizer.title" | translate }}
+      </h5>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "name" | translate }}</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "surname" | translate }}</mat-label>
+          <input matInput formControlName="surname" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "birth_date" | translate }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="birthDate"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "langs" | translate }} </mat-label>
+          <mat-select multiple formControlName="lenguages">
+            <mat-option *ngFor="let language of languages" [value]="language">
+              {{ language.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<div class="buttonsWrapper">
+  <button mat-stroked-button mat-dialog-close type="button">
+    {{ "cancel" | translate }}
+  </button>
+
+  <button
+    mat-flat-button
+    type="button"
+    (click)="handleConfirm()"
+    [disabled]="!isFormValid()"
+  >
+    {{ "confirm" | translate }}
+  </button>
+</div>
