@@ -16,6 +16,7 @@
   "collapse_all": "Collapse all",
   "mandatory": "This field is required",
   "name": "Name",
+  "name_client": "Name",
   "logout": "Go out",
   "surname": "Surnames",
   "mobile": "Mobile",

@@ -16,6 +16,7 @@
   "collapse_all": "Contraer todo",
   "mandatory": "Este campo es obligatorio",
   "name": "Nombre",
+  "name_client": "Nombre",
   "logout": "Salir",
   "surname": "Apellidos",
   "mobile": "Móvil",
