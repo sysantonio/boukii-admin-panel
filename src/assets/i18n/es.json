@@ -105,7 +105,6 @@
   "Samedi": "Sábado",
   "Diamanche": "Domingo",
   "register": "Registrado",
-
   "status": "Estado",
   "payed": "Pago efectuado",
   "no_payed": "No pagado",
@@ -153,6 +152,10 @@
   "choose_students": "Seleccion de alumnos",
   "choose_langs": "Seleccion de idiomas",
   "choose_sports": "Selecciona los deportes",
+  "select_monitor": "Elección monitor",
+  "select_monitor_free": "Elección libre",
+  "select_monitor_posible": "Posibilidad de cambio",
+  "select_monitor_forbidden": "Modificaciones prohibidas",
   "winter": "Invierno",
   "summer": "Verano",
   "choose_all": "Seleccionar todos",
@@ -252,6 +255,8 @@
   "bookings_page.description.date": "fecha y hora",
   "bookings_page.description.monitor": "monitor",
   "bookings_page.description.total": "Total",
+
+  "bookings_page.buttons.save&CreateBooking": "Guardar y hacer nueva reserva",
 
   "courses.title": "Cursos",
   "courses.levels_and_groups": "Niveles / Grupos",
