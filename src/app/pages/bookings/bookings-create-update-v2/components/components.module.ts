@@ -20,6 +20,7 @@ import { StepTwoComponent } from "./step-two/step-two.component";
 import { StepThreeComponent } from "./step-three/step-three.component";
 import { StepFourComponent } from "./step-four/step-four.component";
 import { StepDetailsComponent } from "./step-details/step-details.component";
+import { StepObservationsComponent } from "./step-observations/step-observations.component";
 
 import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
 import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
@@ -54,6 +55,7 @@ import { FormDetailsPrivateComponent } from "./form-details-private/form-details
     CustomHeader,
     StepDetailsComponent,
     FormDetailsPrivateComponent,
+    StepObservationsComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -66,6 +68,7 @@ import { FormDetailsPrivateComponent } from "./form-details-private/form-details
     CustomHeader,
     StepDetailsComponent,
     FormDetailsPrivateComponent,
+    StepObservationsComponent
   ],
 })
 export class BookingComponentsModule {}
