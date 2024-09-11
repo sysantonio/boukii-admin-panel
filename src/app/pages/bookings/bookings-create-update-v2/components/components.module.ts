@@ -13,15 +13,18 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { BookingFormStepper } from "./form-stepper/form-stepper.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatSelectModule } from "@angular/material/select";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
 import { StepThreeComponent } from "./step-three/step-three.component";
 import { StepFourComponent } from "./step-four/step-four.component";
+import { StepDetailsComponent } from "./step-details/step-details.component";
 
 import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
 import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
-import {CustomHeader} from './calendar/custom-header/custom-header.component';
+import { CustomHeader } from "./calendar/custom-header/custom-header.component";
+import { FormDetailsPrivateComponent } from "./form-details-private/form-details-private.component";
 
 @NgModule({
   imports: [
@@ -38,6 +41,7 @@ import {CustomHeader} from './calendar/custom-header/custom-header.component';
     TranslateModule,
     MatDialogModule,
     MatDatepickerModule,
+    MatSelectModule,
   ],
   declarations: [
     BookingFormStepper,
@@ -47,7 +51,9 @@ import {CustomHeader} from './calendar/custom-header/custom-header.component';
     BookingDescriptionCard,
     BookingDialogComponent,
     StepFourComponent,
-    CustomHeader
+    CustomHeader,
+    StepDetailsComponent,
+    FormDetailsPrivateComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -57,7 +63,9 @@ import {CustomHeader} from './calendar/custom-header/custom-header.component';
     BookingDescriptionCard,
     BookingDialogComponent,
     StepFourComponent,
-    CustomHeader
+    CustomHeader,
+    StepDetailsComponent,
+    FormDetailsPrivateComponent,
   ],
 })
 export class BookingComponentsModule {}

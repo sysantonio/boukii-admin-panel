@@ -70,13 +70,11 @@
   </button>
 
   <mat-card class="left-column">
-    <mat-card-content>
-      <booking-form-stepper
-        [forceStep]="forceStep"
-        (changedCurrentStep)="currentStep = $event; forceStep = $event"
-        (changedFormData)="handleFormChange($event)"
-      ></booking-form-stepper>
-    </mat-card-content>
+    <booking-form-stepper
+      [forceStep]="forceStep"
+      (changedCurrentStep)="currentStep = $event; forceStep = $event"
+      (changedFormData)="handleFormChange($event)"
+    ></booking-form-stepper>
   </mat-card>
 
   <mat-card class="right-column">
