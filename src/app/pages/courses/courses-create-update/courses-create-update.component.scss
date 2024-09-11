@@ -36,3 +36,27 @@ button {
   height: 24px;
   font-size: 24px;
 }
+.card_deporte {
+  min-height: 80px;
+  padding: 20px;
+  border-bottom: 1px solid #dee6ea;
+}
+.card_informacion {
+  min-height: 300px;
+  padding: 20px;
+  border-bottom: 1px solid #dee6ea;
+}
+.card_fechas {
+  min-height: 160px;
+  padding: 20px;
+  border-bottom: 1px solid #dee6ea;
+}
+.card_detalles {
+  min-height: 144px;
+  padding: 20px;
+  border-bottom: 1px solid #dee6ea;
+}
+.card_extras {
+  min-height: 100px;
+  padding: 20px;
+}

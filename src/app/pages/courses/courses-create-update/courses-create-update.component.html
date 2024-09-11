@@ -43,8 +43,9 @@
               Curso Colectivo
             </ng-template>
             <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
-            <vex-flux-upload-img style="margin-top: 10px;"
-              (upload)="defaults.image=$event"></vex-flux-upload-img>
+            <!--  (upload)="defaults.image=$event"-->
+            <vex-flux-upload-img
+              style="margin-top: 10px;"></vex-flux-upload-img>
             <mat-form-field appearance="outline" style="width: 100%">
               <mat-label>{{'courses.coursename' | translate}}</mat-label>
               <input id="courseName" formControlName="course_name"
@@ -359,7 +360,11 @@
     </div>
   </div>
   <div card *ngIf="!loading">
-    Hi, i am the card
+    <div class="card_deporte"> </div>
+    <div class="card_informacion"> </div>
+    <div class="card_fechas"> </div>
+    <div class="card_detalles"> </div>
+    <div class="card_extras"> </div>
   </div>
   <div card2 *ngIf="!loading">
     Hi, i am the card
