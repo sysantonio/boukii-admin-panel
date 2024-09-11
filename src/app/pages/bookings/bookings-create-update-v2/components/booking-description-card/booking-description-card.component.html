@@ -71,8 +71,46 @@
         <img src="assets/img/icons/calendar-1.svg" />
         {{ "bookings_page.description.date" | translate }}
       </div>
-      <ng-container *ngIf="date"> </ng-container>
-      <ng-container *ngIf="!date">
+      <ng-container *ngIf="dates">
+        <div *ngFor="let date of dates" class="dateRow">
+          <div>
+            <span class="date">{{ formatDate(date?.date) }} </span>
+            <span class="hour">{{ date.startHour }}h-{{ date.endHour }}h </span>
+            <span class="price">{{ date.price }} {{ date.currency }} </span>
+          </div>
+          <div *ngIf="date.monitor" class="monitorRow">
+            <div class="row1">
+              <mat-icon
+                matPrefix
+                fontSet="material-icons-outlined"
+                class="monitorIcon"
+                >school</mat-icon
+              >
+              {{ date.monitor.first_name }} {{ date.monitor.last_name }}
+              <mat-icon
+                matPrefix
+                class="changeMonitorIcon"
+                [class]="date.changeMonitorOption.class"
+                fontSet="material-icons-outlined"
+                >{{ date.changeMonitorOption.icon }}
+              </mat-icon>
+            </div>
+
+            <span class="monitorDetails"
+              >{{ langService.getLanguage(date.monitor.language1_id) }} ·
+              {{ utilsService.getCountry(date.monitor.country) }} ·
+              {{ utilsService.calculateYears(date.monitor.birth_date) }}
+              {{ "years" | translate }}
+            </span>
+
+            <div *ngIf="date.extras" class="dateExtras">
+              {{ date.utilizer[0].first_name }}:
+              {{ getExtraDescription(date.extras) }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!dates">
         <div class="dateSkeletonsWrapper">
           <div class="skeleton small"></div>
           <div class="skeleton medium"></div>
@@ -86,8 +124,19 @@
         <img src="assets/img/icons/monitores-3.svg" />
         {{ "bookings_page.description.monitor" | translate }}
       </div>
-      <ng-container *ngIf="monitor"> </ng-container>
-      <ng-container *ngIf="!monitor">
+      <ng-container *ngIf="monitors">
+        <div class="monitor__description" *ngFor="let monitor of monitors">
+          <h4>{{ monitor.first_name }} {{ monitor.last_name }}</h4>
+          <span
+            >{{ langService.getLanguage(monitor.language1_id) }} ·
+            {{ utilsService.calculateYears(monitor.birth_date) }} &ensp;{{
+              "years" | translate
+            }}
+            · {{ utilsService.getCountry(monitor.country) }}</span
+          >
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!monitors">
         <div class="utilizersWrapper">
           <div class="sportSkeletonsWrapper">
             <div class="skeleton"></div>
@@ -95,6 +144,13 @@
           </div>
         </div>
       </ng-container>
+    </div>
+
+    <div class="section observacionSection">
+      <div class="sectionTitle">{{ "observation_client" | translate }}</div>
+      <p>{{ clientObs }}</p>
+      <div class="sectionTitle mt-5">{{ "observation_school" | translate }}</div>
+      <p>{{ schoolObs }}</p>
     </div>
   </div>
 
@@ -104,7 +160,7 @@
       <div class="skeleton medium"></div>
     </ng-container>
     <ng-container *ngIf="total">
-      <span> {{ total }}</span>
+      <span class="totalPrice"> {{ total }}</span>
     </ng-container>
   </div>
 </div>

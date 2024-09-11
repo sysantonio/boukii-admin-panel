@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { MOCK_POSIBLE_EXTRAS } from "../../mocks/course";
-import moment from "moment";
+import { UtilsService } from "src/service/utils.service";
 
 @Component({
   selector: "booking-form-details-colective-flex",
@@ -12,12 +12,12 @@ export class FormDetailsColectiveFlexComponent {
   @Input() utilizer: any;
   posibleExtras;
   extraPrice = "90 CHF";
-  constructor() {
+  constructor(protected utilsService: UtilsService) {
     //esto deberia venir en course.course_extras
     this.posibleExtras = MOCK_POSIBLE_EXTRAS;
   }
 
-  formatDate(date: Date) {
-    return moment(date).format("DD.MM.YYYY");
+  formatDate(date: string) {
+    return this.utilsService.formatDate(date);
   }
 }

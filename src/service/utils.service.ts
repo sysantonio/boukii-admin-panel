@@ -22,4 +22,8 @@ export class UtilsService {
     const country = this.countries.find((c) => c.id == id);
     return country ? country.name : "NDF";
   }
+
+  formatDate(date: string, format = "DD.MM.YYYY") {
+    return moment(date).format(format);
+  }
 }
