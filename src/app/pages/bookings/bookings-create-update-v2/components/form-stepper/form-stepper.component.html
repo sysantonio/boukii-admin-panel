@@ -38,4 +38,20 @@
     >
     </booking-step-four>
   </div>
+
+  <ng-container *ngIf="currentStep === 4">
+    <booking-step-details
+      (stepCompleted)="handleStepCompletion(4, $event)"
+      (prevStep)="previousStep()"
+    >
+    </booking-step-details>
+  </ng-container>
+
+  <ng-container *ngIf="currentStep === 5">
+    <booking-step-observations
+      (stepCompleted)="handleStepCompletion(5, $event)"
+      (prevStep)="previousStep()"
+    >
+    </booking-step-observations>
+  </ng-container>
 </div>

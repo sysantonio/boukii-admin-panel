@@ -1,49 +1,50 @@
-<p class="stepTitle">{{ "bookings_page.select_utilizers" | translate }}</p>
+<mat-card-content>
+  <p class="stepTitle">{{ "bookings_page.select_utilizers" | translate }}</p>
+  <form [formGroup]="stepForm">
+    <div class="cards-wrapper">
+      <label class="utilizerCard" *ngFor="let item of utilizers">
+        <mat-checkbox
+          [value]="item"
+          [checked]="isChecked(item)"
+          (change)="onCheckboxChange($event)"
+        ></mat-checkbox>
+        <img
+          [src]="
+            item.image !== null && item.image !== '' ? item.image : userAvatar
+          "
+        />
+        <div class="utilizerCard__description">
+          <h4>{{ item.first_name }} {{ item.last_name }}</h4>
+          <span
+            >{{ langService.getLanguage(item.language1_id) }} ·
+            {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
+              "years" | translate
+            }}
+            · {{ utilsService.getCountry(item.country) }}</span
+          >
+        </div>
+      </label>
+    </div>
+  </form>
 
-<form [formGroup]="stepForm">
-  <div class="cards-wrapper">
-    <label class="utilizerCard" *ngFor="let item of utilizers">
-      <mat-checkbox
-        [value]="item"
-        [checked]="isChecked(item)"
-        (change)="onCheckboxChange($event)"
-      ></mat-checkbox>
-      <img
-        [src]="
-          item.image !== null && item.image !== '' ? item.image : userAvatar
-        "
-      />
-      <div class="utilizerCard__description">
-        <h4>{{ item.first_name }} {{ item.last_name }}</h4>
-        <span
-          >{{ langService.getLanguage(item.language1_id) }} ·
-          {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
-            "years" | translate
-          }}
-          · {{ utilsService.getCountry(item.country) }}</span
-        >
-      </div>
-    </label>
-  </div>
-</form>
-
-<div class="stepButtonsWrapper">
-  <button mat-button type="button" (click)="handlePrevStep()">
-    <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
-    {{ "back" | translate }}
-  </button>
-  <div>
-    <button mat-stroked-button type="button">
-      {{ "add_participant" | translate }}
+  <div class="stepButtonsWrapper">
+    <button mat-button type="button" (click)="handlePrevStep()">
+      <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
+      {{ "back" | translate }}
     </button>
+    <div>
+      <button mat-stroked-button type="button">
+        {{ "add_participant" | translate }}
+      </button>
 
-    <button
-      mat-flat-button
-      type="button"
-      (click)="completeStep()"
-      [disabled]="!isFormValid()"
-    >
-      {{ "confirm" | translate }}
-    </button>
+      <button
+        mat-flat-button
+        type="button"
+        (click)="completeStep()"
+        [disabled]="!isFormValid()"
+      >
+        {{ "confirm" | translate }}
+      </button>
+    </div>
   </div>
-</div>
+</mat-card-content>

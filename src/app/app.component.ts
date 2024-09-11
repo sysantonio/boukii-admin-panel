@@ -1,31 +1,37 @@
-import { Component, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
-import { ConfigService } from '../@vex/config/config.service';
-import { Settings } from 'luxon';
-import { DOCUMENT, registerLocaleData } from '@angular/common';
-import { Platform } from '@angular/cdk/platform';
-import { NavigationService } from '../@vex/services/navigation.service';
-import { LayoutService } from '../@vex/services/layout.service';
-import { ActivatedRoute } from '@angular/router';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { SplashScreenService } from '../@vex/services/splash-screen.service';
-import { VexConfigName } from '../@vex/config/config-name.model';
-import { ColorSchemeName } from '../@vex/config/colorSchemeName';
-import { MatIconRegistry, SafeResourceUrlWithIconOptions } from '@angular/material/icon';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ColorVariable, colorVariables } from '../@vex/components/config-panel/color-variables';
-import { defaultConfig } from 'src/@vex/config/configs';
-import { SchoolService } from 'src/service/school.service';
-import { TranslateService } from '@ngx-translate/core';
-import localeIt from '@angular/common/locales/it';
-import localeEnGb from '@angular/common/locales/en-GB';
-import localeEs from '@angular/common/locales/es';
-import localeDe from '@angular/common/locales/de';
-import localeFr from '@angular/common/locales/fr';
+import { Component, Inject, LOCALE_ID, Renderer2 } from "@angular/core";
+import { ConfigService } from "../@vex/config/config.service";
+import { Settings } from "luxon";
+import {  DOCUMENT, registerLocaleData  } from "@angular/common";
+import { Platform } from "@angular/cdk/platform";
+import { NavigationService } from "../@vex/services/navigation.service";
+import { LayoutService } from "../@vex/services/layout.service";
+import { ActivatedRoute } from "@angular/router";
+import { coerceBooleanProperty } from "@angular/cdk/coercion";
+import { SplashScreenService } from "../@vex/services/splash-screen.service";
+import { VexConfigName } from "../@vex/config/config-name.model";
+import { ColorSchemeName } from "../@vex/config/colorSchemeName";
+import {
+  MatIconRegistry,
+  SafeResourceUrlWithIconOptions,
+} from "@angular/material/icon";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import {
+  ColorVariable,
+  colorVariables,
+} from "../@vex/components/config-panel/color-variables";
+import { defaultConfig } from "src/@vex/config/configs";
+import { SchoolService } from "src/service/school.service";
+import { TranslateService } from "@ngx-translate/core";
+import localeIt from "@angular/common/locales/it";
+import localeEnGb from "@angular/common/locales/en-GB";
+import localeEs from "@angular/common/locales/es";
+import localeDe from "@angular/common/locales/de";
+import localeFr from "@angular/common/locales/fr";
 
 @Component({
-  selector: 'vex-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "vex-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
   user: any;
@@ -64,22 +70,21 @@ export class AppComponent {
     }
     setTimeout(() => {
       if (this.user) {
-        this.schoolService.getSchoolData()
-          .subscribe((data) => {
-            defaultConfig.imgSrc = data.data.logo;
-            this.configService.updateConfig({
-              sidenav: {
-                imageUrl: data.data.logo,
-                title: data.data.name,
-                showCollapsePin: true
-              }
-            });
-          })
+        this.schoolService.getSchoolData().subscribe((data) => {
+          defaultConfig.imgSrc = data.data.logo;
+          this.configService.updateConfig({
+            sidenav: {
+              imageUrl: data.data.logo,
+              title: data.data.name,
+              showCollapsePin: true,
+            },
+          });
+        });
       }
     }, 150);
 
     if (this.platform.BLINK) {
-      this.renderer.addClass(this.document.body, 'is-blink');
+      this.renderer.addClass(this.document.body, "is-blink");
     }
 
     this.matIconRegistry.addSvgIconResolver(
@@ -88,17 +93,17 @@ export class AppComponent {
         namespace: string
       ): SafeResourceUrl | SafeResourceUrlWithIconOptions | null => {
         switch (namespace) {
-          case 'mat':
+          case "mat":
             return this.domSanitizer.bypassSecurityTrustResourceUrl(
               `assets/img/icons/material-design-icons/two-tone/${name}.svg`
             );
 
-          case 'logo':
+          case "logo":
             return this.domSanitizer.bypassSecurityTrustResourceUrl(
               `assets/img/icons/logos/${name}.svg`
             );
 
-          case 'flag':
+          case "flag":
             return this.domSanitizer.bypassSecurityTrustResourceUrl(
               `assets/img/icons/flags/${name}.svg`
             );
@@ -126,36 +131,41 @@ export class AppComponent {
      * You can remove this if you don't need the functionality of being able to enable specific configs with queryParams
      * Example: example.com/?layout=apollo&style=default
      */
-    this.route.queryParamMap.subscribe(queryParamMap => {
-      if (queryParamMap.has('layout')) {
-        this.configService.setConfig(queryParamMap.get('layout') as VexConfigName);
+    this.route.queryParamMap.subscribe((queryParamMap) => {
+      if (queryParamMap.has("layout")) {
+        this.configService.setConfig(
+          queryParamMap.get("layout") as VexConfigName
+        );
       }
 
-      if (queryParamMap.has('style')) {
+      if (queryParamMap.has("style")) {
         this.configService.updateConfig({
           style: {
-            colorScheme: queryParamMap.get('style') as ColorSchemeName
-          }
+            colorScheme: queryParamMap.get("style") as ColorSchemeName,
+          },
         });
       }
 
-      if (queryParamMap.has('primaryColor')) {
-        const color: ColorVariable = colorVariables[queryParamMap.get('primaryColor')];
+      if (queryParamMap.has("primaryColor")) {
+        const color: ColorVariable =
+          colorVariables[queryParamMap.get("primaryColor")];
 
         if (color) {
           this.configService.updateConfig({
             style: {
               colors: {
-                primary: color
-              }
-            }
+                primary: color,
+              },
+            },
           });
         }
       }
 
-      if (queryParamMap.has('rtl')) {
+      if (queryParamMap.has("rtl")) {
         this.configService.updateConfig({
-          direction: coerceBooleanProperty(queryParamMap.get('rtl')) ? 'rtl' : 'ltr'
+          direction: coerceBooleanProperty(queryParamMap.get("rtl"))
+            ? "rtl"
+            : "ltr",
         });
       }
     });
@@ -173,135 +183,136 @@ export class AppComponent {
       },*/
 
       {
-        type: 'subheading',
-        label: 'menu.settings',
+        type: "subheading",
+        label: "menu.settings",
         children: [
           {
-            type: 'link',
-            label: 'menu.home',
-            route: '/home',
-            icon: '../assets/img/icons/home-2.png',
-            icon_active: '../assets/img/icons/home.svg',
-            routerLinkActiveOptions: { exact: true }
+            type: "link",
+            label: "menu.home",
+            route: "/home",
+            icon: "../assets/img/icons/home-2.png",
+            icon_active: "../assets/img/icons/home.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'timeline.timeline',
-            route: '/timeline',
-            icon: '../assets/img/icons/planificador-2.png',
-            icon_active: '../assets/img/icons/planificador.svg',
+            type: "link",
+            label: "timeline.timeline",
+            route: "/timeline",
+            icon: "../assets/img/icons/planificador-2.png",
+            icon_active: "../assets/img/icons/planificador.svg",
 
-            routerLinkActiveOptions: { exact: true }
+            routerLinkActiveOptions: { exact: true },
           },
           /*          {
-                      type: 'link',
-                      label: 'calendar',
-                      route: '/calendar',
-                      icon: '../assets/img/icons/calendar-2.svg',
-                      icon_active: '../assets/img/icons/calendar.svg',
-                      routerLinkActiveOptions: { exact: true }
-                    },*/
-          {
             type: 'link',
-            label: 'bookings',
-            route: '/bookings',
-            icon: '../assets/img/icons/reservas-2.svg',
-            icon_active: '../assets/img/icons/reservas.svg',
+            label: 'calendar',
+            route: '/calendar',
+            icon: '../assets/img/icons/calendar-2.svg',
+            icon_active: '../assets/img/icons/calendar.svg',
             routerLinkActiveOptions: { exact: true }
+          },*/
+          {
+            type: "link",
+            label: "bookings",
+            route: "/bookings",
+            icon: "../assets/img/icons/reservas-2.svg",
+            icon_active: "../assets/img/icons/reservas.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'courses.title',
-            route: '/courses',
-            icon: '../assets/img/icons/cursos-2.svg',
-            icon_active: '../assets/img/icons/cursos.svg',
-            routerLinkActiveOptions: { exact: true }
+            type: "link",
+            label: "courses.title",
+            route: "/courses",
+            icon: "../assets/img/icons/cursos-2.svg",
+            icon_active: "../assets/img/icons/cursos.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
+            type: "link",
             label: "menu.bonus",
-            route: '/vouchers',
-            icon: '../assets/img/icons/bonos-2.svg',
-            icon_active: '../assets/img/icons/bonos.svg',
-            routerLinkActiveOptions: { exact: true }
+            route: "/vouchers",
+            icon: "../assets/img/icons/bonos-2.svg",
+            icon_active: "../assets/img/icons/bonos.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'menu.communication',
-            route: '/mail',
-            icon: '../assets/img/icons/comunicacion-2.svg',
-            icon_active: '../assets/img/icons/comunicacion.svg',
-            routerLinkActiveOptions: { exact: true }
+            type: "link",
+            label: "menu.communication",
+            route: "/mail",
+            icon: "../assets/img/icons/comunicacion-2.svg",
+            icon_active: "../assets/img/icons/comunicacion.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'Chat',
-            route: '/communications',
-            icon: '../assets/img/icons/chat-2.svg',
-            icon_active: '../assets/img/icons/chat.svg',
-            routerLinkActiveOptions: { exact: true }
+            type: "link",
+            label: "Chat",
+            route: "/communications",
+            icon: "../assets/img/icons/chat-2.svg",
+            icon_active: "../assets/img/icons/chat.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'menu.stats',
-            route: '/stats',
-            icon: '../assets/img/icons/stats-2.svg',
-            icon_active: '../assets/img/icons/stats.svg',
-            routerLinkActiveOptions: { exact: true }
-          }
-        ]
+            type: "link",
+            label: "menu.stats",
+            route: "/stats",
+            icon: "../assets/img/icons/stats-2.svg",
+            icon_active: "../assets/img/icons/stats.svg",
+            routerLinkActiveOptions: { exact: true },
+          },
+        ],
       },
       // Otra seccion
       {
-        type: 'subheading',
-        label: 'menu.people',
+        type: "subheading",
+        label: "menu.people",
         children: [
           {
-            type: 'link',
-            label: 'menu.monitors',
-            route: '/monitors',
-            icon: '../assets/img/icons/monitores-3.svg',
-            icon_active: '../assets/img/icons/monitores-2.svg',
-            routerLinkActiveOptions: { exact: true }
+            type: "link",
+            label: "menu.monitors",
+            route: "/monitors",
+            icon: "../assets/img/icons/monitores-3.svg",
+            icon_active: "../assets/img/icons/monitores-2.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'clients',
-            route: '/clients',
-            icon: '../assets/img/icons/clientes2.svg',
-            icon_active: '../assets/img/icons/clientes.svg',
-            routerLinkActiveOptions: { exact: true }
+            type: "link",
+            label: "clients",
+            route: "/clients",
+            icon: "../assets/img/icons/clientes2.svg",
+            icon_active: "../assets/img/icons/clientes.svg",
+            routerLinkActiveOptions: { exact: true },
           },
           {
-            type: 'link',
-            label: 'admins',
-            route: '/admins',
-            icon: '../assets/img/icons/admin.svg',
-            icon_active: '../assets/img/icons/Admins.svg',
-            routerLinkActiveOptions: { exact: true }
-          }
-        ]
+            type: "link",
+            label: "admins",
+            route: "/admins",
+            icon: "../assets/img/icons/admin.svg",
+            icon_active: "../assets/img/icons/Admins.svg",
+            routerLinkActiveOptions: { exact: true },
+          },
+        ],
       },
       {
-        type: 'subheading',
-        label: 'menu.config',
-        children: [{
-          type: 'link',
-          label: 'Boukii Pay',
-          route: 'https://login.pay.boukii.com/fr/',
-          icon: '../assets/img/icons/boukii_pay.svg',
-          routerLinkActiveOptions: { exact: true }
-        },
-        {
-          type: 'link',
-          label: 'settings',
-          route: '/settings',
-          icon: '../assets/img/icons/reglajes-2.svg',
-          icon_active: '../assets/img/icons/reglages.svg',
-          routerLinkActiveOptions: { exact: true }
-        }]
-      }
-
+        type: "subheading",
+        label: "menu.config",
+        children: [
+          {
+            type: "link",
+            label: "Boukii Pay",
+            route: "https://login.pay.boukii.com/fr/",
+            icon: "../assets/img/icons/boukii_pay.svg",
+            routerLinkActiveOptions: { exact: true },
+          },
+          {
+            type: "link",
+            label: "settings",
+            route: "/settings",
+            icon: "../assets/img/icons/reglajes-2.svg",
+            icon_active: "../assets/img/icons/reglages.svg",
+            routerLinkActiveOptions: { exact: true },
+          },
+        ],
+      },
     ];
   }
 }

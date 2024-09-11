@@ -60,9 +60,9 @@ export class BookingsCreateUpdateV2Component {
   }
 
   forceChange(newStep) {
-    if (newStep < this.currentStep) {
+    //if (newStep < this.currentStep) {
       this.forceStep = newStep;
       this.cdr.detectChanges();
-    }
+    //}
   }
 }
