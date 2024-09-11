@@ -1,5 +1,4 @@
 <div class="screen">
-    <ng-content select="[loading]"></ng-content>
     <div class="show"
         style="margin-bottom: 20px;width: 100%;text-align-last: end;">
         <button (click)="ShowCard=!ShowCard"
@@ -14,7 +13,12 @@
     <div class="card resum hide">
         <ng-content select="[card]"></ng-content>
     </div>
-    <div class="modal card resum" *ngIf="ShowCard">
-        <ng-content select="[card]"></ng-content>
+    <div class="modal" *ngIf="ShowCard">
+        <div class="modal-content resum card">
+            <span class="close" (click)="ShowCard=false">&times;</span>
+            <ng-content select="[card2]"></ng-content>
+        </div>
+        <div class="modal-background" (click)="ShowCard=false"> </div>
     </div>
+    <ng-content select="[loading]"></ng-content>
 </div>
