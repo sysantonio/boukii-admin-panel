@@ -19,7 +19,7 @@ export class BookingFormStepper implements OnChanges {
   @Input() forceStep: number;
   stepperForm: FormGroup;
   currentStep = 0;
-  STEPS_LENGTH = 4;
+  STEPS_LENGTH = 6;
 
   constructor(private fb: FormBuilder) {
     // Inicializa el formulario vacío
@@ -28,6 +28,8 @@ export class BookingFormStepper implements OnChanges {
       step2: {},
       step3: {},
       step4: {},
+      step5: {},
+      step6: {},
     });
   }
 
