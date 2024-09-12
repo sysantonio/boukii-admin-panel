@@ -16,6 +16,7 @@
   "collapse_all": "Comprimi tutto",
   "mandatory": "Questo campo è obbligatorio",
   "name": "Nome",
+  "name_client": "Nome",
   "logout": "Esci",
   "surname": "Cognomi",
   "mobile": "Mobile",

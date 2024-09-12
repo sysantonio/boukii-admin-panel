@@ -27,6 +27,7 @@ import localeEnGb from "@angular/common/locales/en-GB";
 import localeEs from "@angular/common/locales/es";
 import localeDe from "@angular/common/locales/de";
 import localeFr from "@angular/common/locales/fr";
+import moment from 'moment';
 
 @Component({
   selector: "vex-root",
@@ -58,8 +59,16 @@ export class AppComponent {
     registerLocaleData(localeFr, "fr");
     Settings.defaultLocale = this.localeId;
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
-    this.translateService.setDefaultLang(navigator.language.split("-")[0]);
-    this.translateService.currentLang = navigator.language.split("-")[0];
+
+    const lang = sessionStorage.getItem('lang' );
+    if (lang && lang.length > 0) {
+      this.translateService.setDefaultLang(lang);
+      this.translateService.currentLang = lang;
+    } else {
+      this.translateService.setDefaultLang(navigator.language.split("-")[0]);
+      this.translateService.currentLang = navigator.language.split("-")[0];
+      sessionStorage.setItem('lang', navigator.language.split("-")[0] );
+    }
 
     setTimeout(() => {
       if (this.user) {
@@ -308,4 +317,6 @@ export class AppComponent {
       },
     ];
   }
+
+
 }

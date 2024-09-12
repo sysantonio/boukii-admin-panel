@@ -16,6 +16,7 @@
   "collapse_all": "Alles einklappen",
   "mandatory": "Dieses Feld ist erforderlich",
   "name": "Name",
+  "name_client": "Name",
   "logout": "Hinausgehen",
   "surname": "Nachnamen",
   "mobile": "Handy, Mobiltelefon",
