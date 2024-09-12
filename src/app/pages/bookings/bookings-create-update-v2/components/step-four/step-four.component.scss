@@ -12,8 +12,17 @@
 }
 
 .calendarWrapper {
-  width: 50%;
-  margin: 0 auto;
+  width: calc(100% - 8rem);
+  margin: 2.5rem auto;
+
+  .two-months {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    > div {
+      width: 50%;
+    }
+  }
 }
 
 ::ng-deep {
@@ -78,6 +87,7 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 4rem;
+  padding: 1.25rem;
 }
 
 .courseCard {
@@ -159,7 +169,7 @@
   }
 }
 
-.wrapper {
+.tabsWrapper {
   ::ng-deep {
     .mat-mdc-tab {
       background-color: var(--color-grey5);
