@@ -1,7 +1,7 @@
 import { Component, Inject, LOCALE_ID, Renderer2 } from "@angular/core";
 import { ConfigService } from "../@vex/config/config.service";
 import { Settings } from "luxon";
-import {  DOCUMENT, registerLocaleData  } from "@angular/common";
+import { DOCUMENT, registerLocaleData } from "@angular/common";
 import { Platform } from "@angular/cdk/platform";
 import { NavigationService } from "../@vex/services/navigation.service";
 import { LayoutService } from "../@vex/services/layout.service";
@@ -50,11 +50,11 @@ export class AppComponent {
     private platform: Platform,
     @Inject(DOCUMENT) private document: Document,
     @Inject(LOCALE_ID) private localeId: string,
-    private layoutService: LayoutService,
+    public layoutService: LayoutService,
     private route: ActivatedRoute,
     private translateService: TranslateService,
     private navigationService: NavigationService,
-    private splashScreenService: SplashScreenService,
+    public splashScreenService: SplashScreenService,
     private schoolService: SchoolService,
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer) {
@@ -63,19 +63,19 @@ export class AppComponent {
     else Settings.defaultLocale = this.locales[0].lan;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
-    const lang = sessionStorage.getItem('lang' );
+    const lang = sessionStorage.getItem('lang');
     if (lang && lang.length > 0) {
       this.translateService.setDefaultLang(lang);
       this.translateService.currentLang = lang;
     } else {
       if (this.locales.find((a: any) => a.lan === navigator.language.split('-')[0])) {
-      this.translateService.setDefaultLang(navigator.language.split('-')[0]);
+        this.translateService.setDefaultLang(navigator.language.split('-')[0]);
         this.translateService.currentLang = navigator.language.split('-')[0];
-      sessionStorage.setItem('lang', navigator.language.split("-")[0] );
-    }
-    } else {
-      this.translateService.setDefaultLang(this.locales[0].lan);
-      this.translateService.currentLang = this.locales[0].lan;
+        sessionStorage.setItem('lang', navigator.language.split("-")[0]);
+      } else {
+        this.translateService.setDefaultLang(this.locales[0].lan);
+        this.translateService.currentLang = this.locales[0].lan;
+      }
     }
     setTimeout(() => {
       if (this.user) {

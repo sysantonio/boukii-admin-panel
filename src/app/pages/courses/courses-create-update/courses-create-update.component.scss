@@ -37,26 +37,49 @@ button {
   font-size: 24px;
 }
 .card_deporte {
-  min-height: 80px;
   padding: 20px;
   border-bottom: 1px solid #dee6ea;
+  display: flex;
 }
 .card_informacion {
-  min-height: 300px;
   padding: 20px;
   border-bottom: 1px solid #dee6ea;
+  flex-wrap: wrap;
+  display: flex;
 }
 .card_fechas {
   min-height: 160px;
   padding: 20px;
   border-bottom: 1px solid #dee6ea;
+  display: flex;
 }
 .card_detalles {
   min-height: 144px;
   padding: 20px;
   border-bottom: 1px solid #dee6ea;
+  display: flex;
 }
 .card_extras {
   min-height: 100px;
   padding: 20px;
+  display: flex;
+}
+
+.cardp {
+  .emptyText {
+    background-color: #dee6ea;
+    border-radius: 10px;
+    width: 100%;
+  }
+  .emptyImg1 {
+    background-color: #dee6ea;
+    border-radius: 5px;
+  }
+  p {
+    font-size: 12px;
+    color: #8b9099;
+    font-weight: 400;
+    min-height: 8px;
+    margin: 6px 0;
+  }
 }

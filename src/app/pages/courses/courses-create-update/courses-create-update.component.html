@@ -33,8 +33,9 @@
     </div>
     <div class="flex flex-col"
       *ngIf="ModalFlux===1"
-      [formGroup]="courseInfoCollecDateSplitFormGroup">
-      <mat-tab-group>
+      [formGroup]="courseFormGroup">
+      <mat-tab-group
+        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event})">
         <mat-tab>
           <div style="padding: 20px 20px 0;">
             <ng-template mat-tab-label>
@@ -43,8 +44,8 @@
               Curso Colectivo
             </ng-template>
             <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
-            <!--  (upload)="defaults.image=$event"-->
             <vex-flux-upload-img
+              (upload)="this.courseFormGroup.patchValue({img:$event})"
               style="margin-top: 10px;"></vex-flux-upload-img>
             <mat-form-field appearance="outline" style="width: 100%">
               <mat-label>{{'courses.coursename' | translate}}</mat-label>
@@ -359,13 +360,104 @@
       </button>
     </div>
   </div>
-  <div card *ngIf="!loading">
+  <div card *ngIf="!loading" class="cardp">
     <div class="card_deporte">
       <img
-        [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_selected">
+        [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_unselected || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+        [class]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value)?'':'emptyImg1'"
+        class="sport_icon noselected"
+        style="max-width: none;">
+      <div style="width: 100%;">
+        <p
+          style="font-size: 14px; font-weight: 600; line-height: 18px; min-height: 12px;"
+          [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
+          {{courseFormGroup.controls['course_name'].value}}
+        </p>
+        <p>
+          {{courseFormGroup.controls['course_type'].value===0?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===1?'Curso privado flex':'Actividad'
+          | translate}}
+        </p>
+      </div>
     </div>
-    <div class="card_informacion"> </div>
-    <div class="card_fechas"> </div>
+    <div class="card_informacion">
+      <div style="width: 100%;display: flex;">
+        <img
+          [src]="courseFormGroup.controls['img'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+          [class]="courseFormGroup.controls['img'].value?'':'emptyImg1'"
+          style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
+        <div style="width: 100%;">
+          <p> {{'RESUMEN' | translate }} </p>
+          <p
+            [class]="courseFormGroup.controls['summary'].value?'':'emptyText'">
+            {{courseFormGroup.controls['summary'].value}}
+          </p>
+        </div>
+      </div>
+      <div style="width: 100%">
+        <p> {{'DESCRIPCIÓN' | translate }} </p>
+        <p
+          [class]="courseFormGroup.controls['description'].value?'':'emptyText'">
+          {{courseFormGroup.controls['description'].value}}
+        </p>
+      </div>
+      <div style="width: 50%; padding-right: 20px;">
+        <p> {{'PRECIO POR FECHA' | translate }} </p>
+        <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'">
+          {{courseFormGroup.controls['price'].value}}
+          {{courseFormGroup.controls['price'].value?'CHF':''}}
+        </p>
+      </div>
+      <div style="width: 50%; padding-left: 20px;">
+        <p> {{'PARTICIPANTES MAX.' | translate }} </p>
+        <p
+          [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
+          {{courseFormGroup.controls['participants'].value}}
+        </p>
+      </div>
+      <div style="width: 50%; padding-right: 20px;"
+        *ngIf="courseFormGroup.controls['course_type'].value>0">
+        <p> {{'EDAD MIN.' | translate }} </p>
+        <p [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'">
+          {{courseFormGroup.controls['age_min'].value}}
+        </p>
+      </div>
+      <div style="width: 50%; padding-left: 20px;"
+        *ngIf="courseFormGroup.controls['course_type'].value>0">
+        <p> {{'EDAD MAX.' | translate }} </p>
+        <p [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'">
+          {{courseFormGroup.controls['age_max'].value}}
+        </p>
+      </div>
+    </div>
+    <div class="card_fechas">
+      <div style="width: 50%; padding-right: 20px;">
+        <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
+        <p
+          [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
+          {{courseFormGroup.controls['reserve_from'].value}}
+        </p>
+      </div>
+      <div style="width: 50%; padding-right: 20px;">
+        <p> {{'RESERVABLE HASTA' | translate }} </p>
+        <p
+          [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
+          {{courseFormGroup.controls['reserve_to'].value}}
+        </p>
+      </div>
+      <div style="width: 100%;">
+        <p> <mat-icon>event_available</mat-icon> {{'FECHA Y HORA' | translate }}
+        </p>
+        <p
+          [class]="courseFormGroup.controls['reserve_date'].value?'':'emptyText'"
+          *ngFor="let item of courseFormGroup.controls['reserve_date'].value">
+          {{item.Fecha}} {{item.Hora}} {{item.Coste}}
+        </p>
+      </div>
+      <div style="width: 100%;"
+        *ngFor="let item of courseFormGroup.controls['reserve_date'].value">
+        Reducción {{item.reduccion}} reservando {{item.day}} fechas
+      </div>
+    </div>
     <div class="card_detalles"> </div>
     <div class="card_extras"> </div>
   </div>

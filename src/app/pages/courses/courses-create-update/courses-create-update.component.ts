@@ -114,6 +114,19 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.monitors = monitors;
       this.courseFormGroup = this.fb.group({
         sport_id: [this.sportData[0].sport_id, Validators.required],
+        course_type: [0, Validators.required],
+        course_name: ["", Validators.required],
+        summary: ["", Validators.required],
+        description: ["", Validators.required],
+        price: [null, Validators.required],
+        participants: [null, Validators.required],
+        img: ["", Validators.required],
+        age_max: [null, Validators.required],
+        age_min: [null, Validators.required],
+        reserve_from: [null, Validators.required],
+        reserve_to: [null, Validators.required],
+        reserve_date: [null, Validators.required],
+        discount: [null, Validators.required],
       });
 
 
@@ -241,7 +254,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   Confirm() {
     if (this.ModalFlux === 0) this.getDegrees();
   }
-
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
 
 }
