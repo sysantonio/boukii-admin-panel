@@ -58,8 +58,16 @@ export class AppComponent {
     registerLocaleData(localeFr, "fr");
     Settings.defaultLocale = this.localeId;
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
-    this.translateService.setDefaultLang(navigator.language.split("-")[0]);
-    this.translateService.currentLang = navigator.language.split("-")[0];
+
+    const lang = sessionStorage.getItem('lang' );
+    if (lang && lang.length > 0) {
+      this.translateService.setDefaultLang(lang);
+      this.translateService.currentLang = lang;
+    } else {
+      this.translateService.setDefaultLang(navigator.language.split("-")[0]);
+      this.translateService.currentLang = navigator.language.split("-")[0];
+      sessionStorage.setItem('lang', navigator.language.split("-")[0] );
+    }
 
     setTimeout(() => {
       if (this.user) {

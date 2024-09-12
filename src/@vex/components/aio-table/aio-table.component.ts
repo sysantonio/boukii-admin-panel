@@ -716,7 +716,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getBookingCourse(data: any) {
     if (data.length === 1 || this.checkIfCourseIdIsSame(data)) {
-      return data[0].course.name;
+      return this.getTrad(data[0].course.translations, data[0].course.name);
     } else {
       return 'MULTIPLE';
     }

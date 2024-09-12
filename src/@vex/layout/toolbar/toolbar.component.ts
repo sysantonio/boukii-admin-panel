@@ -101,10 +101,12 @@ export class ToolbarComponent {
 
       this.translateService.use(lang);
       this.translateService.currentLang = lang;
+      sessionStorage.setItem('lang', lang );
     } else {
 
       this.translateService.setDefaultLang(lang);
       this.translateService.currentLang = lang;
+      sessionStorage.setItem('lang', lang );
     }
   }
 
