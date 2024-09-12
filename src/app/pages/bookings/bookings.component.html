@@ -84,7 +84,7 @@
               </span>
             </div>
             <div *ngIf="detailData.user"
-              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;"
+                 style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;"
             >
               {{ detailData.user.username }}
               <span style="margin-left: 10px;"
@@ -241,20 +241,46 @@
                         }}
                         {{bUsers?.course?.sport.name}}
                       </div>
-                      <ng-container
-                        *ngFor="let item of detailData.bookingusers"
-                      >
-                        <div *ngIf="item.client_id == bUsers.client_id">
-                          <span class="date-course"
-                          ><img
-                            class="icon-calendar"
-                            src="assets/img/icons/calendar-1.svg"
-                          />
-                            {{item.date |date: 'dd.MM.YYYY'}}
-                            <i>{{item?.hour_start.substring(0, 5)}}h</i> -
-                            {{item?.hour_end.substring(0, 5)}}h</span
-                          >
-                        </div>
+                      <ng-container *ngIf="bUsers?.course?.course_type !== 1">
+                        <!-- Para course_type distinto de 1 -->
+                        <ng-container *ngFor="let item of detailData.bookingusers">
+                          <div *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
+      <span class="date-course">
+        <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+        {{ item.date | date: 'dd.MM.YYYY' }}
+        <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
+      </span>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+
+                      <!-- Para course_type 1 -->
+                      <ng-container *ngIf="bUsers?.course?.course_type === 1">
+                        <!-- Si es flexible, mostrar todas las fechas -->
+                        <ng-container *ngIf="bUsers?.course?.is_flexible">
+                          <ng-container *ngFor="let item of detailData.bookingusers">
+                            <div>
+        <span class="date-course">
+          <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+          {{ item.date | date: 'dd.MM.YYYY' }}
+          <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
+        </span>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+
+                        <!-- Si no es flexible, filtrar por client_id -->
+                        <ng-container *ngIf="!bUsers?.course?.is_flexible">
+                          <ng-container *ngFor="let item of detailData.bookingusers">
+                            <div *ngIf="item.client_id == bUsers.client_id">
+        <span class="date-course">
+          <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+          {{ item.date | date: 'dd.MM.YYYY' }}
+          <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
+        </span>
+                            </div>
+                          </ng-container>
+                        </ng-container>
                       </ng-container>
                     </div>
                   </div>
@@ -373,58 +399,58 @@
                               <mat-icon svgIcon="logo:phone"></mat-icon>
                             </a>
                           </div>
-                      <!--    <ng-container
-                            *ngFor="let item of bUsers?.monitor.monitor_sports_degrees_details"
-                          >
-                            <div
-                              style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;"
-                              *ngIf="item.school_id === user?.schools[0]?.id && bUsers?.course?.sport_id === item.sport_id"
-                            >
-                              <div style="text-align: center;width: 100%;">
-                                <img
-                                  [src]="item.sport_icon_selected"
-                                  width="50"
-                                  height="50"
-                                  style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
-                                  [ngStyle]="{'background-color': item.degree?.color}"
-                                />
-                              </div>
-                              <div style="text-align: center;width: 100%;">
-                                {{item?.sport_name}}
-                              </div>
-                              <div style="text-align: center;width: 100%;">
+                          <!--    <ng-container
+                                *ngFor="let item of bUsers?.monitor.monitor_sports_degrees_details"
+                              >
                                 <div
-                                  [ngStyle]="{
-                  'color': '#fff',
-                  'background-color':item.degree?.color,
-                  'border-color': item.degree?.color,
-                  'width': '100%',
-                  'padding': '3px',
-                  'border-radius': '6px'
-                }"
+                                  style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;"
+                                  *ngIf="item.school_id === user?.schools[0]?.id && bUsers?.course?.sport_id === item.sport_id"
                                 >
+                                  <div style="text-align: center;width: 100%;">
+                                    <img
+                                      [src]="item.sport_icon_selected"
+                                      width="50"
+                                      height="50"
+                                      style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                                      [ngStyle]="{'background-color': item.degree?.color}"
+                                    />
+                                  </div>
+                                  <div style="text-align: center;width: 100%;">
+                                    {{item?.sport_name}}
+                                  </div>
+                                  <div style="text-align: center;width: 100%;">
+                                    <div
+                                      [ngStyle]="{
+                      'color': '#fff',
+                      'background-color':item.degree?.color,
+                      'border-color': item.degree?.color,
+                      'width': '100%',
+                      'padding': '3px',
+                      'border-radius': '6px'
+                    }"
+                                    >
+                                      <div
+                                        style="text-align: center;padding: 0px 3px; font-size:12px;"
+                                      >
+                                        {{item.degree?.annotation}}
+                                        {{item.degree?.name}}
+                                      </div>
+                                    </div>
+                                  </div>
                                   <div
-                                    style="text-align: center;padding: 0px 3px; font-size:12px;"
+                                    style="text-align: center;width: 100%; float: left"
                                   >
-                                    {{item.degree?.annotation}}
-                                    {{item.degree?.name}}
+                                    <span
+                                      *ngFor="let auth of item.monitor_sport_authorized_degrees"
+                                    >
+                                      <span
+                                        style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left; border-radius: 3px;"
+                                        [style.background]="auth?.degree?.color"
+                                      ></span>
+                                    </span>
                                   </div>
                                 </div>
-                              </div>
-                              <div
-                                style="text-align: center;width: 100%; float: left"
-                              >
-                                <span
-                                  *ngFor="let auth of item.monitor_sport_authorized_degrees"
-                                >
-                                  <span
-                                    style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left; border-radius: 3px;"
-                                    [style.background]="auth?.degree?.color"
-                                  ></span>
-                                </span>
-                              </div>
-                            </div>
-                          </ng-container>-->
+                              </ng-container>-->
                           <!--<div
                             class="label-user"
                             [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"

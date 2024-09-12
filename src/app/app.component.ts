@@ -27,6 +27,7 @@ import localeEnGb from "@angular/common/locales/en-GB";
 import localeEs from "@angular/common/locales/es";
 import localeDe from "@angular/common/locales/de";
 import localeFr from "@angular/common/locales/fr";
+import moment from 'moment';
 
 @Component({
   selector: "vex-root",
@@ -61,9 +62,17 @@ export class AppComponent {
     if (this.locales.find((a: any) => a.lan === this.localeId)) Settings.defaultLocale = this.localeId;
     else Settings.defaultLocale = this.locales[0].lan;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    if (this.locales.find((a: any) => a.lan === navigator.language.split('-')[0])) {
+
+    const lang = sessionStorage.getItem('lang' );
+    if (lang && lang.length > 0) {
+      this.translateService.setDefaultLang(lang);
+      this.translateService.currentLang = lang;
+    } else {
+      if (this.locales.find((a: any) => a.lan === navigator.language.split('-')[0])) {
       this.translateService.setDefaultLang(navigator.language.split('-')[0]);
-      this.translateService.currentLang = navigator.language.split('-')[0];
+        this.translateService.currentLang = navigator.language.split('-')[0];
+      sessionStorage.setItem('lang', navigator.language.split("-")[0] );
+    }
     } else {
       this.translateService.setDefaultLang(this.locales[0].lan);
       this.translateService.currentLang = this.locales[0].lan;
@@ -315,4 +324,6 @@ export class AppComponent {
       },
     ];
   }
+
+
 }

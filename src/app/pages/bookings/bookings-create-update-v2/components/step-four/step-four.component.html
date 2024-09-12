@@ -14,6 +14,7 @@
         </div>
 
         <div *ngIf="showTwoMonths" class="two-months">
+          <div class="no-arrows no-next">
           <mat-calendar
             [startAt]="selectedDate"
             [minDate]="minDate"
@@ -23,8 +24,8 @@
             (selectedChange)="handleDateChange($event)"
             [headerComponent]="CustomHeader"
           ></mat-calendar>
-
-          <div class="no-arrows">
+          </div>
+          <div class="no-arrows no-previous">
             <mat-calendar
               #secondCalendar
               [startAt]="nextMonthDate"
@@ -33,6 +34,7 @@
               [dateClass]="dateClass()"
               (monthSelected)="getCourses(sportLevel)"
               (selectedChange)="handleDateChange($event)"
+              [headerComponent]="CustomHeader"
             ></mat-calendar>
           </div>
         </div>

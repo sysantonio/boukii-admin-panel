@@ -19,8 +19,8 @@
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
           <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.booking' | translate}}</span>
-          <mat-checkbox color="primary" [checked]="reservationTypeSingle">{{'table.filter.single' | translate}}</mat-checkbox>
-          <mat-checkbox color="primary" [checked]="reservationTypeMultiple">{{'table.filter.multiple' | translate}}</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="reservationTypeSingle" (change)="reservationTypeSingle = !reservationTypeSingle; filterData()">{{'table.filter.single' | translate}}</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="reservationTypeMultiple" (change)="reservationTypeMultiple = !reservationTypeMultiple; filterData()">{{'table.filter.multiple' | translate}}</mat-checkbox>
         </div>
 
         <div style="float:left; width: 30%" *ngIf="(entity.includes('bookings') || entity.includes('courses'))">
