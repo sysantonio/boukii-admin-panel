@@ -195,11 +195,11 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     this.getLanguages();
     this.getDegrees();
     this.getSports();
-/*    this.getMonitors();
-    this.getClients();
+    /*    this.getMonitors();
+        this.getClients();
 
 
-    */
+        */
   }
 
   // Detecta cambios en las propiedades de entrada
@@ -233,7 +233,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   }
 
-  filterData(all: boolean = false) {
+  filterData(all: boolean = false, pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
     let filter = '';
 
     if (!all) {
@@ -331,9 +331,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           filter = filter + '&active=0';
         }
 
-        if(this.sportsControl.value.length !== this.sports.length) {
+        if(this.sportsControl?.value?.length !== this.sports?.length) {
           const ids = [];
-          this.sportsControl.value.forEach(element => {
+          this.sportsControl?.value?.forEach(element => {
             ids.push(element.id);
           });
           if(ids.length>1) {
@@ -350,13 +350,15 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (!this.activeMonitor && this.inactiveMonitor) {
           filter = filter + '&school_active=0';
         }
-        if(this.sportsControl.value.length !== this.sports.length) {
+        if(this.sportsControl?.value?.length !== this.sports?.length) {
           const ids = [];
-          this.sportsControl.value.forEach(element => {
+          this.sportsControl?.value?.forEach(element => {
             ids.push(element.id);
           });
-
+          if(ids.length) {
             filter = filter + '&sports_id[]=' + ids.join('&sports_id[]=');
+          }
+
 
         }
       }
@@ -379,7 +381,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
     this.filter = filter;
-    this.getFilteredData(1, 10, filter);
+    this.getFilteredData(pageIndex, pageSize, filter);
   }
 
   navigateWithParam(route: string, param: string) {
@@ -425,29 +427,29 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
    */
   getData(pageIndex: number, pageSize: number) {
     this.loading = true;
-
+    this.filterData(false, pageIndex, pageSize);
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    this.crudService.list(
-      this.entity,
-      pageIndex,
-      pageSize,
-      'desc',
-      'id',
-      this.filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id
-      + this.search + ( this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
-      '',
-      null,
-      this.searchCtrl.value,
-      this.with)
-      .subscribe((response: any) => {
-        this.data = response.data;
-        this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
-        this.dataSource.data = response.data;
-        this.totalRecords = response.total; // Total de registros disponibles.
+    /*    this.crudService.list(
+          this.entity,
+          pageIndex,
+          pageSize,
+          'desc',
+          'id',
+          this.filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id
+          + this.search + ( this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
+          '',
+          null,
+          this.searchCtrl.value,
+          this.with)
+          .subscribe((response: any) => {
+            this.data = response.data;
+            this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
+            this.dataSource.data = response.data;
+            this.totalRecords = response.total; // Total de registros disponibles.
 
-        this.loading = false;
-      });
+            this.loading = false;
+          });*/
   }
 
   onPageChange(event: PageEvent) {
@@ -563,12 +565,15 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-
         if (this.entity.includes('monitor')) {
-          this.crudService.update(this.deleteEntity, {active: !item.active}, item.id)
-          .subscribe(() => {
-            this.getData(1, 10);
-          })
+          const monitorSchool = item.monitors_schools.find((c) => c.school_id === this.user.schools[0].id);
+
+          this.crudService.update('/monitors-schools', {monitor_id: monitorSchool.monitor_id,
+            school_id: monitorSchool.school_id, active_school: !item.active}, monitorSchool.id)
+            .subscribe(() => {
+              this.getData(1, 10);
+            })
+
         } else if (this.entity.includes('clients')) {
           const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
 
@@ -671,7 +676,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
@@ -687,9 +692,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     if (data.is_flexible && data.course_type === 1) {
       data.course_dates.forEach(courseDate => {
         courseDate.course_groups.forEach(group => {
-            group.course_subgroups.forEach(sb => {
-              ret = ret + sb.max_participants;
-            });
+          group.course_subgroups.forEach(sb => {
+            ret = ret + sb.max_participants;
+          });
         });
 
       });
@@ -711,7 +716,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getBookingCourse(data: any) {
     if (data.length === 1 || this.checkIfCourseIdIsSame(data)) {
-      return data[0].course.name;
+      return this.getTrad(data[0].course.translations, data[0].course.name);
     } else {
       return 'MULTIPLE';
     }
@@ -801,7 +806,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getCourseType(data: any) {
     //if (data.length === 1) {
-      return data.course_type === 1 ? 'collectif' : 'prive'
+    return data.course_type === 1 ? 'collectif' : 'prive'
     /*} else {
       return 'MULTIPLE';
     }*/
@@ -809,7 +814,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getBookingType(data: any) {
     //if (data.length === 1) {
-      return data?.course?.course_type === 1 ? 'collectif' : 'prive'
+    return data?.course?.course_type === 1 ? 'collectif' : 'prive'
     /*} else {
       return 'MULTIPLE';
     }*/
@@ -817,20 +822,20 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getCourseImage(data: any) {
     //if (data.length === 1) {
-      const ret = this.sports.find((s) => s.id === data.sport_id);
-      return ret ? ret.name.toLowerCase() : '';
-   /* } else {
-      return 'MULTIPLE';
-    }*/
+    const ret = this.sports.find((s) => s.id === data.sport_id);
+    return ret ? ret.name.toLowerCase() : '';
+    /* } else {
+       return 'MULTIPLE';
+     }*/
   }
 
   getBookingImage(data: any) {
     //if (data.length === 1) {
-      const ret = this.sports.find((s) => s.id === data.course.sport_id);
-      return ret ? ret.name.toLowerCase() : '';
-   /* } else {
-      return 'MULTIPLE';
-    }*/
+    const ret = this.sports.find((s) => s.id === data.course.sport_id);
+    return ret ? ret.name.toLowerCase() : '';
+    /* } else {
+       return 'MULTIPLE';
+     }*/
   }
 
   getClient(id: number) {
@@ -925,7 +930,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         return 'AUTRE';
       case 5:
         return 'payment_no_payment';
-        case 6:
+      case 6:
         return 'bonus';
 
       default:
@@ -978,105 +983,105 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   exportQR(id:any) {
     console.log('export');
     this.crudService.get('/admin/clients/course/'+ id)
-        .subscribe(async (data) => {
-          console.log(data);
+      .subscribe(async (data) => {
+        console.log(data);
 
-          const clientsData = data.data;
+        const clientsData = data.data;
 
-          if(clientsData && clientsData.length){
-            const doc = new jsPDF();
-            const pageWidth = doc.internal.pageSize.getWidth();
-            const colWidth = pageWidth / 2;
-            const lineHeight = 6;
-            const qrSize = 48;
-            let y = 10;
+        if(clientsData && clientsData.length){
+          const doc = new jsPDF();
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const colWidth = pageWidth / 2;
+          const lineHeight = 6;
+          const qrSize = 48;
+          let y = 10;
 
-            for (let i = 0; i < clientsData.length; i++) {
-              const client = clientsData[i];
-              const isLeftColumn = i % 2 === 0;
-              const baseX = isLeftColumn ? 10 : colWidth + 6;
-              const qrX = baseX + 48;
-              let y_text = y;
-              const maxWidthText = 48;
+          for (let i = 0; i < clientsData.length; i++) {
+            const client = clientsData[i];
+            const isLeftColumn = i % 2 === 0;
+            const baseX = isLeftColumn ? 10 : colWidth + 6;
+            const qrX = baseX + 48;
+            let y_text = y;
+            const maxWidthText = 48;
 
-              doc.setTextColor(70, 70, 70);
-              doc.setFontSize(16);
-              doc.setFont('helvetica', 'bold');
-              let lines = doc.splitTextToSize(`${client.client?.first_name} ${client.client?.last_name}`, maxWidthText);
-              doc.text(lines, baseX, y_text);
-              y_text += (lines.length + 0.4) * lineHeight;
+            doc.setTextColor(70, 70, 70);
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            let lines = doc.splitTextToSize(`${client.client?.first_name} ${client.client?.last_name}`, maxWidthText);
+            doc.text(lines, baseX, y_text);
+            y_text += (lines.length + 0.4) * lineHeight;
 
-              if(client.client?.phone || client.client?.telephone){
-                let clientPhone = '';
-                if(client.client?.phone){clientPhone = client.client.phone;}
-                else{clientPhone = client.client.telephone;}
-                doc.setFontSize(14);
-                doc.setFont('helvetica', 'normal');
-                lines = doc.splitTextToSize(`${clientPhone}`, maxWidthText);
-                doc.text(lines, baseX, y_text);
-                y_text += lines.length * lineHeight;
-              }
-
-              doc.setFontSize(9);
+            if(client.client?.phone || client.client?.telephone){
+              let clientPhone = '';
+              if(client.client?.phone){clientPhone = client.client.phone;}
+              else{clientPhone = client.client.telephone;}
+              doc.setFontSize(14);
               doc.setFont('helvetica', 'normal');
-              lines = doc.splitTextToSize(`${client.course?.name}`, maxWidthText);
+              lines = doc.splitTextToSize(`${clientPhone}`, maxWidthText);
               doc.text(lines, baseX, y_text);
-              y_text += (lines.length * lineHeight) - 2;
-
-              if(client.monitor){
-                doc.setFontSize(8);
-                lines = doc.splitTextToSize(`Professeur - niveau`, maxWidthText);
-                doc.text(lines, baseX, y_text);
-                y_text += (lines.length * lineHeight) - 2;
-                doc.setFontSize(11);
-                doc.setFont('helvetica', 'bold');
-                lines = doc.splitTextToSize(`${client.monitor?.first_name} ${client.monitor?.last_name}`, maxWidthText);
-                doc.text(lines, baseX, y_text);
-                y_text += (lines.length * lineHeight) + 3;
-              }
-              else{
-                y_text += 6;
-              }
-
-              if(client.degree){
-                const rgbColor = this.hexToRgb(client.degree.color);
-                doc.setFillColor(rgbColor.r, rgbColor.g, rgbColor.b);
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'normal');
-
-                const text = `${client.degree?.annotation} - ${client.degree?.name}`;
-                lines = doc.splitTextToSize(text, maxWidthText);
-                const textBoxHeight = (lines.length + 0.5) * lineHeight;
-
-                doc.rect(baseX, y_text - lineHeight, maxWidthText, textBoxHeight, 'F');
-
-                doc.text(lines, baseX + 1.5, y_text);
-                doc.setTextColor(70, 70, 70);
-                y_text += textBoxHeight;
-              }
-
-              // Generate QR code
-              const qrData = await QRCode.toDataURL(client.client.id.toString());
-              doc.addImage(qrData, 'JPEG', qrX, y-10, qrSize, qrSize);
-
-              //Next row if not left and not last
-              if (!isLeftColumn || i === clientsData.length - 1) {
-                y += qrSize + lineHeight * 4;
-              }
-
-              if (y >= doc.internal.pageSize.getHeight() - 20) {
-                doc.addPage();
-                y = 10;
-              }
+              y_text += lines.length * lineHeight;
             }
 
-            doc.save('clients.pdf');
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            lines = doc.splitTextToSize(`${client.course?.name}`, maxWidthText);
+            doc.text(lines, baseX, y_text);
+            y_text += (lines.length * lineHeight) - 2;
+
+            if(client.monitor){
+              doc.setFontSize(8);
+              lines = doc.splitTextToSize(`Professeur - niveau`, maxWidthText);
+              doc.text(lines, baseX, y_text);
+              y_text += (lines.length * lineHeight) - 2;
+              doc.setFontSize(11);
+              doc.setFont('helvetica', 'bold');
+              lines = doc.splitTextToSize(`${client.monitor?.first_name} ${client.monitor?.last_name}`, maxWidthText);
+              doc.text(lines, baseX, y_text);
+              y_text += (lines.length * lineHeight) + 3;
+            }
+            else{
+              y_text += 6;
+            }
+
+            if(client.degree){
+              const rgbColor = this.hexToRgb(client.degree.color);
+              doc.setFillColor(rgbColor.r, rgbColor.g, rgbColor.b);
+              doc.setTextColor(255, 255, 255);
+              doc.setFontSize(9);
+              doc.setFont('helvetica', 'normal');
+
+              const text = `${client.degree?.annotation} - ${client.degree?.name}`;
+              lines = doc.splitTextToSize(text, maxWidthText);
+              const textBoxHeight = (lines.length + 0.5) * lineHeight;
+
+              doc.rect(baseX, y_text - lineHeight, maxWidthText, textBoxHeight, 'F');
+
+              doc.text(lines, baseX + 1.5, y_text);
+              doc.setTextColor(70, 70, 70);
+              y_text += textBoxHeight;
+            }
+
+            // Generate QR code
+            const qrData = await QRCode.toDataURL(client.client.id.toString());
+            doc.addImage(qrData, 'JPEG', qrX, y-10, qrSize, qrSize);
+
+            //Next row if not left and not last
+            if (!isLeftColumn || i === clientsData.length - 1) {
+              y += qrSize + lineHeight * 4;
+            }
+
+            if (y >= doc.internal.pageSize.getHeight() - 20) {
+              doc.addPage();
+              y = 10;
+            }
           }
-          //No clients
-          else{
-            this.snackbar.open(this.translateService.instant('course_without_clients'), 'OK', {duration: 3000});
-          }
+
+          doc.save('clients.pdf');
+        }
+        //No clients
+        else{
+          this.snackbar.open(this.translateService.instant('course_without_clients'), 'OK', {duration: 3000});
+        }
 
       })
   }

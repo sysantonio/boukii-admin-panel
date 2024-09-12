@@ -1,0 +1,110 @@
+<div class="wrapper">
+  <div class="headerWrapper">
+    <span class="sportTitle">01.</span>
+    <div *ngIf="sport || course">
+      <img
+        [class]="{ sportImg: !course, courseImg: course }"
+        [src]="course?.icon || sport.icon"
+        [alt]="sport.name"
+      />
+    </div>
+    <div class="sportSkeletonsWrapper" *ngIf="sport && !course">
+      <div class="skeleton"></div>
+      <div class="skeleton small"></div>
+    </div>
+    <ng-container *ngIf="!sport">
+      <span class="sportIconSkeleton"> </span>
+      <div class="sportSkeletonsWrapper">
+        <div class="skeleton"></div>
+        <div class="skeleton small"></div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="course">
+      <div class="flex flex-col">
+        <h4 class="courseTitle">{{ course.name }}</h4>
+        <span class="courseSubtitle"> {{ course.description }} </span>
+      </div>
+    </ng-container>
+  </div>
+  <div class="bodyWrapper">
+    <div class="section">
+      <div class="sectionTitle">
+        <img src="assets/img/icons/clientes2.svg" />
+        {{ "bookings_page.description.utilizers" | translate }}
+      </div>
+      <ng-container *ngIf="utilizers">
+        <div class="utilizersWrapper" *ngFor="let item of utilizers">
+          <img
+            class="avatarImg"
+            [src]="
+              item.image !== null && item.image !== ''
+                ? item.image
+                : 'assets/img/booking-avatar.svg'
+            "
+          />
+
+          <div class="utilizersWrapper__description">
+            <h4>{{ item.first_name }} {{ item.last_name }}</h4>
+            <span
+              >{{ langService.getLanguage(item.language1_id) }} ·
+              {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
+                "years" | translate
+              }}
+              · {{ utilsService.getCountry(item.country) }}</span
+            >
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!utilizers">
+        <div class="utilizersWrapper">
+          <img class="avatarImg" src="assets/img/booking-avatar.svg" />
+          <div class="sportSkeletonsWrapper">
+            <div class="skeleton"></div>
+            <div class="skeleton small"></div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="section">
+      <div class="sectionTitle">
+        <img src="assets/img/icons/calendar-1.svg" />
+        {{ "bookings_page.description.date" | translate }}
+      </div>
+      <ng-container *ngIf="date"> </ng-container>
+      <ng-container *ngIf="!date">
+        <div class="dateSkeletonsWrapper">
+          <div class="skeleton small"></div>
+          <div class="skeleton medium"></div>
+          <div class="skeleton small last"></div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="section">
+      <div class="sectionTitle">
+        <img src="assets/img/icons/monitores-3.svg" />
+        {{ "bookings_page.description.monitor" | translate }}
+      </div>
+      <ng-container *ngIf="monitor"> </ng-container>
+      <ng-container *ngIf="!monitor">
+        <div class="utilizersWrapper">
+          <div class="sportSkeletonsWrapper">
+            <div class="skeleton"></div>
+            <div class="skeleton small"></div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="footerWrapper">
+    {{ "bookings_page.description.total" | translate }}
+    <ng-container *ngIf="!total">
+      <div class="skeleton medium"></div>
+    </ng-container>
+    <ng-container *ngIf="total">
+      <span> {{ total }}</span>
+    </ng-container>
+  </div>
+</div>

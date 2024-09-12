@@ -576,7 +576,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   findPaxesByCourseExtra(group) {
-    return this.courseExtra.filter(cE => cE.name+cE.description == group.groupName+group.optionName).length
+    return this.courseExtra.filter(cE => cE.description == group.groupName && cE.name == group.optionName).length
   }
 
   getSettingsOptions(course) {

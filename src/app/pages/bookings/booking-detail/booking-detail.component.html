@@ -781,7 +781,8 @@
                 </span>
                 <span style="display: inline-block;width: 20%; text-align: right;">
                   <!--<img src="assets/img/icons/edit.svg"  (click)="showDetail = false" class="btn-edit" />-->
-                  <img src="assets/img/icons/close.svg" (click)="goTo('/bookings/')" class="btn-close" />
+                  <img src="assets/img/icons/close.svg" *ngIf="!incData" (click)="goTo('/bookings/')" class="btn-close" />
+                  <img src="assets/img/icons/close.svg" mat-dialog-close *ngIf="incData" class="btn-close" />
                 </span>
               </div>
               <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">

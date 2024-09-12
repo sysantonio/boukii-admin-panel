@@ -12,4 +12,10 @@
     content: none;
     height: auto;
   }
+
+  .customBookingDialog {
+    .mat-mdc-dialog-container .mdc-dialog__content {
+      padding: 0;
+    }
+  }
 }

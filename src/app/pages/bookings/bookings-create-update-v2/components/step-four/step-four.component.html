@@ -1,0 +1,90 @@
+<mat-card-content>
+  <form [formGroup]="stepForm">
+    <div *ngIf="!isLoading">
+      <div class="calendarWrapper">
+        <div *ngIf="!showTwoMonths">
+          <mat-calendar
+            [startAt]="selectedDate"
+            [minDate]="minDate"
+            [(selected)]="selectedDate"
+            [dateClass]="dateClass()"
+            (monthSelected)="getCourses(sportLevel)"
+            (selectedChange)="handleDateChange($event)"
+          ></mat-calendar>
+        </div>
+
+        <div *ngIf="showTwoMonths" class="two-months">
+          <div class="no-arrows no-next">
+          <mat-calendar
+            [startAt]="selectedDate"
+            [minDate]="minDate"
+            [(selected)]="selectedDate"
+            [dateClass]="dateClass()"
+            (monthSelected)="getCourses(sportLevel)"
+            (selectedChange)="handleDateChange($event)"
+            [headerComponent]="CustomHeader"
+          ></mat-calendar>
+          </div>
+          <div class="no-arrows no-previous">
+            <mat-calendar
+              #secondCalendar
+              [startAt]="nextMonthDate"
+              [minDate]="minDate"
+              [(selected)]="selectedDate"
+              [dateClass]="dateClass()"
+              (monthSelected)="getCourses(sportLevel)"
+              (selectedChange)="handleDateChange($event)"
+              [headerComponent]="CustomHeader"
+            ></mat-calendar>
+          </div>
+        </div>
+      </div>
+
+      <mat-radio-group
+        aria-label="Select an option"
+        formControlName="course"
+        class="courses-wrapper"
+      >
+        <label
+          class="courseCard"
+          [ngClass]="{ active: stepForm.get('course').value === item }"
+          *ngFor="let item of cursesInSelectedDate"
+        >
+          <mat-radio-button [value]="item"> </mat-radio-button>
+          <img class="courseImg" [src]="item.icon" />
+          <div>
+            <h4 class="courseTitle">{{ item.name }}</h4>
+            <span class="courseSubtitle"> {{ item.description }} </span>
+            <div class="courseDate">
+              <img src="assets/img/icons/calendar-1.svg" />
+              <span class="courseDate_day">
+                {{ selectedDateMoment?.format("DD.MM.YYYY") }}
+              </span>
+              <span> {{ item.hour_min }}h - {{ item.hour_max }}h</span>
+            </div>
+          </div>
+          <span class="coursePrice">
+            {{ item.price }} {{ item.currency }}
+          </span>
+        </label>
+      </mat-radio-group>
+    </div>
+  </form>
+
+  <div class="stepButtonsWrapper">
+    <button mat-button type="button" (click)="handlePrevStep()">
+      <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
+      {{ "back" | translate }}
+    </button>
+    <div>
+      <button
+        mat-flat-button
+        type="button"
+        (click)="completeStep()"
+        [disabled]="!isFormValid()"
+      >
+        {{ "confirm" | translate }}
+      </button>
+    </div>
+  </div>
+</mat-card-content>

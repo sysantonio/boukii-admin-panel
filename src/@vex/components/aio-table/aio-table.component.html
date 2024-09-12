@@ -19,8 +19,8 @@
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
           <span style="float:left; width: 100%; font-size:16px">{{ 'table.filter.booking' | translate}}</span>
-          <mat-checkbox color="primary" [checked]="reservationTypeSingle">{{'table.filter.single' | translate}}</mat-checkbox>
-          <mat-checkbox color="primary" [checked]="reservationTypeMultiple">{{'table.filter.multiple' | translate}}</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="reservationTypeSingle" (change)="reservationTypeSingle = !reservationTypeSingle; filterData()">{{'table.filter.single' | translate}}</mat-checkbox>
+          <mat-checkbox color="primary" [checked]="reservationTypeMultiple" (change)="reservationTypeMultiple = !reservationTypeMultiple; filterData()">{{'table.filter.multiple' | translate}}</mat-checkbox>
         </div>
 
         <div style="float:left; width: 30%" *ngIf="(entity.includes('bookings') || entity.includes('courses'))">
@@ -544,8 +544,8 @@
           <ng-container *ngIf="column.type === 'level'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>{{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <div *ngIf="data[i].client_sports.length > 0" class="m-0 body-1" [style.background]="data[i].client_sports[0].degree.color" style="padding: 5%;;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">
-                {{data[i].client_sports[0].degree.annotation}} {{data[i].client_sports[0].degree.name}}
+              <div *ngIf="data[i].client_sports.length > 0" class="m-0 body-1" [style.background]="data[i].client_sports[0]?.degree?.color" style="padding: 5%;;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">
+                {{data[i].client_sports[0]?.degree?.annotation}} {{data[i].client_sports[0].degree?.name}}
               </div>
             </td>
           </ng-container>
@@ -672,7 +672,7 @@
           </ng-container>
         </ng-container>
 
-        <!-- Image Columns -->
+<!--        &lt;!&ndash; Image Columns &ndash;&gt;
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'image'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
@@ -681,7 +681,7 @@
               <img *ngIf="row[column.property] !== 1" [src]="'https://school.boukii.com/assets/icons/prive_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
             </td>
           </ng-container>
-        </ng-container>
+        </ng-container>-->
 
         <!-- Coronita Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
