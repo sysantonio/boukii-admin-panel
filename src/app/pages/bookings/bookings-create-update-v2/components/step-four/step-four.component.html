@@ -1,4 +1,33 @@
-<mat-card-content>
+<mat-card-content class="wrapper">
+  <mat-tab-group (selectedTabChange)="onTabChange($event)">
+    <mat-tab *ngFor="let tab of tabs">
+      <ng-template mat-tab-label>
+        <mat-icon class="custom-icon" [ngClass]="tab.class">circle</mat-icon>
+        {{ tab.label | translate }}
+      </ng-template>
+      <ng-container *ngTemplateOutlet="myForm"></ng-container>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div class="stepButtonsWrapper">
+    <button mat-button type="button" (click)="handlePrevStep()">
+      <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
+      {{ "back" | translate }}
+    </button>
+    <div>
+      <button
+        mat-flat-button
+        type="button"
+        (click)="completeStep()"
+        [disabled]="!isFormValid()"
+      >
+        {{ "confirm" | translate }}
+      </button>
+    </div>
+  </div>
+</mat-card-content>
+
+<ng-template #myForm>
   <form [formGroup]="stepForm">
     <div *ngIf="!isLoading">
       <div class="calendarWrapper">
@@ -68,21 +97,4 @@
       </mat-radio-group>
     </div>
   </form>
-
-  <div class="stepButtonsWrapper">
-    <button mat-button type="button" (click)="handlePrevStep()">
-      <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
-      {{ "back" | translate }}
-    </button>
-    <div>
-      <button
-        mat-flat-button
-        type="button"
-        (click)="completeStep()"
-        [disabled]="!isFormValid()"
-      >
-        {{ "confirm" | translate }}
-      </button>
-    </div>
-  </div>
-</mat-card-content>
+</ng-template>
