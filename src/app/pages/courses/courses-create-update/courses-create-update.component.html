@@ -12,19 +12,19 @@
   <div body *ngIf="!loading">
     <div class="flex flex-col" style="padding: 20px 20px 0;"
       *ngIf="ModalFlux===0"
-      [formGroup]="courseTypeFormGroup">
+      [formGroup]="courseFormGroup">
       <mat-radio-group class="flex" style="flex-wrap: wrap;"
-        formControlName="sportType">
+        formControlName="sport_id">
         <mat-radio-button
           class="sport_checkbox"
           *ngFor="let item of sportData"
           [value]="item.sport_id">
           <div style="display: flex;align-items: center;">
             <img [src]="item.icon_selected"
-              *ngIf="courseTypeFormGroup.controls['sportType'].value===item.sport_id"
+              *ngIf="courseFormGroup.controls['sport_id'].value===item.sport_id"
               class="sport_icon selected">
             <img [src]="item.icon_unselected"
-              *ngIf="courseTypeFormGroup.controls['sportType'].value!==item.sport_id"
+              *ngIf="courseFormGroup.controls['sport_id'].value!==item.sport_id"
               class="sport_icon noselected">
             {{item.name}}
           </div>
@@ -360,7 +360,10 @@
     </div>
   </div>
   <div card *ngIf="!loading">
-    <div class="card_deporte"> </div>
+    <div class="card_deporte">
+      <img
+        [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_selected">
+    </div>
     <div class="card_informacion"> </div>
     <div class="card_fechas"> </div>
     <div class="card_detalles"> </div>

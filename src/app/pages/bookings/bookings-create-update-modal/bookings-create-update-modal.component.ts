@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, ChangeDetectorRef, Inject, Injectable } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin, map, of, startWith } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -25,7 +25,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { AddReductionModalComponent } from '../bookings-create-update/add-reduction/add-reduction.component';
 import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
 import { TranslateService } from '@ngx-translate/core';
-
+@Injectable()
 @Component({
   selector: 'custom-header',
   template: `
@@ -51,7 +51,7 @@ export class CustomHeader {
     private calendar: MatCalendar<any>,
     private dateAdapter: DateAdapter<any>,
     private calendarService: CalendarService
-  ) {}
+  ) { }
 
   getFirstDayOfMonth(date: any): Date {
     return this.dateAdapter.createDate(
@@ -75,6 +75,7 @@ export class CustomHeader {
 }
 
 export class CustomDateAdapter extends NativeDateAdapter {
+  @Injectable()
   format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {
       let day = date.getDate();
@@ -271,13 +272,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService, private dialogRef: MatDialogRef<any>,
     private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router, public translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
 
-                this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
-                this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
-                  this.handleMonthChange(firstDayOfMonth);
-                  this.selectedDatePrivate = firstDayOfMonth;
-                  this.selectedDate = firstDayOfMonth;
-                });
-              }
+    this.minDate = new Date(); // Establecer la fecha mínima como la fecha actual
+    this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
+      this.handleMonthChange(firstDayOfMonth);
+      this.selectedDatePrivate = firstDayOfMonth;
+      this.selectedDate = firstDayOfMonth;
+    });
+  }
 
   ngOnInit() {
     this.getData();
@@ -342,34 +343,34 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             map(value => this._filterTime(value))
           );
 
-          setTimeout(() => {
+        setTimeout(() => {
 
-            this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
-            this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
-            this.selectSport(this.sportDataList[0]);
+          this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected));
+          this.sportDataList = this.sportData.filter(sport => sport.sport_type === this.sportTypeSelected);
+          this.selectSport(this.sportDataList[0]);
 
-            if (this.externalData && this.externalData.client) {
+          if (this.externalData && this.externalData.client) {
 
-              this.getUtilzers(this.externalData.client, true);
-            } /*else {
+            this.getUtilzers(this.externalData.client, true);
+          } /*else {
 
               this.getUtilzers(this.clients[0], true);
             }*/
-            //this.getDegrees(this.defaults.sport_id);
+          //this.getDegrees(this.defaults.sport_id);
 
 
-            setTimeout(() => {
-              if (this.externalData && this.externalData.client) {
+          setTimeout(() => {
+            if (this.externalData && this.externalData.client) {
 
-                this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.client.id));
-                this.defaultsBookingUser.client_id = this.clients.find((c) => c.id === this.externalData.client.id).id;
-              } /*else {
+              this.clientsForm.patchValue(this.clients.find((c) => c.id === this.externalData.client.id));
+              this.defaultsBookingUser.client_id = this.clients.find((c) => c.id === this.externalData.client.id).id;
+            } /*else {
                 this.clientsForm.patchValue(this.clients[0]);
               }*/
-              this.loadingCalendar = false;
-              this.loading = false;
-            }, 800);
-          }, 500);
+            this.loadingCalendar = false;
+            this.loading = false;
+          }, 800);
+        }, 500);
       })
   }
 
@@ -389,7 +390,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   filterSportsByType(onload = false) {
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -417,7 +418,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   setCourseType(type: string, id: number) {
     this.monthAndYear = new Date();
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -448,7 +449,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
     if (!hasSport) {
-      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
     }
   }
 
@@ -471,7 +472,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
   selectItem(item: any) {
     this.color = '';
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -483,7 +484,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       }
       this.courseDates = [];
       this.selectedItem = item;
-      this.selectedSubGroupItem  = null;
+      this.selectedSubGroupItem = null;
       this.courseDates.push(this.defaultsBookingUser);
     } else {
 
@@ -644,23 +645,23 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let paxes = 0;
 
     if (this.levelForm.value == null || this.levelForm.value == '') {
-      this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('choose_level'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.courseTypeId === 2 && this.checkAllFields()) {
 
-      this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});
+      this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.courseTypeId === 1 && this.selectedItem.is_flexible && this.reservableCourseDate.length === 0) {
 
-      this.snackbar.open(this.translateService.instant('snackbar.booking.select_dates'), 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.select_dates'), 'OK', { duration: 3000 });
       return;
     }
 
-    const checkAval = {bookingUsers: []};
+    const checkAval = { bookingUsers: [] };
 
     if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
 
@@ -682,7 +683,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
-    } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible){
+    } else if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
       this.courseDates.forEach(element => {
         checkAval.bookingUsers.push({
           client_id: element.client_id,
@@ -733,34 +734,34 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           })
         } else {
           paxes = 1;
-      }
+        }
 
-      let price = this.selectedItem.price;
-      if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
-        const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
-        price = price * this.reservableCourseDate.length;
-        discounts.forEach(element => {
-          if (element.date === this.reservableCourseDate.length && element.percentage) {
-            price = price - (price * (element.percentage / 100));
-          }
-        });
-      }
+        let price = this.selectedItem.price;
+        if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
+          const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
+          price = price * this.reservableCourseDate.length;
+          discounts.forEach(element => {
+            if (element.date === this.reservableCourseDate.length && element.percentage) {
+              price = price - (price * (element.percentage / 100));
+            }
+          });
+        }
 
-      let data: any = {};
-      data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
-      data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
-      data.price_cancellation_insurance = 0;
-      data.has_boukii_care = this.defaults.has_boukii_care;
-      data.price_boukii_care = 0;
-      data.payment_method_id = this.defaults.payment_method_id;
-      data.paid = this.defaults.payment_method_id === 1 ? true : this.defaults.paid;
-      data.currency = this.selectedItem.currency;
-      data.school_id = this.user.schools[0].id;
-      data.client_main_id = this.defaults.client_main_id.id;
-      data.notes = this.defaults.notes;
-      data.notes_school = this.defaults.notes_school;
-      data.paxes = paxes;
-      data.courseDates = [];
+        let data: any = {};
+        data.price_total = this.selectedItem.is_flexible && this.selectedItem.course_type === 2 ? 0 : +price;
+        data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
+        data.price_cancellation_insurance = 0;
+        data.has_boukii_care = this.defaults.has_boukii_care;
+        data.price_boukii_care = 0;
+        data.payment_method_id = this.defaults.payment_method_id;
+        data.paid = this.defaults.payment_method_id === 1 ? true : this.defaults.paid;
+        data.currency = this.selectedItem.currency;
+        data.school_id = this.user.schools[0].id;
+        data.client_main_id = this.defaults.client_main_id.id;
+        data.notes = this.defaults.notes;
+        data.notes_school = this.defaults.notes_school;
+        data.paxes = paxes;
+        data.courseDates = [];
 
         if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
           this.selectedItem.course_dates.forEach(item => {
@@ -774,7 +775,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               item.course_groups.forEach(groups => {
                 if (groups.degree_id === this.levelForm.value.id) {
                   if (!monitorFind) {
-                    if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                    if (groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                       monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                       degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
                       subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
@@ -786,39 +787,39 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 }
 
               })
-                data.courseDates.push({
-                  school_id: this.user.schools[0].id,
-                  booking_id: null,
-                  client_id: this.courseDates[0].client_id,
-                  course_id: item.course_id,
-                  course_date_id: courseDateId,
-                  degree_id: degreeId,
-                  monitor_id: monitorId,
-                  subgroup_id: subgroupId,
-                  group_id: groupId,
-                  hour_start: item.hour_start,
-                  hour_end: item.hour_end,
-                  price: +this.selectedItem.price,
-                  currency: this.selectedItem.currency,
-                  course: this.selectedItem,
-                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              data.courseDates.push({
+                school_id: this.user.schools[0].id,
+                booking_id: null,
+                client_id: this.courseDates[0].client_id,
+                course_id: item.course_id,
+                course_date_id: courseDateId,
+                degree_id: degreeId,
+                monitor_id: monitorId,
+                subgroup_id: subgroupId,
+                group_id: groupId,
+                hour_start: item.hour_start,
+                hour_end: item.hour_end,
+                price: +this.selectedItem.price,
+                currency: this.selectedItem.currency,
+                course: this.selectedItem,
+                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
               });
             }
           });
         } else if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
           this.reservableCourseDate.forEach(item => {
             if (this.canBook(item.date)) {
-                let monitorId = null;
-                let degreeId = null;
-                let courseDateId = null;
-                let subgroupId = null;
-                let groupId = null;
+              let monitorId = null;
+              let degreeId = null;
+              let courseDateId = null;
+              let subgroupId = null;
+              let groupId = null;
 
-                let monitorFind = false;
-                item.course_groups.forEach(groups => {
-                  if (groups.degree_id === this.levelForm.value.id) {
+              let monitorFind = false;
+              item.course_groups.forEach(groups => {
+                if (groups.degree_id === this.levelForm.value.id) {
                   if (!monitorFind) {
-                    if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                    if (groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                       monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                       degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
                       subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
@@ -829,23 +830,23 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                   }
                 }
 
-                });
-                data.courseDates.push({
-                  school_id: this.user.schools[0].id,
-                  booking_id: null,
-                  client_id: this.courseDates[0].client_id,
-                  course_id: item.course_id,
-                  course_date_id: courseDateId,
-                  degree_id: degreeId,
-                  monitor_id: monitorId,
-                  group_id: groupId,
-                  subgroup_id: subgroupId,
-                  hour_start: item.hour_start,
-                  hour_end: item.hour_end,
-                  price: parseFloat(this.selectedItem.price),
-                  currency: this.selectedItem.currency,
-                  course: this.selectedItem,
-                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              });
+              data.courseDates.push({
+                school_id: this.user.schools[0].id,
+                booking_id: null,
+                client_id: this.courseDates[0].client_id,
+                course_id: item.course_id,
+                course_date_id: courseDateId,
+                degree_id: degreeId,
+                monitor_id: monitorId,
+                group_id: groupId,
+                subgroup_id: subgroupId,
+                hour_start: item.hour_start,
+                hour_end: item.hour_end,
+                price: parseFloat(this.selectedItem.price),
+                currency: this.selectedItem.currency,
+                course: this.selectedItem,
+                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
               });
             }
           });
@@ -869,24 +870,24 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             data.courseDates = [];
             data.school_id = this.user.schools[0].id
             data.booking_id = null
-            data.client_id= item.client_id
-            data.course_id= item.course_id
-            data.course_date_id= item.course_date_id
-            data.degree_id= this.levelForm.value.id
-            data.monitor_id= this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
-            data.hour_start= item.hour_start
-            data.hour_end= this.calculateHourEnd(item.hour_start, item.duration) //calcular en base a la duracion del curso
+            data.client_id = item.client_id
+            data.course_id = item.course_id
+            data.course_date_id = item.course_date_id
+            data.degree_id = this.levelForm.value.id
+            data.monitor_id = this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
+            data.hour_start = item.hour_start
+            data.hour_end = this.calculateHourEnd(item.hour_start, item.duration) //calcular en base a la duracion del curso
 
-            data.currency= item.currency
+            data.currency = item.currency
 
-            data.course= this.selectedItem
-            data.date= moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            data.course = this.selectedItem
+            data.date = moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             let people = [];
             if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
               people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
               data.people = people;
             }
-            data.paxes= people.length + 1
+            data.paxes = people.length + 1
             const price = (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[people.length + 1]));
             data.price = price
             data.price_total = price;
@@ -912,24 +913,24 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             data.courseDates = [];
             data.school_id = this.user.schools[0].id
             data.booking_id = null
-            data.client_id= item.client_id
-            data.course_id= item.course_id
-            data.course_date_id= item.course_date_id
-            data.degree_id= this.levelForm.value.id
-            data.monitor_id= this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
-            data.hour_start= item.hour_start
-            data.hour_end= this.calculateHourEnd(item.hour_start, this.selectedItem.duration) //calcular en base a la duracion del curso
+            data.client_id = item.client_id
+            data.course_id = item.course_id
+            data.course_date_id = item.course_date_id
+            data.degree_id = this.levelForm.value.id
+            data.monitor_id = this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
+            data.hour_start = item.hour_start
+            data.hour_end = this.calculateHourEnd(item.hour_start, this.selectedItem.duration) //calcular en base a la duracion del curso
 
-            data.currency= item.currency
+            data.currency = item.currency
 
-            data.course= this.selectedItem
-            data.date= moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            data.course = this.selectedItem
+            data.date = moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             let people = [];
             if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
               people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
               data.people = people;
             }
-            data.paxes= people.length + 1
+            data.paxes = people.length + 1
             data.price = parseFloat(item.price)
             data.price_total = price;
             data.courseDates.push(data);
@@ -937,7 +938,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           });
         }
 
-        if(this.courseTypeId !== 2){
+        if (this.courseTypeId !== 2) {
           this.bookingsToCreate.unshift(data);
         }
         this.showDetail = this.bookingsToCreate.length - 1;
@@ -950,7 +951,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.clientsForm.disable();
       }, (error) => {
         this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-          moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', {duration: 3000})
+          moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', { duration: 3000 })
       });
 
 
@@ -976,7 +977,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         courseDates.push(cs);
         if (element.forfait) {
 
-          bookingExtras.push({forfait: element.forfait, course_date_id: cs.course_date_id});
+          bookingExtras.push({ forfait: element.forfait, course_date_id: cs.course_date_id });
         }
       });
 
@@ -1037,10 +1038,10 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
     this.crudService.create('/bookings', data)
-    .subscribe((booking) => {
-      console.log('booking, created', booking);
-      this.processBonus(booking.data.id);
-      let rqs = [];
+      .subscribe((booking) => {
+        console.log('booking, created', booking);
+        this.processBonus(booking.data.id);
+        let rqs = [];
 
         courseDates.forEach(item => {
           if (item.course.course_type === 1) {
@@ -1112,34 +1113,34 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         });
 
         rqs.forEach((rq, idx) => {
-          const bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
+          const bExtra = bookingExtras.find((b) => b.course_date_id === rq.course_date_id);
 
           this.crudService.create('/booking-users', rq)
-          .subscribe((bookingUser) => {
-            if (bExtra) {
-              const bookingUserExtra = {
-                booking_user_id: bookingUser.data.id,
-                course_extra_id: null,
-              }
-              const courseExtra = {
-                course_id: rq.course_id,
-                name: bExtra.forfait.id,
-                description: bExtra.forfait.name,
-                price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
-              }
-              this.crudService.create('/course-extras', courseExtra)
-                .subscribe((responseCourseExtra) => {
+            .subscribe((bookingUser) => {
+              if (bExtra) {
+                const bookingUserExtra = {
+                  booking_user_id: bookingUser.data.id,
+                  course_extra_id: null,
+                }
+                const courseExtra = {
+                  course_id: rq.course_id,
+                  name: bExtra.forfait.id,
+                  description: bExtra.forfait.name,
+                  price: bExtra.forfait.price + ((bExtra.forfait.price * bExtra.forfait.tva) / 100),
+                }
+                this.crudService.create('/course-extras', courseExtra)
+                  .subscribe((responseCourseExtra) => {
 
-                  bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                  this.crudService.create('/booking-user-extras', bookingUserExtra)
-                  .subscribe((bookExtra) => {
-                    console.log("b.extra created", bookExtra, idx);
+                    bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
+                    this.crudService.create('/booking-user-extras', bookingUserExtra)
+                      .subscribe((bookExtra) => {
+                        console.log("b.extra created", bookExtra, idx);
+                      })
                   })
-                })
-            }
+              }
 
 
-          });
+            });
         });
         setTimeout(() => {
 
@@ -1158,24 +1159,24 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             });
 
             bookingExtras.forEach(element => {
-              extras.push({name: element.name, quantity: 1, price: parseFloat(element.price)});
+              extras.push({ name: element.name, quantity: 1, price: parseFloat(element.price) });
             });
 
             const basket = {
               payment_method_id: this.defaults.payment_method_id,
-              price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].course.name, quantity: 1, price: this.getBasePrice()},
-              bonus: {total: this.bonus.length, bonuses: bonuses},
-              reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
-              boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
-              cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
-              extras: {total: bookingExtras.length, extras: extras},
-              tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
+              price_base: { name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].course.name, quantity: 1, price: this.getBasePrice() },
+              bonus: { total: this.bonus.length, bonuses: bonuses },
+              reduction: { name: 'Reduction', quantity: 1, price: -(this.reduction) },
+              boukii_care: { name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care) },
+              cancellation_insurance: { name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance) },
+              extras: { total: bookingExtras.length, extras: extras },
+              tva: { name: 'TVA', quantity: 1, price: this.tvaPrice },
               price_total: parseFloat(this.finalPrice),
               paid_total: parseFloat(this.finalPrice),
               pending_amount: parseFloat(this.finalPrice)
             }
 
-            this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, booking.data.id)
+            this.crudService.update('/bookings', { basket: JSON.stringify(basket) }, booking.data.id)
               .subscribe(() => {
 
               })
@@ -1187,34 +1188,36 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
                   window.open(result.data, "_self");
                 } else {
-                  this.goTo('/bookings/update/'+booking.data.id);
+                  this.goTo('/bookings/update/' + booking.data.id);
                 }
-                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 3000 });
               })
-          }  else if(this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
+          } else if (this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
 
-            this.crudService.update('/bookings', {payment_method_id: this.defaults.payment_method_id,
-              paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : 0}, booking.data.id)
+            this.crudService.update('/bookings', {
+              payment_method_id: this.defaults.payment_method_id,
+              paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : 0
+            }, booking.data.id)
               .subscribe(() => {
 
-                this.crudService.create('/payments', {booking_id: booking.data.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'paid', notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'})
+                this.crudService.create('/payments', { booking_id: booking.data.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'paid', notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other' })
                   .subscribe(() => {
 
-                    this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 1000 });
                     this.dialogRef.close();
                     //this.goTo('/bookings/update/'+booking.data.id);
                   })
               })
           } else {
-            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
+            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 1000 });
             this.dialogRef.close();
             //this.goTo('/bookings/update/'+booking.data.id);
           }
 
           this.crudService.post('/admin/bookings/mail/' + booking.data.id, {})
-          .subscribe((data) => {
-            console.log(data);
-          })
+            .subscribe((data) => {
+              console.log(data);
+            })
         }, 1000);
       })
 
@@ -1234,7 +1237,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         this.crudService.update('/vouchers', data, element.bonus.id)
           .subscribe((result) => {
 
-            this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: bookingId, amount: element.bonus.reducePrice})
+            this.crudService.create('/vouchers-logs', { voucher_id: result.data.id, booking_id: bookingId, amount: element.bonus.reducePrice })
               .subscribe((vresult) => {
                 console.log(vresult);
 
@@ -1398,7 +1401,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&active=1');/*
+    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -1407,7 +1410,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getClientsAll() {
-    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports');/*
+    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id, '&with[]=clientSports');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -1423,11 +1426,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data.reverse();
         this.sportData.forEach(element => {
-          this.crudService.get('/sports/'+element.sport_id)
+          this.crudService.get('/sports/' + element.sport_id)
             .subscribe((data) => {
               element.name = data.data.name;
               element.icon_selected = data.data.icon_selected;
@@ -1441,7 +1444,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   selectSport(sport: any) {
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -1453,7 +1456,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getDegrees(sportId: number) {
-   this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + sportId + '&active=1')
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
 
@@ -1499,7 +1502,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const dialogRef = this.dialog.open(AddClientSportModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {sport_id: sportId, title: 'Assign sport'}
+      data: { sport_id: sportId, title: 'Assign sport' }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -1507,10 +1510,10 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
         data.data.forEach(element => {
 
-          this.crudService.create('/client-sports', {client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+          this.crudService.create('/client-sports', { client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
             .subscribe(() => {
               console.log('client sport created');
-              this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&active=1')
+              this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
                 .subscribe((cl) => {
                   this.clients = cl.data;
                   const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
@@ -1528,41 +1531,41 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       }
     });
   }
-  getUtilzers(client: any, onLoad = false, event: any = {isUserInput: true}) {
+  getUtilzers(client: any, onLoad = false, event: any = { isUserInput: true }) {
     if (event.isUserInput) {
-    if(this.snackBarRef!==null) {
+      if (this.snackBarRef !== null) {
 
-      this.snackBarRef.dismiss();
-    }
+        this.snackBarRef.dismiss();
+      }
 
-    this.loadingUtilizers = true;
-    this.utilizers = [];
-    this.mainIdSelected = true;
-    this.borderActive = -1;
-    this.defaultsBookingUser.client_id = client.id;
+      this.loadingUtilizers = true;
+      this.utilizers = [];
+      this.mainIdSelected = true;
+      this.borderActive = -1;
+      this.defaultsBookingUser.client_id = client.id;
 
-    this.crudService.get('/admin/clients/' + client.id +'/utilizers')
-      .subscribe((data: any) => {
-        this.utilizers = data.data;
-        if (!onLoad) {
-          client.client_sports.forEach(sport => {
-            if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
-              const level = this.levels.find((l) => l.id === sport.degree_id);
+      this.crudService.get('/admin/clients/' + client.id + '/utilizers')
+        .subscribe((data: any) => {
+          this.utilizers = data.data;
+          if (!onLoad) {
+            client.client_sports.forEach(sport => {
+              if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
+                const level = this.levels.find((l) => l.id === sport.degree_id);
 
-              if (level) {
-                this.levelForm.patchValue(level);
-                this.defaultsBookingUser.degree_id = level?.id;
-                this.clientsForm.patchValue(client);
-                this.getCourses(level, this.monthAndYear)
+                if (level) {
+                  this.levelForm.patchValue(level);
+                  this.defaultsBookingUser.degree_id = level?.id;
+                  this.clientsForm.patchValue(client);
+                  this.getCourses(level, this.monthAndYear)
+                }
+                ;
               }
-              ;
-            }
-          });
-        }
+            });
+          }
 
-        //this.getDegrees(this.defaults.sport_id);
-        this.loadingUtilizers = false
-      });
+          //this.getDegrees(this.defaults.sport_id);
+          this.loadingUtilizers = false
+        });
     }
 
   }
@@ -1572,7 +1575,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.loadingCalendar = true;
     this.dateClass();
     this.privateDateClass();
-    let today, minDate,maxDate;
+    let today, minDate, maxDate;
 
     if (!fromPrivate) {
       if (date === null) {
@@ -1612,7 +1615,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         }
 
         if (this.courses.length === 0) {
-          this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', { duration: 1500 });
         }
         this.loading = false;
         this.loadingCalendar = false;
@@ -1620,14 +1623,14 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
@@ -1644,7 +1647,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
       })
@@ -1654,21 +1657,21 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const match = timeString.match(/(\d+)h (\d+)min/);
 
     if (match) {
-        const hours = parseInt(match[1], 10);
-        const minutes = parseInt(match[2], 10);
+      const hours = parseInt(match[1], 10);
+      const minutes = parseInt(match[2], 10);
 
-        // Suponiendo que 'fecha' es tu fecha actual en Moment.js
-        let fecha = moment();
-        fecha.add(hours, 'hours').add(minutes, 'minutes');
+      // Suponiendo que 'fecha' es tu fecha actual en Moment.js
+      let fecha = moment();
+      fecha.add(hours, 'hours').add(minutes, 'minutes');
 
-        return fecha;
+      return fecha;
     } else {
-        throw new Error('Formato de tiempo inválido');
+      throw new Error('Formato de tiempo inválido');
     }
   }
 
   getSeason() {
-    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id=' + this.user.schools[0].id + '&is_active=1')
       .subscribe((season) => {
         this.season = season.data[0];
         this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
@@ -1680,12 +1683,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getSchool() {
-    this.crudService.get('/schools/'+this.user.schools[0].id)
+    this.crudService.get('/schools/' + this.user.schools[0].id)
       .subscribe((school) => {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
 
-        this.cancellationInsurance =  parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
+        this.cancellationInsurance = parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
         this.boukiiCarePrice = parseInt(this.settings?.taxes?.boukii_care_price);
         this.tva = parseFloat(this.settings?.taxes?.tva);
       })
@@ -1696,11 +1699,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
       const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'YYYY-MM-DD').startOf('day').isSameOrBefore(moment(date, 'YYYY-MM-DD').startOf('day'))) {
-            return 'with-course';
-          } else {
-            return;
-          }
+      if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'YYYY-MM-DD').startOf('day').isSameOrBefore(moment(date, 'YYYY-MM-DD').startOf('day'))) {
+        return 'with-course';
+      } else {
+        return;
+      }
 
     };
   }
@@ -1710,11 +1713,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
       const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-          if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).startOf('day').isSameOrBefore(moment(date).startOf('day'))) {
-            return 'with-course-private';
-          } else {
-            return;
-          }
+      if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).startOf('day').isSameOrBefore(moment(date).startOf('day'))) {
+        return 'with-course-private';
+      } else {
+        return;
+      }
 
     };
   }
@@ -1819,12 +1822,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     } else {
 
       const client = this.allClients.find((m) => m.id === id);
-      return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
+      return client?.image !== '' && client?.image !== null ? client?.image : this.userAvatar;
     }
   }
 
   getUtilizer(id: any) {
-    if (id!==null) {
+    if (id !== null) {
 
       return this.utilizers.find((u) => u.id === id);
     }
@@ -1868,7 +1871,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       const client = this.allClients.find((m) => m.id === id);
       if (client) {
 
-        return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
+        return client?.image !== '' && client?.image !== null ? client?.image : this.userAvatar;
       } else {
         const utilizer = this.getUtilizer(id);
         return utilizer?.image !== '' ? utilizer?.image : this.userAvatar;
@@ -1918,14 +1921,14 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       const client = this.allClients.find((m) => m.id === id);
 
       if (client) {
-        if(client?.birth_date && client?.birth_date !== null) {
+        if (client?.birth_date && client?.birth_date !== null) {
           const today = new Date();
           const birthDate = new Date(client?.birth_date);
           let age = today.getFullYear() - birthDate.getFullYear();
           const m = today.getMonth() - birthDate.getMonth();
 
           if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-              age--;
+            age--;
           }
 
           return age;
@@ -1935,14 +1938,14 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       } else {
         const utilizer = this.getUtilizer(id);
 
-        if(utilizer?.birth_date && utilizer?.birth_date !== null) {
+        if (utilizer?.birth_date && utilizer?.birth_date !== null) {
           const today = new Date();
           const birthDate = new Date(utilizer.birth_date);
           let age = today.getFullYear() - birthDate.getFullYear();
           const m = today.getMonth() - birthDate.getMonth();
 
           if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-              age--;
+            age--;
           }
 
           return age;
@@ -2031,8 +2034,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   checkAllFields() {
     let ret = false;
 
-    for (let i = 0; i<this.courseDates.length; i++){
-      if((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].hour_start === null) {
+    for (let i = 0; i < this.courseDates.length; i++) {
+      if ((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].hour_start === null) {
         if (this.sameMonitor && this.courseDates[0].monitor_id === null) {
           ret = true;
           break;
@@ -2050,12 +2053,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -2103,13 +2106,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     this.bookingsToCreate.forEach(element => {
       ret = ret + ((!element.courseDates[0].course.is_flexible && element.courseDates[0].course.course_type === 2)
-      ? element.price_total * element.courseDates.length : element.price_total);
+        ? element.price_total * element.courseDates.length : element.price_total);
     });
 
     return ret;
   }
 
-  setForfait(event:any, forfait: any, booking: any, bookingIndex: number) {
+  setForfait(event: any, forfait: any, booking: any, bookingIndex: number) {
 
     if (event.source.checked) {
       booking.forfait = forfait;
@@ -2126,7 +2129,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -2134,7 +2137,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
         this.bookingsToCreate.splice(index, 1);
 
-        if(this.bookingsToCreate.length === 0) {
+        if (this.bookingsToCreate.length === 0) {
           this.clientsForm.enable();
           this.bookingComplete = false;
         }
@@ -2150,7 +2153,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         school_id: this.bookingsToCreate[0].school_id,
         currentPrice: this.finalPriceNoTaxes,
         appliedBonus: this.bonus,
-        currency:  this.bookingsToCreate[0].currency
+        currency: this.bookingsToCreate[0].currency
       }
     });
 
@@ -2186,7 +2189,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     if (this.reduction.type === 1) {
       return (this.getBasePrice() * this.reduction.discount) / 100;
     } else {
-      return this.reduction.discount > this.getBasePrice() ? this.getBasePrice(): this.reduction.discount;
+      return this.reduction.discount > this.getBasePrice() ? this.getBasePrice() : this.reduction.discount;
     }
   }
 
@@ -2209,12 +2212,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
 
   calculateRem(event: any) {
-    if(event.source.checked) {
+    if (event.source.checked) {
       this.opRem = this.getBasePrice() * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
       this.defaults.price_cancellation_insurance = this.getBasePrice() * this.cancellationInsurance;
       this.calculateFinalPrice();
-      return this.getBasePrice() *this.cancellationInsurance;
+      return this.getBasePrice() * this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
@@ -2225,7 +2228,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   calculateBoukiiCare(event: any) {
-    if(event.source.checked) {
+    if (event.source.checked) {
       this.boukiiCare = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
@@ -2246,13 +2249,13 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       width: '1000px', // Asegurarse de que no haya un ancho máximo
       height: '1000px', // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {id: this.user.schools[0].id}
+      data: { id: this.user.schools[0].id }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&active=1')
+        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
           .subscribe((cl: any) => {
             const newClient = cl.data.find((c) => c.id = data.data.id);
             this.clientsForm.patchValue(newClient);
@@ -2271,17 +2274,17 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const dialogRef = this.dialog.open(AddClientUserModalComponent, {
       width: '600px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {id: this.user.schools[0].id}
+      data: { id: this.user.schools[0].id }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        if(data.action === 'add') {
-          this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.defaults.client_main_id.id})
-          .subscribe((res) => {
-            this.getUtilzers(this.defaults.client_main_id, true);
-          })
+        if (data.action === 'add') {
+          this.crudService.create('/clients-utilizers', { client_id: data.ret, main_id: this.defaults.client_main_id.id })
+            .subscribe((res) => {
+              this.getUtilzers(this.defaults.client_main_id, true);
+            })
         } else {
           const user = {
             username: data.data.name,
@@ -2305,12 +2308,12 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             province: this.defaults.client_main_id.province,
             country: this.defaults.client_main_id.country,
             image: null,
-            language1_id:null,
-            language2_id:null,
-            language3_id:null,
-            language4_id:null,
-            language5_id:null,
-            language6_id:null,
+            language1_id: null,
+            language2_id: null,
+            language3_id: null,
+            language4_id: null,
+            language5_id: null,
+            language6_id: null,
             user_id: null,
             station_id: this.defaults.client_main_id.station_id
           }
@@ -2318,25 +2321,26 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           this.setLanguages(data.data.languages, client);
 
           this.crudService.create('/users', user)
-          .subscribe((user) => {
-            client.user_id = user.data.id;
+            .subscribe((user) => {
+              client.user_id = user.data.id;
 
-            this.crudService.create('/clients', client)
-              .subscribe((clientCreated) => {
-                this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
+              this.crudService.create('/clients', client)
+                .subscribe((clientCreated) => {
+                  this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', { duration: 3000 });
 
-                this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
-                  .subscribe((clientSchool) => {
+                  this.crudService.create('/clients-schools', { client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
+                    .subscribe((clientSchool) => {
 
-                    setTimeout(() => {
-                      this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
-                      .subscribe((res) => {
-                        this.getUtilzers(this.defaults.client_main_id, true);
-                      })}, 1000);
-                  });
+                      setTimeout(() => {
+                        this.crudService.create('/clients-utilizers', { client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id })
+                          .subscribe((res) => {
+                            this.getUtilzers(this.defaults.client_main_id, true);
+                          })
+                      }, 1000);
+                    });
 
-              })
-          })
+                })
+            })
         }
       }
     });
@@ -2416,11 +2420,11 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
       });
     }
 
-    if(this.defaults.has_cancellation_insurance) {
+    if (this.defaults.has_cancellation_insurance) {
       price = price + (this.getBasePrice() * this.cancellationInsurance);
     }
 
-    if(this.defaults.has_boukii_care) {
+    if (this.defaults.has_boukii_care) {
       // coger valores de reglajes
       price = price + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
@@ -2452,19 +2456,19 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let mainDurationMinutes = 0;
 
     intervalParts.forEach(part => {
-        if (part.includes('h')) {
-            intervalHours = parseInt(part, 10);
-        } else if (part.includes('min')) {
-            intervalMinutes = parseInt(part, 10);
-        }
+      if (part.includes('h')) {
+        intervalHours = parseInt(part, 10);
+      } else if (part.includes('min')) {
+        intervalMinutes = parseInt(part, 10);
+      }
     });
 
     mainDurationParts.forEach(part => {
-        if (part.includes('h')) {
-            mainDurationHours = parseInt(part, 10);
-        } else if (part.includes('min')) {
-            mainDurationMinutes = parseInt(part, 10);
-        }
+      if (part.includes('h')) {
+        mainDurationHours = parseInt(part, 10);
+      } else if (part.includes('min')) {
+        mainDurationMinutes = parseInt(part, 10);
+      }
     });
 
     let currentHours = startHours;
@@ -2472,25 +2476,25 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const result = [];
 
     while (true) {
-        let nextIntervalEndHours = currentHours + mainDurationHours;
-        let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
+      let nextIntervalEndHours = currentHours + mainDurationHours;
+      let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
 
-        nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
-        nextIntervalEndMinutes %= 60;
+      nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
+      nextIntervalEndMinutes %= 60;
 
-        if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
-            break;
-        }
+      if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
+        break;
+      }
 
-        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
 
-        currentMinutes += intervalMinutes;
-        currentHours += intervalHours + Math.floor(currentMinutes / 60);
-        currentMinutes %= 60;
+      currentMinutes += intervalMinutes;
+      currentHours += intervalHours + Math.floor(currentMinutes / 60);
+      currentMinutes %= 60;
 
-        if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
-            break;
-        }
+      if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
+        break;
+      }
     }
 
     return result.find((r) => r === this.externalData.hour);
@@ -2508,19 +2512,19 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let mainDurationMinutes = 0;
 
     intervalParts.forEach(part => {
-        if (part.includes('h')) {
-            intervalHours = parseInt(part, 10);
-        } else if (part.includes('min')) {
-            intervalMinutes = parseInt(part, 10);
-        }
+      if (part.includes('h')) {
+        intervalHours = parseInt(part, 10);
+      } else if (part.includes('min')) {
+        intervalMinutes = parseInt(part, 10);
+      }
     });
 
     mainDurationParts.forEach(part => {
-        if (part.includes('h')) {
-            mainDurationHours = parseInt(part, 10);
-        } else if (part.includes('min')) {
-            mainDurationMinutes = parseInt(part, 10);
-        }
+      if (part.includes('h')) {
+        mainDurationHours = parseInt(part, 10);
+      } else if (part.includes('min')) {
+        mainDurationMinutes = parseInt(part, 10);
+      }
     });
 
     let currentHours = startHours;
@@ -2528,25 +2532,25 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const result = [];
 
     while (true) {
-        let nextIntervalEndHours = currentHours + mainDurationHours;
-        let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
+      let nextIntervalEndHours = currentHours + mainDurationHours;
+      let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
 
-        nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
-        nextIntervalEndMinutes %= 60;
+      nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
+      nextIntervalEndMinutes %= 60;
 
-        if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
-            break;
-        }
+      if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
+        break;
+      }
 
-        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
 
-        currentMinutes += intervalMinutes;
-        currentHours += intervalHours + Math.floor(currentMinutes / 60);
-        currentMinutes %= 60;
+      currentMinutes += intervalMinutes;
+      currentHours += intervalHours + Math.floor(currentMinutes / 60);
+      currentMinutes %= 60;
 
-        if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
-            break;
-        }
+      if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
+        break;
+      }
     }
 
     return result;
@@ -2599,7 +2603,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const priceRangeCourse = typeof this.selectedItem.price_range === 'string' ? JSON.parse(this.selectedItem.price_range) : this.selectedItem.price_range;
     durations.forEach(element => {
       const priceRange = priceRangeCourse ? priceRangeCourse.find((p) => p.intervalo === element) : null;
-      if (priceRange && priceRange.intervalo === element ) {
+      if (priceRange && priceRange.intervalo === element) {
 
         if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= this.selectedItem.max_participants) {
           tableDurations.push(this.extractValues(priceRange)[0].interval);
@@ -2677,7 +2681,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let personsSelected = this.personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start]
     const index = personsSelected.findIndex((p) => p.id === value.id);
 
-    if (personsSelected.length + 1 >= this.getCourse(courseDate.course_id).max_participants && index === -1 ) {      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', {duration: 3000});
+    if (personsSelected.length + 1 >= this.getCourse(courseDate.course_id).max_participants && index === -1) {
+      this.snackbar.open(this.translateService.instant('pax_limit_reached') + (+personsSelected.length + 1), 'OK', { duration: 3000 });
       return;
     } else {
       if (personsSelected.length === 0 || index === -1) {
@@ -2696,15 +2701,15 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let results = [];
 
     for (const key in data) {
-        if (data.hasOwnProperty(key) && data[key] != null && key !== "intervalo") {
-            results.push({ key: key, value: data[key], interval: data["intervalo"] });
-        }
+      if (data.hasOwnProperty(key) && data[key] != null && key !== "intervalo") {
+        results.push({ key: key, value: data[key], interval: data["intervalo"] });
+      }
     }
 
     return results;
   }
 
-  getBookingPaxes(){
+  getBookingPaxes() {
     let ret = 0;
     this.bookingsToCreate.forEach(element => {
       ret = ret + element.paxes;
@@ -2713,7 +2718,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     return ret;
   }
 
-  getBookingDates(){
+  getBookingDates() {
     let ret = 0;
     this.bookingsToCreate.forEach(element => {
       ret = ret + element.courseDates.length;
@@ -2729,7 +2734,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   checkAvailableMonitors(start: any, duration: any, date) {
 
     let data: any;
-    if(this.selectedItem.is_flexible) {
+    if (this.selectedItem.is_flexible) {
       data = {
         sportId: this.defaults.sport_id,
         minimumDegreeId: this.levelForm.value.id,
@@ -2738,7 +2743,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
         date: moment(date).format('YYYY-MM-DD'),
         clientIds: [this.clientsForm.value.id]
       };
-    } else{
+    } else {
       data = {
         sportId: this.defaults.sport_id,
         minimumDegreeId: this.levelForm.value.id,
@@ -2760,7 +2765,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
         if (response.data.length === 0) {
 
-          this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', { duration: 3000 });
         }
       })
   }
@@ -2778,7 +2783,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   getAllDegrees() {
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data;
       })

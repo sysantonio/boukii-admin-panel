@@ -67,14 +67,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
     outline: true,
     toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
   }
-
   editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
   editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
+
   minDate = new Date();
   maxDate = new Date();
 
   courseTypeFormGroup: UntypedFormGroup;
   courseInfoCollecDateSplitFormGroup: UntypedFormGroup;
+  courseFormGroup: UntypedFormGroup; //El bueno
 
   sportTypeSelected: number = -1;
   sportData: any = [];
@@ -101,18 +102,24 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.mode = this.id ? 'update' : 'create';
-
     forkJoin({
       sportTypes: this.getSportsType(),
       sports: this.getSports(),
       stations: this.getStations(),
       monitors: this.getMonitors()
     }).subscribe(({ sportTypes, sports, stations, monitors }) => {
-      this.loading = false
       this.sportTypeData = sportTypes;
       this.sportData = sports;
       this.stations = stations;
       this.monitors = monitors;
+      this.courseFormGroup = this.fb.group({
+        sport_id: [this.sportData[0].sport_id, Validators.required],
+      });
+
+
+
+
+
 
       this.schoolService.getSchoolData()
         .subscribe((data) => {
@@ -194,76 +201,47 @@ export class CoursesCreateUpdateComponent implements OnInit {
           image: [null],
         });
 
-        this.loading = false;
 
       }
+      this.loading = false;
     });
-
-
   }
 
   displayFn(sportType: any): string {
     return sportType && sportType.name ? sportType.name : '';
   }
 
-  getSportsType() {
-    return this.crudService.list('/sport-types', 1, 1000).pipe(
-      map(data => data.data)
-    );
-  }
-
-  getSports() {
-    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-      map(sport => sport.data),
-      mergeMap(sports => {
-        return forkJoin(sports.map(element =>
-          this.crudService.get('/sports/' + element.sport_id).pipe(
-            map(data => {
-              element.name = data.data.name;
-              element.icon_selected = data.data.icon_selected;
-              element.icon_unselected = data.data.icon_unselected;
-              element.sport_type = data.data.sport_type;
-              return element;
-            })
-          )
-        ));
-      })
-    );
-  }
-
-  getStations() {
-    return this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-      map(station => station.data),
-      mergeMap(stations => {
-        return forkJoin(stations.map(element =>
-          this.crudService.get('/stations/' + element.station_id).pipe(
-            map(data => data.data)
-          )
-        ));
-      })
-    );
-  }
-
-  getMonitors() {
-    return this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-      map(data => data.data)
-    );
-  }
-
-  getDegrees() {
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseTypeFormGroup.controls['sportType'].value)
-      .subscribe((data) => {
-        data.data.forEach(element => {
-          if (element.active) this.levels.push(element);
-        });
-        this.levels.forEach(level => {
-          level.active = false;
-
-        })
-      });
-  }
+  getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
+  getMonitors = () => this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(map(data => data.data));
+  getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
+    map(sport => sport.data),
+    mergeMap(sports =>
+      forkJoin(sports.map(element =>
+        this.crudService.get('/sports/' + element.sport_id).pipe(
+          map(data => {
+            element.name = data.data.name;
+            element.icon_selected = data.data.icon_selected;
+            element.icon_unselected = data.data.icon_unselected;
+            element.sport_type = data.data.sport_type;
+            return element;
+          })
+        )
+      ))
+    )
+  );
+  getStations = () => this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
+    map(station => station.data),
+    mergeMap(stations => forkJoin(stations.map(element => this.crudService.get('/stations/' + element.station_id).pipe(map(data => data.data)))))
+  );
+  getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseTypeFormGroup.controls['sportType'].value).subscribe((data) => {
+    data.data.forEach(element => element.active ? this.levels.push(element) : null);
+    this.levels.forEach(level => level.active = false)
+  });
 
   Confirm() {
     if (this.ModalFlux === 0) this.getDegrees();
   }
+
+  find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
+
 }

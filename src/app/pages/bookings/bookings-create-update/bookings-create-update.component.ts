@@ -1,28 +1,24 @@
 import {
   Component,
   EventEmitter,
-  OnDestroy,
   OnInit,
   Output,
   Input,
   ChangeDetectorRef,
   Inject,
-  Optional
+  Optional,
+  Injectable
 } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Observable, Subscription, forkJoin, map, of, startWith } from 'rxjs';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings-create-update-modal/bookings-create-update-modal.component';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { Platform } from '@angular/cdk/platform';
-import { DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
+import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
 import * as moment from 'moment';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CalendarService } from 'src/service/calendar.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddReductionModalComponent } from './add-reduction/add-reduction.component';
@@ -35,8 +31,8 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { AddClientSportModalComponent } from '../add-client-sport/add-client-sport.component';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { MatSelectChange } from '@angular/material/select';
 
+@Injectable()
 @Component({
   selector: 'custom-header',
   template: `
@@ -62,7 +58,7 @@ export class CustomHeader {
     private calendar: MatCalendar<any>,
     private dateAdapter: DateAdapter<any>,
     private calendarService: CalendarService
-  ) {}
+  ) { }
 
   getFirstDayOfMonth(date: any): Date {
     return this.dateAdapter.createDate(
@@ -86,6 +82,7 @@ export class CustomHeader {
 }
 
 export class CustomDateAdapter extends NativeDateAdapter {
+  @Injectable()
   format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {
       let day = date.getDate();
@@ -130,7 +127,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   duration = '3 horas';
   dates = ['03/11/2023', '04/11/2023', '05/11/2023']; // Ejemplo de fechas
   durations = null; // Ejemplo de duraciones
-  persons:any = []; // Ejemplo de número de personas
+  persons: any = []; // Ejemplo de número de personas
   personsToBook = []; // Ejemplo de número de personas
   personsSelected = []; // Ejemplo de número de personas
   personsSelectedMultiple = []; // Ejemplo de número de personas
@@ -282,18 +279,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private fb: UntypedFormBuilder, private dialog: MatDialog, private crudService: ApiCrudService, private calendarService: CalendarService,
-              private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router,
-              public translateService: TranslateService, private cdr: ChangeDetectorRef,
-              private dateAdapter: DateAdapter<Date>,
-              @Optional() public dialogRef: MatDialogRef<BookingsCreateUpdateComponent>,
-              @Optional() @Inject(MAT_DIALOG_DATA) public externalData: any) {
+    private snackbar: MatSnackBar, private passwordGen: PasswordService, private router: Router,
+    public translateService: TranslateService, private cdr: ChangeDetectorRef,
+    private dateAdapter: DateAdapter<Date>,
+    @Optional() public dialogRef: MatDialogRef<BookingsCreateUpdateComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public externalData: any) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.minDate = new Date();
-    if(this.externalData) {
+    if (this.externalData) {
       this.minDate = new Date(this.externalData.date);
     }
-     // Establecer la fecha mínima como la fecha actual
+    // Establecer la fecha mínima como la fecha actual
     this.subscription = this.calendarService.monthChanged$.subscribe(firstDayOfMonth => {
       this.handleMonthChange(firstDayOfMonth);
       this.selectedDatePrivate = firstDayOfMonth;
@@ -364,7 +361,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         setTimeout(() => {
 
-          if(this.externalData) {
+          if (this.externalData) {
             this.sportTypeSelected = this.sportData[0].sport_type;
             this.form.patchValue({ sportType: this.sportData[0].sport_type });
           }
@@ -397,7 +394,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   filterSportsByType(onload = false) {
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -419,8 +416,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.getCourses(level, this.monthAndYear);
         }
       });
-      if(!client.client_sports.length) {
-        this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+      if (!client.client_sports.length) {
+        this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
       }
     }
 
@@ -432,15 +429,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   setCourseType(type: string, id: number, levelSelected = null) {
     this.monthAndYear = new Date();
-    if(this.externalData) {
+    if (this.externalData) {
       this.monthAndYear = new Date(this.externalData.date);
     }
 
-    if(this.selectedDatePrivate && !this.externalData && type == 'privee') {
+    if (this.selectedDatePrivate && !this.externalData && type == 'privee') {
       this.monthAndYear = new Date(this.selectedDatePrivate);
     }
 
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -452,7 +449,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let hasSport = false;
 
     if (client) {
-      if(client.client_sports.length) {
+      if (client.client_sports.length) {
         client.client_sports.forEach(sport => {
           if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
             const level = this.levels.find((l) => l.id === sport.degree_id);
@@ -464,31 +461,31 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
       } else {
         const level = levelSelected ? levelSelected : this.levelForm.value;
-        if(level) {
+        if (level) {
           this.levelForm.patchValue(level);
           this.defaultsBookingUser.degree_id = level.id;
           this.getCourses(level, this.monthAndYear);
         } else {
-          this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration:6000});
+          this.snackbar.open(this.translateService.instant('choose_level'), 'OK', { duration: 6000 });
         }
 
       }
 
     } else {
       const level = levelSelected ? levelSelected : this.levelForm.value;
-      if(level) {
+      if (level) {
         this.levelForm.patchValue(level);
         this.defaultsBookingUser.degree_id = level.id;
         this.getCourses(level, this.monthAndYear);
       } else {
-        this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration:6000});
+        this.snackbar.open(this.translateService.instant('choose_level'), 'OK', { duration: 6000 });
       }
     }
 
 
-/*    if (!hasSport) {
-      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
-    }*/
+    /*    if (!hasSport) {
+          this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+        }*/
   }
 
   inUseDatesFilter = (d: Date): boolean => {
@@ -510,7 +507,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   selectItem(item: any) {
     this.color = '';
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -522,7 +519,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       }
       this.courseDates = [];
       this.selectedItem = item;
-      this.selectedSubGroupItem  = null;
+      this.selectedSubGroupItem = null;
       this.courseDates.push(this.defaultsBookingUser);
     } else {
 
@@ -532,7 +529,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.selectedPrivateDates = [];
 
       this.selectedItem = item;
-      let selectedPrivateDateItem = this.selectedItem.course_dates.find(i=> moment(i.date).startOf('day').format('YYYY-MM-DD') == moment(this.selectedDatePrivate).startOf('day').format('YYYY-MM-DD'));
+      let selectedPrivateDateItem = this.selectedItem.course_dates.find(i => moment(i.date).startOf('day').format('YYYY-MM-DD') == moment(this.selectedDatePrivate).startOf('day').format('YYYY-MM-DD'));
       this.courseDates.push({
         school_id: this.user.schools[0].id,
         booking_id: null,
@@ -557,12 +554,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
       } else {
         this.calculatePaxesPrivateFix();
       }
-      if(this.externalData){
-        this.setCourseDateItemPrivateNoFlexible(this.courseDates[0], {value:this.externalData.date});
+      if (this.externalData) {
+        this.setCourseDateItemPrivateNoFlexible(this.courseDates[0], { value: this.externalData.date });
         this.courseDates[0].hour_start = this.externalData.hour;
         this.generateCourseDurations(
-          this.externalData.hour+':00', this.getDateFromSelectedDates().hour_end,
-          this.selectedItem.duration.includes(':') ? this.transformTime( this.selectedItem.duration) : this.selectedItem.duration)
+          this.externalData.hour + ':00', this.getDateFromSelectedDates().hour_end,
+          this.selectedItem.duration.includes(':') ? this.transformTime(this.selectedItem.duration) : this.selectedItem.duration)
       }
     }
   }
@@ -702,23 +699,23 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let paxes = 0;
 
     if (this.levelForm.value == null || this.levelForm.value == '') {
-      this.snackbar.open(this.translateService.instant('choose_level'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('choose_level'), 'OK', { duration: 3000 });
       return;
     }
 
     if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.checkAllFields()) {
 
-      this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', {duration:3000});
+      this.snackbar.open(this.sameMonitor ? this.translateService.instant('snackbar.booking.user_no_monitor') : this.translateService.instant('snackbar.booking.user_monitor'), 'OK', { duration: 3000 });
       return;
     }
 
     if (this.courseTypeId === 1 && this.selectedItem.is_flexible && this.reservableCourseDate.length === 0) {
 
-      this.snackbar.open(this.translateService.instant('snackbar.booking.select_dates'), 'OK', {duration:3000});
+      this.snackbar.open(this.translateService.instant('snackbar.booking.select_dates'), 'OK', { duration: 3000 });
       return;
     }
 
-    const checkAval = {bookingUsers: []};
+    const checkAval = { bookingUsers: [] };
 
     if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
 
@@ -742,7 +739,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           date: moment(element.date).format('YYYY-MM-DD'),
         })
       });
-    } else if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible){
+    } else if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible) {
       this.courseDates.forEach((element, index) => {
         checkAval.bookingUsers.push({
           client_id: element.client_id,
@@ -788,7 +785,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     let overlap = this.hasLocalOverlap(checkAval);
 
-    if(overlap) {
+    if (overlap) {
       this.snackbar.open(
         this.translateService.instant('snackbar.booking.overlap') +
         moment(overlap.date).format('DD/MM/YYYY') + ' | ' +
@@ -804,7 +801,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
           if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible) {
             this.courseDates.forEach(item => {
-              if(item.paxes) {
+              if (item.paxes) {
                 paxes = paxes + parseInt(item.paxes);
               }
             })
@@ -814,7 +811,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
           let price = this.selectedItem.price;
           if (this.courseTypeId === 1 && this.selectedItem.is_flexible) {
-            price = price *  this.reservableCourseDate.length;
+            price = price * this.reservableCourseDate.length;
             const discounts = typeof this.selectedItem.discounts === 'string' ? JSON.parse(this.selectedItem.discounts) : this.selectedItem.discounts;
             /*          price = 0;
                       if(discounts && discounts.length) {
@@ -864,7 +861,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 item.course_groups.forEach(groups => {
                   if (groups.degree_id === this.levelForm.value.id) {
                     if (!monitorFind) {
-                      if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                      if (groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                         monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                         degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
                         subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
@@ -908,7 +905,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 item.course_groups.forEach(groups => {
                   if (groups.degree_id === this.levelForm.value.id) {
                     if (!monitorFind) {
-                      if(groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
+                      if (groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id === this.levelForm.value.id) {
                         monitorId = groups.course_subgroups[this.selectedSubGroupItemIndex].monitor_id;
                         degreeId = groups.course_subgroups[this.selectedSubGroupItemIndex].degree_id;
                         subgroupId = groups.course_subgroups[this.selectedSubGroupItemIndex].id;
@@ -959,24 +956,24 @@ export class BookingsCreateUpdateComponent implements OnInit {
               data.courseDates = [];
               data.school_id = this.user.schools[0].id
               data.booking_id = null
-              data.client_id= item.client_id
-              data.course_id= item.course_id
-              data.course_date_id= item.course_date_id
-              data.degree_id= this.levelForm.value.id
-              data.monitor_id= this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
-              data.hour_start= item.hour_start
-              data.hour_end= this.calculateHourEnd(item.hour_start, item.duration) //calcular en base a la duracion del curso
+              data.client_id = item.client_id
+              data.course_id = item.course_id
+              data.course_date_id = item.course_date_id
+              data.degree_id = this.levelForm.value.id
+              data.monitor_id = this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
+              data.hour_start = item.hour_start
+              data.hour_end = this.calculateHourEnd(item.hour_start, item.duration) //calcular en base a la duracion del curso
 
-              data.currency= item.currency
+              data.currency = item.currency
 
-              data.course= this.selectedItem
-              data.date= moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              data.course = this.selectedItem
+              data.date = moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
               let people = [];
               if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
                 people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
-                data.people = [... people];
+                data.people = [...people];
               }
-              data.paxes= people.length + 1
+              data.paxes = people.length + 1
               const price = (parseFloat(priceRange.find((p) => p.intervalo === item.duration)[people.length + 1]));
               data.price = price
               data.price_total = price;
@@ -1064,24 +1061,24 @@ export class BookingsCreateUpdateComponent implements OnInit {
               data.courseDates = [];
               data.school_id = this.user.schools[0].id
               data.booking_id = null
-              data.client_id= item.client_id
-              data.course_id= item.course_id
-              data.course_date_id= item.course_date_id
-              data.degree_id= this.levelForm.value.id
-              data.monitor_id= this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
-              data.hour_start= item.hour_start
-              data.hour_end= this.calculateHourEnd(item.hour_start, this.selectedItem.duration) //calcular en base a la duracion del curso
+              data.client_id = item.client_id
+              data.course_id = item.course_id
+              data.course_date_id = item.course_date_id
+              data.degree_id = this.levelForm.value.id
+              data.monitor_id = this.sameMonitor ? this.courseDates[0].monitor_id : item.monitor_id
+              data.hour_start = item.hour_start
+              data.hour_end = this.calculateHourEnd(item.hour_start, this.selectedItem.duration) //calcular en base a la duracion del curso
 
-              data.currency= item.currency
+              data.currency = item.currency
 
-              data.course= this.selectedItem
-              data.date= moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              data.course = this.selectedItem
+              data.date = moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
               let people = [];
               if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
                 people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
-                data.people = [... people];
+                data.people = [...people];
               }
-              data.paxes= people.length + 1
+              data.paxes = people.length + 1
               data.price = parseFloat(item.price)
               data.price_total = price;
               data.courseDates.push(data);
@@ -1145,7 +1142,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                       });*/
           }
           console.log('Response before un shift:', this.bookingsToCreate);
-          if(this.courseTypeId !== 2 && this.courseTypeId !==3){
+          if (this.courseTypeId !== 2 && this.courseTypeId !== 3) {
             this.bookingsToCreate.unshift(data);
           }
           console.log('Response after un shift:', this.bookingsToCreate);
@@ -1159,14 +1156,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.clientsForm.disable();
         }, (error) => {
           this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-            moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', {duration: 3000})
+            moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', { duration: 3000 })
         });
     }
 
   }
 
   generateUniqueId(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0;
       const v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
@@ -1176,14 +1173,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
   toggleOptions(item: any, uniqueId: number) {
     const person = item.people.find((p: any) => p.uniqueId === uniqueId);
     if (person) {
-      person['showOptions']= !person['showOptions'];
+      person['showOptions'] = !person['showOptions'];
     }
   }
 
   save() {
     this.bookingsToCreate.forEach((booking: any) => {
       booking.uniqueId = this.generateUniqueId();
-      if(booking.people) {
+      if (booking.people) {
         booking.people.forEach((person: any, index: number) => {
           person.uniqueId = this.generateUniqueId(); // O usa una función para generar un identificador único
           person['showOptions'] = false;
@@ -1201,7 +1198,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let settings = typeof course.settings === 'string' ?
       JSON.parse(course.settings) : course.settings;
 
-    if(settings?.groups) {
+    if (settings?.groups) {
       settings.groups.forEach(group => {
         group.paxes = 0;
       });
@@ -1225,7 +1222,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       booking.groups[existingGroupIndex].paxes = group.paxes;
     } else {
       // Add new group
-      booking.groups.push({...group});
+      booking.groups.push({ ...group });
     }
     this.calculateFinalPrice();
   }
@@ -1235,7 +1232,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getBookingGroupsPrice(booking: any): number {
-    if(!booking.groups) {
+    if (!booking.groups) {
       return 0;
     }
     return booking.groups.reduce((total, group) => {
@@ -1249,13 +1246,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
       if (b.courseDates[0].course.is_flexible && b.courseDates[0].course.course_type === 1) {
         const discounts = typeof b.courseDates[0].course.discounts === 'string' ? JSON.parse(b.courseDates[0].course.discounts)
           : b.courseDates[0].course.discounts;
-        if(discounts && discounts.length) {
+        if (discounts && discounts.length) {
           let i = 0;
           let price = 0;
           b.courseDates.forEach(element => {
-            const selectedDiscount = discounts.find(item => item.date == i+1);
-            if(selectedDiscount) {
-              price = price + ((1*b.courseDates[0].course.price) * (selectedDiscount.percentage / 100));
+            const selectedDiscount = discounts.find(item => item.date == i + 1);
+            if (selectedDiscount) {
+              price = price + ((1 * b.courseDates[0].course.price) * (selectedDiscount.percentage / 100));
             }
             i++;
           });
@@ -1278,8 +1275,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
       element.courseDates.forEach(cs => {
         courseDates.push(cs);
         if (element.forfait) {
-          bookingExtras.push({forfait: element.forfait, course_date_id: cs.course_date_id,
-            client_id: element.client_main_id});
+          bookingExtras.push({
+            forfait: element.forfait, course_date_id: cs.course_date_id,
+            client_id: element.client_main_id
+          });
         }
         if (element.groups) {
           element.groups.forEach(group => {
@@ -1295,8 +1294,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
         if (element.people) {
           element.people.forEach(people => {
             if (people.forfait) {
-              bookingExtras.push({forfait: people.forfait, course_date_id: cs.course_date_id,
-                client_id: people.id});
+              bookingExtras.push({
+                forfait: people.forfait, course_date_id: cs.course_date_id,
+                client_id: people.id
+              });
             }
           });
         }
@@ -1453,13 +1454,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
 
         rqs.forEach((rq, idx) => {
-          let bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id);
-          if(!rq.course_subgroup_id) {
-            bExtra = bookingExtras.find((b)=> b.course_date_id === rq.course_date_id && b.client_id === rq.client_id )
+          let bExtra = bookingExtras.find((b) => b.course_date_id === rq.course_date_id);
+          if (!rq.course_subgroup_id) {
+            bExtra = bookingExtras.find((b) => b.course_date_id === rq.course_date_id && b.client_id === rq.client_id)
           }
 
-          if(rq.isActivity) {
-            bExtra = bookingExtras.filter((b)=> b.course_date_id === rq.course_date_id && b.client_id === rq.client_id )
+          if (rq.isActivity) {
+            bExtra = bookingExtras.filter((b) => b.course_date_id === rq.course_date_id && b.client_id === rq.client_id)
           }
 
           this.crudService.create('/booking-users', rq)
@@ -1469,7 +1470,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   booking_user_id: bookingUser.data.id,
                   course_extra_id: null,
                 }
-                if(rq.isActivity) {
+                if (rq.isActivity) {
                   bExtra.forEach(bE => {
                     let courseExtra = {
                       course_id: rq.course_id,
@@ -1524,24 +1525,24 @@ export class BookingsCreateUpdateComponent implements OnInit {
             });
 
             bookingExtras.forEach(element => {
-              extras.push({name: element.name, quantity: 1, price: parseFloat(element.price)});
+              extras.push({ name: element.name, quantity: 1, price: parseFloat(element.price) });
             });
 
             const basket = {
               payment_method_id: this.defaults.payment_method_id,
-              price_base: {name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].course.name, quantity: 1, price: this.getBasePrice()},
-              bonus: {total: this.bonus.length, bonuses: bonuses},
-              reduction: {name: 'Reduction', quantity: 1, price: -(this.reduction)},
-              boukii_care: {name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care)},
-              cancellation_insurance: {name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance)},
-              extras: {total: bookingExtras.length, extras: extras},
-              tva: {name: 'TVA', quantity: 1, price: this.tvaPrice},
+              price_base: { name: this.bookingsToCreate.length > 1 ? 'MULTI' : this.bookingsToCreate[0].courseDates[0].course.name, quantity: 1, price: this.getBasePrice() },
+              bonus: { total: this.bonus.length, bonuses: bonuses },
+              reduction: { name: 'Reduction', quantity: 1, price: -(this.reduction) },
+              boukii_care: { name: 'Boukii Care', quantity: 1, price: parseFloat(this.defaults.price_boukii_care) },
+              cancellation_insurance: { name: 'Cancellation Insurance', quantity: 1, price: parseFloat(this.defaults.price_cancellation_insurance) },
+              extras: { total: bookingExtras.length, extras: extras },
+              tva: { name: 'TVA', quantity: 1, price: this.tvaPrice },
               price_total: parseFloat(this.finalPrice),
               paid_total: parseFloat(this.finalPrice),
               pending_amount: parseFloat(this.finalPrice)
             }
 
-            this.crudService.update('/bookings', {basket: JSON.stringify(basket)}, booking.data.id)
+            this.crudService.update('/bookings', { basket: JSON.stringify(basket) }, booking.data.id)
               .subscribe(() => {
 
               })
@@ -1555,52 +1556,56 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
                   window.open(result.data, "_self");
                 } else {
-                  if(this.externalData) {
+                  if (this.externalData) {
                     this.closeModal();
                   } else {
-                    this.goTo('/bookings/update/'+booking.data.id);
+                    this.goTo('/bookings/update/' + booking.data.id);
                   }
 
                 }
-                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+                this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 3000 });
               }, error => {
-                  if(this.externalData) {
-                    this.closeModal();
-                  } else {
-                    this.goTo('/bookings/update/'+booking.data.id);
-                  }
-                this.snackbar.open(this.translateService.instant('"snackbar.booking.payment.error'), 'OK', {duration: 3000});
+                if (this.externalData) {
+                  this.closeModal();
+                } else {
+                  this.goTo('/bookings/update/' + booking.data.id);
+                }
+                this.snackbar.open(this.translateService.instant('"snackbar.booking.payment.error'), 'OK', { duration: 3000 });
               })
-          } else if(this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
-            this.crudService.update('/bookings', {payment_method_id: this.defaults.payment_method_id,
-              paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : 0}, booking.data.id)
+          } else if (this.defaults.payment_method_id === 1 || this.defaults.payment_method_id === 4) {
+            this.crudService.update('/bookings', {
+              payment_method_id: this.defaults.payment_method_id,
+              paid: this.defaults.paid, paid_total: this.defaults.paid ? this.finalPrice : 0
+            }, booking.data.id)
               .subscribe(() => {
 
-                this.crudService.create('/payments', {booking_id: booking.data.id,
+                this.crudService.create('/payments', {
+                  booking_id: booking.data.id,
                   school_id: this.user.schools[0].id,
                   amount: this.bookingPendingPrice, status: 'paid',
-                  notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'})
+                  notes: this.defaults.payment_method_id === 1 ? 'cash' : 'other'
+                })
                   .subscribe(() => {
 
-                    this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-                    if(this.externalData) {
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 1000 });
+                    if (this.externalData) {
                       this.closeModal();
                     } else {
-                      this.goTo('/bookings/update/'+booking.data.id);
+                      this.goTo('/bookings/update/' + booking.data.id);
                     }
                   })
               })
           } else {
-            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 1000});
-            if(this.externalData) {
+            this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 1000 });
+            if (this.externalData) {
               this.closeModal();
             } else {
-              this.goTo('/bookings/update/'+booking.data.id);
+              this.goTo('/bookings/update/' + booking.data.id);
             }
           }
 
 
-          this.crudService.post('/admin/bookings/mail/' + booking.data.id, {paid: this.defaults.paid, payment_method: this.defaults.payment_method})
+          this.crudService.post('/admin/bookings/mail/' + booking.data.id, { paid: this.defaults.paid, payment_method: this.defaults.payment_method })
             .subscribe((data) => {
               console.log(data);
             })
@@ -1623,7 +1628,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.crudService.update('/vouchers', data, element.bonus.id)
           .subscribe((result) => {
 
-            this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: bookingId, amount: element.bonus.reducePrice})
+            this.crudService.create('/vouchers-logs', { voucher_id: result.data.id, booking_id: bookingId, amount: element.bonus.reducePrice })
               .subscribe((vresult) => {
                 console.log(vresult);
 
@@ -1761,8 +1766,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
         this.getCourses(level, this.monthAndYear);
       }
     });
-    if(!client.client_sports.length) {
-      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+    if (!client.client_sports.length) {
+      this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
     }
   }
 
@@ -1808,7 +1813,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClients() {
-    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&active=1');/*
+    return this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -1817,7 +1822,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getClientsAll() {
-    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports');/*
+    return this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id, '&with[]=clientSports');/*
       .subscribe((data: any) => {
         this.clients = data.data;
         this.loading = false;
@@ -1833,11 +1838,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data.reverse();
         this.sportData.forEach(element => {
-          this.crudService.get('/sports/'+element.sport_id)
+          this.crudService.get('/sports/' + element.sport_id)
             .subscribe((data) => {
               element.name = data.data.name;
               element.icon_selected = data.data.icon_selected;
@@ -1846,7 +1851,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             });
         });
 
-        if(this.externalData && this.externalData.monitor.sports){
+        if (this.externalData && this.externalData.monitor.sports) {
           this.sportData = this.sportData.filter(i =>
             this.externalData.monitor.sports.some(sport => sport.id === i.sport_id)
           ).map(i => {
@@ -1867,7 +1872,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   selectSport(sport: any) {
     this.backToList();
-    if(this.snackBarRef!==null) {
+    if (this.snackBarRef !== null) {
 
       this.snackBarRef.dismiss();
     }
@@ -1879,7 +1884,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getDegrees(sportId: number) {
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&sport_id='+sportId + '&active=1')
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + sportId + '&active=1')
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
 
@@ -1902,14 +1907,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
               this.levelForm.patchValue(level);
               this.defaultsBookingUser.degree_id = level.id;
               hasSport = true;
-              if(this.courseTypeId) {
+              if (this.courseTypeId) {
                 this.getCourses(level, this.monthAndYear);
               }
             }
           });
-          if(!client.client_sports.length) {
-            this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
-            if(this.courseTypeId && this.levelForm.value) {
+          if (!client.client_sports.length) {
+            this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
+            if (this.courseTypeId && this.levelForm.value) {
               this.getCourses(this.levelForm.value, this.monthAndYear);
             }
           }
@@ -1940,7 +1945,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const dialogRef = this.dialog.open(AddClientSportModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {sport_id: sportId, title: 'Assign sport'}
+      data: { sport_id: sportId, title: 'Assign sport' }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -1948,10 +1953,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         data.data.forEach(element => {
 
-          this.crudService.create('/client-sports', {client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+          this.crudService.create('/client-sports', { client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
             .subscribe(() => {
               console.log('client sport created');
-              this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&active=1')
+              this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
                 .subscribe((cl) => {
                   this.clients = cl.data;
                   const client = this.allClients.find((c) => c.id === this.defaultsBookingUser.client_id);
@@ -1970,14 +1975,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     });
   }
 
-  getUtilzers(client: any, onLoad = false, event: any = {isUserInput: true}) {
+  getUtilzers(client: any, onLoad = false, event: any = { isUserInput: true }) {
     if (event.isUserInput) {
-      if(this.snackBarRef!==null) {
+      if (this.snackBarRef !== null) {
 
         this.snackBarRef.dismiss();
       }
       let selectedClient = client;
-      if(client.main_client) {
+      if (client.main_client) {
         client = client.main_client;
         this.defaults.client_main_id = client.id;
       }
@@ -1987,12 +1992,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.borderActive = -1;
       this.defaultsBookingUser.client_id = client.id;
 
-      this.crudService.get('/admin/clients/' + client.id +'/utilizers')
+      this.crudService.get('/admin/clients/' + client.id + '/utilizers')
         .subscribe((data: any) => {
           this.utilizers = data.data;
 
           if (!onLoad) {
-            if(client != selectedClient) {
+            if (client != selectedClient) {
               this.mainIdSelected = false;
               this.clientsForm.patchValue(client);
               let index = this.utilizers.findIndex((utilizer: any) => utilizer.id === selectedClient.id);
@@ -2000,8 +2005,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
               this.selectSport(this.sportDataList[0]);
             } else {
               this.selectSport(this.sportDataList[0]);
-              if(!client.client_sports.length) {
-                this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+              if (!client.client_sports.length) {
+                this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
               }
               client.client_sports.forEach(sport => {
                 if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
@@ -2011,12 +2016,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     this.levelForm.patchValue(level);
                     this.defaultsBookingUser.degree_id = level?.id;
                     this.clientsForm.patchValue(client);
-                    if(this.courseTypeId) {
+                    if (this.courseTypeId) {
                       this.getCourses(level, this.monthAndYear)
                     }
                   } else {
                     this.clientsForm.patchValue(client);
-                    this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', {duration:6000});
+                    this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
                   }
 
                 }
@@ -2032,13 +2037,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   }
   getCourses(level: any, date: any, fromPrivate = false) {
-    if(!this.courseTypeId) {
+    if (!this.courseTypeId) {
       this.setCourseType('private', 2, level);
     }
     this.loadingCalendar = true;
     this.dateClass();
     this.privateDateClass();
-    let today, minDate,maxDate;
+    let today, minDate, maxDate;
 
     if (!fromPrivate) {
       if (date === null) {
@@ -2078,7 +2083,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         }
 
         if (data.data.length === 0) {
-          this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', {duration: 1500});
+          this.snackbar.open(this.translateService.instant('snackbar.booking.no_courses'), 'OK', { duration: 1500 });
         }
         this.loading = false;
         this.loadingCalendar = false;
@@ -2086,7 +2091,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -2110,7 +2115,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
       })
@@ -2134,7 +2139,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSeason() {
-    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+    this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id=' + this.user.schools[0].id + '&is_active=1')
       .subscribe((season) => {
         this.season = season.data[0];
 
@@ -2147,12 +2152,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSchool() {
-    this.crudService.get('/schools/'+this.user.schools[0].id)
+    this.crudService.get('/schools/' + this.user.schools[0].id)
       .subscribe((school) => {
         this.school = school.data;
         this.settings = JSON.parse(school.data.settings);
 
-        this.cancellationInsurance =  parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
+        this.cancellationInsurance = parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
         this.boukiiCarePrice = parseInt(this.settings?.taxes?.boukii_care_price);
         this.tva = parseFloat(this.settings?.taxes?.tva);
 
@@ -2329,7 +2334,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     } else {
 
       const client = this.allClients.find((m) => m.id === id);
-      return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
+      return client?.image !== '' && client?.image !== null ? client?.image : this.userAvatar;
     }
   }
 
@@ -2343,7 +2348,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getUtilizer(id: any) {
-    if (id!==null) {
+    if (id !== null) {
 
       return this.utilizers.find((u) => u.id === id);
     }
@@ -2379,7 +2384,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const client = this.allClients.find((m) => m.id === id);
       if (client) {
 
-        return client?.image !== ''  && client?.image !== null ? client?.image : this.userAvatar;
+        return client?.image !== '' && client?.image !== null ? client?.image : this.userAvatar;
       } else {
         const utilizer = this.getUtilizer(id);
         return utilizer?.image !== '' ? utilizer?.image : this.userAvatar;
@@ -2430,7 +2435,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const client = this.allClients.find((m) => m.id === id);
 
       if (client) {
-        if(client?.birth_date && client?.birth_date !== null) {
+        if (client?.birth_date && client?.birth_date !== null) {
           const today = new Date();
           const birthDate = new Date(client?.birth_date);
           let age = today.getFullYear() - birthDate.getFullYear();
@@ -2447,7 +2452,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       } else {
         const utilizer = this.getUtilizer(id);
 
-        if(utilizer?.birth_date && utilizer?.birth_date !== null) {
+        if (utilizer?.birth_date && utilizer?.birth_date !== null) {
           const today = new Date();
           const birthDate = new Date(utilizer.birth_date);
           let age = today.getFullYear() - birthDate.getFullYear();
@@ -2543,8 +2548,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   checkAllFields() {
     let ret = false;
 
-    for (let i = 0; i<this.courseDates.length; i++){
-      if((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].hour_start === null) {
+    for (let i = 0; i < this.courseDates.length; i++) {
+      if ((!this.courseDates[i].date && this.courseDates[i].date === null) || this.courseDates[i].hour_start === null) {
         if (this.sameMonitor && this.courseDates[0].monitor_id === null) {
           ret = true;
           break;
@@ -2562,12 +2567,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -2620,9 +2625,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return ret;
   }
 
-  setForfait(event:any, forfait: any, booking: any, people: any) {
+  setForfait(event: any, forfait: any, booking: any, people: any) {
     if (event.source.checked) {
-      if(people) {
+      if (people) {
         people.forfait = forfait;
       } else {
         booking.forfait = forfait;
@@ -2630,7 +2635,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       this.calculateFinalPrice();
     } else {
-      if(people) {
+      if (people) {
         people.forfait = null;
       } else {
         booking.forfait = null;
@@ -2645,7 +2650,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -2653,7 +2658,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
         this.bookingsToCreate.splice(index, 1);
 
-        if(this.bookingsToCreate.length === 0) {
+        if (this.bookingsToCreate.length === 0) {
           this.clientsForm.enable();
           this.bookingComplete = false;
         }
@@ -2669,7 +2674,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         school_id: this.bookingsToCreate[0].school_id,
         currentPrice: this.finalPriceNoTaxes,
         appliedBonus: this.bonus,
-        currency:  this.bookingsToCreate[0].currency
+        currency: this.bookingsToCreate[0].currency
       }
     });
 
@@ -2705,7 +2710,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     if (this.reduction.type === 1) {
       return (this.getBasePrice() * this.reduction.discount) / 100;
     } else {
-      return this.reduction.discount > this.getBasePrice() ? this.getBasePrice(): this.reduction.discount;
+      return this.reduction.discount > this.getBasePrice() ? this.getBasePrice() : this.reduction.discount;
     }
   }
 
@@ -2728,14 +2733,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
 
   calculateRem(event: any) {
-    if(event.source.checked) {
+    if (event.source.checked) {
       //Old calculation on baseprice
       //this.opRem = this.getBasePrice() * this.cancellationInsurance;
       this.opRem = this.finalPrice * this.cancellationInsurance;
       this.defaults.has_cancellation_insurance = event.source.checked;
       this.defaults.price_cancellation_insurance = this.finalPrice * this.cancellationInsurance;
       this.calculateFinalPrice();
-      return this.finalPrice *this.cancellationInsurance;
+      return this.finalPrice * this.cancellationInsurance;
     } else {
       this.opRem = 0;
       this.defaults.has_cancellation_insurance = event.source.checked;
@@ -2746,7 +2751,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   calculateBoukiiCare(event: any) {
-    if(event.source.checked) {
+    if (event.source.checked) {
       this.boukiiCare = this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates();
       this.calculateFinalPrice();
       this.defaults.has_boukii_care = event.source.checked;
@@ -2767,13 +2772,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
       width: '1000px', // Asegurarse de que no haya un ancho máximo
       height: '1000px', // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {id: this.user.schools[0].id}
+      data: { id: this.user.schools[0].id }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&active=1')
+        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
           .subscribe((cl: any) => {
             const newClient = cl.data.find((c) => c.id = data.data.id);
             this.clientsForm.patchValue(newClient);
@@ -2792,14 +2797,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const dialogRef = this.dialog.open(AddClientUserModalComponent, {
       width: '600px',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {id: this.user.schools[0].id}
+      data: { id: this.user.schools[0].id }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
 
-        if(data.action === 'add') {
-          this.crudService.create('/clients-utilizers', {client_id: data.ret, main_id: this.defaults.client_main_id.id})
+        if (data.action === 'add') {
+          this.crudService.create('/clients-utilizers', { client_id: data.ret, main_id: this.defaults.client_main_id.id })
             .subscribe((res) => {
               this.getUtilzers(this.defaults.client_main_id, true);
             })
@@ -2826,12 +2831,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
             province: this.defaults.client_main_id.province,
             country: this.defaults.client_main_id.country,
             image: null,
-            language1_id:null,
-            language2_id:null,
-            language3_id:null,
-            language4_id:null,
-            language5_id:null,
-            language6_id:null,
+            language1_id: null,
+            language2_id: null,
+            language3_id: null,
+            language4_id: null,
+            language5_id: null,
+            language6_id: null,
             user_id: null,
             station_id: this.defaults.client_main_id.station_id
           }
@@ -2844,16 +2849,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
               this.crudService.create('/clients', client)
                 .subscribe((clientCreated) => {
-                  this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
+                  this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', { duration: 3000 });
 
-                  this.crudService.create('/clients-schools', {client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
+                  this.crudService.create('/clients-schools', { client_id: clientCreated.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
                     .subscribe((clientSchool) => {
 
                       setTimeout(() => {
-                        this.crudService.create('/clients-utilizers', {client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id})
+                        this.crudService.create('/clients-utilizers', { client_id: clientCreated.data.id, main_id: this.defaults.client_main_id.id })
                           .subscribe((res) => {
                             this.getUtilzers(this.defaults.client_main_id, true);
-                          })}, 1000);
+                          })
+                      }, 1000);
                     });
 
                 })
@@ -2922,8 +2928,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   calculateAllForfaitPriceBookingPrivate() {
     let price = 0;
     this.bookingsToCreate.forEach(element => {
-      if(element.courseDates[0].course.course_type == 1) {
-        if(element.forfait) {
+      if (element.courseDates[0].course.course_type == 1) {
+        if (element.forfait) {
           price += (element.forfait.price * element.courseDates.length)
             + (element.forfait.price * element.courseDates.length) * (element.forfait.tva / 100);
         }
@@ -2962,7 +2968,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
 
 
-    if(this.defaults.has_boukii_care) {
+    if (this.defaults.has_boukii_care) {
       // coger valores de reglajes
       price = price + (this.boukiiCarePrice * this.getBookingPaxes() * this.getBookingDates());
     }
@@ -2971,7 +2977,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       price -= this.discounts.reduce((total, discount) => total + discount, 0);
     }
 
-    if(this.defaults.has_cancellation_insurance) {
+    if (this.defaults.has_cancellation_insurance) {
       price = price + (price * this.cancellationInsurance);
     }
 
@@ -2980,15 +2986,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.tvaPrice = (price * this.tva);
     }
     this.finalPrice = price + this.tvaPrice;
-    this.bookingPendingPrice =  this.finalPrice;
+    this.bookingPendingPrice = this.finalPrice;
     if (this.bonus !== null && price > 0) {
       this.bonus.forEach(element => {
-        if ( this.finalPrice > 0) {
+        if (this.finalPrice > 0) {
 
-          if (element.bonus.remaining_balance >  this.finalPrice) {
-            this.bookingPendingPrice =  this.finalPrice - this.finalPrice;
+          if (element.bonus.remaining_balance > this.finalPrice) {
+            this.bookingPendingPrice = this.finalPrice - this.finalPrice;
           } else {
-            this.bookingPendingPrice =  this.finalPrice - element.bonus.remaining_balance;
+            this.bookingPendingPrice = this.finalPrice - element.bonus.remaining_balance;
           }
         }
       });
@@ -3002,17 +3008,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.calculateFinalPrice();
   }
 
-/*  getDateFromSelectedDates() {
-    let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
-
-    const formattedDate = new Date(date).toISOString().split('T')[0];
-
-    return this.selectedItem.course_dates.find(i => {
-      const courseDate = new Date(i.date).toISOString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
-      return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
-    });
-
-  }*/
+  /*  getDateFromSelectedDates() {
+      let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
+  
+      const formattedDate = new Date(date).toISOString().split('T')[0];
+  
+      return this.selectedItem.course_dates.find(i => {
+        const courseDate = new Date(i.date).toISOString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
+        return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
+      });
+  
+    }*/
 
   getDateFromSelectedDates() {
     // Obtén la fecha de externalData o selectedDatePrivate
@@ -3296,7 +3302,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return results;
   }
 
-  getBookingPaxes(){
+  getBookingPaxes() {
     let ret = 0;
     this.bookingsToCreate.forEach(element => {
       ret = ret + element.paxes;
@@ -3305,7 +3311,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     return ret;
   }
 
-  getBookingDates(){
+  getBookingDates() {
     let ret = 0;
     this.bookingsToCreate.forEach(element => {
       ret = ret + element.courseDates.length;
@@ -3363,7 +3369,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         if (!this.langMatch(monitorLanguages, clientLanguages)) {
           return 'language_match';
         } else {
-          this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id='+this.defaults.monitor.id+'&school_id='+this.defaults.school_id+'&sport_id='+this.defaults.booking.sport_id)
+          this.crudService.list('/monitor-sports-degrees', 1, 1000, 'desc', 'id', '&monitor_id=' + this.defaults.monitor.id + '&school_id=' + this.defaults.school_id + '&sport_id=' + this.defaults.booking.sport_id)
             .subscribe((data) => {
               monitor.degrees = data.data;
               return 'degree_match';
@@ -3390,7 +3396,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   checkAvailableMonitors(start: any, duration: any, date) {
 
     let data: any;
-    if(this.selectedItem.is_flexible) {
+    if (this.selectedItem.is_flexible) {
       data = {
         sportId: this.defaults.sport_id,
         minimumDegreeId: this.levelForm.value.id,
@@ -3399,7 +3405,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         date: moment(date).format('YYYY-MM-DD'),
         clientIds: [this.clientsForm.value.id]
       };
-    } else{
+    } else {
       data = {
         sportId: this.defaults.sport_id,
         minimumDegreeId: this.levelForm.value.id,
@@ -3413,7 +3419,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.crudService.post('/admin/monitors/available', data)
       .subscribe((response) => {
         this.monitors = response.data;
-        if(!this.externalData) {
+        if (!this.externalData) {
 
           this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
             startWith(''),
@@ -3423,7 +3429,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
           if (response.data.length === 0) {
 
-            this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', {duration:3000});
+            this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'), 'OK', { duration: 3000 });
           }
         } else {
           const selectedMonitor = this.monitors.find(monitor => monitor.id === this.externalData.monitor.id);
@@ -3486,7 +3492,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getAllDegrees() {
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data;
         this.allLevels.forEach((degree: any) => {
