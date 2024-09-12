@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from './add-task/add-task.component';
-import { duration } from 'moment';
+import moment, { duration } from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {ColorSchemeName} from '../../config/colorSchemeName';
 @Component({
@@ -48,23 +48,23 @@ export class ToolbarComponent {
     this.isDarkMode = this.getThemePreference() === 'dark';
     this.setColor();
     switch(translateService.getDefaultLang()) {
-                  case 'es':
-                    this.flag = 'flag:spain';
-                  break;
-                  case 'de':
-                    this.flag = 'flag:germany';
-                  break;
-                  case 'it':
-                    this.flag = 'flag:italy';
-                  break;
-                  case 'fr':
-                    this.flag = 'flag:france';
-                  break;
-                  case 'en':
-                    this.flag = 'flag:uk';
-                  break;
-                }
-              }
+      case 'es':
+        this.flag = 'flag:spain';
+        break;
+      case 'de':
+        this.flag = 'flag:germany';
+        break;
+      case 'it':
+        this.flag = 'flag:italy';
+        break;
+      case 'fr':
+        this.flag = 'flag:france';
+        break;
+      case 'en':
+        this.flag = 'flag:uk';
+        break;
+    }
+  }
 
   openQuickpanel(): void {
     this.layoutService.openQuickpanel();
@@ -102,12 +102,43 @@ export class ToolbarComponent {
       this.translateService.use(lang);
       this.translateService.currentLang = lang;
       sessionStorage.setItem('lang', lang );
+      // Ajusta el locale de la aplicación
+      moment.locale(this.setLocale(lang));
     } else {
 
       this.translateService.setDefaultLang(lang);
       this.translateService.currentLang = lang;
       sessionStorage.setItem('lang', lang );
+
+      // Configura el locale de moment.js
+      moment.locale(this.setLocale(lang));
     }
+  }
+
+  setLocale(lang: string) {
+    let locale;
+
+    // Establece el locale basado en el idioma
+    switch (lang) {
+      case 'it':
+        locale = 'it-IT';
+        break;
+      case 'en':
+        locale = 'en-GB';
+        break;
+      case 'es':
+        locale = 'es';
+        break;
+      case 'de':
+        locale = 'de';
+        break;
+      case 'fr':
+        locale = 'fr';
+        break;
+      default:
+        locale = 'en-GB';
+    }
+    return locale
   }
 
   openMegaMenu(origin: ElementRef | HTMLElement): void {
