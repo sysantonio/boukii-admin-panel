@@ -1,8 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 
 import { LangService } from "src/service/langService";
 import { UtilsService } from "src/service/utils.service";
+import { CreateUserDialogComponent } from "../create-user-dialog/create-user-dialog.component";
 
 @Component({
   selector: "booking-step-two",
@@ -23,7 +25,8 @@ export class StepTwoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     protected langService: LangService,
-    protected utilsService: UtilsService
+    protected utilsService: UtilsService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -69,5 +72,15 @@ export class StepTwoComponent implements OnInit {
   isChecked(utilizer) {
     const currentUtilizers = this.stepForm.get("utilizers").value;
     return !!currentUtilizers.find((u) => u.id === utilizer.id);
+  }
+
+  openBookingDialog() {
+    this.dialog.open(CreateUserDialogComponent, {
+      width: "670px",
+      panelClass: "",
+      data: {
+        utilizers: this.utilizers,
+      },
+    });
   }
 }
