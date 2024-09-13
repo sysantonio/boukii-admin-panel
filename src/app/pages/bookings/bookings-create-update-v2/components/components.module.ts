@@ -16,6 +16,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { BreadcrumbsModule } from "src/@vex/components/breadcrumbs/breadcrumbs.module";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
@@ -33,8 +34,9 @@ import { FormDetailsPrivateComponent } from "./form-details-private/form-details
 
 import { FormDetailsColectiveFixComponent } from "./form-details-colective-fix/form-details-colective-fix.component";
 import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex/form-details-colective-flex.component";
-
 import { UploadImgComponent } from "./upload-img/upload-img.component";
+import { CreateBookingProcessComponent } from "./create-booking-process/create-booking-process.component";
+import { BookingSummaryComponent } from "./booking-summary/booking-summary.component";
 
 @NgModule({
   imports: [
@@ -53,7 +55,8 @@ import { UploadImgComponent } from "./upload-img/upload-img.component";
     MatDatepickerModule,
     MatSelectModule,
     MatTabsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    BreadcrumbsModule,
   ],
   declarations: [
     BookingFormStepper,
@@ -72,6 +75,8 @@ import { UploadImgComponent } from "./upload-img/upload-img.component";
     CreateUserDialogComponent,
     UploadImgComponent,
     CreateClientDialogComponent,
+    CreateBookingProcessComponent,
+    BookingSummaryComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -90,6 +95,8 @@ import { UploadImgComponent } from "./upload-img/upload-img.component";
     CreateUserDialogComponent,
     UploadImgComponent,
     CreateClientDialogComponent,
+    CreateBookingProcessComponent,
+    BookingSummaryComponent,
   ],
 })
 export class BookingComponentsModule {}
