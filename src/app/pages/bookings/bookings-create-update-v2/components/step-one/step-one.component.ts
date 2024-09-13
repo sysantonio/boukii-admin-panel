@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, debounceTime, map, skip, startWith } from "rxjs";
 import { ApiCrudService } from "src/service/crud.service";
 import { ApiResponse } from "src/app/interface/api-response";
+import { MatDialog } from "@angular/material/dialog";
+import { CreateClientDialogComponent } from "../create-client-dialog/create-client-dialog.component";
 
 @Component({
   selector: "booking-step-one",
@@ -20,7 +22,11 @@ export class StepOneComponent implements OnInit {
   mainClient: any;
   expandClients: any[];
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
+  constructor(
+    private fb: FormBuilder,
+    private crudService: ApiCrudService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
@@ -108,5 +114,12 @@ export class StepOneComponent implements OnInit {
         client.first_name.toLowerCase().includes(filterValue) ||
         client.last_name.toLowerCase().includes(filterValue)
     );
+  }
+
+  openCreateClientDialog() {
+    this.dialog.open(CreateClientDialogComponent, {
+      width: "670px",
+      panelClass: "",
+    });
   }
 }

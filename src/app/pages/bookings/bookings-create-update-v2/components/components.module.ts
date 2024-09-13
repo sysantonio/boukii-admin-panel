@@ -15,6 +15,7 @@ import { BookingFormStepper } from "./form-stepper/form-stepper.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
@@ -26,11 +27,14 @@ import { StepObservationsComponent } from "./step-observations/step-observations
 import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
 import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
 import { CreateUserDialogComponent } from "./create-user-dialog/create-user-dialog.component";
+import { CreateClientDialogComponent } from "./create-client-dialog/create-client-dialog.component";
 import { CustomHeader } from "./calendar/custom-header/custom-header.component";
 import { FormDetailsPrivateComponent } from "./form-details-private/form-details-private.component";
 
 import { FormDetailsColectiveFixComponent } from "./form-details-colective-fix/form-details-colective-fix.component";
 import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex/form-details-colective-flex.component";
+
+import { UploadImgComponent } from "./upload-img/upload-img.component";
 
 @NgModule({
   imports: [
@@ -49,6 +53,7 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     MatDatepickerModule,
     MatSelectModule,
     MatTabsModule,
+    MatExpansionModule
   ],
   declarations: [
     BookingFormStepper,
@@ -65,6 +70,8 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     FormDetailsColectiveFixComponent,
     FormDetailsColectiveFlexComponent,
     CreateUserDialogComponent,
+    UploadImgComponent,
+    CreateClientDialogComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -81,6 +88,8 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     FormDetailsColectiveFixComponent,
     FormDetailsColectiveFlexComponent,
     CreateUserDialogComponent,
+    UploadImgComponent,
+    CreateClientDialogComponent,
   ],
 })
 export class BookingComponentsModule {}

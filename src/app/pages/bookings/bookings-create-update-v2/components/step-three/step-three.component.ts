@@ -81,10 +81,23 @@ export class StepThreeComponent implements OnInit {
         10000,
         "asc",
         "id",
-        "&school_id=" + this.user.schools[0].id
+        "&school_id=" + this.user.schools[0].id,
+        null,
+        null,
+        null,
+        ["sport"]
       )
       .subscribe((sport) => {
-        this.sportData = sport.data;
+        this.sportData = sport.data.map((sport) => {
+          const { name, icon_selected, sport_type } = sport.sport;
+          delete sport.sport;
+          return {
+            ...sport,
+            name,
+            icon: icon_selected,
+            sport_type,
+          };
+        });
         // TODO: Mejorar esto, debido al cambio de puntero de memoria cuando llego a este step y tengo initialData el radioButton no se selecciona
         if (this.selectedSport) {
           const newPointer = sport.data.find(
@@ -92,15 +105,6 @@ export class StepThreeComponent implements OnInit {
           );
           this.stepForm.get("sport").patchValue(newPointer);
         }
-        this.sportData.forEach((element) => {
-          this.crudService
-            .get("/sports/" + element.sport_id)
-            .subscribe((data) => {
-              element.name = data.data.name;
-              element.icon = data.data.icon_selected;
-              element.sport_type = data.data.sport_type;
-            });
-        });
       });
   }
 
