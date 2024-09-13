@@ -1,0 +1,214 @@
+<div class="dialogHeader">
+  <h5>
+    {{ "new_client" | translate }}
+  </h5>
+  <mat-icon
+    fontSet="material-icons-outlined"
+    mat-dialog-close
+    class="closeButton"
+    >close</mat-icon
+  >
+</div>
+<form [formGroup]="stepForm">
+  <mat-accordion class="accordionWrapper">
+    <mat-expansion-panel
+      [expanded]="step() === 0"
+      (opened)="setStep(0)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ "createClient.tab1.title" | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="panelContent" formGroupName="step1">
+        <upload-img
+          class="imageInput"
+          (upload)="handleImageUpload($event)"
+        ></upload-img>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "name" | translate }}</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "surname" | translate }}</mat-label>
+          <input matInput formControlName="surname" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "email" | translate }}</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "username" | translate }}</mat-label>
+          <input matInput formControlName="userName" />
+        </mat-form-field>
+      </div>
+
+      <div class="panelButtons">
+        <button mat-stroked-button mat-dialog-close type="button">
+          {{ "cancel" | translate }}
+        </button>
+
+        <button
+          mat-flat-button
+          type="button"
+          (click)="nextStep()"
+          [disabled]="!isFormStep1Valid()"
+        >
+          {{ "confirm" | translate }}
+        </button>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      [expanded]="step() === 1"
+      (opened)="setStep(1)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ "createClient.tab2.title" | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="panelContent" formGroupName="step2">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "birth_date" | translate }}</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="birthDate"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "langs" | translate }} </mat-label>
+          <mat-select multiple formControlName="languages">
+            <mat-option *ngFor="let language of languages" [value]="language">
+              {{ language.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "mobile" | translate }}</mat-label>
+          <input matInput formControlName="phone" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "phone" | translate }}</mat-label>
+          <input matInput formControlName="phone2" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "address" | translate }}</mat-label>
+          <input matInput formControlName="address" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "cp" | translate }}</mat-label>
+          <input matInput formControlName="postalCode" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "country" | translate }}</mat-label>
+          <input matInput formControlName="country" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ "province" | translate }}</mat-label>
+          <input matInput formControlName="province" />
+        </mat-form-field>
+      </div>
+      <div class="panelButtons">
+        <button mat-stroked-button mat-dialog-close type="button">
+          {{ "cancel" | translate }}
+        </button>
+
+        <button
+          mat-flat-button
+          type="button"
+          (click)="nextStep()"
+          [disabled]="!isFormStep2Valid()"
+        >
+          {{ "confirm" | translate }}
+        </button>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel
+      [expanded]="step() === 2"
+      (opened)="setStep(2)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ "createClient.tab3.title" | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="panelContent" formGroupName="step3">
+        <mat-form-field appearance="outline" class="fullWidth">
+          <mat-label>{{ "sports" | translate }} </mat-label>
+          <mat-select multiple formControlName="sports">
+            <mat-option *ngFor="let sport of sports" [value]="sport">
+              {{ sport.sport.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="fullWidth">
+          <textarea
+            class="textarea"
+            type="text"
+            placeholder="{{ 'observation_general' | translate }}"
+            matInput
+            formControlName="general"
+          >
+          </textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="fullWidth">
+          <textarea
+            class="textarea"
+            type="text"
+            placeholder="{{ 'observation_school' | translate }}"
+            matInput
+            formControlName="obeservation"
+          >
+          </textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="fullWidth">
+          <textarea
+            class="textarea"
+            type="text"
+            placeholder="{{ 'historical' | translate }}"
+            matInput
+            formControlName="historical"
+          >
+          </textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="panelButtons">
+        <button mat-stroked-button mat-dialog-close type="button">
+          {{ "cancel" | translate }}
+        </button>
+
+        <button
+          mat-flat-button
+          type="button"
+          (click)="completeForm()"
+          [disabled]="!isFormValid()"
+        >
+          {{ "save" | translate }}
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

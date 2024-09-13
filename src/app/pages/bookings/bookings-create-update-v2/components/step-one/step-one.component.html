@@ -24,7 +24,11 @@
     </mat-form-field>
 
     <div class="stepOneButtonsWrapper">
-      <button mat-stroked-button type="button">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="openCreateClientDialog()"
+      >
         <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
         {{ "new_client" | translate }}
       </button>

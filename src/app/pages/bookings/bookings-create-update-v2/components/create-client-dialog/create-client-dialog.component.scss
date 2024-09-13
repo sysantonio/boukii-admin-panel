@@ -1,0 +1,90 @@
+h5 {
+  font-family: var(--font-dinamit);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.15rem;
+  color: var(--color-dark1);
+}
+
+.dialogHeader {
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-grey3);
+
+  .closeButton {
+    cursor: pointer;
+  }
+}
+.accordionWrapper {
+  ::ng-deep {
+    .mat-expansion-panel-header {
+      font-family: var(--font-dm);
+      font-size: 0.75rem;
+      font-weight: 300;
+      line-height: 1rem;
+      height: 3rem;
+      border-bottom: 1px solid var(--color-grey3);
+    }
+
+    .mat-expansion-panel-header-title {
+      color: var(--color-dark1);
+    }
+
+    .mat-expansion-panel-spacing {
+      margin: 0;
+    }
+
+    .mat-expansion-panel-header.mat-expanded {
+      .mat-expansion-panel-header-title {
+        color: var(--color-primary-red);
+      }
+    }
+
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+
+    .mat-mdc-form-field {
+      width: calc(50% - 0.65rem);
+      &.fullWidth {
+        width: 100%;
+      }
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mdc-text-field--outlined .mdc-floating-label,
+    .mat-mdc-select-value,
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+      .mdc-text-field__input {
+      font-family: var(--font-dm);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+      color: var(--color-dark1);
+    }
+  }
+}
+
+.panelButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 1.25rem;
+}
+
+.panelContent {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.imageInput {
+  width: 100%;
+}
