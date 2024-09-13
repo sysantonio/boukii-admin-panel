@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { BookingsCreateUpdateV2Component } from "./bookings-create-update-v2.component";
 import { MatCardModule } from "@angular/material/card";
 import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/secondary-toolbar.module";
-import { BreadcrumbsModule } from "src/@vex/components/breadcrumbs/breadcrumbs.module";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
@@ -18,7 +17,6 @@ import { BookingComponentsModule } from "./components/components.module";
     MatCardModule,
     BookingComponentsModule,
     SecondaryToolbarModule,
-    BreadcrumbsModule,
     MatIconModule,
     MatButtonModule,
   ],
