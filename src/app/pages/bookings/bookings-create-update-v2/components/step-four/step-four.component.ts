@@ -1,10 +1,19 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {MatCalendar, MatCalendarCellCssClasses} from '@angular/material/datepicker';
+import {
+  MatCalendar,
+  MatCalendarCellCssClasses,
+} from "@angular/material/datepicker";
 import moment from "moment";
 import { ApiCrudService } from "src/service/crud.service";
-import {CustomHeader} from '../calendar/custom-header/custom-header.component';
-import {CalendarService} from '../../../../../../service/calendar.service';
+import { CustomHeader } from "../calendar/custom-header/custom-header.component";
+import { CalendarService } from "../../../../../../service/calendar.service";
 
 @Component({
   selector: "booking-step-four",
@@ -17,13 +26,13 @@ export class StepFourComponent {
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
-  @ViewChild('secondCalendar') secondCalendar: MatCalendar<Date>;
+  @ViewChild("secondCalendar") secondCalendar: MatCalendar<Date>;
 
   stepForm: FormGroup;
   selectedDate;
   nextMonthDate: Date;
   selectedCourse;
-  courseTypeId: number = 0;
+  courseTypeId: number = 1;
   user;
   courses = [];
   minDate;
@@ -33,8 +42,17 @@ export class StepFourComponent {
   selectedDateMoment;
   showTwoMonths: boolean = true;
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService,
-              private calendarService: CalendarService) {
+  tabs = [
+    { label: "course_colective", courseTypeId: 1, class: "yellow" },
+    { label: "course_private", courseTypeId: 2, class: "green" },
+    { label: "activity", courseTypeId: 3, class: "blue" },
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private crudService: ApiCrudService,
+    private calendarService: CalendarService
+  ) {
     this.selectedCourse = this.initialData?.selectedCourse;
     this.selectedDate = this.initialData?.selectedDate;
     this.selectedDateMoment = this.selectedDate
@@ -78,14 +96,14 @@ export class StepFourComponent {
     const currentMonth = moment();
     const selectedMonth = moment(this.selectedDate);
 
-    if (selectedMonth.isSame(currentMonth, 'month')) {
-      this.selectedDate =  new Date();
+    if (selectedMonth.isSame(currentMonth, "month")) {
+      this.selectedDate = new Date();
     }
   }
 
   updateNextMonth() {
-    this.nextMonthDate = moment(this.selectedDate).add(1, 'month').toDate();
-    if(this.secondCalendar) {
+    this.nextMonthDate = moment(this.selectedDate).add(1, "month").toDate();
+    if (this.secondCalendar) {
       this.secondCalendar.activeDate = this.nextMonthDate;
     }
   }
@@ -121,7 +139,10 @@ export class StepFourComponent {
           .startOf("day")
           .isSameOrBefore(moment(date, "YYYY-MM-DD").startOf("day"))
       ) {
-        return "with-course";
+        const colorClass = this.tabs.find(
+          (tab) => tab.courseTypeId === this.courseTypeId
+        )?.class;
+        return `with-course ${colorClass}`;
       } else {
         return;
       }
@@ -149,6 +170,11 @@ export class StepFourComponent {
       this.compareCourseDates();
       this.isLoading = false;
     });
+  }
+
+  onTabChange(event) {
+    this.courseTypeId = this.tabs[event.index].courseTypeId;
+    this.getCourses(this.sportLevel);
   }
 
   protected readonly CustomHeader = CustomHeader;

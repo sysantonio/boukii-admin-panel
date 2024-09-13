@@ -14,6 +14,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { BookingFormStepper } from "./form-stepper/form-stepper.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSelectModule } from "@angular/material/select";
+import { MatTabsModule } from "@angular/material/tabs";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
@@ -47,6 +48,7 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     MatDialogModule,
     MatDatepickerModule,
     MatSelectModule,
+    MatTabsModule,
   ],
   declarations: [
     BookingFormStepper,

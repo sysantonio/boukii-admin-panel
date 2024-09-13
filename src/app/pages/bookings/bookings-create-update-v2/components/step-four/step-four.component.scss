@@ -1,3 +1,9 @@
+:host {
+  --color-yellow: #e5962a;
+  --color-green: #2faa41;
+  --color-blue: #0ab0bc;
+}
+
 .stepButtonsWrapper {
   display: flex;
   flex-direction: row;
@@ -6,25 +12,74 @@
 }
 
 .calendarWrapper {
-  width: 50%;
-  margin: 0 auto;
+  width: calc(100% - 8rem);
+  margin: 2.5rem auto;
+
+  .two-months {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    > div {
+      width: 50%;
+    }
+  }
 }
 
-::ng-deep .no-arrows .mat-calendar-controls {
-  display: none;  /* Oculta las flechas de navegación del segundo calendario */
-}
+::ng-deep {
+  .mat-calendar-body-selected {
+    background-color: var(--color-grey4) !important;
+    border: none !important;
+    color: var(--color-primary-red) !important;
+  }
+  .mat-calendar-body-cell-content {
+    color: var(--color-white);
+    border-radius: 1rem;
+  }
 
-::ng-deep .no-previous .previous{
-  display: none;  /* Oculta las flechas de navegación del segundo calendario */
-}
+  .with-course {
+    .mat-calendar-body-cell-content {
+      color: var(--color-white);
+      border-radius: 1rem;
+    }
 
-::ng-deep .no-next .next{
-  display: none;  /* Oculta las flechas de navegación del segundo calendario */
-}
+    &.green .mat-calendar-body-cell-content {
+      background-color: var(--color-green) !important;
+      border: 1px solid var(--color-green) !important;
+    }
 
-::ng-deep .with-course .mat-calendar-body-cell-content {
-  background-color: var(--color-green) !important;
-  border: 1px solid var(--color-green) !important;
+    &.blue .mat-calendar-body-cell-content {
+      background-color: var(--color-blue) !important;
+      border: 1px solid var(--color-blue) !important;
+    }
+
+    &.yellow .mat-calendar-body-cell-content {
+      background-color: var(--color-yellow) !important;
+      border: 1px solid var(--color-yellow) !important;
+    }
+    &.green,
+    &.blue,
+    &.yellow {
+      .mat-calendar-body-selected {
+        background-color: var(--color-grey4) !important;
+        color: var(--color-primary-red) !important;
+      }
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .no-previous .previous {
+    display: none; /* Oculta las flechas de navegación del segundo calendario */
+  }
+
+  .no-next .next {
+    display: none; /* Oculta las flechas de navegación del segundo calendario */
+  }
+
+  .no-arrows .mat-calendar-controls {
+    display: none; /* Oculta las flechas de navegación del segundo calendario */
+  }
 }
 
 .courses-wrapper {
@@ -32,6 +87,7 @@
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 4rem;
+  padding: 1.25rem;
 }
 
 .courseCard {
@@ -93,5 +149,58 @@
     font-weight: 300;
     line-height: 18px;
     color: var(--color-dark1);
+  }
+}
+
+// estilos de las tabs
+.custom-icon {
+  margin-right: 10px;
+
+  &.yellow {
+    color: var(--color-yellow);
+  }
+
+  &.green {
+    color: var(--color-green);
+  }
+
+  &.blue {
+    color: var(--color-blue);
+  }
+}
+
+.tabsWrapper {
+  ::ng-deep {
+    .mat-mdc-tab {
+      background-color: var(--color-grey5);
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.15rem;
+      border-bottom: 1px solid var(--color-grey3);
+    }
+
+    .mdc-tab-indicator--active {
+      background-color: var(--color-white);
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.15rem;
+      border-bottom: none;
+    }
+
+    .mat-mdc-tab .mdc-tab__text-label {
+      color: var(--color-dark2);
+    }
+
+    .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+      color: var(--color-dark1);
+    }
+
+    .mat-mdc-tab .mdc-tab-indicator__content--underline {
+      border-top-width: 3px;
+      align-self: flex-start;
+      border-color: var(--color-primary-red);
+    }
   }
 }
