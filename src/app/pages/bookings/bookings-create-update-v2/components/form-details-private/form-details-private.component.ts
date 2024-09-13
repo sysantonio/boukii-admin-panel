@@ -5,6 +5,7 @@ import {
   MOCK_POSIBLE_EXTRAS,
 } from "../../mocks/course";
 import { MOCK_MONITORS } from "../../mocks/monitor";
+import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 
 @Component({
   selector: "booking-form-details-private",
@@ -16,31 +17,12 @@ export class FormDetailsPrivateComponent {
   @Input() utilizers: any;
   @Input() monitors: any;
   selectedMonitor;
-  selectedPosibleMonitor;
+  selectedChangeMonitor;
 
   posibleHours;
   posibleDurations;
   posibleMonitors;
-  posibleMonitorSelection = [
-    {
-      description: "select_monitor_free",
-      value: "free",
-      icon: "done",
-      class: "text-green",
-    },
-    {
-      description: "select_monitor_posible",
-      value: "posible",
-      icon: "warning_amber",
-      class: "text-yellow",
-    },
-    {
-      description: "select_monitor_forbidden",
-      value: "forbidden",
-      icon: "error_outline",
-      class: "text-red",
-    },
-  ];
+  posibleChangeMonitorSelection = changeMonitorOptions;
   posibleExtras;
   extraPrice = ["90 CHF", "120 CHF"];
 

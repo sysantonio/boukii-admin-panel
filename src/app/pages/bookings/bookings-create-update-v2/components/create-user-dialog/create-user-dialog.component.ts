@@ -1,31 +1,32 @@
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Observable, debounceTime, map, skip, startWith } from "rxjs";
-import { ApiCrudService } from "src/service/crud.service";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { debounceTime, map, Observable, startWith } from "rxjs";
 import { ApiResponse } from "src/app/interface/api-response";
+import { ApiCrudService } from "src/service/crud.service";
+import { LangService } from "src/service/langService";
 
 @Component({
-  selector: "booking-step-one",
-  templateUrl: "./step-one.component.html",
-  styleUrls: ["./step-one.component.scss"],
+  selector: "booking-create-user-dialog",
+  templateUrl: "./create-user-dialog.component.html",
+  styleUrls: ["./create-user-dialog.component.scss"],
 })
-export class StepOneComponent implements OnInit {
-  @Input() initialData: any;
-  @Output() stepCompleted = new EventEmitter<FormGroup>();
-
-  stepOneForm: FormGroup;
-  user: any;
-  filteredOptions: Observable<any[]>;
-  selectedClient: any;
-  mainClient: any;
+export class CreateUserDialogComponent implements OnInit {
+  constructor(
+    private fb: FormBuilder,
+    private crudService: ApiCrudService,
+    private langService: LangService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+  user;
   expandClients: any[];
-
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
+  stepForm: FormGroup;
+  filteredOptions: Observable<any[]>;
+  languages;
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
-    this.selectedClient = this.initialData?.client;
-    this.mainClient = this.initialData?.mainClient;
+    this.languages = this.langService.getLanguages();
     this.getClients().subscribe({
       next: (response) => {
         this.expandClients = this.getExpandClients(response.data);
@@ -34,12 +35,16 @@ export class StepOneComponent implements OnInit {
         console.error("Error en la petición getClients", err);
       },
     });
-    this.stepOneForm = this.fb.group({
-      client: [this.selectedClient || "", Validators.required],
-      mainClient: [this.mainClient, Validators.required],
+
+    this.stepForm = this.fb.group({
+      client: ["", Validators.required],
+      name: ["", Validators.required],
+      surname: ["", Validators.required],
+      birthDate: ["", Validators.required],
+      lenguages: ["", Validators.required],
     });
 
-    this.filteredOptions = this.stepOneForm.get("client")!.valueChanges.pipe(
+    this.filteredOptions = this.stepForm.get("client")!.valueChanges.pipe(
       startWith(""),
       debounceTime(300),
       map((value: any) =>
@@ -51,25 +56,10 @@ export class StepOneComponent implements OnInit {
     );
   }
 
-  setClient(ev) {
-    this.selectedClient = ev.source.value;
-    this.stepOneForm.patchValue({
-      client: ev.source.value,
-      mainClient: this.selectedClient.main_client || this.selectedClient,
-    });
-  }
-
   displayFn(client: any): string {
     return client && client?.first_name && client?.last_name
       ? client?.first_name + " " + client?.last_name
       : client?.first_name;
-  }
-
-  isFormValid() {
-    return (
-      this.stepOneForm.valid &&
-      this.selectedClient === this.stepOneForm.get("client").value
-    );
   }
 
   getClients(): Observable<ApiResponse> {
@@ -83,10 +73,18 @@ export class StepOneComponent implements OnInit {
     );
   }
 
-  completeStep() {
-    if (this.isFormValid()) {
-      this.stepCompleted.emit(this.stepOneForm);
-    }
+  setClient(ev) {
+    this.stepForm.patchValue({
+      client: ev.source.value,
+    });
+  }
+
+  isFormValid() {
+    return this.stepForm.valid;
+  }
+
+  handleConfirm() {
+    console.log("confirmar");
   }
 
   private getExpandClients(clients: any[]): any[] {
