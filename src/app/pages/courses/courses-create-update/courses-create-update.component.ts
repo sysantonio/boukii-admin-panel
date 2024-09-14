@@ -36,9 +36,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     { Code: "de", Name: "ALEMAN" },
     { Code: "it", Name: "ITALIANO" },
   ]
-  FechaReserva: { Fecha: Date, Hora: string, Duracion: number }[] = [{ Fecha: new Date(), Hora: "08:00", Duracion: 1 }]
-  Descuentos: { NFecha: number, Reduccion: string }[] = [{ NFecha: 2, Reduccion: "10%" }]
-
   hours: string[] = [
     '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
     '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45',
@@ -55,6 +52,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   ];
   reduccions: string[] = ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%",];
   ndays: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  weekSelect: string[] = ["Cada día", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -77,13 +75,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
   editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
   editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
 
-  minDate = new Date();
-  maxDate = new Date();
+  minDate = new Date(2000, 1, 1);
+  nowDate = new Date()
+  maxDate = new Date(2099, 12, 31);
 
   courseTypeFormGroup: UntypedFormGroup;
 
   courseFormGroup: UntypedFormGroup; //El bueno
-  extrasFormGroup: UntypedFormGroup;
+  extrasFormGroup: UntypedFormGroup; //crear extras nuevas
   levelGrop: { level_id: number, EdadMin: number, EdadMax: number, PartMax: number, Subgrupo: number, active: boolean, data: any }[] = []
 
 
@@ -150,14 +149,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
         price: [null, Validators.required],
         participants: [null, Validators.required],
         img: ["", Validators.required],
-        age_max: [null, Validators.required],
-        age_min: [null, Validators.required],
+        age_max: [null, Validators.required], //2
+        age_min: [null, Validators.required], //2
+
         reserve_from: [null, Validators.required],
         reserve_to: [null, Validators.required],
-        reserve_date: [null, Validators.required],
-        discount: [null, Validators.required],
-        extras: [null, Validators.required],
+        duration_min: [null, Validators.required], //2
+        reserve_date: [[{ Fecha: new Date(), Hora: "08:00", Duracion: 1 }], Validators.required],
+        discount: [[{ day: 2, reduccion: "10%" }], Validators.required],
+        extras: [[], Validators.required],
+
       });
+
       this.extrasFormGroup = this.fb.group({
         product: ["", Validators.required],
         name: ["", Validators.required],
@@ -206,10 +209,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
   }
 
-  displayFn(sportType: any): string {
-    return sportType && sportType.name ? sportType.name : '';
-  }
-
+  displayFn = (value: any): string => value
   getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
   getMonitors = () => this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(map(data => data.data));
   getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
@@ -270,7 +270,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   }
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
-  selectLevel(event: any, i: number) {
-    this.levelGrop[i].active = event.target.checked
+  selectLevel = (event: any, i: number) => this.levelGrop[i].active = event.target.checked
+  selectExtra = (event: any, item: any) => {
+    const extras: any[] = this.courseFormGroup.controls['extras'].value
+    if (event.checked) this.courseFormGroup.patchValue({ extras: [...extras, item] })
+    else this.courseFormGroup.patchValue({ extras: extras.slice(extras.findIndex((a: any) => a.id === item.id), 1) })
   }
 }

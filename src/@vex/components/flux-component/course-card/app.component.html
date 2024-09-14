@@ -77,14 +77,14 @@
             <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
             <p style="color: black; font-size: 12px;"
                 [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
-                {{courseFormGroup.controls['reserve_from'].value}}
+                {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
             <p> {{'RESERVABLE HASTA' | translate }} </p>
             <p style="color: black;font-size: 12px;"
                 [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
-                {{courseFormGroup.controls['reserve_to'].value}}
+                {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
             </p>
         </div>
         <div style="width: 100%;">
@@ -98,13 +98,13 @@
             <p
                 *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
                 style="font-size: 14px;">
-                <span style="color: black;"> {{item.Fecha}} </span>
+                <span style="color: black;"> {{DateISO(item.Fecha)}} </span>
                 <span> {{item.Hora}}</span>
                 <span> {{item.Coste}} </span>
             </p>
         </div>
         <div style="width: 100%; color: black;font-weight: 400;"
-            *ngFor="let item of courseFormGroup.controls['reserve_date'].value">
+            *ngFor="let item of courseFormGroup.controls['discount'].value">
             Reducción {{item.reduccion}} reservando {{item.day}} fechas
         </div>
     </div>
@@ -141,5 +141,34 @@
             </ng-container>
         </div>
     </div>
-    <!--<div class="cardgroup"> </div>-->
+    <div class="cardgroup">
+        <div
+            style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+            <div style="width: 100%;">
+                <p> {{'EXTRAS' | translate }} </p>
+            </div>
+            <ng-container
+                *ngFor="let item of courseFormGroup.controls['extras'].value">
+                <div style="width: 100%; display: flex;">
+                    <span style="
+                    color: #222222;
+                     font-size: 14px;
+                     font-weight: 600;
+                     line-height: 18px;
+                     word-wrap: break-word">
+                        {{item.name.slice(0,20)}}
+                    </span>
+                    <span style="
+                    color: #222222;
+                     font-size: 14px;
+                     font-weight: 300;
+                     line-height: 18px;
+                     word-wrap: break-word;
+                     margin-right: auto;">
+                        {{item.price}} CHF/día
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
 </div>
