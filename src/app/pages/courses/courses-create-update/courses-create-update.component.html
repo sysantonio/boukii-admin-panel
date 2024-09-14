@@ -277,7 +277,7 @@
         style="width: 100%; height: 100%; padding: 10px; background: #D2EFFF; border-radius: 8px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
         <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
         <div
-          style="flex: 1 1 0; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Elije
+          style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">Elije
           los niveles aquí. Podrás asignar los monitores en un segundo
           momento.
         </div>
@@ -333,7 +333,7 @@
       <section class="flex"
         style="flex-wrap: wrap;gap: 16px;justify-content: space-around;">
         <div
-          style="color: black; font-size: 12px; font-family: DM Sans; font-weight: 400; line-height: 16px; margin-bottom: 20px;width: 100%;">
+          style="color: black; font-size: 12px; font-weight: 400; line-height: 16px; margin-bottom: 20px;width: 100%;">
           Seleccionar los extras que pueden ser añadidos haciendo la reserva:
         </div>
         <div
@@ -343,20 +343,21 @@
           <div
             style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
             <div
-              style="align-self: stretch; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 600; line-height: 18px; word-wrap: break-word">
+              style="align-self: stretch; color: #222222; font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
               {{item.product}}
             </div>
             <div
-              style="align-self: stretch; color: #8B9099; font-size: 12px; font-family: DM Sans; font-weight: 400; line-height: 16px; word-wrap: break-word">
+              style="align-self: stretch; color: #8B9099; font-size: 12px; font-weight: 400; line-height: 16px; word-wrap: break-word">
               {{item.name}}
             </div>
           </div>
           <div
-            style="flex: 1 1 0; text-align: right; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">
+            style="flex: 1 1 0; text-align: right; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
             {{item.price}} CHF/Día
           </div>
         </div>
         <div
+          (click)="extrasModal=!extrasModal"
           style="width: calc(50% - 8px); height: 64px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 3px; border: 1px #E91E63 dotted; flex-direction: column; justify-content: space-between; align-items: center; display: inline-flex;cursor: pointer;">
           <div style="width: 24px; height: 24px; position: relative">
             <mat-icon
@@ -364,7 +365,7 @@
               style="height: 30px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
           </div>
           <div
-            style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Crear
+            style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">Crear
             extra</div>
         </div>
       </section>
@@ -445,9 +446,9 @@
   </vex-course-detail-card>
 </vex-flux-layout>
 
-<vex-flux-modal>
-  <div title>Crear extra</div>
-  <div body style="display: flex; gap: 20px; flex-wrap: wrap;"
+<vex-flux-modal *ngIf="extrasModal" (Close)="extrasModal=!extrasModal"
+  [width]="670" title="Crear extra">
+  <div body style="display: flex; column-gap: 20px; flex-wrap: wrap;"
     [formGroup]="extrasFormGroup">
     <mat-form-field appearance="outline"
       style="width: calc(50% - 10px);margin-top: 10px;">
@@ -470,26 +471,98 @@
       <mat-label>{{'IVA' | translate}}</mat-label>
       <input matInput required type="number" formControlName="iva">
     </mat-form-field>
-    <mat-form-field appearance="outline"
-      style="width: 100%">
+    <div style="width: 100%">
       <mat-slide-toggle [checked]="true"> Activo </mat-slide-toggle>
-    </mat-form-field>
-
+    </div>
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-      color="secundary"
-      mat-raised-button
+      color="primary"
+      mat-stroked-button
       type="button"
       class="client-button">
       {{'Cancelar' | translate }}
     </button>
     <button
-      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      style="margin-top: 0px !important;height: 38px; width: 128px;"
       color="primary"
       mat-raised-button
       type="button"
       class="client-button">
       {{'Confirmar' | translate }}
+    </button>
+  </div>
+</vex-flux-modal>
+
+<vex-flux-modal *ngIf="confirmModal" (Close)="extrasModal=!extrasModal"
+  [width]="670" title="Casi estás!">
+  <div body style="display: flex; gap: 20px; flex-wrap: wrap;"
+    [formGroup]="extrasFormGroup">
+    <div
+      style="width: 100;
+        color: black;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    word-wrap: break-word">
+      El curso ha sido creado! Confirma estas opciones:
+    </div>
+    <div style="width: 100%">
+      <mat-slide-toggle [checked]="true">
+        <span style="
+        color: #222222;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 18px;
+        word-wrap: break-word">
+          {{"Visible en la página de reservas" | translate}}
+        </span>
+        <br>
+        <span style="
+        color: #8B9099;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+        word-wrap: break-word">
+          {{"El curso serà visible y online desde ahora" | translate}}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div style="width: 100%">
+      <mat-slide-toggle [checked]="true">
+        <span style="
+        color: #222222;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 18px;
+        word-wrap: break-word">
+          {{"Activo" | translate}}
+        </span>
+        <br>
+        <span style="
+        color: #8B9099;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+        word-wrap: break-word">
+          {{"El curso es activo y reservable" | translate}}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      color="primary"
+      mat-stroked-button
+      type="button"
+      class="client-button">
+      {{'Cancelar' | translate }}
+    </button>
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 200px;"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button">
+      {{'Finalizar creación curso' | translate }}
     </button>
   </div>
 </vex-flux-modal>

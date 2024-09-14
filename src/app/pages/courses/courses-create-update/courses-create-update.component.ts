@@ -99,7 +99,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
-
+  extrasModal: boolean = false
+  confirmModal: boolean = false
   user: any;
   id: any = null;
 
@@ -241,7 +242,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   Confirm() {
     if (this.ModalFlux === 0) this.getDegrees();
-    if (this.ModalFlux === 3) {
+    else if (this.ModalFlux === 3) {
       if (!this.courseFormGroup.controls["course_name_es"].value) {
         this.courseFormGroup.patchValue({
           course_name_es: this.courseFormGroup.controls["course_name"].value,
@@ -263,6 +264,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
       this.getDegrees();
     }
+    else if (this.ModalFlux === 5) {
+      this.confirmModal = true
+    }
+
   }
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   selectLevel(event: any, i: number) {
