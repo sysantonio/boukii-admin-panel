@@ -19,6 +19,30 @@
       border-bottom-width: 0px;
     }
   }
+  ::ng-deep {
+    .mat-mdc-select,
+    .mat-mdc-form-field-infix {
+      height: 1.5rem;
+    }
+
+    mat-select-trigger {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-left: 1rem;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mat-mdc-option.mdc-list-item {
+      font-family: var(--font-dm);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+    }
+  }
 }
 
 .row-1 {
@@ -37,7 +61,7 @@
     font-size: 0.85rem;
     font-weight: 400;
     line-height: 1.15rem;
-    color: var(--color-grey);
+    color: var(--color-grey1);
   }
 
   .price {
@@ -86,29 +110,6 @@
     gap: 0.75rem;
     width: 100%;
     justify-content: space-between;
-  }
-
-  .mat-mdc-select,
-  .mat-mdc-form-field-infix {
-    height: 1.5rem;
-  }
-
-  mat-select-trigger {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding-left: 1rem;
-  }
-
-  .mat-mdc-form-field-subscript-wrapper {
-    display: none;
-  }
-
-  .mat-mdc-option.mdc-list-item {
-    font-family: var(--font-dm);
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.25rem;
   }
 }
 

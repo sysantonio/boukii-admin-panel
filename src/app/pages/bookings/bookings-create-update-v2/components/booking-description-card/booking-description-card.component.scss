@@ -148,7 +148,8 @@
   line-height: 16px;
 }
 
-.utilizersWrapper__description {
+.utilizersWrapper__description,
+.monitor__description {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -170,6 +171,10 @@
   }
 }
 
+.monitor__description {
+  margin-bottom: 0.25rem;
+}
+
 @keyframes pulse {
   0% {
     opacity: 1;
@@ -179,5 +184,107 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+.dateRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-direction: column;
+  > div {
+    width: 100%;
+    display: flex;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    .date {
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.15rem;
+      color: var(--color-dark1);
+    }
+
+    .hour {
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.15rem;
+      color: var(--color-grey1);
+    }
+
+    .price {
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.15rem;
+      color: var(--color-dark1);
+      margin-left: auto;
+    }
+  }
+}
+
+.monitorRow {
+  flex-direction: column;
+  .row1 {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    font-family: var(--font-dm);
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.15rem;
+    gap: 0.5rem;
+  }
+
+  .monitorDetails {
+    font-family: var(--font-dm);
+    font-size: 0.75rem;
+    font-weight: 300;
+    line-height: 1rem;
+    color: var(--color-grey1);
+    margin-left: 2rem;
+  }
+
+  .monitorIcon {
+    font-size: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-grey1);
+  }
+
+  .changeMonitorIcon {
+    font-size: 1rem;
+    height: 1rem;
+  }
+}
+
+.dateExtras {
+  font-family: var(--font-dm);
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.15rem;
+  color: var(--color-dark1);
+  margin-left: 2rem;
+}
+
+.totalPrice {
+  font-family: var(--font-dm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.15rem;
+  color: var(--color-dark1);
+}
+
+.observacionSection {
+  border-top: 1px solid var(--color-grey3);
+  padding-top: 1.25rem;
+  margin-bottom: 0;
+
+  p {
+    font-family: var(--font-dm);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1rem;
   }
 }

@@ -14,6 +14,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { BookingFormStepper } from "./form-stepper/form-stepper.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatSelectModule } from "@angular/material/select";
+import { MatTabsModule } from "@angular/material/tabs";
 
 import { StepOneComponent } from "./step-one/step-one.component";
 import { StepTwoComponent } from "./step-two/step-two.component";
@@ -24,6 +25,7 @@ import { StepObservationsComponent } from "./step-observations/step-observations
 
 import { BookingDescriptionCard } from "./booking-description-card/booking-description-card.component";
 import { BookingDialogComponent } from "./booking-dialog/booking-dialog.component";
+import { CreateUserDialogComponent } from "./create-user-dialog/create-user-dialog.component";
 import { CustomHeader } from "./calendar/custom-header/custom-header.component";
 import { FormDetailsPrivateComponent } from "./form-details-private/form-details-private.component";
 
@@ -46,6 +48,7 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     MatDialogModule,
     MatDatepickerModule,
     MatSelectModule,
+    MatTabsModule,
   ],
   declarations: [
     BookingFormStepper,
@@ -61,6 +64,7 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     StepObservationsComponent,
     FormDetailsColectiveFixComponent,
     FormDetailsColectiveFlexComponent,
+    CreateUserDialogComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -76,6 +80,7 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     StepObservationsComponent,
     FormDetailsColectiveFixComponent,
     FormDetailsColectiveFlexComponent,
+    CreateUserDialogComponent,
   ],
 })
 export class BookingComponentsModule {}

@@ -54,7 +54,7 @@
     </button>
   </div>
   <div *ngIf="mainClient" class="clientDescription">
-    <span> {{ "bookings_page.crumbs.client" | translate }} </span>
+    <span> {{ "bookings_page.crumbs.client" | translate }}: </span>
     {{ mainClient.first_name }} {{ mainClient.last_name }}
   </div>
 </div>
@@ -83,7 +83,11 @@
       [sport]="sport"
       [sportLevel]="sportLevel"
       [course]="course"
-      [date]="date"
+      [dates]="normalizedDates"
+      [monitors]="monitors"
+      [clientObs]="clientObs"
+      [schoolObs]="schoolObs"
+      [total]="total"
     >
     </booking-description-card>
   </mat-card>

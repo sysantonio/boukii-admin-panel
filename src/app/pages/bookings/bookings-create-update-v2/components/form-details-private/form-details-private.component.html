@@ -46,26 +46,26 @@
 
     <mat-form-field appearance="outline">
       <mat-label>{{ "select_monitor" | translate }}</mat-label>
-      <mat-select [(value)]="selectedPosibleMonitor">
-        <mat-select-trigger *ngIf="selectedPosibleMonitor">
+      <mat-select [(value)]="selectedChangeMonitor">
+        <mat-select-trigger *ngIf="selectedChangeMonitor">
           <mat-icon
             matPrefix
-            [class]="selectedPosibleMonitor.class"
+            [class]="selectedChangeMonitor.class"
             fontSet="material-icons-outlined"
-            >{{ selectedPosibleMonitor.icon }}
+            >{{ selectedChangeMonitor.icon }}
           </mat-icon>
-          {{ selectedPosibleMonitor.description | translate }}
+          {{ selectedChangeMonitor.description | translate }}
         </mat-select-trigger>
         <mat-option
-          *ngFor="let posibleMonitor of posibleMonitorSelection"
-          [value]="posibleMonitor"
+          *ngFor="let posibleChangeMonitor of posibleChangeMonitorSelection"
+          [value]="posibleChangeMonitor"
         >
           <mat-icon
-            [class]="posibleMonitor.class"
+            [class]="posibleChangeMonitor.class"
             fontSet="material-icons-outlined"
-            >{{ posibleMonitor.icon }}</mat-icon
+            >{{ posibleChangeMonitor.icon }}</mat-icon
           >
-          {{ posibleMonitor.description | translate }}
+          {{ posibleChangeMonitor.description | translate }}
         </mat-option>
       </mat-select>
     </mat-form-field>
