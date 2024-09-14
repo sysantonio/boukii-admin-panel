@@ -20,7 +20,6 @@
         *ngIf="imagePreviewUrl">
         {{"Change image" | translate}}
     </label>
-    <input type="file" formControlName="image"
-        style="display: none;"
-        (change)="onFileChanged($event)" id="file" />
+    <input type="file" style="display: none;" (change)="onFileChanged($event)"
+        id="file" />
 </div>

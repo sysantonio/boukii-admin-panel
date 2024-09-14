@@ -6,7 +6,6 @@ import { Component, ContentChild, TemplateRef } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class FluxLayoutComponent {
-  @ContentChild(TemplateRef) contentTemplate: TemplateRef<any>;
   ShowCard: boolean = false
 }
 

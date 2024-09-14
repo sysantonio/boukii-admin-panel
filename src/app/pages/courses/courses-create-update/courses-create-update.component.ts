@@ -29,6 +29,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
     { Name: "EXTRAS", Modal: 4 },
     { Name: "IDIOMAS", Modal: 5 },
   ]
+  Translate: { Code: string, Name: string }[] = [
+    { Code: "es", Name: "ESPAÑOL" },
+    { Code: "en", Name: "INGLES" },
+    { Code: "fr", Name: "FRANCÉS" },
+    { Code: "de", Name: "ALEMAN" },
+    { Code: "it", Name: "ITALIANO" },
+  ]
   FechaReserva: { Fecha: Date, Hora: string, Duracion: number }[] = [{ Fecha: new Date(), Hora: "08:00", Duracion: 1 }]
   Descuentos: { NFecha: number, Reduccion: string }[] = [{ NFecha: 2, Reduccion: "10%" }]
 
@@ -76,7 +83,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   courseTypeFormGroup: UntypedFormGroup;
 
   courseFormGroup: UntypedFormGroup; //El bueno
+  extrasFormGroup: UntypedFormGroup;
   levelGrop: { level_id: number, EdadMin: number, EdadMax: number, PartMax: number, Subgrupo: number, active: boolean, data: any }[] = []
+
+
 
   sportData: any = [];
   sportDataList: any = [];
@@ -85,6 +95,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   levels: any = [];
   monitors: any = [];
   schoolData: any = [];
+  extras: any = []
 
   mode: 'create' | 'update' = 'create';
   loading: boolean = true;
@@ -101,6 +112,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
 
   ngOnInit() {
+    const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
+    this.extras = [...extras.food, ...extras.forfait, ...extras.transport]
     this.mode = this.id ? 'update' : 'create';
     forkJoin({
       sportTypes: this.getSportsType(),
@@ -118,6 +131,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
         course_name: ["", Validators.required],
         summary: ["", Validators.required],
         description: ["", Validators.required],
+        course_name_es: ["", Validators.required],
+        summary_es: ["", Validators.required],
+        description_es: ["", Validators.required],
+        course_name_fr: ["", Validators.required],
+        summary_fr: ["", Validators.required],
+        description_fr: ["", Validators.required],
+        course_name_en: ["", Validators.required],
+        summary_en: ["", Validators.required],
+        description_en: ["", Validators.required],
+        course_name_de: ["", Validators.required],
+        summary_de: ["", Validators.required],
+        description_de: ["", Validators.required],
+        course_name_it: ["", Validators.required],
+        summary_it: ["", Validators.required],
+        description_it: ["", Validators.required],
         price: [null, Validators.required],
         participants: [null, Validators.required],
         img: ["", Validators.required],
@@ -127,7 +155,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
         reserve_to: [null, Validators.required],
         reserve_date: [null, Validators.required],
         discount: [null, Validators.required],
+        extras: [null, Validators.required],
       });
+      this.extrasFormGroup = this.fb.group({
+        product: ["", Validators.required],
+        name: ["", Validators.required],
+        price: ["", Validators.required],
+        iva: ["", Validators.required],
+      })
 
 
 
@@ -206,6 +241,28 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   Confirm() {
     if (this.ModalFlux === 0) this.getDegrees();
+    if (this.ModalFlux === 3) {
+      if (!this.courseFormGroup.controls["course_name_es"].value) {
+        this.courseFormGroup.patchValue({
+          course_name_es: this.courseFormGroup.controls["course_name"].value,
+          summary_es: this.courseFormGroup.controls["course_name"].value,
+          description_es: this.courseFormGroup.controls["course_name"].value,
+          course_name_fr: this.courseFormGroup.controls["course_name"].value,
+          summary_fr: this.courseFormGroup.controls["course_name"].value,
+          description_fr: this.courseFormGroup.controls["course_name"].value,
+          course_name_en: this.courseFormGroup.controls["course_name"].value,
+          summary_en: this.courseFormGroup.controls["course_name"].value,
+          description_en: this.courseFormGroup.controls["course_name"].value,
+          course_name_de: this.courseFormGroup.controls["course_name"].value,
+          summary_de: this.courseFormGroup.controls["course_name"].value,
+          description_de: this.courseFormGroup.controls["course_name"].value,
+          course_name_it: this.courseFormGroup.controls["course_name"].value,
+          summary_it: this.courseFormGroup.controls["course_name"].value,
+          description_it: this.courseFormGroup.controls["course_name"].value,
+        })
+      }
+      this.getDegrees();
+    }
   }
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   selectLevel(event: any, i: number) {

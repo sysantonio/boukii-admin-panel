@@ -36,6 +36,7 @@ import { FluxUploadImgModule } from 'src/@vex/components/flux-component/upload-i
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout/app.module';
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
+import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { CoursesDetailCardModule } from '../../../../@vex/components/flux-compon
     FluxUploadImgModule,
     MatExpansionModule,
     FluxLayoutModule,
-    CoursesDetailCardModule
+    CoursesDetailCardModule,
+    FluxModalModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

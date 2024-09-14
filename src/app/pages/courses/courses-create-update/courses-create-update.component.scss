@@ -77,8 +77,22 @@ button {
     .mat-mdc-form-field-subscript-wrapper {
       display: none;
     }
-    .mat-mdc-form-field-flex{
+    .mat-mdc-form-field-flex {
       height: 15px;
     }
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+      .mat-mdc-form-field-infix {
+      padding-top: 11px;
+      padding-bottom: 11px;
+    }
+    .mat-mdc-checkbox-checked {
+      label {
+        color: white;
+      }
+    }
+    .mdc-checkbox {
+      border-radius: 3px;
+    }
+
   }
 }

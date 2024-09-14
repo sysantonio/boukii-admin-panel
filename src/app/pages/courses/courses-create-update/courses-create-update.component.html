@@ -273,21 +273,22 @@
       </div>
     </div>
     <div class="flex flex-col level" *ngIf="ModalFlux===3">
-      <div style="background-color: #D2EFFF; border-radius: 8px;height: 44px;">
-        <mat-icon style="color: #006fcb;">info</mat-icon>
-        <span>
-          Elije los niveles aquí. Podrás asignar los monitores en un segundo
+      <div
+        style="width: 100%; height: 100%; padding: 10px; background: #D2EFFF; border-radius: 8px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+        <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
+        <div
+          style="flex: 1 1 0; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Elije
+          los niveles aquí. Podrás asignar los monitores en un segundo
           momento.
-        </span>
+        </div>
       </div>
-      <div style="width: 100%;height: 20px;"> </div>
       <div
         style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px; gap: 10px;">
         <ng-container *ngFor="let level of levels;index as i">
           <div style="display: flex;gap: 16px;">
             <mat-checkbox
               style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;"
-              [style.backgroundColor]="levelGrop[i].active?level.color:level.color+'CC'"
+              [style.backgroundColor]="levelGrop[i].active?level.color:level.color+'33'"
               [style.color]="level.color"
               [style.border]="'1px solid '+level.color"
               (click)="selectLevel($event,i) ">
@@ -311,7 +312,7 @@
               </mat-form-field>
               <mat-icon (click)="levelGrop[i].Subgrupo=levelGrop[i].Subgrupo+1"
                 color="primary"
-                style="height: 46px;width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
+                style="height: 46px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
             </ng-container>
           </div>
           <ng-container
@@ -327,42 +328,81 @@
         </ng-container>
       </div>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===4">
-      <span>
-        Seleccionar los extras que pueden ser añadidos haciendo la reserva
-      </span>
+    <div class="flex flex-col" *ngIf="ModalFlux===4" style="padding: 24px;"
+      [formGroup]="courseFormGroup">
+      <section class="flex"
+        style="flex-wrap: wrap;gap: 16px;justify-content: space-around;">
+        <div
+          style="color: black; font-size: 12px; font-family: DM Sans; font-weight: 400; line-height: 16px; margin-bottom: 20px;width: 100%;">
+          Seleccionar los extras que pueden ser añadidos haciendo la reserva:
+        </div>
+        <div
+          *ngFor="let item of extras"
+          style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px #8B9099 solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+          <mat-checkbox [value]="item.id"> </mat-checkbox>
+          <div
+            style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+            <div
+              style="align-self: stretch; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 600; line-height: 18px; word-wrap: break-word">
+              {{item.product}}
+            </div>
+            <div
+              style="align-self: stretch; color: #8B9099; font-size: 12px; font-family: DM Sans; font-weight: 400; line-height: 16px; word-wrap: break-word">
+              {{item.name}}
+            </div>
+          </div>
+          <div
+            style="flex: 1 1 0; text-align: right; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">
+            {{item.price}} CHF/Día
+          </div>
+        </div>
+        <div
+          style="width: calc(50% - 8px); height: 64px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 3px; border: 1px #E91E63 dotted; flex-direction: column; justify-content: space-between; align-items: center; display: inline-flex;cursor: pointer;">
+          <div style="width: 24px; height: 24px; position: relative">
+            <mat-icon
+              color="primary"
+              style="height: 30px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
+          </div>
+          <div
+            style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Crear
+            extra</div>
+        </div>
+      </section>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===5">
+    <div class="flex flex-col" *ngIf="ModalFlux===5"
+      [formGroup]="courseFormGroup">
       <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> FRANCÉS </mat-panel-title>
+        <mat-expansion-panel *ngFor="let item of Translate">
+          <mat-expansion-panel-header
+            style="background-color: #eff2f5; border-top: 1px #C7D0D3 solid;
+          color: #222222;
+          font-size: 14px;
+          font-family: Montserrat;
+          font-weight: 400;
+          text-transform: uppercase;
+          line-height: 20px;
+          word-wrap: break-word">
+            <mat-panel-title> {{item.Name | translate}} </mat-panel-title>
           </mat-expansion-panel-header>
-          <p>This is the primary content of the panel.</p>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> INGLÉS </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>This is the primary content of the panel.</p>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> ALEMÁN </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>This is the primary content of the panel.</p>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> ESPAÑOL </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>This is the primary content of the panel.</p>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> ITALIANO </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>This is the primary content of the panel.</p>
+          <mat-form-field appearance="outline"
+            style="width: 100%;margin-top: 10px;">
+            <mat-label>{{'courses.coursename' | translate}}</mat-label>
+            <input id="courseName" [formControlName]="'course_name_'+item.Code"
+              matInput required type="text">
+          </mat-form-field>
+          <div style="margin: 10px 0;">
+            <angular-editor id="summary" style="width: 100%"
+              [placeholder]="'courses.summary' | translate"
+              [formControlName]="'summary_'+item.Code" [config]="editor1Config">
+            </angular-editor>
+          </div>
+          <div style="margin: 20px 0;">
+            <angular-editor id="description" style="width: 100%"
+              [placeholder]="'courses.desc' | translate"
+              [formControlName]="'description_'+item.Code"
+              [config]="editor2Config">
+            </angular-editor>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
@@ -396,7 +436,6 @@
     [courseFormGroup]="courseFormGroup"
     [levelGrop]="levelGrop">
   </vex-course-detail-card>
-
   <vex-course-detail-card
     card2
     *ngIf="!loading"
@@ -405,3 +444,52 @@
     [levelGrop]="levelGrop">
   </vex-course-detail-card>
 </vex-flux-layout>
+
+<vex-flux-modal>
+  <div title>Crear extra</div>
+  <div body style="display: flex; gap: 20px; flex-wrap: wrap;"
+    [formGroup]="extrasFormGroup">
+    <mat-form-field appearance="outline"
+      style="width: calc(50% - 10px);margin-top: 10px;">
+      <mat-label>{{'Producto' | translate}}</mat-label>
+      <input matInput required type="text"
+        formControlName="product">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+      style="width: calc(50% - 10px);margin-top: 10px;">
+      <mat-label>{{'Nombre' | translate}}</mat-label>
+      <input matInput required type="text" formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+      style="width: calc(50% - 10px)">
+      <mat-label>{{'Precio por día' | translate}}</mat-label>
+      <input matInput required type="number" formControlName="price">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+      style="width: calc(50% - 10px)">
+      <mat-label>{{'IVA' | translate}}</mat-label>
+      <input matInput required type="number" formControlName="iva">
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+      style="width: 100%">
+      <mat-slide-toggle [checked]="true"> Activo </mat-slide-toggle>
+    </mat-form-field>
+
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      color="secundary"
+      mat-raised-button
+      type="button"
+      class="client-button">
+      {{'Cancelar' | translate }}
+    </button>
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button">
+      {{'Confirmar' | translate }}
+    </button>
+  </div>
+</vex-flux-modal>
