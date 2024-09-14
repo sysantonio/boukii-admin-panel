@@ -272,37 +272,67 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===3"
-      [formGroup]="courseInfoCollecDateSplitFormGroup">
+    <div class="flex flex-col level" *ngIf="ModalFlux===3">
       <div style="background-color: #D2EFFF; border-radius: 8px;height: 44px;">
         <mat-icon style="color: #006fcb;">info</mat-icon>
-        Elije los niveles aquí. Podrás asignar los monitores en un segundo
-        momento.
+        <span>
+          Elije los niveles aquí. Podrás asignar los monitores en un segundo
+          momento.
+        </span>
       </div>
       <div style="width: 100%;height: 20px;"> </div>
       <div
-        style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px;">
-        <ng-container *ngFor="let level of levels">
-          <mat-checkbox
-            style="height: 36px; border-radius: 3px;width: 225px;margin: 5px 0;font-size: 12px;"
-            [style.backgroundColor]="level.color+'CC'"
-            [style.color]="level.color"
-            [style.border]="'1px solid '+level.color">
-            {{level.annotation}} {{level.level}}
-          </mat-checkbox>
+        style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px; gap: 10px;">
+        <ng-container *ngFor="let level of levels;index as i">
+          <div style="display: flex;gap: 16px;">
+            <mat-checkbox
+              style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;"
+              [style.backgroundColor]="levelGrop[i].active?level.color:level.color+'CC'"
+              [style.color]="level.color"
+              [style.border]="'1px solid '+level.color"
+              (click)="selectLevel($event,i) ">
+              {{level.annotation}} {{level.level}}
+            </mat-checkbox>
+            <ng-container *ngIf="levelGrop[i].active">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'Edad mínima' | translate}}</mat-label>
+                <input matInput type="number"
+                  [(ngModel)]="levelGrop[i].EdadMin">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{'Edad máxima' | translate}}</mat-label>
+                <input matInput type="number"
+                  [(ngModel)]="levelGrop[i].EdadMax">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{'Participante máxima' | translate}}</mat-label>
+                <input matInput type="number"
+                  [(ngModel)]="levelGrop[i].PartMax">
+              </mat-form-field>
+              <mat-icon (click)="levelGrop[i].Subgrupo=levelGrop[i].Subgrupo+1"
+                color="primary"
+                style="height: 46px;width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
+            </ng-container>
+          </div>
+          <ng-container
+            *ngFor="let item of [].constructor(levelGrop[i].Subgrupo); index as i">
+            <div
+              style="background-color: #EFF2F5; display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
+              {{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
+              <mat-icon (click)="levelGrop[i].Subgrupo=levelGrop[i].Subgrupo-1"
+                style="height: 46px;width: 20px;cursor: pointer; font-size: 20px;align-content: space-evenly;">
+                delete </mat-icon>
+            </div>
+          </ng-container>
         </ng-container>
-
       </div>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===4"
-      [formGroup]="courseInfoCollecDateSplitFormGroup">
+    <div class="flex flex-col" *ngIf="ModalFlux===4">
       <span>
         Seleccionar los extras que pueden ser añadidos haciendo la reserva
       </span>
-
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===5"
-      [formGroup]="courseInfoCollecDateSplitFormGroup">
+    <div class="flex flex-col" *ngIf="ModalFlux===5">
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -335,9 +365,7 @@
           <p>This is the primary content of the panel.</p>
         </mat-expansion-panel>
       </mat-accordion>
-
     </div>
-
     <div style="margin: 20px;display: flex;justify-content: space-between;">
       <button
         *ngIf="ModalFlux>0"
@@ -361,106 +389,19 @@
       </button>
     </div>
   </div>
-  <div card *ngIf="!loading" class="cardp">
-    <div class="card_deporte">
-      <img
-        [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_unselected || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
-        [class]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value)?'':'emptyImg1'"
-        class="sport_icon noselected"
-        style="max-width: none;">
-      <div style="width: 100%;">
-        <p
-          style="font-size: 14px; font-weight: 600; line-height: 18px; min-height: 12px;"
-          [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
-          {{courseFormGroup.controls['course_name'].value}}
-        </p>
-        <p>
-          {{courseFormGroup.controls['course_type'].value===0?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===1?'Curso privado flex':'Actividad'
-          | translate}}
-        </p>
-      </div>
-    </div>
-    <div class="card_informacion">
-      <div style="width: 100%;display: flex;">
-        <img
-          [src]="courseFormGroup.controls['img'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
-          [class]="courseFormGroup.controls['img'].value?'':'emptyImg1'"
-          style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
-        <div style="width: 100%;">
-          <p> {{'RESUMEN' | translate }} </p>
-          <p
-            [class]="courseFormGroup.controls['summary'].value?'':'emptyText'">
-            {{courseFormGroup.controls['summary'].value}}
-          </p>
-        </div>
-      </div>
-      <div style="width: 100%">
-        <p> {{'DESCRIPCIÓN' | translate }} </p>
-        <p
-          [class]="courseFormGroup.controls['description'].value?'':'emptyText'">
-          {{courseFormGroup.controls['description'].value}}
-        </p>
-      </div>
-      <div style="width: 50%; padding-right: 20px;">
-        <p> {{'PRECIO POR FECHA' | translate }} </p>
-        <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'">
-          {{courseFormGroup.controls['price'].value}}
-          {{courseFormGroup.controls['price'].value?'CHF':''}}
-        </p>
-      </div>
-      <div style="width: 50%; padding-left: 20px;">
-        <p> {{'PARTICIPANTES MAX.' | translate }} </p>
-        <p
-          [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
-          {{courseFormGroup.controls['participants'].value}}
-        </p>
-      </div>
-      <div style="width: 50%; padding-right: 20px;"
-        *ngIf="courseFormGroup.controls['course_type'].value>0">
-        <p> {{'EDAD MIN.' | translate }} </p>
-        <p [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'">
-          {{courseFormGroup.controls['age_min'].value}}
-        </p>
-      </div>
-      <div style="width: 50%; padding-left: 20px;"
-        *ngIf="courseFormGroup.controls['course_type'].value>0">
-        <p> {{'EDAD MAX.' | translate }} </p>
-        <p [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'">
-          {{courseFormGroup.controls['age_max'].value}}
-        </p>
-      </div>
-    </div>
-    <div class="card_fechas">
-      <div style="width: 50%; padding-right: 20px;">
-        <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
-        <p
-          [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
-          {{courseFormGroup.controls['reserve_from'].value}}
-        </p>
-      </div>
-      <div style="width: 50%; padding-right: 20px;">
-        <p> {{'RESERVABLE HASTA' | translate }} </p>
-        <p
-          [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
-          {{courseFormGroup.controls['reserve_to'].value}}
-        </p>
-      </div>
-      <div style="width: 100%;">
-        <p> <mat-icon>event_available</mat-icon> {{'FECHA Y HORA' | translate
-          }}
-        </p>
-        <p
-          [class]="courseFormGroup.controls['reserve_date'].value?'':'emptyText'"
-          *ngFor="let item of courseFormGroup.controls['reserve_date'].value">
-          {{item.Fecha}} {{item.Hora}} {{item.Coste}}
-        </p>
-      </div>
-      <div style="width: 100%;"
-        *ngFor="let item of courseFormGroup.controls['reserve_date'].value">
-        Reducción {{item.reduccion}} reservando {{item.day}} fechas
-      </div>
-    </div>
-    <div class="card_detalles"> </div>
-    <div class="card_extras"> </div>
-  </div>
+  <vex-course-detail-card
+    card
+    *ngIf="!loading"
+    [sportData]="sportData"
+    [courseFormGroup]="courseFormGroup"
+    [levelGrop]="levelGrop">
+  </vex-course-detail-card>
+
+  <vex-course-detail-card
+    card2
+    *ngIf="!loading"
+    [sportData]="sportData"
+    [courseFormGroup]="courseFormGroup"
+    [levelGrop]="levelGrop">
+  </vex-course-detail-card>
 </vex-flux-layout>

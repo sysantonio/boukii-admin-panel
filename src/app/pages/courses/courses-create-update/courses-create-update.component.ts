@@ -74,10 +74,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   maxDate = new Date();
 
   courseTypeFormGroup: UntypedFormGroup;
-  courseInfoCollecDateSplitFormGroup: UntypedFormGroup;
-  courseFormGroup: UntypedFormGroup; //El bueno
 
-  sportTypeSelected: number = -1;
+  courseFormGroup: UntypedFormGroup; //El bueno
+  levelGrop: { level_id: number, EdadMin: number, EdadMax: number, PartMax: number, Subgrupo: number, active: boolean, data: any }[] = []
+
   sportData: any = [];
   sportDataList: any = [];
   sportTypeData: any = [];
@@ -153,31 +153,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
               separatedDates: [false]
             })
 
-            this.courseInfoCollecDateSplitFormGroup = this.fb.group({
-              course_name: [null, Validators.required],
-
-              course_name_en: [null],
-              course_name_de: [null],
-              course_name_es: [null],
-              course_name_it: [null],
-              price: [null],
-              station: [null, Validators.required],
-              summary: [null, Validators.required],
-              description: [null, Validators.required],
-
-              summary_en: [null],
-              description_en: [null],
-              summary_de: [null],
-              description_de: [null],
-              summary_es: [null],
-              description_es: [null],
-              summary_it: [null],
-              description_it: [null],
-              duration: [null, Validators.required],
-              participants: [null, Validators.required],
-              image: [null],
-            });
-
           })
       } else {
         this.courseTypeFormGroup = this.fb.group({
@@ -188,31 +163,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
           separatedDates: [false]
         })
 
-
-
-        this.courseInfoCollecDateSplitFormGroup = this.fb.group({
-          course_name: [null, Validators.required],
-          course_name_en: [null],
-          course_name_de: [null],
-          course_name_es: [null],
-          course_name_it: [null],
-          price: [null],
-          station: [null, Validators.required],
-          summary: [null, Validators.required],
-          description: [null, Validators.required],
-
-          summary_en: [null],
-          description_en: [null],
-          summary_de: [null],
-          description_de: [null],
-          summary_es: [null],
-          description_es: [null],
-          summary_it: [null],
-          description_it: [null],
-          duration: [null, Validators.required],
-          participants: [null, Validators.required],
-          image: [null],
-        });
 
 
       }
@@ -248,11 +198,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
   );
   getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseTypeFormGroup.controls['sportType'].value).subscribe((data) => {
     data.data.forEach(element => element.active ? this.levels.push(element) : null);
-    this.levels.forEach(level => level.active = false)
+    this.levels.forEach(level => {
+      this.levelGrop.push({ level_id: level.id, EdadMin: 0, EdadMax: 0, PartMax: 0, Subgrupo: 0, active: false, data: level })
+      level.active = false
+    })
   });
 
   Confirm() {
     if (this.ModalFlux === 0) this.getDegrees();
   }
-
+  find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
+  selectLevel(event: any, i: number) {
+    this.levelGrop[i].active = event.target.checked
+  }
 }

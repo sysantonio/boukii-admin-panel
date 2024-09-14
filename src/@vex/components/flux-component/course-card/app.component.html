@@ -1,0 +1,145 @@
+<div class="cardp">
+    <div class="cardgroup" style="flex-wrap: nowrap;">
+        <img
+            [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_unselected || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+            [class]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value)?'':'emptyImg1'"
+            class="sport_icon noselected"
+            style="max-width: none;">
+        <div style="width: 100%;">
+            <p
+                style="font-weight: 600; line-height: 18px; min-height: 12px; color: black;font-size: 14px;"
+                [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
+                {{courseFormGroup.controls['course_name'].value}}
+            </p>
+            <p>
+                {{courseFormGroup.controls['course_type'].value===0?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===1?'Curso privado flex':'Actividad'
+                | translate}}
+            </p>
+        </div>
+    </div>
+    <div class="cardgroup">
+        <div style="width: 100%;display: flex;">
+            <img
+                [src]="courseFormGroup.controls['img'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+                class="Img1"
+                [class]="courseFormGroup.controls['img'].value?'':'emptyImg1'"
+                style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
+            <div style="width: 100%;">
+                <p> {{'RESUMEN' | translate }} </p>
+                <p style="color: black;"
+                    [class]="courseFormGroup.controls['summary'].value?'':'emptyText'">
+                    {{courseFormGroup.controls['summary'].value}}
+                </p>
+            </div>
+        </div>
+        <div style="width: 100%">
+            <p> {{'DESCRIPCIÓN' | translate }} </p>
+            <p
+                [class]="courseFormGroup.controls['description'].value?'':'emptyText'"
+                style="color: black;">
+                {{courseFormGroup.controls['description'].value}}
+            </p>
+        </div>
+        <div style="width: calc(50% - 10px);">
+            <p> {{'PRECIO POR FECHA' | translate }} </p>
+            <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
+                style="color: black; font-weight: 200;">
+                {{courseFormGroup.controls['price'].value}}
+                {{courseFormGroup.controls['price'].value?'CHF':''}}
+            </p>
+        </div>
+        <div style="width: calc(50% - 10px);">
+            <p> {{'PARTICIPANTES MAX.' | translate }} </p>
+            <p style="color: black; font-weight: 200;font-size: 12px;"
+                [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
+                {{courseFormGroup.controls['participants'].value}}
+            </p>
+        </div>
+        <div style="width: calc(50% - 10px);"
+            *ngIf="courseFormGroup.controls['course_type'].value>0">
+            <p> {{'EDAD MIN.' | translate }} </p>
+            <p style="color: black;font-size: 12px;"
+                [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'">
+                {{courseFormGroup.controls['age_min'].value}}
+            </p>
+        </div>
+        <div style="width: calc(50% - 10px);"
+            *ngIf="courseFormGroup.controls['course_type'].value>0">
+            <p> {{'EDAD MAX.' | translate }} </p>
+            <p style="color: black; font-size: 12px;"
+                [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'">
+                {{courseFormGroup.controls['age_max'].value}}
+            </p>
+        </div>
+    </div>
+    <div class="cardgroup">
+        <div style="width: calc(50% - 10px);">
+            <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
+            <p style="color: black; font-size: 12px;"
+                [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
+                {{courseFormGroup.controls['reserve_from'].value}}
+            </p>
+        </div>
+        <div style="width: calc(50% - 10px);">
+            <p> {{'RESERVABLE HASTA' | translate }} </p>
+            <p style="color: black;font-size: 12px;"
+                [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
+                {{courseFormGroup.controls['reserve_to'].value}}
+            </p>
+        </div>
+        <div style="width: 100%;">
+            <p> <mat-icon class="icon24">event_available</mat-icon>
+                {{'FECHA Y HORA' |
+                translate }}
+            </p>
+            <p *ngIf="!courseFormGroup.controls['reserve_date'].value"
+                class="emptyText">
+            </p>
+            <p
+                *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
+                style="font-size: 14px;">
+                <span style="color: black;"> {{item.Fecha}} </span>
+                <span> {{item.Hora}}</span>
+                <span> {{item.Coste}} </span>
+            </p>
+        </div>
+        <div style="width: 100%; color: black;font-weight: 400;"
+            *ngFor="let item of courseFormGroup.controls['reserve_date'].value">
+            Reducción {{item.reduccion}} reservando {{item.day}} fechas
+        </div>
+    </div>
+    <div class="cardgroup" *ngIf="count(levelGrop,'active')">
+        <div
+            style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+            <div style="width: 100%;">
+                <p> {{'NIVELES' | translate }} </p>
+            </div>
+            <ng-container *ngFor="let item of levelGrop">
+                <div *ngIf="item.active"
+                    style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
+                    [style.backgroundColor]="item.data.color+'CC'"
+                    [style.border]="'1px solid '+item.data.color">
+                    <div [style.color]="item.data.color"
+                        style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
+                        <mat-icon class="icon24">workspace_premium</mat-icon>
+                        <span> {{item.data.annotation}} {{item.data.level}}
+                        </span>
+                    </div>
+                    <div
+                        style="color: #222222; font-weight: 400;display: flex;align-items: center;">
+                        <mat-icon class="icon16">group</mat-icon>
+                        <span> {{item.Subgrupo}}g · {{item.PartMax}}p </span>
+                        <div style="margin: auto;"></div>
+                        <mat-icon class="icon16">event_available</mat-icon>
+                        <span> 3 días · 2h 30m </span>
+                        <div style="margin: auto;"></div>
+                        <mat-icon class="icon16">confirmation_number</mat-icon>
+                        <span> {{item.EdadMin}}/{{item.EdadMax}} </span>
+                        <div style="margin: auto;"></div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <!--<div class="cardgroup"> </div>-->
+</div>
