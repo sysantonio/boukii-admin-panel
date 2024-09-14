@@ -254,6 +254,5 @@ export class CoursesCreateUpdateComponent implements OnInit {
   Confirm() {
     if (this.ModalFlux === 0) this.getDegrees();
   }
-  find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
 
 }

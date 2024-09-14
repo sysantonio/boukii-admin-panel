@@ -13,7 +13,8 @@
     <div class="flex flex-col" style="padding: 20px 20px 0;"
       *ngIf="ModalFlux===0"
       [formGroup]="courseFormGroup">
-      <mat-radio-group class="flex" style="flex-wrap: wrap;"
+      <mat-radio-group class="flex"
+        style="flex-wrap: wrap;gap: 16px;justify-content: space-around;"
         formControlName="sport_id">
         <mat-radio-button
           class="sport_checkbox"
@@ -34,7 +35,7 @@
     <div class="flex flex-col"
       *ngIf="ModalFlux===1"
       [formGroup]="courseFormGroup">
-      <mat-tab-group
+      <mat-tab-group class="tabsWrapper"
         (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event})">
         <mat-tab>
           <div style="padding: 20px 20px 0;">
@@ -445,7 +446,8 @@
         </p>
       </div>
       <div style="width: 100%;">
-        <p> <mat-icon>event_available</mat-icon> {{'FECHA Y HORA' | translate }}
+        <p> <mat-icon>event_available</mat-icon> {{'FECHA Y HORA' | translate
+          }}
         </p>
         <p
           [class]="courseFormGroup.controls['reserve_date'].value?'':'emptyText'"
@@ -460,8 +462,5 @@
     </div>
     <div class="card_detalles"> </div>
     <div class="card_extras"> </div>
-  </div>
-  <div card2 *ngIf="!loading">
-    Hi, i am the card
   </div>
 </vex-flux-layout>

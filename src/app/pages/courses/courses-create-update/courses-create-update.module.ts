@@ -75,7 +75,7 @@ import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout
     FluxToolbarModule,
     FluxUploadImgModule,
     MatExpansionModule,
-    FluxLayoutModule
+    FluxLayoutModule,
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

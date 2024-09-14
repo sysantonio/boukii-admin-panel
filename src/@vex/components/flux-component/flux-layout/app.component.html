@@ -12,12 +12,12 @@
     </div>
     <div class="hide" style="width: 30px;"> </div>
     <div class="card resum hide">
-        <ng-content select="[card]"></ng-content>
+        <ng-content select="#card"></ng-content>
     </div>
     <div class="modal" *ngIf="ShowCard">
         <div class="modal-content resum card">
             <span class="close" (click)="ShowCard=false">&times;</span>
-            <ng-content select="[card2]"></ng-content>
+            <ng-content select="#card2"></ng-content>
         </div>
         <div class="modal-background" (click)="ShowCard=false"> </div>
     </div>
