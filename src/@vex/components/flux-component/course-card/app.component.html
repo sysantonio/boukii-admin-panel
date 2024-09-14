@@ -4,6 +4,7 @@
             [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_unselected || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
             [class]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value)?'':'emptyImg1'"
             class="sport_icon noselected"
+            [style.backgroundColor]="courseFormGroup.controls['course_type'].value===0?'#E5962A':courseFormGroup.controls['course_type'].value===1?'#2FAA41':courseFormGroup.controls['course_type'].value===2?'#0AB0BC':''"
             style="max-width: none;">
         <div style="width: 100%;">
             <p
@@ -12,7 +13,7 @@
                 {{courseFormGroup.controls['course_name'].value}}
             </p>
             <p>
-                {{courseFormGroup.controls['course_type'].value===0?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===1?'Curso privado flex':'Actividad'
+                {{courseFormGroup.controls['course_type'].value===0?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===1?'Curso privado flex':courseFormGroup.controls['course_type'].value===2?'Actividad':''
                 | translate}}
             </p>
         </div>
@@ -72,7 +73,7 @@
             </p>
         </div>
     </div>
-    <div class="cardgroup">
+    <div class="cardgroup" style="gap: 10px;">
         <div style="width: calc(50% - 10px);">
             <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
             <p style="color: black; font-size: 12px;"
@@ -87,7 +88,8 @@
                 {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
             </p>
         </div>
-        <div style="width: 100%;">
+        <div style="width: 100%;"
+            *ngIf="courseFormGroup.controls['reserve_date'].value.length>0">
             <p> <mat-icon class="icon24">event_available</mat-icon>
                 {{'FECHA Y HORA' |
                 translate }}
@@ -105,16 +107,18 @@
         </div>
         <div style="width: 100%; color: black;font-weight: 400;"
             *ngFor="let item of courseFormGroup.controls['discount'].value">
-            Reducción {{item.reduccion}} reservando {{item.day}} fechas
+            · Reducción {{item.reduccion}} reservando {{item.day}} fechas
         </div>
     </div>
-    <div class="cardgroup" *ngIf="count(levelGrop,'active')">
+    <div class="cardgroup"
+        *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
         <div
             style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
             <div style="width: 100%;">
                 <p> {{'NIVELES' | translate }} </p>
             </div>
-            <ng-container *ngFor="let item of levelGrop">
+            <ng-container
+                *ngFor="let item of courseFormGroup.controls['levelGrop'].value">
                 <div *ngIf="item.active"
                     style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
                     [style.backgroundColor]="item.data.color+'33'"
@@ -141,7 +145,8 @@
             </ng-container>
         </div>
     </div>
-    <div class="cardgroup">
+    <div class="cardgroup"
+        *ngIf="courseFormGroup.controls['extras'].value.length>0">
         <div
             style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
             <div style="width: 100%;">
@@ -164,7 +169,7 @@
                      font-weight: 300;
                      line-height: 18px;
                      word-wrap: break-word;
-                     margin-right: auto;">
+                     margin-left: auto;">
                         {{item.price}} CHF/día
                     </span>
                 </div>

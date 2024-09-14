@@ -228,7 +228,7 @@
           <button
             style="border: 1px solid #222222; border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
             type="button"
-            (click)="courseFormGroup.controls['reserve_date'].value.push({ Fecha:  minDate, Hora: '08:00', Duracion: 1 })"
+            (click)="courseFormGroup.controls['reserve_date'].value.push({ Fecha:  nowDate, Hora: '08:00', Duracion: 1 })"
             class="client-button">
             {{'Añadir fecha' | translate }}
           </button>
@@ -288,7 +288,7 @@
           </div>
           <div style="margin: 0 20px;">
             <button
-              (click)="courseFormGroup.controls['discount'].value.push({ NFecha: 2, Reduccion: '10%' })"
+              (click)="courseFormGroup.controls['discount'].value.push({ day: 2, reduccion: '10%' })"
               style="margin-top: 0px !important;height: 38px;"
               color="primary"
               mat-button
@@ -416,41 +416,42 @@
           <div style="display: flex;gap: 16px;">
             <mat-checkbox
               style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;"
-              [style.backgroundColor]="levelGrop[i].active?level.color:level.color+'33'"
+              [style.backgroundColor]="courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
               [style.color]="level.color"
               [style.border]="'1px solid '+level.color"
               (click)="selectLevel($event,i) ">
               {{level.annotation}} {{level.level}}
             </mat-checkbox>
-            <ng-container *ngIf="levelGrop[i].active">
+            <ng-container
+              *ngIf="courseFormGroup.controls['levelGrop'].value[i].active">
               <mat-form-field appearance="outline">
                 <mat-label>{{'Edad mínima' | translate}}</mat-label>
                 <input matInput type="number"
-                  [(ngModel)]="levelGrop[i].EdadMin">
+                  [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].EdadMin">
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>{{'Edad máxima' | translate}}</mat-label>
                 <input matInput type="number"
-                  [(ngModel)]="levelGrop[i].EdadMax">
+                  [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].EdadMax">
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>{{'Participante máxima' | translate}}</mat-label>
                 <input matInput type="number"
-                  [(ngModel)]="levelGrop[i].PartMax">
+                  [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].PartMax">
               </mat-form-field>
               <mat-icon
-                (click)="levelGrop[i].Subgrupo=levelGrop[i].Subgrupo+1"
+                (click)="addLevelSubgroup(i,1)"
                 color="primary"
                 style="height: 46px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
             </ng-container>
           </div>
           <ng-container
-            *ngFor="let item of [].constructor(levelGrop[i].Subgrupo); index as i">
+            *ngFor="let item of [].constructor(courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as i">
             <div
               style="background-color: #EFF2F5; display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
               {{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
               <mat-icon
-                (click)="levelGrop[i].Subgrupo=levelGrop[i].Subgrupo-1"
+                (click)="addLevelSubgroup(i,-1)"
                 style="height: 46px;width: 20px;cursor: pointer; font-size: 20px;align-content: space-evenly;">
                 delete </mat-icon>
             </div>
@@ -567,15 +568,13 @@
     card
     *ngIf="!loading"
     [sportData]="sportData"
-    [courseFormGroup]="courseFormGroup"
-    [levelGrop]="levelGrop">
+    [courseFormGroup]="courseFormGroup">
   </vex-course-detail-card>
   <vex-course-detail-card
     card2
     *ngIf="!loading"
     [sportData]="sportData"
-    [courseFormGroup]="courseFormGroup"
-    [levelGrop]="levelGrop">
+    [courseFormGroup]="courseFormGroup">
   </vex-course-detail-card>
 </vex-flux-layout>
 
