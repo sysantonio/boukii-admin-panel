@@ -74,20 +74,31 @@
         </div>
     </div>
     <div class="cardgroup" style="gap: 10px;">
-        <div style="width: calc(50% - 10px);">
-            <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
-            <p style="color: black; font-size: 12px;"
-                [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
-                {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
-            </p>
+        <div style="display: flex;width: 100%;column-gap: 10px;">
+            <div style="width: 100%">
+                <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
+                <p style="color: black; font-size: 12px;"
+                    [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
+                    {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
+                </p>
+            </div>
+            <div style="width: 100%">
+                <p> {{'RESERVABLE HASTA' | translate }} </p>
+                <p style="color: black;font-size: 12px;"
+                    [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
+                    {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
+                </p>
+            </div>
+            <div style="width: 100%"
+                *ngIf="courseFormGroup.controls['course_type'].value>0">
+                <p> {{'RESERVABLE HASTA' | translate }} </p>
+                <p style="color: black;font-size: 12px;"
+                    [class]="courseFormGroup.controls['duration_min'].value?'':'emptyText'">
+                    {{courseFormGroup.controls['duration_min'].value}}
+                </p>
+            </div>
         </div>
-        <div style="width: calc(50% - 10px);">
-            <p> {{'RESERVABLE HASTA' | translate }} </p>
-            <p style="color: black;font-size: 12px;"
-                [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
-                {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
-            </p>
-        </div>
+
         <div style="width: 100%;"
             *ngIf="courseFormGroup.controls['reserve_date'].value.length>0">
             <p> <mat-icon class="icon24">event_available</mat-icon>
@@ -100,9 +111,18 @@
             <p
                 *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
                 style="font-size: 14px;">
+
                 <span style="color: black;"> {{DateISO(item.Fecha)}} </span>
+                <span style="color: black;"
+                    *ngIf="courseFormGroup.controls['course_type'].value>0">-{{DateISO(item.FechaFin)}}
+                </span>
                 <span> {{item.Hora}}</span>
-                <span> {{item.Coste}} </span>
+                <span
+                    *ngIf="courseFormGroup.controls['course_type'].value>0">-{{item.HoraFin}}</span>
+                <span>
+                    {{courseFormGroup.controls['price'].value * item.Duracion}}
+                    CHF
+                </span>
             </p>
         </div>
         <div style="width: 100%; color: black;font-weight: 400;"

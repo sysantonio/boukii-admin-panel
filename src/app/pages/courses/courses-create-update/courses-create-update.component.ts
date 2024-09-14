@@ -216,8 +216,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       if (!this.courseFormGroup.controls["course_type"].value) this.courseFormGroup.patchValue({ course_type: 0 })
       this.getDegrees();
     } else if (this.ModalFlux === 1) {
-      if (!this.courseFormGroup.controls["reserve_date"].value) this.courseFormGroup.patchValue({ reserve_date: [{ Fecha: this.nowDate, Hora: "08:00", Duracion: 1 }] })
-      if (!this.courseFormGroup.controls["discount"].value) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: "10%" }] })
+      if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
+        this.courseFormGroup.patchValue({ reserve_date: [{ Fecha: this.nowDate, Hora: "08:00", Duracion: 1, FechaFin: this.nowDate, HoraFin: "09:00", Semana: [] }] })
+      if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: "10%" }] })
       this.getDegrees();
     }
     else if (this.ModalFlux === 3) {

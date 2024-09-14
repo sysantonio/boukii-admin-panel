@@ -306,7 +306,7 @@
             <ng-template mat-tab-label>
               Un periodo
             </ng-template>
-            <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; flex-direction: column;padding: 10px;">
               <div style="display: flex;column-gap: 20px;">
                 <mat-form-field
                   appearance="outline">
@@ -316,13 +316,14 @@
                     matInput
                     [matDatepicker]="date_inicio"
                     [min]="minDate"
-                    [max]="maxDate" />
+                    [max]="maxDate"
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].Fecha" />
                   <mat-datepicker-toggle
                     matSuffix
                     [for]="date_inicio"></mat-datepicker-toggle>
                   <mat-datepicker
                     #date_inicio
-                    [startAt]="minDate"></mat-datepicker>
+                    [startAt]="nowDate"></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field
                   appearance="outline">
@@ -332,13 +333,14 @@
                     matInput
                     [matDatepicker]="date_fin"
                     [min]="minDate"
-                    [max]="maxDate" />
+                    [max]="maxDate"
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].FechaFin" />
                   <mat-datepicker-toggle
                     matSuffix
                     [for]="date_fin"></mat-datepicker-toggle>
                   <mat-datepicker
                     #date_fin
-                    [startAt]="minDate"></mat-datepicker>
+                    [startAt]="nowDate"></mat-datepicker>
                 </mat-form-field>
               </div>
               <div
@@ -347,6 +349,7 @@
                   style="width: calc(25% - 16px);">
                   {{item}}
                 </mat-checkbox>
+                <!--Falta logica-->
               </div>
               <div style="display: flex;column-gap: 20px;">
                 <mat-form-field appearance="outline">
@@ -356,7 +359,8 @@
                     placeholder="{{'hour' | translate}}"
                     aria-label="Number"
                     matInput
-                    [matAutocomplete]="auto" />
+                    [matAutocomplete]="auto"
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].Hora" />
                   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayFn">
                     <mat-option
@@ -375,7 +379,8 @@
                     placeholder="{{'hour' | translate}}"
                     aria-label="Number"
                     matInput
-                    [matAutocomplete]="auto" />
+                    [matAutocomplete]="auto"
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].HoraFin" />
                   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayFn">
                     <mat-option
@@ -389,12 +394,14 @@
                 </mat-form-field>
               </div>
             </div>
-
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
               Multiples periodos
             </ng-template>
+            <div style="display: flex; flex-direction: column;padding: 10px;">
+
+            </div>
           </mat-tab>
         </mat-tab-group>
       </ng-container>
