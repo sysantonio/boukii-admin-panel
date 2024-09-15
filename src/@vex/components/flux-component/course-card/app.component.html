@@ -1,10 +1,10 @@
 <div class="cardp">
     <div class="cardgroup" style="flex-wrap: nowrap;">
         <img
-            [src]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value).icon_unselected || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
-            [class]="find(sportData,'sport_id',courseFormGroup.controls['sport_id'].value)?'':'emptyImg1'"
+            [src]="courseFormGroup.controls['icon'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+            [class]="courseFormGroup.controls['icon'].value?'':'emptyImg1'"
             class="sport_icon noselected"
-            [style.backgroundColor]="courseFormGroup.controls['course_type'].value===0?'#E5962A':courseFormGroup.controls['course_type'].value===1?'#2FAA41':courseFormGroup.controls['course_type'].value===2?'#0AB0BC':''"
+            [style.backgroundColor]="courseFormGroup.controls['course_type'].value===1?'#E5962A':courseFormGroup.controls['course_type'].value===2?'#2FAA41':courseFormGroup.controls['course_type'].value===3?'#0AB0BC':''"
             style="max-width: none;">
         <div style="width: 100%;">
             <p
@@ -13,7 +13,7 @@
                 {{courseFormGroup.controls['course_name'].value}}
             </p>
             <p>
-                {{courseFormGroup.controls['course_type'].value===0?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===1?'Curso privado flex':courseFormGroup.controls['course_type'].value===2?'Actividad':''
+                {{courseFormGroup.controls['course_type'].value===1?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===2?'Curso privado flex':courseFormGroup.controls['course_type'].value===3?'Actividad':''
                 | translate}}
             </p>
         </div>
@@ -28,8 +28,8 @@
             <div style="width: 100%;">
                 <p> {{'RESUMEN' | translate }} </p>
                 <p style="color: black;"
-                    [class]="courseFormGroup.controls['summary'].value?'':'emptyText'">
-                    {{courseFormGroup.controls['summary'].value}}
+                    [class]="courseFormGroup.controls['summary'].value?'':'emptyText'"
+                    [innerHTML]="courseFormGroup.controls['summary'].value">
                 </p>
             </div>
         </div>
@@ -37,8 +37,8 @@
             <p> {{'DESCRIPCIÓN' | translate }} </p>
             <p
                 [class]="courseFormGroup.controls['description'].value?'':'emptyText'"
-                style="color: black;">
-                {{courseFormGroup.controls['description'].value}}
+                style="color: black;"
+                [innerHTML]="courseFormGroup.controls['description'].value">
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
@@ -57,7 +57,7 @@
             </p>
         </div>
         <div style="width: calc(50% - 10px);"
-            *ngIf="courseFormGroup.controls['course_type'].value>0">
+            *ngIf="courseFormGroup.controls['course_type'].value>1">
             <p> {{'EDAD MIN.' | translate }} </p>
             <p style="color: black;font-size: 12px;"
                 [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'">
@@ -65,7 +65,7 @@
             </p>
         </div>
         <div style="width: calc(50% - 10px);"
-            *ngIf="courseFormGroup.controls['course_type'].value>0">
+            *ngIf="courseFormGroup.controls['course_type'].value>1">
             <p> {{'EDAD MAX.' | translate }} </p>
             <p style="color: black; font-size: 12px;"
                 [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'">
@@ -90,8 +90,8 @@
                 </p>
             </div>
             <div style="width: 100%"
-                *ngIf="courseFormGroup.controls['course_type'].value>0">
-                <p> {{'RESERVABLE HASTA' | translate }} </p>
+                *ngIf="courseFormGroup.controls['course_type'].value>1">
+                <p> {{'DURACIÓN' | translate }} </p>
                 <p style="color: black;font-size: 12px;"
                     [class]="courseFormGroup.controls['duration_min'].value?'':'emptyText'">
                     {{courseFormGroup.controls['duration_min'].value}}
@@ -112,15 +112,19 @@
                 *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
                 style="font-size: 14px;">
 
-                <span style="color: black;"> {{DateISO(item.Fecha)}} </span>
+                <span style="color: black;"> {{DateISO(item.date)}} </span>
                 <span style="color: black;"
-                    *ngIf="courseFormGroup.controls['course_type'].value>0">-{{DateISO(item.FechaFin)}}
+                    *ngIf="courseFormGroup.controls['course_type'].value>1 && item.date_end">-{{DateISO(item.date_end)}}
                 </span>
-                <span> {{item.Hora}}</span>
+                <span> {{item.hour_start}}</span>
                 <span
-                    *ngIf="courseFormGroup.controls['course_type'].value>0">-{{item.HoraFin}}</span>
-                <span>
+                    *ngIf="courseFormGroup.controls['course_type'].value>1">-{{item.hour_end}}</span>
+                <span *ngIf="item.Duracion && courseFormGroup.controls['price'].value">
                     {{courseFormGroup.controls['price'].value * item.Duracion}}
+                    CHF
+                </span>
+                <span *ngIf="!item.Duracion && courseFormGroup.controls['price'].value">
+                    {{courseFormGroup.controls['price'].value * (item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60 - item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)}}
                     CHF
                 </span>
             </p>

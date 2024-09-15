@@ -4,7 +4,7 @@
     {text:'bookings', title: true, link: '/bookings'},
     {text: bookingService.editData.booking.id, subtitle: true,  link: '/bookings/update/'+bookingService.editData.booking.id},
     {text:'bookings_page.edit.title', subtitle: true}
-    ]" class="flex-auto"></vex-breadcrumbs>
+    ]" class="flex"></vex-breadcrumbs>
 </vex-secondary-toolbar>
 <div [@stagger]="true" class="p-gutter container" style="max-width: none;">
   <mat-spinner *ngIf="loading" style="margin:0 auto"></mat-spinner>

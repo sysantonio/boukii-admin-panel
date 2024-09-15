@@ -8,7 +8,6 @@ import { UntypedFormGroup } from '@angular/forms';
 })
 export class CourseDetailCardComponent {
 
-  @Input() sportData: any
   @Input() courseFormGroup: UntypedFormGroup
 
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)

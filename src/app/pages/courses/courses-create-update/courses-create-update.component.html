@@ -36,7 +36,7 @@
       *ngIf="ModalFlux===1"
       [formGroup]="courseFormGroup">
       <mat-tab-group class="tabsWrapper"
-        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event})">
+        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event+1})">
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon style="color: #E5962A;"
@@ -94,7 +94,7 @@
             <input id="participants" formControlName="participants"
               matInput required type="number">
           </mat-form-field>
-          <ng-container *ngIf="courseFormGroup.controls['course_type'].value>0">
+          <ng-container *ngIf="courseFormGroup.controls['course_type'].value>1">
             <mat-form-field appearance="outline"
               style="width: calc(50% - 10px);">
               <mat-label>{{'Edad mínima' | translate}}</mat-label>
@@ -148,7 +148,7 @@
             [startAt]="nowDate"></mat-datepicker>
         </mat-form-field>
         <mat-form-field appearance="outline"
-          *ngIf="courseFormGroup.controls['course_type'].value>0">
+          *ngIf="courseFormGroup.controls['course_type'].value>1">
           <mat-label>{{'Duración mínima' | translate}}</mat-label>
           <input
             type="text"
@@ -168,7 +168,7 @@
           <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
         </mat-form-field>
       </div>
-      <ng-container *ngIf="courseFormGroup.controls['course_type'].value===0">
+      <ng-container *ngIf="courseFormGroup.controls['course_type'].value===1">
         <div
           *ngFor="let item of courseFormGroup.controls['reserve_date'].value, index as i">
           <div
@@ -190,7 +190,7 @@
                 [matDatepicker]="date_reservable"
                 [min]="minDate"
                 [max]="maxDate"
-                [value]="item.Fecha" />
+                [value]="item.date" />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="date_reservable"></mat-datepicker-toggle>
@@ -206,7 +206,7 @@
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
-                [value]="item.Hora" />
+                [value]="item.hour_start" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -228,7 +228,7 @@
           <button
             style="border: 1px solid #222222; border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
             type="button"
-            (click)="courseFormGroup.controls['reserve_date'].value.push({ Fecha:  nowDate, Hora: '08:00', Duracion: 1 })"
+            (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: '08:00', Duracion: 1 })"
             class="client-button">
             {{'Añadir fecha' | translate }}
           </button>
@@ -300,7 +300,7 @@
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="courseFormGroup.controls['course_type'].value>0">
+      <ng-container *ngIf="courseFormGroup.controls['course_type'].value>1">
         <mat-tab-group class="tabsWrapper" style="margin: 20px 20px 0;">
           <mat-tab>
             <ng-template mat-tab-label>
@@ -317,7 +317,7 @@
                     [matDatepicker]="date_inicio"
                     [min]="minDate"
                     [max]="maxDate"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].Fecha" />
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].date" />
                   <mat-datepicker-toggle
                     matSuffix
                     [for]="date_inicio"></mat-datepicker-toggle>
@@ -334,7 +334,7 @@
                     [matDatepicker]="date_fin"
                     [min]="minDate"
                     [max]="maxDate"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].FechaFin" />
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].date_end" />
                   <mat-datepicker-toggle
                     matSuffix
                     [for]="date_fin"></mat-datepicker-toggle>
@@ -360,7 +360,7 @@
                     aria-label="Number"
                     matInput
                     [matAutocomplete]="auto"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].Hora" />
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].hour_start" />
                   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayFn">
                     <mat-option
@@ -380,7 +380,7 @@
                     aria-label="Number"
                     matInput
                     [matAutocomplete]="auto"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].HoraFin" />
+                    [value]="courseFormGroup.controls['reserve_date'].value[0].hour_end" />
                   <mat-autocomplete #auto="matAutocomplete"
                     [displayWith]="displayFn">
                     <mat-option
@@ -574,13 +574,11 @@
   <vex-course-detail-card
     card
     *ngIf="!loading"
-    [sportData]="sportData"
     [courseFormGroup]="courseFormGroup">
   </vex-course-detail-card>
   <vex-course-detail-card
     card2
     *ngIf="!loading"
-    [sportData]="sportData"
     [courseFormGroup]="courseFormGroup">
   </vex-course-detail-card>
 </vex-flux-layout>

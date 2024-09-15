@@ -146,6 +146,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         price: [null, Validators.required],
         participants: [null, Validators.required],
         img: ["", Validators.required],
+        icon: ["", Validators.required],
+
         age_max: [null, Validators.required], //2
         age_min: [null, Validators.required], //2
 
@@ -213,11 +215,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   Confirm() {
     if (this.ModalFlux === 0) {
-      if (!this.courseFormGroup.controls["course_type"].value) this.courseFormGroup.patchValue({ course_type: 0 })
+      if (!this.courseFormGroup.controls["course_type"].value) this.courseFormGroup.patchValue({ course_type: 1 })
+      this.courseFormGroup.patchValue({
+        icon: this.sportData.find((a: any) => a.sport_id === this.courseFormGroup.controls['sport_id'].value).icon_unselected
+      })
+
       this.getDegrees();
     } else if (this.ModalFlux === 1) {
       if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
-        this.courseFormGroup.patchValue({ reserve_date: [{ Fecha: this.nowDate, Hora: "08:00", Duracion: 1, FechaFin: this.nowDate, HoraFin: "09:00", Semana: [] }] })
+        this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: 1, FechaFin: this.nowDate, hour_end: "09:00", Semana: [] }] })
       if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: "10%" }] })
       this.getDegrees();
     }
