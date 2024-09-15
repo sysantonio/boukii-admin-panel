@@ -207,7 +207,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     data.data.forEach(element => element.active ? this.levels.push(element) : null);
     const levelGrop = []
     this.levels.forEach(level => {
-      levelGrop.push({ level_id: level.id, EdadMin: 0, EdadMax: 0, PartMax: 0, Subgrupo: 0, active: false, data: level })
+      levelGrop.push({ ...level, id: level.id, age_min: 0, age_max: 0, PartMax: 0, Subgrupo: 0, active: false })
       level.active = false
     })
     this.courseFormGroup.patchValue({ levelGrop })
@@ -255,8 +255,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   selectLevel = (event: any, i: number) => {
-    const levelGrop: { level_id: number, EdadMin: number, EdadMax: number, PartMax: number, Subgrupo: number, active: boolean, data: any }[]
-      = this.courseFormGroup.controls['levelGrop'].value
+    const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].active = event.target.checked
     this.courseFormGroup.patchValue({ levelGrop })
   }

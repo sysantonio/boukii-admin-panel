@@ -33,3 +33,19 @@
     }
   }
 }
+
+.contents {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #8b9099;
+    padding: 20px;
+    gap: 20px;
+    > div {
+      width: 100%;
+    }
+  }
+}

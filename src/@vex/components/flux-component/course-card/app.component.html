@@ -202,24 +202,31 @@
                 *ngFor="let item of courseFormGroup.controls['levelGrop'].value">
                 <div *ngIf="item.active"
                     style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
-                    [style.backgroundColor]="item.data.color+'33'"
-                    [style.border]="'1px solid '+item.data.color">
-                    <div [style.color]="item.data.color"
+                    [style.backgroundColor]="item.color+'33'"
+                    [style.border]="'1px solid '+item.color">
+                    <div [style.color]="item.color"
                         style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
                         <mat-icon class="icon24">workspace_premium</mat-icon>
-                        <span> {{item.data.annotation}} {{item.data.level}}
+                        <span> {{item.annotation}} {{item.level}}
                         </span>
                     </div>
                     <div
                         style="color: #222222; font-weight: 400;display: flex;align-items: center;">
                         <mat-icon class="icon16">group</mat-icon>
-                        <span> {{item.Subgrupo}}g · {{item.PartMax}}p </span>
+                        <span> {{item.Subgrupo}}g · {{item.PartMax ||
+                            courseFormGroup.controls['participants'].value}}p
+                        </span>
                         <div style="margin: auto;"></div>
-                        <mat-icon class="icon16">event_available</mat-icon>
-                        <span> 3 días · 2h 30m </span>
+                        <ng-container
+                            *ngIf="courseFormGroup.controls['duration_min'].value">
+                            <mat-icon class="icon16">event_available</mat-icon>
+                            <span>
+                                {{courseFormGroup.controls['duration_min'].value}}
+                            </span>
+                        </ng-container>
                         <div style="margin: auto;"></div>
                         <mat-icon class="icon16">confirmation_number</mat-icon>
-                        <span> {{item.EdadMin}}/{{item.EdadMax}} </span>
+                        <span> {{item.age_min}}/{{item.age_max}} </span>
                         <div style="margin: auto;"></div>
                     </div>
                 </div>

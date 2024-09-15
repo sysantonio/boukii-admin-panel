@@ -68,9 +68,8 @@ export class CoursesComponent {
         .subscribe((data) => {
           this.detailData.degrees = [];
           data.data.forEach(element => {
-            if (element.active) {
-              this.detailData.degrees.push(element);
-            }
+            if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
+
           });
           this.detailData.degrees.forEach(level => {
             if (!this.groupedByColor[level.color]) {
@@ -88,62 +87,61 @@ export class CoursesComponent {
             this.groupedByColor[level.color].push(level);
           });
           this.colorKeys = Object.keys(this.groupedByColor);
-          this.showDetail = true;
-        });
+          this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
+            .subscribe((st) => {
+              st.data.forEach(element => {
+                if (element.id === this.detailData.station_id) this.detailData.station = element
+              });
+              this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
+                .subscribe((bookingUser) => {
+                  this.detailData.users = [];
+                  this.detailData.users = bookingUser.data;
+                  console.log(this.detailData)
+                  this.courseFormGroup = this.fb.group({
+                    id: [this.detailData.id, Validators.required], //Solo listado
+                    user: [this.detailData.user, Validators.required], //Solo listado
+                    created_at: [this.detailData.created_at, Validators.required], //Solo listado
+                    active: [this.detailData.active, Validators.required], //Solo listado
+                    online: [this.detailData.online, Validators.required], //Solo listado
+                    sport_id: [this.detailData.sport_id, Validators.required],
+                    course_type: [this.detailData.course_type, Validators.required],
+                    course_name: [this.detailData.name, Validators.required],
+                    summary: [this.detailData.short_description, Validators.required],
+                    description: [this.detailData.description, Validators.required],
+                    course_name_es: ["", Validators.required],
+                    summary_es: ["", Validators.required],
+                    description_es: ["", Validators.required],
+                    course_name_fr: ["", Validators.required],
+                    summary_fr: ["", Validators.required],
+                    description_fr: ["", Validators.required],
+                    course_name_en: ["", Validators.required],
+                    summary_en: ["", Validators.required],
+                    description_en: ["", Validators.required],
+                    course_name_de: ["", Validators.required],
+                    summary_de: ["", Validators.required],
+                    description_de: ["", Validators.required],
+                    course_name_it: ["", Validators.required],
+                    summary_it: ["", Validators.required],
+                    description_it: ["", Validators.required],
+                    price: [this.detailData.price, Validators.required],
+                    participants: [this.detailData.max_participants, Validators.required],
+                    img: [this.detailData.image, Validators.required],
+                    icon: [this.detailData.sport.icon_unselected, Validators.required],
+                    age_max: [this.detailData.age_max, Validators.required],
+                    age_min: [this.detailData.age_min, Validators.required],
+                    reserve_from: [this.detailData.date_start, Validators.required],
+                    reserve_to: [this.detailData.date_end, Validators.required],
+                    duration_min: [this.detailData.duration, Validators.required],
+                    reserve_date: [this.detailData.course_dates, Validators.required],
+                    discount: [[], Validators.required],
+                    extras: [[], Validators.required],
+                    levelGrop: [this.detailData.degrees, Validators.required],
+                  });
 
-      this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
-        .subscribe((st) => {
-          st.data.forEach(element => {
-            if (element.id === this.detailData.station_id) this.detailData.station = element
-          });
-        })
-      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
-        .subscribe((bookingUser) => {
-          this.detailData.users = [];
-          this.detailData.users = bookingUser.data;
-          this.showDetail = true;
-        })
-      this.courseFormGroup = this.fb.group({
-        id: [event.item.id, Validators.required], //Solo listado
-        user: [event.item.user, Validators.required], //Solo listado
-        created_at: [event.item.created_at, Validators.required], //Solo listado
-        active: [event.item.active, Validators.required], //Solo listado
-        online: [event.item.online, Validators.required], //Solo listado
-        
-        sport_id: [event.item.sport_id, Validators.required],
-        course_type: [event.item.course_type, Validators.required],
-        course_name: [event.item.name, Validators.required],
-        summary: [event.item.short_description, Validators.required],
-        description: [event.item.description, Validators.required],
-        course_name_es: ["", Validators.required],
-        summary_es: ["", Validators.required],
-        description_es: ["", Validators.required],
-        course_name_fr: ["", Validators.required],
-        summary_fr: ["", Validators.required],
-        description_fr: ["", Validators.required],
-        course_name_en: ["", Validators.required],
-        summary_en: ["", Validators.required],
-        description_en: ["", Validators.required],
-        course_name_de: ["", Validators.required],
-        summary_de: ["", Validators.required],
-        description_de: ["", Validators.required],
-        course_name_it: ["", Validators.required],
-        summary_it: ["", Validators.required],
-        description_it: ["", Validators.required],
-        price: [event.item.price, Validators.required],
-        participants: [event.item.max_participants, Validators.required],
-        img: [event.item.image, Validators.required],
-        icon: [event.item.sport.icon_unselected, Validators.required],
-        age_max: [event.item.age_max, Validators.required],
-        age_min: [event.item.age_min, Validators.required],
-        reserve_from: [event.item.date_start, Validators.required],
-        reserve_to: [event.item.date_end, Validators.required],
-        duration_min: [event.item.duration, Validators.required],
-        reserve_date: [event.item.course_dates, Validators.required],
-        discount: [[], Validators.required],
-        extras: [[], Validators.required],
-        levelGrop: [[], Validators.required],
-      });
+                  this.showDetail = true;
+                })
+            })
+        });
     } else this.showDetail = event.showDetail;
   }
 
