@@ -11,13 +11,24 @@
     min-width: 300px;
     float: left;
     position: fixed;
-    right: calc(50px);
+    right: 50px;
     overflow-y: auto;
     max-height: calc(100vh - 180px);
     border-radius: 10px;
     padding: 0px;
     margin-top: 6px;
     box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    @media (max-width: 1280px) {
+      right: 40px;
+    }
+
+    @media (max-width: 1020px) {
+      right: 30px;
+    }
+
+    @media (max-width: 768px) {
+      right: 20px;
+    }
 
     .mat-mdc-card-subtitle {
       > div {

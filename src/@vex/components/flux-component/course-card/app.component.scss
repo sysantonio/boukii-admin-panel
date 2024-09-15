@@ -8,9 +8,12 @@
   font-weight: 600;
   color: #8b9099;
 }
-
+.button {
+  cursor: pointer;
+}
 .cardp {
   background-color: #ffffff;
+  border: 1px solid #8b9099;
   .emptyText {
     background-color: #dee6ea;
     border-radius: 10px;

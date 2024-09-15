@@ -1,4 +1,56 @@
 <div class="cardp">
+    <div class="cardgroup" *ngIf="courseFormGroup.controls['id']"
+        style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
+        <p style="display: flex;flex-wrap: nowrap;
+         color: white;
+         font-size: 16px;
+         font-family: Dinamit;
+         font-weight: 500;
+         line-height: 20px;
+         word-wrap: break-word">
+            {{"Curso #" +
+            ("00000"+courseFormGroup.controls['id'].value).slice(-5) |
+            translate}}
+            <mat-icon (click)="open.emit(courseFormGroup.controls['id'].value)"
+                class="button"
+                style="margin-left: auto;">edit</mat-icon>
+            <mat-icon (click)="close.emit()" class="button">close</mat-icon>
+        </p>
+        <div
+            style="width: 100%; height: 100%; border: 1px #C7D0D3 solid;margin: 4px 0;"></div>
+        <p style="
+        color: white;
+         font-size: 12px;
+         font-family: DM Sans;
+         font-weight: 400;
+         line-height: 16px;
+         word-wrap: break-word">
+            {{"Registrado: " +
+            DateISO(courseFormGroup.controls['created_at'].value)
+            | translate}}
+        </p>
+        <p *ngIf="courseFormGroup.controls['user'].value" style="
+        color: white;
+         font-size: 12px;
+         font-family: DM Sans;
+         font-weight: 400;
+         line-height: 16px;
+         word-wrap: break-word">
+            {{courseFormGroup.controls['user'].value}}
+        </p>
+        <div style="display: flex; gap: 8px;">
+            <div *ngIf="courseFormGroup.controls['active'].value"
+                style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+                <div
+                    style="color: #075800; font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word">ACTIVO</div>
+            </div>
+            <div *ngIf="courseFormGroup.controls['online'].value"
+                style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+                <div
+                    style="color: #075800; font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word">ONLINE</div>
+            </div>
+        </div>
+    </div>
     <div class="cardgroup" style="flex-wrap: nowrap;">
         <img
             [src]="courseFormGroup.controls['icon'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
@@ -119,12 +171,17 @@
                 <span> {{item.hour_start}}</span>
                 <span
                     *ngIf="courseFormGroup.controls['course_type'].value>1">-{{item.hour_end}}</span>
-                <span *ngIf="item.Duracion && courseFormGroup.controls['price'].value">
+                <span
+                    *ngIf="item.Duracion && courseFormGroup.controls['price'].value>0">
                     {{courseFormGroup.controls['price'].value * item.Duracion}}
                     CHF
                 </span>
-                <span *ngIf="!item.Duracion && courseFormGroup.controls['price'].value">
-                    {{courseFormGroup.controls['price'].value * (item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60 - item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)}}
+                <span
+                    *ngIf="!item.Duracion && courseFormGroup.controls['price'].value>0">
+                    {{courseFormGroup.controls['price'].value *
+                    (item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60
+                    -
+                    item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)}}
                     CHF
                 </span>
             </p>
