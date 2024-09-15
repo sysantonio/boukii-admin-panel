@@ -1,9 +1,9 @@
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { VexRoutes } from 'src/@vex/interfaces/vex-route.interface';
 import { CoursesComponent } from './courses.component';
 import { CoursesCreateUpdateComponent } from './courses-create-update/courses-create-update.component';
-import { CourseDetailComponent } from './course-detail/course-detail.component';
+import { CourseDetailNewComponent } from './course-detail-new/course-detail-new.component';
 
 
 const routes: VexRoutes = [
@@ -30,7 +30,7 @@ const routes: VexRoutes = [
   },
   {
     path: 'detail/:id',
-    component: CourseDetailComponent,
+    component: CourseDetailNewComponent,
     data: {
       toolbarShadowEnabled: true
     }

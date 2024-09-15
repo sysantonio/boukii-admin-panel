@@ -20,22 +20,22 @@
             style="width: 100%; height: 100%; border: 1px #C7D0D3 solid;margin: 4px 0;"></div>
         <p style="
         color: white;
-         font-size: 12px;
-         font-family: DM Sans;
-         font-weight: 400;
-         line-height: 16px;
-         word-wrap: break-word">
+        font-size: 12px;
+        font-family: DM Sans;
+        font-weight: 400;
+        line-height: 16px;
+        word-wrap: break-word">
             {{"Registrado: " +
             DateISO(courseFormGroup.controls['created_at'].value)
             | translate}}
         </p>
         <p *ngIf="courseFormGroup.controls['user'].value" style="
         color: white;
-         font-size: 12px;
-         font-family: DM Sans;
-         font-weight: 400;
-         line-height: 16px;
-         word-wrap: break-word">
+        font-size: 12px;
+        font-family: DM Sans;
+        font-weight: 400;
+        line-height: 16px;
+        word-wrap: break-word">
             {{courseFormGroup.controls['user'].value}}
         </p>
         <div style="display: flex; gap: 8px;">

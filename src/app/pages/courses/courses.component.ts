@@ -103,7 +103,6 @@ export class CoursesComponent {
           this.detailData.users = bookingUser.data;
           this.showDetail = true;
         })
-      console.log(event)
       this.courseFormGroup = this.fb.group({
         id: [event.item.id, Validators.required], //Solo listado
         user: [event.item.user, Validators.required], //Solo listado
