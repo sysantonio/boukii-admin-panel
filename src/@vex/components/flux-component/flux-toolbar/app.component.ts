@@ -1,4 +1,4 @@
-import { Component, Input, } from '@angular/core';
+import { Component, EventEmitter, Input, Output, } from '@angular/core';
 
 @Component({
   selector: 'vex-flux-toolbad',
@@ -8,4 +8,5 @@ import { Component, Input, } from '@angular/core';
 export class FluxToolbarComponent {
   @Input() Modal!: { Name: string, Modal: number }[]
   @Input() Flux: number = 0
+  @Output() Check = new EventEmitter<number>()
 }

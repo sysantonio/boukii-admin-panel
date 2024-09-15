@@ -105,8 +105,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
     private schoolService: SchoolService,) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
-  }
+    this.ModalFlux = this.activatedRoute.snapshot.queryParamMap['params'].step || 0
 
+  }
 
   ngOnInit() {
     const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
@@ -213,21 +214,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.courseFormGroup.patchValue({ levelGrop })
   });
 
-  Confirm() {
-    if (this.ModalFlux === 0) {
+  Confirm(add: number) {
+    this.ModalFlux += add
+    if (this.ModalFlux === 1) {
       if (!this.courseFormGroup.controls["course_type"].value) this.courseFormGroup.patchValue({ course_type: 1 })
       this.courseFormGroup.patchValue({
         icon: this.sportData.find((a: any) => a.sport_id === this.courseFormGroup.controls['sport_id'].value).icon_unselected
       })
-
       this.getDegrees();
-    } else if (this.ModalFlux === 1) {
+    } else if (this.ModalFlux === 2) {
       if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
         this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: 1, FechaFin: this.nowDate, hour_end: "09:00", Semana: [] }] })
       if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: "10%" }] })
       this.getDegrees();
     }
-    else if (this.ModalFlux === 3) {
+    else if (this.ModalFlux === 4) {
       if (!this.courseFormGroup.controls["course_name_es"].value) {
         this.courseFormGroup.patchValue({
           course_name_es: this.courseFormGroup.controls["course_name"].value,
@@ -248,7 +249,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         })
       }
     }
-    else if (this.ModalFlux === 5) {
+    else if (this.ModalFlux === 6) {
       this.confirmModal = true
     }
   }

@@ -13,7 +13,6 @@
 }
 .cardp {
   background-color: #ffffff;
-  border: 1px solid #8b9099;
   .emptyText {
     background-color: #dee6ea;
     border-radius: 10px;
@@ -30,7 +29,6 @@
     color: #8b9099;
     font-weight: 400;
     min-height: 8px;
-    margin: 6px 0;
   }
 }
 .sport_icon {
@@ -70,4 +68,14 @@ button {
   width: 24px;
   height: 24px;
   font-size: 24px;
+}
+.editbutton {
+  cursor: pointer;
+  float: right;
+}
+.check {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  color: green;
 }

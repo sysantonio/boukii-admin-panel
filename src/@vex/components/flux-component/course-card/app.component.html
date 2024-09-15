@@ -1,5 +1,5 @@
-<div class="cardp">
-    <div class="cardgroup" *ngIf="courseFormGroup.controls['id']"
+<div class="cardp" *ngIf="courseFormGroup">
+    <div class="cardgroup" *ngIf="courseFormGroup.controls['id'] && !detail"
         style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
         <p style="display: flex;flex-wrap: nowrap;
          color: white;
@@ -21,7 +21,6 @@
         <p style="
         color: white;
         font-size: 12px;
-        font-family: DM Sans;
         font-weight: 400;
         line-height: 16px;
         word-wrap: break-word">
@@ -32,7 +31,6 @@
         <p *ngIf="courseFormGroup.controls['user'].value" style="
         color: white;
         font-size: 12px;
-        font-family: DM Sans;
         font-weight: 400;
         line-height: 16px;
         word-wrap: break-word">
@@ -42,12 +40,12 @@
             <div *ngIf="courseFormGroup.controls['active'].value"
                 style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                 <div
-                    style="color: #075800; font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word">ACTIVO</div>
+                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">ACTIVO</div>
             </div>
             <div *ngIf="courseFormGroup.controls['online'].value"
                 style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                 <div
-                    style="color: #075800; font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word">ONLINE</div>
+                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">ONLINE</div>
             </div>
         </div>
     </div>
@@ -69,6 +67,8 @@
                 | translate}}
             </p>
         </div>
+        <mat-icon *ngIf="detail" (click)="edit.emit(0)"
+            class="editbutton">edit</mat-icon>
     </div>
     <div class="cardgroup">
         <div style="width: 100%;display: flex;">
@@ -83,6 +83,10 @@
                     [class]="courseFormGroup.controls['summary'].value?'':'emptyText'"
                     [innerHTML]="courseFormGroup.controls['summary'].value">
                 </p>
+            </div>
+            <div>
+                <mat-icon *ngIf="detail" (click)="edit.emit(1)"
+                    class="editbutton">edit</mat-icon>
             </div>
         </div>
         <div style="width: 100%">
@@ -149,6 +153,10 @@
                     {{courseFormGroup.controls['duration_min'].value}}
                 </p>
             </div>
+            <div>
+                <mat-icon *ngIf="detail" (click)="edit.emit(3)"
+                    class="editbutton">edit</mat-icon>
+            </div>
         </div>
 
         <div style="width: 100%;"
@@ -192,9 +200,9 @@
         </div>
     </div>
     <div class="cardgroup"
-        *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
+        *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active') && !detail">
         <div
-            style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+            style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;">
             <div style="width: 100%;">
                 <p> {{'NIVELES' | translate }} </p>
             </div>
@@ -217,10 +225,14 @@
                             courseFormGroup.controls['participants'].value}}p
                         </span>
                         <div style="margin: auto;"></div>
-                        <ng-container
-                            *ngIf="courseFormGroup.controls['duration_min'].value">
+                        <ng-container>
                             <mat-icon class="icon16">event_available</mat-icon>
                             <span>
+                                {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
+                                días
+                            </span>
+                            <span
+                                *ngIf="courseFormGroup.controls['duration_min'].value">
                                 {{courseFormGroup.controls['duration_min'].value}}
                             </span>
                         </ng-container>
@@ -234,11 +246,74 @@
         </div>
     </div>
     <div class="cardgroup"
-        *ngIf="courseFormGroup.controls['extras'].value.length>0">
+        *ngIf="detail">
         <div
             style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
             <div style="width: 100%;">
-                <p> {{'EXTRAS' | translate }} </p>
+                <p> {{'IDIOMAS' | translate }}
+                    <mat-icon *ngIf="detail" (click)="edit.emit(5)"
+                        class="editbutton">edit</mat-icon>
+                </p>
+            </div>
+            <div style="width: 100%; display: flex;gap: 20px;">
+                <p style="height: 24px;
+                color: #222222;
+                 font-size: 14px;
+                 font-weight: 600;
+                 line-height: 18px;
+                 word-wrap: break-word">
+                    Francés
+                    <mat-icon class="check">check</mat-icon>
+                </p>
+                <p style="height: 24px;
+                color: #222222;
+                 font-size: 14px;
+                 font-weight: 600;
+                 line-height: 18px;
+                 word-wrap: break-word">
+                    Inglés
+                    <mat-icon class="check">check</mat-icon>
+                </p>
+                <p style="height: 24px;
+                color: #222222;
+                 font-size: 14px;
+                 font-weight: 600;
+                 line-height: 18px;
+                 word-wrap: break-word">
+                    Aleman
+                    <mat-icon class="check">check</mat-icon>
+                </p>
+                <p style="height: 24px;
+                color: #222222;
+                 font-size: 14px;
+                 font-weight: 600;
+                 line-height: 18px;
+                 word-wrap: break-word">
+                    Español
+                    <mat-icon class="check">check</mat-icon>
+                </p>
+                <p style="height: 24px;
+                color: #222222;
+                 font-size: 14px;
+                 font-weight: 600;
+                 line-height: 18px;
+                 word-wrap: break-word">
+                    Italiano
+                    <mat-icon class="check">check</mat-icon>
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <div class="cardgroup"
+        *ngIf="courseFormGroup.controls['extras'].value.length>0 || detail">
+        <div
+            style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+            <div style="width: 100%;">
+                <p> {{'EXTRAS' | translate }}
+                    <mat-icon *ngIf="detail" (click)="edit.emit(4)"
+                        class="editbutton">edit</mat-icon>
+                </p>
             </div>
             <ng-container
                 *ngFor="let item of courseFormGroup.controls['extras'].value">

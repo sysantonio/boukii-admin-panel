@@ -38,14 +38,51 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
+  width: 50%;
   > div {
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid #8b9099;
+    border: 1px solid #dee6ea;
     padding: 20px;
     gap: 20px;
+    height: 100%;
     > div {
       width: 100%;
     }
+  }
+}
+.editbutton {
+  cursor: pointer;
+  float: right;
+}
+.icon16 {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+.icon24 {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+.cardp {
+  background-color: #ffffff;
+  border: 1px solid #8b9099;
+  .emptyText {
+    background-color: #dee6ea;
+    border-radius: 10px;
+    width: 100%;
+  }
+  .Img1 {
+    border-radius: 5px;
+  }
+  .emptyImg1 {
+    background-color: #dee6ea;
+  }
+  p {
+    font-size: 12px;
+    color: #8b9099;
+    font-weight: 400;
+    min-height: 8px;
   }
 }

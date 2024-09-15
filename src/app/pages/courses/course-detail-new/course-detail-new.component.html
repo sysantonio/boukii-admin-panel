@@ -6,91 +6,145 @@
   ]" class="flex"></vex-breadcrumbs>
 </vex-secondary-toolbar>
 
-<div class="container" style="max-width: none;">
-  <div class="flex flex-col sm:flex-row gap-4"
-    style="width: 100%; float: left;">
-    <div class="card flex-auto">
-      <mat-tab-group class="tabsWrapper">
-        <mat-tab label="{{'course' | translate}}">
-          <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
-          <mat-card *ngIf="!loading">
-            <mat-card-content>
-              <div class="contents">
-                <div>
-                  <div style="width: 50%">
-                    <mat-slide-toggle [checked]="true">
-                      <span style="
+<div class="flex flex-col sm:flex-row gap-4"
+  style="width: 100%; float: left;">
+  <div class="card flex-auto">
+    <mat-tab-group class="tabsWrapper">
+      <mat-tab label="{{'course' | translate}}">
+        <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
+        <mat-card *ngIf="!loading">
+          <mat-card-content style="display: flex;padding: 0;">
+            <div class="contents">
+              <div>
+                <div style="width: calc(50% - 10px);">
+                  <mat-slide-toggle [checked]="true">
+                    <span style="
                       color: #222222;
                       font-size: 14px;
                       font-weight: 600;
                       line-height: 18px;
                       word-wrap: break-word">
-                        {{"Visible en la página de reservas" | translate}}
-                      </span>
-                      <br>
-                      <span style="
+                      {{"Visible en la página de reservas" | translate}}
+                    </span>
+                    <br>
+                    <span style="
                       color: #8B9099;
                       font-size: 12px;
                       font-weight: 400;
                       line-height: 16px;
                       word-wrap: break-word">
-                        {{"El curso serà visible y online desde ahora" |
-                        translate}}
-                      </span>
-                    </mat-slide-toggle>
-                  </div>
-                  <div style="width: 50%">
-                    <mat-slide-toggle [checked]="true">
-                      <span style="
+                      {{"El curso serà visible y online desde ahora" |
+                      translate}}
+                    </span>
+                  </mat-slide-toggle>
+                </div>
+                <div style="width: calc(50% - 10px)">
+                  <mat-slide-toggle [checked]="true">
+                    <span style="
                       color: #222222;
                       font-size: 14px;
                       font-weight: 600;
                       line-height: 18px;
                       word-wrap: break-word">
-                        {{"Activo" | translate}}
-                      </span>
-                      <br>
-                      <span style="
+                      {{"Activo" | translate}}
+                    </span>
+                    <br>
+                    <span style="
                       color: #8B9099;
                       font-size: 12px;
                       font-weight: 400;
                       line-height: 16px;
                       word-wrap: break-word">
-                        {{"El curso es activo y reservable" | translate}}
-                      </span>
-                    </mat-slide-toggle>
-                  </div>
-                  <div>
-                    <button
-                      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-                      color="primary"
-                      mat-stroked-button
-                      type="button"
-                      class="client-button">
-                      {{'Cancelar' | translate }}
-                    </button>
-                  </div>
+                      {{"El curso es activo y reservable" | translate}}
+                    </span>
+                  </mat-slide-toggle>
                 </div>
                 <div>
-                  <vex-course-detail-card>
-                    
-                  </vex-course-detail-card>
-
+                  <button
+                    style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+                    color="primary"
+                    mat-stroked-button
+                    type="button"
+                    class="client-button">
+                    <mat-icon>mail</mat-icon>
+                    {{'Mandar mail' | translate }}
+                  </button>
                 </div>
-
               </div>
+              <div style="padding: 0;border: none;">
+                <vex-course-detail-card style="width: 100%"
+                  [courseFormGroup]="courseFormGroup" [detail]="true"
+                  (edit)="goTo('courses/update/'+id,{step:$event})">
+                </vex-course-detail-card>
+              </div>
+            </div>
+            <div class="contents">
+              <div>
+                <div
+                  style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">
+                  <div style="width: 100%;">
+                    <p style="
+                    color: #8B9099;
+                    font-size: 12px;
+                    font-weight: 600;
+                    line-height: 16px;
+                    word-wrap: break-word"> {{'GRUPOS' | translate }}
+                      <mat-icon
+                        (click)="goTo('courses/update/'+id+'?step=0')"
+                        class="editbutton">edit</mat-icon>
+                    </p>
+                  </div>
+                  <ng-container
+                    *ngFor="let item of courseFormGroup.controls['levelGrop'].value">
+                    <div *ngIf="item.active"
+                      style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
+                      [style.backgroundColor]="item.color+'33'"
+                      [style.border]="'1px solid '+item.color">
+                      <div [style.color]="item.color"
+                        style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
+                        <mat-icon class="icon24">workspace_premium</mat-icon>
+                        <span> {{item.annotation}} {{item.level}}
+                        </span>
+                      </div>
+                      <div
+                        style="color: #222222; font-weight: 400;display: flex;align-items: center;">
+                        <mat-icon class="icon16">group</mat-icon>
+                        <span> {{item.Subgrupo}}g · {{item.PartMax ||
+                          courseFormGroup.controls['participants'].value}}p
+                        </span>
+                        <div style="margin: auto;"></div>
+                        <ng-container>
+                          <mat-icon class="icon16">event_available</mat-icon>
+                          <span>
+                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
+                            días
+                          </span>
+                          <span
+                            *ngIf="courseFormGroup.controls['duration_min'].value">
+                            {{courseFormGroup.controls['duration_min'].value}}
+                          </span>
+                        </ng-container>
+                        <div style="margin: auto;"></div>
+                        <mat-icon
+                          class="icon16">confirmation_number</mat-icon>
+                        <span> {{item.age_min}}/{{item.age_max}} </span>
+                        <div style="margin: auto;"></div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="{{'bookings' | translate}}">
 
-            </mat-card-content>
-          </mat-card>
-        </mat-tab>
-        <mat-tab label="{{'bookings' | translate}}">
+      </mat-tab>
+      <mat-tab label="{{'menu.stats' | translate}}">
 
-        </mat-tab>
-        <mat-tab label="{{'menu.stats' | translate}}">
+      </mat-tab>
 
-        </mat-tab>
-
-      </mat-tab-group>
-    </div>
+    </mat-tab-group>
   </div>
 </div>

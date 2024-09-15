@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/course-card/app.module';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -31,7 +32,8 @@ import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/cour
     MatFormFieldModule,
     MatInputModule,
     MatSlideToggleModule,
-    CoursesDetailCardModule
+    CoursesDetailCardModule,
+    MatIconModule
   ]
 })
 export class CourseDetailNewModule { }

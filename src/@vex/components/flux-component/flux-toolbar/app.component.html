@@ -2,7 +2,8 @@
     <div class="fluxbar">
         <ng-container *ngFor="let item of Modal; index as i">
             <span
-                [ngClass]="Flux===item.Modal?'Selected':Flux>item.Modal?'Past':''">
+                [ngClass]="Flux===item.Modal?'Selected':Flux>item.Modal?'Past':''"
+                (click)="Flux>item.Modal?Check.emit(i):''">
                 {{item.Name | translate }}
             </span>
             <span *ngIf="i<Modal.length-1" class="Dir">
