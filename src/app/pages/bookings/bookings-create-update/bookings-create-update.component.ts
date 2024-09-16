@@ -34,7 +34,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 @Component({
-  selector: 'custom-header',
+  selector: 'custom-header-booking-create',
   template: `
     <div class="custom-header">
       <button mat-icon-button (click)="previousClicked()">
@@ -80,8 +80,8 @@ export class CustomHeader {
     this.calendarService.notifyMonthChanged(this.getFirstDayOfMonth(newDate));
   }
 }
-
-export class CustomDateAdapter extends NativeDateAdapter {
+@Injectable()
+export class CustomDateAdapter2 extends NativeDateAdapter {
   @Injectable()
   format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {

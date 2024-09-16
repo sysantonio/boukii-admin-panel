@@ -30,7 +30,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AddReductionModalModule } from '../bookings-create-update/add-reduction/add-reduction.module';
 import { AddDiscountBonusModalModule } from '../bookings-create-update/add-discount-bonus/add-discount-bonus.module';
 import { BookingDetailComponent } from './booking-detail.component';
-import { CustomDateAdapter } from '../bookings-create-update/bookings-create-update.component';
+import { CustomDateAdapter2 } from '../bookings-create-update/bookings-create-update.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { CancelBookginModalModule } from '../cancel-booking/cancel-booking.module';
 import { CancelPartialBookginModalModule } from '../cancel-partial-booking/cancel-partial-booking.module';
@@ -96,7 +96,7 @@ export const MY_DATE_FORMATS = {
   declarations: [BookingDetailComponent],
   exports: [BookingDetailComponent],
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter }
+    { provide: DateAdapter, useClass: CustomDateAdapter2 }
   ],
 })
 export class BookingDetailModule {

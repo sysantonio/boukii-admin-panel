@@ -30,7 +30,7 @@ import { BookingService } from 'src/service/bookings.service';
 import { ConfirmModalEditBookingComponent } from './confirm-dialog-edit-booking/confirm-dialog-edit-booking.component';
 @Injectable()
 @Component({
-  selector: 'custom-header',
+  selector: 'custom-header-booking-edit',
   template: `
     <div class="custom-header">
       <button mat-icon-button (click)="previousClicked()">
@@ -77,6 +77,7 @@ export class CustomHeader {
   }
 }
 
+@Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
   @Injectable()
   format(date: Date, displayFormat: Object): string {

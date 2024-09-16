@@ -27,7 +27,7 @@ import { AddDiscountBonusModalComponent } from '../bookings-create-update/add-di
 import { TranslateService } from '@ngx-translate/core';
 @Injectable()
 @Component({
-  selector: 'custom-header',
+  selector: 'custom-header-update-modal',
   template: `
     <div class="custom-header">
       <button mat-icon-button (click)="previousClicked()">
@@ -73,7 +73,7 @@ export class CustomHeader {
     this.calendarService.notifyMonthChanged(this.getFirstDayOfMonth(newDate));
   }
 }
-
+@Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
   @Injectable()
   format(date: Date, displayFormat: Object): string {

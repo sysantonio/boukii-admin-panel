@@ -9,13 +9,13 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { BookingsCreateUpdateComponent, CustomDateAdapter } from './bookings-create-update.component';
+import { BookingsCreateUpdateComponent, CustomDateAdapter2 } from './bookings-create-update.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-clients-group/widget-clients-group.module';
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
@@ -91,7 +91,7 @@ export const MY_DATE_FORMATS = {
   declarations: [BookingsCreateUpdateComponent],
   exports: [BookingsCreateUpdateComponent],
   providers: [
-    { provide: DateAdapter, useClass: CustomDateAdapter }
+    { provide: DateAdapter, useClass: CustomDateAdapter2 }
   ],
 })
 export class BookingsCreateUpdateModule {
