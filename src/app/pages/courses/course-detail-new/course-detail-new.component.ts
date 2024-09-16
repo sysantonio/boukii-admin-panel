@@ -112,6 +112,7 @@ export class CourseDetailNewComponent implements OnInit {
                       discount: [[], Validators.required],
                       extras: [[], Validators.required],
                       levelGrop: [this.detailData.degrees, Validators.required],
+                      settings: [JSON.parse(this.detailData.settings), Validators.required],
                     });
                     setTimeout(() => this.loading = false, 0);
                   })

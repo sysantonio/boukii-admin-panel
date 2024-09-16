@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
@@ -6,7 +6,7 @@ import { UntypedFormGroup } from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class CourseDetailCardComponent {
+export class CourseDetailCardComponent implements OnChanges {
 
   @Input() courseFormGroup!: UntypedFormGroup
   @Input() detail: boolean = false
@@ -15,7 +15,25 @@ export class CourseDetailCardComponent {
   @Output() edit = new EventEmitter<number>()
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
-  DateISO = (value: string) => value ? new Date(value).toISOString().split("T")[0] : ''
+  DateISO = (value: string) => value ? new Date(value).toISOString().split("T")[0].replace("-", ".").replace("-", ".") : ''
   DateDiff = (value1: string, value2: string): number => Math.round((new Date(value2).getTime() - new Date(value1).getTime()) / 1000 / 60 / 60 / 24)
-
+  ngOnChanges(): void {
+    if (this.courseFormGroup.controls['id']) {
+      const reserve_date = []
+      for (const [index, value] of this.courseFormGroup.controls['reserve_date'].value.entries()) {
+        if (index !== 0 && reserve_date[reserve_date.length - 1]["price"] === value["price"] &&
+          reserve_date[reserve_date.length - 1]["hour_end"] === value["hour_end"] &&
+          reserve_date[reserve_date.length - 1]["hour_start"] === value["hour_start"] &&
+          new Date(value["date"]).getTime() - new Date(reserve_date[reserve_date.length - 1]["date_end"]).getTime() === 86400000
+        ) {
+          reserve_date[reserve_date.length - 1].date_end = value.date
+        } else {
+          reserve_date.push(value)
+          reserve_date[reserve_date.length - 1].date_end = value.date
+        }
+      }
+      this.courseFormGroup.patchValue({ reserve_date })
+      console.log(reserve_date)
+    }
+  }
 }

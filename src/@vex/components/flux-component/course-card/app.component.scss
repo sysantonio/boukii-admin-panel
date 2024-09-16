@@ -1,7 +1,8 @@
 .cardgroup {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  row-gap: 20px;
+  column-gap: 10px;
   padding: 20px;
   border-bottom: 1px solid #dee6ea;
   font-size: 12px;

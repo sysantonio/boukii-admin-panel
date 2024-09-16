@@ -50,10 +50,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
     '20:00', '20:15', '20:30', '20:45', '21:00', '21:15', '21:30', '21:45',
     '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45',
   ];
-  reduccions: string[] = ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%",];
   ndays: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  weekSelect: string[] = ["Cada día", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-
+  weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+  PeriodoFecha: number = 0
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -161,8 +160,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
         discount: [[], Validators.required],
         extras: [[], Validators.required],
         levelGrop: [[], Validators.required],
-        //{ level_id: number, EdadMin: number, EdadMax: number, PartMax: number, Subgrupo: number, active: boolean, data: any }[]
+        settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
       });
+
 
       this.extrasFormGroup = this.fb.group({
         product: ["", Validators.required],
@@ -205,6 +205,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     mergeMap(stations => forkJoin(stations.map(element => this.crudService.get('/stations/' + element.station_id).pipe(map(data => data.data)))))
   );
   getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseFormGroup.controls['sport_id'].value).subscribe((data) => {
+    this.levels = []
     data.data.forEach(element => element.active ? this.levels.push(element) : null);
     const levelGrop = []
     this.levels.forEach(level => {
@@ -224,8 +225,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.getDegrees();
     } else if (this.ModalFlux === 2) {
       if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
-        this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: 1, FechaFin: this.nowDate, hour_end: "09:00", Semana: [] }] })
-      if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: "10%" }] })
+        this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
+      if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })
       this.getDegrees();
     }
     else if (this.ModalFlux === 4) {
@@ -258,6 +259,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   selectLevel = (event: any, i: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].active = event.target.checked
+    levelGrop[i].age_min = this.courseFormGroup.controls['age_min'].value || 0
+    levelGrop[i].age_max = this.courseFormGroup.controls['age_max'].value || 99
+    levelGrop[i].PartMax = this.courseFormGroup.controls['participants'].value || 0
     this.courseFormGroup.patchValue({ levelGrop })
   }
   addLevelSubgroup = (i: number, add: number) => {
@@ -269,5 +273,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const extras: any[] = this.courseFormGroup.controls['extras'].value
     if (event.checked) this.courseFormGroup.patchValue({ extras: [...extras, item] })
     else this.courseFormGroup.patchValue({ extras: extras.slice(extras.findIndex((a: any) => a.id === item.id), 1) })
+  }
+  selectAllweek = (event: any) => {
+    const settings = this.courseFormGroup.controls['settings'].value
+    settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
+    this.courseFormGroup.patchValue({ settings })
   }
 }

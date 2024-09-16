@@ -7,13 +7,13 @@
     ]" class="flex"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
-  <vex-page-layout-content class="-mt-6 fullwidth" style="padding: 0;">
+  <vex-page-layout-content class="fullwidth" style="padding: 0;margin-top: 65px;">
     <vex-aio-table [columns]="columns" [entity]="entity"
       [deleteEntity]="deleteEntity" [title]="'courses.title'"
       [route]="'courses'" [createComponent]="createComponent"
       [canDelete]="false" [canDeactivate]="true"
       [ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon"
-      [canDuplicate]="true"
+      [canDuplicate]="true" [withHeader]="false"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
       [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers', 'sport']"

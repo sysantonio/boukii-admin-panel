@@ -11,10 +11,12 @@
             {{"Curso #" +
             ("00000"+courseFormGroup.controls['id'].value).slice(-5) |
             translate}}
-            <mat-icon (click)="open.emit(courseFormGroup.controls['id'].value)"
-                class="button"
-                style="margin-left: auto;">edit</mat-icon>
-            <mat-icon (click)="close.emit()" class="button">close</mat-icon>
+            <img src="assets/icons/icon/edit.png"
+                (click)="open.emit(courseFormGroup.controls['id'].value)"
+                class="button icon24"
+                style="margin-left: auto;">
+            <img src="assets/icons/icon/cancel.png" (click)="close.emit()"
+                class="button icon24">
         </p>
         <div
             style="width: 100%; height: 100%; border: 1px #C7D0D3 solid;margin: 4px 0;"></div>
@@ -49,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="cardgroup" style="flex-wrap: nowrap;">
+    <div class="cardgroup" style="flex-wrap: nowrap;align-items: center;">
         <img
             [src]="courseFormGroup.controls['icon'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
             [class]="courseFormGroup.controls['icon'].value?'':'emptyImg1'"
@@ -65,6 +67,17 @@
             <p>
                 {{courseFormGroup.controls['course_type'].value===1?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===2?'Curso privado flex':courseFormGroup.controls['course_type'].value===3?'Actividad':''
                 | translate}}
+            </p>
+        </div>
+        <div *ngIf="courseFormGroup.controls['id'] && !detail">
+            <p style="
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 18px;
+            text-align: right;
+            color: #222222;
+            ">
+                {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
         </div>
         <mat-icon *ngIf="detail" (click)="edit.emit(0)"
@@ -101,8 +114,7 @@
             <p> {{'PRECIO POR FECHA' | translate }} </p>
             <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
                 style="color: black; font-weight: 200;">
-                {{courseFormGroup.controls['price'].value}}
-                {{courseFormGroup.controls['price'].value?'CHF':''}}
+                {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
@@ -132,7 +144,7 @@
     <div class="cardgroup" style="gap: 10px;">
         <div style="display: flex;width: 100%;column-gap: 10px;">
             <div style="width: 100%">
-                <p> {{'RESERVABLE A PARTIR DE' | translate }} </p>
+                <p> {{'RESERVABLE DESDE' | translate }} </p>
                 <p style="color: black; font-size: 12px;"
                     [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
                     {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
@@ -147,7 +159,7 @@
             </div>
             <div style="width: 100%"
                 *ngIf="courseFormGroup.controls['course_type'].value>1">
-                <p> {{'DURACIÓN' | translate }} </p>
+                <p> {{'DUR. MIN.' | translate }} </p>
                 <p style="color: black;font-size: 12px;"
                     [class]="courseFormGroup.controls['duration_min'].value?'':'emptyText'">
                     {{courseFormGroup.controls['duration_min'].value}}
@@ -161,18 +173,20 @@
 
         <div style="width: 100%;"
             *ngIf="courseFormGroup.controls['reserve_date'].value.length>0">
-            <p> <mat-icon class="icon24">event_available</mat-icon>
-                {{'FECHA Y HORA' |
-                translate }}
-            </p>
+            <div style="display: flex;">
+                <img src="assets/icons/icon/calendar.png" class="icon24">
+                <p>
+                    {{'FECHA Y HORA' |
+                    translate }}
+                </p>
+            </div>
             <p *ngIf="!courseFormGroup.controls['reserve_date'].value"
                 class="emptyText">
             </p>
             <p
                 *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
-                style="font-size: 14px;">
-
-                <span style="color: black;"> {{DateISO(item.date)}} </span>
+                style="font-size: 14px;text-align-last: justify;">
+                <span style="color: black;">{{DateISO(item.date)}}</span>
                 <span style="color: black;"
                     *ngIf="courseFormGroup.controls['course_type'].value>1 && item.date_end">-{{DateISO(item.date_end)}}
                 </span>
@@ -181,22 +195,28 @@
                     *ngIf="courseFormGroup.controls['course_type'].value>1">-{{item.hour_end}}</span>
                 <span
                     *ngIf="item.Duracion && courseFormGroup.controls['price'].value>0">
-                    {{courseFormGroup.controls['price'].value * item.Duracion}}
-                    CHF
-                </span>
-                <span
-                    *ngIf="!item.Duracion && courseFormGroup.controls['price'].value>0">
                     {{courseFormGroup.controls['price'].value *
-                    (item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60
-                    -
-                    item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)}}
-                    CHF
+                    item.Duracion}}&nbsp;CHF
+                </span>
+                <span style="color: black;"
+                    *ngIf="!item.Duracion && courseFormGroup.controls['price'].value>0">
+                    {{(courseFormGroup.controls['price'].value *
+                    (item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60-item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)).toFixed(2)}}CHF
                 </span>
             </p>
         </div>
         <div style="width: 100%; color: black;font-weight: 400;"
             *ngFor="let item of courseFormGroup.controls['discount'].value">
-            · Reducción {{item.reduccion}} reservando {{item.day}} fechas
+            · Reducción {{item.reduccion}}% reservando
+            {{item.day}} fechas
+        </div>
+        <div *ngIf="courseFormGroup.controls['settings'].value">
+            <ng-container style="width: 100%; color: black;font-weight: 400;"
+                *ngFor="let item of courseFormGroup.controls['settings'].value.weekDays | keyvalue">
+                <ng-container *ngIf="item.value">
+                    {{item.key+"" | translate}}
+                </ng-container>
+            </ng-container>
         </div>
     </div>
     <div class="cardgroup"
@@ -214,19 +234,20 @@
                     [style.border]="'1px solid '+item.color">
                     <div [style.color]="item.color"
                         style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
-                        <mat-icon class="icon24">workspace_premium</mat-icon>
+                        <img src="assets/icons/icon/award.png" class="icon24">
                         <span> {{item.annotation}} {{item.level}}
                         </span>
                     </div>
                     <div
                         style="color: #222222; font-weight: 400;display: flex;align-items: center;">
-                        <mat-icon class="icon16">group</mat-icon>
+                        <img src="assets/icons/icon/people.png" class="icon16">
                         <span> {{item.Subgrupo}}g · {{item.PartMax ||
                             courseFormGroup.controls['participants'].value}}p
                         </span>
                         <div style="margin: auto;"></div>
                         <ng-container>
-                            <mat-icon class="icon16">event_available</mat-icon>
+                            <img src="assets/icons/icon/calendar.png"
+                                class="icon16">
                             <span>
                                 {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
                                 días
@@ -237,7 +258,7 @@
                             </span>
                         </ng-container>
                         <div style="margin: auto;"></div>
-                        <mat-icon class="icon16">confirmation_number</mat-icon>
+                        <img src="assets/icons/icon/ticket.png" class="icon16">
                         <span> {{item.age_min}}/{{item.age_max}} </span>
                         <div style="margin: auto;"></div>
                     </div>

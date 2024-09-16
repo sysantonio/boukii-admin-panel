@@ -37,7 +37,8 @@
       *ngIf="ModalFlux===1"
       [formGroup]="courseFormGroup">
       <mat-tab-group class="tabsWrapper"
-        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event+1})">
+        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event+1})"
+        [selectedIndex]="courseFormGroup.controls['course_type'].value-1||0">
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon style="color: #E5962A;"
@@ -85,13 +86,15 @@
         <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
           <mat-form-field appearance="outline"
             style="width: calc(50% - 10px);">
-            <mat-label>{{'prices' | translate}}</mat-label>
+            <mat-label>{{'Precio por fecha' | translate}}</mat-label>
             <input id="price" formControlName="price"
               matInput required type="number">
+            <span matTextSuffix>CHF</span>
           </mat-form-field>
           <mat-form-field appearance="outline"
             style="width: calc(50% - 10px);">
-            <mat-label>{{'max_pax' | translate}}</mat-label>
+            <mat-label>{{'N° max. participantes por grupo' |
+              translate}}</mat-label>
             <input id="participants" formControlName="participants"
               matInput required type="number">
           </mat-form-field>
@@ -112,16 +115,15 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===2"
-      [formGroup]="courseFormGroup">
+    <div class="flex flex-col" *ngIf="ModalFlux===2">
       <span style="margin: 20px;">
         {{'Fechas de reservas' | translate}}
       </span>
-      <div
+      <div [formGroup]="courseFormGroup"
         style="margin: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
         <mat-form-field
           appearance="outline">
-          <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+          <mat-label>{{'Reservable desde' | translate}}</mat-label>
           <input
             matInput
             [matDatepicker]="date_reservable"
@@ -134,7 +136,7 @@
         </mat-form-field>
         <mat-form-field
           appearance="outline">
-          <mat-label>{{'courses.date_reservable_to' |
+          <mat-label>{{'Reservable hasta' |
             translate}}</mat-label>
           <input
             matInput
@@ -191,7 +193,7 @@
                 [matDatepicker]="date_reservable"
                 [min]="minDate"
                 [max]="maxDate"
-                [value]="item.date" />
+                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date" />
               <mat-datepicker-toggle
                 matSuffix
                 [for]="date_reservable"></mat-datepicker-toggle>
@@ -207,7 +209,7 @@
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
-                [value]="item.hour_start" />
+                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].hour_start" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -219,9 +221,23 @@
               <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>{{'courses.duration' | translate}}</mat-label>
-              <input [value]="item.Duracion"
-                matInput required type="number">
+              <mat-label>{{'Duración' | translate}}</mat-label>
+              <input
+                type="text"
+                placeholder="{{'Duración' | translate}}"
+                aria-label="Number"
+                matInput
+                [matAutocomplete]="auto"
+                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].Duracion" />
+              <mat-autocomplete #auto="matAutocomplete"
+                [displayWith]="displayFn">
+                <mat-option
+                  *ngFor="let hour of hours"
+                  [value]="hour">
+                  {{hour}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
             </mat-form-field>
           </div>
         </div>
@@ -247,11 +263,11 @@
               style="width: calc(49% - 20px);margin-right: 1%;">
               <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
               <input
+                [(ngModel)]="courseFormGroup.controls['discount'].value[i].day"
                 type="text"
                 placeholder="{{'N. fechas reservadas' | translate}}"
                 matInput
-                [matAutocomplete]="auto"
-                [value]="item.day" />
+                [matAutocomplete]="auto" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -264,21 +280,11 @@
             </mat-form-field>
             <mat-form-field appearance="outline"
               style="width: calc(49% - 20px);margin-left:1%;">
-              <mat-label>{{'courses.reduction_title' | translate}}</mat-label>
+              <mat-label>{{'Reducción % (0-100)' | translate}}</mat-label>
               <input
-                type="text"
-                placeholder="{{'courses.reduction_title' | translate}}"
-                matInput
-                [matAutocomplete]="auto" [value]="item.reduccion" />
-              <mat-autocomplete #auto="matAutocomplete"
-                [displayWith]="displayFn">
-                <mat-option
-                  *ngFor="let reduccion of reduccions"
-                  [value]="reduccion">
-                  {{reduccion}}
-                </mat-option>
-              </mat-autocomplete>
-              <mat-icon matSuffix svgIcon="mat:unfold_more"></mat-icon>
+                [(ngModel)]="courseFormGroup.controls['discount'].value[i].reduccion"
+                matInput required type="number">
+              <span matTextSuffix>%</span>
             </mat-form-field>
             <mat-icon
               class="icon24"
@@ -289,7 +295,7 @@
           </div>
           <div style="margin: 0 20px;">
             <button
-              (click)="courseFormGroup.controls['discount'].value.push({ day: 2, reduccion: '10%' })"
+              (click)="courseFormGroup.controls['discount'].value.push({ day: 2, reduccion: 10 })"
               style="margin-top: 0px !important;height: 38px;"
               color="primary"
               mat-button
@@ -302,109 +308,129 @@
         </div>
       </ng-container>
       <ng-container *ngIf="courseFormGroup.controls['course_type'].value>1">
-        <mat-tab-group class="tabsWrapper" style="margin: 20px 20px 0;">
+        <mat-tab-group class="tabsWrapper" style="margin: 20px 20px 0;"
+          (selectedIndexChange)="PeriodoFecha=$event;$event===0?courseFormGroup.patchValue({reserve_date:[courseFormGroup.controls['reserve_date'].value[0]]}):''"
+          [selectedIndex]="courseFormGroup.controls['reserve_date'].value.length>1?1:0">
           <mat-tab>
             <ng-template mat-tab-label>
               Un periodo
             </ng-template>
-            <div style="display: flex; flex-direction: column;padding: 10px;">
-              <div style="display: flex;column-gap: 20px;">
-                <mat-form-field
-                  appearance="outline">
-                  <mat-label>{{'courses.date_reservable' |
-                    translate}}</mat-label>
-                  <input
-                    matInput
-                    [matDatepicker]="date_inicio"
-                    [min]="minDate"
-                    [max]="maxDate"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].date" />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="date_inicio"></mat-datepicker-toggle>
-                  <mat-datepicker
-                    #date_inicio
-                    [startAt]="nowDate"></mat-datepicker>
-                </mat-form-field>
-                <mat-form-field
-                  appearance="outline">
-                  <mat-label>{{'courses.date_reservable' |
-                    translate}}</mat-label>
-                  <input
-                    matInput
-                    [matDatepicker]="date_fin"
-                    [min]="minDate"
-                    [max]="maxDate"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].date_end" />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="date_fin"></mat-datepicker-toggle>
-                  <mat-datepicker
-                    #date_fin
-                    [startAt]="nowDate"></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div
-                style="display: flex; flex-wrap: wrap;gap: 16px;margin-bottom: 20px;">
-                <mat-checkbox *ngFor="let item of weekSelect"
-                  style="width: calc(25% - 16px);">
-                  {{item}}
-                </mat-checkbox>
-                <!--Falta logica-->
-              </div>
-              <div style="display: flex;column-gap: 20px;">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{'hour' | translate}}</mat-label>
-                  <input
-                    type="text"
-                    placeholder="{{'hour' | translate}}"
-                    aria-label="Number"
-                    matInput
-                    [matAutocomplete]="auto"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].hour_start" />
-                  <mat-autocomplete #auto="matAutocomplete"
-                    [displayWith]="displayFn">
-                    <mat-option
-                      *ngFor="let hour of hours"
-                      [value]="hour">
-                      {{hour}}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <mat-icon matSuffix
-                    svgIcon="mat:keyboard_arrow_down"></mat-icon>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{'hour' | translate}}</mat-label>
-                  <input
-                    type="text"
-                    placeholder="{{'hour' | translate}}"
-                    aria-label="Number"
-                    matInput
-                    [matAutocomplete]="auto"
-                    [value]="courseFormGroup.controls['reserve_date'].value[0].hour_end" />
-                  <mat-autocomplete #auto="matAutocomplete"
-                    [displayWith]="displayFn">
-                    <mat-option
-                      *ngFor="let hour of hours"
-                      [value]="hour">
-                      {{hour}}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <mat-icon matSuffix
-                    svgIcon="mat:keyboard_arrow_down"></mat-icon>
-                </mat-form-field>
-              </div>
-            </div>
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
               Multiples periodos
             </ng-template>
-            <div style="display: flex; flex-direction: column;padding: 10px;">
-
-            </div>
           </mat-tab>
         </mat-tab-group>
+        <div style=" display: flex; flex-direction: column;padding: 10px;">
+          <div style="display: flex;column-gap: 20px;"
+            *ngFor="let item of courseFormGroup.controls['reserve_date'].value;index as i">
+            <ng-container *ngIf="PeriodoFecha>0 || i===0">
+              <mat-form-field
+                appearance="outline">
+                <mat-label>{{'courses.date_reservable' |
+                  translate}}</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="date_inicio"
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date" />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="date_inicio"></mat-datepicker-toggle>
+                <mat-datepicker
+                  #date_inicio
+                  [startAt]="nowDate"></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline">
+                <mat-label>{{'courses.date_reservable' |
+                  translate}}</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="date_fin"
+                  [min]="minDate"
+                  [max]="maxDate"
+                  [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date_end" />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="date_fin"></mat-datepicker-toggle>
+                <mat-datepicker
+                  #date_fin
+                  [startAt]="nowDate"></mat-datepicker>
+              </mat-form-field>
+            </ng-container>
+          </div>
+          <div *ngIf="PeriodoFecha>0">
+            <button
+              (click)="courseFormGroup.controls['reserve_date'].value.push({ date: nowDate, hour_start: '08:00',
+              Duracion: '01:00', date_end: nowDate, hour_end: '09:00', Semana: [] })"
+              style="margin-top: 0px !important;height: 38px; width: 200px;"
+              color="primary"
+              mat-button
+              type="button"
+              class="client-button">
+              <mat-icon>add</mat-icon>
+              {{'Añadir fecha' | translate }}
+            </button>
+          </div>
+          <div
+            style="display: flex; flex-wrap: wrap;gap: 16px;margin-bottom: 20px;">
+            <mat-checkbox
+              style="width: calc(25% - 16px);"
+              (change)="selectAllweek($event)">
+              {{"Cada día" | translate}}
+            </mat-checkbox>
+            <mat-checkbox *ngFor="let item of weekSelect"
+              style="width: calc(25% - 16px);"
+              [(ngModel)]="courseFormGroup.controls['settings'].value.weekDays[item]">
+              {{item | translate}}
+            </mat-checkbox>
+          </div>
+          <div style="display: flex;column-gap: 20px;">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'hour' | translate}}</mat-label>
+              <input
+                type="text"
+                placeholder="{{'hour' | translate}}"
+                aria-label="Number"
+                matInput
+                [matAutocomplete]="auto"
+                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[0].hour_start" />
+              <mat-autocomplete #auto="matAutocomplete"
+                [displayWith]="displayFn">
+                <mat-option
+                  *ngFor="let hour of hours"
+                  [value]="hour">
+                  {{hour}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-icon matSuffix
+                svgIcon="mat:keyboard_arrow_down"></mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{'hour' | translate}}</mat-label>
+              <input
+                type="text"
+                placeholder="{{'hour' | translate}}"
+                aria-label="Number"
+                matInput
+                [matAutocomplete]="auto"
+                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[0].hour_end" />
+              <mat-autocomplete #auto="matAutocomplete"
+                [displayWith]="displayFn">
+                <mat-option
+                  *ngFor="let hour of hours"
+                  [value]="hour">
+                  {{hour}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-icon matSuffix
+                svgIcon="mat:keyboard_arrow_down"></mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
       </ng-container>
 
     </div>
