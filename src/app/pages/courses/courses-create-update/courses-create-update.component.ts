@@ -162,9 +162,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
           discount: [[], Validators.required],
           extras: [[], Validators.required],
           levelGrop: [[], Validators.required],
+          categoryPart: [[], Validators.required],
           settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
         });
-
+        this.loading = false
       } else {
         this.crudService.get('/admin/courses/' + this.id,
           ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
@@ -230,6 +231,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
                           discount: [[], Validators.required],
                           extras: [[], Validators.required],
                           levelGrop: [this.detailData.degrees, Validators.required],
+                          categoryPart: [[], Validators.required],
                           settings: [JSON.parse(this.detailData.settings), Validators.required],
                         });
                         this.Confirm(0)
@@ -241,10 +243,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
           })
       }
       this.extrasFormGroup = this.fb.group({
+        id: ["", Validators.required],
         product: ["", Validators.required],
         name: ["", Validators.required],
         price: ["", Validators.required],
         iva: ["", Validators.required],
+        status: ["", Validators.required],
       })
       this.schoolService.getSchoolData()
         .subscribe((data) => {
@@ -316,6 +320,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
       if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })
       this.getDegrees();
+    } else if (this.ModalFlux === 3) {
+      if (this.courseFormGroup.controls["categoryPart"].value.length === 0) {
+        this.courseFormGroup.patchValue({
+          categoryPart: [{
+            name: "",
+            age_min: this.courseFormGroup.controls["age_min"].value || 0,
+            age_max: this.courseFormGroup.controls["age_max"].value || 99,
+            num_min: this.courseFormGroup.controls["participants"].value || 0,
+            num_max: this.courseFormGroup.controls["participants"].value || 0,
+          }]
+        })
+      }
     }
     else if (this.ModalFlux === 4) {
       if (!this.courseFormGroup.controls["course_name_es"].value) {
@@ -368,4 +384,5 @@ export class CoursesCreateUpdateComponent implements OnInit {
     settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
     this.courseFormGroup.patchValue({ settings })
   }
+
 }

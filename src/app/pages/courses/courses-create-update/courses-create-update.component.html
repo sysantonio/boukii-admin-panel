@@ -291,7 +291,7 @@
               style="margin-left: 16px"
               [style.color]="i===0?'gray':'black'"
               [style.cursor]="i===0?'':'pointer'"
-              (click)="courseFormGroup.controls['discount'].value.splice(i,1)">delete</mat-icon>
+              (click)="i>0?courseFormGroup.controls['discount'].value.splice(i,1):''">delete</mat-icon>
           </div>
           <div style="margin: 0 20px;">
             <button
@@ -518,7 +518,68 @@
         </div>
       </ng-container>
       <ng-container *ngIf="courseFormGroup.controls['course_type'].value===3">
-
+        <div
+          *ngFor="let item of courseFormGroup.controls['categoryPart'].value, index as i">
+          <div
+            style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+            <span>
+              {{'CATEGORIA PARTICIPANTE  '+ (i+1)| translate}}
+            </span>
+            <mat-icon *ngIf="i!==0"
+              (click)="courseFormGroup.controls['categoryPart'].value.splice(i,1)"
+              style="cursor: pointer;float: inline-end;">delete</mat-icon>
+          </div>
+          <div
+            style="margin: 20px 20px 0px; display: flex; flex-wrap: wrap; column-gap: 20px;">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'Nombre categoría' | translate}}</mat-label>
+              <input matInput type="text"
+                [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].name">
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: calc(50% - 10px);">
+              <mat-label>{{'Edad mínma' | translate}}</mat-label>
+              <input matInput type="number"
+                [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].age_min">
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: calc(50% - 10px);">
+              <mat-label>{{'Edad máxima' | translate}}</mat-label>
+              <input matInput type="number"
+                [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].age_max">
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: calc(50% - 10px);">
+              <mat-label>{{'N. mín.' | translate}}</mat-label>
+              <input matInput type="number"
+                [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].num_min">
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              style="width: calc(50% - 10px);">
+              <mat-label>{{'N. máx' | translate}}</mat-label>
+              <input matInput type="number"
+                [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].num_max">
+            </mat-form-field>
+          </div>
+        </div>
+        <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
+          <button
+            (click)="courseFormGroup.controls['categoryPart'].value.push({
+            name: '',
+            age_min: this.courseFormGroup.controls['age_min'].value || 0,
+            age_max: this.courseFormGroup.controls['age_max'].value || 99,
+            num_min: this.courseFormGroup.controls['participants'].value || 0,
+            num_max: this.courseFormGroup.controls['participants'].value || 0,
+          })"
+            style="margin-top: 0px !important;height: 38px;"
+            color="primary"
+            mat-button
+            type="button"
+            class="client-button">
+            <mat-icon>add</mat-icon>
+            {{'Añadir categoria' | translate }}
+          </button>
+        </div>
       </ng-container>
     </div>
     <div class="flex flex-col" *ngIf="ModalFlux===4" style="padding: 24px;"
@@ -529,39 +590,48 @@
           style="color: black; font-size: 12px; font-weight: 400; line-height: 16px; margin-bottom: 20px;width: 100%;">
           Seleccionar los extras que pueden ser añadidos haciendo la reserva:
         </div>
-        <div
-          *ngFor="let item of extras"
-          style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px #8B9099 solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-          <mat-checkbox [value]="item.id" (change)="selectExtra($event,item)">
-          </mat-checkbox>
+        <ng-container
+          *ngFor="let item of courseFormGroup.controls['course_type'].value===3?courseFormGroup.controls['categoryPart'].value:[1];index as i">
           <div
-            style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+            style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+            <span>
+              {{courseFormGroup.controls['categoryPart'].value[i].name}}
+            </span>
+          </div>
+          <div
+            *ngFor="let item of extras"
+            style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px #8B9099 solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+            <mat-checkbox [value]="item.id" (change)="selectExtra($event,item)">
+            </mat-checkbox>
             <div
-              style="align-self: stretch; color: #222222; font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
-              {{item.product}}
+              style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+              <div
+                style="align-self: stretch; color: #222222; font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
+                {{item.product}}
+              </div>
+              <div
+                style="align-self: stretch; color: #8B9099; font-size: 12px; font-weight: 400; line-height: 16px; word-wrap: break-word">
+                {{item.name}}
+              </div>
             </div>
             <div
-              style="align-self: stretch; color: #8B9099; font-size: 12px; font-weight: 400; line-height: 16px; word-wrap: break-word">
-              {{item.name}}
+              style="flex: 1 1 0; text-align: right; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+              {{item.price}} CHF/Día
             </div>
           </div>
           <div
-            style="flex: 1 1 0; text-align: right; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-            {{item.price}} CHF/Día
+            (click)="extrasModal=!extrasModal"
+            style="width: calc(50% - 8px); height: 64px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 3px; border: 1px #E91E63 dotted; flex-direction: column; justify-content: space-between; align-items: center; display: inline-flex;cursor: pointer;">
+            <div style="width: 24px; height: 24px; position: relative">
+              <mat-icon
+                color="primary"
+                style="height: 30px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
+            </div>
+            <div
+              style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">Crear
+              extra</div>
           </div>
-        </div>
-        <div
-          (click)="extrasModal=!extrasModal"
-          style="width: calc(50% - 8px); height: 64px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 3px; border: 1px #E91E63 dotted; flex-direction: column; justify-content: space-between; align-items: center; display: inline-flex;cursor: pointer;">
-          <div style="width: 24px; height: 24px; position: relative">
-            <mat-icon
-              color="primary"
-              style="height: 30px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
-          </div>
-          <div
-            style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">Crear
-            extra</div>
-        </div>
+        </ng-container>
       </section>
     </div>
     <div class="flex flex-col" *ngIf="ModalFlux===5"
@@ -624,7 +694,7 @@
         mat-raised-button
         type="button"
         class="client-button">
-        {{'Confirmar' | translate }}
+        {{mode==='create'?'Confirmar':'Seguiente' | translate }}
       </button>
     </div>
   </div>
@@ -681,10 +751,10 @@
       style="margin-top: 0px !important;height: 38px; width: 128px;"
       color="primary"
       mat-raised-button
-      (click)="extrasModal=false"
+      (click)="extrasModal=false;extras.push(extrasFormGroup.getRawValue());extrasFormGroup.reset()"
       type="button"
       class="client-button">
-      {{'Confirmar' | translate }}
+      {{'Crear extras' | translate }}
     </button>
   </div>
 </vex-flux-modal>
@@ -699,7 +769,7 @@
     font-weight: 400;
     line-height: 18px;
     word-wrap: break-word">
-      El curso ha sido creado! Confirma estas opciones:
+      {{mode==='create'?"El curso ha sido creado!":""}} Confirma estas opciones:
     </div>
     <div style="width: 100%">
       <mat-slide-toggle [checked]="true">
@@ -759,7 +829,8 @@
       (click)="confirmModal=false"
       type="button"
       class="client-button">
-      {{'Finalizar creación curso' | translate }}
+      {{mode==='create'?'Finalizar creación curso':'Finalizar edición curso' |
+      translate }}
     </button>
   </div>
 </vex-flux-modal>

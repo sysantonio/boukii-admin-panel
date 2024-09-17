@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start2": "ng serve --no-live-reload",
     "build": "node --max-old-space-size=4096 node_modules/.bin/ng build",
     "test": "ng test",
     "lint": "ng lint",
