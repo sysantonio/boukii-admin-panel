@@ -99,7 +99,7 @@ export class CoursesComponent {
                   console.log(this.detailData)
                   this.courseFormGroup = this.fb.group({
                     id: [this.detailData.id, Validators.required], //Solo listado
-                    user: [this.detailData.user, Validators.required], //Solo listado
+                    user: [this.detailData.user ? this.detailData.user.username + " (" + this.detailData.user.first_name + " " + this.detailData.user.last_name + ")" : "", Validators.required], //Solo listado
                     created_at: [this.detailData.created_at, Validators.required], //Solo listado
                     active: [this.detailData.active, Validators.required], //Solo listado
                     online: [this.detailData.online, Validators.required], //Solo listado
@@ -190,7 +190,6 @@ export class CoursesComponent {
       }
       return null;
     }
-
   }
 
   encontrarPrimeraCombinacionConValores(data: any, course: any) {
@@ -203,7 +202,6 @@ export class CoursesComponent {
       }
       return null; // Devuelve null si no encuentra ninguna combinación válida
     }
-
   }
 
   getStudents(levelId: any) {
@@ -214,22 +212,18 @@ export class CoursesComponent {
         ret = ret + 1;
       }
     });
-
     return ret;
   }
 
   getMaxStudents(levelId: any) {
     let ret = 0;
-
     this.detailData.course_dates[0].course_groups.forEach(group => {
       if (group.degree_id === levelId) {
         group.course_subgroups.forEach(sb => {
           ret = ret + sb.max_participants;
         });
       }
-
     });
-
     return ret;
   }
 
@@ -250,7 +244,6 @@ export class CoursesComponent {
 
   getSubGroups(levelId: any) {
     let ret = 0;
-
     this.detailData.course_dates.forEach(courseDate => {
       let find = false;
       courseDate.course_groups.forEach(group => {

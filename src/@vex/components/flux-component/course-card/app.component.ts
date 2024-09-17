@@ -13,6 +13,7 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() close = new EventEmitter()
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
+  week: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",]
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
   DateISO = (value: string) => value ? new Date(value).toISOString().split("T")[0].replace("-", ".").replace("-", ".") : ''
@@ -33,7 +34,7 @@ export class CourseDetailCardComponent implements OnChanges {
         }
       }
       this.courseFormGroup.patchValue({ reserve_date })
-      console.log(reserve_date)
     }
+    console.log(this.courseFormGroup.getRawValue())
   }
 }
