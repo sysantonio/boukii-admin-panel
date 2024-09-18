@@ -13,6 +13,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/course-card/app.module';
 import { MatIconModule } from '@angular/material/icon';
+import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatButtonModule } from '@angular/material/button';
+import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component/course-nivel/app.module';
 
 
 
@@ -33,7 +39,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatSlideToggleModule,
     CoursesDetailCardModule,
-    MatIconModule
+    MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule
   ]
 })
 export class CourseDetailNewModule { }

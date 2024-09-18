@@ -1,0 +1,93 @@
+ <ng-container
+    *ngFor="let item of courseFormGroup.controls['levelGrop'].value;index as i">
+    <div *ngIf="item.active" style="width: 100%;">
+        <div
+            style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
+            [style.backgroundColor]="item.color+'33'"
+            [style.border]="'1px solid '+item.color">
+            <div [style.color]="item.color"
+                style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
+                <img src="assets/icons/icon/award.png"
+                    class="icon24">
+                <span> {{item.annotation}} {{item.level}}
+                </span>
+                <ng-container *ngIf="item.Subgrupo>0">
+                    <mat-icon
+                        *ngIf="!courseFormGroup.controls['levelGrop'].value[i].modal"
+                        class="icon24"
+                        (click)="courseFormGroup.controls['levelGrop'].value[i].modal=true"
+                        style="cursor: pointer;margin-left:auto">
+                        keyboard_arrow_up </mat-icon>
+                    <mat-icon
+                        *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal"
+                        class="icon24"
+                        (click)="courseFormGroup.controls['levelGrop'].value[i].modal=false"
+                        style="cursor: pointer;margin-left:auto">
+                        keyboard_arrow_down </mat-icon>
+                </ng-container>
+            </div>
+            <div
+                style="color: #222222; font-weight: 400;display: flex;align-items: center;">
+                <img src="assets/icons/icon/people.png"
+                    class="icon16">
+                <span> {{item.Subgrupo}}g · {{item.PartMax ||
+                    courseFormGroup.controls['participants'].value}}p
+                </span>
+                <div style="margin: auto;"></div>
+                <ng-container>
+                    <img src="assets/icons/icon/calendar.png"
+                        class="icon16">
+                    <span>
+                        {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
+                        días
+                    </span>
+                    <span
+                        *ngIf="courseFormGroup.controls['duration_min'].value">
+                        {{courseFormGroup.controls['duration_min'].value}}
+                    </span>
+                </ng-container>
+                <div style="margin: auto;"></div>
+                <img src="assets/icons/icon/ticket.png"
+                    class="icon16">
+                <span> {{item.age_min}}/{{item.age_max}} </span>
+                <div style="margin: auto;"></div>
+            </div>
+        </div>
+        <div style="width: 100%;">
+            <ng-container
+                *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal">
+                <div
+                    *ngFor="let ix of [].constructor(item.Subgrupo);;index as i"
+                    style="padding: 10px;width: 100%; background-color: #EFF2F5;border: 1px solid var(--Grey-03, #DEE6EA);display: flex;align-items: center;height: 60%;">
+                    <div>
+                        <span
+                            style="color: var(--Dark-02, #2F3844);
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 16px;"> {{item.annotation}}
+                            {{item.level}} {{i+1}}
+                        </span>
+                        <br>
+                        <span
+                            style="color: var(--Dark-02, #2F3844);
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 16px;">
+                            {{"No monitor assigned"}}
+                        </span>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <span
+                            style="color: var(--Dark-02, #2F3844);
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    line-height: 16px;">
+                            0/6
+                        </span>
+                    </div>
+
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>

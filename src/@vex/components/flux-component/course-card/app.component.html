@@ -58,7 +58,7 @@
             class="sport_icon noselected"
             [style.backgroundColor]="courseFormGroup.controls['course_type'].value===1?'#E5962A':courseFormGroup.controls['course_type'].value===2?'#2FAA41':courseFormGroup.controls['course_type'].value===3?'#0AB0BC':''"
             style="max-width: none;">
-        <div style="width: 100%;">
+        <div style="width: max-content;">
             <p
                 style="font-weight: 600; line-height: 18px; min-height: 12px; color: black;font-size: 14px;"
                 [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
@@ -81,6 +81,7 @@
             </p>
         </div>
         <mat-icon *ngIf="detail" (click)="edit.emit(0)"
+            style="margin-left: auto;width: 24px;"
             class="editbutton">edit</mat-icon>
     </div>
     <div class="cardgroup">
@@ -232,77 +233,8 @@
             <div style="width: 100%;">
                 <p> {{'NIVELES' | translate }} </p>
             </div>
-            <ng-container
-                *ngFor="let item of courseFormGroup.controls['levelGrop'].value;index as i">
-                <div *ngIf="item.active"
-                    style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
-                    [style.backgroundColor]="item.color+'33'"
-                    [style.border]="'1px solid '+item.color">
-                    <div [style.color]="item.color"
-                        style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
-                        <img src="assets/icons/icon/award.png" class="icon24">
-                        <span> {{item.annotation}} {{item.level}}
-                        </span>
-                        <mat-icon
-                            *ngIf="courseFormGroup.controls['id'] && !courseFormGroup.controls['levelGrop'].value[i].modal"
-                            class="icon24"
-                            (click)="courseFormGroup.controls['levelGrop'].value[i].modal=true"
-                            style="cursor: pointer;margin-left:auto">
-                            keyboard_arrow_up </mat-icon>
-                        <mat-icon
-                            *ngIf="courseFormGroup.controls['id'] && courseFormGroup.controls['levelGrop'].value[i].modal"
-                            class="icon24"
-                            (click)="courseFormGroup.controls['levelGrop'].value[i].modal=false"
-                            style="cursor: pointer;margin-left:auto">
-                            keyboard_arrow_down </mat-icon>
-                    </div>
-                    <div
-                        style="color: #222222; font-weight: 400;display: flex;align-items: center;">
-                        <img src="assets/icons/icon/people.png" class="icon16">
-                        <span> {{item.Subgrupo}}g · {{item.PartMax ||
-                            courseFormGroup.controls['participants'].value}}p
-                        </span>
-                        <div style="margin: auto;"></div>
-                        <ng-container>
-                            <img src="assets/icons/icon/calendar.png"
-                                class="icon16">
-                            <span>
-                                {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
-                                días
-                            </span>
-                            <span
-                                *ngIf="courseFormGroup.controls['duration_min'].value">
-                                {{courseFormGroup.controls['duration_min'].value}}
-                            </span>
-                        </ng-container>
-                        <div style="margin: auto;"></div>
-                        <img src="assets/icons/icon/ticket.png" class="icon16">
-                        <span> {{item.age_min}}/{{item.age_max}} </span>
-                        <div style="margin: auto;"></div>
-                    </div>
-                </div>
-                <div style="width: 100%;">
-                    <ng-container
-                        *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal">
-                        <div
-                            *ngFor="let ix of [].constructor(item.Subgrupo);;index as i"
-                            style="padding: 10px;width: 100%; border-radius: 4px;background-color: #EFF2F5;border: 1px solid var(--Grey-03, #DEE6EA);">
-                            <span style="color: var(--Dark-02, #2F3844);
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 16px;"> {{item.annotation}} {{item.level}} {{i+1}}
-                            </span>
-                            <br>
-                            <span style="color: var(--Dark-02, #2F3844);
-                            font-style: normal;
-                            font-weight: 400;
-                            line-height: 16px;">
-                                {{"No monitor assigned"}}
-                            </span>
-                        </div>
-                    </ng-container>
-                </div>
-            </ng-container>
+            <vex-course-detail-nivel style="width: 100%;"
+                [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
         </div>
     </div>
     <div class="cardgroup"
@@ -397,6 +329,116 @@
                     </span>
                 </div>
             </ng-container>
+            <ng-container
+                *ngIf="courseFormGroup.controls['extras'].value.length===0">
+                <div>
+                    <button
+                        style="margin-top: 0px !important;"
+                        color="primary"
+                        mat-button
+                        type="button"
+                        class="client-button">
+                        <mat-icon>add</mat-icon>
+                        {{'Añadir extra' | translate }}
+                    </button>
+                </div>
+            </ng-container>
+
         </div>
+    </div>
+    <div class="cardgroup" *ngIf="mode==='update'">
+        <div
+            style="width: 100%; height: 100%;  background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: inline-flex">
+            <div
+                style="align-self: stretch; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 600; line-height: 18px; word-wrap: break-word">Leyenda</div>
+            <div
+                style="align-self: stretch; height: 276px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
+                <div
+                    style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 21px; display: flex">
+                    <div
+                        style="height: 24px; padding-top: 10px; padding-bottom: 10px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                        <div
+                            style="width: 24px; height: 24px; position: relative">
+                            <img src="assets/icons/icon/monitor.png" alt>
+                        </div>
+                        <div
+                            style="width: 91px; height: 24px; color: #8B9099; font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word;    align-content: center;">MONITOR</div>
+                    </div>
+                    <div
+                        style="align-self: stretch; height: 70px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+                        <div
+                            style="justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #31C044; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Asignado</div>
+                        </div>
+                        <div
+                            style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #FFCF25; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Modificado</div>
+                        </div>
+                        <div
+                            style="justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #C7D0D3; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Sin
+                                monitor</div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style="height: 141px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 21px; display: flex">
+                    <div
+                        style="height: 24px; padding-top: 10px; padding-bottom: 10px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                        <div
+                            style="width: 24px; height: 24px; position: relative">
+                            <img src="assets/icons/icon/alumno.png" alt>
+                        </div>
+                        <div
+                            style="width: 91px; height: 24px; color: #8B9099; font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word;    align-content: center;">ALUMNOS</div>
+                    </div>
+                    <div
+                        style="align-self: stretch; height: 96px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+                        <div
+                            style="justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #31C044; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Presente
+                                el día del curso </div>
+                        </div>
+                        <div
+                            style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #FFCF25; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Alumno
+                                cambiado de curso/nivel/grupo</div>
+                        </div>
+                        <div
+                            style="justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #E70F0F; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">No
+                                presentado</div>
+                        </div>
+                        <div
+                            style="justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+                            <div
+                                style="width: 10px; height: 10px; background: #C7D0D3; border-radius: 9999px"></div>
+                            <div
+                                style="color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">Día
+                                a venir</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

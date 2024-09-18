@@ -61,10 +61,10 @@
                 </div>
                 <div>
                   <button
-                    style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+                    style="margin-top: 0px !important;height: 38px; width: 140px;margin-left: auto;"
                     color="primary"
                     mat-stroked-button
-                    type="button"
+                    type="button" (click)="sendEmailModal=true"
                     class="client-button">
                     <mat-icon>mail</mat-icon>
                     {{'Mandar mail' | translate }}
@@ -90,82 +90,12 @@
                     line-height: 16px;
                     word-wrap: break-word"> {{'GRUPOS' | translate }}
                       <mat-icon
-                        (click)="goTo('courses/update/'+id+'?step=0')"
+                        (click)="goTo('courses/update/'+id,{step:3})"
                         class="editbutton">edit</mat-icon>
                     </p>
                   </div>
-                  <ng-container
-                    *ngFor="let item of courseFormGroup.controls['levelGrop'].value;index as i">
-                    <div *ngIf="item.active"
-                      style="height: 72px; padding: 10px;width: 100%; border-radius: 4px;"
-                      [style.backgroundColor]="item.color+'33'"
-                      [style.border]="'1px solid '+item.color">
-                      <div [style.color]="item.color"
-                        style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
-                        <img src="assets/icons/icon/award.png" class="icon24">
-                        <span> {{item.annotation}} {{item.level}}
-                        </span>
-                        <mat-icon
-                          *ngIf="courseFormGroup.controls['id'] && !courseFormGroup.controls['levelGrop'].value[i].modal"
-                          class="icon24"
-                          (click)="courseFormGroup.controls['levelGrop'].value[i].modal=true"
-                          style="cursor: pointer;margin-left:auto">
-                          keyboard_arrow_up </mat-icon>
-                        <mat-icon
-                          *ngIf="courseFormGroup.controls['id'] && courseFormGroup.controls['levelGrop'].value[i].modal"
-                          class="icon24"
-                          (click)="courseFormGroup.controls['levelGrop'].value[i].modal=false"
-                          style="cursor: pointer;margin-left:auto">
-                          keyboard_arrow_down </mat-icon>
-                      </div>
-                      <div
-                        style="color: #222222; font-weight: 400;display: flex;align-items: center;">
-                        <img src="assets/icons/icon/people.png" class="icon16">
-                        <span> {{item.Subgrupo}}g · {{item.PartMax ||
-                          courseFormGroup.controls['participants'].value}}p
-                        </span>
-                        <div style="margin: auto;"></div>
-                        <ng-container>
-                          <img src="assets/icons/icon/calendar.png"
-                            class="icon16">
-                          <span>
-                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
-                            días
-                          </span>
-                          <span
-                            *ngIf="courseFormGroup.controls['duration_min'].value">
-                            {{courseFormGroup.controls['duration_min'].value}}
-                          </span>
-                        </ng-container>
-                        <div style="margin: auto;"></div>
-                        <img src="assets/icons/icon/ticket.png" class="icon16">
-                        <span> {{item.age_min}}/{{item.age_max}} </span>
-                        <div style="margin: auto;"></div>
-                      </div>
-                    </div>
-                    <div style="width: 100%;">
-                      <ng-container
-                        *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal">
-                        <div
-                          *ngFor="let ix of [].constructor(item.Subgrupo);;index as i"
-                          style="padding: 10px;width: 100%; border-radius: 4px;background-color: #EFF2F5;border: 1px solid var(--Grey-03, #DEE6EA);">
-                          <span style="color: var(--Dark-02, #2F3844);
-                              font-style: normal;
-                              font-weight: 600;
-                              line-height: 16px;"> {{item.annotation}}
-                            {{item.level}} {{i+1}}
-                          </span>
-                          <br>
-                          <span style="color: var(--Dark-02, #2F3844);
-                              font-style: normal;
-                              font-weight: 400;
-                              line-height: 16px;">
-                            {{"No monitor assigned"}}
-                          </span>
-                        </div>
-                      </ng-container>
-                    </div>
-                  </ng-container>
+                  <vex-course-detail-nivel style="width: 100%;"
+                    [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
                 </div>
               </div>
             </div>
@@ -173,12 +103,79 @@
         </mat-card>
       </mat-tab>
       <mat-tab label="{{'bookings' | translate}}">
-
       </mat-tab>
       <mat-tab label="{{'menu.stats' | translate}}">
-
       </mat-tab>
-
     </mat-tab-group>
   </div>
 </div>
+<vex-flux-modal *ngIf="sendEmailModal" title="Mandar mail"
+  (Close)="sendEmailModal=false">
+  <div body class="contents" style="width: 100%;padding: 0;">
+    <div>
+      <span style="width: 100%;">
+        A quien se envia
+      </span>
+      <mat-checkbox style="width: calc(50% - 10px);"> {{'Clientes' | translate
+        }}
+      </mat-checkbox>
+      <mat-checkbox style="width: calc(50% - 10px);"> {{'Profesores' | translate
+        }}
+      </mat-checkbox>
+      <mat-form-field
+        appearance="outline" style="width: calc(50% - 10px);">
+        <mat-label>{{'Desde' | translate}}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="date_desde"
+          [min]="minDate"
+          [max]="maxDate" />
+        <mat-datepicker-toggle matSuffix
+          [for]="date_desde"></mat-datepicker-toggle>
+        <mat-datepicker #date_desde [startAt]="nowDate"></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline" style="width: calc(50% - 10px);">
+        <mat-label>{{'Hasta' | translate}}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="date_hasta"
+          [min]="minDate"
+          [max]="maxDate" />
+        <mat-datepicker-toggle matSuffix
+          [for]="date_hasta"></mat-datepicker-toggle>
+        <mat-datepicker #date_hasta [startAt]="nowDate"></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline"
+        style="width: 100%;">
+        <mat-label>{{'Asunto' | translate}}</mat-label>
+        <input matInput required type="text">
+      </mat-form-field>
+      <div>
+        <angular-editor style="width: 100%"
+          [placeholder]="'Mensaje' | translate"
+          [config]="editor2Config">
+        </angular-editor>
+      </div>
+    </div>
+  </div>
+  <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      color="primary"
+      mat-stroked-button
+      type="button" (click)="sendEmailModal=false"
+      class="client-button">
+      {{'Cancelar' | translate }}
+    </button>
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button" (click)="sendEmailModal=false"
+      class="client-button">
+      {{'Enviar' | translate }}
+    </button>
+  </div>
+
+</vex-flux-modal>

@@ -1,0 +1,156 @@
+<div style="overflow: auto; height: 100%;">
+    <table>
+        <thead>
+            <tr style="  border-bottom: 1px solid #dee6ea;">
+                <td> </td>
+                <td *ngFor="let item of [].constructor(30); index as i">
+                    {{ISODate(i).split("T")[0]}}
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="color: var(--Grey-01, #8B9099);
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 16px;">
+                    <div class="flexicon">
+                        <img src="assets/icons/icon/monitor.png" class="icon24">
+                        MONITOR
+                    </div>
+
+                </td>
+                <td *ngFor="let item of [].constructor(30); index as i">
+
+                </td>
+            </tr>
+            <tr style="border-bottom: 3px solid #dee6ea;">
+                <td>
+                    <mat-form-field appearance="outline" style="height: 40px;">
+                        <input
+                            type="text"
+                            aria-label="Number"
+                            matInput
+                            [matAutocomplete]="auto" value="Maria Gonzales" />
+                        <mat-autocomplete #auto="matAutocomplete"
+                            [displayWith]="displayFn">
+                            <mat-option
+                                *ngFor="let item of ['Maria Gonzales','Maria Gonzales','Maria Gonzales']"
+                                [value]="item">{{item}}</mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </td>
+                <td *ngFor="let item of [].constructor(30); index as i">
+                    <mat-icon [style.color]="ramdonColor()"
+                        class="icon16">circle</mat-icon>
+                </td>
+            </tr>
+            <tr>
+                <td style="color: var(--Grey-01, #8B9099);
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 16px;">
+                    <div class="flexicon">
+                        <img src="assets/icons/icon/alumno.png" class="icon24">
+                        ALUMNOS
+                    </div>
+                </td>
+                <td *ngFor="let item of [].constructor(30); index as i">
+
+                </td>
+            </tr>
+            <tr
+                *ngFor="let item of ['Mathias Meier','Mathias Meier','Mathias Meier','Mathias Meier']">
+                <td>
+                    <div class="flexicon" style="color: var(--Dark-01, #222);
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 16px;">
+                        {{item}}
+                        <img src="assets/icons/icon/exc.png" class="icon24"
+                            style="cursor: pointer;"
+                            (click)="cambiarModal=true">
+                    </div>
+                    <span style="color: var(--Grey-01, #8B9099);
+                    font-size: 12px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 16px;">
+                        FR · Switzerland · 47 Años
+                    </span>
+                </td>
+                <td *ngFor="let item of [].constructor(30); index as i">
+                    <mat-icon [style.color]="ramdonColor()"
+                        class="icon16">circle</mat-icon>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<vex-flux-modal title="Cambiar nivel alumno" *ngIf="cambiarModal">
+    <div body style="display: flex;flex-wrap: nowrap;">
+        <div style="width: 50%; display: flex;">
+            <div>
+                <div class="flexicon">
+                    <img src="assets/icons/icon/alumno.png" class="icon24">
+                    ALUMNOS
+                </div>
+                <mat-checkbox style="display: flex;"
+                    *ngFor="let item of [1,2,3,4]">
+                    <div style="display: flex; gap: 20px;">
+                        <div>
+                            <img src="assets/icons/icon/avatar.png"
+                                style="height: 40px;height: 40px;">
+                        </div>
+                        <div>
+                            <span style="color: var(--Dark-01, #222);
+                            font-size: 12px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: 16px;">
+                                Mathias Meier
+                            </span>
+                            <br>
+                            <span style="color: var(--Grey-01, #8B9099);
+                            font-size: 12px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 16px;">
+                                FR · Switzerland · 47 Años
+                            </span>
+                        </div>
+                    </div>
+                </mat-checkbox>
+            </div>
+        </div>
+        <div style="width: 50%;">
+            <div class="flexicon">
+                <img src="assets/icons/icon/alumno.png" class="icon24">
+                NIVEL
+            </div>
+            <vex-course-detail-nivel
+                [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
+        </div>
+    </div>
+    <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
+        <button
+            style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+            color="primary"
+            mat-stroked-button
+            type="button" (click)="cambiarModal=false"
+            class="client-button">
+            {{'Cancelar' | translate }}
+        </button>
+        <button
+            style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+            color="primary"
+            mat-raised-button
+            type="button" (click)="cambiarModal=false"
+            class="client-button">
+            {{'Guardar' | translate }}
+        </button>
+    </div>
+</vex-flux-modal>

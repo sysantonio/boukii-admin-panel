@@ -37,6 +37,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout/app.module';
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
+import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/a
     MatExpansionModule,
     FluxLayoutModule,
     CoursesDetailCardModule,
-    FluxModalModule
+    FluxModalModule,
+    FluxDisponibilidadModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

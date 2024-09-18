@@ -25,9 +25,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CourseDetailCardComponent } from './app.component';
+import { CourseDetailCardNivelComponent } from './app.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { CoursesDetailCardNivelModule } from '../course-nivel/app.module';
 
 @NgModule({
   imports: [
@@ -59,9 +58,9 @@ import { CoursesDetailCardNivelModule } from '../course-nivel/app.module';
     MatCheckboxModule,
     AngularEditorModule,
     MatTabsModule,
-    MatProgressSpinnerModule, TranslateModule, CoursesDetailCardNivelModule
+    MatProgressSpinnerModule, TranslateModule
   ],
-  declarations: [CourseDetailCardComponent],
-  exports: [CourseDetailCardComponent]
+  declarations: [CourseDetailCardNivelComponent],
+  exports: [CourseDetailCardNivelComponent]
 })
-export class CoursesDetailCardModule { }
+export class CoursesDetailCardNivelModule { }

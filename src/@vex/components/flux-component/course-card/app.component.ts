@@ -10,6 +10,7 @@ export class CourseDetailCardComponent implements OnChanges {
 
   @Input() courseFormGroup!: UntypedFormGroup
   @Input() detail: boolean = false
+  @Input() mode: 'create' | 'update' = "create"
   @Output() close = new EventEmitter()
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
@@ -37,4 +38,6 @@ export class CourseDetailCardComponent implements OnChanges {
     }
     console.log(this.courseFormGroup.getRawValue())
   }
+
+  
 }

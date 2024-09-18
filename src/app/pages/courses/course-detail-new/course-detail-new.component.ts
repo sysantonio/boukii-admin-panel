@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment/moment';
 import { CoursesService } from '../../../../service/courses.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-course-detail-new',
@@ -14,7 +15,9 @@ import { CoursesService } from '../../../../service/courses.service';
   styleUrls: ['./course-detail-new.component.scss']
 })
 export class CourseDetailNewComponent implements OnInit {
-
+  minDate = new Date(2000, 1, 1);
+  nowDate = new Date()
+  maxDate = new Date(2099, 12, 31);
   user: any;
   settings: any;
   id: number;
@@ -25,7 +28,27 @@ export class CourseDetailNewComponent implements OnInit {
   description: string = '';
   ageRange: { age_min: number, age_max: number } = { age_min: 0, age_max: 0 };
   shortestDuration: string | null = null;
-
+  sendEmailModal: boolean = false
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    //height: '56px',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
+    toolbarPosition: 'bottom',
+    outline: true,
+    toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
+  }
+  editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
+  editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService,
     private activatedRoute: ActivatedRoute, private router: Router,
     private dialog: MatDialog, private courseService: CoursesService,
