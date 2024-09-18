@@ -90,7 +90,8 @@
         </tbody>
     </table>
 </div>
-<vex-flux-modal title="Cambiar nivel alumno" *ngIf="cambiarModal">
+<vex-flux-modal title="Cambiar nivel alumno" *ngIf="cambiarModal"
+    (Close)="cambiarModal=false">
     <div body style="display: flex;flex-wrap: nowrap;">
         <div style="width: 50%; display: flex;">
             <div>
