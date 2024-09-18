@@ -1,74 +1,58 @@
 .wrapper {
   display: flex;
-  gap: 1.25rem;
   flex-direction: column;
-  > div {
+  gap: 1.25rem;
+
+  > div[formArrayName] {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
     width: 100%;
   }
+
+  .content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Alinea el checkbox a la derecha */
+    width: 100%;
+  }
+
   .rowsWrapper {
     display: flex;
-    gap: 1rem;
     flex-direction: column;
+    gap: 1rem;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid var(--color-grey3);
-    width: 100%;
-    &.last {
-      border-bottom-width: 0px;
-    }
+    width: calc(100% - 4rem); /* Ajusta el ancho para dar espacio al checkbox */
   }
-  ::ng-deep {
-    .mat-mdc-select,
-    .mat-mdc-form-field-infix {
-      height: 1.5rem;
-    }
 
-    mat-select-trigger {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding-left: 1rem;
-    }
-
-    .mat-mdc-form-field-subscript-wrapper {
-      display: none;
-    }
-
-    .mat-mdc-option.mdc-list-item {
-      font-family: var(--font-dm);
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.25rem;
-    }
+  .rowsWrapper.last {
+    border-bottom-width: 0;
   }
 }
 
 .row-1 {
   display: flex;
   gap: 0.5rem;
-  .date {
+
+  .date, .hour, .price {
     font-family: var(--font-dm);
     font-size: 0.85rem;
-    font-weight: 600;
     line-height: 1.15rem;
+  }
+
+  .date {
+    font-weight: 600;
     color: var(--color-dark1);
   }
 
   .hour {
-    font-family: var(--font-dm);
-    font-size: 0.85rem;
     font-weight: 400;
-    line-height: 1.15rem;
     color: var(--color-grey1);
   }
 
   .price {
-    font-family: var(--font-dm);
-    font-size: 0.85rem;
     font-weight: 300;
-    line-height: 1.15rem;
     color: var(--color-dark1);
     margin-left: auto;
   }
@@ -77,11 +61,13 @@
 .row-2 {
   display: flex;
   gap: 1rem;
+
   > div {
     width: 50%;
     display: flex;
     gap: 1rem;
     align-items: center;
+
     > * {
       width: 100%;
     }
@@ -104,6 +90,29 @@
 }
 
 ::ng-deep {
+  .mat-mdc-select,
+  .mat-mdc-form-field-infix {
+    height: auto; /* Ajustar según sea necesario */
+  }
+
+  mat-select-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-left: 1rem;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  .mat-mdc-option.mdc-list-item {
+    font-family: var(--font-dm);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+  }
+
   .mdc-list-item__primary-text {
     display: flex;
     align-items: center;

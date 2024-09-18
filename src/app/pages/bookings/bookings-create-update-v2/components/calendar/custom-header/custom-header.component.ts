@@ -51,13 +51,24 @@ export class CustomHeader implements OnChanges, DoCheck {
     );
   }
 
+  getLastDayOfMonth(date: any): Date {
+    const year = this.dateAdapter.getYear(date);
+    const month = this.dateAdapter.getMonth(date);
+
+    // Creamos una fecha del primer día del mes siguiente
+    const firstDayNextMonth = this.dateAdapter.createDate(year, month + 1, 1);
+
+    // Restamos un día para obtener el último día del mes actual
+    return this.dateAdapter.addCalendarDays(firstDayNextMonth, -1);
+  }
+
   previousClicked() {
     const newDate = this.dateAdapter.addCalendarMonths(
       this.calendar.activeDate,
       -1
     );
     this.calendar.activeDate = newDate;
-    this.calendarService.notifyMonthChanged(this.getFirstDayOfMonth(newDate));
+    this.calendarService.notifyMonthChanged(this.getLastDayOfMonth(newDate));
   }
 
   nextClicked() {

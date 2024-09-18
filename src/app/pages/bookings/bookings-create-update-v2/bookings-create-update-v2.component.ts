@@ -88,7 +88,7 @@ export class BookingsCreateUpdateV2Component {
       step2: { utilizers },
       step3: { sport, sportLevel },
       step4: { course },
-      step5: { dates },
+      step5: { course_dates },
       step6: { clientObs, schoolObs },
     } = formData.value;
 
@@ -98,19 +98,64 @@ export class BookingsCreateUpdateV2Component {
     this.sport = sport;
     this.sportLevel = sportLevel;
     this.course = course;
-    this.dates = dates;
-    // TODO: habra que recogerlo de las dates configuradas en el step5
-    this.monitors = MOCK_MONITORS;
-/*     this.clientObs = clientObs;
-    this.schoolObs = schoolObs; */
-
-    this.clientObs = "observacion text";
-    
-    this.schoolObs = "observacion text 2";
+    this.dates = course_dates ? this.getSelectedDates(course_dates) : [];
+    //this.monitors = MOCK_MONITORS;
+    this.clientObs = clientObs;
+    this.schoolObs = schoolObs;
     // TODO: habra que cambiar esto por el dato real calculado
-    this.total = "500,00 CHF";
+    // Calcula el total de la reserva
+    if(this.course && this.dates) {
+      this.calculateTotal();
+    }
     // TODO: crear funcion normalizadora
     //this.normalizedDates= this.normalizeDates()
+  }
+
+  calculateTotal() {
+    let total = 0;
+
+    // Verifica si el curso es del tipo 1
+    if (this.course.course_type === 1) {
+      if (this.course.is_flexible) {
+        // Si el curso es flexible
+        const selectedDatesCount = this.dates.length; // Número de fechas seleccionadas
+        total = this.course.price * selectedDatesCount;
+
+        // Aplica los descuentos
+        const discounts = this.course.discounts ? JSON.parse(this.course.discounts) : [];
+        discounts.forEach((discount: { date: number; percentage: number }) => {
+          if (discount.date <= selectedDatesCount) {
+            const discountAmount = (this.course.price * discount.percentage) / 100;
+            total -= discountAmount;
+          }
+        });
+      } else {
+        // Si el curso no es flexible
+        total = parseFloat(this.course.price);
+      }
+    }
+
+    // Suma el precio total de los extras elegidos
+    const extrasTotal = this.dates.reduce((acc, date) => {
+      if (date.extras && date.extras.length) {
+        const extrasPrice = date.extras.reduce((extraAcc, extra) => {
+          const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+          return extraAcc + price;
+        }, 0);
+        return acc + extrasPrice;
+      }
+      return acc;
+    }, 0);
+
+    total += extrasTotal;
+
+    // Actualiza el total
+    this.total = `${total.toFixed(2)} ${this.course.currency}`;
+  }
+
+  // Filtra las fechas seleccionadas
+  getSelectedDates(dates) {
+    return dates.filter((date: any) => date.selected);
   }
 
   openBookingDialog() {
@@ -126,7 +171,7 @@ export class BookingsCreateUpdateV2Component {
         sport: this.sport,
         sportLevel: this.sportLevel,
         course: this.course,
-        dates: this.normalizedDates,
+        dates: this.dates,
         monitors: this.monitors,
         clientObs: this.clientObs,
         schoolObs: this.schoolObs,

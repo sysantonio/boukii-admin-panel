@@ -26,4 +26,9 @@ export class UtilsService {
   formatDate(date: string, format = "DD.MM.YYYY") {
     return moment(date).format(format);
   }
+
+  getSchoolData() {
+    const user = JSON.parse(localStorage.getItem("boukiiUser"));
+    return user.schools[0]
+  }
 }
