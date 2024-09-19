@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {
   MOCK_POSIBLE_HOURS,
   MOCK_POSIBLE_DURATION,
@@ -12,11 +12,14 @@ import {UtilsService} from '../../../../../../service/utils.service';
 import {ApiCrudService} from '../../../../../../service/crud.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
+import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
 
 @Component({
   selector: "booking-form-details-private",
   templateUrl: "./form-details-private.component.html",
   styleUrls: ["./form-details-private.component.scss"],
+  encapsulation: ViewEncapsulation.None // Desactiva la encapsulación de estilos
+
 })
 export class FormDetailsPrivateComponent implements OnInit {
   @Input() course: any;
@@ -91,6 +94,22 @@ export class FormDetailsPrivateComponent implements OnInit {
       // Si no hay datos iniciales, añade una fecha por defecto
       this.addCourseDate();
     }
+  }
+
+  dateClass() {
+    return (date: Date): MatCalendarCellCssClasses => {
+      const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
+      if (
+        this.course.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === currentDate) &&
+        moment(this.minDate, "YYYY-MM-DD")
+          .startOf("day")
+          .isSameOrBefore(moment(date, "YYYY-MM-DD").startOf("day"))
+      ) {
+        return `with-course green`;
+      } else {
+        return;
+      }
+    };
   }
 
   inUseDatesFilter = (d: Date): boolean => {
@@ -170,14 +189,18 @@ export class FormDetailsPrivateComponent implements OnInit {
           // Si la duración no está en las posibles, setearla en null
           courseDateGroup.get('duration').setValue(null);
         }
-        if(courseDateGroup.get('duration').value) {
+        if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
           this.getMonitorsAvailable(courseDateGroup)
         }
       }
     });
 
     courseDateGroup.get('date').valueChanges.subscribe(() => {
-      this.getMonitorsAvailable(courseDateGroup)
+
+      if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
+        this.getMonitorsAvailable(courseDateGroup)
+      }
+
     });
 
     // Suscribirse a cambios en 'duration'
@@ -189,10 +212,9 @@ export class FormDetailsPrivateComponent implements OnInit {
 
       // Actualizar el campo del precio con el nuevo cálculo
       courseDateGroup.get('price').setValue(newPrice);
-      if(courseDateGroup.get('startHour').value) {
-        if(courseDateGroup.get('duration').value) {
-          this.getMonitorsAvailable(courseDateGroup)
-        }
+      if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
+        this.getMonitorsAvailable(courseDateGroup)
+
       }
     });
 
