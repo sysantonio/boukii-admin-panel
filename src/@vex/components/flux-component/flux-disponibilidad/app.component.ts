@@ -8,6 +8,7 @@ import { UntypedFormGroup } from '@angular/forms';
 })
 export class FluxDisponibilidadComponent {
   cambiarModal: boolean = false
+  @Input() mode: 'create' | 'update' = "create"
   @Input() courseFormGroup!: UntypedFormGroup
 
   ISODate = (n: number) => new Date(new Date().getTime() + n * 24 * 60 * 60 * 1000).toISOString()

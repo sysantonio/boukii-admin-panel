@@ -9,6 +9,8 @@ import { UntypedFormGroup } from '@angular/forms';
 export class CourseDetailCardNivelComponent {
 
   @Input() courseFormGroup!: UntypedFormGroup
+  @Input() checkbox: boolean = false
+
   week: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",]
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))

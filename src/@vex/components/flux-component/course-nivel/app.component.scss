@@ -80,3 +80,10 @@ button {
   font-size: 24px;
   color: green;
 }
+
+::ng-deep {
+  .mat-checkbox-background,
+  .mat-checkbox-frame {
+    border-radius: 70% !important;
+  }
+}
