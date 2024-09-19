@@ -79,3 +79,13 @@ table td + td {
 button {
   border-radius: 3px !important;
 }
+td:hover {
+  background-color: #dee6ea;
+}
+
+table tr td:first-child:hover ~ td {
+  background-color: #dee6ea;
+}
+table tr td:first-child:hover {
+  background-color: #dee6ea;
+}

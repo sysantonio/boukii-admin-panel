@@ -166,6 +166,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
           settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
         });
         this.loading = false
+        this.Confirm(0)
+
       } else {
         this.crudService.get('/admin/courses/' + this.id,
           ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
@@ -234,8 +236,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
                           categoryPart: [[], Validators.required],
                           settings: [JSON.parse(this.detailData.settings), Validators.required],
                         });
-                        this.Confirm(0)
                         this.getDegrees()
+                        this.Confirm(0)
+
                         this.loading = false
                       })
                   })

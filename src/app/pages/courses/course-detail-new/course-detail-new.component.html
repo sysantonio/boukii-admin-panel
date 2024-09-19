@@ -14,7 +14,8 @@
         <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
         <mat-card *ngIf="!loading">
           <mat-card-content style="display: flex;padding: 0;">
-            <div class="contents">
+            <div class="contents"
+              [style.width]="count(courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'">
               <div>
                 <div style="width: calc(50% - 10px);">
                   <mat-slide-toggle [checked]="true">
@@ -78,7 +79,8 @@
                 </vex-course-detail-card>
               </div>
             </div>
-            <div class="contents">
+            <div class="contents"
+              *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
               <div>
                 <div
                   style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">

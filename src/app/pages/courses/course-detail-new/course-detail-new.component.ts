@@ -168,5 +168,6 @@ export class CourseDetailNewComponent implements OnInit {
     return ret;
   }
   DateDiff = (value1: string, value2: string): number => Math.round((new Date(value2).getTime() - new Date(value1).getTime()) / 1000 / 60 / 60 / 24)
+  count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
 
 }

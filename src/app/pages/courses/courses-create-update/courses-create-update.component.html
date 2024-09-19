@@ -39,21 +39,21 @@
       <mat-tab-group class="tabsWrapper"
         (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event+1})"
         [selectedIndex]="courseFormGroup.controls['course_type'].value-1||0">
-        <mat-tab>
+        <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #E5962A;"
               class="icon16">circle</mat-icon>
             Curso Colectivo
           </ng-template>
         </mat-tab>
-        <mat-tab>
+        <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #2FAA41;"
               class="icon16">circle</mat-icon>
             Curso Privado
           </ng-template>
         </mat-tab>
-        <mat-tab>
+        <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #0AB0BC;"
               class="icon16">circle</mat-icon>
@@ -596,11 +596,11 @@
           Seleccionar los extras que pueden ser añadidos haciendo la reserva:
         </div>
         <ng-container
-          *ngFor="let item of courseFormGroup.controls['course_type'].value===3?courseFormGroup.controls['categoryPart'].value:[1];index as i">
-          <div
+          *ngFor="let ite of courseFormGroup.controls['course_type'].value===3&&courseFormGroup.controls['categoryPart'].value.length>0?courseFormGroup.controls['categoryPart'].value.length:[1];index as i">
+          <div *ngIf="courseFormGroup.controls['course_type'].value===3"
             style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
-            <span>
-              {{courseFormGroup.controls['categoryPart'].value[i].name}}
+            <span>  
+              {{courseFormGroup.controls['categoryPart'].value[i]?courseFormGroup.controls['categoryPart'].value[i].name:"EXTRAS"}}
             </span>
           </div>
           <div
