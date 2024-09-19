@@ -12,6 +12,7 @@ export interface BookingDescriptionCardDate {
   changeMonitorOption?: ChangeMonitorOption;
   monitor?: Record<string, any>;
   utilizer?: Record<string, any>[];
+  utilizers?: Record<string, any>[];
   extras?: Record<string, any>[];
 }
 
@@ -38,6 +39,11 @@ export class BookingDescriptionCard {
 
   formatDate(date: string) {
     return this.utilsService.formatDate(date);
+  }
+
+  hasExtrasForDate(date: any): boolean {
+    // Verifica si hay utilizadores para la fecha y si al menos uno tiene extras
+    return date.utilizers?.some((utilizer: any) => utilizer.extras && utilizer.extras.length > 0) || false;
   }
 
   calculateDiscountedPrice(date: any, index: number): number {

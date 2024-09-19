@@ -20,7 +20,8 @@
       <div class="extra-field-wrapper">
         <mat-form-field appearance="outline" class="extras-field">
           <mat-label>{{ "extras" | translate }} </mat-label>
-          <mat-select multiple (selectionChange)="onExtraChange($event)" [value]="selectedExtras">
+          <mat-select multiple (selectionChange)="onExtraChange($event)" [value]="selectedExtras"
+          [disabled]="!this.possibleExtras || !this.possibleExtras.length">
             <mat-option
               class="extra-field-option"
               *ngFor="let extra of possibleExtras"

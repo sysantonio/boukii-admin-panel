@@ -109,7 +109,22 @@
               </span>
             </div>
 
-
+            <ng-container *ngIf="date.utilizers && date.utilizers.length && hasExtrasForDate(date)">
+              <div class="sectionTitle monitorDetails">
+                {{ "extras" | translate }}
+              </div>
+              <ng-container *ngFor="let utilizer of date.utilizers">
+                <ng-container *ngIf="utilizer.extras && utilizer.extras.length">
+                  <div *ngIf="utilizer.extras && utilizer.extras.length" class="dateExtras">
+                    <h5>{{ utilizer.first_name }} {{ utilizer.last_name }}:</h5>
+                    <div *ngFor="let extra of utilizer.extras" class="extraDetails">
+                      <span>{{ getExtraName([extra]) }} - {{ getExtraDescription([extra]) }}</span>
+                      <span class="price">{{ getExtraPrice([extra]) }} {{ date.currency }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
             <!--
                         <span class="monitorDetails"
                         >{{ langService.getLanguage(date.monitor.language1_id) }} ·

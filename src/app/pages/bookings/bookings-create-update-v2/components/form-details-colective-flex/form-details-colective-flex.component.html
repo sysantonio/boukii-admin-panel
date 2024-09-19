@@ -21,7 +21,8 @@
               <div class="extra-field-wrapper">
                 <mat-form-field appearance="outline" class="extras-field">
                   <mat-label>{{ "extras" | translate }} </mat-label>
-                  <mat-select multiple formControlName="extras" (selectionChange)="onExtraChange(i)" [disabled]="!(courseDatesArray.at(i)).get('selected').value">
+                  <mat-select multiple formControlName="extras" (selectionChange)="onExtraChange(i)"
+                              [disabled]="!(courseDatesArray.at(i)).get('selected').value || !this.posibleExtras || !this.posibleExtras.length">
                     <mat-option *ngFor="let extra of posibleExtras" [value]="extra">
                       <span>{{ extra.name }} - {{ extra.description }}</span>
                       <span>{{ extra.price }}</span>

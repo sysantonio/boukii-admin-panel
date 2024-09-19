@@ -70,7 +70,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
       endHour: [courseDate.hour_end],
       price: this.course.price,
       currency: this.course.currency,
-      extras: [{ value: extras, disabled: !selected }] ,
+      extras: [{ value: extras, disabled: !selected || !this.posibleExtras || !this.posibleExtras.length }] ,
       monitor: [monitor]
     });
   }
@@ -91,10 +91,6 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
 
     // Si no encuentra ningún grupo o subgrupo adecuado, retorna null
     return null;
-  }
-
-  calculateDayPrice() {
-
   }
 
   onDateSelect(event: any, index: number) {

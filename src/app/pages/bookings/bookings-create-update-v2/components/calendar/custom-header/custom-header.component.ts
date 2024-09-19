@@ -23,6 +23,7 @@ export class CustomHeader implements OnChanges, DoCheck {
     moment.locale(this.setLocale(currentLocale));
     console.log(currentLocale);
     this.dateAdapter.setLocale("es-ES");
+    this.dateAdapter.getFirstDayOfWeek = () => 1;
     this.updateHeader();
   }
 

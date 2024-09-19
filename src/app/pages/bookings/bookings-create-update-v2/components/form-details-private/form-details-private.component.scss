@@ -25,6 +25,25 @@
   }
 }
 
+.card {
+  &__header {
+    background-color: var(--color-grey4);
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-dm);
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: var(--color-dark1);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__content {
+    padding: 1.25rem;
+  }
+}
+
 ::ng-deep {
   .mdc-list-item__primary-text {
     display: flex;
@@ -84,6 +103,7 @@
     color: var(--color-grey1);
     min-width: 6rem;
     text-align: right;
+    width: auto !important;
   }
 
   ::root {
@@ -97,6 +117,30 @@
     }
   }
 }
+::ng-deep {
+  .mat-calendar-body-selected {
+    background-color: var(--color-grey4) !important;
+    border: none !important;
+    color: var(--color-primary-red) !important;
+  }
+  .mat-calendar-body-cell-content {
+    color: var(--color-white);
+    border-radius: 1rem;
+  }
+  /* Aplica a las celdas que no estén deshabilitadas */
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled) .mat-calendar-body-cell-content {
+    color: var(--color-white);
+    border-radius: 1rem;
+    background-color: var(--color-green) !important;
+    border: 1px solid var(--color-green) !important;
+  }
+
+  /* Hover para las celdas no deshabilitadas */
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover .mat-calendar-body-cell-content {
+    opacity: 0.8;
+  }
+}
+
 
 .disabled-icon {
   color: var(--color-grey1);

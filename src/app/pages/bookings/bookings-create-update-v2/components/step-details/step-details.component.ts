@@ -16,30 +16,11 @@ export class StepDetailsComponent {
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
+  addDateEvent = false;
   stepForm: FormGroup;
   utilizer;
-  dates = [
-    {
-      date: "",
-      hour: "",
-      duration: "",
-      monitor: "",
-      monitorElection: "",
-      //utilizers: this.utilizers,
-      utilizers: [MOCK_USER1, MOCK_USER2],
-    },
-    {
-      date: "",
-      hour: "",
-      duration: "",
-      monitor: "",
-      monitorElection: "",
-      //utilizers: this.utilizers,
-      utilizers: [MOCK_USER1, MOCK_USER2],
-    },
-  ];
-  constructor(private fb: FormBuilder) {}
 
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.utilizer = this.utilizers?.[0];
@@ -59,6 +40,10 @@ export class StepDetailsComponent {
 
   handlePrevStep() {
     this.prevStep.emit();
+  }
+
+  addPrivateDate() {
+    this.addDateEvent = true;  setTimeout(() => this.addDateEvent = false, 0);
   }
 
   completeStep() {

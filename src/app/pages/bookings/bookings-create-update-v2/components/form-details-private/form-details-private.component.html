@@ -1,116 +1,109 @@
-<form class="wrapper">
-  <div class="row1">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "date" | translate }} *</mat-label>
-      <input matInput [matDatepicker]="picker" />
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+<form [formGroup]="stepForm" class="wrapper">
+  <div formArrayName="course_dates">
+    <div
+      *ngFor="let dateGroup of courseDates.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <mat-card-header class="card__header">
+        <mat-card-title> {{ "date" | translate }} {{ i + 1 }} </mat-card-title>
+        <ng-container *ngIf="i > 0">
+          <mat-icon fontSet="material-icons-outlined" (click)="removeDate(i)">delete</mat-icon>
+        </ng-container>
+      </mat-card-header>
+      <mat-card-content class="card__content wrapper">
+        <div class="row1">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "date" | translate }}</mat-label>
+            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="inUseDatesFilter" formControlName="date" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker [startAt]="minDate"></mat-datepicker>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "hour" | translate }} *</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let hour of posibleHours" [value]="hour">{{
-          hour.description
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "hour" | translate }}</mat-label>
+            <mat-select formControlName="startHour">
+              <mat-option *ngFor="let hour of possibleHours"
+                          [value]="hour"
+                          [disabled]="calculateAvailableHours(dateGroup, hour, i)"
+              >
+                {{ hour }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "duration" | translate }} *</mat-label>
-      <input matInput *ngIf="!course.is_flexible" disabled value="1h" />
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "duration" | translate }}</mat-label>
+            <input
+              matInput
+              *ngIf="!course.is_flexible"
+              formControlName="duration"
+              readonly
+            />
+            <mat-select *ngIf="course.is_flexible" formControlName="duration">
+              <mat-option *ngFor="let duration of possibleDurations" [value]="duration">
+                {{ duration }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="row2" *ngIf="isRow1Complete(i)">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "monitor" | translate }}</mat-label>
+            <mat-select formControlName="monitor">
+              <mat-option *ngFor="let monitor of possibleMonitors[i]" [value]="monitor">
+                {{ monitor.first_name }} {{ monitor.last_name }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix fontSet="material-icons-outlined">school</mat-icon>
+          </mat-form-field>
 
-      <mat-select *ngIf="course.is_flexible">
-        <mat-option
-          *ngFor="let duration of posibleDurations"
-          [value]="duration"
-          >{{ duration.description }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-  </div>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ "select_monitor" | translate }}</mat-label>
+            <mat-select formControlName="changeMonitorOption">
+              <mat-select-trigger *ngIf="dateGroup.get('changeMonitorOption').value">
+                <mat-icon matPrefix [class]="dateGroup.get('changeMonitorOption').value.class" fontSet="material-icons-outlined">
+                  {{ dateGroup.get('changeMonitorOption').value.icon }}
+                </mat-icon>
+                {{ dateGroup.get('changeMonitorOption').value.description | translate }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let option of possibleChangeMonitorSelection" [value]="option">
+                <mat-icon [class]="option.class" fontSet="material-icons-outlined">{{ option.icon }}</mat-icon>
+                {{ option.description | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-  <div class="row2">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "monitor" | translate }}</mat-label>
-      <mat-select [(value)]="selectedMonitor">
-        <mat-option *ngFor="let monitor of posibleMonitors" [value]="monitor">
-          {{ monitor.first_name }} {{ monitor.last_name }}
-        </mat-option>
-      </mat-select>
-      <mat-icon matPrefix fontSet="material-icons-outlined">school</mat-icon>
-    </mat-form-field>
+        <ng-container [formArrayName]="'utilizers'">
+          <div class="row3"  *ngFor="let utilizerGroup of getUtilizersArray(i).controls; let u = index"
+               [formGroupName]="u">
+            <!-- Datos del utilizador -->
+            <div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ "participant" | translate }} {{ u + 1 }}</mat-label>
+              <input matInput disabled [value]="utilizerGroup.get('first_name').value + ' ' + utilizerGroup.get('last_name').value" />
+              <mat-icon class="disabled-icon" matPrefix fontSet="material-icons-outlined">people</mat-icon>
+            </mat-form-field>
+            </div>
+            <!-- Selección de extras -->
+            <div class="extra-field-wrapper">
+              <mat-form-field appearance="outline" class="extras-field">
+                <mat-label>{{ "extras" | translate }}</mat-label>
+                <mat-select formControlName="extras" multiple [disabled]="!this.possibleExtras || !this.possibleExtras.length">
+                  <mat-option *ngFor="let extra of possibleExtras" [value]="extra">
+                    {{ extra.description }} - {{ extra.price | currency: course.currency}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "select_monitor" | translate }}</mat-label>
-      <mat-select [(value)]="selectedChangeMonitor">
-        <mat-select-trigger *ngIf="selectedChangeMonitor">
-          <mat-icon
-            matPrefix
-            [class]="selectedChangeMonitor.class"
-            fontSet="material-icons-outlined"
-            >{{ selectedChangeMonitor.icon }}
-          </mat-icon>
-          {{ selectedChangeMonitor.description | translate }}
-        </mat-select-trigger>
-        <mat-option
-          *ngFor="let posibleChangeMonitor of posibleChangeMonitorSelection"
-          [value]="posibleChangeMonitor"
-        >
-          <mat-icon
-            [class]="posibleChangeMonitor.class"
-            fontSet="material-icons-outlined"
-            >{{ posibleChangeMonitor.icon }}</mat-icon
-          >
-          {{ posibleChangeMonitor.description | translate }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="row3" *ngFor="let utilizer of utilizers; let i = index">
-    <div>
-      <mat-form-field appearance="outline">
-        <mat-label>{{ "participant" | translate }} {{ i + 1 }} </mat-label>
-        <input
-          matInput
-          disabled
-          [value]="utilizer.first_name + ' ' + utilizer.last_name"
-        />
-        <mat-icon
-          class="disabled-icon"
-          matPrefix
-          fontSet="material-icons-outlined"
-          >people</mat-icon
-        >
-      </mat-form-field>
-    </div>
-    <div>
-      <div class="extra-field-wrapper">
-        <mat-form-field appearance="outline" class="extras-field">
-          <mat-label>{{ "extras" | translate }} </mat-label>
-          <mat-select multiple>
-            <!-- // TODO: mostrar bien los extras en el trigger cuando estos datos esten bindeados a una variable    
-              <mat-select-trigger> 
-
-             </mat-select-trigger> -->
-            <mat-option
-              class="extra-field-option"
-              *ngFor="let extra of posibleExtras"
-              [value]="extra"
-            >
-              <span>{{ extra.description }} </span>
-              <span> {{ extra.price }} </span>
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <!-- // TODO: quitar hardcoded y mostrar bien los precios cuando esten seteados en alguna variable calculada   
-          -->
-        <span class="extras-price"> {{ extraPrice[i] }} </span>
-      </div>
+              <!-- Precio de los extras -->
+              <span class="extras-price">
+                  {{ utilizerGroup.get('totalExtraPrice').value | currency: course.currency }}
+                </span>
+            </div>
+          </div>
+        </ng-container>
+      </mat-card-content>
     </div>
   </div>
 </form>
