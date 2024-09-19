@@ -1,8 +1,8 @@
-<form class="wrapper">
+<form class="wrapper" [formGroup]="stepForm">
   <div class="row">
     <div>
       <mat-form-field appearance="outline">
-        <mat-label>{{ "participant" | translate }} {{ 1 }} </mat-label>
+        <mat-label>{{ "participant" | translate }} {{ 1 }}</mat-label>
         <input
           matInput
           disabled
@@ -12,7 +12,7 @@
           class="disabled-icon"
           matPrefix
           fontSet="material-icons-outlined"
-          >people</mat-icon
+        >people</mat-icon
         >
       </mat-form-field>
     </div>
@@ -20,14 +20,11 @@
       <div class="extra-field-wrapper">
         <mat-form-field appearance="outline" class="extras-field">
           <mat-label>{{ "extras" | translate }} </mat-label>
-          <mat-select multiple>
-            <!-- // TODO: mostrar bien los extras en el trigger cuando estos datos esten bindeados a una variable    
-                    <mat-select-trigger> 
-      
-                   </mat-select-trigger> -->
+          <mat-select multiple (selectionChange)="onExtraChange($event)" [value]="selectedExtras"
+          [disabled]="!this.possibleExtras || !this.possibleExtras.length">
             <mat-option
               class="extra-field-option"
-              *ngFor="let extra of posibleExtras"
+              *ngFor="let extra of possibleExtras"
               [value]="extra"
             >
               <span>{{ extra.description }} </span>
@@ -35,9 +32,8 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <!-- // TODO: quitar hardcoded y mostrar bien los precios cuando esten seteados en alguna variable calculada   
-                -->
-        <span class="extras-price"> {{ extraPrice }} </span>
+        <!-- Mostrar el precio total de extras aplicados a todas las fechas -->
+        <span class="extras-price">{{ totalExtrasPrice }}</span>
       </div>
     </div>
   </div>

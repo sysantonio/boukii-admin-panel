@@ -46,7 +46,7 @@
           <div class="utilizersWrapper__description">
             <h4>{{ item.first_name }} {{ item.last_name }}</h4>
             <span
-              >{{ langService.getLanguage(item.language1_id) }} ·
+            >{{ langService.getLanguage(item.language1_id) }} ·
               {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
                 "years" | translate
               }}
@@ -71,46 +71,81 @@
         <img src="assets/img/icons/calendar-1.svg" />
         {{ "bookings_page.description.date" | translate }}
       </div>
-      <ng-container *ngIf="dates">
-        <div *ngFor="let date of dates" class="dateRow">
+      <ng-container *ngIf="dates && dates.length">
+        <div *ngFor="let date of dates; let i = index" class="dateRow">
           <div>
             <span class="date">{{ formatDate(date?.date) }} </span>
             <span class="hour">{{ date.startHour }}h-{{ date.endHour }}h </span>
-            <span class="price">{{ date.price }} {{ date.currency }} </span>
+            <span class="price" *ngIf="date.price">
+              <!-- Mostrar el precio original tachado -->
+              <span *ngIf="isDiscounted(date, i)" class="original-price">
+                {{ parseFloat(date.price).toFixed(2) }} {{ date.currency }}
+              </span>
+              <!-- Mostrar el precio con descuento -->
+              <span class="discounted-price">
+                {{ calculateDiscountedPrice(date, i).toFixed(2) }} {{ date.currency }}
+              </span>
+            </span>
           </div>
-          <div *ngIf="date.monitor" class="monitorRow">
+          <div  class="monitorRow">
             <div class="row1">
-              <mat-icon
-                matPrefix
-                fontSet="material-icons-outlined"
-                class="monitorIcon"
-                >school</mat-icon
-              >
+
+              <div class="sectionTitle">
+                <img src="assets/img/icons/monitores-3.svg" />
+                {{ "bookings_page.description.monitor" | translate }}
+              </div>
+              <span class="monitorDetails" *ngIf="date.monitor">
               {{ date.monitor.first_name }} {{ date.monitor.last_name }}
-              <mat-icon
-                matPrefix
-                class="changeMonitorIcon"
-                [class]="date.changeMonitorOption.class"
-                fontSet="material-icons-outlined"
+                <mat-icon *ngIf="date.changeMonitorOption"
+                          matPrefix
+                          class="changeMonitorIcon"
+                          [class]="date.changeMonitorOption.class"
+                          fontSet="material-icons-outlined"
                 >{{ date.changeMonitorOption.icon }}
               </mat-icon>
+              </span>
+              <span class="monitorDetails" *ngIf="!date.monitor">
+              {{ 'not_assigned' | translate }}
+              </span>
             </div>
 
-            <span class="monitorDetails"
-              >{{ langService.getLanguage(date.monitor.language1_id) }} ·
-              {{ utilsService.getCountry(date.monitor.country) }} ·
-              {{ utilsService.calculateYears(date.monitor.birth_date) }}
-              {{ "years" | translate }}
-            </span>
+            <ng-container *ngIf="date.utilizers && date.utilizers.length && hasExtrasForDate(date)">
+              <div class="sectionTitle monitorDetails">
+                {{ "extras" | translate }}
+              </div>
+              <ng-container *ngFor="let utilizer of date.utilizers">
+                <ng-container *ngIf="utilizer.extras && utilizer.extras.length">
+                  <div *ngIf="utilizer.extras && utilizer.extras.length" class="dateExtras">
+                    <h5>{{ utilizer.first_name }} {{ utilizer.last_name }}:</h5>
+                    <div *ngFor="let extra of utilizer.extras" class="extraDetails">
+                      <span>{{ getExtraName([extra]) }} - {{ getExtraDescription([extra]) }}</span>
+                      <span class="price">{{ getExtraPrice([extra]) }} {{ date.currency }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <!--
+                        <span class="monitorDetails"
+                        >{{ langService.getLanguage(date.monitor.language1_id) }} ·
+                          {{ utilsService.getCountry(date.monitor.country) }} ·
+                          {{ utilsService.calculateYears(date.monitor.birth_date) }}
+                          {{ "years" | translate }}
+                        </span>-->
 
-            <div *ngIf="date.extras" class="dateExtras">
-              {{ date.utilizer[0].first_name }}:
+
+          </div>
+          <div class="monitorRow">
+            <div *ngIf="date.extras && date.extras.length" class="dateExtras">
+              {{ (date.utilizer && date.utilizer[0]?.first_name) ?? '' }}
+              {{getExtraName(date.extras)}} -
               {{ getExtraDescription(date.extras) }}
+              <span class="price">{{ getExtraPrice(date.extras) }} {{ date.currency }} </span>
             </div>
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="!dates">
+      <ng-container *ngIf="!dates || !dates.length">
         <div class="dateSkeletonsWrapper">
           <div class="skeleton small"></div>
           <div class="skeleton medium"></div>
@@ -119,7 +154,7 @@
       </ng-container>
     </div>
 
-    <div class="section">
+    <!--<div class="section">
       <div class="sectionTitle">
         <img src="assets/img/icons/monitores-3.svg" />
         {{ "bookings_page.description.monitor" | translate }}
@@ -128,7 +163,7 @@
         <div class="monitor__description" *ngFor="let monitor of monitors">
           <h4>{{ monitor.first_name }} {{ monitor.last_name }}</h4>
           <span
-            >{{ langService.getLanguage(monitor.language1_id) }} ·
+          >{{ langService.getLanguage(monitor.language1_id) }} ·
             {{ utilsService.calculateYears(monitor.birth_date) }} &ensp;{{
               "years" | translate
             }}
@@ -144,7 +179,7 @@
           </div>
         </div>
       </ng-container>
-    </div>
+    </div>-->
 
     <div class="section observacionSection">
       <div class="sectionTitle">{{ "observation_client" | translate }}</div>

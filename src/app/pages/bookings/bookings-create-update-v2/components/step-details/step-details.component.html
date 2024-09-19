@@ -1,18 +1,14 @@
+
 <ng-container *ngIf="course.course_type === 2">
-  <div *ngFor="let item of dates; index as i" class="card">
-    <mat-card-header class="card__header">
-      <mat-card-title> {{ "date" | translate }} {{ i + 1 }} </mat-card-title>
-      <ng-container *ngIf="i > 0">
-        <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
-      </ng-container>
-    </mat-card-header>
-    <mat-card-content class="card__content">
-      <booking-form-details-private
-        [course]="course"
-        [utilizers]="item.utilizers"
-      ></booking-form-details-private>
-    </mat-card-content>
-  </div>
+  <booking-form-details-private
+    [course]="course"
+    [date]="date"
+    [utilizers]="utilizers"
+    [sportLevel]="sportLevel"
+    [initialData]="initialData"
+    [stepForm]="stepForm"
+    [addDateEvent]="addDateEvent"
+  ></booking-form-details-private>
 </ng-container>
 
 <ng-container *ngIf="course.course_type === 1">
@@ -20,7 +16,10 @@
     <mat-card-content class="card__content">
       <booking-form-details-colective-flex
         [course]="course"
+        [sportLevel]="sportLevel"
         [utilizer]="utilizer"
+        [initialData]="initialData"
+        [stepForm]="stepForm"
       ></booking-form-details-colective-flex>
     </mat-card-content>
   </ng-container>
@@ -28,9 +27,12 @@
     <mat-card-content class="card__content">
       <booking-form-details-colective-fix
         [course]="course"
+        [sportLevel]="sportLevel"
         [utilizer]="utilizer"
+        [initialData]="initialData"
+        [stepForm]="stepForm"
       ></booking-form-details-colective-fix
-    ></mat-card-content>
+      ></mat-card-content>
   </ng-container>
 </ng-container>
 
@@ -40,7 +42,8 @@
     {{ "back" | translate }}
   </button>
   <div>
-    <button mat-stroked-button type="button" *ngIf="course.course_type === 2">
+    <button mat-stroked-button type="button" *ngIf="course.course_type === 2"
+            (click)="addPrivateDate()">
       {{ "add_date" | translate }}
     </button>
 

@@ -159,6 +159,9 @@
           "configurations": {
             "production": {
               "browserTarget": "vex:build:production"
+            },
+            "local": {
+              "browserTarget": "vex:build:local"
             }
           }
         },

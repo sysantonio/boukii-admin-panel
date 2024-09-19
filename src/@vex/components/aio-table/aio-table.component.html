@@ -422,12 +422,9 @@
         <!-- Count Columns -->
 
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
-          <ng-container *ngIf="column.type === 'count'"
-            [matColumnDef]="column.property">
-            <th *matHeaderCellDef class="uppercase" mat-header-cell
-              mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell
-              style="text-align: center;">{{ row[column.property].length }}</td>
+          <ng-container *ngIf="column.type === 'count'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell style="text-align: center;">{{ row[column.property].length + 1 }}</td>
           </ng-container>
         </ng-container>
 
@@ -972,20 +969,11 @@
 
         <!-- Coronita Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
-          <ng-container *ngIf="column.type === 'coronita'"
-            [matColumnDef]="column.property">
-            <th *matHeaderCellDef class="uppercase" mat-header-cell
-              mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row; let i = index"
-              [ngClass]="column.cssClasses" mat-cell>
-              <img *ngIf="data[i].utilizers.length > 0"
-                [src]="'../../../assets/img/icons/group.png'"
-                class="avatar h-8 w-8 align-middle"
-                style="height: 25px;margin: 0 0 0 35%;width: 30px;">
-              <img *ngIf="data[i].utilizers.length === 0"
-                [src]="'../../../assets/img/icons/gold-crown.png'"
-                class="avatar h-8 w-8 align-middle"
-                style="height: 25px;margin: 0 0 0 35%;width: 30px;">
+          <ng-container *ngIf="column.type === 'coronita'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
+              <img *ngIf="data[i].utilizers.length > 0" [src]="'../../../assets/img/icons/cuentagrupo.svg'" class="avatar h-8 w-8 align-middle"  style="height: 25px;margin: 0 0 0 35%;width: 30px;">
+              <img *ngIf="data[i].utilizers.length === 0" [src]="'../../../assets/img/icons/cuentaunica.svg'" class="avatar h-8 w-8 align-middle"  style="height: 25px;margin: 0 0 0 35%;width: 30px;">
             </td>
           </ng-container>
         </ng-container>

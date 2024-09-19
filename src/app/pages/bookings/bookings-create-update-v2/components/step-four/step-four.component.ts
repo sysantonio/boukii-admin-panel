@@ -23,6 +23,7 @@ import { CalendarService } from "../../../../../../service/calendar.service";
 export class StepFourComponent {
   @Input() initialData: any;
   @Input() client: any;
+  @Input() utilizers: any;
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
@@ -33,6 +34,7 @@ export class StepFourComponent {
   nextMonthDate: Date;
   selectedCourse;
   courseTypeId: number = 1;
+  selectedIndex: number = 1;
   user;
   courses = [];
   minDate;
@@ -64,6 +66,7 @@ export class StepFourComponent {
   }
 
   ngOnInit(): void {
+    this.updateTabs();
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.stepForm = this.fb.group({
       date: [this.selectedDate || this.minDate, Validators.required],
@@ -76,6 +79,26 @@ export class StepFourComponent {
       this.autoSelectFirstDayIfCurrentMonth();
       this.getCourses(this.sportLevel);
     });
+  }
+
+  updateTabs(): void {
+    // Si utilizers tiene más de 1 usuario, eliminamos el tab "course_colective"
+    if (this.utilizers && this.utilizers.length > 1) {
+      this.tabs = [
+        { label: "course_private", courseTypeId: 2, class: "green" },
+        { label: "activity", courseTypeId: 3, class: "blue" }
+      ];
+      this.courseTypeId = 2;
+      this.selectedIndex = this.courseTypeId - 2;
+    } else {
+      // Si solo hay 1 user, mostramos las 3 tabs
+      this.tabs = [
+        { label: "course_colective", courseTypeId: 1, class: "yellow" },
+        { label: "course_private", courseTypeId: 2, class: "green" },
+        { label: "activity", courseTypeId: 3, class: "blue" }
+      ];
+      this.selectedIndex = this.courseTypeId - 1;
+    }
   }
 
   isFormValid() {
@@ -158,7 +181,7 @@ export class StepFourComponent {
       end_date: maxDate.format("YYYY-MM-DD"),
       course_type: this.courseTypeId,
       sport_id: sportLevel.sport_id,
-      client_id: this.client.client_id,
+      client_id: this.client.id,
       degree_id: sportLevel.id,
       get_lower_degrees: false,
       school_id: this.user.schools[0].id,

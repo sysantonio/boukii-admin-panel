@@ -220,6 +220,10 @@
       line-height: 1.15rem;
       color: var(--color-dark1);
       margin-left: auto;
+      float: right;
+    }
+    .original-price {
+      text-decoration: line-through;
     }
   }
 }
@@ -236,14 +240,21 @@
     font-weight: 300;
     line-height: 1.15rem;
     gap: 0.5rem;
+    .sectionTitle {
+      margin-bottom: 0;
+      width: 100%;
+      img {
+        max-width: 24px;
+      }
+    }
   }
 
   .monitorDetails {
-    font-family: var(--font-dm);
+/*    font-family: var(--font-dm);
     font-size: 0.75rem;
     font-weight: 300;
     line-height: 1rem;
-    color: var(--color-grey1);
+    color: var(--color-grey1);*/
     margin-left: 2rem;
   }
 

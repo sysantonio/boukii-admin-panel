@@ -1,4 +1,4 @@
-<mat-tab-group (selectedTabChange)="onTabChange($event)" class="tabsWrapper">
+<mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="selectedIndex" class="tabsWrapper">
   <mat-tab *ngFor="let tab of tabs">
     <ng-template mat-tab-label>
       <mat-icon class="custom-icon" [ngClass]="tab.class">circle</mat-icon>
@@ -82,7 +82,7 @@
           <img class="courseImg" [src]="item.icon" />
           <div>
             <h4 class="courseTitle">{{ item.name }}</h4>
-            <span class="courseSubtitle"> {{ item.description }} </span>
+            <span class="courseSubtitle" [innerHTML]="item.description ">  </span>
             <div class="courseDate">
               <img src="assets/img/icons/calendar-1.svg" />
               <span class="courseDate_day">
@@ -92,7 +92,7 @@
             </div>
           </div>
           <span class="coursePrice">
-            {{ item.price }} {{ item.currency }}
+            {{ item.minPrice }} {{ item.currency }}
           </span>
         </label>
       </mat-radio-group>
