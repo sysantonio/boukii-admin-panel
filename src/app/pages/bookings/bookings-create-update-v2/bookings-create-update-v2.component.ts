@@ -17,70 +17,26 @@ import moment from 'moment';
 export class BookingsCreateUpdateV2Component {
   currentStep = 0;
   currentBookingData = {};
-  client: any;
   mainClient: any;
   utilizers: any;
   sport: any;
   sportLevel: any;
   forceStep;
   dates: any;
-  normalizedDates: BookingDescriptionCardDate[];
+  normalizedDates: any[];
   course;
   monitors;
   clientObs;
   schoolObs;
   total;
+  isDetail = false;
   constructor(
     public translateService: TranslateService,
     public dialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) {
     // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
-    this.normalizedDates = [
-      {
-        date: "2024-09-16T00:00:00.000000Z",
-        startHour: "09:00",
-        endHour: "11:00",
-        price: "90.00",
-        currency: "CHF",
-        //estos datos son opcionales, si se envian se mostrara los detalles dentro dentro de cada fecha
-        monitor: MOCK_MONITORS[0],
-        utilizer: [MOCK_USER1],
-        extras: [MOCK_POSIBLE_EXTRAS[0]],
-        changeMonitorOption: changeMonitorOptions[0],
-      },
-      {
-        date: "2024-09-17T00:00:00.000000Z",
-        startHour: "09:00",
-        endHour: "11:00",
-        price: "90.00",
-        currency: "CHF",
-        //estos datos son opcionales, si se envian se mostrara los detalles dentro dentro de cada fecha
-        monitor: MOCK_MONITORS[1],
-        utilizer: [MOCK_USER2],
-        extras: [MOCK_POSIBLE_EXTRAS[1]],
-        changeMonitorOption: changeMonitorOptions[1],
-      },
-      {
-        date: "2024-09-18T00:00:00.000000Z",
-        startHour: "09:00",
-        endHour: "11:00",
-        price: "90.00",
-        currency: "CHF",
-      },
-      {
-        date: "2024-09-19T00:00:00.000000Z",
-        startHour: "09:00",
-        endHour: "11:00",
-        price: "90.00",
-        currency: "CHF",
-        //estos datos son opcionales, si se envian se mostrara los detalles dentro dentro de cada fecha
-        monitor: MOCK_MONITORS[1],
-        utilizer: [MOCK_USER2],
-        extras: [MOCK_POSIBLE_EXTRAS[1], MOCK_POSIBLE_EXTRAS[2]],
-        changeMonitorOption: changeMonitorOptions[2],
-      },
-    ];
+    this.normalizedDates =[]
   }
 
   handleFormChange(formData) {
@@ -93,7 +49,6 @@ export class BookingsCreateUpdateV2Component {
       step6: { clientObs, schoolObs },
     } = formData.value;
 
-    this.client = client;
     this.mainClient = mainClient;
     this.utilizers = utilizers;
     this.sport = sport;
@@ -109,7 +64,9 @@ export class BookingsCreateUpdateV2Component {
       this.calculateTotal();
     }
     // TODO: crear funcion normalizadora
-    //this.normalizedDates= this.normalizeDates()
+    if(this.course && this.dates && this.clientObs && this.schoolObs ) {
+      this.normalizeDates()
+    }
   }
 
   calculateTotal() {
@@ -190,6 +147,22 @@ export class BookingsCreateUpdateV2Component {
     return total;
   }
 
+  private normalizeDates() {
+    this.normalizedDates.push(
+      {
+        utilizers: this.utilizers,
+        sport: this.sport,
+        sportLevel: this.sportLevel,
+        course: this.course,
+        dates: this.dates,
+        clientObs: this.clientObs,
+        schoolObs: this.dates,
+        total: this.total
+
+      }
+    )
+    this.isDetail = true;
+  }
 
 // Método para obtener el intervalo de precios basado en la duración
   private getPriceInterval(duration: number) {

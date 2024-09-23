@@ -16,7 +16,7 @@
             <mat-label>{{ "date" | translate }}</mat-label>
             <input matInput [matDatepicker]="picker" [matDatepickerFilter]="inUseDatesFilter" formControlName="date" />
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker [startAt]="minDate" [dateClass]="dateClass()"></mat-datepicker>
+            <mat-datepicker #picker [startAt]="minDate" [dateClass]="utilService.dateClass('green', this.course, minDate)"></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -24,7 +24,7 @@
             <mat-select formControlName="startHour">
               <mat-option *ngFor="let hour of possibleHours"
                           [value]="hour"
-                          [disabled]="calculateAvailableHours(dateGroup, hour, i)"
+                          [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course)"
               >
                 {{ hour }}
               </mat-option>

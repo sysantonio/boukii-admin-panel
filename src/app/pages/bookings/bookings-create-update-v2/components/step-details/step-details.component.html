@@ -11,6 +11,18 @@
   ></booking-form-details-private>
 </ng-container>
 
+<ng-container *ngIf="course.course_type === 3">
+  <booking-form-details-activity
+    [course]="course"
+    [date]="date"
+    [utilizers]="utilizers"
+    [sportLevel]="sportLevel"
+    [initialData]="initialData"
+    [stepForm]="stepForm"
+    [addParticipantEvent]="addParticipantEvent"
+  ></booking-form-details-activity>
+</ng-container>
+
 <ng-container *ngIf="course.course_type === 1">
   <ng-container *ngIf="course.is_flexible">
     <mat-card-content class="card__content">
@@ -46,7 +58,10 @@
             (click)="addPrivateDate()">
       {{ "add_date" | translate }}
     </button>
-
+    <button mat-stroked-button type="button" *ngIf="course.course_type === 3"
+            (click)="addParticipant()">
+      {{ "add_participant" | translate }}
+    </button>
     <button
       mat-flat-button
       type="button"
