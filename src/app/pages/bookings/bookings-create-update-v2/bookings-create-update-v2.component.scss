@@ -119,3 +119,19 @@
     display: none;
   }
 }
+
+.bookingDetailContainer {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  .activities {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    booking-description-card {
+      width: 400px;
+      max-width: 100%;
+    }
+  }
+}

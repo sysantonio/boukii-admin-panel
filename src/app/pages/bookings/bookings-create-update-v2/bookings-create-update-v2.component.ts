@@ -36,7 +36,7 @@ export class BookingsCreateUpdateV2Component {
     private cdr: ChangeDetectorRef
   ) {
     // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
-    this.normalizedDates =[]
+    this.normalizedDates = []
   }
 
   handleFormChange(formData) {
@@ -60,11 +60,11 @@ export class BookingsCreateUpdateV2Component {
     this.schoolObs = schoolObs;
     // TODO: habra que cambiar esto por el dato real calculado
     // Calcula el total de la reserva
-    if(this.course && this.dates) {
+    if (this.course && this.dates) {
       this.calculateTotal();
     }
     // TODO: crear funcion normalizadora
-    if(this.course && this.dates && this.clientObs && this.schoolObs ) {
+    if (this.course && this.dates && this.clientObs && this.schoolObs) {
       this.normalizeDates()
     }
   }
@@ -75,7 +75,7 @@ export class BookingsCreateUpdateV2Component {
     // Verifica si el curso es del tipo 1
     if (this.course.course_type === 1) {
       total = this.calculateColectivePrice();
-    } else if(this.course.course_type === 2) {
+    } else if (this.course.course_type === 2) {
       total = this.calculatePrivatePrice();
     }
 
@@ -164,7 +164,7 @@ export class BookingsCreateUpdateV2Component {
     this.isDetail = true;
   }
 
-// Método para obtener el intervalo de precios basado en la duración
+  // Método para obtener el intervalo de precios basado en la duración
   private getPriceInterval(duration: number) {
     const priceRanges = this.course.price_range;
     return priceRanges.find(interval => {
@@ -173,7 +173,7 @@ export class BookingsCreateUpdateV2Component {
     });
   }
 
-// Método para parsear la duración en formato de texto a minutos
+  // Método para parsear la duración en formato de texto a minutos
   private parseDuration(durationStr: string): number {
     const parts = durationStr.split(' ');
     let totalMinutes = 0;
