@@ -68,6 +68,10 @@ export class BookingFormStepper implements OnChanges {
       }
     }
 
+    if(step == 6) {
+
+    }
+
     this.nextStep();
     this.changedFormData.emit(this.stepperForm);
   }

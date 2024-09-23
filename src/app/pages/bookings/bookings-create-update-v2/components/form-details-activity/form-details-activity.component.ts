@@ -109,15 +109,15 @@ export class FormDetailsActivityComponent implements OnInit {
   }
 
   onGroupChange(index: number) {
-    const selectedGroupName = this.formArray.at(index).get('groupName').value;
-    const selectedGroup = this.course.settings.groups.find(group => group.groupName === selectedGroupName);
+   // const selectedGroupName = this.formArray.at(index).get('groupName').value;
+    /*const selectedGroup = this.course.settings.groups.find(group => group.groupName === selectedGroupName);
 
     // Actualiza el grupo actual para ese índice
     this.currentGroups[index] = selectedGroup;
 
     // Filtrar los extras para ese grupo
     this.filteredExtras[index] = this.course.course_extras.filter(extra => extra.group === selectedGroupName);
-  }
+*/  }
 
   getGroupPrice(groupName: string): number {
     const group = this.course.settings.groups.find(g => g.groupName === groupName);

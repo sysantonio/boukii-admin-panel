@@ -76,15 +76,15 @@
             </mat-form-field>
 
             <!-- Paxes -->
-            <mat-form-field appearance="outline">
+           <!-- <mat-form-field appearance="outline">
               <mat-label>{{ 'number_of_paxes' | translate }}</mat-label>
               <input type="number" matInput formControlName="paxes" [min]="group.paxMin" [max]="group.paxMax" (change)="updateGroupPrice(i)">
             </mat-form-field>
 
-            <!-- Precio por Pax (solo para cálculo) -->
+            &lt;!&ndash; Precio por Pax (solo para cálculo) &ndash;&gt;
             <input type="hidden" formControlName="price" [value]="getGroupPrice(group?.groupName)">
 
-            <!-- Extras -->
+            &lt;!&ndash; Extras &ndash;&gt;
             <mat-form-field appearance="outline">
               <mat-label>{{ 'extras' | translate }}</mat-label>
               <mat-select formControlName="extras" multiple (selectionChange)="updateGroupPrice(i)">
@@ -92,7 +92,7 @@
                   {{ extra.description }} - {{ extra.price | currency }}
                 </mat-option>
               </mat-select>
-            </mat-form-field>
+            </mat-form-field>-->
 
             <!-- Precio total del grupo -->
             <div>

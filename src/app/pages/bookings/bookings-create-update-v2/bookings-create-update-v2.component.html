@@ -1,3 +1,4 @@
+<ng-container  *ngIf="!isDetail">
 <div class="barWrapper">
   <vex-breadcrumbs
     class="booking-breadcrumb"
@@ -92,3 +93,31 @@
     </booking-description-card>
   </mat-card>
 </div>
+</ng-container>
+<ng-container *ngIf="isDetail">
+  <div class="bookingDetailContainer">
+    <div class="left-column">
+      <div class="activities-grid">
+        <booking-description-card
+          *ngFor="let activity of normalizedDates"
+          [utilizers]="activity.utilizers"
+          [sport]="activity.sport"
+          [sportLevel]="activity.sportLevel"
+          [course]="activity.course"
+          [dates]="activity.dates"
+          [monitors]="activity.monitors"
+          [clientObs]="activity.clientObs"
+          [schoolObs]="activity.schoolObs"
+          [total]="total"
+        >
+        </booking-description-card>
+      </div>
+    </div>
+    <div class="right-column">
+      <booking-reservation-detail
+        [client]="mainClient"
+      >
+      </booking-reservation-detail>
+    </div>
+  </div>
+</ng-container>
