@@ -17,6 +17,7 @@ export class StepDetailsComponent {
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   addDateEvent = false;
+  addParticipantEvent = false;
   stepForm: FormGroup;
   utilizer;
 
@@ -44,6 +45,10 @@ export class StepDetailsComponent {
 
   addPrivateDate() {
     this.addDateEvent = true;  setTimeout(() => this.addDateEvent = false, 0);
+  }
+
+  addParticipant() {
+    this.addParticipantEvent = true;  setTimeout(() => this.addParticipantEvent = false, 0);
   }
 
   completeStep() {

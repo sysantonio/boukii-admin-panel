@@ -31,6 +31,7 @@ import { FormDetailsPrivateComponent } from "./form-details-private/form-details
 
 import { FormDetailsColectiveFixComponent } from "./form-details-colective-fix/form-details-colective-fix.component";
 import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex/form-details-colective-flex.component";
+import { FormDetailsActivityComponent } from './form-details-activity/form-details-activity.component';
 
 @NgModule({
   imports: [
@@ -65,6 +66,7 @@ import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex
     FormDetailsColectiveFixComponent,
     FormDetailsColectiveFlexComponent,
     CreateUserDialogComponent,
+    FormDetailsActivityComponent,
   ],
   exports: [
     BookingFormStepper,

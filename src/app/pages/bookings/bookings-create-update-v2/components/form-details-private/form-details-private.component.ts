@@ -13,6 +13,7 @@ import {ApiCrudService} from '../../../../../../service/crud.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
+import {SchoolService} from '../../../../../../service/school.service';
 
 @Component({
   selector: "booking-form-details-private",
@@ -45,7 +46,7 @@ export class FormDetailsPrivateComponent implements OnInit {
   myHolidayDates = [];
 
   constructor(private fb: FormBuilder,  private snackbar: MatSnackBar, public translateService: TranslateService,
-              private crudService: ApiCrudService) {
+              private crudService: ApiCrudService, public utilService: UtilsService) {
     this.possibleMonitors = [];
   }
 
@@ -63,22 +64,18 @@ export class FormDetailsPrivateComponent implements OnInit {
     this.getSeason();
     this.initializeForm();
     this.setupExtrasValueChanges();
-    this.possibleHours = this.generateCourseHours(this.course.hour_min, this.course.hour_max, this.course.minDuration, '5min');
-    this.possibleDurations = this.generateCourseDurations(this.course.hour_min, this.course.hour_max);
+    this.possibleHours = this.utilService.generateCourseHours(this.course.hour_min, this.course.hour_max, this.course.minDuration, '5min');
+    this.possibleDurations = this.utilService.generateCourseDurations(this.course.hour_min, this.course.hour_max, this.course);
   }
 
   getSeason() {
-    this.crudService.list('/seasons', 1, 10000, 'asc', 'id',
-      '&school_id='+this.user.schools[0].id+'&is_active=1')
-      .subscribe((season) => {
-        this.season = season.data[0];
-
-        this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
-
-        this.holidays.forEach(element => {
-          this.myHolidayDates.push(moment(element).toDate());
-        });
-      })
+    this.utilService.getSeason(this.user.schools[0].id).subscribe((season) => {
+      this.season = season;
+      this.holidays = this.utilService.getHolidays();
+      this.holidays.forEach((element) => {
+        this.myHolidayDates.push(moment(element).toDate());
+      });
+    });
   }
 
   initializeForm() {
@@ -96,43 +93,9 @@ export class FormDetailsPrivateComponent implements OnInit {
     }
   }
 
-  dateClass() {
-    return (date: Date): MatCalendarCellCssClasses => {
-      const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
-      if (
-        this.course.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === currentDate) &&
-        moment(this.minDate, "YYYY-MM-DD")
-          .startOf("day")
-          .isSameOrBefore(moment(date, "YYYY-MM-DD").startOf("day"))
-      ) {
-        return `with-course green`;
-      } else {
-        return;
-      }
-    };
-  }
-
   inUseDatesFilter = (d: Date): boolean => {
-    if (!d) return false; // Si la fecha es nula o indefinida, no debería ser seleccionable.
-
-    const formattedDate = moment(d).format('YYYY-MM-DD');
-    const time = moment(d).startOf('day').valueOf(); // .getTime() es igual a .valueOf()
-    const today = moment().startOf('day'); // Fecha actual (sin hora, solo día)
-
-    // Verifica si la fecha es anterior a hoy.
-    const isPastDate = moment(d).isBefore(today);
-
-    // Encuentra si la fecha actual está en myHolidayDates.
-    const isHoliday = this.myHolidayDates.some(x => x.getTime() === time);
-
-    // Encuentra si la fecha actual está en selectedItem.course_dates y si es activa.
-    const courseDate = this.course.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === formattedDate);
-    const isActive = courseDate ? (courseDate.active || courseDate.active === 1) : false;
-
-    // La fecha debería ser seleccionable si no es un día festivo y está activa (o sea, active no es falso ni 0).
-    return !isHoliday && isActive && !isPastDate;
+    return this.utilService.inUseDatesFilter(d, this.myHolidayDates, this.course);
   }
-
   addCourseDate(initialData: any = null) {
     const utilizerArray = this.fb.array(this.utilizers.map(utilizer =>
       this.createUtilizer(utilizer, initialData?.utilizers?.find(u => u.first_name === utilizer.first_name && u.last_name === utilizer.last_name)?.extras || [])
@@ -181,7 +144,7 @@ export class FormDetailsPrivateComponent implements OnInit {
 
       if (this.course.is_flexible) {
         // Generar duraciones posibles basadas en la nueva 'startHour'
-        this.possibleDurations = this.generateCourseDurations(courseDateGroup.get('startHour').value, this.course.hour_max);
+        this.possibleDurations = this.utilService.generateCourseDurations(courseDateGroup.get('startHour').value, this.course.hour_max, this.course);
 
         // Verificar si la duración actual está dentro de las posibles duraciones
         const currentDuration = courseDateGroup.get('duration').value;
@@ -218,122 +181,6 @@ export class FormDetailsPrivateComponent implements OnInit {
       }
     });
 
-  }
-
-  generateCourseDurations(startTime: any, endTime: any, interval: string = '15min') {
-
-    const timeToMinutes = (time) => {
-      const [hours, minutes] = time.split(':').map(Number);
-      return hours * 60 + minutes;
-    };
-
-    const formatMinutes = (totalMinutes) => {
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`.trim();
-    };
-
-    const startMinutes = timeToMinutes(startTime);
-    const endMinutes = timeToMinutes(endTime);
-
-    const intervalMatch = interval.match(/(\d+)(h|min)/g);
-    let intervalTotalMinutes = 0;
-
-    if (intervalMatch) {
-      intervalMatch.forEach(part => {
-        if (part.includes('h')) {
-          intervalTotalMinutes += parseInt(part, 10) * 60;
-        } else if (part.includes('min')) {
-          intervalTotalMinutes += parseInt(part, 10);
-        }
-      });
-    } else {
-      console.error("Interval format is not correct.");
-      return [];
-    }
-
-    const durations = [];
-    for (let minutes = startMinutes + intervalTotalMinutes; minutes <= endMinutes; minutes += 5) {
-      durations.push(formatMinutes(minutes - startMinutes));
-    }
-
-    const tableDurations = [];
-    const tablePaxes = [];
-
-    const priceRangeCourse = typeof this.course.price_range === 'string' ? JSON.parse(this.course.price_range) : this.course.price_range;
-    durations.forEach(element => {
-      const priceRange = priceRangeCourse ? priceRangeCourse.find((p) => p.intervalo === element) : null;
-      if (priceRange && priceRange.intervalo === element) {
-
-        if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= this.course.max_participants) {
-          tableDurations.push(this.extractValues(priceRange)[0].interval);
-
-
-
-          this.extractValues(priceRange).forEach(element => {
-            const pax = element.key;
-
-            if (pax && tablePaxes.length === 0 || pax && tablePaxes.length > 0 && !tablePaxes.find((p) => p === pax)) {
-              tablePaxes.push(element.key);
-            }
-          });
-        }
-
-      }
-    });
-
-    return tableDurations;
-
-  }
-
-  extractValues(data: any): { key: string, value: string, interval: string }[] {
-    let results = [];
-
-    for (const key in data) {
-      if (data.hasOwnProperty(key) && data[key] != null && key !== "intervalo") {
-        results.push({ key: key, value: data[key], interval: data["intervalo"] });
-      }
-    }
-
-    return results;
-  }
-
-  calculateAvailableHours(dateGroup: any, hour: string, index: number): boolean {
-    // Obtén la fecha seleccionada y el rango de horas disponibles
-    const selectedDate = moment( dateGroup.get('date').value).format('YYYY-MM-DD');
-    const startHour = this.course.hour_min;
-    const endHour = this.course.hour_max;
-
-    // Verificar si startHour y endHour son válidos
-    if (!startHour || !endHour) {
-      return false; // Si no hay horas de inicio o fin, no desactiva ninguna opción
-    }
-
-    // Obtener la hora en formato HH:mm
-    const selectedHour = moment(`${selectedDate} ${hour}`, 'YYYY-MM-DD HH:mm');
-
-    // Combinar la fecha seleccionada con startHour y endHour para formar fechas completas
-    const start = moment(`${selectedDate} ${startHour}`, 'YYYY-MM-DD HH:mm');
-    const end = moment(`${selectedDate} ${endHour}`, 'YYYY-MM-DD HH:mm');
-
-    // Verificar si la fecha seleccionada es hoy
-    if (moment(selectedDate).isSame(moment(), 'day')) {
-      // Si la fecha seleccionada es hoy, desactiva horas pasadas
-      const now = moment().format('HH:mm');
-      const nowMoment = moment(`${selectedDate} ${now}`, 'YYYY-MM-DD HH:mm');
-      if (selectedHour.isBefore(nowMoment, 'minute')) {
-        return true; // Desactivar la opción si la hora es anterior al momento actual
-      }
-    }
-
-    // Verificar si la hora está dentro del rango permitido
-    if (selectedHour.isBefore(start) || selectedHour.isAfter(end)) {
-      return true; // Desactivar la opción si la hora está fuera del rango
-    }
-
-    // Aquí puedes agregar más validaciones específicas si es necesario
-
-    return false; // La hora es válida si no se desactiva
   }
 
   private calculatePrice(date) {
@@ -391,7 +238,7 @@ export class FormDetailsPrivateComponent implements OnInit {
     const duration = courseDateGroup.get('duration').value;
 
     if (startHour && duration) {
-      const endHour = this.calculateEndHour(startHour, duration);
+      const endHour = this.utilService.calculateEndHour(startHour, duration);
       courseDateGroup.get('endHour').setValue(endHour, { emitEvent: false });
       console.log(endHour);
     }
@@ -399,79 +246,6 @@ export class FormDetailsPrivateComponent implements OnInit {
 
   getMaxDate() {
     return moment(this.course.course_dates[this.course.course_dates.length - 1].date).toDate();
-  }
-
-  generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
-    const [startHours, startMinutes] = startTime.split(':').map(Number);
-    const [endHours, endMinutes] = endTime.split(':').map(Number);
-    const intervalParts = interval.split(' ');
-    const mainDurationParts = mainDuration.split(' ');
-
-    let intervalHours = 0;
-    let intervalMinutes = 0;
-    let mainDurationHours = 0;
-    let mainDurationMinutes = 0;
-
-    intervalParts.forEach(part => {
-      if (part.includes('h')) {
-        intervalHours = parseInt(part, 10);
-      } else if (part.includes('min')) {
-        intervalMinutes = parseInt(part, 10);
-      }
-    });
-
-    mainDurationParts.forEach(part => {
-      if (part.includes('h')) {
-        mainDurationHours = parseInt(part, 10);
-      } else if (part.includes('min')) {
-        mainDurationMinutes = parseInt(part, 10);
-      }
-    });
-
-    let currentHours = startHours;
-    let currentMinutes = startMinutes;
-    const result = [];
-
-    while (true) {
-      let nextIntervalEndHours = currentHours + mainDurationHours;
-      let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
-
-      nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
-      nextIntervalEndMinutes %= 60;
-
-      if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
-        break;
-      }
-
-      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
-
-      currentMinutes += intervalMinutes;
-      currentHours += intervalHours + Math.floor(currentMinutes / 60);
-      currentMinutes %= 60;
-
-      if (currentHours > endHours || (currentHours === endHours && currentMinutes >= endMinutes)) {
-        break;
-      }
-    }
-
-    return result;
-  }
-
-  calculateEndHour(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
-      const hours = duration.split(' ')[0].replace('h', '');
-      const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
-
-      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
-      const hours = duration.split(' ')[0].replace('h', '');
-
-      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
-    } else {
-      const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
-
-      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
-    }
   }
 
   setupExtrasValueChanges() {
@@ -507,7 +281,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       sportId: this.course.sport_id,
       minimumDegreeId: this.sportLevel.id,
       startTime: dateGroup.get('startHour').value,
-      endTime: this.calculateEndHour(dateGroup.get('startHour').value, dateGroup.get('duration').value),
+      endTime: this.utilService.calculateEndHour(dateGroup.get('startHour').value, dateGroup.get('duration').value),
       date: moment( dateGroup.get('date').value).format('YYYY-MM-DD'),
       clientIds: this.utilizers.map(utilizer => utilizer.id)
     };
