@@ -1,32 +1,43 @@
-<div style="overflow: auto; height: 100%;">
+<div style="overflow: auto; height: 100%;background-color: #EFF2F5;">
     <table>
         <thead>
-            <tr style="  border-bottom: 1px solid #dee6ea;">
+            <tr style="  border-bottom: 1px solid #dee6ea; height: 38px;">
                 <td> </td>
-                <td *ngFor="let item of [].constructor(30); index as i">
+                <td
+                    (click)="selectDate=i"
+                    [style.backgroundColor]="selectDate===i?'white':''"
+                    [style.borderTop]="selectDate===i?'3px solid #E91E63':''"
+                    *ngFor="let item of [].constructor(30); index as i" style="
+                color: #222222;
+                font-size: 12px;
+                font-family: DM Sans;
+                font-weight: 600;
+                line-height: 16px;
+                word-wrap: break-word">
                     {{ISODate(i).split("T")[0]}}
                 </td>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr style="height: 34px;">
                 <td style="color: var(--Grey-01, #8B9099);
                 font-size: 12px;
                 font-style: normal;
                 font-weight: 600;
-                line-height: 16px;">
+                line-height: 16px;
+                background-color: white;">
                     <div class="flexicon">
                         <img src="assets/icons/icon/monitor.png" class="icon24">
                         MONITOR
                     </div>
-
                 </td>
-                <td *ngFor="let item of [].constructor(30); index as i">
-
+                <td *ngFor="let item of [].constructor(30); index as i"
+                    [style.backgroundColor]="selectDate===i?'white':''"
+                    (click)="selectDate=i">
                 </td>
             </tr>
             <tr style="border-bottom: 3px solid #dee6ea;">
-                <td>
+                <td style="background-color: white;padding: 7px;">
                     <mat-form-field appearance="outline" style="height: 40px;">
                         <input
                             type="text"
@@ -41,29 +52,32 @@
                         </mat-autocomplete>
                     </mat-form-field>
                 </td>
-                <td *ngFor="let item of [].constructor(30); index as i">
+                <td *ngFor="let item of [].constructor(30); index as i"
+                    [style.backgroundColor]="selectDate===i?'white':''"
+                    (click)="selectDate=i">
                     <mat-icon [style.color]="ramdonColor()"
                         class="icon16">circle</mat-icon>
                 </td>
             </tr>
-            <tr>
+            <tr style="height: 34px;">
                 <td style="color: var(--Grey-01, #8B9099);
                 font-size: 12px;
                 font-style: normal;
                 font-weight: 600;
-                line-height: 16px;">
+                line-height: 16px;background-color: white;">
                     <div class="flexicon">
                         <img src="assets/icons/icon/alumno.png" class="icon24">
                         ALUMNOS
                     </div>
                 </td>
-                <td *ngFor="let item of [].constructor(30); index as i">
-
+                <td *ngFor="let item of [].constructor(30); index as i"
+                    [style.backgroundColor]="selectDate===i?'white':''"
+                    (click)="selectDate=i">
                 </td>
             </tr>
             <tr
                 *ngFor="let item of ['Mathias Meier','Mathias Meier','Mathias Meier','Mathias Meier']">
-                <td>
+                <td style="background-color: white;text-align-last: start;">
                     <div class="flexicon" style="color: var(--Dark-01, #222);
                         font-size: 12px;
                         font-style: normal;
@@ -82,7 +96,9 @@
                         FR · Switzerland · 47 Años
                     </span>
                 </td>
-                <td *ngFor="let item of [].constructor(30); index as i">
+                <td *ngFor="let item of [].constructor(30); index as i"
+                    [style.backgroundColor]="selectDate===i?'white':''"
+                    (click)="selectDate=i">
                     <mat-icon [style.color]="ramdonColor()"
                         class="icon16">circle</mat-icon>
                 </td>

@@ -67,6 +67,11 @@ table {
   tr > td:first-child {
     min-width: 200px;
   }
+  tbody {
+    td {
+      padding-left: 10px;
+    }
+  }
 }
 table td + td {
   border-left: 1px solid #dee6ea;
@@ -74,18 +79,11 @@ table td + td {
 .flexicon {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 button {
   border-radius: 3px !important;
 }
 td:hover {
-  background-color: #dee6ea;
-}
-
-table tr td:first-child:hover ~ td {
-  background-color: #dee6ea;
-}
-table tr td:first-child:hover {
-  background-color: #dee6ea;
+  background-color: white;
 }

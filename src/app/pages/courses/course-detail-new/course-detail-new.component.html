@@ -14,9 +14,9 @@
         <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
         <mat-card *ngIf="!loading">
           <mat-card-content style="display: flex;padding: 0;">
-            <div class="contents"
+            <div class="contents" style="border: 1px solid #dee6ea;"
               [style.width]="count(courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'">
-              <div>
+              <div style="border-bottom: 1px solid #dee6ea;">
                 <div style="width: calc(50% - 10px);">
                   <mat-slide-toggle [checked]="true">
                     <span style="

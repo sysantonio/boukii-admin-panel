@@ -1,7 +1,8 @@
 <div class="cardp" *ngIf="courseFormGroup">
     <div class="cardgroup" *ngIf="courseFormGroup.controls['id'] && !detail"
         style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
-        <p style="display: flex;flex-wrap: nowrap;
+        <p
+            style="display: flex;flex-wrap: nowrap;
          color: white;
          font-size: 16px;
          font-family: Dinamit;
@@ -26,9 +27,10 @@
         font-weight: 400;
         line-height: 16px;
         word-wrap: break-word">
-            {{"Registrado: " +
-            DateISO(courseFormGroup.controls['created_at'].value)
-            | translate}}
+            {{"Registrado: "| translate}}
+            <span style="font-weight: 600;">
+                {{ DateISO(courseFormGroup.controls['created_at'].value)}}
+            </span>
         </p>
         <p *ngIf="courseFormGroup.controls['user'].value" style="
         color: white;
@@ -58,14 +60,20 @@
             class="sport_icon noselected"
             [style.backgroundColor]="courseFormGroup.controls['course_type'].value===1?'#E5962A':courseFormGroup.controls['course_type'].value===2?'#2FAA41':courseFormGroup.controls['course_type'].value===3?'#0AB0BC':''"
             style="max-width: none;">
-        <div style="width: max-content;min-width: calc(100% - 60px);">
+        <div style="width: max-content;"
+            [style.minWidth]="courseFormGroup.controls['id']?'':'calc(100% - 60px)'">
             <p
                 style="font-weight: 600; line-height: 18px; min-height: 12px; color: black;font-size: 14px;"
                 [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
                 {{courseFormGroup.controls['course_name'].value}}
             </p>
             <p
-                style="font-weight: 600; line-height: 18px; min-height: 12px; font-size: 14px;margin-top: 5px;"
+                style="line-height: 18px; min-height: 12px;margin-top: 5px;
+                color: #8B9099;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 16px;
+                word-wrap: break-word"
                 [class]="courseFormGroup.controls['course_type'].value?'':'emptyText'">
                 {{courseFormGroup.controls['course_type'].value===1?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===2?'Curso privado flex':courseFormGroup.controls['course_type'].value===3?'Actividad':''
                 | translate}}
@@ -117,13 +125,13 @@
         <div style="width: calc(50% - 10px);">
             <p> {{'PRECIO POR FECHA' | translate }} </p>
             <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
-                style="color: black; font-weight: 200;">
+                style="color: black; font-weight: 400;">
                 {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
             <p> {{'PARTICIPANTES MAX.' | translate }} </p>
-            <p style="color: black; font-weight: 200;font-size: 12px;"
+            <p style="color: black; font-weight: 400;font-size: 12px;"
                 [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
                 {{courseFormGroup.controls['participants'].value}}
             </p>
