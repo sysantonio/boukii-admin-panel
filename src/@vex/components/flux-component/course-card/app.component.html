@@ -58,13 +58,15 @@
             class="sport_icon noselected"
             [style.backgroundColor]="courseFormGroup.controls['course_type'].value===1?'#E5962A':courseFormGroup.controls['course_type'].value===2?'#2FAA41':courseFormGroup.controls['course_type'].value===3?'#0AB0BC':''"
             style="max-width: none;">
-        <div style="width: max-content;">
+        <div style="width: max-content;min-width: calc(100% - 60px);">
             <p
                 style="font-weight: 600; line-height: 18px; min-height: 12px; color: black;font-size: 14px;"
                 [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
                 {{courseFormGroup.controls['course_name'].value}}
             </p>
-            <p>
+            <p
+                style="font-weight: 600; line-height: 18px; min-height: 12px; font-size: 14px;margin-top: 5px;"
+                [class]="courseFormGroup.controls['course_type'].value?'':'emptyText'">
                 {{courseFormGroup.controls['course_type'].value===1?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===2?'Curso privado flex':courseFormGroup.controls['course_type'].value===3?'Actividad':''
                 | translate}}
             </p>
@@ -198,7 +200,7 @@
                 <span
                     *ngIf="item.Duracion && courseFormGroup.controls['price'].value>0">
                     {{courseFormGroup.controls['price'].value *
-                    item.Duracion}}&nbsp;CHF
+                    item.Duracion || 0}}&nbsp;CHF
                 </span>
                 <span style="color: black;"
                     *ngIf="!item.Duracion && courseFormGroup.controls['price'].value>0">
@@ -326,7 +328,7 @@
                      line-height: 18px;
                      word-wrap: break-word;
                      margin-left: auto;">
-                        {{item.price}} CHF/día
+                        {{item.price || 0}} CHF/día
                     </span>
                 </div>
             </ng-container>

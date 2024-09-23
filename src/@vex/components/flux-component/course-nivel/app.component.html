@@ -33,26 +33,26 @@ flex-direction: column;">
                     style="color: #222222; font-weight: 400;display: flex;align-items: center;">
                     <img src="assets/icons/icon/people.png"
                         class="icon16">
-                    <span> {{item.Subgrupo}}g · {{item.PartMax ||
-                        courseFormGroup.controls['participants'].value}}p
+                    <span> {{item.Subgrupo || 0}}g · {{item.PartMax ||
+                        courseFormGroup.controls['participants'].value || 0}}p
                     </span>
                     <div style="margin: auto;"></div>
                     <ng-container>
                         <img src="assets/icons/icon/calendar.png"
                             class="icon16">
                         <span>
-                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)}}
+                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value) || 0}}
                             días
                         </span>
                         <span
                             *ngIf="courseFormGroup.controls['duration_min'].value">
-                            {{courseFormGroup.controls['duration_min'].value}}
+                            {{courseFormGroup.controls['duration_min'].value || 0}}
                         </span>
                     </ng-container>
                     <div style="margin: auto;"></div>
                     <img src="assets/icons/icon/ticket.png"
                         class="icon16">
-                    <span> {{item.age_min}}/{{item.age_max}} </span>
+                    <span> {{item.age_min || 0}}/{{item.age_max || 99}} </span>
                     <div style="margin: auto;"></div>
                 </div>
             </div>
