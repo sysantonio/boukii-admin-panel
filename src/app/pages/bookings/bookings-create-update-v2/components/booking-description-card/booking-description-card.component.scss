@@ -15,16 +15,19 @@
 }
 
 .headerWrapper:hover {
-  animation: fadeOut 3s;
+  animation: fadeOut 1s;
   cursor: pointer;
+  background-color: white;
+  border: 1px solid var(--color-grey3);
+  border-radius: 8px;
+  transform: scale(1.15);
 }
-
 @keyframes fadeOut {
   0% {
-    size: 100%;
+    transform: scale(1);
   }
   100% {
-    size: 150%;
+    transform: scale(1.15);
   }
 }
 

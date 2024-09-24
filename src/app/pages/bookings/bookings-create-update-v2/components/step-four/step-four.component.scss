@@ -14,13 +14,21 @@
 .calendarWrapper {
   width: calc(100% - 8rem);
   margin: 2.5rem auto;
-
+  @media (max-width: 800px) {
+    min-width: 85vw;
+  }
   .two-months {
     display: flex;
     flex-direction: row;
     gap: 3rem;
+    @media (max-width: 800px) {
+      flex-wrap: wrap;
+    }
     > div {
       width: 50%;
+      @media (max-width: 800px) {
+        width: 100%;
+      }
     }
   }
 }

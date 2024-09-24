@@ -52,7 +52,6 @@
       {{ mainClient.first_name }} {{ mainClient.last_name }}
     </div>
   </div>
-
   <div class="bookingContainer">
     <button
       mat-button
@@ -61,7 +60,6 @@
       (click)="openBookingDialog()">
       {{ "bookings_page_descriptionModal_button" | translate }}
     </button>
-
     <mat-card class="left-column">
       <booking-form-stepper
         [forceStep]="forceStep"
@@ -102,16 +100,14 @@
           [total]="total"
           [isDetail]="true"
           [summaryMode]="true"
-          (editActivity)="editActivity($event, i)"
-        >
+          (editActivity)="editActivity($event, i)">
         </booking-description-card>
       </div>
     </div>
     <div class="right-column">
       <booking-reservation-detail
         [client]="mainClient"
-        [activities]="normalizedDates"
-      >
+        [activities]="normalizedDates">
       </booking-reservation-detail>
       <button
         mat-button

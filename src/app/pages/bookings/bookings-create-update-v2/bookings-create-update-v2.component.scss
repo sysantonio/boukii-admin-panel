@@ -26,6 +26,9 @@
   + .barWrapper {
     border-top: 0px;
   }
+  @media (max-width: 700px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .left-column {
@@ -130,7 +133,7 @@
     flex-wrap: wrap;
     justify-content: center;
     booking-description-card {
-      width: 600px;
+      width: 400px;
       max-width: 100%;
     }
   }
@@ -153,5 +156,4 @@
     display: block;
     flex: 400px 1 0;
   }
-
 }

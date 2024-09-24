@@ -15,6 +15,7 @@
   gap: 8px;
   cursor: pointer;
   align-items: center;
+  min-width: 300px;
 
   &.active {
     border: 2px solid var(--color-primary-red);
