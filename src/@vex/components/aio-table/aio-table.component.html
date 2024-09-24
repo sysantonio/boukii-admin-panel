@@ -465,7 +465,7 @@
               <img
                 [src]="getCourseType(data[i]) === 'prive' ? data[i].sport.icon_prive : data[i].sport.icon_collective"
                 class="avatar h-8 w-8 align-middle"
-                style="border-radius: 5px; height: 70%; width: 100%;">
+                style="border-radius: 5px; height: calc(100% - 32px); width: 100%;">
               <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
@@ -484,7 +484,7 @@
               [ngClass]="column.cssClasses" mat-cell>
               <img *ngIf="row[column.property] != 'multiple'"
                 [src]="row[column.property]" class="avatar h-8 w-8 align-middle"
-                style="border-radius: 5px; height: 70%; width: 100%;">
+                style="border-radius: 5px; height: calc(100% - 32px); width: 100%;">
               <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
@@ -503,7 +503,7 @@
               [ngClass]="column.cssClasses" mat-cell>
               <img [src]="row[column.property]?.sport"
                 class="avatar h-8 w-8 align-middle"
-                style="border-radius: 5px; height: 70%; width: 100%;">
+                style="border-radius: 5px; height: calc(100% - 32px); width: 100%;">
               <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
@@ -961,8 +961,8 @@
           <ng-container *ngIf="column.type === 'image'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <img *ngIf="row[column.property] === 1" [src]="'https://school.boukii.com/assets/icons/collectif_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
-              <img *ngIf="row[column.property] !== 1" [src]="'https://school.boukii.com/assets/icons/prive_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 70%; width: 100%;">
+              <img *ngIf="row[column.property] === 1" [src]="'https://school.boukii.com/assets/icons/collectif_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: calc(100% - 32px); width: 100%;">
+              <img *ngIf="row[column.property] !== 1" [src]="'https://school.boukii.com/assets/icons/prive_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: calc(100% - 32px); width: 100%;">
             </td>
           </ng-container>
         </ng-container>-->

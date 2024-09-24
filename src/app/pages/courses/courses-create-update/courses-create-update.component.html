@@ -438,8 +438,13 @@
         <div class="level"
           style="width: 100%; height: 100%; padding: 10px; background: #D2EFFF; border-radius: 8px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
           <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
-          <div
-            style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">Elije
+          <div *ngIf="mode==='update'"
+            style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+            Edita los niveles aquí.
+          </div>
+          <div *ngIf="mode==='create'"
+            style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+            Elije
             los niveles aquí. Podrás asignar los monitores en un segundo
             momento.
           </div>
@@ -476,7 +481,17 @@
                 <mat-icon
                   (click)="addLevelSubgroup(i,1)"
                   color="primary"
-                  style="height: 46px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
+                  style="color: white;
+                  height: 30px;
+                  min-width: 30px;
+                  border-radius: 15px;
+                  cursor: pointer;
+                  font-size: 30px;
+                  margin: auto;
+                  align-content: space-evenly;
+                  background-color: #E91E63;">
+                  add
+                </mat-icon>
               </ng-container>
             </div>
             <ng-container
@@ -484,12 +499,13 @@
               <div
                 style="background-color: #EFF2F5; display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
                 {{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
-                <mat-icon
+                <img src="assets/icons/icon/delete.png" alt class="icon20"
                   (click)="addLevelSubgroup(i,-1)"
-                  style="height: 46px;width: 20px;cursor: pointer; font-size: 20px;align-content: space-evenly;">
-                  delete </mat-icon>
+                  style="cursor: pointer; font-size: 20px;align-content: space-evenly;">
               </div>
-              <div style="width: 100%;height: 350px;margin-top: -10px;padding: 10px; background-color: #EFF2F5;" *ngIf="mode==='update'">
+              <div
+                style="width: 100%;margin-top: -10px;padding: 10px; background-color: #EFF2F5;"
+                *ngIf="mode==='update'">
                 <vex-flux-disponibilidad
                   [courseFormGroup]="courseFormGroup"></vex-flux-disponibilidad>
               </div>
@@ -690,8 +706,8 @@
         mat-button
         type="button"
         class="client-button">
-        <mat-icon>arrow_back</mat-icon>
-        {{'Atrás' | translate }}
+        <mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
+        {{mode==='create'?'Atrás':'Cancelar' | translate }}
       </button>
       <button
         (click)="Confirm(1);"
@@ -700,18 +716,20 @@
         mat-raised-button
         type="button"
         class="client-button">
-        {{mode==='create'?'Confirmar':'Seguiente' | translate }}
+        {{mode==='create'?'Confirmar':'Guardar' | translate }}
       </button>
     </div>
   </div>
   <vex-course-detail-card
     card
     *ngIf="!loading"
+    [step]="ModalFlux"
     [mode]="mode"
     [courseFormGroup]="courseFormGroup">
   </vex-course-detail-card>
   <vex-course-detail-card
     card2
+    [step]="ModalFlux"
     *ngIf="!loading"
     [mode]="mode"
     [courseFormGroup]="courseFormGroup">
