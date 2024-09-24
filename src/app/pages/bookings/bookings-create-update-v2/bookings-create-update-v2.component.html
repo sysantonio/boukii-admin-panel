@@ -65,7 +65,8 @@
     <mat-card class="left-column">
       <booking-form-stepper
         [forceStep]="forceStep"
-        (changedCurrentStep)="currentStep = $event; forceStep = $event"
+        [selectedForm]="selectedForm"
+        (changedCurrentStep)="currentStep = $event; forceStep = $event;"
         (changedFormData)="handleFormChange($event)"></booking-form-stepper>
     </mat-card>
 
@@ -89,7 +90,7 @@
     <div class="left-column">
       <div class="activities">
         <booking-description-card
-          *ngFor="let activity of normalizedDates"
+          *ngFor="let activity of normalizedDates; let i = index"
           [utilizers]="activity.utilizers"
           [sport]="activity.sport"
           [sportLevel]="activity.sportLevel"
@@ -98,50 +99,26 @@
           [monitors]="activity.monitors"
           [clientObs]="activity.clientObs"
           [schoolObs]="activity.schoolObs"
-          [total]="total">
-        </booking-description-card>
-        <booking-description-card
-          *ngFor="let activity of normalizedDates"
-          [utilizers]="activity.utilizers"
-          [sport]="activity.sport"
-          [sportLevel]="activity.sportLevel"
-          [course]="activity.course"
-          [dates]="activity.dates"
-          [monitors]="activity.monitors"
-          [clientObs]="activity.clientObs"
-          [schoolObs]="activity.schoolObs"
-          [total]="total">
-        </booking-description-card>
-        <booking-description-card
-          *ngFor="let activity of normalizedDates"
-          [utilizers]="activity.utilizers"
-          [sport]="activity.sport"
-          [sportLevel]="activity.sportLevel"
-          [course]="activity.course"
-          [dates]="activity.dates"
-          [monitors]="activity.monitors"
-          [clientObs]="activity.clientObs"
-          [schoolObs]="activity.schoolObs"
-          [total]="total">
-        </booking-description-card>
-        <booking-description-card
-          *ngFor="let activity of normalizedDates"
-          [utilizers]="activity.utilizers"
-          [sport]="activity.sport"
-          [sportLevel]="activity.sportLevel"
-          [course]="activity.course"
-          [dates]="activity.dates"
-          [monitors]="activity.monitors"
-          [clientObs]="activity.clientObs"
-          [schoolObs]="activity.schoolObs"
-          [total]="total">
+          [total]="total"
+          [isDetail]="true"
+          [summaryMode]="true"
+          (editActivity)="editActivity($event, i)"
+        >
         </booking-description-card>
       </div>
     </div>
     <div class="right-column">
       <booking-reservation-detail
-        [client]="mainClient">
+        [client]="mainClient"
+        [activities]="normalizedDates"
+      >
       </booking-reservation-detail>
+      <button
+        mat-button
+        type="button"
+        (click)="isDetail = false">
+        {{ "back" | translate }}
+      </button>
     </div>
   </div>
 </ng-container>

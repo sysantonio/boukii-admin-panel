@@ -130,8 +130,28 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
     booking-description-card {
-      width: 400px;
+      width: 600px;
       max-width: 100%;
     }
   }
+}
+
+@media (min-width: 1440px) {
+  .bookingDetailContainer {
+    flex-direction: row;
+    gap: 1.875rem;
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+
+  .left-column {
+    flex: 1 1 0;
+    height: fit-content;
+  }
+
+  .right-column {
+    display: block;
+    flex: 400px 1 0;
+  }
+
 }

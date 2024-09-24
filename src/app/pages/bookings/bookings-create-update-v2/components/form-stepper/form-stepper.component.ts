@@ -17,6 +17,19 @@ export class BookingFormStepper implements OnChanges {
   @Output() changedCurrentStep = new EventEmitter<number>();
   @Output() changedFormData = new EventEmitter();
   @Input() forceStep: number;
+  private _selectedForm: FormGroup;
+  @Input()
+  set selectedForm(value: FormGroup) {
+    if (value) {
+      this._selectedForm = value;
+      this.stepperForm = this._selectedForm;
+    }
+  }
+
+  get selectedForm() {
+    return this._selectedForm;
+  }
+
   stepperForm: FormGroup;
   currentStep = 0;
   STEPS_LENGTH = 6;

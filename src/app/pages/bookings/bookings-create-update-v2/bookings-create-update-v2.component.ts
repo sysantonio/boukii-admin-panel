@@ -8,6 +8,7 @@ import { MOCK_POSIBLE_EXTRAS } from "./mocks/course";
 import { BookingDescriptionCardDate } from "./components/booking-description-card/booking-description-card.component";
 import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -22,6 +23,7 @@ export class BookingsCreateUpdateV2Component {
   sport: any;
   sportLevel: any;
   forceStep;
+  forms: FormGroup[];
   dates: any;
   normalizedDates: any[];
   course;
@@ -30,6 +32,8 @@ export class BookingsCreateUpdateV2Component {
   schoolObs;
   total;
   isDetail = false;
+  selectedIndexForm = null;
+  selectedForm: FormGroup;
   constructor(
     public translateService: TranslateService,
     public dialog: MatDialog,
@@ -37,6 +41,7 @@ export class BookingsCreateUpdateV2Component {
   ) {
     // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
     this.normalizedDates = []
+    this.forms = []
   }
 
   handleFormChange(formData) {
@@ -58,15 +63,30 @@ export class BookingsCreateUpdateV2Component {
     //this.monitors = MOCK_MONITORS;
     this.clientObs = clientObs;
     this.schoolObs = schoolObs;
-    // TODO: habra que cambiar esto por el dato real calculado
     // Calcula el total de la reserva
     if (this.course && this.dates) {
       this.calculateTotal();
     }
     // TODO: crear funcion normalizadora
     if (this.course && this.dates && this.clientObs && this.schoolObs) {
+      if(this.selectedIndexForm === null) {
+        this.forms.push(formData);
+      } else {
+        this.forms[this.selectedIndexForm] = formData;
+      }
       this.normalizeDates()
     }
+  }
+
+  editActivity(data: any, index: number) {
+    this.isDetail = false;
+    this.currentStep = data.step;
+    this.selectedIndexForm = index;
+    this.selectedForm = this.forms[index];
+    this.forceStep = data.step;
+
+    // Forzar la detección de cambios
+    this.cdr.detectChanges();
   }
 
   calculateTotal() {
@@ -148,19 +168,31 @@ export class BookingsCreateUpdateV2Component {
   }
 
   private normalizeDates() {
-    this.normalizedDates.push(
-      {
-        utilizers: this.utilizers,
-        sport: this.sport,
-        sportLevel: this.sportLevel,
-        course: this.course,
-        dates: this.dates,
-        clientObs: this.clientObs,
-        schoolObs: this.dates,
-        total: this.total
+    // Limpia el array normalizedDates antes de llenarlo
+    this.normalizedDates = this.forms.map(form => {
+      const {
+        step1: { client, mainClient },
+        step2: { utilizers },
+        step3: { sport, sportLevel },
+        step4: { course },
+        step5: { course_dates },
+        step6: { clientObs, schoolObs },
+      } = form.value;
 
-      }
-    )
+      const dates = course_dates ? this.getSelectedDates(course_dates) : [];
+
+      return {
+        utilizers,
+        sport,
+        sportLevel,
+        course,
+        dates,
+        clientObs,
+        schoolObs,
+        total: this.total // Asegúrate de que this.total se actualice correctamente para cada form
+      };
+    });
+
     this.isDetail = true;
   }
 

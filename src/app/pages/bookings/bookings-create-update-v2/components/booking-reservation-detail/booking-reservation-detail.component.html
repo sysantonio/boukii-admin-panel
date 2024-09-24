@@ -1,33 +1,126 @@
 <div class="wrapper">
   <div class="headerWrapper">
-    Reserva #notdefined
+    {{ 'booking' | translate }} #****
   </div>
-</div>
-<div class="bodyWrapper">
-  <div class="section">
-    <div class="sectionTitle">
-      {{'client' | translate}}
-    </div>
-    <div class="utilizersWrapper">
-      <img
-        class="avatarImg"
-        [src]="
+  <div class="bodyWrapper">
+    <div class="section">
+      <div class="sectionTitle">
+        {{'client' | translate}}
+      </div>
+      <div class="utilizersWrapper">
+        <img
+          class="avatarImg"
+          [src]="
               client.image !== null && client.image !== ''
                 ? client.image
                 : 'assets/img/booking-avatar.svg'
             "
-      />
+        />
 
-      <div class="utilizersWrapper__description">
-        <h4>{{ client.first_name }} {{ client.last_name }}</h4>
-        <span
-        >{{ langService.getLanguage(client.language1_id) }} ·
-          {{ utilsService.calculateYears(client.birth_date) }} &ensp;{{
-            "years" | translate
-          }}
-          · {{ utilsService.getCountry(client.country) }}</span
-        >
+        <div class="utilizersWrapper__description">
+          <h4>{{ client.first_name }} {{ client.last_name }}</h4>
+          <span
+          >{{ langService.getLanguage(client.language1_id) }} ·
+            {{ utilsService.calculateYears(client.birth_date) }} &ensp;{{
+              "years" | translate
+            }}
+            · {{ utilsService.getCountry(client.country) }}</span
+          >
+        </div>
       </div>
     </div>
+    <div class="section">
+      <div class="dateRow" *ngFor="let activity of activities; let i = index">
+        <div>
+          <span class="date">{{ i + 1 }}.</span>
+          <span class="hour"> {{ activity.course.name }} </span>
+          <span class="price">
+            <!-- Mostrar el precio con descuento -->
+              <span class="discounted-price">
+             {{
+                  activity.total }}
+              </span>
+            </span>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="dateRow" >
+        <div>
+          <span class="hour">{{ "bookings_page.description.total" | translate }}</span>
+          <span class="price">
+            <!-- Mostrar el precio con descuento -->
+              <span class="discounted-price">
+                {{ sumActivityTotal().toFixed(2) }} {{
+                  activities[0].course.currency }}
+              </span>
+            </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="dateRow" >
+        <div>
+          <span class="hour" (click)="addReduction()" *ngIf="reduction === null">+{{ "apply_reduction" | translate }}</span>
+          <span style="width: 100%; float:left" *ngIf="reduction !== null">
+                <mat-icon
+                  svgIcon="mat:delete"
+                  style="float: left;color: red; cursor:pointer"
+                  (click)="reduction = null;"
+                ></mat-icon>
+                <p style="float:left">{{'reduction' |translate}}</p>
+                <p style="float:right">
+                  -{{bookingData.price_reduction.toFixed(2)}}
+                  {{activities[0].course.currency}}
+                </p>
+              </span>
+        </div>
+      </div>
+      <div class="dateRow" >
+        <div>
+          <span class="hour" (click)="addBonus()">{{ "apply_bonus" | translate }}</span>
+          <ng-container *ngIf="vouchers?.length">
+          <span style="width: 100%; float:left" *ngFor="let item of vouchers; let i = index" >
+                <mat-icon
+                  svgIcon="mat:delete"
+                  style="float: left;color: red; cursor:pointer"
+                  (click)="deleteBonus(i);"
+                ></mat-icon>
+                <p style="float:left">{{'bonus' |translate}} {{item.bonus.code}}</p>
+                <p style="float:right">
+                   -{{item.bonus.reducePrice}}
+                  {{activities[0].course.currency}}
+                </p>
+              </span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="dateRow" >
+        <div>
+          <mat-checkbox
+            color="primary"
+            [(ngModel)]="bookingData.has_cancellation_insurance"
+            (change)="calculateRem($event)"
+            [disabled]="isNaN(this.cancellationInsurancePercent)"
+            style="float: left;"
+          ></mat-checkbox>
+          <span class="hour">{{ "op_rem" | translate }}</span>
+          <p style="float:right">
+            -{{bookingData.price_cancellation_insurance.toFixed(2)}}
+            {{activities[0].course.currency}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footerWrapper">
+    {{ "bookings_page.description.total" | translate }}
+    <ng-container >
+      <span class="totalPrice">
+        {{ bookingData.price_total }}
+        {{ activities[0].course.currency }}
+      </span>
+    </ng-container>
   </div>
 </div>

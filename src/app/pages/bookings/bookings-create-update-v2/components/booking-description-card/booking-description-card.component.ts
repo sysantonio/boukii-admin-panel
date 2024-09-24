@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { ChangeMonitorOption } from "src/app/static-data/changeMonitorOptions";
 import { LangService } from "src/service/langService";
 import { UtilsService } from "src/service/utils.service";
@@ -22,6 +22,7 @@ export interface BookingDescriptionCardDate {
   styleUrls: ["./booking-description-card.component.scss"],
 })
 export class BookingDescriptionCard {
+  @Output() editActivity = new EventEmitter();
   @Input() utilizers: any;
   @Input() sport: any;
   @Input() sportLevel: any;
@@ -31,6 +32,8 @@ export class BookingDescriptionCard {
   @Input() clientObs: any;
   @Input() schoolObs: any;
   @Input() total: any;
+  @Input() summaryMode = false;
+  @Input() isDetail = false;
 
   constructor(
     protected langService: LangService,
@@ -81,6 +84,14 @@ export class BookingDescriptionCard {
 
   getExtraPrice(dateExtra) {
     return dateExtra.map((extra) => extra.price).join(", ");
+  }
+
+  sendEditForm() {
+    this.editActivity.emit(
+      {step: 2,
+        initialData: this.utilizers
+      }
+    )
   }
 
   protected readonly parseFloat = parseFloat;

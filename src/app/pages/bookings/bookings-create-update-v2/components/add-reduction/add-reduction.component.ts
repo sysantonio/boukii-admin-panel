@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'booking-add-reduction',
+  selector: 'vex-add-reduction',
   templateUrl: './add-reduction.component.html',
   styleUrls: ['./add-reduction.component.scss']
 })
