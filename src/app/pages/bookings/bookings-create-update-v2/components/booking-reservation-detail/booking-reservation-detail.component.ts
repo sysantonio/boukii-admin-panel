@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {LangService} from '../../../../../../service/langService';
-import {UtilsService} from '../../../../../../service/utils.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LangService } from '../../../../../../service/langService';
+import { UtilsService } from '../../../../../../service/utils.service';
 
-import {MatDialog} from '@angular/material/dialog';
-import {AddReductionModalComponent} from '../add-reduction/add-reduction.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AddReductionModalComponent } from '../add-reduction/add-reduction.component';
 import {
   AddDiscountBonusModalComponent
 } from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
@@ -40,6 +40,8 @@ export interface BookingCreateData {
 export class BookingReservationDetailComponent implements OnInit {
   @Input() client: any;
   @Input() activities: any;
+  @Output() endClick = new EventEmitter()
+  @Output() addClick = new EventEmitter()
   bookingData: BookingCreateData = {
     school_id: 0,
     client_main_id: 0,

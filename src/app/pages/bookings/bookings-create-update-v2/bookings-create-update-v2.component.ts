@@ -8,7 +8,7 @@ import { MOCK_POSIBLE_EXTRAS } from "./mocks/course";
 import { BookingDescriptionCardDate } from "./components/booking-description-card/booking-description-card.component";
 import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
-import {FormGroup} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -69,7 +69,7 @@ export class BookingsCreateUpdateV2Component {
     }
     // TODO: crear funcion normalizadora
     if (this.course && this.dates && this.clientObs && this.schoolObs) {
-      if(this.selectedIndexForm === null) {
+      if (this.selectedIndexForm === null) {
         this.forms.push(formData);
       } else {
         this.forms[this.selectedIndexForm] = formData;
@@ -266,6 +266,9 @@ export class BookingsCreateUpdateV2Component {
         clientObs: this.clientObs,
         schoolObs: this.schoolObs,
         total: this.total,
+        isDetail: this.isDetail,
+        mainClient: this.mainClient,
+        normalizedDates: this.normalizedDates
       },
     });
   }

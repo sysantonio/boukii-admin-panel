@@ -67,7 +67,6 @@
         (changedCurrentStep)="currentStep = $event; forceStep = $event;"
         (changedFormData)="handleFormChange($event)"></booking-form-stepper>
     </mat-card>
-
     <mat-card class="right-column">
       <booking-description-card
         [utilizers]="utilizers"
@@ -85,6 +84,13 @@
 </ng-container>
 <ng-container *ngIf="isDetail">
   <div class="bookingDetailContainer">
+    <button
+      mat-button
+      type="button"
+      class="modalButton"
+      (click)="openBookingDialog()">
+      {{ "bookings_page_descriptionModal_button" | translate }}
+    </button>
     <div class="left-column">
       <div class="activities">
         <booking-description-card
@@ -107,14 +113,10 @@
     <div class="right-column">
       <booking-reservation-detail
         [client]="mainClient"
-        [activities]="normalizedDates">
+        [activities]="normalizedDates"
+        (endClick)="isDetail = false"
+        (addClick)="isDetail = false">
       </booking-reservation-detail>
-      <button
-        mat-button
-        type="button"
-        (click)="isDetail = false">
-        {{ "back" | translate }}
-      </button>
     </div>
   </div>
 </ng-container>
