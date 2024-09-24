@@ -4,7 +4,7 @@
   flex-direction: column;
   background-color: white;
   border-radius: 8px;
-  border: 1px solid #DEE6EA;
+  border: 1px solid #dee6ea;
 }
 .headerWrapper {
   padding: 1.25rem;
@@ -12,6 +12,20 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+}
+
+.headerWrapper:hover {
+  animation: fadeOut 3s;
+  cursor: pointer;
+}
+
+@keyframes fadeOut {
+  0% {
+    size: 100%;
+  }
+  100% {
+    size: 150%;
+  }
 }
 
 .sportTitle {
