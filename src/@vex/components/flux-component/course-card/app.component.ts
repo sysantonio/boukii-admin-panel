@@ -10,10 +10,12 @@ export class CourseDetailCardComponent implements OnChanges {
 
   @Input() courseFormGroup!: UntypedFormGroup
   @Input() detail: boolean = false
+  @Input() step: number = 0
   @Input() mode: 'create' | 'update' = "create"
   @Output() close = new EventEmitter()
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
+
   week: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",]
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
@@ -39,5 +41,5 @@ export class CourseDetailCardComponent implements OnChanges {
     console.log(this.courseFormGroup.getRawValue())
   }
 
-  
+
 }

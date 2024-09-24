@@ -571,3 +571,18 @@ body {
   --font-montserrat: "Montserrat", sans-serif;
   --mdc-checkbox-selected-checkmark-color: var(--color-white);
 }
+
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not(
+    [data-indeterminate="true"]
+  )
+  ~ .mdc-checkbox__background {
+  background-color: white !important;
+  border-radius: 3px;
+}
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled
+  ~ .mdc-checkbox__background
+  .mdc-checkbox__checkmark {
+  margin: auto;
+}

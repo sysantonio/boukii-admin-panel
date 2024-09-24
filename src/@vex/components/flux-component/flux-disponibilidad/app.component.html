@@ -1,4 +1,5 @@
-<div style="overflow: auto; height: 100%;background-color: #EFF2F5;">
+<div
+    style="overflow-x: auto;overflow-y: hidden; height: 100%;background-color: #EFF2F5;">
     <table>
         <thead>
             <tr style="  border-bottom: 1px solid #dee6ea; height: 38px;">
@@ -56,7 +57,7 @@
                     [style.backgroundColor]="selectDate===i?'white':''"
                     (click)="selectDate=i">
                     <mat-icon [style.color]="ramdonColor()"
-                        class="icon16">circle</mat-icon>
+                        class="icon10">circle</mat-icon>
                 </td>
             </tr>
             <tr style="height: 34px;">
@@ -68,6 +69,9 @@
                     <div class="flexicon">
                         <img src="assets/icons/icon/alumno.png" class="icon24">
                         ALUMNOS
+                        <img src="assets/icons/icon/exc.png" class="icon24"
+                            style="cursor: pointer; margin-left: auto;margin-right: 10px;"
+                            (click)="cambiarModal=true">
                     </div>
                 </td>
                 <td *ngFor="let item of [].constructor(30); index as i"
@@ -84,9 +88,6 @@
                         font-weight: 600;
                         line-height: 16px;">
                         {{item}}
-                        <img src="assets/icons/icon/exc.png" class="icon24"
-                            style="cursor: pointer;"
-                            (click)="cambiarModal=true">
                     </div>
                     <span style="color: var(--Grey-01, #8B9099);
                     font-size: 12px;
@@ -100,7 +101,7 @@
                     [style.backgroundColor]="selectDate===i?'white':''"
                     (click)="selectDate=i">
                     <mat-icon [style.color]="ramdonColor()"
-                        class="icon16">circle</mat-icon>
+                        class="icon10">circle</mat-icon>
                 </td>
             </tr>
         </tbody>
