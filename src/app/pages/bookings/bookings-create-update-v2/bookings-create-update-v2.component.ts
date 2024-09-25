@@ -321,8 +321,4 @@ export class BookingsCreateUpdateV2Component {
   deleteModal: boolean = false
   deleteIndex: number = 1
   endModal: boolean = false
-  editarFechaModal: boolean = false
-  //nuevaReservaModal: boolean = false
-  //reduccionModal: boolean = false
-  //bonoModal: boolean = false
 }
