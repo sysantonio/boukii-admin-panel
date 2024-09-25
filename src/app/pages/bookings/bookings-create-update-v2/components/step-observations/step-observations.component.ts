@@ -16,8 +16,8 @@ export class StepObservationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.stepForm = this.fb.group({
-      clientObs: [this.initialData ? this.initialData.clientObs : '', Validators.required],
-      schoolObs: [this.initialData ? this.initialData.schoolObs : '', Validators.required],
+      clientObs: [this.initialData ? this.initialData.clientObs : ''],
+      schoolObs: [this.initialData ? this.initialData.schoolObs : ''],
     });
   }
 

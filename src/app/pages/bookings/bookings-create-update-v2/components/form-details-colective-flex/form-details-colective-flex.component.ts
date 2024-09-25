@@ -17,6 +17,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
   @Input() utilizer: any;
   @Input() sportLevel: any;
   @Input() initialData: any;
+  @Input() activitiesBooked: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   @Input() stepForm: FormGroup; // Recibe el formulario desde el padre
@@ -98,6 +99,14 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
         bookingUserIds: []
       };
 
+      const hasLocalOverlap = this.checkLocalOverlap(checkAval.bookingUsers);
+
+      if (hasLocalOverlap) {
+        // Si hay solapamiento en la verificación local, mostramos mensaje y resolvemos como false
+        this.snackbar.open(this.translateService.instant('snackbar.booking.localOverlap'), 'OK', { duration: 3000 });
+        resolve(false);
+        return;
+      }
       // Llamamos al servicio para verificar la disponibilidad de la fecha
       this.crudService.post('/admin/bookings/checkbooking', checkAval)
         .subscribe((response: any) => {
@@ -114,6 +123,35 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
     });
   }
 
+  checkLocalOverlap(bookingUsers: any[]): boolean {
+    // Recorremos cada normalizedDate
+    for (let normalized of this.activitiesBooked) {
+      // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
+      for (let bookingUser of bookingUsers) {
+        const matchingUtilizer = normalized.utilizers.find(
+          (utilizer: any) => utilizer.id === bookingUser.client_id
+        );
+
+        // Si encontramos un utilizer coincidente, verificamos las fechas
+        if (matchingUtilizer) {
+          for (let normalizedDate of normalized.dates) {
+            // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
+            const formattedNormalizedDate = moment(normalizedDate.date).format('YYYY-MM-DD');
+            const formattedBookingUserDate = moment(bookingUser.date).format('YYYY-MM-DD');
+
+            if (formattedBookingUserDate === formattedNormalizedDate) {
+              // Verificamos solapamiento en las horas
+              if (bookingUser.hour_start < normalizedDate.endHour &&
+                normalizedDate.startHour < bookingUser.hour_end) {
+                return true; // Si hay solapamiento, retornamos true
+              }
+            }
+          }
+        }
+      }
+    }
+    return false; // Si no encontramos solapamientos, retornamos false
+  }
 
 
   // Validación personalizada para asegurarse de que al menos una fecha esté seleccionada

@@ -1,6 +1,8 @@
 <div class="wrapper">
-  <div class="headerWrapper" (click)="summaryMode = !summaryMode">
-    <span class="sportTitle">01.</span>
+  <div class="headerWrapper"
+       [ngClass]="{ 'headerHover': isDetail }"
+       (click)="isDetail ? summaryMode = !summaryMode : null">
+    <span class="sportTitle">{{ index+1 }}.</span>
     <div *ngIf="sport || course">
       <img
         [class]="{ sportImg: !course, courseImg: course }"

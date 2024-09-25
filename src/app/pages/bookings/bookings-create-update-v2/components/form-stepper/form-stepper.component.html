@@ -57,7 +57,7 @@
 
   <ng-container *ngIf="currentStep === 5">
     <booking-step-observations
-      [initialData]="stepperForm.get('step5')?.value.course_dates"
+      [initialData]="stepperForm.get('step6')?.value"
       (stepCompleted)="handleStepCompletion(6, $event)"
       (prevStep)="previousStep()"
     >

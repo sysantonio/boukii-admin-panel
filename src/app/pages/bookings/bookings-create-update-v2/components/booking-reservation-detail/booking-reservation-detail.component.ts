@@ -130,13 +130,19 @@ export class BookingReservationDetailComponent implements OnInit {
       - this.bookingData.price_reduction + this.bookingData.price_boukii_care + this.bookingData.price_tva;
   }
 
+  calculateTotalVoucherPrice() {
+    return this.vouchers.reduce((acc, item) => {
+      return acc + item.bonus.reducePrice;
+    }, 0);
+  }
+
   addBonus() {
     const dialogRef = this.dialog.open(AddDiscountBonusModalComponent, {
       width: '600px',
       data: {
         client_id: this.client.id,
         school_id: this.school.id,
-        currentPrice: this.sumActivityTotal(),
+        currentPrice: this.bookingData.price_total - this.calculateTotalVoucherPrice(),
         appliedBonus: this.vouchers,
         currency: this.activities[0].course.currency
       }
@@ -153,7 +159,7 @@ export class BookingReservationDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(AddReductionModalComponent, {
       width: '300px',
       data: {
-        currentPrice: this.sumActivityTotal()
+        currentPrice: this.bookingData.price_total
       }
     });
 
@@ -162,6 +168,7 @@ export class BookingReservationDetailComponent implements OnInit {
         this.reduction = result;
         this.reduction.appliedPrice = this.calculateReduction();
         this.bookingData.price_reduction = this.reduction.appliedPrice;
+        this.calculateTotal();
       }
     });
   }

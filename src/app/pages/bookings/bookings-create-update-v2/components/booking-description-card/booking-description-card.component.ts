@@ -32,8 +32,10 @@ export class BookingDescriptionCard {
   @Input() clientObs: any;
   @Input() schoolObs: any;
   @Input() total: any;
+  @Input() index: any;
   @Input() summaryMode = false;
   @Input() isDetail = false;
+
 
   constructor(
     protected langService: LangService,

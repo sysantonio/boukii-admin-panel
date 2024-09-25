@@ -78,7 +78,7 @@
       </div>
       <div class="dateRow">
         <div>
-          <span class="hour" (click)="addBonus()">{{ "apply_bonus" | translate
+          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total" (click)="addBonus()">{{ "apply_bonus" | translate
             }}</span>
           <ng-container *ngIf="vouchers?.length">
             <span style="width: 100%; float:left"

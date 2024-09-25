@@ -28,6 +28,7 @@ export class FormDetailsPrivateComponent implements OnInit {
   @Input() utilizers: any;
   @Input() sportLevel: any;
   @Input() initialData: any;
+  @Input() activitiesBooked: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   @Input() stepForm: FormGroup; // Recibe el formulario desde el padre
@@ -142,10 +143,19 @@ export class FormDetailsPrivateComponent implements OnInit {
       // Preparamos el objeto con los datos de la fecha seleccionada
       const bookingUsers = this.utilizers.map(utilizer => ({
         client_id: utilizer.id,
-        hour_start: courseDateGroup.get('startHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
-        hour_end: courseDateGroup.get('endHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
+        hour_start: courseDateGroup.get('startHour').value, // Reemplaza ":00" si es necesario
+        hour_end: courseDateGroup.get('endHour').value, // Reemplaza ":00" si es necesario
         date: moment(courseDateGroup.get('date').value).format('YYYY-MM-DD') // Formateamos la fecha
       }));
+
+      const hasLocalOverlap = this.checkLocalOverlap(bookingUsers, courseDateGroup);
+
+      if (hasLocalOverlap) {
+        // Si hay solapamiento en la verificación local, mostramos mensaje y resolvemos como false
+        this.snackbar.open(this.translateService.instant('snackbar.booking.localOverlap'), 'OK', { duration: 3000 });
+        resolve(false);
+        return;
+      }
 
       const checkAval = {
         bookingUsers,
@@ -168,6 +178,55 @@ export class FormDetailsPrivateComponent implements OnInit {
     });
   }
 
+  checkLocalOverlap(bookingUsers: any[], currentFormGroup: FormGroup = null): boolean {
+    // Recorremos cada normalizedDate
+    for (let normalized of this.activitiesBooked) {
+      // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
+      for (let bookingUser of bookingUsers) {
+        const matchingUtilizer = normalized.utilizers.find(
+          (utilizer: any) => utilizer.id === bookingUser.client_id
+        );
+
+        // Si encontramos un utilizer coincidente, verificamos las fechas
+        if (matchingUtilizer) {
+          for (let normalizedDate of normalized.dates) {
+            // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
+            const formattedNormalizedDate = moment(normalizedDate.date).format('YYYY-MM-DD');
+            const formattedBookingUserDate = moment(bookingUser.date).format('YYYY-MM-DD');
+
+            if (formattedBookingUserDate === formattedNormalizedDate) {
+              // Verificamos solapamiento en las horas
+              if (bookingUser.hour_start < normalizedDate.endHour &&
+                normalizedDate.startHour < bookingUser.hour_end) {
+                return true; // Si hay solapamiento, retornamos true
+              }
+            }
+          }
+        }
+        for (let normalizedDate of this.courseDates.controls) {
+
+          if (currentFormGroup && currentFormGroup === normalizedDate) {
+            continue; // Saltamos la comparación si es el mismo FormGroup
+          }
+          // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
+          const formattedNormalizedDate = moment(normalizedDate.get('date').value).format('YYYY-MM-DD');
+          const formattedBookingUserDate = moment(bookingUser.date).format('YYYY-MM-DD');
+
+          if (formattedBookingUserDate === formattedNormalizedDate) {
+            // Verificamos solapamiento en las horas
+            if (bookingUser.hour_start < normalizedDate.get('endHour').value &&
+              normalizedDate.get('startHour').value < bookingUser.hour_end) {
+              return true; // Si hay solapamiento, retornamos true
+            }
+          }
+        }
+      }
+    }
+    // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
+    return false; // Si no encontramos solapamientos, retornamos false
+  }
+
+
   subscribeToFormChanges(courseDateGroup: FormGroup) {
     // Suscribirse a cambios en 'startHour'
     courseDateGroup.get('startHour').valueChanges.subscribe(() => {
@@ -184,17 +243,29 @@ export class FormDetailsPrivateComponent implements OnInit {
           courseDateGroup.get('duration').setValue(null);
         }
         if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
-          this.getMonitorsAvailable(courseDateGroup)
-          this.checkAval(courseDateGroup)
+          this.checkAval(courseDateGroup).then((isAvailable) => {
+            if (isAvailable) {
+              this.getMonitorsAvailable(courseDateGroup)
+            } else {
+              // Si no hay disponibilidad, deshabilitamos la fecha de nuevo
+              courseDateGroup.get('duration').setValue(null);
+            }
+          });
         }
       }
     });
 
     courseDateGroup.get('date').valueChanges.subscribe(() => {
-
       if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
-        this.getMonitorsAvailable(courseDateGroup)
-        this.checkAval(courseDateGroup)
+        this.checkAval(courseDateGroup).then((isAvailable) => {
+          if (isAvailable) {
+            this.getMonitorsAvailable(courseDateGroup)
+          } else {
+            // Si no hay disponibilidad, deshabilitamos la fecha de nuevo
+            courseDateGroup.get('duration').setValue(null);
+
+          }
+        });
       }
 
     });
@@ -209,8 +280,15 @@ export class FormDetailsPrivateComponent implements OnInit {
       // Actualizar el campo del precio con el nuevo cálculo
       courseDateGroup.get('price').setValue(newPrice);
       if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
-        this.getMonitorsAvailable(courseDateGroup)
-        this.checkAval(courseDateGroup)
+        this.checkAval(courseDateGroup).then((isAvailable) => {
+          if (isAvailable) {
+            this.getMonitorsAvailable(courseDateGroup)
+          } else {
+            // Si no hay disponibilidad, deshabilitamos la fecha de nuevo
+            courseDateGroup.get('duration').setValue(null);
+
+          }
+        });
       }
     });
 
