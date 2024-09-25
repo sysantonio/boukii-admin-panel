@@ -33,9 +33,9 @@ import { FormDetailsColectiveFixComponent } from "./form-details-colective-fix/f
 import { FormDetailsColectiveFlexComponent } from "./form-details-colective-flex/form-details-colective-flex.component";
 import { FormDetailsActivityComponent } from './form-details-activity/form-details-activity.component';
 import { BookingReservationDetailComponent } from './booking-reservation-detail/booking-reservation-detail.component';
-import {AddReductionModalComponent} from './add-reduction/add-reduction.component';
-import {AddDiscountBonusModalComponent} from './add-discount-bonus/add-discount-bonus.component';
-import {MatDividerModule} from '@angular/material/divider';
+import { AddReductionModalComponent } from './add-reduction/add-reduction.component';
+import { AddDiscountBonusModalComponent } from './add-discount-bonus/add-discount-bonus.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   imports: [
@@ -74,7 +74,7 @@ import {MatDividerModule} from '@angular/material/divider';
     FormDetailsActivityComponent,
     BookingReservationDetailComponent,
     AddReductionModalComponent,
-    AddDiscountBonusModalComponent
+    AddDiscountBonusModalComponent,
   ],
   exports: [
     BookingFormStepper,
@@ -96,4 +96,4 @@ import {MatDividerModule} from '@angular/material/divider';
     AddDiscountBonusModalComponent
   ],
 })
-export class BookingComponentsModule {}
+export class BookingComponentsModule { }

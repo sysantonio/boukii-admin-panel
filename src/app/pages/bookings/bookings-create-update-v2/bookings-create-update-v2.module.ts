@@ -9,6 +9,7 @@ import { MatButtonModule } from "@angular/material/button";
 
 import { TranslateModule } from "@ngx-translate/core";
 import { BookingComponentsModule } from "./components/components.module";
+import { FluxModalModule } from "src/@vex/components/flux-component/flux-modal/app.module";
 
 @NgModule({
   declarations: [BookingsCreateUpdateV2Component],
@@ -21,7 +22,8 @@ import { BookingComponentsModule } from "./components/components.module";
     BreadcrumbsModule,
     MatIconModule,
     MatButtonModule,
+    FluxModalModule
   ],
   exports: [BookingsCreateUpdateV2Component],
 })
-export class BookingsCreateUpdateV2Module {}
+export class BookingsCreateUpdateV2Module { }
