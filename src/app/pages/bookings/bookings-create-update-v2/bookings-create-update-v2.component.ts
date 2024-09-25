@@ -307,6 +307,12 @@ export class BookingsCreateUpdateV2Component {
     });
   }
 
+  sumActivityTotal(): number {
+    return this.normalizedDates.reduce((acc, item) => {
+      const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, '')); // Eliminar cualquier cosa que no sea un número o signo
+      return acc + numericValue;
+    }, 0);
+  }
 
 
 
