@@ -7,5 +7,5 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./booking-dialog.component.scss']
 })
 export class BookingDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 }

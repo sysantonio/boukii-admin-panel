@@ -62,7 +62,8 @@
     </button>
     <mat-card class="left-column">
       <div *ngIf="forceStep < 5 && selectedIndexForm != null">
-        Una vez que selecciones continuar en esté paso se reiniciaran y eliminarán todas las selecciones de los pasos siguientes.
+        Una vez que selecciones continuar en esté paso se reiniciaran y
+        eliminarán todas las selecciones de los pasos siguientes.
       </div>
       <booking-form-stepper
         [forceStep]="forceStep"
@@ -105,6 +106,7 @@
       <div class="activities">
         <booking-description-card
           *ngFor="let activity of normalizedDates; let i = index"
+          [index]="i"
           [utilizers]="activity.utilizers"
           [sport]="activity.sport"
           [sportLevel]="activity.sportLevel"
@@ -116,7 +118,8 @@
           [total]="total"
           [isDetail]="true"
           [summaryMode]="true"
-          (editActivity)="editActivity($event, i)">
+          (editActivity)="editActivity($event, i)"
+          (deleteActivity)="deleteModal=true; deleteIndex=i">
         </booking-description-card>
       </div>
     </div>
@@ -124,9 +127,87 @@
       <booking-reservation-detail
         [client]="mainClient"
         [activities]="normalizedDates"
-        (endClick)="isDetail = false"
+        (endClick)="isDetail = false;endModal=true"
         (addClick)="addNewActivity()">
       </booking-reservation-detail>
     </div>
   </div>
 </ng-container>
+
+<vex-flux-modal *ngIf="deleteModal" (Close)="deleteModal=false"
+  [width]="570" title="Eliminar actividad">
+  <div body>
+    <div style="margin: 10px;">
+      Quieres cancelar “Actividad #{{("00"+deleteIndex).slice(-2)}}”?
+    </div>
+  </div>
+  <div footer style="display: flex;">
+    <button
+      style="height: 38px; width: 85px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+      mat-raised-button
+      type="button"
+      class="client-button" (click)="deleteModal=false">
+      {{"Cancelar" | translate }}
+    </button>
+    <button
+      style="height: 38px; width: 85px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button">
+      {{ "Si, eliminar" | translate }}
+    </button>
+  </div>
+</vex-flux-modal>
+
+<vex-flux-modal *ngIf="endModal" (Close)="endModal=false"
+  [width]="570" title="Finalizar reserva">
+  <div body>
+    <div style="margin: 10px;">
+      Si dejas esta pagina los datos no se guardarán los datos de la reserva,
+      <br>
+      Estás seguro?
+    </div>
+  </div>
+  <div footer style="display: flex;">
+    <button
+      style="height: 38px; width: 150px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+      mat-raised-button
+      type="button"
+      class="client-button" (click)="endModal=false">
+      {{"Salir de la reserva" | translate }}
+    </button>
+    <button
+      style="height: 38px; width: 150px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button">
+      {{ "Finalizar reserva y pagar" | translate }}
+    </button>
+  </div>
+</vex-flux-modal>
+
+<vex-flux-modal *ngIf="editarFechaModal" (Close)="editarFechaModal=false"
+  [width]="570" title="Editar fecha 1">
+  <div body>
+
+  </div>
+  <div footer style="display: flex;">
+    <button
+      style="height: 38px; width: 85px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+      mat-raised-button
+      type="button"
+      class="client-button" (click)="editarFechaModal=false">
+      {{"Cancelar" | translate }}
+    </button>
+    <button
+      style="height: 38px; width: 85px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button">
+      {{ "Confirmar" | translate }}
+    </button>
+  </div>
+</vex-flux-modal>

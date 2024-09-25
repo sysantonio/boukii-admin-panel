@@ -8,7 +8,7 @@ import { MOCK_POSIBLE_EXTRAS } from "./mocks/course";
 import { BookingDescriptionCardDate } from "./components/booking-description-card/booking-description-card.component";
 import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -106,7 +106,7 @@ export class BookingsCreateUpdateV2Component {
       step5: this.fb.group({}),            // Vacío
       step6: this.fb.group({})             // Vacío
     });
-    
+
     this.utilizers = [];
     this.sport = null;
     this.sportLevel = null;
@@ -307,10 +307,22 @@ export class BookingsCreateUpdateV2Component {
     });
   }
 
+
+
+
+
   forceChange(newStep) {
     //if (newStep < this.currentStep) {
     this.forceStep = newStep;
     this.cdr.detectChanges();
     //}
   }
+
+  deleteModal: boolean = false
+  deleteIndex: number = 1
+  endModal: boolean = false
+  editarFechaModal: boolean = false
+  //nuevaReservaModal: boolean = false
+  //reduccionModal: boolean = false
+  //bonoModal: boolean = false
 }

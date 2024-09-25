@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChangeMonitorOption } from "src/app/static-data/changeMonitorOptions";
 import { LangService } from "src/service/langService";
 import { UtilsService } from "src/service/utils.service";
@@ -23,6 +23,8 @@ export interface BookingDescriptionCardDate {
 })
 export class BookingDescriptionCard {
   @Output() editActivity = new EventEmitter();
+  @Output() deleteActivity = new EventEmitter();
+
   @Input() utilizers: any;
   @Input() sport: any;
   @Input() sportLevel: any;
@@ -34,11 +36,12 @@ export class BookingDescriptionCard {
   @Input() total: any;
   @Input() summaryMode = false;
   @Input() isDetail = false;
+  @Input() index: number = 1;
 
   constructor(
     protected langService: LangService,
     protected utilsService: UtilsService
-  ) {}
+  ) { }
 
   formatDate(date: string) {
     return this.utilsService.formatDate(date);
@@ -88,14 +91,13 @@ export class BookingDescriptionCard {
 
   sendEditForm(step: number) {
     this.editActivity.emit(
-      {step: step
+      {
+        step: step
       }
     )
   }
 
-  openDeleteDialog() {
 
-  }
 
   protected readonly parseFloat = parseFloat;
 }
