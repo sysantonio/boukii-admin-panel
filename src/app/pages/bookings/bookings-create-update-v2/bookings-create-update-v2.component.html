@@ -10,7 +10,7 @@
   </div>
   <div class="barWrapper">
     <div>
-      <button
+      <button [disabled]="forms.length"
         class="crumb"
         [ngClass]="{ active: currentStep === 0, prev: currentStep > 0 }"
         (click)="forceChange(0)">
@@ -61,8 +61,12 @@
       {{ "bookings_page_descriptionModal_button" | translate }}
     </button>
     <mat-card class="left-column">
+      <div *ngIf="forceStep < 5 && selectedIndexForm != null">
+        Una vez que selecciones continuar en esté paso se reiniciaran y eliminarán todas las selecciones de los pasos siguientes.
+      </div>
       <booking-form-stepper
         [forceStep]="forceStep"
+        [activitiesBooked]="normalizedDates"
         [selectedForm]="selectedForm"
         (changedCurrentStep)="currentStep = $event; forceStep = $event;"
         (changedFormData)="handleFormChange($event)"></booking-form-stepper>
@@ -79,6 +83,12 @@
         [schoolObs]="schoolObs"
         [total]="total">
       </booking-description-card>
+      <button *ngIf="selectedIndexForm != null"
+        mat-button
+        type="button"
+        (click)="isDetail = true">
+        {{ "Volver a la pagina de pago" | translate }}
+      </button>
     </mat-card>
   </div>
 </ng-container>
@@ -115,7 +125,7 @@
         [client]="mainClient"
         [activities]="normalizedDates"
         (endClick)="isDetail = false"
-        (addClick)="isDetail = false">
+        (addClick)="addNewActivity()">
       </booking-reservation-detail>
     </div>
   </div>

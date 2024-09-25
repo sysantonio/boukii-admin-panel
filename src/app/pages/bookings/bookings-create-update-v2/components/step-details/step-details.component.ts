@@ -13,6 +13,7 @@ export class StepDetailsComponent {
   @Input() course: any;
   @Input() date: any;
   @Input() utilizers: any;
+  @Input() activitiesBooked: any;
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();

@@ -8,7 +8,7 @@ import { MOCK_POSIBLE_EXTRAS } from "./mocks/course";
 import { BookingDescriptionCardDate } from "./components/booking-description-card/booking-description-card.component";
 import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
-import { FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -37,7 +37,8 @@ export class BookingsCreateUpdateV2Component {
   constructor(
     public translateService: TranslateService,
     public dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder
   ) {
     // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
     this.normalizedDates = []
@@ -88,6 +89,39 @@ export class BookingsCreateUpdateV2Component {
     // Forzar la detección de cambios
     this.cdr.detectChanges();
   }
+
+  addNewActivity() {
+    this.isDetail = false;
+    this.currentStep = 1;
+
+    // Copiar solo el contenido de step1 de this.forms[0]
+    const step1Controls = this.forms[0].get('step1').value;
+
+    // Crear un nuevo formGroup solo con los controles de step1 y vaciar el resto
+    this.selectedForm = this.fb.group({
+      step1: this.fb.group(step1Controls),        // Copia step1
+      step2: this.fb.group({}),            // Vacío
+      step3: this.fb.group({}),            // Vacío
+      step4: this.fb.group({}),            // Vacío
+      step5: this.fb.group({}),            // Vacío
+      step6: this.fb.group({})             // Vacío
+    });
+    
+    this.utilizers = [];
+    this.sport = null;
+    this.sportLevel = null;
+    this.course = null;
+    this.dates = [];
+    this.clientObs = null;
+    this.schoolObs = null;
+
+
+    this.forceStep = 1;
+
+    // Forzar la detección de cambios
+    this.cdr.detectChanges();
+  }
+
 
   calculateTotal() {
     let total = 0;

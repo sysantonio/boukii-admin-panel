@@ -34,6 +34,7 @@
       [client]="stepperForm.get('step1')?.value?.mainClient"
       [sportLevel]="stepperForm.get('step3')?.value?.sportLevel"
       [utilizers]="stepperForm.get('step2')?.value?.utilizers"
+      [activitiesBooked]="activitiesBooked"
       (stepCompleted)="handleStepCompletion(4, $event)"
       (prevStep)="previousStep()"
     >
@@ -47,6 +48,7 @@
       [date]="stepperForm.get('step4')?.value?.date"
       [sportLevel]="stepperForm.get('step3')?.value?.sportLevel"
       [utilizers]="stepperForm.get('step2')?.value?.utilizers"
+      [activitiesBooked]="activitiesBooked"
       (stepCompleted)="handleStepCompletion(5, $event)"
       (prevStep)="previousStep()"
     >
@@ -55,6 +57,7 @@
 
   <ng-container *ngIf="currentStep === 5">
     <booking-step-observations
+      [initialData]="stepperForm.get('step5')?.value.course_dates"
       (stepCompleted)="handleStepCompletion(6, $event)"
       (prevStep)="previousStep()"
     >

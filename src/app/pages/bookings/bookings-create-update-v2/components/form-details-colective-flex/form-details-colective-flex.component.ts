@@ -2,6 +2,10 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { MOCK_POSIBLE_EXTRAS } from "../../mocks/course";
 import { UtilsService } from "src/service/utils.service";
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import moment from 'moment';
+import {ApiCrudService} from '../../../../../../service/crud.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: "booking-form-details-colective-flex",
@@ -21,7 +25,11 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
   totalExtraPrice: number[] = [];
 
 
-  constructor(protected utilsService: UtilsService, private fb: FormBuilder) {
+  constructor(protected utilsService: UtilsService,
+              private fb: FormBuilder,
+              private crudService: ApiCrudService,
+              public translateService: TranslateService,
+              private snackbar: MatSnackBar) {
 
   }
 
@@ -42,17 +50,70 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
     if (!existingCourseDatesArray) {
       const courseDatesArray = this.fb.array(
         this.course.course_dates.map((date, index) => {
-          // Si hay datos iniciales, usamos esos datos para restaurar los valores seleccionados
-          const initialSelected = this.initialData?.[index]?.selected || false;
-          const initialExtras = this.initialData?.[index]?.extras || [];
-          return this.createCourseDateGroup(date, initialSelected, initialExtras);
-        }),
+          // Validar si la fecha es hoy o en el futuro y si cumple con la hora de inicio
+          const dateMoment = moment(date.date, "YYYY-MM-DD");
+          const currentTime = moment(); // Hora actual
+
+          // Verificamos si la fecha es hoy
+          const isToday = dateMoment.isSame(currentTime, "day");
+
+          // Verificamos si es una fecha futura
+          const isInFuture = dateMoment.isAfter(currentTime, "day");
+
+          // Verificamos si la hora de inicio es posterior a la hora actual (solo si es hoy)
+          const hourStartMoment = moment(date.hour_start, "HH:mm");
+          const isValidToday = isToday && hourStartMoment.isAfter(currentTime);
+
+          // Si es una fecha en el futuro o es hoy y cumple con la hora, añadimos el grupo
+          if (isInFuture || isValidToday) {
+            // Si hay datos iniciales, usamos esos datos para restaurar los valores seleccionados
+            const initialSelected = this.initialData?.[index]?.selected || false;
+            const initialExtras = this.initialData?.[index]?.extras || [];
+            return this.createCourseDateGroup(date, initialSelected, initialExtras);
+          } else {
+            // Si la fecha no es válida (pasada o hoy pero la hora es menor a la actual), devolvemos null
+            return null;
+          }
+        }).filter(group => group !== null), // Filtrar los null (fechas no válidas)
         this.atLeastOneSelectedValidator  // Validación personalizada
       );
+
       // Añadir el FormArray al formulario del padre
       this.stepForm.addControl('course_dates', courseDatesArray);
     }
   }
+
+  checkAval(index: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      const courseDateGroup = this.courseDatesArray.at(index) as FormGroup;
+
+      // Preparamos el objeto con los datos de la fecha seleccionada
+      const checkAval = {
+        bookingUsers: [{
+          client_id: this.utilizer.id,
+          hour_start: courseDateGroup.get('startHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
+          hour_end: courseDateGroup.get('endHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
+          date: moment(courseDateGroup.get('date').value).format('YYYY-MM-DD') // Formateamos la fecha
+        }],
+        bookingUserIds: []
+      };
+
+      // Llamamos al servicio para verificar la disponibilidad de la fecha
+      this.crudService.post('/admin/bookings/checkbooking', checkAval)
+        .subscribe((response: any) => {
+          // Supongamos que la API devuelve un campo 'available' que indica la disponibilidad
+          const isAvailable = response.success; // Ajusta según la respuesta real de tu API
+          resolve(isAvailable); // Resolvemos la promesa con el valor de disponibilidad
+        }, (error) => {
+          this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
+            moment(error.error.data[0].date).format('DD/MM/YYYY') +
+            ' | ' + error.error.data[0].hour_start + ' - ' +
+            error.error.data[0].hour_end, 'OK', { duration: 3000 })
+          resolve(false); // En caso de error, rechazamos la promesa
+        });
+    });
+  }
+
 
 
   // Validación personalizada para asegurarse de que al menos una fecha esté seleccionada
@@ -99,7 +160,18 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
     const extrasControl = courseDateGroup.get('extras');
 
     if (isChecked) {
-      extrasControl.enable();
+      // Llamamos a checkAval para verificar la disponibilidad de la fecha seleccionada
+      this.checkAval(index).then((isAvailable) => {
+        if (isAvailable) {
+          extrasControl.enable();
+        } else {
+          // Si no hay disponibilidad, deshabilitamos la fecha de nuevo
+          courseDateGroup.get('selected').setValue(false);
+          extrasControl.disable();
+          extrasControl.setValue([]); // Limpia los extras seleccionados
+
+        }
+      });
     } else {
       extrasControl.disable();
       extrasControl.setValue([]);

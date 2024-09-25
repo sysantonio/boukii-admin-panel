@@ -137,6 +137,37 @@ export class FormDetailsPrivateComponent implements OnInit {
     });
   }
 
+  checkAval(courseDateGroup: FormGroup): Promise<boolean> {
+    return new Promise((resolve) => {
+      // Preparamos el objeto con los datos de la fecha seleccionada
+      const bookingUsers = this.utilizers.map(utilizer => ({
+        client_id: utilizer.id,
+        hour_start: courseDateGroup.get('startHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
+        hour_end: courseDateGroup.get('endHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
+        date: moment(courseDateGroup.get('date').value).format('YYYY-MM-DD') // Formateamos la fecha
+      }));
+
+      const checkAval = {
+        bookingUsers,
+        bookingUserIds: [] // Puedes rellenar esto según sea necesario
+      };
+
+      // Llamamos al servicio para verificar la disponibilidad de la fecha
+      this.crudService.post('/admin/bookings/checkbooking', checkAval)
+        .subscribe((response: any) => {
+          // Supongamos que la API devuelve un campo 'available' que indica la disponibilidad
+          const isAvailable = response.success; // Ajusta según la respuesta real de tu API
+          resolve(isAvailable); // Resolvemos la promesa con el valor de disponibilidad
+        }, (error) => {
+          this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
+            moment(error.error.data[0].date).format('DD/MM/YYYY') +
+            ' | ' + error.error.data[0].hour_start + ' - ' +
+            error.error.data[0].hour_end, 'OK', { duration: 3000 })
+          resolve(false); // En caso de error, rechazamos la promesa
+        });
+    });
+  }
+
   subscribeToFormChanges(courseDateGroup: FormGroup) {
     // Suscribirse a cambios en 'startHour'
     courseDateGroup.get('startHour').valueChanges.subscribe(() => {
@@ -154,6 +185,7 @@ export class FormDetailsPrivateComponent implements OnInit {
         }
         if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
           this.getMonitorsAvailable(courseDateGroup)
+          this.checkAval(courseDateGroup)
         }
       }
     });
@@ -162,6 +194,7 @@ export class FormDetailsPrivateComponent implements OnInit {
 
       if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
         this.getMonitorsAvailable(courseDateGroup)
+        this.checkAval(courseDateGroup)
       }
 
     });
@@ -177,7 +210,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       courseDateGroup.get('price').setValue(newPrice);
       if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
         this.getMonitorsAvailable(courseDateGroup)
-
+        this.checkAval(courseDateGroup)
       }
     });
 

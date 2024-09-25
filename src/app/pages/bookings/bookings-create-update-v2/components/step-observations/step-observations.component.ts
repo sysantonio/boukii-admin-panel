@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   styleUrls: ["./step-observations.component.scss"],
 })
 export class StepObservationsComponent implements OnInit {
+  @Input() initialData: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   stepForm: FormGroup;
@@ -15,8 +16,8 @@ export class StepObservationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.stepForm = this.fb.group({
-      clientObs: ["", Validators.required],
-      schoolObs: ["", Validators.required],
+      clientObs: [this.initialData ? this.initialData.clientObs : '', Validators.required],
+      schoolObs: [this.initialData ? this.initialData.schoolObs : '', Validators.required],
     });
   }
 

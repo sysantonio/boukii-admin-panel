@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <div class="headerWrapper">
+  <div class="headerWrapper" (click)="summaryMode = !summaryMode">
     <span class="sportTitle">01.</span>
     <div *ngIf="sport || course">
       <img
@@ -24,12 +24,13 @@
         <span class="courseSubtitle"> {{ course.description }} </span>
       </div>
     </ng-container>
-    <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail" (click)="sendEditForm()">
+    <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail"
+         (click)="openDeleteDialog(); $event.stopPropagation()">
       <img [class]="{ sportImg: !course, courseImg: course }"
            style="min-width: 24px;
       width: 24px;
       height: 24px;"
-           src="assets/icons/icon/more.png" alt>
+           src="assets/icons/icon/delete.png" alt>
     </div>
   </div>
   <div class="bodyWrapper">
@@ -39,6 +40,9 @@
         width: 24px;
         height: 24px;" />
         {{ "bookings_page.description.utilizers" | translate }}
+        <img src="assets/img/icons/edit-grey.svg" style="float: right; min-width: 24px;
+        width: 24px;
+        height: 24px;" (click)="sendEditForm(1)" *ngIf="!summaryMode && isDetail" />
       </div>
       <ng-container *ngIf="utilizers">
         <div *ngIf="!summaryMode; else summaryUtilizer" >
@@ -114,10 +118,13 @@
       <div class="sectionTitle">
         <img src="assets/img/icons/calendar-1.svg" />
         {{ "bookings_page.description.date" | translate }}
+        <img src="assets/img/icons/edit-grey.svg" style="float: right; min-width: 24px;
+        width: 24px;
+        height: 24px;" (click)="sendEditForm(4)" *ngIf="!summaryMode && isDetail"/>
       </div>
       <ng-container *ngIf="dates && dates.length">
         <div *ngIf="!summaryMode; else summaryDates" >
-          <div *ngFor="let date of dates; let i = index"class="dateRow" >
+          <div *ngFor="let date of dates; let i = index" class="dateRow" >
             <div>
               <span class="date">{{ formatDate(date?.date) }} </span>
               <span class="hour">{{ date.startHour }}h-{{ date.endHour }}h </span>
@@ -251,7 +258,10 @@
     </div>-->
 
     <div class="section observacionSection" *ngIf="!summaryMode">
-      <div class="sectionTitle">{{ "observation_client" | translate }}</div>
+      <div class="sectionTitle">{{ "observation_client" | translate }}
+        <img src="assets/img/icons/edit-grey.svg" style="float: right; min-width: 24px;
+        width: 24px;
+        height: 24px;" (click)="sendEditForm(5)" *ngIf="!summaryMode && isDetail"/></div>
       <p>{{ clientObs }}</p>
       <div class="sectionTitle mt-5">{{ "observation_school" | translate
         }}</div>

@@ -24,6 +24,7 @@ export class StepFourComponent {
   @Input() initialData: any;
   @Input() client: any;
   @Input() utilizers: any;
+  @Input() activitiesBooked: any;
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
@@ -57,10 +58,10 @@ export class StepFourComponent {
   ) {
     this.selectedCourse = this.initialData?.selectedCourse;
     this.selectedDate = this.initialData?.selectedDate;
+    this.minDate = new Date();
     this.selectedDateMoment = this.selectedDate
       ? moment(this.selectedDate)
-      : null;
-    this.minDate = new Date();
+      : moment(this.minDate);
     this.updateNextMonth();
     this.autoSelectFirstDayIfCurrentMonth();
   }
@@ -131,22 +132,68 @@ export class StepFourComponent {
     }
   }
 
+  filterCoursesCollective() {
+    this.courses = this.courses.filter(course => {
+        if(!course.is_flexible) {
+          course.course_dates.some(d => {
+            const courseDateMoment = moment(d.date, "YYYY-MM-DD");
+            const currentTime = moment(); // Definir la hora actual aquí
+
+            // Comprobar si la fecha es hoy
+            if (courseDateMoment.isSame(moment(), "day")) {
+              const hourStart = moment(d.hour_start, "HH:mm");
+              return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+            } else {
+              return this.selectedDateMoment.isSame(courseDateMoment, 'day');
+            }
+          })
+        } else {
+          return true;
+        }
+      }
+    );
+  }
+
   handleDateChange(event: any) {
     this.selectedDate = event;
     this.selectedDateMoment = moment(event);
     this.stepForm.get("date").patchValue(this.selectedDateMoment);
-    this.cursesInSelectedDate = this.courses.filter((course) =>
-      course.course_dates.find((d) =>
-        this.selectedDateMoment.isSame(moment(d.date), "day")
-      )
+    this.cursesInSelectedDate = this.courses.filter(course =>
+      course.course_dates.some(d => {
+        const courseDateMoment = moment(d.date, "YYYY-MM-DD");
+        const currentTime = moment(); // Definir la hora actual aquí
+
+        // Comprobar si la fecha es hoy
+        if (courseDateMoment.isSame(moment(), "day")) {
+          const hourStart = moment(d.hour_start, "HH:mm");
+          return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+        } else {
+          return this.selectedDateMoment.isSame(courseDateMoment, 'day');
+        }
+      })
     );
   }
 
   compareCourseDates() {
     let ret = [];
+    const currentTime = moment(); // Hora actual
+
     this.courses.forEach((course) => {
       course.course_dates.forEach((courseDate) => {
-        ret.push(moment(courseDate.date, "YYYY-MM-DD").format("YYYY-MM-DD"));
+        const courseDateMoment = moment(courseDate.date, "YYYY-MM-DD");
+
+        // Si la fecha del curso es hoy, comprobar las horas
+        if (courseDateMoment.isSame(moment(), "day")) {
+          const hourStart = moment(courseDate.hour_start, "HH:mm");
+
+          // Solo añadir la fecha si el curso aún no ha empezado
+          if (currentTime.isBefore(hourStart)) {
+            ret.push(courseDateMoment.format("YYYY-MM-DD"));
+          }
+        } else {
+          // Si la fecha no es hoy, añadirla sin comprobación de hora
+          ret.push(courseDateMoment.format("YYYY-MM-DD"));
+        }
       });
     });
 
@@ -189,8 +236,31 @@ export class StepFourComponent {
     this.isLoading = true;
     this.crudService.post("/availability", rq).subscribe((data) => {
       this.courses = data.data;
-      this.cursesInSelectedDate = null;
+      this.courses = this.courses.filter(course => {
+        const isCourseBooked = this.activitiesBooked.some(activity =>
+          activity.course_type === 1 && activity.id === course.id
+        );
+        return !isCourseBooked;  // Retorna solo si no está reservado
+      });
+      if(this.courseTypeId == 1) {
+        this.filterCoursesCollective();
+      }
       this.compareCourseDates();
+
+      this.cursesInSelectedDate = this.courses.filter(course =>
+        course.course_dates.some(d => {
+          const courseDateMoment = moment(d.date, "YYYY-MM-DD");
+          const currentTime = moment(); // Definir la hora actual aquí
+
+          // Comprobar si la fecha es hoy
+          if (courseDateMoment.isSame(moment(), "day")) {
+            const hourStart = moment(d.hour_start, "HH:mm");
+            return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+          } else {
+            return this.selectedDateMoment.isSame(courseDateMoment, 'day');
+          }
+        })
+      );
       this.isLoading = false;
     });
   }

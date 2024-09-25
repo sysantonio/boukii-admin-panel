@@ -86,12 +86,15 @@ export class BookingDescriptionCard {
     return dateExtra.map((extra) => extra.price).join(", ");
   }
 
-  sendEditForm() {
+  sendEditForm(step: number) {
     this.editActivity.emit(
-      {step: 2,
-        initialData: this.utilizers
+      {step: step
       }
     )
+  }
+
+  openDeleteDialog() {
+
   }
 
   protected readonly parseFloat = parseFloat;

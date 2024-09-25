@@ -17,6 +17,7 @@ export class BookingFormStepper implements OnChanges {
   @Output() changedCurrentStep = new EventEmitter<number>();
   @Output() changedFormData = new EventEmitter();
   @Input() forceStep: number;
+  @Input() activitiesBooked: any;
   private _selectedForm: FormGroup;
   @Input()
   set selectedForm(value: FormGroup) {
@@ -77,13 +78,13 @@ export class BookingFormStepper implements OnChanges {
     this.stepperForm.setControl(`step${step}`, formGroup);
     if (step < this.STEPS_LENGTH) {
       for (let i = step + 1; i <= this.STEPS_LENGTH; i++) {
-        this.stepperForm.setControl(`step${i}`, this.fb.group({}));
+        if(step != 6) {
+          this.stepperForm.setControl(`step${i}`, this.fb.group({}));
+        }
       }
     }
 
-    if(step == 6) {
 
-    }
 
     this.nextStep();
     this.changedFormData.emit(this.stepperForm);
