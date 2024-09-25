@@ -158,3 +158,14 @@
     flex: 400px 1 0;
   }
 }
+.mobileFixe {
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+  position: fixed;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
+  flex-wrap: wrap;
+}

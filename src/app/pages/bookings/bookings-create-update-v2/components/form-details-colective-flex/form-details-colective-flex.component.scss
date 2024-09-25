@@ -63,7 +63,7 @@
 .row-2 {
   display: flex;
   gap: 1rem;
-
+  flex-wrap: wrap;
   > div {
     width: calc(50% - 0.5rem);
     display: flex;
