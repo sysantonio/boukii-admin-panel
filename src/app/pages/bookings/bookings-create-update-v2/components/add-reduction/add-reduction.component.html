@@ -16,7 +16,7 @@
 
   <mat-divider class="text-border"></mat-divider>
 
-  <mat-dialog-content class="flex flex-col">
+  <mat-dialog-content class="flex flex-col" style="padding: 0;">
 
     <mat-tab-group class="tabsWrapper">
       <mat-tab>
@@ -60,7 +60,7 @@
     <button mat-raised-button [mat-dialog-close]="false"
       style="border-radius: 3px;">{{'Cancelar' |
       translate}}</button>
-    <button color="primary" mat-flat-button style="margin-left: 30px;"
+    <button color="primary" mat-flat-button style="margin-left: 20px;"
       [mat-dialog-close]="{type: type, discount: discount}"
       [disabled]="form.invalid">{{'Confirmar' | translate}}</button>
   </mat-dialog-actions>
