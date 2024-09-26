@@ -35,7 +35,9 @@
   display: flex;
   gap: 0.5rem;
 
-  .date, .hour, .price {
+  .date,
+  .hour,
+  .price {
     font-family: var(--font-dm);
     font-size: 0.85rem;
     line-height: 1.15rem;
@@ -61,12 +63,13 @@
 .row-2 {
   display: flex;
   gap: 1rem;
-
+  flex-wrap: wrap;
   > div {
-    width: 50%;
+    width: calc(50% - 0.5rem);
     display: flex;
     gap: 1rem;
     align-items: center;
+    min-width: 260px;
 
     > * {
       width: 100%;
@@ -84,7 +87,7 @@
 
   .extras-price {
     color: var(--color-grey1);
-    min-width: 6rem;
+    min-width: 60px;
     text-align: right;
   }
 }

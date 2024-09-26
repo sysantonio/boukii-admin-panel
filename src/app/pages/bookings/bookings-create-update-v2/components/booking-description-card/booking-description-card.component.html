@@ -156,7 +156,7 @@
                   <img src="assets/img/icons/monitores-3.svg" />
                   {{ "bookings_page.description.monitor" | translate }}
                 </div>
-                <span class="monitorDetails" *ngIf="date.monitor">
+                <span *ngIf="date.monitor">
                   {{ date.monitor.first_name }} {{ date.monitor.last_name }}
                   <mat-icon *ngIf="date.changeMonitorOption"
                     matPrefix

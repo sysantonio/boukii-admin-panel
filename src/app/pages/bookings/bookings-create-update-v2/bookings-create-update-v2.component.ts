@@ -307,6 +307,12 @@ export class BookingsCreateUpdateV2Component {
     });
   }
 
+  sumActivityTotal(): number {
+    return this.normalizedDates.reduce((acc, item) => {
+      const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, '')); // Eliminar cualquier cosa que no sea un número o signo
+      return acc + numericValue;
+    }, 0);
+  }
 
 
 
@@ -321,8 +327,4 @@ export class BookingsCreateUpdateV2Component {
   deleteModal: boolean = false
   deleteIndex: number = 1
   endModal: boolean = false
-  editarFechaModal: boolean = false
-  //nuevaReservaModal: boolean = false
-  //reduccionModal: boolean = false
-  //bonoModal: boolean = false
 }

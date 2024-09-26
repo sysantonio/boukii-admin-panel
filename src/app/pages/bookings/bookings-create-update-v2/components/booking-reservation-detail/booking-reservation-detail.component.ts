@@ -42,6 +42,9 @@ export class BookingReservationDetailComponent implements OnInit {
   @Input() activities: any;
   @Output() endClick = new EventEmitter()
   @Output() addClick = new EventEmitter()
+  @Input() hideBotton: boolean = false;
+
+
   bookingData: BookingCreateData = {
     school_id: 0,
     client_main_id: 0,
@@ -157,7 +160,7 @@ export class BookingReservationDetailComponent implements OnInit {
 
   addReduction() {
     const dialogRef = this.dialog.open(AddReductionModalComponent, {
-      width: '300px',
+      width: '530px',
       data: {
         currentPrice: this.bookingData.price_total
       }

@@ -96,6 +96,7 @@
 <ng-container *ngIf="isDetail">
   <div class="bookingDetailContainer">
     <button
+      style="margin-bottom: 0;"
       mat-button
       type="button"
       class="modalButton"
@@ -106,6 +107,7 @@
       <div class="activities">
         <booking-description-card
           *ngFor="let activity of normalizedDates; let i = index"
+          [index]="i"
           [utilizers]="activity.utilizers"
           [sport]="activity.sport"
           [sportLevel]="activity.sportLevel"
@@ -117,8 +119,7 @@
           [total]="total"
           [isDetail]="true"
           [summaryMode]="true"
-          [index]="i"
-          (editActivity)="editActivity($event, i)">
+          (editActivity)="editActivity($event, i)"
           (deleteActivity)="deleteModal=true; deleteIndex=i">
         </booking-description-card>
       </div>
@@ -127,9 +128,61 @@
       <booking-reservation-detail
         [client]="mainClient"
         [activities]="normalizedDates"
-        (endClick)="isDetail = false;endModal=true"
+        (endClick)="endModal=true"
         (addClick)="addNewActivity()">
       </booking-reservation-detail>
+    </div>
+  </div>
+  <div  class="mobileFixe" >
+    <div style="width: 100%;">
+      <span class="totalPrice" style="
+      color: #222222;
+       font-size: 14px;
+       font-family: DM Sans;
+       font-weight: 600;
+       line-height: 18px;
+       word-wrap: break-word">
+        <span style="
+        color: #8B9099;
+         font-size: 14px;
+         font-family: DM Sans;
+         font-weight: 400;
+         line-height: 18px;
+         word-wrap: break-word;padding-right: 10px;">
+          Total
+        </span>
+        {{ sumActivityTotal().toFixed(2) }}
+        {{ normalizedDates[0].course.currency }}
+      </span>
+    </div>
+    <div style="width: 100%;display: flex;gap: 10px;">
+      <button
+        style="height: 38px; width: calc(50% - 5px);border-radius: 3px;margin-top: 16px;
+        color: #222222;
+         font-size: 14px;
+         font-family: DM Sans;
+         font-weight: 600;
+         line-height: 18px;
+         word-wrap: break-word"
+        mat-raised-button
+        type="button"
+        class="client-button">
+        {{ "Añadir actividad" | translate }}
+      </button>
+      <button
+        style="height: 38px; width: calc(50% - 5px);border-radius: 3px;margin-top: 16px;
+        color: white;
+         font-size: 14px;
+         font-family: DM Sans;
+         font-weight: 600;
+         line-height: 18px;
+         word-wrap: break-word"
+        color="primary"
+        mat-raised-button
+        type="button"
+        class="client-button">
+        {{ "Ir a pago" | translate }}
+      </button>
     </div>
   </div>
 </ng-container>
@@ -178,36 +231,12 @@
       {{"Salir de la reserva" | translate }}
     </button>
     <button
-      style="height: 38px; width: 150px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+      style="height: 38px; width: 200px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
       color="primary"
       mat-raised-button
       type="button"
       class="client-button">
       {{ "Finalizar reserva y pagar" | translate }}
-    </button>
-  </div>
-</vex-flux-modal>
-
-<vex-flux-modal *ngIf="editarFechaModal" (Close)="editarFechaModal=false"
-  [width]="570" title="Editar fecha 1">
-  <div body>
-
-  </div>
-  <div footer style="display: flex;">
-    <button
-      style="height: 38px; width: 85px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
-      mat-raised-button
-      type="button"
-      class="client-button" (click)="editarFechaModal=false">
-      {{"Cancelar" | translate }}
-    </button>
-    <button
-      style="height: 38px; width: 85px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
-      color="primary"
-      mat-raised-button
-      type="button"
-      class="client-button">
-      {{ "Confirmar" | translate }}
     </button>
   </div>
 </vex-flux-modal>
