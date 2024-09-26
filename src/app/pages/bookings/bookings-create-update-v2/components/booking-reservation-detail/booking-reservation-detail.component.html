@@ -74,7 +74,7 @@
       <div class="dateRow">
         <div>
           <span class="hour" (click)="addReduction()"
-            *ngIf="reduction === null"
+            *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total"
             style="
             color: #E91E63;
              font-size: 14px;
@@ -86,11 +86,11 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
-          <span style="width: 100%; float:left" *ngIf="reduction !== null">
+          <span style="width: 100%; float:left" *ngIf="bookingData.reduction !== null;">
             <mat-icon
               svgIcon="mat:delete"
               style="float: left;color: red; cursor:pointer"
-              (click)="reduction = null;"></mat-icon>
+              (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
               -{{bookingData.price_reduction.toFixed(2)}}
@@ -113,9 +113,9 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_bonus" | translate }}
           </span>
-          <ng-container *ngIf="vouchers?.length">
+          <ng-container *ngIf="bookingData.vouchers?.length">
             <span style="width: 100%; float:left"
-              *ngFor="let item of vouchers; let i = index">
+              *ngFor="let item of bookingData.vouchers; let i = index">
               <mat-icon
                 svgIcon="mat:delete"
                 style="float: left;color: red; cursor:pointer"
@@ -155,6 +155,13 @@
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
+    {{ "A pagar" | translate }}
+    <ng-container>
+      <span class="totalPrice">
+        {{ bookingData.price_total - calculateTotalVoucherPrice() }}
+        {{ activities[0].course.currency }}
+      </span>
+    </ng-container>
   </div>
 </div>
 <button *ngIf="!hideBotton"
@@ -162,7 +169,7 @@
   color="primary"
   mat-raised-button
   type="button"
-  class="client-button" (click)="endClick.emit()">
+  class="client-button" (click)="payClick.emit()">
   {{ "Finalizar reserva y pagar" | translate }}
 </button>
 <button *ngIf="!hideBotton"

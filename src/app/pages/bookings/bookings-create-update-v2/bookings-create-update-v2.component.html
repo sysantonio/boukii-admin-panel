@@ -116,7 +116,7 @@
           [monitors]="activity.monitors"
           [clientObs]="activity.clientObs"
           [schoolObs]="activity.schoolObs"
-          [total]="total"
+          [total]="activity.total"
           [isDetail]="true"
           [summaryMode]="true"
           (editActivity)="editActivity($event, i)"
@@ -129,6 +129,7 @@
         [client]="mainClient"
         [activities]="normalizedDates"
         (endClick)="endModal=true"
+        (payClick)="payModal=true"
         (addClick)="addNewActivity()">
       </booking-reservation-detail>
     </div>
@@ -236,6 +237,54 @@
       mat-raised-button
       type="button"
       class="client-button">
+      {{ "Finalizar reserva y pagar" | translate }}
+    </button>
+  </div>
+</vex-flux-modal>
+
+<vex-flux-modal *ngIf="payModal" (Close)="payModal=false" [width]="570" title="Finalizar reserva">
+  <div body>
+    <div style="margin: 10px;">
+      Pendiente de pago: {{bookingService.calculatePendingPrice()}}
+    </div>
+
+    <!-- Radio Buttons for Payment Methods -->
+    <div style="margin: 10px 0;">
+      <mat-radio-group [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange($event)">
+        <mat-radio-button [value]="1" style="display: block;">Pago directo</mat-radio-button>
+        <!-- Payment method dropdown only for 'Pago directo' -->
+        <div *ngIf="paymentMethod == 1 || paymentMethod == 4" style="margin: 10px 0;">
+          <mat-form-field appearance="fill">
+            <mat-label>Selecciona la forma de pago</mat-label>
+            <mat-select [(ngModel)]="paymentMethod">
+              <mat-option *ngFor="let option of paymentOptions" [value]="option.value">{{option.type}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <mat-radio-button [value]="2" style="display: block;">Pago online</mat-radio-button>
+        <mat-radio-button [value]="5" style="display: block;">Confirmación sin pago</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+
+  </div>
+
+  <div footer style="display: flex;">
+    <button
+      style="height: 38px; width: 150px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+      mat-raised-button
+      type="button"
+      class="client-button"
+      (click)="payModal=false">
+      {{"Salir de la reserva" | translate }}
+    </button>
+    <button
+      style="height: 38px; width: 200px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button"
+      (click)="finalizeBooking()">
       {{ "Finalizar reserva y pagar" | translate }}
     </button>
   </div>

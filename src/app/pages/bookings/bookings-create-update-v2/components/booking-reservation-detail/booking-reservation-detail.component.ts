@@ -1,129 +1,132 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LangService } from '../../../../../../service/langService';
 import { UtilsService } from '../../../../../../service/utils.service';
-
 import { MatDialog } from '@angular/material/dialog';
 import { AddReductionModalComponent } from '../add-reduction/add-reduction.component';
-import {
-  AddDiscountBonusModalComponent
-} from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
-
-export interface BookingCreateData {
-  school_id: number;
-  client_main_id: number;
-  user_id: number;
-  price_total: number;
-  has_cancellation_insurance: boolean;
-  has_boukii_care: boolean;
-  has_reduction: boolean;
-  has_tva: boolean;
-  price_cancellation_insurance: number;
-  price_reduction: number;
-  price_boukii_care: number;
-  price_tva: number;
-  source: 'admin';
-  payment_method_id: number | null;
-  paid_total: number;
-  paid: boolean;
-  notes: string;
-  notes_school: string;
-  paxes: number;
-  status: number;
-  color: string;
-}
+import { AddDiscountBonusModalComponent } from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
+import {BookingCreateData, BookingService} from '../../../../../../service/bookings.service';
 
 @Component({
   selector: 'booking-reservation-detail',
   templateUrl: './booking-reservation-detail.component.html',
-  styleUrls: ['./booking-reservation-detail.component.scss']
+  styleUrls: ['./booking-reservation-detail.component.scss'],
 })
 export class BookingReservationDetailComponent implements OnInit {
   @Input() client: any;
   @Input() activities: any;
-  @Output() endClick = new EventEmitter()
-  @Output() addClick = new EventEmitter()
-  @Input() hideBotton: boolean = false;
+  @Input() hideBotton = false;
+  @Output() endClick = new EventEmitter();
+  @Output() payClick = new EventEmitter();
+  @Output() addClick = new EventEmitter();
 
-
-  bookingData: BookingCreateData = {
-    school_id: 0,
-    client_main_id: 0,
-    user_id: 0,
-    price_total: 0,
-    has_cancellation_insurance: false,
-    has_boukii_care: false,
-    has_reduction: false,
-    has_tva: false,
-    price_cancellation_insurance: 0,
-    price_reduction: 0,
-    price_boukii_care: 0,
-    price_tva: 0,
-    source: 'admin',
-    payment_method_id: null,
-    paid_total: 0,
-    paid: false,
-    notes: '',
-    notes_school: '',
-    paxes: 0,
-    status: 0,
-    color: ''
-  };
-  cancellationInsurancePercent: number = 0;
-  price_tva: number = 0;
-  price_boukii_care: number = 0;
-  vouchers: any[] = [];
-  reduction: any = null;
+  bookingData: BookingCreateData;
+  cancellationInsurancePercent: number;
+  price_tva: number;
+  price_boukii_care: number;
   school: any;
   settings: any;
 
   constructor(
     protected langService: LangService,
     protected utilsService: UtilsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private bookingService: BookingService
   ) {
     this.school = this.utilsService.getSchoolData();
     this.settings = JSON.parse(this.school.settings);
     this.cancellationInsurancePercent = parseFloat(this.settings?.taxes?.cancellation_insurance_percent);
-    this.price_boukii_care = parseInt(this.settings?.taxes?.boukii_care_price);
+    this.price_boukii_care = parseInt(this.settings?.taxes?.boukii_care_price, 10);
     this.price_tva = parseFloat(this.settings?.taxes?.tva);
   }
 
   ngOnInit(): void {
-    this.bookingData.price_total = this.sumActivityTotal();
+    this.bookingData = this.bookingService.getBookingData() || this.initializeBookingData();
+    this.recalculateBonusPrice();
+    this.updateBookingData();
   }
 
-  protected readonly parseFloat = parseFloat;
+  private initializeBookingData(): BookingCreateData {
+    return {
+      school_id: this.school.id,
+      client_main_id: this.client.id,
+      user_id: 0,
+      price_total: 0,
+      has_cancellation_insurance: false,
+      has_boukii_care: false,
+      has_reduction: false,
+      has_tva: false,
+      price_cancellation_insurance: 0,
+      price_reduction: 0,
+      price_boukii_care: 0,
+      price_tva: 0,
+      source: 'admin',
+      payment_method_id: null,
+      paid_total: 0,
+      paid: false,
+      notes: '',
+      notes_school: '',
+      paxes: 0,
+      status: 0,
+      color: '',
+      vouchers: [],
+      reduction: null,
+    };
+  }
 
   sumActivityTotal(): number {
     return this.activities.reduce((acc, item) => {
-      const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, '')); // Eliminar cualquier cosa que no sea un número o signo
+      const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, ''));
       return acc + numericValue;
     }, 0);
   }
 
+  updateBookingData() {
+    this.bookingData.price_total = this.calculateTotal();
+    this.bookingService.setBookingData(this.bookingData);
+  }
 
   calculateRem(event: any) {
     if (event.source.checked) {
       this.bookingData.price_cancellation_insurance = this.sumActivityTotal() * this.cancellationInsurancePercent;
       this.bookingData.has_cancellation_insurance = event.source.checked;
-      this.bookingData.price_total = this.calculateTotal();
-
     } else {
       this.bookingData.price_cancellation_insurance = 0;
       this.bookingData.has_cancellation_insurance = event.source.checked;
-      this.bookingData.price_total = this.calculateTotal();
-      return 0;
     }
+    this.updateBookingData();
+    this.recalculateBonusPrice();
+  }
+
+  recalculateBonusPrice() {
+    let remainingPrice = this.bookingData.price_total - this.calculateTotalVoucherPrice();
+
+    if(remainingPrice != 0) {
+      this.bookingData.vouchers.forEach(voucher => {
+        if (remainingPrice > 0) {
+          if (voucher.bonus.remaining_balance + voucher.bonus.reducePrice >= remainingPrice) {
+            voucher.bonus.reducePrice = voucher.bonus.reducePrice + remainingPrice;
+            remainingPrice = 0;
+          } else {
+            voucher.bonus.reducePrice = voucher.bonus.remaining_balance;
+            remainingPrice -= voucher.bonus.remaining_balance;
+          }
+        } else if (remainingPrice == 0) {
+          voucher.bonus.reducePrice = 0;
+        } else {
+          voucher.bonus.reducePrice = voucher.bonus.reducePrice + remainingPrice;
+        }
+      });
+    }
+
+    this.updateBookingData();
   }
 
   recalculateTva() {
-    // Calculamos la base imponible sumando los componentes relevantes
     const basePrice = this.sumActivityTotal()
       + this.bookingData.price_cancellation_insurance
       - this.bookingData.price_reduction
       + this.bookingData.price_boukii_care;
 
-    // Calculamos el TVA como un porcentaje de la base imponible
     this.bookingData.price_tva = basePrice * this.price_tva;
   }
 
@@ -133,62 +136,64 @@ export class BookingReservationDetailComponent implements OnInit {
       - this.bookingData.price_reduction + this.bookingData.price_boukii_care + this.bookingData.price_tva;
   }
 
-  calculateTotalVoucherPrice() {
-    return this.vouchers.reduce((acc, item) => {
-      return acc + item.bonus.reducePrice;
-    }, 0);
+  calculateTotalVoucherPrice(): number {
+    return this.bookingData.vouchers.reduce((acc, item) => acc + item.bonus.reducePrice, 0);
   }
 
-  addBonus() {
+  addBonus(): void {
     const dialogRef = this.dialog.open(AddDiscountBonusModalComponent, {
       width: '600px',
       data: {
         client_id: this.client.id,
         school_id: this.school.id,
         currentPrice: this.bookingData.price_total - this.calculateTotalVoucherPrice(),
-        appliedBonus: this.vouchers,
-        currency: this.activities[0].course.currency
-      }
+        appliedBonus: this.bookingData.vouchers,
+        currency: this.activities[0].course.currency,
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.vouchers.push(result);
+        this.bookingData.vouchers.push(result);
+        this.updateBookingData();
       }
     });
   }
 
-  addReduction() {
+  addReduction(): void {
     const dialogRef = this.dialog.open(AddReductionModalComponent, {
       width: '530px',
-      data: {
-        currentPrice: this.bookingData.price_total
-      }
+      data: { currentPrice: this.bookingData.price_total },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.reduction = result;
-        this.reduction.appliedPrice = this.calculateReduction();
-        this.bookingData.price_reduction = this.reduction.appliedPrice;
-        this.calculateTotal();
+        this.bookingData.reduction = result;
+        this.bookingData.reduction.appliedPrice = this.calculateReduction();
+        this.bookingData.price_reduction = this.bookingData.reduction.appliedPrice;
+        this.updateBookingData();
+        this.recalculateBonusPrice();
       }
     });
   }
 
-
-  deleteBonus(index: number) {
-    this.vouchers.splice(index, 1);
+  deleteReduction(): void {
+    this.bookingData.reduction = null;
+    this.bookingData.price_reduction = 0;
+    this.updateBookingData();
+    this.recalculateBonusPrice();
   }
 
-  private calculateReduction() {
-    if (this.reduction.type === 1) {
-      return (this.sumActivityTotal() * this.reduction.discount) / 100;
-    } else {
-      return this.reduction.discount > this.sumActivityTotal() ? this.sumActivityTotal() : this.reduction.discount;
-    }
+  deleteBonus(index: number): void {
+    this.bookingData.vouchers.splice(index, 1);
+    this.updateBookingData();
+  }
+
+  private calculateReduction(): number {
+    return this.bookingData.reduction.type === 1
+      ? (this.sumActivityTotal() * this.bookingData.reduction.discount) / 100
+      : Math.min(this.bookingData.reduction.discount, this.sumActivityTotal());
   }
 
   protected readonly isNaN = isNaN;
-
 }

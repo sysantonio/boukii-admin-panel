@@ -10,6 +10,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { TranslateModule } from "@ngx-translate/core";
 import { BookingComponentsModule } from "./components/components.module";
 import { FluxModalModule } from "src/@vex/components/flux-component/flux-modal/app.module";
+import {MatRadioModule} from '@angular/material/radio';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [BookingsCreateUpdateV2Component],
@@ -22,7 +26,11 @@ import { FluxModalModule } from "src/@vex/components/flux-component/flux-modal/a
     BreadcrumbsModule,
     MatIconModule,
     MatButtonModule,
-    FluxModalModule
+    FluxModalModule,
+    MatRadioModule,
+    MatInputModule,
+    MatSelectModule,
+    FormsModule
   ],
   exports: [BookingsCreateUpdateV2Component],
 })

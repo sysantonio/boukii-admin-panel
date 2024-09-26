@@ -9,6 +9,7 @@ import { BookingDescriptionCardDate } from "./components/booking-description-car
 import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import {BookingService} from '../../../../service/bookings.service';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -31,14 +32,23 @@ export class BookingsCreateUpdateV2Component {
   clientObs;
   schoolObs;
   total;
+  deleteModal: boolean = false
+  deleteIndex: number = 1
+  endModal: boolean = false
   isDetail = false;
   selectedIndexForm = null;
   selectedForm: FormGroup;
+  payModal: boolean = false;
+  paymentMethod: number = 1; // Valor por defecto
+  selectedPaymentOption: string = '';
+  paymentOptions: any[] = [{type: 'Tarjeta', value: 4}, {type: 'Efectivo', value: 1}]; // Opciones de pago para "Pago directo"
+
   constructor(
     public translateService: TranslateService,
     public dialog: MatDialog,
     private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public bookingService: BookingService
   ) {
     // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
     this.normalizedDates = []
@@ -68,7 +78,7 @@ export class BookingsCreateUpdateV2Component {
     if (this.course && this.dates) {
       this.calculateTotal();
     }
-    // TODO: crear funcion normalizadora
+
     if (this.course && this.dates && this.clientObs && this.schoolObs) {
       if (this.selectedIndexForm === null) {
         this.forms.push(formData);
@@ -215,6 +225,9 @@ export class BookingsCreateUpdateV2Component {
 
       const dates = course_dates ? this.getSelectedDates(course_dates) : [];
 
+      // Calcular el total para cada actividad
+      const total = this.calculateIndividualTotal(course, dates, utilizers);
+
       return {
         utilizers,
         sport,
@@ -223,11 +236,101 @@ export class BookingsCreateUpdateV2Component {
         dates,
         clientObs,
         schoolObs,
-        total: this.total // Asegúrate de que this.total se actualice correctamente para cada form
+        total: `${total.toFixed(2)} ${course.currency}` // Guardar el total calculado para esta actividad
       };
     });
 
     this.isDetail = true;
+  }
+
+  private calculateIndividualTotal(course, dates, utilizers) {
+    let total = 0;
+
+    if (course.course_type === 1) {
+      total = this.calculateColectivePriceForDates(course, dates);
+    } else if (course.course_type === 2) {
+      total = this.calculatePrivatePriceForDates(course, dates, utilizers);
+    }
+
+    // Sumar el total de los extras seleccionados para las fechas
+    const extrasTotal = dates.reduce((acc, date) => {
+      if (date.extras && date.extras.length) {
+        const extrasPrice = date.extras.reduce((extraAcc, extra) => {
+          const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+          return extraAcc + price;
+        }, 0);
+        return acc + extrasPrice;
+      }
+      return acc;
+    }, 0);
+
+    total += extrasTotal;
+
+    return total;
+  }
+
+  private calculateColectivePriceForDates(course, dates) {
+    let total = 0;
+    if (course.is_flexible) {
+      const selectedDatesCount = dates.length; // Número de fechas seleccionadas
+      total = course.price * selectedDatesCount;
+
+      const discounts = course.discounts ? JSON.parse(course.discounts) : [];
+      discounts.forEach((discount: { date: number; percentage: number }) => {
+        if (discount.date <= selectedDatesCount) {
+          const discountAmount = (course.price * discount.percentage) / 100;
+          total -= discountAmount;
+        }
+      });
+    } else {
+      total = parseFloat(course.price);
+    }
+    return total;
+  }
+
+  private calculatePrivatePriceForDates(course, dates, utilizers) {
+    let total = 0;
+
+    if (course.is_flexible) {
+      dates.forEach(date => {
+        const duration = date.duration;
+        const selectedUtilizers = utilizers.length;
+
+        const interval = course.price_range.find(range => {
+          return range.intervalo === duration;
+        });
+
+        if (interval) {
+          total += parseFloat(interval[selectedUtilizers]);
+        }
+
+        date.utilizers.forEach(utilizer => {
+          if (utilizer.extras && utilizer.extras.length) {
+            const extrasTotal = utilizer.extras.reduce((acc, extra) => {
+              const price = parseFloat(extra.price) || 0;
+              return acc + price;
+            }, 0);
+            total += extrasTotal;
+          }
+        });
+      });
+    } else {
+      dates.forEach(date => {
+        const dateTotal = parseFloat(course.price) * utilizers.length;
+        total += dateTotal;
+        date.utilizers.forEach(utilizer => {
+          if (utilizer.extras && utilizer.extras.length) {
+            const extrasTotal = utilizer.extras.reduce((acc, extra) => {
+              const price = parseFloat(extra.price) || 0;
+              return acc + price;
+            }, 0);
+            total += extrasTotal;
+          }
+        });
+      });
+    }
+
+    return total;
   }
 
   // Método para obtener el intervalo de precios basado en la duración
@@ -314,9 +417,6 @@ export class BookingsCreateUpdateV2Component {
     }, 0);
   }
 
-
-
-
   forceChange(newStep) {
     //if (newStep < this.currentStep) {
     this.forceStep = newStep;
@@ -324,7 +424,15 @@ export class BookingsCreateUpdateV2Component {
     //}
   }
 
-  deleteModal: boolean = false
-  deleteIndex: number = 1
-  endModal: boolean = false
+
+  onPaymentMethodChange(event: any): void {
+
+  }
+
+  // Método para finalizar la reserva
+  finalizeBooking(): void {
+    debugger;
+    console.log('Finalizar con confirmación sin pago');
+    /*let bookingData = this.bookingService.*/
+  }
 }

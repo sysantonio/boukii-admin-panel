@@ -34,7 +34,6 @@ export class BookingDescriptionCard {
   @Input() clientObs: any;
   @Input() schoolObs: any;
   @Input() total: any;
-  @Input() index: any;
   @Input() summaryMode = false;
   @Input() isDetail = false;
   @Input() index: number = 1;
