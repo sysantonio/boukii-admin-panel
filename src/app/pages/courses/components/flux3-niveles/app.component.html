@@ -1,0 +1,169 @@
+
+<ng-container *ngIf="courseFormGroup.controls['course_type'].value===1">
+  <div class="level"
+    style="width: 100%; height: 100%; padding: 10px; background: #D2EFFF; border-radius: 8px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
+    <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
+    <div *ngIf="mode==='update'"
+      style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+      Edita los niveles aquí.
+    </div>
+    <div
+      style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+      Elije
+      los niveles aquí. Podrás asignar los monitores en un segundo
+      momento.
+    </div>
+  </div>
+  <div class="level"
+    style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px; gap: 10px;">
+    <ng-container *ngFor="let level of levels;index as i">
+      <div style="display: flex;gap: 16px;">
+        <mat-checkbox
+          style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;"
+          [style.backgroundColor]="courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
+          [style.color]="level.color"
+          [style.border]="'1px solid '+level.color"
+          (click)="selectLevel($event,i) ">
+          {{level.annotation}} {{level.level}}
+        </mat-checkbox>
+        <ng-container
+          *ngIf="courseFormGroup.controls['levelGrop'].value[i].active">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'Edad mínima' | translate}}</mat-label>
+            <input matInput type="number"
+              [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].age_min">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{'Edad máxima' | translate}}</mat-label>
+            <input matInput type="number"
+              [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].age_max">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{'Participante máxima' | translate}}</mat-label>
+            <input matInput type="number"
+              [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].PartMax">
+          </mat-form-field>
+          <mat-icon
+            (click)="addLevelSubgroup(i,1)"
+            color="primary"
+            style="color: white;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 30px;
+            margin: auto;
+            align-content: space-evenly;
+            background-color: #E91E63;">
+            add
+          </mat-icon>
+        </ng-container>
+      </div>
+      <ng-container
+        *ngFor="let item of [].constructor(courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as i">
+        <div
+          style="background-color: #EFF2F5; display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
+          {{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
+          <img src="assets/icons/icon/delete.png" alt class="icon20"
+            (click)="addLevelSubgroup(i,-1)"
+            style="cursor: pointer; font-size: 20px;align-content: space-evenly;">
+        </div>
+        <div
+          style="width: 100%;margin-top: -10px;padding: 10px; background-color: #EFF2F5;"
+          *ngIf="mode==='update'">
+          <vex-flux-disponibilidad
+            [courseFormGroup]="courseFormGroup"></vex-flux-disponibilidad>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-container>
+<ng-container *ngIf="courseFormGroup.controls['course_type'].value===2">
+  <div class="table-container"
+    style="overflow: auto;max-height: 100vh;">
+    <table mat-table [dataSource]="hours" class="mat-elevation-z8"
+      #scrollContainer>
+      <ng-container matColumnDef="intervalo">
+        <th mat-header-cell *matHeaderCellDef> {{'interval'|translate}}
+        </th>
+        <td mat-cell *matCellDef="let row"> {{row}} </td>
+      </ng-container>
+      <ng-container *ngFor="let col of displayedColumns.slice(1)"
+        [matColumnDef]="col">
+        <th mat-header-cell *matHeaderCellDef> {{col}} </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field appearance="outline" class="flex-auto">
+            <input class="flex-auto" matInput style="margin-top:3%">
+            <span matTextSuffix>CHF</span>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</ng-container>
+<ng-container *ngIf="courseFormGroup.controls['course_type'].value===3">
+  <div
+    *ngFor="let item of courseFormGroup.controls['categoryPart'].value, index as i">
+    <div
+      style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+      <span>
+        {{'CATEGORIA PARTICIPANTE  '+ (i+1)| translate}}
+      </span>
+      <mat-icon *ngIf="i!==0"
+        (click)="courseFormGroup.controls['categoryPart'].value.splice(i,1)"
+        style="cursor: pointer;float: inline-end;">delete</mat-icon>
+    </div>
+    <div
+      style="margin: 20px 20px 0px; display: flex; flex-wrap: wrap; column-gap: 20px;">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'Nombre categoría' | translate}}</mat-label>
+        <input matInput type="text"
+          [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].name">
+      </mat-form-field>
+      <mat-form-field appearance="outline"
+        style="width: calc(50% - 10px);">
+        <mat-label>{{'Edad mínma' | translate}}</mat-label>
+        <input matInput type="number"
+          [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].age_min">
+      </mat-form-field>
+      <mat-form-field appearance="outline"
+        style="width: calc(50% - 10px);">
+        <mat-label>{{'Edad máxima' | translate}}</mat-label>
+        <input matInput type="number"
+          [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].age_max">
+      </mat-form-field>
+      <mat-form-field appearance="outline"
+        style="width: calc(50% - 10px);">
+        <mat-label>{{'N. mín.' | translate}}</mat-label>
+        <input matInput type="number"
+          [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].num_min">
+      </mat-form-field>
+      <mat-form-field appearance="outline"
+        style="width: calc(50% - 10px);">
+        <mat-label>{{'N. máx' | translate}}</mat-label>
+        <input matInput type="number"
+          [(ngModel)]="courseFormGroup.controls['categoryPart'].value[i].num_max">
+      </mat-form-field>
+    </div>
+  </div>
+  <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
+    <button
+      (click)="courseFormGroup.controls['categoryPart'].value.push({
+      name: '',
+      age_min: this.courseFormGroup.controls['age_min'].value || 0,
+      age_max: this.courseFormGroup.controls['age_max'].value || 99,
+      num_min: this.courseFormGroup.controls['participants'].value || 0,
+      num_max: this.courseFormGroup.controls['participants'].value || 0,
+    })"
+      style="margin-top: 0px !important;height: 38px;"
+      color="primary"
+      mat-button
+      type="button"
+      class="client-button">
+      <mat-icon>add</mat-icon>
+      {{'Añadir categoria' | translate }}
+    </button>
+  </div>
+</ng-container>

@@ -1,0 +1,93 @@
+.tabsWrapper {
+  ::ng-deep {
+    .mat-mdc-tab {
+      background-color: var(--color-grey5);
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.15rem;
+      border-bottom: 1px solid var(--color-grey3);
+    }
+
+    .mdc-tab-indicator--active {
+      background-color: var(--color-white);
+      font-family: var(--font-dm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.15rem;
+      border-bottom: none;
+    }
+
+    .mat-mdc-tab .mdc-tab__text-label {
+      color: var(--color-dark2);
+    }
+
+    .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+      color: var(--color-dark1);
+    }
+
+    .mat-mdc-tab .mdc-tab-indicator__content--underline {
+      border-top-width: 3px;
+      align-self: flex-start;
+      border-color: var(--color-primary-red);
+    }
+  }
+}
+
+.sport_icon {
+  border-radius: 3px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.noselected {
+  background-color: #2f3844;
+}
+
+.selected {
+  background-color: #e91e63;
+}
+button {
+  border-radius: 3px !important;
+}
+.sport_checkbox {
+  width: calc(50% - 32px);
+  border: 1px #c7d0d3 solid;
+  padding: 16px;
+  border-radius: 3px;
+  min-width: 250px;
+  label {
+    font-size: 14px;
+    font-weight: 900;
+  }
+}
+
+.level {
+  ::ng-deep {
+    .mat-mdc-form-field-flex {
+      height: 15px;
+    }
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+      .mat-mdc-form-field-infix {
+      padding-top: 11px;
+      padding-bottom: 11px;
+    }
+    .mat-mdc-checkbox-checked {
+      label {
+        color: white;
+      }
+    }
+    .mdc-checkbox {
+      border-radius: 3px;
+    }
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+}
+
+mat-form-field,
+.mat-mdc-form-field,
+::ng-deep.mat-mdc-form-field {
+  width: 100%;
+}
