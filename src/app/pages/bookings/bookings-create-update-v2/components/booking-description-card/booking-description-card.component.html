@@ -5,7 +5,7 @@
     <span class="sportTitle">{{("00"+index).slice(-2)}}.</span>
     <div *ngIf="sport || course">
       <img
-        [class]="{ sportImg: !course, courseImg: course }"
+        class="icon40"
         [src]="course?.icon || sport.icon"
         [alt]="sport.name" />
     </div>
@@ -28,7 +28,7 @@
     </ng-container>
     <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail"
       (click)="deleteActivity.emit(); $event.stopPropagation()">
-      <img [class]="{ sportImg: !course, courseImg: course }"
+      <img
         class="icon24"
         src="assets/icons/icon/delete.png" alt>
     </div>
@@ -274,7 +274,7 @@
     </div>
   </div>
 
-  <div class="footerWrapper">
+  <div class="footerWrapper" style="padding-bottom: 20px;">
     {{ "bookings_page.description.total" | translate }}
     <ng-container *ngIf="!total">
       <div class="skeleton medium"></div>
