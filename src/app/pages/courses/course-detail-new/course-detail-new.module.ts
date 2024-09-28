@@ -19,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatButtonModule } from '@angular/material/button';
 import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component/course-nivel/app.module';
+import { CourseComponentsModule } from '../components/components.module';
 
 
 
@@ -39,7 +40,8 @@ import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component
     MatInputModule,
     MatSlideToggleModule,
     CoursesDetailCardModule,
-    MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule
+    MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
+    FluxModalModule, CourseComponentsModule
   ]
 })
 export class CourseDetailNewModule { }

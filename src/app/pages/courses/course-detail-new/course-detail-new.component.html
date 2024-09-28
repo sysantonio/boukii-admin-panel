@@ -75,7 +75,7 @@
               <div style="padding: 0;border: none;">
                 <vex-course-detail-card style="width: 100%"
                   [courseFormGroup]="courseFormGroup" [detail]="true"
-                  (edit)="goTo('courses/update/'+id,{step:$event})">
+                  (edit)="editModal=$event">
                 </vex-course-detail-card>
               </div>
             </div>
@@ -92,7 +92,7 @@
                     line-height: 16px;
                     word-wrap: break-word"> {{'GRUPOS' | translate }}
                       <img src="assets/icons/icon/edit2.png" alt
-                        (click)="goTo('courses/update/'+id,{step:3})"
+                        (click)="editModal=3"
                         class="editbutton icon24">
                     </p>
                   </div>
@@ -107,8 +107,8 @@
                     style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
                     <div style="width: 100%;">
                       <p> {{'EXTRAS' | translate }}
-                          <img src="assets/icons/icon/edit2.png" alt
-                          (click)="goTo('courses/update/'+id,{step:4})"
+                        <img src="assets/icons/icon/edit2.png" alt
+                          (click)="editModal=4"
                           class="editbutton icon24">
                       </p>
                     </div>
@@ -117,19 +117,19 @@
                       <div style="width: 100%; display: flex;">
                         <span style="
                             color: #222222;
-                             font-size: 14px;
-                             font-weight: 600;
-                             line-height: 18px;
-                             word-wrap: break-word">
+                            font-size: 14px;
+                            font-weight: 600;
+                            line-height: 18px;
+                            word-wrap: break-word">
                           {{item.name.slice(0,20)}}
                         </span>
                         <span style="
                             color: #222222;
-                             font-size: 14px;
-                             font-weight: 300;
-                             line-height: 18px;
-                             word-wrap: break-word;
-                             margin-left: auto;">
+                            font-size: 14px;
+                            font-weight: 300;
+                            line-height: 18px;
+                            word-wrap: break-word;
+                            margin-left: auto;">
                           {{item.price || 0}} CHF/día
                         </span>
                       </div>
@@ -230,5 +230,61 @@
       {{'Enviar' | translate }}
     </button>
   </div>
+</vex-flux-modal>
 
+<vex-flux-modal *ngIf="editModal>0" (Close)="editModal=0"
+  [width]="editModal===3?1150:670"
+  [title]="editModal===1?'Editar detalles':editModal===2?'Editar fechas':editModal===3?'Editar niveles':editModal===4?'Editar extras':'Editar idiomas'">
+  <div body style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <vex-course-componente-detalles
+      style="width: 100%;"
+      *ngIf="editModal===1"
+      [courseFormGroup]="courseFormGroup"
+      mode="update">
+    </vex-course-componente-detalles>
+    <vex-course-componente-fechas
+      style="width: 100%;"
+      *ngIf="editModal===2"
+      [courseFormGroup]="courseFormGroup"
+      mode="update">
+    </vex-course-componente-fechas>
+    <vex-course-componente-niveles
+      style="width: 100%;"
+      *ngIf="editModal===3"
+      [courseFormGroup]="courseFormGroup"
+      mode="update"
+      [levels]="levels">
+    </vex-course-componente-niveles>
+    <vex-course-componente-extras
+      style="width: 100%;"
+      *ngIf="editModal===4"
+      [courseFormGroup]="courseFormGroup"
+      mode="update"
+      [extras]="extras">
+    </vex-course-componente-extras>
+    <vex-course-componente-idiomas
+      style="width: 100%;"
+      *ngIf="editModal===5"
+      [courseFormGroup]="courseFormGroup"
+      mode="update">
+    </vex-course-componente-idiomas>
+  </div>
+  <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      color="primary"
+      mat-stroked-button
+      type="button" (click)="editModal=0"
+      class="client-button">
+      {{'Cancelar' | translate }}
+    </button>
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button" (click)="editModal=0"
+      class="client-button">
+      {{'Confirmar' | translate }}
+    </button>
+  </div>
 </vex-flux-modal>

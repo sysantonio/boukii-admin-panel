@@ -10,6 +10,7 @@ export class CourseComponenteNivelesComponent {
   @Input() courseFormGroup: UntypedFormGroup
   @Input() mode: "create" | "update"
   @Input() levels: any = []
+  dispModal: boolean = false
   hours: string[] = [
     '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
     '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45',
@@ -33,6 +34,7 @@ export class CourseComponenteNivelesComponent {
     levelGrop[i].PartMax = this.courseFormGroup.controls['participants'].value || 0
     this.courseFormGroup.patchValue({ levelGrop })
   }
+  
   addLevelSubgroup = (i: number, add: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].Subgrupo = levelGrop[i].Subgrupo + add

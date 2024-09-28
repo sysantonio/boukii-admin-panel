@@ -51,7 +51,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
     FluxDisponibilidadModule,
     FluxModalModule,
     MatSlideToggleModule,
-    MatExpansionModule
+    MatExpansionModule, FluxModalModule
   ],
   declarations: [
     CourseComponenteDetallesComponent,

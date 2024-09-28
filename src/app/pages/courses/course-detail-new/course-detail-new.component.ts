@@ -32,7 +32,6 @@ export class CourseDetailNewComponent implements OnInit {
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    //height: '56px',
     minHeight: '0',
     maxHeight: 'auto',
     width: 'auto',
@@ -42,13 +41,15 @@ export class CourseDetailNewComponent implements OnInit {
     showToolbar: true,
     defaultParagraphSeparator: '',
     defaultFontName: '',
-    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
+    sanitize: false,
     toolbarPosition: 'bottom',
     outline: true,
     toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
   }
   editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
   editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
+  editModal: number = 0
+
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService,
     private activatedRoute: ActivatedRoute, private router: Router,
     private dialog: MatDialog, private courseService: CoursesService,
@@ -58,9 +59,12 @@ export class CourseDetailNewComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.params.id;
 
   }
+  extras: any = []
   courseFormGroup!: UntypedFormGroup;
   detailData: any
   ngOnInit(): void {
+    const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
+    this.extras = [...extras.food, ...extras.forfait, ...extras.transport]
     this.getCourseData();
   }
 
@@ -137,15 +141,12 @@ export class CourseDetailNewComponent implements OnInit {
                       levelGrop: [this.detailData.degrees, Validators.required],
                       settings: [JSON.parse(this.detailData.settings), Validators.required],
                     });
+                    this.getDegrees()
                     setTimeout(() => this.loading = false, 0);
                   })
               })
           });
       })
-  }
-
-  goTo(route: string, query: any = null) {
-    this.router.navigate([route], { queryParams: query });
   }
 
   parseDateToDay(date: string, fromFormat: string, toFormat: string): string {
@@ -169,5 +170,10 @@ export class CourseDetailNewComponent implements OnInit {
   }
   DateDiff = (value1: string, value2: string): number => Math.round((new Date(value2).getTime() - new Date(value1).getTime()) / 1000 / 60 / 60 / 24)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
-
+  levels: any = []
+  getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseFormGroup.controls['sport_id'].value).subscribe((data) => {
+    this.levels = []
+    data.data.forEach(element => element.active ? this.levels.push(element) : null);
+    this.levels.forEach(level => level.active = false)
+  });
 }
