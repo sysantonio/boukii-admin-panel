@@ -91,9 +91,9 @@
                     font-weight: 600;
                     line-height: 16px;
                     word-wrap: break-word"> {{'GRUPOS' | translate }}
-                      <mat-icon
+                      <img src="assets/icons/icon/edit2.png" alt
                         (click)="goTo('courses/update/'+id,{step:3})"
-                        class="editbutton">edit</mat-icon>
+                        class="editbutton icon24">
                     </p>
                   </div>
                   <vex-course-detail-nivel style="width: 100%;"
@@ -107,8 +107,9 @@
                     style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
                     <div style="width: 100%;">
                       <p> {{'EXTRAS' | translate }}
-                        <mat-icon (click)="goTo('courses/update/'+id,{step:4})"
-                          class="editbutton">edit</mat-icon>
+                          <img src="assets/icons/icon/edit2.png" alt
+                          (click)="goTo('courses/update/'+id,{step:4})"
+                          class="editbutton icon24">
                       </p>
                     </div>
                     <ng-container
