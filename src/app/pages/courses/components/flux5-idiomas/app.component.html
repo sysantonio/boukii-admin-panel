@@ -1,0 +1,38 @@
+<mat-accordion [formGroup]="courseFormGroup">
+  <mat-expansion-panel *ngFor="let item of Translate">
+    <mat-expansion-panel-header
+      style="background-color: #eff2f5; border-top: 1px #C7D0D3 solid;
+    color: #222222;
+    font-size: 14px;
+    font-family: Montserrat;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 20px;
+    word-wrap: break-word">
+      <mat-panel-title> {{item.Name | translate}} </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <mat-form-field appearance="outline"
+        style="width: 100%;margin-top: 10px;">
+        <mat-label>{{'courses.coursename' | translate}}</mat-label>
+        <input id="courseName"
+          [formControlName]="'course_name_'+item.Code"
+          matInput required type="text">
+      </mat-form-field>
+      <div style="margin: 10px 0;">
+        <angular-editor id="summary" style="width: 100%"
+          [placeholder]="'courses.summary' | translate"
+          [formControlName]="'summary_'+item.Code"
+          [config]="editor1Config">
+        </angular-editor>
+      </div>
+      <div style="margin: 20px 0;">
+        <angular-editor id="description" style="width: 100%"
+          [placeholder]="'courses.desc' | translate"
+          [formControlName]="'description_'+item.Code"
+          [config]="editor2Config">
+        </angular-editor>
+      </div>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -21,6 +21,11 @@ import { CourseComponenteFechasComponent } from "./flux2-fechas/app.component";
 import { CourseComponenteNivelesComponent } from "./flux3-niveles/app.component";
 import { MatTableModule } from "@angular/material/table";
 import { FluxDisponibilidadModule } from "src/@vex/components/flux-component/flux-disponibilidad/app.module";
+import { CourseComponenteExtrasComponent } from "./flux4-extras/app.component";
+import { FluxModalModule } from "src/@vex/components/flux-component/flux-modal/app.module";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { CourseComponenteIdiomasComponent } from "./flux5-idiomas/app.component";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
   imports: [
@@ -43,11 +48,24 @@ import { FluxDisponibilidadModule } from "src/@vex/components/flux-component/flu
     FluxUploadImgModule,
     AngularEditorModule,
     MatTableModule,
-    FluxDisponibilidadModule
+    FluxDisponibilidadModule,
+    FluxModalModule,
+    MatSlideToggleModule,
+    MatExpansionModule
   ],
   declarations: [
-    CourseComponenteDetallesComponent, CourseComponenteFechasComponent, CourseComponenteNivelesComponent
+    CourseComponenteDetallesComponent,
+    CourseComponenteFechasComponent,
+    CourseComponenteNivelesComponent,
+    CourseComponenteExtrasComponent,
+    CourseComponenteIdiomasComponent
   ],
-  exports: [CourseComponenteDetallesComponent, CourseComponenteFechasComponent, CourseComponenteNivelesComponent]
+  exports: [
+    CourseComponenteDetallesComponent,
+    CourseComponenteFechasComponent,
+    CourseComponenteNivelesComponent,
+    CourseComponenteExtrasComponent,
+    CourseComponenteIdiomasComponent
+  ]
 })
 export class CourseComponentsModule { }

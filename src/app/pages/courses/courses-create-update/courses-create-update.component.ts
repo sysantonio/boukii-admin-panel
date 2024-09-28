@@ -7,7 +7,6 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -19,8 +18,6 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class CoursesCreateUpdateComponent implements OnInit {
-  dataSource: any;
-
   ModalFlux: number = +this.activatedRoute.snapshot.queryParamMap['params'].step || 0
   ModalProgress: { Name: string, Modal: number }[] = [
     { Name: "DEPORTE", Modal: 0 },
@@ -30,41 +27,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
     { Name: "EXTRAS", Modal: 4 },
     { Name: "IDIOMAS", Modal: 5 },
   ]
-  Translate: { Code: string, Name: string }[] = [
-    { Code: "es", Name: "ESPAÑOL" },
-    { Code: "en", Name: "INGLES" },
-    { Code: "fr", Name: "FRANCÉS" },
-    { Code: "de", Name: "ALEMAN" },
-    { Code: "it", Name: "ITALIANO" },
-  ]
-
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    //height: '56px',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
-    toolbarPosition: 'bottom',
-    outline: true,
-    toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
-  }
-  editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
-  editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
 
   minDate = new Date(2000, 1, 1);
   nowDate = new Date()
   maxDate = new Date(2099, 12, 31);
 
-  courseFormGroup: UntypedFormGroup; //El bueno
-  extrasFormGroup: UntypedFormGroup; //crear extras nuevas
+  courseFormGroup: UntypedFormGroup;
 
   sportData: any = [];
   sportDataList: any = [];
@@ -76,7 +44,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   extras: any = []
 
   loading: boolean = true;
-  extrasModal: boolean = false
   confirmModal: boolean = false
   translateExpandedIndex: number = 0
   user: any;
@@ -147,14 +114,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       });
       this.loading = false
       this.Confirm(0)
-      this.extrasFormGroup = this.fb.group({
-        id: ["", Validators.required],
-        product: ["", Validators.required],
-        name: ["", Validators.required],
-        price: ["", Validators.required],
-        iva: ["", Validators.required],
-        status: ["", Validators.required],
-      })
+
       this.schoolService.getSchoolData().subscribe((data) => this.schoolData = data.data)
     });
   }
@@ -257,15 +217,5 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.confirmModal = true
     }
   }
-
-  find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
-
-
-  selectExtra = (event: any, item: any) => {
-    const extras = this.courseFormGroup.controls['extras'].value
-    if (event.checked || !extras.find((a: any) => a.id === item.id)) this.courseFormGroup.patchValue({ extras: [...extras, item] })
-    else this.courseFormGroup.patchValue({ extras: extras.filter((a: any) => a.id !== item.id) })
-  }
-
 
 }
