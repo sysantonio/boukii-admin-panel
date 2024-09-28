@@ -404,7 +404,7 @@
         </div>
     </div>
     <div class="cardgroup"
-        *ngIf="courseFormGroup.controls['extras'].value.length>0 || detail">
+        *ngIf="courseFormGroup.controls['extras'].value.length>0 || (detail && count(courseFormGroup.controls['levelGrop'].value,'active'))">
         <div
             style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
             <div style="width: 100%;">
@@ -449,7 +449,6 @@
                     </button>
                 </div>
             </ng-container>
-
         </div>
     </div>
 
