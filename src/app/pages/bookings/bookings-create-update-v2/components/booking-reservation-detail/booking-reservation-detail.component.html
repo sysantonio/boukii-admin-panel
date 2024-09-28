@@ -2,8 +2,8 @@
   <div class="headerWrapper">
     {{ 'booking' | translate }} #****
   </div>
-  <div class="bodyWrapper" style="padding-bottom: 0;">
-    <div class="section">
+  <div class="bodyWrapper">
+    <div class="section" style="padding: 20px;">
       <div class="sectionTitle">
         <img src="assets/img/icons/clientes2.svg" style="min-width: 24px;
         width: 24px;
@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="section">
+    <div class="section" style="margin: 20px;">
       <div class="dateRow" *ngFor="let activity of activities; let i = index">
         <div>
           <span class="date">{{("00"+ (i + 1)).slice(-2)}}.</span>
@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-    <div class="section">
+    <div class="section" style="margin: 20px;">
       <div class="dateRow">
         <div>
           <span class="hour">{{ "Subtotal" | translate
@@ -71,10 +71,10 @@
     </div>
 
     <div class="section" style="margin-bottom: 0;border: none;">
-      <div class="dateRow">
+      <div class="dateRow"
+        *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total">
         <div>
           <span class="hour" (click)="addReduction()"
-            *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total"
             style="
             color: #E91E63;
              font-size: 14px;
@@ -86,7 +86,8 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
-          <span style="width: 100%; float:left" *ngIf="bookingData.reduction !== null;">
+          <span style="width: 100%; float:left"
+            *ngIf="bookingData.reduction !== null;">
             <mat-icon
               svgIcon="mat:delete"
               style="float: left;color: red; cursor:pointer"
@@ -99,9 +100,11 @@
           </span>
         </div>
       </div>
-      <div class="dateRow">
+      <div class="dateRow"
+        *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total">
         <div>
-          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total" (click)="addBonus()"
+          <span class="hour"
+            (click)="addBonus()"
             style="
           color: #E91E63;
            font-size: 14px;
