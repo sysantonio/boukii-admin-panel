@@ -39,19 +39,19 @@
         mode="create">
       </vex-course-componente-detalles>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===2">
+    <div class="flex flex-col" *ngIf="ModalFlux===2" style="padding-top: 20px;">
       <vex-course-componente-fechas mode="create"
         [courseFormGroup]="courseFormGroup">
       </vex-course-componente-fechas>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===3">
+    <div class="flex flex-col" *ngIf="ModalFlux===3" style="padding-top: 20px;">
       <vex-course-componente-niveles
         [courseFormGroup]="courseFormGroup"
         mode="create"
         [levels]="levels">
       </vex-course-componente-niveles>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===4" style="padding: 24px;">
+    <div class="flex flex-col" *ngIf="ModalFlux===4">
       <vex-course-componente-extras
         [courseFormGroup]="courseFormGroup"
         mode="create"

@@ -1,9 +1,9 @@
 
-<p style="margin: 20px;">
+<p style="margin: 0 20px;">
   {{'Fechas de reservas' | translate}}
 </p>
 <div [formGroup]="courseFormGroup"
-  style="margin: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
+  style="margin: 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
   <mat-form-field
     appearance="outline">
     <mat-label>{{'Reservable desde' | translate}}</mat-label>
@@ -55,7 +55,7 @@
   </mat-form-field>
 </div>
 <ng-container *ngIf="courseFormGroup.controls['course_type'].value===1">
-  <div
+  <div style="margin-bottom: 20px;"
     *ngFor="let item of courseFormGroup.controls['reserve_date'].value, index as i">
     <div
       style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
