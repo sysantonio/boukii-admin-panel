@@ -38,11 +38,19 @@
     display: none;
   }
 }
+.mat-mdc-card-content:last-child {
+  @media only screen and (max-width: 834px) {
+    flex-wrap: wrap;
+  }
+}
 .contents {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
   width: 50%;
+  @media only screen and (max-width: 834px) {
+    width: 100%;
+  }
   > div {
     display: flex;
     flex-wrap: wrap;
@@ -58,7 +66,6 @@
   cursor: pointer;
   float: right;
 }
-
 
 .cardp {
   background-color: #ffffff;

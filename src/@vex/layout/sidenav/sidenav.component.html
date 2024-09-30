@@ -11,7 +11,7 @@
       <p style="margin: 0 0 0 10px;"
         *ngIf="collapsed && collapsedOpen$ | async">{{ title$ | async }}</p>
       <button (click)="toggleCollapse()"
-        *ngIf="showCollapsePin$ | async"
+        *ngIf="!collapsed || (collapsedOpen$ | async)"
         class="-mr-4 leading-none flex-none hidden lg:block"
         mat-icon-button
         type="button">

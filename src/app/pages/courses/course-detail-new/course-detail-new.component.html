@@ -17,7 +17,7 @@
             <div class="contents" style="border: 1px solid #dee6ea;"
               [style.width]="count(courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'">
               <div style="border-bottom: 1px solid #dee6ea;">
-                <div style="width: calc(50% - 10px);">
+                <div style="width: max-content;">
                   <mat-slide-toggle [checked]="true">
                     <span style="
                       color: #222222;
@@ -39,7 +39,7 @@
                     </span>
                   </mat-slide-toggle>
                 </div>
-                <div style="width: calc(50% - 10px)">
+                <div style="width: max-content;">
                   <mat-slide-toggle [checked]="true">
                     <span style="
                       color: #222222;
