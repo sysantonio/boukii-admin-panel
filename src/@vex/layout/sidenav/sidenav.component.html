@@ -5,15 +5,15 @@
   class="sidenav flex flex-col">
   <div class="vex-sidenav-toolbar__container">
     <div class="sidenav-toolbar flex-none flex items-center"
-
       [class.collapsed-logo]="collapsed" [class.normal-logo]="!collapsed">
-      <img [src]="imageUrl$ | async" alt="Logo" />
-      <p style="margin: 0 0 0 10px;" *ngIf="!collapsed">{{ title$ | async }}</p>
-      <p style="margin: 0 0 0 10px;"
+      <img [src]="imageUrl$ | async" alt="Logo"
+        style="width: 50px; height: 50px;" />
+      <p style="margin: auto;" *ngIf="!collapsed">{{ title$ | async }}</p>
+      <p style="margin: auto;"
         *ngIf="collapsed && collapsedOpen$ | async">{{ title$ | async }}</p>
       <button (click)="toggleCollapse()"
         *ngIf="!collapsed || (collapsedOpen$ | async)"
-        class="-mr-4 leading-none flex-none hidden lg:block"
+        class="leading-none flex-none hidden lg:block"
         mat-icon-button
         type="button">
         <mat-icon *ngIf="!collapsed"

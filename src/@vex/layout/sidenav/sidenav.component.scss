@@ -5,15 +5,19 @@
   width: var(--sidenav-width);
 
   .collapsed-logo {
-    width: 100% !important;
+    display: flex;
+    width: calc(100% - 20px);
     padding: 0;
-    max-width: 50px;
     margin: 10px;
     height: 50px;
   }
 
   .normal-logo {
-    width: 40% !important;
+    display: flex;
+    width: calc(100% - 20px);
+    padding: 0;
+    margin: 10px;
+    height: 50px;
   }
   &.collapsed {
     width: var(--sidenav-collapsed-width);
@@ -63,7 +67,6 @@
 
     &.open {
       .collapsed-logo {
-        width: 40% !important;
       }
       width: var(--sidenav-width);
 
