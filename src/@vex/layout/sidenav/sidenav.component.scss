@@ -6,6 +6,10 @@
 
   .collapsed-logo {
     width: 100% !important;
+    padding: 0;
+    max-width: 50px;
+    margin: 10px;
+    height: 50px;
   }
 
   .normal-logo {
@@ -22,7 +26,7 @@
 
       ::ng-deep {
         .vex-sidenav-item__icon {
-          margin-inline-end: var(--sidenav-item-padding-horizontal)
+          margin-inline-end: var(--sidenav-item-padding-horizontal);
         }
 
         .vex-sidenav-subheading,
@@ -47,7 +51,8 @@
     }
 
     ::ng-deep {
-      .vex-sidenav-subheading, .vex-sidenav-item__label {
+      .vex-sidenav-subheading,
+      .vex-sidenav-item__label {
         transition: all 300ms var(--trans-ease-out-timing-function);
       }
 
@@ -99,7 +104,9 @@
 .vex-sidenav-toolbar__headline {
   @apply text-2xl font-bold tracking-wide select-none;
   padding-inline-start: var(--sidenav-item-icon-gap);
-  transition: padding var(--trans-ease-out-duration) var(--trans-ease-out-timing-function), opacity var(--trans-ease-out-duration) var(--trans-ease-out-timing-function);
+  transition: padding var(--trans-ease-out-duration)
+      var(--trans-ease-out-timing-function),
+    opacity var(--trans-ease-out-duration) var(--trans-ease-out-timing-function);
 }
 
 .vex-sidenav-toolbar__divider {

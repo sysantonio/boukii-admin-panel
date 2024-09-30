@@ -5,6 +5,7 @@
   class="sidenav flex flex-col">
   <div class="vex-sidenav-toolbar__container">
     <div class="sidenav-toolbar flex-none flex items-center"
+
       [class.collapsed-logo]="collapsed" [class.normal-logo]="!collapsed">
       <img [src]="imageUrl$ | async" alt="Logo" />
       <p style="margin: 0 0 0 10px;" *ngIf="!collapsed">{{ title$ | async }}</p>
