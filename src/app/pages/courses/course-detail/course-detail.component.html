@@ -1,9 +1,9 @@
 <vex-secondary-toolbar current>
   <vex-breadcrumbs [crumbs]="[
-    {icon:'cursos'},
-    {text:'courses.title', title: true,  link: '/courses'},
-    {text: defaults.id, subtitle: true},
-    ]" class="flex-auto"></vex-breadcrumbs>
+{icon:'cursos'},
+{text:'courses.title', title: true,link: '/courses'},
+{text: defaults.id, subtitle: true},
+]" class="flex-auto"></vex-breadcrumbs>
 </vex-secondary-toolbar>
 <div [@stagger]="true" class="p-gutter container" style="max-width: none">
   <div class="flex flex-col sm:flex-row gap-4"
@@ -35,7 +35,7 @@
                   </div>
 
                   <div style="float: right;" style="float: right;cursor:pointer"
-                    (click)="goTo('/courses/update/'+this.id)">
+                    (click)="goTo('/courses/update/'+id)">
                     <i class="fa fa-edit"
                       style="color: #ff3085;font-size: 30px;"></i>
                   </div>
@@ -322,7 +322,7 @@
                                 <div
                                   style="width: 100%; margin-top: 10%;height: 60px">
                                   <button mat-button color="accent"
-                                    style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%"
+                                    style="width: 100%;border-radius: 5px;color:#fff !important;background: #ff3085;height: 100%"
                                     (click)="addSubGroup(groupLevel)">Añadir
                                     subgrupo</button>
                                 </div>
@@ -396,7 +396,8 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0%;height: 100px;padding: 2%;background: #e6e6e6;text-align: center;border-radius:10px"
+                                  [style.color]="calculateMaxGroup(groupLevel)>defaults.max_participants?'red':'black'">
                                   {{'students' | translate}}
                                   <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
@@ -409,7 +410,7 @@
                                     aria-label="Number" matInput
                                     (blur)="setSubGroupPax($event, groupLevel)" />
                                   <mat-error
-                                    *ngIf="groupLevel.max_participants > this.defaults.max_participants">
+                                    *ngIf="groupLevel.max_participants > defaults.max_participants">
                                     {{'courses.errors.students' | translate }}
                                   </mat-error>
                                 </mat-form-field>
@@ -418,43 +419,35 @@
                               <ng-container
                                 *ngIf="groupLevel.active && groupLevel.visible">
 
-                                <div
-                                  style="width:100%;float:left;overflow: scroll;"
+                                <table
                                   *ngFor="let subGroup of readSubGroups(groupLevel.id); let subGroupIndex = index">
-                                  <div
-                                    style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%">
-                                    <div>
-                                      <ul style="display: flex">
-                                        <li
-                                          style="float: left; width: 20%;font-size: 14px">
-                                          <mat-icon svgIcon="mat:delete"
-                                            style="color:red;cursor: pointer;float:left;"
-                                            (click)="deleteSubGroup(subGroup)"></mat-icon>
-
-                                          <span
-                                            [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong>
-                                            - {{groupLevel.name}} - {{
-                                            subGroupIndex + 1 }}</span>
-                                        </li>
-                                        <ng-container
-                                          *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;">
-                                          <li *ngIf="dayLevel.active === 1"
-                                            (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
-                                            [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
-                                            style="float: left; width: 13%; text-align: center; cursor: pointer;">
-                                            {{ dayLevel.dateString }}
-                                          </li>
-                                        </ng-container>
-
-                                      </ul>
-                                    </div>
-                                  </div>
-                                  <div
-                                    style="float:left; width: 100%; margin-top: 5%;padding: 0 0% 0 10%"
-                                    *ngIf="subGroupSelectedIndex !== null">
-                                    <div>
-                                      <ul>
-                                        <li style="float: left; width: 20%;"
+                                  <thead>
+                                    <tr>
+                                      <td>
+                                        <mat-icon svgIcon="mat:delete"
+                                          style="color:red;cursor: pointer;float:left;"
+                                          (click)="deleteSubGroup(subGroup)">
+                                        </mat-icon>
+                                        <span
+                                          [style.color]="colorKey"><strong>{{groupLevel.annotation}}</strong>
+                                          - {{groupLevel.name}} - {{
+                                          subGroupIndex + 1 }}</span>
+                                      </td>
+                                      <td
+                                        *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;">
+                                        <span *ngIf="dayLevel.active === 1"
+                                          (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
+                                          [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
+                                          style="text-align: center; cursor: pointer;">
+                                          {{ dayLevel.dateString }}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </thead>
+                                  <tbody *ngIf="subGroupSelectedIndex !== null">
+                                    <tr>
+                                      <td>
+                                        <span style="float: left; width: 20%;"
                                           (click)="subGroupSelectedIndex = subGroupIndex;">
                                           <label for="monitor"
                                             style="font-size: 20px;">{{'monitor'
@@ -492,84 +485,20 @@
                                             <mat-icon matPrefix
                                               svgIcon="mat:person"></mat-icon>
                                           </mat-form-field>
-                                        </li>
-                                        <ng-container
-                                          *ngFor="let item of daysDatesLevels; let dayIndex = index;">
-
-                                          <li
-                                            style="float: left; width: 13%;margin: 3% 0 0 0;"
-                                            *ngIf="item.active === 1">
-                                            <div
-                                              style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex)? '#CEE741': 'red'}"></div>
-                                          </li>
-                                        </ng-container>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                  <mat-divider class="text-border"
-                                    style="float: left;width: 100%;border: 4px solid #f0f0f0;"></mat-divider>
-
-                                  <!-- n iteraciones por alumno-->
-                                  <div
-                                    style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%"
-                                    *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index">
-                                    <p *ngIf="courseUserIndex === 0"
-                                      style="font-size: 20px;margin: 0 0 2% 0;">
-                                      <img
-                                        (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1, groupLevel)"
-                                        src="../../../../assets/img/icons/change.svg"
-                                        style="float:left;cursor: pointer;">{{'students'
-                                      | translate }}</p>
-
-                                    <ng-container>
-
-                                      <div>
-                                        <ul>
-                                          <li style="float: left; width: 20%;">
-                                            <div
-                                              style="float: left; width: 100%;">
-                                              <div
-                                                style="float: left; width: 25%;">
-                                                <img
-                                                  [src]="getClient(courseUser.client_id)?.image || userAvatar"
-                                                  style="border-radius: 100%;height: 50px;width: 110px;">
-                                              </div>
-                                              <div
-                                                style="float: left; width: 75%;">
-                                                <p
-                                                  style="font-size: 16px;">{{getClient(courseUser.client_id)?.first_name}}
-                                                  {{getClient(courseUser.client_id)?.last_name}}</p>
-                                                <p
-                                                  style="font-size: 10px;">{{getLanguage(getClient(courseUser.client_id)?.language1_id)}}
-                                                  · {{
-                                                  getCountry(getClient(courseUser.client_id)?.country)
-                                                  }}
-                                                  · {{
-                                                  calculateAge(getClient(courseUser.client_id)?.birth_date)
-                                                  }}
-                                                  {{'years' | translate }}</p>
-                                              </div>
-                                            </div>
-                                          </li>
-
-                                          <ng-container
-                                            *ngFor="let item of daysDatesLevels; let dayIndex = index;">
-
-                                            <li style="float: left; width: 13%;"
-                                              *ngIf="item.active === 1">
-                                              <div
-                                                style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                                [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741': 'red'}">
-                                              </div>
-                                            </li>
-                                          </ng-container>
-                                        </ul>
-                                      </div>
-                                    </ng-container>
-                                  </div>
-                                </div>
-
+                                        </span>
+                                      </td>
+                                      <td
+                                        *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+                                        <span
+                                          *ngIf="item.active === 1">
+                                          <div
+                                            style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                            [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex)? '#CEE741': 'red'}"></div>
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                               </ng-container>
                             </div>
                           </div>
@@ -586,7 +515,7 @@
           <vex-page-layout style="margin: 2% 0 0 0;">
 
             <vex-page-layout-content class="-mt-6 fullwidth"
-              [ngClass]="{'table-show-detail': this.showDetail}">
+              [ngClass]="{'table-show-detail': showDetail}">
               <vex-aio-table [columns]="columns" [entity]="entity"
                 [title]="'bookings'" [route]="'bookings'"
                 (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
@@ -637,55 +566,55 @@
               </mat-card-header>
 
               <!--<vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
-            <mat-card style="padding: 0 3%;">
-            <mat-card-header style="display:block">
-                <div style="width: 100%;float: left;">
+<mat-card style="padding: 0 3%;">
+<mat-card-header style="display:block">
+<div style="width: 100%;float: left;">
 
-                </div>
-                <div style="width: 100%;float:left;">
-                <mat-card-title class="font-bold" style="float: left;width: 100%;">
-                  {{'course_detail' | translate}}
-                  <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
-                </mat-card-title>
+</div>
+<div style="width: 100%;float:left;">
+<mat-card-title class="font-bold" style="float: left;width: 100%;">
+{{'course_detail' | translate}}
+<img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
+</mat-card-title>
 
-                </div>
-                <div style="width:100%; margin-top:5%;float:left">
-                <div style="width: 100%;">
-                    <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
-                    <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
-                </div>
-                <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
-                </div>
-                </div>
-                <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+</div>
+<div style="width:100%; margin-top:5%;float:left">
+<div style="width: 100%;">
+<p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
+<p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
+</div>
+<div style="width: 100%;">
+<p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
+<p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
+</div>
+</div>
+<mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-                <div style="width:100%; margin-top:5%;float:left">
-                <div style="width: 100%;">
-                    <p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate}}</b></p>
-                    <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate}}</b></p>
-                </div>
-                <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
-                    <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
-                      {{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
-                </div>
-                </div>
-                <ng-container *ngIf="detailData?.course.course_type == 1">
-                    <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-                    <div style="float: left; width: 100%;margin-top: 5%;">
-                    <ul>
-                        <ng-container *ngFor="let date of detailData?.course.course_dates">
-                            <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-                        </ng-container>
-                    </ul>
-                    </div>
-                </ng-container>
-                <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+<div style="width:100%; margin-top:5%;float:left">
+<div style="width: 100%;">
+<p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate}}</b></p>
+<p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate}}</b></p>
+</div>
+<div style="width: 100%;">
+<p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
+<p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
+{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</p>
+<p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
+</div>
+</div>
+<ng-container *ngIf="detailData?.course.course_type == 1">
+<mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+<div style="float: left; width: 100%;margin-top: 5%;">
+<ul>
+<ng-container *ngFor="let date of detailData?.course.course_dates">
+<li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
+</ng-container>
+</ul>
+</div>
+</ng-container>
+<mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-            </mat-card-header>-->
+</mat-card-header>-->
 
               <mat-card-content>
                 <div class="title-status">
