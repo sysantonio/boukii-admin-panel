@@ -1,62 +1,147 @@
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import moment from "moment";
-import { debounceTime, map, skip } from "rxjs";
-import { ApiCrudService } from "src/service/crud.service";
-import { UtilsService } from "src/service/utils.service";
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, map, startWith, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { ApiCrudService } from 'src/service/crud.service';
+import { UtilsService } from 'src/service/utils.service';
 
 @Component({
-  selector: "booking-step-three",
-  templateUrl: "./step-three.component.html",
-  styleUrls: ["./step-three.component.scss"],
+  selector: 'booking-step-three',
+  templateUrl: './step-three.component.html',
+  styleUrls: ['./step-three.component.scss'],
 })
 export class StepThreeComponent implements OnInit {
   @Input() initialData: any;
   @Input() utilizers: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
+
   stepForm: FormGroup;
-  selectedSport;
-  selectedLevel;
-  sports: any;
-  sportData: any;
-  user: any;
-  levels: any;
-  filteredLevel: any;
-  utilizersComplete: any[] = [];
+  sportData: any[] = [];
+  filteredLevels: Observable<any[]>;
+  levels: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private crudService: ApiCrudService,
-    protected utilsService: UtilsService
+    private utilsService: UtilsService
   ) {}
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem("boukiiUser"));
-    this.selectedSport = this.initialData.sport;
-    this.selectedLevel = this.initialData.sportLevel;
+    this.initializeForm();
+    this.loadSports();
+  }
+
+  initializeForm() {
     this.stepForm = this.fb.group({
-      sport: [this.selectedSport || "", Validators.required],
-      sportLevel: [this.selectedLevel || "", Validators.required],
+      sport: [null, Validators.required],
+      sportLevel: [null, Validators.required],
     });
 
-    this.getSports();
-    this.getUtilizersData();
+    // Preseleccionar el deporte si existe `initialData`
+    if (this.initialData?.sport) {
+      this.stepForm.patchValue({
+        sport: this.initialData.sport,
+      });
+      this.loadLevels(this.initialData.sport); // Cargar niveles para el deporte preseleccionado
+    }
 
-    this.stepForm.get("sport")!.valueChanges.subscribe((value) => {
-      this.getDegrees(value.sport_id);
+    // Cuando se selecciona un deporte, se cargan los grados (niveles)
+    this.stepForm.get('sport').valueChanges.subscribe((sport) => {
+      if (sport) {
+        this.stepForm.get('sportLevel').reset(); // Resetear el nivel al cambiar el deporte
+        this.loadLevels(sport);
+      }
     });
 
-    this.filteredLevel = this.stepForm.get("sportLevel").valueChanges.pipe(
-      skip(1),
+    // Filtrar niveles en función de la búsqueda en el input
+    this.filteredLevels = this.stepForm.get('sportLevel').valueChanges.pipe(
+      startWith(''),
       debounceTime(300),
-      map((value: any) =>
-        typeof value === "string" ? value : value?.annotation
-      ),
-      map((annotation) =>
-        annotation ? this._filterLevel(annotation) : this.levels.slice()
+      map((value) => (typeof value === 'string' ? value : this.formatLevel(value))),
+      map((value) => this.filterLevels(value || ''))
+    );
+  }
+
+  formatLevel(level: any): string {
+    // Asegurarse de que league, level, y name existen y no son nulos
+    const league = level?.league || '';
+    const levelName = level?.level || '';
+    const name = level?.name || '';
+
+    return `${league} ${levelName} ${name}`.trim();
+  }
+
+  // Método para cargar los deportes
+  loadSports() {
+    this.crudService
+      .list(
+        '/school-sports',
+        1,
+        10000,
+        'asc',
+        'id',
+        `&school_id=${this.getUserSchoolId()}`,
+        null,
+        null,
+        null,
+        ['sport.degrees']
+      )
+      .subscribe((response) => {
+        this.sportData = response.data;
+      });
+  }
+
+  // Método para cargar los niveles (grados) según el deporte seleccionado
+  loadLevels(selectedSport) {
+    if (selectedSport?.degrees) {
+      this.levels = selectedSport.degrees;
+
+      // Filtrar niveles según la edad máxima del utilizer más grande
+      const maxUtilizerAge = this.getMaxUtilizerAge();
+      this.levels = this.levels.filter(
+        (level) =>
+          maxUtilizerAge >= level.age_min && maxUtilizerAge <= level.age_max && level.school_id == this.getUserSchoolId()
+      );
+
+      // Preseleccionar el nivel si existe en `initialData`
+      if (this.initialData?.sportLevel) {
+        this.stepForm.patchValue({
+          sportLevel: this.initialData.sportLevel,
+        });
+      }
+    } else {
+      this.levels = []; // Si no hay grados, vaciar el array
+    }
+  }
+
+  // Filtro de niveles para el autocompletado
+  filterLevels(value: string) {
+    const filterValue = value.toLowerCase();
+    return this.levels.filter(option =>
+      (option.league && option.league.toLowerCase().includes(filterValue)) ||
+      (option.level && option.level.toLowerCase().includes(filterValue)) ||
+      (option.name && option.name.toLowerCase().includes(filterValue))
+    );
+  }
+
+  // Obtener la edad máxima entre los utilizadores
+  getMaxUtilizerAge(): number {
+    return Math.max(
+      ...this.utilizers.map((utilizer) =>
+        this.utilsService.calculateYears(utilizer.birth_date)
       )
     );
+  }
+
+  // Obtener el ID de la escuela del usuario
+  getUserSchoolId(): number {
+    const user = JSON.parse(localStorage.getItem('boukiiUser'));
+    return user.schools[0].id;
+  }
+
+  displayFnLevel(level: any): string {
+    return level ? `${level.annotation} - ${level.name}` : '';
   }
 
   isFormValid() {
@@ -71,110 +156,5 @@ export class StepThreeComponent implements OnInit {
     if (this.isFormValid()) {
       this.stepCompleted.emit(this.stepForm);
     }
-  }
-
-  getSports() {
-    this.crudService
-      .list(
-        "/school-sports",
-        1,
-        10000,
-        "asc",
-        "id",
-        "&school_id=" + this.user.schools[0].id
-      )
-      .subscribe((sport) => {
-        this.sportData = sport.data;
-        // TODO: Mejorar esto, debido al cambio de puntero de memoria cuando llego a este step y tengo initialData el radioButton no se selecciona
-        if (this.selectedSport) {
-          const newPointer = sport.data.find(
-            (sp) => sp.id === this.selectedSport.id
-          );
-          this.stepForm.get("sport").patchValue(newPointer);
-        }
-        this.sportData.forEach((element) => {
-          this.crudService
-            .get("/sports/" + element.sport_id)
-            .subscribe((data) => {
-              element.name = data.data.name;
-              element.icon = data.data.icon_selected;
-              element.sport_type = data.data.sport_type;
-            });
-        });
-      });
-  }
-
-  getUtilizersData() {
-    this.utilizers.map((utilizer) => {
-      this.crudService
-        .get("/admin/clients/" + utilizer.id)
-        .subscribe((data) => {
-          this.utilizersComplete.push(data.data);
-        });
-    });
-  }
-
-  getDegrees(sportId: number) {
-    this.crudService
-      .list(
-        "/degrees",
-        1,
-        10000,
-        "asc",
-        "degree_order",
-        "&school_id=" +
-          this.user.schools[0].id +
-          "&sport_id=" +
-          sportId +
-          "&active=1"
-      )
-      .subscribe((data) => {
-        this.levels = data.data;
-        // almacenara los niveles de todos los utilizers para luego devolver el superior
-        const posibleLevels = [];
-        const biggestAge = this.utilizersComplete
-          .map((utilizer) =>
-            utilizer.birth_date
-              ? this.utilsService.calculateYears(utilizer.birth_date)
-              : 0
-          )
-          .sort((a, b) => b - a)[0];
-
-        this.levels = this.levels.filter((level) => {
-          return biggestAge >= level.age_min && biggestAge <= level.age_max;
-        });
-        this.utilizersComplete.forEach((utilizer) =>
-          utilizer.client_sports.forEach((sport) => {
-            if (
-              sport.sport_id === this.stepForm.get("sport").value.sport_id &&
-              sport.school_id === this.user.schools[0].id
-            ) {
-              const level = this.levels.find((l) => l.id === sport.degree_id);
-              posibleLevels.push(level);
-            }
-          })
-        );
-
-        if (posibleLevels.length) {
-          const correctLevel = posibleLevels
-            .filter(Boolean)
-            .sort((a, b) => b.degree_order - a.degree_order)[0];
-          this.stepForm.get("sportLevel").patchValue(correctLevel);
-        } else {
-          this.stepForm.get("sportLevel").patchValue(null);
-        }
-      });
-  }
-
-  displayFnLevel(level: any): string {
-    return level && level?.name && level?.annotation
-      ? level?.annotation + " " + level?.name
-      : level?.name;
-  }
-  private _filterLevel(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.levels.filter((level) =>
-      level.annotation?.toLowerCase().includes(filterValue)
-    );
   }
 }

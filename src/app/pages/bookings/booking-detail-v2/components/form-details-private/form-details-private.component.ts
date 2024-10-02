@@ -1,22 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import {
-  MOCK_POSIBLE_HOURS,
-  MOCK_POSIBLE_DURATION,
-  MOCK_POSIBLE_EXTRAS,
-} from "../../mocks/course";
-import { MOCK_MONITORS } from "../../mocks/monitor";
-import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
+import {changeMonitorOptions} from 'src/app/static-data/changeMonitorOptions';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment/moment';
 import {UtilsService} from '../../../../../../service/utils.service';
 import {ApiCrudService} from '../../../../../../service/crud.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
-import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
-import {SchoolService} from '../../../../../../service/school.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+
 
 @Component({
-  selector: "booking-form-details-private",
+  selector: "booking-detail-form-details-private",
   templateUrl: "./form-details-private.component.html",
   styleUrls: ["./form-details-private.component.scss"]
 
@@ -30,8 +24,6 @@ export class FormDetailsPrivateComponent implements OnInit {
   @Input() activitiesBooked: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
-  @Input() stepForm: FormGroup; // Recibe el formulario desde el padre
-  @Input() selectedForm: FormGroup; // Recibe el formulario desde el padre
   @Input() addDateEvent!: boolean; // Recibe el evento como Input
   @Input() removeDateEvent!: boolean; // Recibe el evento como Input
 
@@ -45,10 +37,21 @@ export class FormDetailsPrivateComponent implements OnInit {
   season: any = [];
   holidays: any = [];
   myHolidayDates = [];
+  stepForm: FormGroup;
 
   constructor(private fb: FormBuilder,  private snackbar: MatSnackBar, public translateService: TranslateService,
-              private crudService: ApiCrudService, public utilService: UtilsService) {
+              private crudService: ApiCrudService, public utilService: UtilsService,
+              @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<FormDetailsPrivateComponent>) {
     this.possibleMonitors = [];
+    this.course = data.course;
+    this.date = data.date;
+    this.utilizers = data.utilizers;
+    this.sportLevel = data.sportLevel;
+    this.initialData = data.initialData;
+    this.activitiesBooked = data.groupedActivities;
+    this.stepForm = this.fb.group({});
+    this.addDateEvent = data.addDateEvent;
+    this.removeDateEvent = data.removeDateEvent;
   }
 
   ngOnChanges() {
@@ -97,9 +100,19 @@ export class FormDetailsPrivateComponent implements OnInit {
   inUseDatesFilter = (d: Date): boolean => {
     return this.utilService.inUseDatesFilter(d, this.myHolidayDates, this.course);
   }
+
+  isPast(date) {
+    return  moment(date).isBefore(moment(), 'day');
+  }
+
   addCourseDate(initialData: any = null) {
+    let disabled =  initialData.booking_users[0].status == 2;
+    const isDatePast = initialData.date && moment(initialData.date).isBefore(moment(), 'day');
     const utilizerArray = this.fb.array(this.utilizers.map(utilizer =>
-      this.createUtilizer(utilizer, initialData?.utilizers?.find(u => u.first_name === utilizer.first_name && u.last_name === utilizer.last_name)?.extras || [])
+      this.createUtilizer(utilizer,
+        initialData?.utilizers?.find(
+          u => u.first_name === utilizer.first_name &&
+            u.last_name === utilizer.last_name)?.extras || [], disabled || isDatePast)
     ));
 
     let formattedDate = this.date ? this.date.format('YYYY-MM-DD') : null;
@@ -112,30 +125,57 @@ export class FormDetailsPrivateComponent implements OnInit {
       formattedDate = moment(lastDate).add(1, 'day').format('YYYY-MM-DD');
     }
 
+
+
+
     const courseDateGroup = this.fb.group({
-      selected: [initialData ? initialData.selected : true],
-      date: [initialData ? initialData.date : formattedDate, Validators.required],
-      startHour: [initialData ? initialData.startHour : null, Validators.required],
+      selected: [initialData ? disabled : null],
+      booking_users: [initialData ? initialData.booking_users : null],
+      date: [{value: initialData ? initialData.date : formattedDate, disabled: disabled || isDatePast }, Validators.required],
+      startHour: [{value: initialData ? initialData.startHour : null, disabled: disabled || isDatePast}, Validators.required],
       endHour: [initialData ? initialData.endHour : null, Validators.required],
-      duration: [initialData ? initialData.duration : (!this.course.is_flexible ? this.course.duration : null), Validators.required],
+      duration: [{value: initialData ? initialData.duration :
+        (!this.course.is_flexible ? this.course.duration : null), disabled: disabled || isDatePast}, Validators.required],
       price: [initialData ? initialData.price : null],
       currency: this.course.currency,
-      monitor: [initialData ? initialData.monitor : null],
-      changeMonitorOption: [initialData ? initialData.changeMonitorOption : null],
+      monitor: [{value: initialData ? initialData.monitor : null, disabled: disabled || isDatePast}],
+      changeMonitorOption: [{value: initialData ? initialData.changeMonitorOption : null, disabled: disabled || isDatePast}],
       utilizers: utilizerArray,
     });
 
     this.courseDates.push(courseDateGroup);
+
+    if(initialData) {
+      this.getMonitorsAvailable(courseDateGroup)
+    }
+
+
     this.subscribeToFormChanges(courseDateGroup);
   }
 
-  createUtilizer(utilizer: any, initialExtras: any[] = []): FormGroup {
-    return this.fb.group({
+  createUtilizer(utilizer: any, initialExtras: any[] = [], disabled = false): FormGroup {
+    const group = this.fb.group({
+      id: [utilizer.id],
       first_name: [utilizer.first_name],
       last_name: [utilizer.last_name],
-      extras: [{value: initialExtras, disabled: !this.possibleExtras || !this.possibleExtras.length}], // Carga los extras iniciales
+      extras: [{value: [], disabled: !this.possibleExtras || !this.possibleExtras.length || disabled}], // Carga los extras iniciales
       totalExtraPrice: [0] // Para almacenar el precio total de los extras
     });
+    if (initialExtras.length > 0) {
+      // Mapeamos los extras iniciales para obtener los objetos exactos de possibleExtras
+      const validExtras = this.possibleExtras.filter(extra =>
+        initialExtras.some(initialExtra => initialExtra.id === extra.id)
+      );
+
+      // Actualizamos el FormControl con los objetos mapeados de possibleExtras
+      group.get('extras')?.patchValue(validExtras);
+
+      // Calculamos el precio total de los extras seleccionados
+      const totalPrice = validExtras.reduce((sum, extra) => sum + parseFloat(extra.price), 0);
+      group.get('totalExtraPrice')?.setValue(totalPrice);
+    }
+
+    return group;
   }
 
   checkAval(courseDateGroup: FormGroup): Promise<boolean> {
@@ -181,9 +221,6 @@ export class FormDetailsPrivateComponent implements OnInit {
   checkLocalOverlap(bookingUsers: any[], currentFormGroup: FormGroup = null): boolean {
     // Recorremos cada normalizedDate
     for (let normalized of this.activitiesBooked) {
-      if (this.selectedForm && this.selectedForm === normalized) {
-        continue; // Saltamos la comparación si es el mismo FormGroup
-      }
       // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
       for (let bookingUser of bookingUsers) {
         const matchingUtilizer = normalized.utilizers.find(
@@ -228,7 +265,6 @@ export class FormDetailsPrivateComponent implements OnInit {
     // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
     return false; // Si no encontramos solapamientos, retornamos false
   }
-
 
   subscribeToFormChanges(courseDateGroup: FormGroup) {
     // Suscribirse a cambios en 'startHour'
@@ -389,6 +425,7 @@ export class FormDetailsPrivateComponent implements OnInit {
   }
 
   getMonitorsAvailable(dateGroup) {
+    const monitor = dateGroup.get('monitor').value
     const index = this.courseDates.controls.indexOf(dateGroup);
 
     const rq = {
@@ -401,10 +438,58 @@ export class FormDetailsPrivateComponent implements OnInit {
     };
     this.crudService.post("/admin/monitors/available", rq).subscribe((data) => {
       this.possibleMonitors[index] = data.data;
+      if(monitor) {
+        this.possibleMonitors[index].push(monitor);
+      }
+      dateGroup.patchValue({monitor: monitor});
       if (data.data.length === 0) {
         this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'),
           'OK', {duration:3000});
       }
     });
+  }
+
+  submitForm() {
+    if (this.stepForm.valid) {
+
+      // Recorrer las fechas y calcular el precio para cada una
+      // Usar getRawValue() para obtener todos los valores, incluso los deshabilitados
+      const course_dates = this.stepForm.get('course_dates').getRawValue();
+
+      let totalPrice = 0;
+
+      // Calcular el precio para cada fecha y acumular el total
+      course_dates.forEach((date, index) => {
+        if(!date.selected) {
+          const datePrice = this.calculatePrice(date) +
+            date.utilizers.reduce((sum, utilizer) => sum + parseFloat(utilizer.totalExtraPrice), 0);
+
+          course_dates[index].price = datePrice; // Asignar el precio a la fecha actual
+          totalPrice += datePrice; // Acumular el precio total
+        }
+      });
+
+      // Asignar el precio total a todas las fechas
+      course_dates.forEach((date, index) => {
+        course_dates[index].price = totalPrice;
+        course_dates[index].course_date_id = this.course.course_dates.find(d =>
+          moment(d.date).format('YYYY-MM-DD') == moment(date.date).format('YYYY-MM-DD')).id;
+      });
+
+      // Actualizar el formulario con las fechas que ahora tienen los precios calculados
+      this.stepForm.patchValue({
+        course_dates: course_dates
+      });
+
+      // Cerrar el diálogo pasando los valores del formulario
+      this.dialogRef.close({course_dates: course_dates});
+
+    } else {
+      this.snackbar.open('Por favor completa todos los campos requeridos', 'OK', { duration: 3000 });
+    }
+
+  }
+  cancel() {
+    this.dialogRef.close();
   }
 }

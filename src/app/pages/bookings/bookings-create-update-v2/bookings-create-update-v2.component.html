@@ -69,6 +69,7 @@
         [forceStep]="forceStep"
         [activitiesBooked]="normalizedDates"
         [selectedForm]="selectedForm"
+        [selectedDates]="normalizedDates[selectedIndexForm] || null"
         (changedCurrentStep)="currentStep = $event; forceStep = $event;"
         (changedFormData)="handleFormChange($event)"></booking-form-stepper>
     </mat-card>
@@ -252,16 +253,18 @@
     <div style="margin: 10px 0;">
       <mat-radio-group [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange($event)">
         <mat-radio-button [value]="1" style="display: block;">Pago directo</mat-radio-button>
+
         <!-- Payment method dropdown only for 'Pago directo' -->
-        <div *ngIf="paymentMethod == 1 || paymentMethod == 4" style="margin: 10px 0;">
+        <div *ngIf="paymentMethod === 1" style="margin: 10px 0;">
           <mat-form-field appearance="fill">
             <mat-label>Selecciona la forma de pago</mat-label>
-            <mat-select [(ngModel)]="paymentMethod">
-              <mat-option *ngFor="let option of paymentOptions" [value]="option.value">{{option.type}}</mat-option>
+            <mat-select [(ngModel)]="selectedPaymentOption">
+              <mat-option *ngFor="let option of paymentOptions" [value]="option.type">{{option.type}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <mat-radio-button [value]="2" style="display: block;">Pago online</mat-radio-button>
+
+        <mat-radio-button [value]="3" style="display: block;">Pago online</mat-radio-button>
         <mat-radio-button [value]="5" style="display: block;">Confirmación sin pago</mat-radio-button>
       </mat-radio-group>
     </div>

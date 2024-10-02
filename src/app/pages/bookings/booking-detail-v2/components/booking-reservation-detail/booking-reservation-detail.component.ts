@@ -2,12 +2,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LangService } from '../../../../../../service/langService';
 import { UtilsService } from '../../../../../../service/utils.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddReductionModalComponent } from '../add-reduction/add-reduction.component';
-import { AddDiscountBonusModalComponent } from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
 import {BookingCreateData, BookingService} from '../../../../../../service/bookings.service';
+import {AddReductionModalComponent} from '../../../bookings-create-update/add-reduction/add-reduction.component';
+import {
+  AddDiscountBonusModalComponent
+} from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
-  selector: 'booking-reservation-detail',
+  selector: 'booking-detail-reservation-detail',
   templateUrl: './booking-reservation-detail.component.html',
   styleUrls: ['./booking-reservation-detail.component.scss'],
 })
@@ -15,11 +18,15 @@ export class BookingReservationDetailComponent implements OnInit {
   @Input() client: any;
   @Input() activities: any;
   @Input() hideBotton = false;
+  @Input() bookingData: any;
   @Output() endClick = new EventEmitter();
+  @Output() editClick = new EventEmitter();
   @Output() payClick = new EventEmitter();
   @Output() addClick = new EventEmitter();
+  @Input() activitiesChanged: Observable<void>;  // Recibimos el observable
 
-  bookingData: BookingCreateData;
+  private activitiesChangedSub: Subscription;
+
   cancellationInsurancePercent: number;
   price_tva: number;
   price_boukii_care: number;
@@ -40,46 +47,50 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.bookingData = this.bookingService.getBookingData() || this.initializeBookingData();
+    this.loadExistingVouchers();
+    //this.bookingData = this.bookingService.getBookingData() || this.initializeBookingData();
     this.recalculateBonusPrice();
     this.updateBookingData();
+    this.activitiesChangedSub = this.activitiesChanged.subscribe((res:any) => {
+      if(res) {
+        this.bookingData = res;
+      }
+      this.loadExistingVouchers();
+      this.recalculateBonusPrice();
+      this.updateBookingData();
+    });
   }
 
-  private initializeBookingData(): BookingCreateData {
-    return {
-      school_id: this.school.id,
-      client_main_id: this.client.id,
-      user_id: 0,
-      price_total: 0,
-      has_cancellation_insurance: false,
-      has_boukii_care: false,
-      has_reduction: false,
-      has_tva: false,
-      price_cancellation_insurance: 0,
-      price_reduction: 0,
-      price_boukii_care: 0,
-      price_tva: 0,
-      source: 'admin',
-      payment_method_id: null,
-      paid_total: 0,
-      paid: false,
-      notes: '',
-      notes_school: '',
-      selectedPaymentOption: '',
-      paxes: 0,
-      status: 0,
-      color: '',
-      vouchers: [],
-      reduction: null,
-      basket: null,
-      cart: null
-    };
+  calculateStatus() {
+
+  }
+
+  loadExistingVouchers() {
+    this.bookingData.vouchers = [];
+    if (this.bookingData.vouchers_logs && Array.isArray(this.bookingData.vouchers_logs)) {
+      this.bookingData.vouchers_logs.forEach(log => {
+        this.bookingData.vouchers.push({
+          bonus: {
+            id: log.id,
+            voucher_id: log.voucher_id,
+            reducePrice: parseFloat(log.amount),
+            code: log.voucher.code,
+            remaining_balance: log.voucher.remaining_balance,
+            is_old: true
+          }
+        });
+      });
+    }
   }
 
   sumActivityTotal(): number {
     return this.activities.reduce((acc, item) => {
-      const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, ''));
-      return acc + numericValue;
+      // Solo suma si el status es 1
+      if (item.status != 2) {
+        const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, ''));
+        return acc + numericValue;
+      }
+      return acc; // Si no es status 1, retorna el acumulador sin sumar
     }, 0);
   }
 
@@ -101,29 +112,30 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   recalculateBonusPrice() {
-    let remainingPrice = this.bookingData.price_total - this.calculateTotalVoucherPrice();
-
+    let remainingPrice = parseFloat(this.bookingData.price_total) - this.calculateTotalVoucherPrice();
     if (remainingPrice !== 0) {
       this.bookingData.vouchers.forEach(voucher => {
-        const availableBonus = voucher.bonus.remaining_balance - voucher.bonus.reducePrice;
+        if(!voucher.bonus.is_old) {
+          const availableBonus = voucher.bonus.remaining_balance - voucher.bonus.reducePrice;
 
-        if (remainingPrice > 0) {
-          if (availableBonus >= remainingPrice) {
-            voucher.bonus.reducePrice += remainingPrice;
-            remainingPrice = 0;
+          if (remainingPrice > 0) {
+            if (availableBonus >= remainingPrice) {
+              voucher.bonus.reducePrice += remainingPrice;
+              remainingPrice = 0;
+            } else {
+              voucher.bonus.reducePrice += availableBonus;
+              remainingPrice -= availableBonus;
+            }
           } else {
-            voucher.bonus.reducePrice += availableBonus;
-            remainingPrice -= availableBonus;
-          }
-        } else {
-          const adjustedReducePrice = voucher.bonus.reducePrice + remainingPrice;
+            const adjustedReducePrice = voucher.bonus.reducePrice + remainingPrice;
 
-          if (adjustedReducePrice >= 0) {
-            voucher.bonus.reducePrice = adjustedReducePrice;
-            remainingPrice = 0;
-          } else {
-            remainingPrice -= voucher.bonus.reducePrice; // Reduce remainingPrice solo por lo que hay en reducePrice.
-            voucher.bonus.reducePrice = 0; // Aseguramos que nunca sea negativo.
+            if (adjustedReducePrice >= 0) {
+              voucher.bonus.reducePrice = adjustedReducePrice;
+              remainingPrice = 0;
+            } else {
+              remainingPrice -= voucher.bonus.reducePrice; // Reduce remainingPrice solo por lo que hay en reducePrice.
+              voucher.bonus.reducePrice = 0; // Aseguramos que nunca sea negativo.
+            }
           }
         }
       });
@@ -135,21 +147,23 @@ export class BookingReservationDetailComponent implements OnInit {
 
   recalculateTva() {
     const basePrice = this.sumActivityTotal()
-      + this.bookingData.price_cancellation_insurance
-      - this.bookingData.price_reduction
-      + this.bookingData.price_boukii_care;
+      + parseFloat(this.bookingData.price_cancellation_insurance)
+      - parseFloat(this.bookingData.price_reduction)
+      + parseFloat(this.bookingData.price_boukii_care);
 
     this.bookingData.price_tva = basePrice * this.price_tva;
   }
 
   calculateTotal() {
     this.recalculateTva();
-    return this.sumActivityTotal() + this.bookingData.price_cancellation_insurance
-      - this.bookingData.price_reduction + this.bookingData.price_boukii_care + this.bookingData.price_tva;
+    return this.sumActivityTotal() + parseFloat(this.bookingData.price_cancellation_insurance)
+      - parseFloat(this.bookingData.price_reduction)
+      + parseFloat(this.bookingData.price_boukii_care)
+      + parseFloat(this.bookingData.price_tva);
   }
 
   calculateTotalVoucherPrice(): number {
-    return this.bookingData.vouchers.reduce((acc, item) => acc + item.bonus.reducePrice, 0);
+    return this.bookingData.vouchers.reduce((acc, item) => acc + parseFloat(item.bonus.reducePrice), 0);
   }
 
   addBonus(): void {

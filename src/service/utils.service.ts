@@ -170,7 +170,7 @@ export class UtilsService {
     };
   }
 
-  inUseDatesFilter = (d: Date, myHolidayDates:any, course:any): boolean => {
+  inUseDatesFilter = (d: Date, myHolidayDates:any, course:any, allowPast = false): boolean => {
     if (!d) return false; // Si la fecha es nula o indefinida, no debería ser seleccionable.
 
     const formattedDate = moment(d).format('YYYY-MM-DD');
@@ -178,7 +178,7 @@ export class UtilsService {
     const today = moment().startOf('day'); // Fecha actual (sin hora, solo día)
 
     // Verifica si la fecha es anterior a hoy.
-    const isPastDate = moment(d).isBefore(today);
+    const isPastDate = allowPast ? !allowPast : moment(d).isBefore(today);
 
     // Encuentra si la fecha actual está en myHolidayDates.
     const isHoliday = myHolidayDates.some(x => x.getTime() === time);

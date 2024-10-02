@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { MOCK_POSIBLE_EXTRAS } from "../../mocks/course";
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import { UtilsService } from "src/service/utils.service";
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import moment from 'moment';
 import {ApiCrudService} from '../../../../../../service/crud.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: "booking-form-details-colective-flex",
@@ -31,8 +31,15 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
               private fb: FormBuilder,
               private crudService: ApiCrudService,
               public translateService: TranslateService,
-              private snackbar: MatSnackBar) {
-
+              private snackbar: MatSnackBar,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private dialogRef: MatDialogRef<FormDetailsColectiveFlexComponent>) {
+    this.course = data.course;
+    this.utilizer = data.utilizer;
+    this.sportLevel = data.sportLevel;
+    this.initialData = data.initialData;
+    this.activitiesBooked = data.groupedActivities;
+    this.stepForm = this.fb.group({});
   }
 
   ngOnInit(): void {
@@ -69,7 +76,8 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
           // Si es una fecha en el futuro o es hoy y cumple con la hora, añadimos el grupo
           if (isInFuture || isValidToday) {
             // Si hay datos iniciales, usamos esos datos para restaurar los valores seleccionados
-            const initialSelected = this.initialData?.[index]?.selected || false;
+            // Si hay datos iniciales, usamos esos datos para restaurar los valores seleccionados
+            const initialSelected = this.initialData?.[index] || false;
             const initialExtras = this.initialData?.[index]?.extras || [];
             return this.createCourseDateGroup(date, initialSelected, initialExtras);
           } else {
@@ -166,16 +174,28 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
 
   createCourseDateGroup(courseDate: any, selected: boolean = false, extras: any[] = []): FormGroup {
     const monitor = this.findMonitor(courseDate);
-    return this.fb.group({
+    const group = this.fb.group({
       selected: [selected],
       date: [courseDate.date],
       startHour: [courseDate.hour_start],
       endHour: [courseDate.hour_end],
       price: this.course.price,
       currency: this.course.currency,
-      extras: [{ value: extras, disabled: !selected || !this.posibleExtras || !this.posibleExtras.length }] ,
+      extras: [{ value: [], disabled: !selected || !this.posibleExtras || !this.posibleExtras.length }] ,
       monitor: [monitor]
     });
+    if (extras.length > 0) {
+      // Mapeamos los extras iniciales para obtener los objetos exactos de possibleExtras
+      const validExtras = this.posibleExtras.filter(extra =>
+        extras.some(initialExtra => initialExtra.id === extra.id)
+      );
+
+      // Actualizamos el FormControl con los objetos mapeados de possibleExtras
+      group.get('extras')?.patchValue(validExtras);
+
+    }
+
+    return group;
   }
 
   findMonitor(courseDate: any): any {
@@ -238,4 +258,16 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
     return this.utilsService.formatDate(date);
   }
 
+  submitForm() {
+    if (this.stepForm.valid) {
+      // Cerrar el diálogo pasando los valores del formulario
+      this.dialogRef.close(this.stepForm.value);
+
+    } else {
+      this.snackbar.open('Por favor completa todos los campos requeridos', 'OK', { duration: 3000 });
+    }
+  }
+  cancel() {
+    this.dialogRef.close();
+  }
 }

@@ -53,6 +53,11 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'bookings/update-v2/:id',
+        loadChildren: () => import('./pages/bookings/booking-detail-v2/booking-detail-v2.module').then(m => m.BookingDetailV2Module),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'bookings/edit/:id',
         loadChildren: () => import('./pages/bookings/bookings-create-update-edit/bookings-create-update-edit.module').then(m => m.BookingsCreateUpdateEditModule),
         canActivate: [AuthGuard],

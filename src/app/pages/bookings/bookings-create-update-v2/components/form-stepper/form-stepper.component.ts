@@ -18,6 +18,7 @@ export class BookingFormStepper implements OnChanges {
   @Output() changedFormData = new EventEmitter();
   @Input() forceStep: number;
   @Input() activitiesBooked: any;
+  @Input() selectedDates: any;
   private _selectedForm: FormGroup;
   @Input()
   set selectedForm(value: FormGroup) {

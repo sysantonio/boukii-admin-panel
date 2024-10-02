@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
-import { MOCK_POSIBLE_EXTRAS } from "../../mocks/course";
 
 @Component({
   selector: "booking-form-details-colective-fix",

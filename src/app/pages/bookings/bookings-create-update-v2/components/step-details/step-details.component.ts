@@ -14,6 +14,8 @@ export class StepDetailsComponent {
   @Input() date: any;
   @Input() utilizers: any;
   @Input() activitiesBooked: any;
+  @Input() selectedForm: FormGroup;
+  @Input() dateForm: any;
   @Input() sportLevel: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
@@ -22,7 +24,9 @@ export class StepDetailsComponent {
   stepForm: FormGroup;
   utilizer;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+
+  }
 
   ngOnInit(): void {
     this.utilizer = this.utilizers?.[0];
