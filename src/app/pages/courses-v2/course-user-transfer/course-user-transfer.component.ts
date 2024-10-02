@@ -12,7 +12,7 @@ import { ApiCrudService } from 'src/service/crud.service';
   templateUrl: './course-user-transfer.component.html',
   styleUrls: ['./course-user-transfer.component.scss']
 })
-export class CourseUserTransferComponent implements OnInit {
+export class CourseUserTransfer2Component implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   courseSubGroups: any = [];

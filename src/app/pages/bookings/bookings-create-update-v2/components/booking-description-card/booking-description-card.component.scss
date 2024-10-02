@@ -16,20 +16,44 @@
   gap: 0.5rem;
 }
 
-.headerHover:hover {
-  animation: fadeOut 1s;
-  cursor: pointer;
-  background-color: white;
-  border: 1px solid var(--color-grey3);
-  border-radius: 8px;
-  transform: scale(1.15);
+
+.header1:hover {  cursor: pointer;
+
+  background-color: #fee0b9;
+  animation: fadeOut1 1s;
 }
-@keyframes fadeOut {
+.header2:hover {  cursor: pointer;
+
+  background-color: #c2eac8;
+  animation: fadeOut2 1s;
+}
+.header3:hover {  cursor: pointer;
+
+  background-color: #acf4f8;
+  animation: fadeOut3 1s;
+}
+@keyframes fadeOut1 {
   0% {
-    transform: scale(1);
+    background-color: white;
   }
   100% {
-    transform: scale(1.15);
+    background-color: #fee0b9;
+  }
+}
+@keyframes fadeOut2 {
+  0% {
+    background-color: white;
+  }
+  100% {
+    background-color: #c2eac8;
+  }
+}
+@keyframes fadeOut3 {
+  0% {
+    background-color: white;
+  }
+  100% {
+    background-color: #acf4f8;
   }
 }
 
@@ -94,7 +118,6 @@
 }
 
 .footerWrapper {
-  padding: 0 20px;
   font-family: var(--font-dm);
   font-size: 14px;
   font-weight: 400;
