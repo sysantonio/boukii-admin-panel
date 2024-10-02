@@ -10,8 +10,8 @@
 .custom-card {
   transition: all 0.3s ease;
   box-shadow: none;
-  border: 1px solid #E6E6E6; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
-  color: #E6E6E6;
+  border: 1px solid #e6e6e6; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
+  color: #e6e6e6;
   text-align: center;
   cursor: pointer;
 }
@@ -25,19 +25,18 @@
   --mdc-outlined-card-outline-width: 0px;
 }
 
-
 .selected-collectif {
-  background-color: #FAC710; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #fac710; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .selected-prive {
-  background-color: #8FD14F; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #8fd14f; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 .selected-activity {
-  background-color: #00BEFFFF; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #00beffff; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .smaller-calendar {
@@ -51,10 +50,9 @@
 }
 
 .columns-container {
-  display: flex;  /* Establecemos un contenedor flex */
-  width: 100%;    /* Aseguramos que tome todo el ancho disponible */
+  display: flex; /* Establecemos un contenedor flex */
+  width: 100%; /* Aseguramos que tome todo el ancho disponible */
   height: 100%; /* Asegura que ocupe toda la altura disponible */
-
 }
 
 .calendar-column {
@@ -72,7 +70,6 @@
   max-height: 100%; /* Cambia esto para que ocupe toda la altura disponible */
   overflow-y: auto;
 }
-
 
 .custom-list-item {
   display: flex;
@@ -100,7 +97,7 @@
   flex-direction: column;
   justify-content: center; /* Alinea el contenido verticalmente al centro */
   flex-grow: 1; /* Ocupa el espacio restante */
-  padding: 10px 0 0 15px;/* Espacio entre la imagen y el contenido */
+  padding: 10px 0 0 15px; /* Espacio entre la imagen y el contenido */
   float: left;
   width: 80%;
 }
@@ -122,7 +119,6 @@ mat-list {
   background-color: rgba(255, 48, 133, 0.1);
 }
 
-
 .reservation-detail-card {
   width: 31%;
   position: relative;
@@ -132,18 +128,20 @@ mat-list {
 }
 
 .delete-icon {
-  cursor: pointer;    /* Cambia el cursor a una mano cuando pasas sobre el icono */
+  cursor: pointer; /* Cambia el cursor a una mano cuando pasas sobre el icono */
 }
 
 .column-container {
   padding: 1rem; /* Añade un pequeño padding alrededor para separar el contenido de las bordas */
 }
 
-.column-container:nth-child(1) { /* Selecciona la primera columna */
+.column-container:nth-child(1) {
+  /* Selecciona la primera columna */
   flex: 7; /* Esto representa el 70% */
 }
 
-.column-container:nth-child(2) { /* Selecciona la segunda columna */
+.column-container:nth-child(2) {
+  /* Selecciona la segunda columna */
   flex: 3; /* Esto representa el 30% */
 }
 
@@ -155,9 +153,9 @@ mat-list {
 
 /* Ajusta la imagen de fondo de mat-card-avatar */
 mat-card-avatar {
-  background-size: cover;  /* Ajusta la imagen para que cubra completamente el elemento */
-  background-position: center;  /* Centra la imagen */
-  background-repeat: no-repeat;  /* Asegura que la imagen no se repita */
+  background-size: cover; /* Ajusta la imagen para que cubra completamente el elemento */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Asegura que la imagen no se repita */
   color: red;
 }
 
@@ -168,34 +166,35 @@ mat-card-avatar {
 }
 
 ::ng-deep .mat-mdc-card-header-text {
-  width: 100%; float: left;
+  width: 100%;
+  float: left;
 }
 /* Estilos para el contenido de la tarjeta */
 .content-title {
-  margin: 16px 0;  /* Esto añade un poco de espacio arriba y abajo del título, ajusta según lo que necesites */
+  margin: 16px 0; /* Esto añade un poco de espacio arriba y abajo del título, ajusta según lo que necesites */
 }
 
 /* Alinea horizontalmente el avatar y el nombre del usuario */
 .user-info {
-  display: flex;  /* Habilita flexbox */
-  align-items: center;  /* Alinea verticalmente al centro los ítems */
-  gap: 8px;  /* Espacio entre el avatar y el nombre, puedes ajustarlo según tus necesidades */
+  display: flex; /* Habilita flexbox */
+  align-items: center; /* Alinea verticalmente al centro los ítems */
+  gap: 8px; /* Espacio entre el avatar y el nombre, puedes ajustarlo según tus necesidades */
   margin: 10px 0 0 0;
 }
 
 .user-avatar {
-  width: 50px;  /* Puedes ajustar según tus necesidades */
+  width: 50px; /* Puedes ajustar según tus necesidades */
   height: 50px;
-  border-radius: 50%;  /* Hace que la imagen sea redonda */
-  object-fit: contain;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
+  border-radius: 50%; /* Hace que la imagen sea redonda */
+  object-fit: contain; /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
 }
 
 .centered-chip-list {
   display: flex;
-  justify-content: center;  /* Centra el chip horizontalmente */
-  align-items: center;      /* Centra el chip verticalmente, aunque esto podría no ser necesario si el contenedor es del tamaño del chip */
-  width: 100%;  /* Ocupa el ancho total de su contenedor padre */
-  margin-top: 16px;  /* Espacio arriba del chip list, ajusta según lo que necesites */
+  justify-content: center; /* Centra el chip horizontalmente */
+  align-items: center; /* Centra el chip verticalmente, aunque esto podría no ser necesario si el contenedor es del tamaño del chip */
+  width: 100%; /* Ocupa el ancho total de su contenedor padre */
+  margin-top: 16px; /* Espacio arriba del chip list, ajusta según lo que necesites */
 }
 .opaque-box {
   width: 100%;
@@ -224,7 +223,7 @@ mat-card-avatar {
 }
 
 .reservation-multiple .title {
-  font-size: 1.25rem!important
+  font-size: 1.25rem !important;
 }
 
 .reservation-multiple .subtitle {
@@ -248,18 +247,20 @@ mat-card-avatar {
   justify-content: center;
   text-align: center;
   border-radius: 10px;
-  background: #FFF !important;
-  color: #F53D7C !important;
+  background: #fff !important;
+  color: #f53d7c !important;
 }
 
-.square-button:active, .square-button:hover, .square-button.selected {
-  background: #F53D7C !important;
-  color: #FFF !important;
+.square-button:active,
+.square-button:hover,
+.square-button.selected {
+  background: #f53d7c !important;
+  color: #fff !important;
 }
 
 .client-container {
   width: 100%;
-  float: left
+  float: left;
 }
 
 .client-search-container {
@@ -288,7 +289,7 @@ mat-card-avatar {
 }
 
 .active-border {
-  border: 2px solid #E91E63;
+  border: 2px solid #e91e63;
 }
 
 .card-users mat-card-header {
@@ -314,13 +315,13 @@ mat-card-subtitle {
 }
 
 ::ng-deep .with-course .mat-calendar-body-cell-content {
-  background-color: #FAC710 !important;
-  border: 1px solid #FAC710 !important;
+  background-color: #fac710 !important;
+  border: 1px solid #fac710 !important;
 }
 
 ::ng-deep .with-course-private .mat-calendar-body-cell-content {
-  background-color: #2FCA45 !important;
-  border: 1px solid #2FCA45 !important;
+  background-color: #2fca45 !important;
+  border: 1px solid #2fca45 !important;
 }
 
 .icon-wrapper {
@@ -336,18 +337,24 @@ img[mat-card-image] {
 }
 
 .add-date {
-  box-shadow: none;background: #fff;border: 1px solid #e6e6e6;
+  box-shadow: none;
+  background: #fff;
+  border: 1px solid #e6e6e6;
 }
 
 .icon-date {
-  color: #e6e6e6; font-size: 10px;width: 50px;height: 50px;
+  color: #e6e6e6;
+  font-size: 10px;
+  width: 50px;
+  height: 50px;
 }
 
-.add-date:hover   {
-  box-shadow: none;background: #e6e6e6;border: 1px solid #e6e6e6;
-
+.add-date:hover {
+  box-shadow: none;
+  background: #e6e6e6;
+  border: 1px solid #e6e6e6;
 }
-.add-date:hover .icon-date  {
+.add-date:hover .icon-date {
   color: #fff;
 }
 
@@ -365,7 +372,6 @@ img[mat-card-image] {
   }
 }
 
-
 @media only screen and (max-width: 1024px) {
   .reservation-detail-card {
     width: 90%;
@@ -374,11 +380,13 @@ img[mat-card-image] {
     float: left;
   }
 
-  .column-container:nth-child(1) { /* Selecciona la primera columna */
+  .column-container:nth-child(1) {
+    /* Selecciona la primera columna */
     flex: 1; /* Esto representa el 70% */
   }
 
-  .column-container:nth-child(2) { /* Selecciona la segunda columna */
+  .column-container:nth-child(2) {
+    /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
   }
   .button-cancel {
@@ -397,11 +405,13 @@ img[mat-card-image] {
     float: left;
   }
 
-  .column-container:nth-child(1) { /* Selecciona la primera columna */
+  .column-container:nth-child(1) {
+    /* Selecciona la primera columna */
     flex: 1; /* Esto representa el 70% */
   }
 
-  .column-container:nth-child(2) { /* Selecciona la segunda columna */
+  .column-container:nth-child(2) {
+    /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
   }
   .button-cancel {
@@ -456,18 +466,18 @@ img[mat-card-image] {
 
 .mat-mdc-card-subtitle {
   b {
-    color: #4D4D4D;
+    color: #4d4d4d;
     font-size: 1.3em;
     font-weight: 700;
   }
 }
 
 .title-summary {
-  background-color: #F2F3F3;
+  background-color: #f2f3f3;
   padding: 15px 35px;
 
   b {
-    color: #4D4D4D;
+    color: #4d4d4d;
     font-size: 1.4em;
     font-weight: 600;
   }
@@ -475,15 +485,15 @@ img[mat-card-image] {
 
 .table-box {
   padding: 15px 35px;
-  font-size: 12px!important;
+  font-size: 12px !important;
 
   p {
-    font-size: 12px!important;
+    font-size: 12px !important;
   }
 }
 
 .mat-divider {
-  border-top-color: #A4A3A3!important;
+  border-top-color: #a4a3a3 !important;
 }
 
 .square-buttons-container {
@@ -492,17 +502,17 @@ img[mat-card-image] {
   }
 
   .square-button {
-    border-radius: 4px!important;
-    padding: 0px!important;
-    border: 1px solid #A4A3A3;
+    border-radius: 4px !important;
+    padding: 0px !important;
+    border: 1px solid #a4a3a3;
     font-size: 11px;
     line-height: 13px;
 
-    &:not(.selected,:hover){
-      color: #A4A3A3!important;
+    &:not(.selected, :hover) {
+      color: #a4a3a3 !important;
 
       .mdc-button__label {
-        color: #A4A3A3;
+        color: #a4a3a3;
       }
     }
   }
@@ -514,17 +524,17 @@ img[mat-card-image] {
   position: relative;
   font-size: 1.1em;
   font-weight: 400;
-  color: #4D4D4D;
+  color: #4d4d4d;
   margin-top: 20px;
   margin-bottom: 20px;
 
   &:after {
-    content: '';
+    content: "";
     display: block;
     height: 1px;
     width: 100%;
-    background-color: #523F69;
-    opacity: .06;
+    background-color: #523f69;
+    opacity: 0.06;
   }
 }
 
@@ -532,17 +542,22 @@ img[mat-card-image] {
   &.col-right {
     border-radius: var(--border-radius);
     --tw-bg-opacity: 1;
-    background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));
+    background-color: rgba(
+      var(--background-foreground-rgb),
+      var(--tw-bg-opacity)
+    );
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+      0 1px 2px -1px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 
     mat-icon {
       cursor: pointer;
     }
 
     .mat-mdc-card-header {
-      background-color: #ED297B;
+      background-color: #ed297b;
       padding: 15px 20px !important;
 
       .mat-mdc-card-title {
@@ -552,12 +567,12 @@ img[mat-card-image] {
       }
 
       .mat-icon {
-        fill: white!important;
+        fill: white !important;
       }
     }
 
     .mat-mdc-card-subtitle {
-      margin-left: 0px!important;
+      margin-left: 0px !important;
 
       b {
         color: #fff;
@@ -567,7 +582,7 @@ img[mat-card-image] {
     }
 
     .title-status {
-      background-color: #F2F3F3;
+      background-color: #f2f3f3;
       padding: 15px 20px;
 
       b {
@@ -592,7 +607,7 @@ img[mat-card-image] {
 
     .title-client {
       padding: 10px 1px;
-      color: #4D4D4D;
+      color: #4d4d4d;
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -612,13 +627,13 @@ img[mat-card-image] {
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          var(--color-dark1);
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
-          font-size: .9em;
+          font-family: "Montserrat", sans-serif;
+          font-size: 0.9em;
         }
       }
       .col-right_ {
@@ -629,13 +644,13 @@ img[mat-card-image] {
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          var(--color-dark1);
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
-          font-size: .9em;
+          font-family: "Montserrat", sans-serif;
+          font-size: 0.9em;
         }
       }
     }
@@ -647,10 +662,10 @@ img[mat-card-image] {
 }
 
 .course-label {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 1em;
   font-weight: 400;
-  color: #4D4D4D;
+  color: #4d4d4d;
   margin-bottom: 10px;
 }
 
@@ -670,10 +685,10 @@ img[mat-card-image] {
     }
 
     .course-label {
-      font-family: 'Montserrat', sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: #4D4D4D;
+      color: #4d4d4d;
       margin-bottom: 0px;
     }
 
@@ -717,10 +732,9 @@ img[mat-card-image] {
       text-align: right;
 
       span {
-        color: #FA9917;
+        color: #fa9917;
       }
     }
-
   }
   .col-right {
     width: 30%;

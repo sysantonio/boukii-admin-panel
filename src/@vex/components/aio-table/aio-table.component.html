@@ -123,7 +123,7 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="gift = 0; filterData(true)">
               <span
-                [ngStyle]="{'color': !gift ? '#fe3085' : 'black'}">{{'vouchers'
+                [ngStyle]="{'color': !gift ? '#fe3085' : 'var(--color-dark1)'}">{{'vouchers'
                 | translate}}</span>
             </button>
           </div>
@@ -131,7 +131,7 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="gift = 1; filterData()">
               <span
-                [ngStyle]="{'color': gift ? '#fe3085' : 'black'}">{{'gift_vouchers'
+                [ngStyle]="{'color': gift ? '#fe3085' : 'var(--color-dark1)'}">{{'gift_vouchers'
                 | translate}}</span>
             </button>
           </div>
@@ -139,7 +139,7 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="router.navigate(['./discount-codes'])">
               <span
-                [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'discount_code'
+                [ngStyle]="{'color': activeCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'discount_code'
                 | translate}}</span>
             </button>
           </div>
@@ -150,7 +150,7 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="navigateWithParam('./vouchers', '0')">
               <span
-                [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'vouchers'
+                [ngStyle]="{'color': activeCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'vouchers'
                 | translate}}</span>
             </button>
           </div>
@@ -158,14 +158,14 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="navigateWithParam('./vouchers', '1')">
               <span
-                [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'gift_vouchers'
+                [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'gift_vouchers'
                 | translate}}</span>
             </button>
           </div>
           <div>
             <button class="ml-4 flex-none" mat-button type="button">
               <span
-                [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">{{'discount_code'
+                [ngStyle]="{'color': allCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'discount_code'
                 | translate}}</span>
             </button>
           </div>
@@ -177,20 +177,20 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="activeCourse = true;inActiveCourse=false;finishedCourse = false; allCourse = false;filterData()">
               <span
-                [ngStyle]="{'color': activeCourse ? '#fe3085' : 'black'}">{{'active'
+                [ngStyle]="{'color': activeCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'active'
                 | translate}}</span>
             </button>
           </div>
           <!--<div *ngIf="entity.includes('courses')">
           <button class="ml-4 flex-none" mat-button type="button" (click)="inActiveCourse = true;activeCourse=false;finishedCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'black'}">{{'inactive' | translate}}</span>
+            <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'inactive' | translate}}</span>
           </button>
         </div>-->
           <div>
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData()">
               <span
-                [ngStyle]="{'color': finishedCourse ? '#fe3085' : 'black'}">{{'finished'
+                [style.color]="finishedCourse ? '#fe3085' : 'var(--color-dark1)'">{{'finished'
                 | translate}}</span>
             </button>
           </div>
@@ -198,7 +198,7 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="finishedCourse = false;activeCourse=false;inActiveCourse = true; allCourse = false;filterData()">
               <span
-                [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'black'}">{{'current'
+                [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'current'
                 | translate}}</span>
             </button>
           </div>
@@ -206,7 +206,8 @@
             <button class="ml-4 flex-none" mat-button type="button"
               (click)="allCourse = true;activeCourse=false;inActiveCourse = false; finishedCourse = false; filterData(true)">
               <span
-                [ngStyle]="{'color': allCourse ? '#fe3085' : 'black'}">{{'all' |
+                [ngStyle]="{'color': allCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'all'
+                |
                 translate}}</span>
             </button>
           </div>
@@ -216,7 +217,7 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="activeBooking = true; finishedBooking=false; allBookings=false;finishedBooking=false;filterData()">
             <span
-              [ngStyle]="{'color': activeBooking ? '#fe3085' : 'black'}">{{'active'
+              [ngStyle]="{'color': activeBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'active'
               | translate}}</span>
           </button>
         </div>
@@ -226,7 +227,7 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
             <span
-              [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'black'}">{{'finished'
+              [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'finished'
               | translate}}</span>
           </button>
         </div>
@@ -235,7 +236,7 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="finishedBooking = false; activeBooking=false; allBookings=false; filterData()">
             <span
-              [ngStyle]="{'color': !allBookings && !finishedBooking && !activeBooking ? '#fe3085' : 'black'}">{{'current'
+              [ngStyle]="{'color': !allBookings && !finishedBooking && !activeBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'current'
               | translate}}</span>
           </button>
         </div>
@@ -244,7 +245,7 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData()">
             <span
-              [ngStyle]="{'color': allBookings && !finishedBooking ? '#fe3085' : 'black'}">{{'all'
+              [ngStyle]="{'color': allBookings && !finishedBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'all'
               | translate}}</span>
           </button>
         </div>
@@ -254,7 +255,7 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="activeMonitor = true; inactiveMonitor=false; allMonitors=false; filterData()">
             <span
-              [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'black'}">{{'active'
+              [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'var(--color-dark1)'}">{{'active'
               | translate}}</span>
           </button>
         </div>
@@ -263,7 +264,7 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData()">
             <span
-              [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'black'}">{{'inactive'
+              [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'var(--color-dark1)'}">{{'inactive'
               | translate}}</span>
           </button>
         </div>
@@ -272,7 +273,8 @@
           <button class="ml-4 flex-none" mat-button type="button"
             (click)="allMonitors = true; activeMonitor=false; inactiveMonitor=false; filterData()">
             <span
-              [ngStyle]="{'color': allMonitors ? '#fe3085' : 'black'}">{{'all' |
+              [ngStyle]="{'color': allMonitors ? '#fe3085' : 'var(--color-dark1)'}">{{'all'
+              |
               translate}}</span>
           </button>
         </div>
@@ -422,9 +424,13 @@
         <!-- Count Columns -->
 
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
-          <ng-container *ngIf="column.type === 'count'" [matColumnDef]="column.property">
-            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell style="text-align: center;">{{ row[column.property].length + 1 }}</td>
+          <ng-container *ngIf="column.type === 'count'"
+            [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell
+              mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell
+              style="text-align: center;">{{ row[column.property].length + 1
+              }}</td>
           </ng-container>
         </ng-container>
 
@@ -969,11 +975,20 @@
 
         <!-- Coronita Columns -->
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
-          <ng-container *ngIf="column.type === 'coronita'" [matColumnDef]="column.property">
-            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-              <img *ngIf="data[i].utilizers.length > 0" [src]="'../../../assets/img/icons/cuentagrupo.svg'" class="avatar h-8 w-8 align-middle"  style="height: 25px;margin: 0 0 0 35%;width: 30px;">
-              <img *ngIf="data[i].utilizers.length === 0" [src]="'../../../assets/img/icons/cuentaunica.svg'" class="avatar h-8 w-8 align-middle"  style="height: 25px;margin: 0 0 0 35%;width: 30px;">
+          <ng-container *ngIf="column.type === 'coronita'"
+            [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell
+              mat-sort-header> {{ column.label | translate }}</th>
+            <td *matCellDef="let row; let i = index"
+              [ngClass]="column.cssClasses" mat-cell>
+              <img *ngIf="data[i].utilizers.length > 0"
+                [src]="'../../../assets/img/icons/cuentagrupo.svg'"
+                class="avatar h-8 w-8 align-middle"
+                style="height: 25px;margin: 0 0 0 35%;width: 30px;">
+              <img *ngIf="data[i].utilizers.length === 0"
+                [src]="'../../../assets/img/icons/cuentaunica.svg'"
+                class="avatar h-8 w-8 align-middle"
+                style="height: 25px;margin: 0 0 0 35%;width: 30px;">
             </td>
           </ng-container>
         </ng-container>

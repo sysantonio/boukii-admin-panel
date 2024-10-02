@@ -50,7 +50,7 @@
               [disabled]="booking.status === 2"
               color="accent"
               [ngStyle]="{
-                background: booking.status === 2 ? '#ededed' : '#f53d7c'
+                background: booking.status === 2 ? 'var(--color-grey5)' : '#f53d7c'
               }"
               class="btn-primary-accent"
               style="min-width: 240px;"
@@ -63,7 +63,7 @@
             class="reservation-detail-card"
             *ngFor="let item of bookingsToCreate; let bI = index"
           >
-            <div style="background: #ededed; padding: 2%">
+            <div style="background: var(--color-grey5); padding: 2%">
               <div style="width: 50%;float: left;">
                 <p
                   style="padding: 5% 5% 0 5%;width: 100%;float: left;font-size: 16px;color:#868686"
@@ -125,7 +125,7 @@
                     [ariaLabel]="'QR Code image with the following content...'"
                     [cssClass]="'center'"
                     [colorDark]="'#808080'"
-                    [colorLight]="'#ededed'"
+                    [colorLight]="'var(--color-grey5)'"
                     [elementType]="'canvas'"
                     [errorCorrectionLevel]="'H'"
                     [imageSrc]="'../../../../assets/img/10.png'"
