@@ -11,6 +11,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { CourseComponentsModule } from '../components/components.module';
 
 
 
@@ -29,7 +30,10 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    CoursesDetailCardModule,
+    MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
+    FluxModalModule, CourseComponentsModule
   ]
 })
 export class CourseDetailNewModule { }

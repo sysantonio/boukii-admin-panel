@@ -30,6 +30,7 @@ import { CoursesDetailModalModule } from './course-detail-modal/course-detail-mo
 import { TranslateModule } from '@ngx-translate/core';
 import { CoursesCreateUpdateModalModule } from './courses-create-update-modal/courses-create-update-modal.module';
 import {CourseDetailNewModule} from './course-detail-new/course-detail-new.module';
+import { CourseComponentsModule } from './components/components.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -61,7 +62,8 @@ import {CourseDetailNewModule} from './course-detail-new/course-detail-new.modul
     MatDividerModule,
     MatCardModule,
     CourseUserTransferModalModule,
-    TranslateModule
+    TranslateModule,
+    CourseComponentsModule
   ]
 })
 export class CoursesModule {

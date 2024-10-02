@@ -1,0 +1,77 @@
+<mat-tab-group class="tabsWrapper"
+  *ngIf="mode!=='update'">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon style="color: #E5962A;"
+        class="icon16">circle</mat-icon>
+      Curso Colectivo
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon style="color: #2FAA41;"
+        class="icon16">circle</mat-icon>
+      Curso Privado
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon style="color: #0AB0BC;"
+        class="icon16">circle</mat-icon>
+      Actividad
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+<div style="padding: 20px 20px 0;" [formGroup]="courseFormGroup">
+  <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
+  <vex-flux-upload-img
+    (upload)="this.courseFormGroup.patchValue({img:$event})"
+    style="margin-top: 10px;"></vex-flux-upload-img>
+  <mat-form-field appearance="outline" style="width: 100%">
+    <mat-label>{{'courses.coursename' | translate}}</mat-label>
+    <input id="courseName" formControlName="course_name"
+      matInput required type="text">
+  </mat-form-field>
+  <div style="margin: 10px 0;">
+    <angular-editor id="summary" style="width: 100%"
+      [placeholder]="'courses.summary' | translate"
+      formControlName="summary" [config]="editor1Config">
+    </angular-editor>
+  </div>
+  <div style="margin: 20px 0;">
+    <angular-editor id="description" style="width: 100%"
+      [placeholder]="'courses.desc' | translate"
+      formControlName="description" [config]="editor2Config">
+    </angular-editor>
+  </div>
+  <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+    <mat-form-field appearance="outline"
+      style="width: calc(50% - 10px);">
+      <mat-label>{{'Precio por fecha' | translate}}</mat-label>
+      <input id="price" formControlName="price"
+        matInput required type="number">
+      <span matTextSuffix>CHF</span>
+    </mat-form-field>
+    <mat-form-field appearance="outline"
+      style="width: calc(50% - 10px);">
+      <mat-label>{{'N° max. participantes por grupo' |
+        translate}}</mat-label>
+      <input id="participants" formControlName="participants"
+        matInput required type="number">
+    </mat-form-field>
+    <ng-container *ngIf="courseFormGroup.controls['course_type'].value>1">
+      <mat-form-field appearance="outline"
+        style="width: calc(50% - 10px);">
+        <mat-label>{{'Edad mínima' | translate}}</mat-label>
+        <input id="age_min" formControlName="age_min"
+          matInput required type="number">
+      </mat-form-field>
+      <mat-form-field appearance="outline"
+        style="width: calc(50% - 10px);">
+        <mat-label>{{'Edad máxima' | translate}}</mat-label>
+        <input id="age_max" formControlName="age_max"
+          matInput required type="number">
+      </mat-form-field>
+    </ng-container>
+  </div>
+</div>

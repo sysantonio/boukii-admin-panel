@@ -1,7 +1,7 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import {Observable, map, of, startWith, forkJoin, mergeMap} from 'rxjs';
+import { Observable, map, of, startWith, forkJoin, mergeMap } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { DateTimeDialogComponent } from 'src/@vex/components/date-time-dialog/date-time-dialog.component';
@@ -13,13 +13,7 @@ import { PrivateDatesDialogComponent } from 'src/@vex/components/private-dates-d
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
-import { MatStepper } from '@angular/material/stepper';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateService } from '@ngx-translate/core';
-import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
-import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
-import { DateAdapter } from '@angular/material/core';
-import {AngularEditorConfig} from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -28,56 +22,49 @@ import {AngularEditorConfig} from '@kolkov/angular-editor';
     '../../../../../node_modules/quill/dist/quill.snow.css',
     '../../../../@vex/styles/partials/plugins/quill/_quill.scss'
   ],
-  animations: [fadeInUp400ms,stagger20ms]
+  animations: [fadeInUp400ms, stagger20ms]
 })
-export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
+export class CoursesCreateUpdateComponent implements OnInit {
+  dataSource: any;
+  displayedColumns = ['intervalo', ...Array.from({ length: 6 }, (_, i) => `${i + 1}`)];
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild('dateTable') dateTable: MatTable<any>;
-  @ViewChild('reductionTable') reductionTable: MatTable<any>;
-  @ViewChild('privateDatesTable') privateDatesTable: MatTable<any>;
-  @ViewChild('activityDatesTable') activityDatesTable: MatTable<any>;
-  @ViewChild('privateReductionTable') privateReductionTable: MatTable<any>;
-  @ViewChild('levelTable') table: MatTable<any>;
-
-  userAvatar = '../../../../assets/img/avatar.png';
-
-  people = 6; // Aquí puedes cambiar el número de personas
-  intervalos = Array.from({ length: 28 }, (_, i) => 15 + i * 15);
-
+  ModalFlux: number = +this.activatedRoute.snapshot.queryParamMap['params'].step || 0
+  ModalProgress: { Name: string, Modal: number }[] = [
+    { Name: "DEPORTE", Modal: 0 },
+    { Name: "DETALLES", Modal: 1 },
+    { Name: "FECHAS", Modal: 2 },
+    { Name: "NIVELES", Modal: 3 },
+    { Name: "EXTRAS", Modal: 4 },
+    { Name: "IDIOMAS", Modal: 5 },
+  ]
+  Translate: { Code: string, Name: string }[] = [
+    { Code: "es", Name: "ESPAÑOL" },
+    { Code: "en", Name: "INGLES" },
+    { Code: "fr", Name: "FRANCÉS" },
+    { Code: "de", Name: "ALEMAN" },
+    { Code: "it", Name: "ITALIANO" },
+  ]
   hours: string[] = [
-    '00:00', '00:15', '00:30', '00:45',
-    '01:00', '01:15', '01:30', '01:45',
-    '02:00', '02:15', '02:30', '02:45',
-    '03:00', '03:15', '03:30', '03:45',
-    '04:00', '04:15', '04:30', '04:45',
-    '05:00', '05:15', '05:30', '05:45',
-    '06:00', '06:15', '06:30', '06:45',
-    '07:00', '07:15', '07:30', '07:45',
-    '08:00', '08:15', '08:30', '08:45',
-    '09:00', '09:15', '09:30', '09:45',
-    '10:00', '10:15', '10:30', '10:45',
-    '11:00', '11:15', '11:30', '11:45',
-    '12:00', '12:15', '12:30', '12:45',
-    '13:00', '13:15', '13:30', '13:45',
-    '14:00', '14:15', '14:30', '14:45',
-    '15:00', '15:15', '15:30', '15:45',
-    '16:00', '16:15', '16:30', '16:45',
-    '17:00', '17:15', '17:30', '17:45',
-    '18:00', '18:15', '18:30', '18:45',
-    '19:00', '19:15', '19:30', '19:45',
-    '20:00', '20:15', '20:30', '20:45',
-    '21:00', '21:15', '21:30', '21:45',
-    '22:00', '22:15', '22:30', '22:45',
-    '23:00'
+    '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+    '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45',
+    '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45',
+    '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45',
+    '08:00', '08:15', '08:30', '08:45', '09:00', '09:15', '09:30', '09:45',
+    '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45',
+    '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45',
+    '14:00', '14:15', '14:30', '14:45', '15:00', '15:15', '15:30', '15:45',
+    '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45',
+    '18:00', '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45',
+    '20:00', '20:15', '20:30', '20:45', '21:00', '21:15', '21:30', '21:45',
+    '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45',
   ];
-
-  filteredToHours = [];
-
+  ndays: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+  PeriodoFecha: number = 0
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    height: 'auto',
+    //height: '56px',
     minHeight: '0',
     maxHeight: 'auto',
     width: 'auto',
@@ -88,38 +75,23 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     defaultParagraphSeparator: '',
     defaultFontName: '',
     sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
-    toolbarPosition: 'top',
+    toolbarPosition: 'bottom',
     outline: true,
+    toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
   }
+  editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
+  editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
 
-  summary = ``;
-  description = ``;
+  minDate = new Date(2000, 1, 1);
+  nowDate = new Date()
+  maxDate = new Date(2099, 12, 31);
 
-  daysDates = [];
-  daysDatesLevels = [];
-  days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-  startDayControl = new FormControl();
-  endDayControl = new FormControl();
-  availableEndDays: string[] = [];
+  courseFormGroup: UntypedFormGroup; //El bueno
+  extrasFormGroup: UntypedFormGroup; //crear extras nuevas
 
-  //separatedDates = false;
-  displayedColumns: string[] = ['date', 'duration', 'hour', 'edit', 'delete'];
-  displayedReductionsColumns: string[] = ['date', 'percentage', 'delete'];
-  displayedPrivateDateColumns: string[] = ['dateFrom', 'dateTo', 'delete'];
-  dataSource: any = new MatTableDataSource([]);
-  dataSourceReductions = new MatTableDataSource([]);
-  dataSourceDatePrivate: any = new MatTableDataSource([]);
-  dataSourceReductionsPrivate = new MatTableDataSource([]);
-
-  dataSourceFlexiblePrices: any;
-  displayedColumnsFlexiblePrices: string[] = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
-
-  myControl = new FormControl();
-  myControlSport = new FormControl();
-  myControlStations = new FormControl(Validators.required);
-  monitorsForm = new FormControl();
-
-  options: any[] = [{id: 1, name:'Cours collectif'}, {id:2, name: 'Cours privés'}];
+  sportData: any = [];
+  sportDataList: any = [];
+  sportTypeData: any = [];
   stations: any = [];
 
   filteredOptions: Observable<any[]>;
@@ -180,33 +152,33 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     online: true,
     image: this.imagePreviewUrl,
     translations:
-      {
-        es: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        en: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        fr: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        it: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
-        de: {
-          name: '',
-          short_description: '',
-          description: ''
-        },
+    {
+      es: {
+        name: '',
+        short_description: '',
+        description: ''
       },
+      en: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+      fr: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+      it: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+      de: {
+        name: '',
+        short_description: '',
+        description: ''
+      },
+    },
     price_range: null,
     discounts: null,
     settings: {
@@ -258,7 +230,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     degree_id: null,
     course_group_id: null,
     monitor_id: null,
-    max_participants:null,
+    max_participants: null,
   }
 
   sportTypeSelected: number = -1;
@@ -273,14 +245,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   selectedCourses = new MatTableDataSource([]);
   displayedCourseColumns: string[] = ['course', 'min', 'max', 'levels', 'checkbox', 'delete'];
 
-  mode: 'create' | 'update' = 'create';
   loading: boolean = true;
-  loadingTable: boolean = false;
-
-  durations = [];
-  filteredMaxDurations = [];
-  courseType: any = null;
-  courseComplete: boolean = false;
+  extrasModal: boolean = false
+  confirmModal: boolean = false
+  translateExpandedIndex: number = 0
   user: any;
   id: any = null;
 
@@ -292,8 +260,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   myHolidayDates = [];
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private router: Router, private activatedRoute: ActivatedRoute,
-              private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, private cdRef: ChangeDetectorRef,
-              private dateAdapter: DateAdapter<Date>) {
+    private schoolService: SchoolService, private snackbar: MatSnackBar, private translateService: TranslateService, private cdRef: ChangeDetectorRef,
+    private dateAdapter: DateAdapter<Date>) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
 
@@ -337,13 +305,9 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
-    if (!this.id) {
-      this.mode = 'create';
-    } else {
-      this.mode = 'update';
-    }
-
+    const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
+    this.extras = [...extras.food, ...extras.forfait, ...extras.transport]
+    this.mode = this.id ? 'update' : 'create';
     forkJoin({
       sportTypes: this.getSportsType(),
       sports: this.getSports(),
@@ -354,2460 +318,269 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       this.sportData = sports;
       this.stations = stations;
       this.monitors = monitors;
+      if (this.mode === "create") {
+        this.courseFormGroup = this.fb.group({
+          sport_id: [this.sportData[0].sport_id, Validators.required],
+          course_type: [null, Validators.required],
+          course_name: ["", Validators.required],
+          summary: ["", Validators.required],
+          description: ["", Validators.required],
+          course_name_es: ["", Validators.required],
+          summary_es: ["", Validators.required],
+          description_es: ["", Validators.required],
+          course_name_fr: ["", Validators.required],
+          summary_fr: ["", Validators.required],
+          description_fr: ["", Validators.required],
+          course_name_en: ["", Validators.required],
+          summary_en: ["", Validators.required],
+          description_en: ["", Validators.required],
+          course_name_de: ["", Validators.required],
+          summary_de: ["", Validators.required],
+          description_de: ["", Validators.required],
+          course_name_it: ["", Validators.required],
+          summary_it: ["", Validators.required],
+          description_it: ["", Validators.required],
+          price: [null, Validators.required],
+          participants: [null, Validators.required],
+          img: ["", Validators.required],
+          icon: ["", Validators.required],
 
+          age_max: [null, Validators.required], //2
+          age_min: [null, Validators.required], //2
+
+          reserve_from: [null, Validators.required],
+          reserve_to: [null, Validators.required],
+          duration_min: [null, Validators.required], //2
+
+          //Datos en forma de array
+          reserve_date: [[], Validators.required],
+          discount: [[], Validators.required],
+          extras: [[], Validators.required],
+          levelGrop: [[], Validators.required],
+          categoryPart: [[], Validators.required],
+          settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
+        });
+        this.loading = false
+        this.Confirm(0)
+
+      } else {
+        this.crudService.get('/admin/courses/' + this.id,
+          ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
+          .subscribe((data: any) => {
+            this.detailData = data.data
+            this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id=' + this.detailData.sport_id)
+              .subscribe((data) => {
+                this.detailData.degrees = [];
+                data.data.forEach(element => {
+                  if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
+                });
+                this.detailData.degrees.forEach(level => {
+                  level.active = false;
+                  this.detailData.course_dates.forEach(cs => {
+                    cs.course_groups.forEach(group => {
+                      if (group.degree_id === level.id) {
+                        level.active = true;
+                        level.old = true;
+                      } level.visible = false;
+                    });
+                  });
+                });
+                this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
+                  .subscribe((st) => {
+                    st.data.forEach(element => {
+                      if (element.id === this.detailData.station_id) this.detailData.station = element
+                    });
+                    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
+                      .subscribe((bookingUser) => {
+                        this.detailData.users = [];
+                        this.detailData.users = bookingUser.data;
+                        this.courseFormGroup = this.fb.group({
+                          sport_id: [this.detailData.sport_id, Validators.required],
+                          course_type: [this.detailData.course_type, Validators.required],
+                          course_name: [this.detailData.name, Validators.required],
+                          summary: [this.detailData.short_description, Validators.required],
+                          description: [this.detailData.description, Validators.required],
+                          course_name_es: ["", Validators.required],
+                          summary_es: ["", Validators.required],
+                          description_es: ["", Validators.required],
+                          course_name_fr: ["", Validators.required],
+                          summary_fr: ["", Validators.required],
+                          description_fr: ["", Validators.required],
+                          course_name_en: ["", Validators.required],
+                          summary_en: ["", Validators.required],
+                          description_en: ["", Validators.required],
+                          course_name_de: ["", Validators.required],
+                          summary_de: ["", Validators.required],
+                          description_de: ["", Validators.required],
+                          course_name_it: ["", Validators.required],
+                          summary_it: ["", Validators.required],
+                          description_it: ["", Validators.required],
+                          price: [this.detailData.price, Validators.required],
+                          participants: [this.detailData.max_participants, Validators.required],
+                          img: [this.detailData.image, Validators.required],
+                          icon: [this.detailData.sport.icon_unselected, Validators.required],
+                          age_max: [this.detailData.age_max, Validators.required],
+                          age_min: [this.detailData.age_min, Validators.required],
+                          reserve_from: [this.detailData.date_start, Validators.required],
+                          reserve_to: [this.detailData.date_end, Validators.required],
+                          duration_min: [this.detailData.duration, Validators.required],
+                          reserve_date: [this.detailData.course_dates, Validators.required],
+                          discount: [[], Validators.required],
+                          extras: [[], Validators.required],
+                          levelGrop: [this.detailData.degrees, Validators.required],
+                          categoryPart: [[], Validators.required],
+                          settings: [JSON.parse(this.detailData.settings), Validators.required],
+                        });
+                        this.getDegrees()
+                        this.Confirm(0)
+
+                        this.loading = false
+                      })
+                  })
+              });
+          })
+      }
+      this.extrasFormGroup = this.fb.group({
+        id: ["", Validators.required],
+        product: ["", Validators.required],
+        name: ["", Validators.required],
+        price: ["", Validators.required],
+        iva: ["", Validators.required],
+        status: ["", Validators.required],
+      })
       this.schoolService.getSchoolData()
         .subscribe((data) => {
           this.schoolData = data.data;
-          this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id='+data.data.id + '&is_active=1')
-            .subscribe((season) => {
-              this.season = season.data[0];
-              this.minDate = moment(this.season.start_date, 'YYYY-MM-DD').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'YYYY-MM-DD').toDate() : this.minDate;
-              this.maxDate = moment(this.season.end_date).toDate();
-
-              this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
-
-              this.holidays.forEach(element => {
-                this.myHolidayDates.push(moment(element).toDate());
-              });
-
-              // Extrae las horas de inicio y fin
-              const hourStart = this.season?.hour_start.substr(0, 5); // '08:00'
-              const hourEnd = this.season?.hour_end.substr(0, 5); // '17:00'
-
-              // Filtra el array de horas
-              this.hours = this.hours?.filter(hour => hour >= hourStart && hour <= hourEnd);
-
-            });
-          this.schoolPriceRanges = JSON.parse(data.data.settings)?.prices_range;
-          this.people = this.schoolPriceRanges?.people ? this.schoolPriceRanges.people : 6;
-          this.displayedColumnsFlexiblePrices = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
-          this.dataSourceFlexiblePrices = this.schoolPriceRanges && this.schoolPriceRanges.prices && this.schoolPriceRanges.prices !== null ? this.schoolPriceRanges.prices :
-            this.intervalos.map(intervalo => {
-              const fila: any = { intervalo: this.formatIntervalo(intervalo) };
-              for (let i = 1; i <= this.people; i++) {
-                fila[`${i}`] = '';
-              }
-              return fila;
-            });
         })
-
-      if (this.mode === 'update') {
-        this.crudService.get('/admin/courses/'+this.id)
-          .subscribe((course) => {
-            this.defaults = course.data;
-            if (this.defaults.translations === null) {
-              this.defaults.translations = {
-                es: {
-                  name: '',
-                  short_description: '',
-                  description: ''
-                },
-                en: {
-                  name: '',
-                  short_description: '',
-                  description: ''
-                },
-                fr: {
-                  name: '',
-                  short_description: '',
-                  description: ''
-                },
-                it: {
-                  name: '',
-                  short_description: '',
-                  description: ''
-                },
-                de: {
-                  name: '',
-                  short_description: '',
-                  description: ''
-                },
-              };
-
-            } else {
-              this.defaults.translations = JSON.parse(this.defaults.translations);
-            }
-
-            if (this.defaults.is_flexible && this.defaults.course_type === 2) {
-              this.defaults.price = this.encontrarPrimeraClaveConValor(this.encontrarPrimeraCombinacionConValores(this.defaults.price_range))
-            }
-            this.defaults.translations.fr.name = this.defaults.name;
-            this.defaults.translations.fr.short_description = this.defaults.short_description;
-            this.defaults.translations.fr.description = this.defaults.description;
-            this.defaults.hour_min = this.defaults.course_dates[0].hour_start.replace(': 00', '');
-            this.defaults.hour_max = this.defaults.course_dates[0].hour_end.replace(': 00', '');
-            this.people = this.defaults.max_participants;
-            this.defaults.course_dates = this.sortEventsByDate();
-            this.defaults.settings = typeof course.data.settings === 'string' ? JSON.parse(course.data.settings) : course.data.settings;
-
-            if (this.defaults.price_range === null) {
-              this.dataSourceFlexiblePrices =
-                this.intervalos.map(intervalo => {
-                  const fila: any = { intervalo: this.formatIntervalo(intervalo) };
-                  for (let i = 1; i <= this.people; i++) {
-                    fila[`${i}`] = '';
-                  }
-                  return fila;
-                });
-            } else {
-
-              this.dataSourceFlexiblePrices = this.defaults.price_range;
-              this.updateTable(null);
-            }
-            this.getSeparatedDates(this.defaults.course_dates, true);
-            this.getDegrees();
-
-            this.courseTypeFormGroup = this.fb.group({
-
-              sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
-              sport: [null, Validators.required],
-              courseType: [null, Validators.required],
-              separatedDates: [false]
-            })
-
-            this.courseInfoFormGroup = this.fb.group({
-
-              course_name: [null, Validators.required],
-              course_name_en: [null],
-              course_name_de: [null],
-              course_name_es: [null],
-              course_name_it: [null],
-              price: [null],
-              station: [null, Validators.required],
-              summary: [null, Validators.required],
-              description: [null, Validators.required],
-              summary_en: [null],
-              description_en: [null],
-              summary_de: [null],
-              description_de: [null],
-              summary_es: [null],
-              description_es: [null],
-              summary_it: [null],
-              description_it: [null],
-              image: [null],
-              ageFrom: [null],
-              ageTo: [null],
-            })
-
-
-            this.courseInfoPriveFormGroup = this.fb.group({
-
-              duration: [null],
-              minDuration: [null],
-              maxDuration: [null],
-              fromHour: [this.defaults.course_dates[0].hour_start.replace(': 00', ''), Validators.required],
-              toHour: [this.defaults.course_dates[0].hour_end.replace(': 00', '') , Validators.required],
-              participants: [this.defaults.max_participants, Validators.required],
-              fromDate: [this.defaults.date_start],
-              toDate: [this.defaults.date_end],
-              fromDateUnique: [null],
-              toDateUnique: [null],
-              from: [this.defaults.date_start],
-              to: [this.defaults.date_end],
-              image: [null],
-              periodeUnique: [this.defaults.unique],
-              periodeMultiple: [!this.defaults.unique]
-            });
-
-            if(this.defaults?.settings?.groups) {
-              this.groups = this.defaults.settings.groups;
-            }
-
-            this.courseInfoPriveFormGroup.controls.periodeUnique.patchValue(this.defaults.unique);
-            this.courseInfoPriveFormGroup.controls.periodeMultiple.patchValue(!this.defaults.unique);
-            this.courseInfoPriveFormGroup.controls.periodeUnique.disable();
-            this.courseInfoPriveFormGroup.controls.periodeMultiple.disable();
-
-            this.courseLevelFormGroup = this.fb.group({});
-
-            this.courseInfoCollecDateSplitFormGroup = this.fb.group({
-              course_name: [null, Validators.required],
-
-              course_name_en: [null],
-              course_name_de: [null],
-              course_name_es: [null],
-              course_name_it: [null],
-              price: [null],
-              station: [null, Validators.required],
-              summary: [null, Validators.required],
-              description: [null, Validators.required],
-
-              summary_en: [null],
-              description_en: [null],
-              summary_de: [null],
-              description_de: [null],
-              summary_es: [null],
-              description_es: [null],
-              summary_it: [null],
-              description_it: [null],
-              duration: [null, Validators.required],
-              participants: [null, Validators.required],
-              image: [null],
-            });
-
-            this.courseInfoPriveSeparatedFormGroup = this.fb.group({
-              course_name: [null, Validators.required],
-
-              course_name_en: [null],
-              course_name_de: [null],
-              course_name_es: [null],
-              course_name_it: [null],
-              price: ['Flexible'],
-              station: [null, Validators.required],
-              summary: [null, Validators.required],
-              description: [null, Validators.required],
-              summary_en: [null],
-              description_en: [null],
-              summary_de: [null],
-              description_de: [null],
-              summary_es: [null],
-              description_es: [null],
-              summary_it: [null],
-              description_it: [null],
-              duration: [null, Validators.required],
-              participants: [null, Validators.required],
-              image: [null],
-            });
-
-            this.courseConfigForm = this.fb.group({
-
-              fromDate: [this.toDate(this.defaults.date_start), Validators.required],
-              toDate: [this.toDate(this.defaults.date_end), Validators.required],
-              from: [this.toDate(this.defaults.date_start)],
-              to: [this.toDate(this.defaults.date_end)],
-              duration: [null],
-              participants: [null, Validators.required],
-            });
-
-            this.filteredOptions = this.myControl.valueChanges
-              .pipe(
-                startWith(''),
-                map(value => this._filter(value))
-              );
-
-            this.filteredStations = this.myControlStations.valueChanges
-              .pipe(
-                startWith(''),
-                map(value => typeof value === 'string' ? value : value.name),
-                map(name => name ? this._filterStations(name) : this.stations.slice())
-              );
-
-            this.filteredSports = this.myControlSport.valueChanges.pipe(
-              startWith(''),
-              map((value: any) => typeof value === 'string' ? value : value?.name),
-              map(name => name ? this._filterSport(name) : this.sportData.slice())
-            );
-
-            this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
-              startWith(''),
-              map((value: any) => typeof value === 'string' ? value : value?.full_name),
-              map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
-            );
-
-            this.myControl.valueChanges.subscribe(value => {
-              this.courseTypeFormGroup.get('courseType').setValue(value);
-            });
-
-            this.myControlSport.valueChanges.subscribe(value => {
-              this.courseTypeFormGroup.get('sport').setValue(value);
-            });
-
-            this.myControlStations.valueChanges.subscribe(value => {
-              this.courseInfoFormGroup.get('station').setValue(value);
-            });
-
-            this.courseInfoPriveFormGroup.get('minDuration').valueChanges.subscribe(selectedDuration => {
-              this.updateMaxDurationOptions(selectedDuration);
-            });
-
-            this.courseInfoPriveFormGroup.get('fromHour').valueChanges.subscribe(selectedStartHour => {
-              this.updateToHourOptions(selectedStartHour);
-            });
-
-
-            if (this.defaults.course_type === 2 && this.defaults.is_flexible) {
-              /*this.defaults.course_dates.forEach(element => {
-                this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('YYYY-MM-DD'), dateTo: moment(element.date).format('YYYY-MM-DD'), active: element.active, id: element.id});
-              });*/
-
-              if (this.defaults.settings.periods) {
-
-                this.defaults.settings.periods.forEach((period, periodIdx) => {
-
-                  this.dataSourceDatePrivate.data.push({dateFrom: period.from, dateTo: period.to, active: period.active, id: period.id, main: true, mainPeriod: periodIdx});
-
-                  const from = moment(period.from, 'DD-MM-YYYY').startOf('day');
-                  const to = moment(period.to, 'DD-MM-YYYY').startOf('day');
-
-                  this.defaults.course_dates.forEach(element => {
-                    const current = moment(element.date).startOf('day');
-
-                    if (current.isSame(from) || current.isSame(to) || current.isBetween(from, to)) {
-                      this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('DD-MM-YYYY'), dateTo: moment(element.date).format('DD-MM-YYYY'), active: element.active, id: element.id, main: false, period: periodIdx})
-                    }
-                  })
-                });
-
-              }
-
-              this.dataSourceReductionsPrivate.data = JSON.parse(this.defaults.discounts);
-            }
-            if (this.defaults.course_type === 1) {
-              this.defaults.course_dates.forEach(element => {
-                this.dataSource.data.push({date: moment(element.date).format('YYYY-MM-DD'), hour: element.hour_start,
-                  duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id});
-              });
-
-              if (this.defaults.is_flexible) {
-                this.dataSourceReductions.data = JSON.parse(this.defaults.discounts);
-              }
-            }
-
-
-            setTimeout(() => {
-              if(this.mode == 'create') {
-                this.filterSportsByType();
-              }
-              this.defaults.station_id = this.stations.filter((s) => s.id === this.defaults.station_id)[0];
-              this.loading = false;
-            }, 500);
-          })
-      } else {
-        this.courseTypeFormGroup = this.fb.group({
-
-          sportType: [1, Validators.required], // Posiblemente establezcas un valor predeterminado aquí
-          sport: [null, Validators.required],
-          courseType: [null, Validators.required],
-          separatedDates: [false]
-        })
-
-        this.courseInfoFormGroup = this.fb.group({
-
-          course_name: [null, Validators.required],
-          course_name_en: [null],
-          course_name_de: [null],
-          course_name_es: [null],
-          course_name_it: [null],
-          price: [null],
-          station: [null, Validators.required],
-          summary: [null, Validators.required],
-          description: [null, Validators.required],
-
-          summary_en: [null],
-          description_en: [null],
-          summary_de: [null],
-          description_de: [null],
-          summary_es: [null],
-          description_es: [null],
-          summary_it: [null],
-          description_it: [null],
-          duration: [null],
-          participants: [null],
-          ageFrom: [null],
-          ageTo: [null],
-          image: [null],
-        })
-
-
-        this.courseInfoPriveFormGroup = this.fb.group({
-
-          duration: [null, Validators.required],
-          minDuration: [null],
-          maxDuration: [null],
-          fromHour: [null, Validators.required],
-          toHour: [null, Validators.required],
-          participants: [null, Validators.required],
-          fromDate: [null, Validators.required],
-          toDate: [null, Validators.required],
-          from: [null],
-          to: [null],
-          image: [null],
-          fromDateUnique: [null],
-          toDateUnique: [null],
-          periodeUnique: new FormControl(true),
-          periodeMultiple: new FormControl(false)
-        })
-
-        this.courseLevelFormGroup = this.fb.group({});
-
-        this.courseInfoCollecDateSplitFormGroup = this.fb.group({
-          course_name: [null, Validators.required],
-          course_name_en: [null],
-          course_name_de: [null],
-          course_name_es: [null],
-          course_name_it: [null],
-          price: [null],
-          station: [null, Validators.required],
-          summary: [null, Validators.required],
-          description: [null, Validators.required],
-
-          summary_en: [null],
-          description_en: [null],
-          summary_de: [null],
-          description_de: [null],
-          summary_es: [null],
-          description_es: [null],
-          summary_it: [null],
-          description_it: [null],
-          duration: [null, Validators.required],
-          participants: [null, Validators.required],
-          image: [null],
-        });
-
-        this.courseInfoPriveSeparatedFormGroup = this.fb.group({
-          course_name: [null, Validators.required],
-          course_name_en: [null],
-          course_name_de: [null],
-          course_name_es: [null],
-          course_name_it: [null],
-          price: ['Flexible'],
-          station: [null, Validators.required],
-          summary: [null, Validators.required],
-          description: [null, Validators.required],
-
-          summary_en: [null],
-          description_en: [null],
-          summary_de: [null],
-          description_de: [null],
-          summary_es: [null],
-          description_es: [null],
-          summary_it: [null],
-          description_it: [null],
-          duration: [null, Validators.required],
-          participants: [null, Validators.required],
-          image: [null],
-        });
-
-
-        this.courseConfigForm = this.fb.group({
-
-          fromDate: [null, Validators.required],
-          toDate: [null, Validators.required],
-          from: [null],
-          to: [null],
-          duration: [null],
-          participants: [null, Validators.required],
-        });
-
-        this.filteredOptions = this.myControl.valueChanges
-          .pipe(
-            startWith(''),
-            map(value => this._filter(value))
-          );
-
-        this.filteredStations = this.myControlStations.valueChanges
-          .pipe(
-            startWith(''),
-            map(value => typeof value === 'string' ? value : value.name),
-            map(name => name ? this._filterStations(name) : this.stations.slice())
-          );
-
-        this.filteredSports = this.myControlSport.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.name),
-          map(name => name ? this._filterSport(name) : this.sportData.slice())
-        );
-
-        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
-        );
-
-        this.myControl.valueChanges.subscribe(value => {
-          this.courseTypeFormGroup.get('courseType').setValue(value);
-        });
-
-        this.myControlSport.valueChanges.subscribe(value => {
-          this.courseTypeFormGroup.get('sport').setValue(value);
-        });
-
-        this.myControlStations.valueChanges.subscribe(value => {
-          this.courseInfoFormGroup.get('station').setValue(value);
-        });
-
-        this.courseInfoPriveFormGroup.get('minDuration').valueChanges.subscribe(selectedDuration => {
-          this.updateMaxDurationOptions(selectedDuration);
-        });
-
-        this.courseInfoPriveFormGroup.get('fromHour').valueChanges.subscribe(selectedStartHour => {
-          this.updateToHourOptions(selectedStartHour);
-        });
-
-        this.filterSportsByType();
-        this.loading = false;
-
-      }
-    });
-
-
-  }
-
-  get periodeUnique() {
-    return this.courseInfoPriveFormGroup.get('periodeUnique').value;
-  }
-
-  get periodeMultiple() {
-    return this.courseInfoPriveFormGroup.get('periodeMultiple').value;
-  }
-
-  areAllTrue(obj) {
-    return Object.values(obj).every(value => value === true);
-  }
-
-  onCheckboxChange(type: string) {
-    if (type === 'unique') {
-      this.courseInfoPriveFormGroup.patchValue({ periodeMultiple: false });
-      this.dataSourceDatePrivate.data = [];
-      this.privateDatesTable?.renderRows();
-      this.activityDatesTable?.renderRows();
-
-    } else {
-      this.courseInfoPriveFormGroup.patchValue({ periodeUnique: false });
-    }
-  }
-
-  save() {
-    if (this.mode === 'create') {
-      this.create();
-    } else if (this.mode === 'update') {
-      this.update();
-    }
-  }
-
-  addGroup() {
-    this.groups.push({
-      groupName: '',
-      ageMax: '',
-      ageMin: '',
-      optionName: '',
-      price: ''
-    })
-  }
-
-  removeGroup(index: number) {
-    this.groups.splice(index, 1);
-  }
-
-  sortEventsByDate() {
-    return this.defaults.course_dates.sort((a, b) => {
-      // Convertir las fechas a objetos Date para compararlas
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-
-      return dateA.getTime() - dateB.getTime();
     });
   }
 
-  goTo(route: string) {
-    this.router.navigate([route]);
-  }
-
-
-  filterSportsByType() {
-    this.defaults.sport_id = null;
-    this.sportTypeSelected = this.courseTypeFormGroup.get('sportType').value;
-    let selectedSportType = this.courseTypeFormGroup.get('sportType').value;
-    this.filteredSports = of(this.sportData.filter(sport => sport.sport_type === selectedSportType));
-    this.sportDataList = this.sportData.filter(sport => sport.sport_type === selectedSportType);
-  }
-
-  onFileChanged(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result;
-        this.defaults.image = reader.result;
-      };
-
-      reader.readAsDataURL(file);
-    }
-  }
-
-  isCreateMode() {
-    return this.mode === 'create';
-  }
-
-  isUpdateMode() {
-    return this.mode === 'update';
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
-
-  private _filterStations(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.stations.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
-  displayFn(sportType: any): string {
-    return sportType && sportType.name ? sportType.name : '';
-  }
-
-  displayFnStation(station: any): string {
-    return station && station.name ? station.name : '';
-  }
-
-  displayFnSport(sport: any): string {
-    return sport && sport.name ? sport.name : '';
-  }
-
-  displayFnCourse(course: any): string {
-    return course && course.name ? course.name : '';
-  }
-
-  displayFnLevel(sportType: any): string {
-    return sportType && sportType.annotation && sportType.name ? sportType.annotation + ' - ' + sportType.name : '';
-  }
-
-  displayFnMoniteurs(monitor: any): string {
-    return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
-  }
-
-  private _filterSport(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.sportData.filter(sport => sport.name.toLowerCase().includes(filterValue));
-  }
-
-  private _filterMonitor(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.monitors.filter(monitor => monitor.first_name.toLowerCase().includes(filterValue) || monitor.last_name.toLowerCase().includes(filterValue));
-  }
-
-  generateDurations() {
-    let minutes = 15;
-    const maxMinutes = 7 * 60; // 7 horas en minutos
-    this.durations = [];
-
-    while (minutes <= maxMinutes) {
-      const hours = Math.floor(minutes / 60);
-      const remainingMinutes = minutes % 60;
-
-      const durationString = `${hours ? hours + 'h ' : ''}${remainingMinutes}min`;
-      this.durations.push({ text: durationString, value: minutes });
-
-      minutes += 15;
-    }
-  }
-
-  myHolidayFilter = (d: Date): boolean => {
-    if (d !== null) {
-
-      const time=d.getTime();
-      return !this.myHolidayDates.find(x=>x.getTime()==time);
-    }
-  }
-
-  openDialog(): void {
-    let blockedDays = this.myHolidayDates;
-    if (this.mode === 'update') {
-
-      this.dataSource.data.forEach(element => {
-        if (element.active || element.active === 1) {
-          blockedDays.push(moment(element.date).toDate())
-        }
-      });
-    }
-
-    const dialogRef = this.dialog.open(DateTimeDialogComponent, {
-      width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, dates: this.dataSource.data},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSource.data.push({date: moment(result.date).format('YYYY-MM-DD'), duration: result.duration, hour: result.hour, active: true});
-        this.dateTable?.renderRows();
-
-        /*if (this.mode === 'update') {
-          this.defaults.course_dates.push({date: moment(result.date).format('YYYY-MM-DD'), hour_start: result.hour, hour_end: this.calculateHourEnd(result.hour, result.duration)});
-          this.activeGroupWhenEdit(this.defaults.course_dates[this.defaults.course_dates.length - 1]);
-        }*/
-      }
-    });
-  }
-
-  activeGroupWhenEdit(courseDate: any) {
-    courseDate.active = true;
-    courseDate.course_groups = [];
-    courseDate.course_id = this.id
-    this.defaults.course_dates[0].course_groups.forEach(group => {
-      //courseDate.groups.push(this.generateGroups({id: element.degree_id}));
-      courseDate.course_groups.push(
-        {
-          active: true,
-          teachers_min: group.teachers_min,
-          age_min: group.age_min,
-          age_max: group.age_max,
-          course_subgroups: group.course_subgroups
-        }
-      )
-    });
-  }
-
-  activeGroup(event: any, level: any) {
-
-    this.selectedItem = this.daysDatesLevels[0].dateString;
-    this.selectedDate = this.defaults.course_dates[0]?.date;
-    level.active = event.source.checked;
-
-    if(event.source.checked) {
-      this.defaults.course_dates.forEach(element => {
-        element.groups.push(this.generateGroups(level));
-      });
-
-      this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
-          if (group.degree_id === level.id) {
-            group.active = event.source.checked;
-            group.teachers_min = level.id;
-            group.age_min = level.age_min;
-            group.age_max = level.age_max;
-            group.subgroups.push({
-              degree_id: level.id,
-              monitor_id: null,
-              max_participants: this.defaults.max_participants
-            })
-          }
-
-        });
-      });
-
-      this.checkAvailableMonitors(level);
-    } else {
-      // eliminar el curso o desactivarlo
-
-      this.defaults.course_dates.forEach((element) => {
-        element.groups.forEach((group, idx) => {
-          if (group.degree_id === level.id) {
-            element.groups.splice(idx, 1);
-
-          }
-        });
-      });
-
-
-    }
-
-  }
-
-  editDate(index: any, item: any) {
-    let blockedDays = this.myHolidayDates;
-    if (this.mode === 'update') {
-
-      this.dataSource.data.forEach(element => {
-        if (element.active || element.active === 1) {
-          blockedDays.push(moment(element.date).toDate())
-        }
-      });
-    }
-
-    const dialogRef = this.dialog.open(DateTimeDialogEditComponent, {
-      width: '300px',
-      data: {minDate: this.minDate, maxDate: this.maxDate, holidays: blockedDays, selectedDate: item.date, selectedHour: item.hour.replace(' ', '').split('-')[0], selectedDuration: item.duration},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
-        const dialogRef = this.dialog.open(ConfirmModalComponent, {
-          maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
-          panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-          data: {message: this.translateService.instant('update_date_warning'), title: this.translateService.instant('update_date_warning_title')}
-        });
-
-        dialogRef.afterClosed().subscribe((data: any) => {
-          if (data) {
-            if( this.defaults.course_dates[index]) {
-              this.defaults.course_dates[index].date = moment(result.date).format('YYYY-MM-DD');
-              this.defaults.course_dates[index].hour_start = result.hour;
-              this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
-            }
-
-            if(this.dataSource.data[index]) {
-              this.dataSource.data[index].date = moment(result.date).format('YYYY-MM-DD');
-              this.dataSource.data[index].hour = result.hour;
-              this.dataSource.data[index].duration = result.duration;
-              this.dateTable?.renderRows();
-            }
-
-          }
-        });
-
-      }
-    });
-
-  }
-
-  openDialogReductions(): void {
-    const dialogRef = this.dialog.open(ReductionDialogComponent, {
-      width: '300px',
-      data: {iterations: this.dataSource.data.length}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSourceReductions.data.push({date: result.dateIndex, percentage: result.percentage});
-        this.reductionTable?.renderRows();
-      }
-    });
-  }
-
-  openDialogPrivateReductions(): void {
-    const dialogRef = this.dialog.open(ReductionDialogComponent, {
-      width: '300px',
-      data: {iterations: this.dataSourceDatePrivate.data.length}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSourceReductionsPrivate.data.push({date: result.dateIndex, percentage: result.percentage});
-        this.privateReductionTable?.renderRows();
-      }
-    });
-  }
-
-  openDialogPrivateDate(): void {
-
-    let blockedDays = this.myHolidayDates;
-    if (this.mode === 'update') {
-
-      this.dataSourceDatePrivate.data.forEach(element => {
-        if (element.active || element.active === 1) {
-          blockedDays.push(moment(element.dateFrom).toDate())
-        }
-      });
-    }
-    const dialogRef = this.dialog.open(PrivateDatesDialogComponent, {
-      width: '300px',
-      data: {
-        iterations: this.dataSource.data.length,
-        minDate: this.minDate,
-        maxDate: this.maxDate,
-        holidays: blockedDays
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.defaults.settings.periods.push({from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true})
-        this.dataSourceDatePrivate.data.push({dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true});
-        this.privateDatesTable?.renderRows();
-        this.activityDatesTable?.renderRows();
-        this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
-      }
-    });
-  }
-
-  onChipClick(level: any) {
-    const selectedCourse: any = {
-      annotation: level.annotation,
-      name: level.name
-    };
-    this.selectedCourses.data.push(selectedCourse);
-    this.table.renderRows();
-
-  }
-
-  removeCourse(course: any) {
-
-    let index = -1;
-
-    this.selectedCourses.data.forEach((element, idx) => {
-      if (course.annotation === element.annotation && course.name === element.name) {
-        index = idx;
-      }
-    });
-    if (index > -1) {
-      this.selectedCourses.data.splice(index, 1);
-      this.table.renderRows();
-
-    }
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removeReduction(redcution: any, index: any) {
-    this.dataSourceReductions.data.splice(index, 1);
-    this.reductionTable.renderRows();
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removePrivateReduction(redcution: any, index: any) {
-    this.dataSourceReductionsPrivate.data.splice(index, 1);
-    this.privateReductionTable.renderRows();
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removeteDate(index: any) {
-
-
-    if (this.mode === 'update') {
-      if (this.dataSource.data.length <= 1 || this.dataSource.data.filter(i => i.active).length <= 1) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', {duration: 3000});
-      } else {
-        this.dataSource.data[index].active = false;
-        this.defaults.course_dates[index].active = false;
-        this.dateTable.renderRows();
-      }
-    } else {
-      this.dataSource.data.splice(index, 1);
-      this.dateTable.renderRows();
-    }
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  activateDate(index: any) {
-    if (this.mode === 'update') {
-      this.dataSource.data[index].active = true;
-      this.defaults.course_dates[index].active = true;
-      this.dateTable.renderRows();
-    }
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  removePrivateDate(index: any, main: any, period: any) {
-
-    if (this.mode === 'update') {
-
-      if (main) {
-        this.dataSourceDatePrivate.data[index].active = false;
-        this.defaults.settings.periods[index].active = false;
-        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'DD-MM-YYYY').add(-1, 'd');
-        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'DD-MM-YYYY').add(1, 'd');
-        this.defaults.course_dates.forEach(element => {
-          if (moment(element.date).isBetween(from, to)) {
-
-            element.active = false;
-          }
-        });
-
-        this.dataSourceDatePrivate.data.forEach(element => {
-          if (element.period === period) {
-
-            element.active = false;
-          }
-        });
-        this.privateDatesTable.renderRows();
-this.activityDatesTable.renderRows();
-      } else {
-        this.defaults.course_dates[index - (period+1)].active = false;
-        this.dataSourceDatePrivate.data[index].active = false;
-        this.privateDatesTable.renderRows();
-this.activityDatesTable.renderRows();
-      }
-
-    } else {
-      this.defaults.settings.periods.splice(index, 1);
-      this.dataSourceDatePrivate.data.splice(index, 1);
-      this.privateDatesTable.renderRows();
-this.activityDatesTable.renderRows();
-    }
-
-
-    // Aquí también puedes deseleccionar el chip correspondiente
-  }
-
-  selectSport(sport: any) {
-    this.defaults.sport_id = sport.sport_id;
-    this.courseTypeFormGroup.get("sport").patchValue(sport.sport_id);
-    this.getDegrees();
-  }
-
-  setCourseType(type: string, id: number) {
-
-    this.defaults = {
-      unique: false,
-      course_type: null,
-      is_flexible: this.defaults.is_flexible,
-      name: null,
-      short_description: null,
-      description: null,
-      price: null,
-      currency: '',
-      date_start: null,
-      date_end: null,
-      date_start_res: null,
-      date_end_res: null,
-      confirm_attendance: false,
-      active: true,
-      online: true,
-      image: this.imagePreviewUrl,
-      translations:
-        {
-          es: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          en: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          fr: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          it: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          de: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-        },
-      price_range: this.dataSourceFlexiblePrices,
-      discounts: null,
-      settings: {
-        weekDays: {
-          monday: false,
-          tuesday: false,
-          wednesday: false,
-          thursday: false,
-          friday: false,
-          saturday: false,
-          sunday: false
-        },
-        periods: []
-      },
-      sport_id: this.defaults.sport_id,
-      school_id: null,
-      station_id: null,
-      max_participants: null,
-      duration: null,
-      hour_min: null,
-      hour_max: null,
-      course_dates: [],
-      groups: []
-    };
-
-    this.courseType = type;
-    this.courseTypeFormGroup.get("courseType").patchValue(id);
-    this.defaults.course_type = id;
-
-
-
-    this.courseInfoFormGroup.reset();
-    this.courseInfoPriveFormGroup.reset();
-    this.courseInfoPriveSeparatedFormGroup.reset();
-    this.courseInfoCollecDateSplitFormGroup.reset();
-    this.courseLevelFormGroup.reset();
-    this.courseInfoPriveFormGroup.get("periodeUnique").patchValue(true);
-    if(id ===3) {
-      this.defaults.is_flexible = true
-      this.daysDates = [];
-      this.daysDatesLevels = [];
-    }
-    //this.isAngularHtmlEditing = false;
-  }
-
-  setFlexibility(event: any) {
-    this.defaults.is_flexible = event.target.checked;
-    this.daysDates = [];
-    this.daysDatesLevels = [];
-
-  }
-
-  updateTable(event: any, fromInput = false) {
-    if (fromInput) {
-      this.people = parseInt(event);
-    }
-    this.displayedColumnsFlexiblePrices = ['intervalo']; // Inicializa con la columna de intervalo
-    for (let i = 1; i <= this.people; i++) {
-      this.displayedColumnsFlexiblePrices.push(`${i}`); // Añade columnas para cada persona
-    }
-  }
-
-  formatIntervalo(minutos: number): string {
-    const horas = Math.floor(minutos / 60);
-    const mins = minutos % 60;
-    return `${horas > 0 ? horas + 'h ' : ''}${mins > 0 ? mins + 'm' : ''}`.trim();
-  }
-
-  getSportsType() {
-    return this.crudService.list('/sport-types', 1, 1000).pipe(
-      map(data => data.data)
-    );
-  }
-
-  getSports() {
-    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-      map(sport => sport.data),
-      mergeMap(sports => {
-        return forkJoin(sports.map(element =>
-          this.crudService.get('/sports/' + element.sport_id).pipe(
-            map(data => {
-              element.name = data.data.name;
-              element.icon_selected = data.data.icon_selected;
-              element.icon_unselected = data.data.icon_unselected;
-              element.sport_type = data.data.sport_type;
-              return element;
-            })
-          )
-        ));
-      })
-    );
-  }
-
-  getStations() {
-    return this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-      map(station => station.data),
-      mergeMap(stations => {
-        return forkJoin(stations.map(element =>
-          this.crudService.get('/stations/' + element.station_id).pipe(
-            map(data => data.data)
-          )
-        ));
-      })
-    );
-  }
-
-  getMonitors() {
-    return this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-      map(data => data.data)
-    );
-  }
-
-  getDegrees() {
-    this.groupedByColor = {};
-    this.colorKeys= [];
-    this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
-      .subscribe((data) => {
-        data.data.forEach(element => {
-          if(element.active) {
-            this.levels.push(element);
-          }
-        });
-        this.levels.forEach(level => {
-          if (!this.groupedByColor[level.color]) {
-            this.groupedByColor[level.color] = [];
-          }
-          level.active = false;
-
-          if (this.mode === 'update' && this.defaults.course_type === 1) {
-
-            this.defaults.course_dates.forEach(cs => {
-              cs.course_groups.forEach(group => {
-                if (group.degree_id === level.id) {
-                  level.active = true;
-                  level.old = true;
-                }
-              });
-            });
-            this.selectedItem = this.daysDatesLevels[0]?.dateString;
-          }
-          this.groupedByColor[level.color].push(level);
-        });
-
-        this.colorKeys = Object.keys(this.groupedByColor);
-      })
-  }
-
-  calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
-      const hours = duration.split(' ')[0].replace('h', '');
-      const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
-
-      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
-      const hours = duration.split(' ')[0].replace('h', '');
-
-      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
-    } else {
-      const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
-
-      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
-    }
-  }
-
-  calculateAgeMin(level: any) {
-    let ret = 0;
-    this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          ret = group.age_min;
-        }
-      });
-    });
-
-    return ret;
-  }
-
-  calculateAgeMax(level: any) {
-    let ret = 0;
-    this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          ret = group.age_max;
-        }
-      });
-    });
-
-    return ret;
-  }
-
-  getDatesBetween(startDate, endDate, process, hourStart = null, hourEnd = null) {
-
-    let index = 0;
-    if (process) {
-      this.daysDatesLevels = [];
-      let daysOfWeekAdded = new Set();
-      let currentDate = moment(startDate);
-
-      while (currentDate <= moment(endDate)) {
-        let dayOfWeek = currentDate.format('dddd');
-
-        if (!daysOfWeekAdded.has(dayOfWeek)) {
-          this.daysDates.push(dayOfWeek.toLowerCase());
-
-          /*{
-            date: currentDate.format('YYYY-MM-DD'),
-            dayOfWeek: dayOfWeek.toLowerCase()
-          }*/
-          daysOfWeekAdded.add(dayOfWeek);
-        }
-
-        this.daysDatesLevels.push({date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '')});
-
-        if (this.mode === 'update') {
-          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
-          if (!existDate) {
-            this.defaults.course_dates.push({
-              date: currentDate.format('YYYY-MM-DD'),
-              hour_start: hourStart,
-              hour_end: hourEnd,
-            })
-          } else {
-
-            this.dataSourceDatePrivate.data.forEach(element => {
-              const from = moment(element.dateFrom, 'DD-MM-YYYY').startOf('day');
-              const to = moment(element.dateTo, 'DD-MM-YYYY').startOf('day');
-              const currentDate = moment(existDate.date).startOf('day');
-
-              if (currentDate.isBetween(from, to) || currentDate.isSame(from) || currentDate.isSame(to)) {
-                const idx = this.defaults.course_dates.findIndex((d) => d.id === existDate.id);
-                this.defaults.course_dates[idx].active = element.active;
-              }
-
-            });
-
-          }
-          currentDate = currentDate.add(1, 'days');
-
-        } else {
-          this.defaults.course_dates.push({
-            date: currentDate.format('YYYY-MM-DD'),
-            hour_start: hourStart,
-            hour_end: hourEnd,
-          })
-          currentDate = currentDate.add(1, 'days');
-        }
-        index = index + 1;
-      }
-    }
-
-  }
-
-  getSeparatedDates(dates: any, onLoad: boolean = false) {
-
-    this.daysDates = [];
-    this.daysDatesLevels = [];
-
-    if (this.mode === 'create') {
-
-      this.defaults.course_dates = [];
-    }
-
-    if (this.mode === 'update') {
-      this.dataSource.data.forEach(element => {
-        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
-        if(!existDate) {
-
-          const dataNew = {
-            date: moment(element.date).format('YYYY-MM-DD'),
-            hour_start: element.hour,
-            hour_end: this.calculateHourEnd(element.hour, element.duration),
-            course_groups: []
-          }
-
-          this.defaults.course_dates[0].course_groups.forEach(element => {
-            this.generateGroupForNewDate(dataNew, element);
-          });
-
-          this.defaults.course_dates.push(dataNew)
-        }
-      });
-
-    } else {
-
-      dates.forEach(element => {
-
-        if (!onLoad) {
-          const hour = element.hour;
-          const duration = element.duration;
-          const [hours, minutes] = duration.split(' ').reduce((acc, part) => {
-            if (part.includes('h')) {
-              acc[0] = parseInt(part, 10);
-            } else if (part.includes('min')) {
-              acc[1] = parseInt(part, 10);
-            }
-            return acc;
-          }, [0, 0]);
-
-          this.daysDatesLevels.push({date: moment(element.date).format('YYYY-MM-DD'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
-          if (this.courseType === 'collectif') {
-
-            this.defaults.course_dates.push({
-              date: moment(element.date).format('YYYY-MM-DD'),
-              hour_start: element.hour,
-              hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
-              groups: []
-            })
-          } else {
-
-            this.defaults.course_dates.push({
-              date: moment(element.date).format('YYYY-MM-DD'),
-              hour_start: element.hour,
-              hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
-            })
-
-
-          }
-        } else {
-          this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '')});
-        }
-
-      });
-    }
-
-
-
-
-  }
-
-  generateGroupForNewDate(date: any, group: any) {
-
-    date.course_groups.push({
-      course_id: group.course_id,
-      course_date_id: null,
-      degree_id: group.degree_id,
-      age_min: group.age_min,
-      age_max: group.age_max,
-      recommended_age: group.recommended_age,
-      teacher_min_degree: group.teacher_min_degree,
-      teachers_min: null,
-      teachers_max: null,
-      observations: null,
-      auto: true,
-      course_subgroups: []
-    });
-
-
-    group.course_subgroups.forEach(element => {
-      date.course_groups.forEach(group => {
-        if (group.degree_id === element.degree_id) {
-          group.active = true;
-          group.teachers_min = group.teacher_min_degree;
-          group.ge_min = group.age_min;
-          group.age_max = group.age_max;
-          group.course_subgroups.push({
-            degree_id: element.degree_id,
-            max_participants: element.max_participants
-          })
-        }
-
-      });
-    });
-  }
-
-  updateMaxDurationOptions(selectedMinDuration) {
-    const minDurationValue = this.durations.find(d => d.text === selectedMinDuration)?.value;
-    this.filteredMaxDurations = this.durations.filter(d => d.value >= minDurationValue);
-  }
-
-  updateToHourOptions(selectedStartHour) {
-    const startIndex = this.hours.indexOf(selectedStartHour);
-    this.filteredToHours = this.hours.slice(startIndex + 1);
-  }
-
-  loadData(event: any) {
-    if (event.selectedIndex === 3 && this.defaults.course_type === 1) {
-
-      this.getSeparatedDates(this.dataSource.data);
-    }
-  }
-
-  generateGroups(level: any) {
-    let ret = {};
-    this.levels.forEach(element => {
-      if (element.id === level.id){
-        ret = {
-          course_id: null,
-          course_date_id: null,
-          degree_id: element.id,
-          age_min: null,
-          age_max: null,
-          recommended_age: null,
-          teachers_min: null,
-          teachers_max: null,
-          observations: null,
-          auto: null,
-          subgroups: []
-        }
-      }
-
-    });
-
-    return ret;
-  }
-
-  addSubGroup(level: any) {
-    this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          group.subgroups.push({
-            degree_id: level.id,
-            monitor_id: null,
-            max_participants: group.subgroups && group.subgroups.length > 0 ? group.subgroups[0].max_participants : null
-          })
-        }
-
-      });
-    });
-  }
-
-  readSubGroups(levelId: number) {
-
-    let ret = [];
-    this.defaults.course_dates[0].groups.forEach((group) => {
-      if (group.degree_id === levelId) {
-        ret = group.subgroups;
-      }
-    });
-
-    return ret;
-  }
-
-  setLevelTeacher(level: any) {
-    this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          group.teachers_min = level.id;
-        }
-
-      });
-    });
-  }
-
-  setMinAge(event: any, level: any) {
-    if (+event.target.value >= 3) {
-
-      this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
-          if (level.id === group.degree_id) {
-            group.age_min = +event.target.value;
-          }
-
-        });
-      });
-    }
-  }
-
-  setMaxAge(event: any, level: any) {
-    if (+event.target.value < 81) {
-      this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
-          if (level.id === group.degree_id) {
-            group.age_max = +event.target.value;
-          }
-
-        });
-      });
-    }
-  }
-
-
-  calculateFormattedDuration(hourStart: string, hourEnd: string): string {
-    // Parsea las horas de inicio y fin
-    let start = moment(hourStart, "HH:mm");
-    let end = moment(hourEnd, "HH:mm");
-
-    // Calcula la duración
-    let duration = moment.duration(end.diff(start));
-
-    // Formatea la duración
-    let formattedDuration = "";
-    if (duration.hours() > 0) {
-      formattedDuration += duration.hours() + "h ";
-    }
-    if (duration.minutes() > 0) {
-      formattedDuration += duration.minutes() + "m";
-    }
-
-    return formattedDuration.trim();
-  }
-
-  getMonitorValue(level: any, subGroupIndex: number, daySelectedIndex: number) {
-
-    let ret = null;
-    if(!level.old) {
-      this.defaults.course_dates.forEach(courseDate => {
-
-        if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
-          courseDate.groups.forEach(group => {
-            if (group.degree_id === level.id) {
-              ret = group.subgroups[subGroupIndex]?.monitor;
-            }
-          });
-        }
-      });
-
-    } else {
-      this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
-        if (group.degree_id === level.id) {
-          ret = group?.subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group?.subgroups[subGroupIndex]?.monitor?.last_name;
-        }
-
-      });
-    }
-
-
-    return ret;
-  }
-
-  calculateMonitorLevel(level: any) {
-    let ret = 0;
-    this.defaults.course_dates.forEach(courseDate => {
-      courseDate.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          ret = level;
-        }
-      });
-    });
-
-    return ret;
-  }
-
-  calculateSubGroupPaxes(level: any) {
+  getSubGroups(levelId: any) {
     let ret = 0;
 
-    this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          group.subgroups.forEach(subgroup => {
-
-            ret = ret + subgroup.max_participants;
-          });
-        }
-
-      });
-    });
-
-    return ret;
-  }
-
-  checkIfExistInDate(daySelectedIndex, monitor, level) {
-
-    let blocked = false;
-    this.defaults.course_dates[daySelectedIndex].groups.forEach(gs => {
-      if (!blocked) {
-        gs.subgroups.forEach(sbs => {
-          if (sbs.monitor_id === monitor.id) {
-            blocked = true;
-          }
-        });
-      }
-
-    });
-
-    return blocked;
-  }
-
-  setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
-
-    let monitorSet = false;
-    if (event.isUserInput) {
-
-      if (!level.old) {
-        this.defaults.course_dates.forEach(courseDate => {
-          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
-            courseDate.groups.forEach(group => {
-              if(group.degree_id === level.id && !monitorSet) {
-
-                group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-                group.subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
-                monitorSet = true;
-              }
-            });
-          }
-        });
-      } else {
-        this.defaults.course_dates[daySelectedIndex].groups.forEach(group => {
-          if (group.degree_id === level.id) {
-            group.subgroups[subGroupSelectedIndex].monitor = monitor;
-            group.subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-          }
-
-        });
-      }
-
-    }
-  }
-
-  calculateMaxGroup(level: any) {
-    let ret = 0;
-    this.defaults.course_dates.forEach(courseDate => {
+    this.detailData.course_dates.forEach(courseDate => {
+      let find = false;
       courseDate.course_groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          ret = group.course_subgroups[0].max_participants;
+        if (group.degree_id === levelId && !find) {
+          ret = group.course_subgroups[0]?.max_participants;
+          find = true;
         }
       });
+
     });
 
     return ret;
   }
+  displayFn = (value: any): string => value
+  getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
+  getMonitors = () => this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(map(data => data.data));
+  getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
+    map(sport => sport.data),
+    mergeMap(sports =>
+      forkJoin(sports.map(element =>
+        this.crudService.get('/sports/' + element.sport_id).pipe(
+          map(data => {
+            element.name = data.data.name;
+            element.icon_selected = data.data.icon_selected;
+            element.icon_unselected = data.data.icon_unselected;
+            element.sport_type = data.data.sport_type;
+            return element;
+          })
+        )
+      ))
+    )
+  );
+  getStations = () => this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
+    map(station => station.data),
+    mergeMap(stations => forkJoin(stations.map(element => this.crudService.get('/stations/' + element.station_id).pipe(map(data => data.data)))))
+  );
+  getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseFormGroup.controls['sport_id'].value).subscribe((data) => {
+    this.levels = []
+    data.data.forEach(element => element.active ? this.levels.push(element) : null);
+    const levelGrop = []
+    this.levels.forEach(level => {
+      levelGrop.push({ ...level, id: level.id, age_min: 0, age_max: 0, PartMax: 0, Subgrupo: 0, active: false })
+      level.active = false
+    })
+    this.courseFormGroup.patchValue({ levelGrop })
+  });
 
-  setSubGroupPax(event: any, level: any) {
-
-    if (+event.target.value > this.defaults.max_participants) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', {duration: 3000});
-      this.defaults.course_dates.forEach(element => {
-        element.groups.forEach(group => {
-          if (level.id === group.degree_id) {
-            group.subgroups.forEach(subGroup => {
-              subGroup.max_participants = this.defaults.max_participants;
-            });
-          }
-        });
-      });
-    }
-
-    level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
-
-    this.defaults.course_dates.forEach(element => {
-      element.groups.forEach(group => {
-        if (level.id === group.degree_id) {
-          group.subgroups.forEach(subGroup => {
-            subGroup.max_participants =level.max_participants;
-          });
-        }
-      });
-    });
-  }
-
-  selectItem(item: any, index: any, subGroupIndex: any, level) {
-    this.subGroupSelectedIndex = null;
-    this.selectedItem = item.dateString;
-    this.selectedDate = item.date;
-    this.daySelectedIndex = index;
-    this.subGroupSelectedIndex = subGroupIndex;
-
-    this.checkAvailableMonitors(level);
-  }
-
-  setStation(station: any) {
-    this.defaults.station_id = station.id;
-  }
-
-  addWeekDay(event: any, day: string) {
-    if (day === 'all') {
-      this.defaults.settings.weekDays.monday = event.source.checked;
-      this.defaults.settings.weekDays.tuesday = event.source.checked;
-      this.defaults.settings.weekDays.wednesday = event.source.checked;
-      this.defaults.settings.weekDays.thursday = event.source.checked;
-      this.defaults.settings.weekDays.friday = event.source.checked;
-      this.defaults.settings.weekDays.saturday = event.source.checked;
-      this.defaults.settings.weekDays.sunday = event.source.checked;
-    } else {
-      this.defaults.settings.weekDays[day] = event.source.checked;
-    }
-  }
-
-  setDebut(hour: any) {
-    this.defaults.course_dates.forEach(element => {
-      element.hour_start = hour;
-    });
-  }
-
-  setHourEnd(hour: any) {
-    this.defaults.course_dates.forEach(element => {
-      element.hour_end = hour;
-    });
-  }
-
-  create() {
-
-    if (this.defaults.course_type  !== 1) {
-      this.checkStep3PrivateNoFlex();
-      this.setDebut(this.defaults.hour_min);
-      this.setHourEnd(this.defaults.hour_max);
-    }
-
-    let data: any = [];
-
-    let courseDates = [];
-
-    if (this.courseType === 'collectif') {
-      this.defaults.course_dates.forEach(dates => {
-        const group = [];
-        dates.groups.forEach(dateGroup => {
-          if (dateGroup.subgroups.length > 0) {
-            group.push(dateGroup);
-          }
-        });
-        dates.groups = group;
-      });
-    } else {
-      courseDates = this.defaults.course_dates;
-    }
-
-    let settings = JSON.parse(this.user.schools[0].settings);
-    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.translations.fr.name,
-        short_description: this.defaults.translations.fr.short_description,
-        description: this.defaults.translations.fr.description,
-        price: this.defaults.price,
-        currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
-        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        confirm_attendance: false,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        translations: JSON.stringify(this.defaults.translations),
-        discounts: JSON.stringify(this.dataSourceReductions.data),
-        sport_id: this.defaults.sport_id,
-        school_id: this.user.schools[0].id, //sacar del global
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
-      }
-      console.log(data);
-
-    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.translations.fr.name,
-        short_description: this.defaults.translations.fr.short_description,
-        description: this.defaults.translations.fr.description,
-        price: this.defaults.price,
-        currency:  settings?.taxes?.currency || 'CHF',//poner currency de reglajes
-        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        confirm_attendance: false,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        translations: JSON.stringify(this.defaults.translations),
-        sport_id: this.defaults.sport_id,
-        school_id: this.user.schools[0].id, //sacar del global
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
-      }
-      console.log(data);
-    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
-
-      if (this.periodeUnique) {
-
-        this.getDatesBetween(this.defaults.date_start, this.defaults.date_end, true, this.defaults.hour_min, this.defaults.hour_max);
-      }
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.translations.fr.name,
-        short_description: this.defaults.translations.fr.short_description,
-        description: this.defaults.translations.fr.description,
-        price: 0,
-        currency:  settings?.taxes?.currency || 'CHF',
-        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: JSON.stringify(this.defaults.translations),
-        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
-        price_range: this.dataSourceFlexiblePrices,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        age_min: this.defaults.age_min,
-        age_max: this.defaults.age_max,
-        course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings),
-        unique: this.periodeUnique,
-        hour_min: this.defaults.hour_min,
-        hour_max: this.defaults.hour_max,
-      };
-      console.log(data);
-    } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
-      this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.translations.fr.name,
-        short_description: this.defaults.translations.fr.short_description,
-        description: this.defaults.translations.fr.description,
-        price: this.defaults.price,
-        currency:  settings?.taxes?.currency || 'CHF',
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: JSON.stringify(this.defaults.translations),
-        price_range: null,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        age_min: this.defaults.age_min,
-        age_max: this.defaults.age_max,
-        course_dates: this.defaults.course_dates,
-        hour_min: this.defaults.hour_min,
-        hour_max: this.defaults.hour_max,
-        settings: JSON.stringify(this.defaults.settings)
-      };
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
-
-      if (this.periodeUnique) {
-
-        this.getDatesBetween(this.defaults.date_start, this.defaults.date_end, true, this.defaults.hour_min, this.defaults.hour_max);
-      }
-      if(this.groups) {
-        this.defaults.settings.groups = this.groups;
-      }
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.translations.fr.name,
-        short_description: this.defaults.translations.fr.short_description,
-        description: this.defaults.translations.fr.description,
-        price: 0,
-        currency:  settings?.taxes?.currency || 'CHF',
-        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: JSON.stringify(this.defaults.translations),
-        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
-        price_range: this.dataSourceFlexiblePrices,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        age_min: this.defaults.age_min,
-        age_max: this.defaults.age_max,
-        course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings),
-        unique: this.periodeUnique,
-        hour_min: this.defaults.hour_min,
-        hour_max: this.defaults.hour_max,
-      };
-      console.log(data);
-    }
-    data.school_id = this.user.schools[0].id;
-
-    this.crudService.create('/admin/courses', data)
-      .subscribe((res) => {
-        console.log(res);
-        this.goTo('/courses');
-      },error => {
-        console.log(error);
-        this.snackbar.open(error.error.message, 'OK', {duration: 5000})
-
+  Confirm(add: number) {
+    this.ModalFlux += add
+    if (this.ModalFlux === 1) {
+      if (!this.courseFormGroup.controls["course_type"].value) this.courseFormGroup.patchValue({ course_type: 1 })
+      this.courseFormGroup.patchValue({
+        icon: this.sportData.find((a: any) => a.sport_id === this.courseFormGroup.controls['sport_id'].value).icon_unselected
       })
-
-  }
-
-  update() {
-    if (this.defaults.course_type  === 2 ) {
-      this.checkStep3PrivateNoFlex();
-      this.setDebut(this.defaults.hour_min);
-      this.setHourEnd(this.defaults.hour_max);
-    }
-
-    let data: any = [];
-
-    let dates: any = [];
-    let sortedDates: any = [];
-
-    if (this.defaults.course_type === 2 && this.defaults.is_flexible && this.periodeMultiple) {
-      dates = this.dataSourceDatePrivate.data.filter((date) => date.active || date.active === 1);
-      sortedDates = dates.map(d => moment(d.dateFrom, 'DD-MM-YYYY').toDate()).sort((a, b) => a - b);
-    } else {
-
-      dates = this.dataSource.data.filter((date) => date.active || date.active === 1);
-      sortedDates = dates.map(d => new Date(d.date)).sort((a, b) => a - b);
-    }
-
-    let lowestDate = moment(sortedDates[0]).format('YYYY-MM-DD');
-    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
-
-    if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
-      this.defaults.date_start_res = this.defaults.date_start;
-      this.defaults.date_end_res = this.defaults.date_end;
-      this.getSeparatedDates(this.defaults.course_dates);
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: this.defaults.price,
-        currency:  this.defaults.currency,//poner currency de reglajes
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        confirm_attendance: false,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        translations: JSON.stringify(this.defaults.translations),
-        discounts: JSON.stringify(this.dataSourceReductions.data),
-        sport_id: this.defaults.sport_id,
-        school_id: null, //sacar del global
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
-      }
-      console.log(data);
-
-    } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
-      this.defaults.date_start_res = this.defaults.date_start;
-      this.defaults.date_end_res = this.defaults.date_end;
-      this.getSeparatedDates(this.defaults.course_dates);
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: this.defaults.price,
-        currency:  this.defaults.currency,//poner currency de reglajes
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        confirm_attendance: false,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        translations: JSON.stringify(this.defaults.translations),
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id, //sacar del global
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        course_dates: this.defaults.course_dates
-      }
-      console.log(data);
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: 0,
-        currency:  this.defaults.currency,
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: JSON.stringify(this.defaults.translations),
-        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
-        price_range: this.dataSourceFlexiblePrices,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        age_min: this.defaults.age_min,
-        age_max: this.defaults.age_max,
-        course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings),
-        unique: this.periodeUnique,
-        hour_min: this.defaults.hour_min,
-        hour_max: this.defaults.hour_max,
-      };
-      console.log(data);
-    } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
-      this.getDatesBetween(this.defaults.course_dates[0].date, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
-      let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
-
-      let lowestDateP = moment(sortedDates[0]).format('YYYY-MM-DD');
-      let highestDateP = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
-
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: this.defaults.price,
-        currency:  this.defaults.currency,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start: lowestDateP,
-        date_end: highestDateP,
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: JSON.stringify(this.defaults.translations),
-        price_range: null,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        age_min: this.defaults.age_min,
-        age_max: this.defaults.age_max,
-        course_dates: this.defaults.course_dates,
-        hour_min: this.defaults.hour_min,
-        hour_max: this.defaults.hour_max,
-        settings: JSON.stringify(this.defaults.settings)
-      };
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
-      if(this.groups) {
-        this.defaults.settings.groups = this.groups;
-      }
-      data = {
-        course_type: this.defaults.course_type,
-        is_flexible: this.defaults.is_flexible,
-        name: this.defaults.name,
-        short_description: this.defaults.short_description,
-        description: this.defaults.description,
-        price: 0,
-        currency:  this.defaults.currency,
-        date_start: lowestDate,
-        date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        active: this.defaults.active,
-        online: this.defaults.online,
-        options: this.defaults.options,
-        image: this.imagePreviewUrl,
-        confirm_attendance: false,
-        translations: JSON.stringify(this.defaults.translations),
-        discounts: JSON.stringify(this.dataSourceReductionsPrivate.data),
-        price_range: this.dataSourceFlexiblePrices,
-        sport_id: this.defaults.sport_id,
-        school_id: this.defaults.school_id,
-        station_id: this.defaults.station_id.id,
-        max_participants: this.defaults.max_participants,
-        duration: this.defaults.duration,
-        age_min: this.defaults.age_min,
-        age_max: this.defaults.age_max,
-        course_dates: this.defaults.course_dates,
-        settings: JSON.stringify(this.defaults.settings),
-        unique: this.periodeUnique,
-        hour_min: this.defaults.hour_min,
-        hour_max: this.defaults.hour_max,
-      };
-      console.log(data);
-    }
-    data.school_id = this.user.schools[0].id;
-
-    this.crudService.update('/admin/courses', data, this.id)
-      .subscribe((res) => {
-        console.log(res);
-        this.goTo('/courses');
-      }, (error) => {
-        this.snackbar.open(error.error.message, 'OK', {duration: 5000})
-      })
-  }
-  async translateCurrentTabToOthers() {
-    const fieldsToTranslate = ['name', 'short_description', 'description'];
-    const languages = ['fr', 'en', 'de', 'es', 'it'];
-
-    for (let index = 0; index < languages.length; index++) {
-      this.selectedTabDescIndex = index;
-      this.cdRef.detectChanges();
-
-      // Esperar a que la pestaña se renderice completamente
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      this.cdRef.detectChanges();
-
-      const sourceLang = languages[index];
-
-      for (const field of fieldsToTranslate) {
-        const sourceText = this.defaults.translations[sourceLang][field];
-        if (!sourceText) continue;
-
-        const targetLanguages = languages.filter(lang => lang !== sourceLang);
-
-        const translationObservables = targetLanguages.map(targetLang => {
-          const newValue = this.decodeHtmlEntities(sourceText);
-          return this.crudService.translateText(newValue, targetLang.toUpperCase())
-            .pipe(
-              map((response: any) => ({
-                lang: targetLang,
-                field: field,
-                translatedText: response.data.translations[0].text
-              }))
-            );
-        });
-
-        forkJoin(translationObservables).subscribe(translations => {
-          translations.forEach(translation => {
-            const { lang, field, translatedText } = translation;
-
-            if (field !== 'name') {
-              // Cambiar al modo de edición de HTML
-              const toggleEditorModeButton = document.getElementById('toggleEditorMode-' + field + '_' + lang);
-              if (toggleEditorModeButton) {
-                toggleEditorModeButton.click();
-              }
-
-              this.defaults.translations[lang][field] = translatedText;
-
-              // Insertar el texto traducido
-              const editorElement = document.getElementById('sourceText' + field + '_' + lang);
-              if (editorElement) {
-                editorElement.innerHTML = this.encodeHtmlEntities(translatedText);
-
-                // Regresar al modo de edición de WYSIWYG
-                if (toggleEditorModeButton) {
-                  toggleEditorModeButton.click();
-                }
-              }
-            } else {
-              this.defaults.translations[lang][field] = translatedText;
-            }
-          });
-
-          this.cdRef.detectChanges();
-        });
-      }
-
-      // Esperar antes de pasar a la siguiente pestaña
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
-  }
-
-  decodeHtmlEntities(encodedString: string): string {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = encodedString;
-    return textarea.value;
-  }
-
-  encodeHtmlEntities(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  getField(language: string, field: string): string {
-    return `${field}_${language}`;
-  }
-
-  checkStep2PrivateNoFlex(stepper: MatStepper) {
-    if(this.defaults.translations.fr.name === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.price === null && !this.defaults.is_flexible) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.myControlStations.value === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.age_min === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.min_age'), 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.age_max=== null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.max_age'), 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.translations.fr.short_description === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', {duration: 3000})
-      return;
-    }
-
-    if(this.defaults.translations.fr.description === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', {duration: 3000})
-      return;
-    }
-
-    stepper.next();
-
-  }
-
-  checkStep3PrivateNoFlex() {
-    if (this.defaults.date_start_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.date_end_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.duration === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.max_participants === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.hour_min === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.hour_max === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', {duration: 3000});
-      return;
-    }
-
-  }
-
-
-  checkStep3PrivateFlex(stepper: MatStepper) {
-    if (this.defaults.date_start_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_from'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.date_end_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_res_to'), 'OK', {duration: 3000});
-      return;
-    }
-    if (!this.periodeMultiple && this.defaults.date_start === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (!this.periodeMultiple && this.defaults.date_end === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
-      return;
-    }
-
-
-    if (this.defaults.duration === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.duration'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.max_participants === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.hour_min === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_from'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.hour_max === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.hour_to'), 'OK', {duration: 3000});
-      return;
-    }
-
-    stepper.next();
-    this.updateTable(this.defaults.max_participants, true);
-    return true;
-  }
-
-
-  checkStep2ColectiveNoFlex(stepper: MatStepper) {
-    if (this.mode === 'create') {
-      if(this.defaults.translations.fr.name === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.coursename'), 'OK', {duration: 3000})
-        return;
-      }
-
-      if(this.defaults.price === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.price'), 'OK', {duration: 3000})
-        return;
-      }
-
-      if(this.myControlStations.value === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.station'), 'OK', {duration: 3000})
-        return;
-      }
-
-      if(this.defaults.translations.fr.short_description === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.summary'), 'OK', {duration: 3000})
-        return;
-      }
-
-      if(this.defaults.translations.fr.description === null) {
-        this.snackbar.open(this.translateService.instant('snackbar.course.desc'), 'OK', {duration: 3000})
-        return;
-      }
-
-      stepper.next();
-    } else {
-      this.update();
-    }
-
-  }
-
-  checkStep3ColectiveNoFlex(stepper: MatStepper) {
-
-    if (this.defaults.date_start_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_from'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.date_end_res === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.date_to'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.defaults.max_participants === null) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.pax'), 'OK', {duration: 3000});
-      return;
-    }
-
-    if (this.dataSource.data.length < 1) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.dates'), 'OK', {duration: 3000});
-      return;
-    }
-
-    stepper.next();
-  }
-
-  onTabNameChanged(event: any) {
-    this.selectedTabNameIndex = event.index;
-    this.selectedTabDescIndex = event.index;
-  }
-
-  onTabDesChanged(event: any) {
-    this.selectedTabDescIndex = event.index;
-    this.selectedTabNameIndex = event.index;
-  }
-
-  checkAvailableMonitors(level: any) {
-    this.loadingMonitors = true;
-    let minDegree = 0;
-    this.defaults.course_dates[this.daySelectedIndex].groups.forEach(element => {
-      if (element.degree_id === level.id) {
-        minDegree = element.teachers_min;
-      }
-    });
-    const data = {
-      sportId: this.defaults.sport_id,
-      minimumDegreeId: minDegree,
-      startTime: this.dataSource.data[this.daySelectedIndex].hour,
-      endTime: this.calculateHourEnd(this.dataSource.data[this.daySelectedIndex].hour, this.dataSource.data[this.daySelectedIndex].duration),
-      date: this.daysDatesLevels[this.daySelectedIndex].date
-    };
-
-    this.crudService.post('/admin/monitors/available', data)
-      .subscribe((response) => {
-        this.monitors = response.data;
-        this.filteredMonitors = this.monitorsForm.valueChanges.pipe(
-          startWith(''),
-          map((value: any) => typeof value === 'string' ? value : value?.full_name),
-          map(full_name => full_name ? this._filterMonitor(full_name) : this.monitors.slice())
-        );
-
-        this.loadingMonitors = false;
-      })
-  }
-
-  toDate(date) {
-    return moment(date).toDate()
-  }
-
-  encontrarPrimeraCombinacionConValores(data: any) {
-    if (data !== null) {
-      for (const intervalo of data) {
-        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
-        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
-          return intervalo;
-        }
-      }
-      return null; // Devuelve null si no encuentra ninguna combinación válida
-    }
-
-  }
-
-  encontrarPrimeraClaveConValor(obj: any): string | null {
-    if (obj !== null) {
-      for (const clave of Object.keys(obj)) {
-        if (obj[clave] !== null && clave !== 'intervalo') {
-          return obj[clave];
-        }
-      }
-      return null;
-    }
-
-  }
-
-  selectPeriod(data: any, isMain: boolean) {
-    if (isMain) {
-      if (data !== this.selectedPeriod) {
-        this.selectedPeriod = data;
-      } else {
-        this.selectedPeriod = -1;
+      this.getDegrees();
+    } else if (this.ModalFlux === 2) {
+      if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
+        this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
+      if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })
+      this.getDegrees();
+    } else if (this.ModalFlux === 3) {
+      if (this.courseFormGroup.controls["categoryPart"].value.length === 0) {
+        this.courseFormGroup.patchValue({
+          categoryPart: [{
+            name: "",
+            age_min: this.courseFormGroup.controls["age_min"].value || 0,
+            age_max: this.courseFormGroup.controls["age_max"].value || 99,
+            num_min: this.courseFormGroup.controls["participants"].value || 0,
+            num_max: this.courseFormGroup.controls["participants"].value || 0,
+          }]
+        })
       }
     }
-
+    else if (this.ModalFlux === 4) {
+      if (!this.courseFormGroup.controls["course_name_es"].value) {
+        this.courseFormGroup.patchValue({
+          course_name_es: this.courseFormGroup.controls["course_name"].value,
+          summary_es: this.courseFormGroup.controls["course_name"].value,
+          description_es: this.courseFormGroup.controls["course_name"].value,
+          course_name_fr: this.courseFormGroup.controls["course_name"].value,
+          summary_fr: this.courseFormGroup.controls["course_name"].value,
+          description_fr: this.courseFormGroup.controls["course_name"].value,
+          course_name_en: this.courseFormGroup.controls["course_name"].value,
+          summary_en: this.courseFormGroup.controls["course_name"].value,
+          description_en: this.courseFormGroup.controls["course_name"].value,
+          course_name_de: this.courseFormGroup.controls["course_name"].value,
+          summary_de: this.courseFormGroup.controls["course_name"].value,
+          description_de: this.courseFormGroup.controls["course_name"].value,
+          course_name_it: this.courseFormGroup.controls["course_name"].value,
+          summary_it: this.courseFormGroup.controls["course_name"].value,
+          description_it: this.courseFormGroup.controls["course_name"].value,
+        })
+      }
+    }
+    else if (this.ModalFlux === 6) {
+      this.ModalFlux--
+      this.confirmModal = true
+    }
   }
+
+  find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
+  selectLevel = (event: any, i: number) => {
+    const levelGrop = this.courseFormGroup.controls['levelGrop'].value
+    levelGrop[i].active = event.target.checked
+    levelGrop[i].age_min = this.courseFormGroup.controls['age_min'].value || 0
+    levelGrop[i].age_max = this.courseFormGroup.controls['age_max'].value || 99
+    levelGrop[i].PartMax = this.courseFormGroup.controls['participants'].value || 0
+    this.courseFormGroup.patchValue({ levelGrop })
+  }
+  addLevelSubgroup = (i: number, add: number) => {
+    const levelGrop = this.courseFormGroup.controls['levelGrop'].value
+    levelGrop[i].Subgrupo = levelGrop[i].Subgrupo + add
+    this.courseFormGroup.patchValue({ levelGrop })
+  }
+  selectExtra = (event: any, item: any) => {
+    const extras = this.courseFormGroup.controls['extras'].value
+    if (event.checked || !extras.find((a: any) => a.id === item.id)) this.courseFormGroup.patchValue({ extras: [...extras, item] })
+    else this.courseFormGroup.patchValue({ extras: extras.filter((a: any) => a.id !== item.id) })
+  }
+  selectAllweek = (event: any) => {
+    const settings = this.courseFormGroup.controls['settings'].value
+    settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
+    this.courseFormGroup.patchValue({ settings })
+  }
+
 }
