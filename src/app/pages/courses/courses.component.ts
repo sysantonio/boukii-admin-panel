@@ -8,7 +8,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import jsPDF from 'jspdf';
 import * as QRCode from 'qrcode';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -16,7 +15,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
-
 export class CoursesComponent {
 
   showDetail: boolean = false;
@@ -26,9 +24,9 @@ export class CoursesComponent {
   selectedGroup: any = [];
   monitors: any = [];
   groupedByColor = {};
-  user: any;
+  user:any;
   imageAvatar = '../../../assets/img/avatar.png';
-  colorKeys: string[] = [];
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
 
   createComponent = CoursesCreateUpdateComponent;
   entity = '/admin/courses';
@@ -36,9 +34,10 @@ export class CoursesComponent {
   icon = '../../../assets/img/icons/cursos.svg';
 
   columns: TableColumn<any>[] = [
+    //{ label: '', property: 'qr', type: 'qr', visible: true },
     { label: 'Id', property: 'id', type: 'text', visible: true },
     { label: 'type', property: 'course_type', type: 'course_image', visible: true },
-    { label: 'course', property: 'translations', type: 'trads', visible: true },
+    { label: 'course', property: 'translations', type: 'trads', visible: true},
     { label: 'sport', property: 'sport', type: 'sport', visible: true },
     { label: 'FX-FI', property: 'is_flexible', type: 'flexible', visible: true },
     { label: 'dates', property: 'course_dates', type: 'datesCourse', visible: true },
@@ -52,98 +51,70 @@ export class CoursesComponent {
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
-  constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService, private snackbar: MatSnackBar, private fb: UntypedFormBuilder) {
+  constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.getMonitors();
   }
 
-  courseFormGroup: UntypedFormGroup;
-
   showDetailEvent(event: any) {
+
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.detailData = event.item;
+
       this.groupedByColor = {};
-      this.colorKeys = [];
-      this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id=' + this.detailData.sport_id)
+      this.colorKeys= [];
+      this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id='+ this.detailData.sport_id)
         .subscribe((data) => {
           this.detailData.degrees = [];
           data.data.forEach(element => {
-            if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
-
+            if(element.active) {
+              this.detailData.degrees.push(element);
+            }
           });
-          this.detailData.degrees.forEach(level => {
+
+
+           this.detailData.degrees.forEach(level => {
             if (!this.groupedByColor[level.color]) {
               this.groupedByColor[level.color] = [];
             }
             level.active = false;
+
+
             this.detailData.course_dates.forEach(cs => {
               cs.course_groups.forEach(group => {
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
-                } level.visible = false;
+                }
+                level.visible = false;
               });
             });
             this.groupedByColor[level.color].push(level);
           });
-          this.colorKeys = Object.keys(this.groupedByColor);
-          this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
-            .subscribe((st) => {
-              st.data.forEach(element => {
-                if (element.id === this.detailData.station_id) this.detailData.station = element
-              });
-              this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
-                .subscribe((bookingUser) => {
-                  this.detailData.users = [];
-                  this.detailData.users = bookingUser.data;
-                  console.log(this.detailData)
-                  this.courseFormGroup = this.fb.group({
-                    id: [this.detailData.id, Validators.required], //Solo listado
-                    user: [this.detailData.user ? this.detailData.user.username + " (" + this.detailData.user.first_name + " " + this.detailData.user.last_name + ")" : "", Validators.required], //Solo listado
-                    created_at: [this.detailData.created_at, Validators.required], //Solo listado
-                    active: [this.detailData.active, Validators.required], //Solo listado
-                    online: [this.detailData.online, Validators.required], //Solo listado
-                    sport_id: [this.detailData.sport_id, Validators.required],
-                    course_type: [this.detailData.course_type, Validators.required],
-                    course_name: [this.detailData.name, Validators.required],
-                    summary: [this.detailData.short_description, Validators.required],
-                    description: [this.detailData.description, Validators.required],
-                    course_name_es: ["", Validators.required],
-                    summary_es: ["", Validators.required],
-                    description_es: ["", Validators.required],
-                    course_name_fr: ["", Validators.required],
-                    summary_fr: ["", Validators.required],
-                    description_fr: ["", Validators.required],
-                    course_name_en: ["", Validators.required],
-                    summary_en: ["", Validators.required],
-                    description_en: ["", Validators.required],
-                    course_name_de: ["", Validators.required],
-                    summary_de: ["", Validators.required],
-                    description_de: ["", Validators.required],
-                    course_name_it: ["", Validators.required],
-                    summary_it: ["", Validators.required],
-                    description_it: ["", Validators.required],
-                    price: [this.detailData.price, Validators.required],
-                    participants: [this.detailData.max_participants, Validators.required],
-                    img: [this.detailData.image, Validators.required],
-                    icon: [this.detailData.sport.icon_unselected, Validators.required],
-                    age_max: [this.detailData.age_max, Validators.required],
-                    age_min: [this.detailData.age_min, Validators.required],
-                    reserve_from: [this.detailData.date_start, Validators.required],
-                    reserve_to: [this.detailData.date_end, Validators.required],
-                    duration_min: [this.detailData.duration, Validators.required],
-                    reserve_date: [this.detailData.course_dates, Validators.required],
-                    discount: [[], Validators.required],
-                    extras: [[], Validators.required],
-                    levelGrop: [this.detailData.degrees, Validators.required],
-                    settings: [JSON.parse(this.detailData.settings), Validators.required],
-                  });
 
-                  this.showDetail = true;
-                })
-            })
+          this.colorKeys = Object.keys(this.groupedByColor);
+          this.showDetail = true;
         });
-    } else this.showDetail = event.showDetail;
+
+        this.crudService.list('/stations', 1, 10000,  'desc', 'id', '&school_id=' + this.detailData.school_id)
+          .subscribe((st) => {
+            st.data.forEach(element => {
+              if (element.id === this.detailData.station_id) {
+                this.detailData.station = element;
+              }
+            });
+          })
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id='+ this.detailData.id)
+          .subscribe((bookingUser) => {
+            this.detailData.users = [];
+            this.detailData.users = bookingUser.data;
+            this.showDetail = true;
+
+          })
+    } else {
+      this.showDetail = event.showDetail;
+    }
+
   }
 
   calculateFormattedDuration(hourStart: string, hourEnd: string): string {
@@ -167,7 +138,7 @@ export class CoursesComponent {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((monitor) => {
         this.monitors = monitor.data;
       })
@@ -190,6 +161,7 @@ export class CoursesComponent {
       }
       return null;
     }
+
   }
 
   encontrarPrimeraCombinacionConValores(data: any, course: any) {
@@ -202,6 +174,7 @@ export class CoursesComponent {
       }
       return null; // Devuelve null si no encuentra ninguna combinación válida
     }
+
   }
 
   getStudents(levelId: any) {
@@ -212,18 +185,22 @@ export class CoursesComponent {
         ret = ret + 1;
       }
     });
+
     return ret;
   }
 
   getMaxStudents(levelId: any) {
     let ret = 0;
+
     this.detailData.course_dates[0].course_groups.forEach(group => {
       if (group.degree_id === levelId) {
         group.course_subgroups.forEach(sb => {
           ret = ret + sb.max_participants;
         });
       }
+
     });
+
     return ret;
   }
 
@@ -244,6 +221,7 @@ export class CoursesComponent {
 
   getSubGroups(levelId: any) {
     let ret = 0;
+
     this.detailData.course_dates.forEach(courseDate => {
       let find = false;
       courseDate.course_groups.forEach(group => {
@@ -283,7 +261,7 @@ export class CoursesComponent {
     });
   }
 
-  hexToRgb(hex: string) {
+  hexToRgb(hex:string) {
     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return rgb ? {
       r: parseInt(rgb[1], 16),
@@ -292,108 +270,108 @@ export class CoursesComponent {
     } : null;
   }
 
-  exportQR(id: any) {
+  exportQR(id:any) {
     console.log('export');
-    this.crudService.get('/admin/clients/course/' + id)
-      .subscribe(async (data) => {
-        console.log(data);
+    this.crudService.get('/admin/clients/course/'+ id)
+        .subscribe(async (data) => {
+          console.log(data);
 
-        const clientsData = data.data;
+          const clientsData = data.data;
 
-        if (clientsData && clientsData.length) {
-          const doc = new jsPDF();
-          const pageWidth = doc.internal.pageSize.getWidth();
-          const colWidth = pageWidth / 2;
-          const lineHeight = 6;
-          const qrSize = 48;
-          let y = 10;
+          if(clientsData && clientsData.length){
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const colWidth = pageWidth / 2;
+            const lineHeight = 6;
+            const qrSize = 48;
+            let y = 10;
 
-          for (let i = 0; i < clientsData.length; i++) {
-            const client = clientsData[i];
-            const isLeftColumn = i % 2 === 0;
-            const baseX = isLeftColumn ? 10 : colWidth + 6;
-            const qrX = baseX + 48;
-            let y_text = y;
-            const maxWidthText = 48;
+            for (let i = 0; i < clientsData.length; i++) {
+              const client = clientsData[i];
+              const isLeftColumn = i % 2 === 0;
+              const baseX = isLeftColumn ? 10 : colWidth + 6;
+              const qrX = baseX + 48;
+              let y_text = y;
+              const maxWidthText = 48;
 
-            doc.setTextColor(70, 70, 70);
-            doc.setFontSize(16);
-            doc.setFont('helvetica', 'bold');
-            let lines = doc.splitTextToSize(`${client.client?.first_name} ${client.client?.last_name}`, maxWidthText);
-            doc.text(lines, baseX, y_text);
-            y_text += (lines.length + 0.4) * lineHeight;
-
-            if (client.client?.phone || client.client?.telephone) {
-              let clientPhone = '';
-              if (client.client?.phone) { clientPhone = client.client.phone; }
-              else { clientPhone = client.client.telephone; }
-              doc.setFontSize(14);
-              doc.setFont('helvetica', 'normal');
-              lines = doc.splitTextToSize(`${clientPhone}`, maxWidthText);
-              doc.text(lines, baseX, y_text);
-              y_text += lines.length * lineHeight;
-            }
-
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
-            lines = doc.splitTextToSize(`${client.course?.name}`, maxWidthText);
-            doc.text(lines, baseX, y_text);
-            y_text += (lines.length * lineHeight) - 2;
-
-            if (client.monitor) {
-              doc.setFontSize(8);
-              lines = doc.splitTextToSize(`Professeur - niveau`, maxWidthText);
-              doc.text(lines, baseX, y_text);
-              y_text += (lines.length * lineHeight) - 2;
-              doc.setFontSize(11);
+              doc.setTextColor(70, 70, 70);
+              doc.setFontSize(16);
               doc.setFont('helvetica', 'bold');
-              lines = doc.splitTextToSize(`${client.monitor?.first_name} ${client.monitor?.last_name}`, maxWidthText);
+              let lines = doc.splitTextToSize(`${client.client?.first_name} ${client.client?.last_name}`, maxWidthText);
               doc.text(lines, baseX, y_text);
-              y_text += (lines.length * lineHeight) + 3;
-            }
-            else {
-              y_text += 6;
-            }
+              y_text += (lines.length + 0.4) * lineHeight;
 
-            if (client.degree) {
-              const rgbColor = this.hexToRgb(client.degree.color);
-              doc.setFillColor(rgbColor.r, rgbColor.g, rgbColor.b);
-              doc.setTextColor(255, 255, 255);
+              if(client.client?.phone || client.client?.telephone){
+                let clientPhone = '';
+                if(client.client?.phone){clientPhone = client.client.phone;}
+                else{clientPhone = client.client.telephone;}
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                lines = doc.splitTextToSize(`${clientPhone}`, maxWidthText);
+                doc.text(lines, baseX, y_text);
+                y_text += lines.length * lineHeight;
+              }
+
               doc.setFontSize(9);
               doc.setFont('helvetica', 'normal');
+              lines = doc.splitTextToSize(`${client.course?.name}`, maxWidthText);
+              doc.text(lines, baseX, y_text);
+              y_text += (lines.length * lineHeight) - 2;
 
-              const text = `${client.degree?.annotation} - ${client.degree?.name}`;
-              lines = doc.splitTextToSize(text, maxWidthText);
-              const textBoxHeight = (lines.length + 0.5) * lineHeight;
+              if(client.monitor){
+                doc.setFontSize(8);
+                lines = doc.splitTextToSize(`Professeur - niveau`, maxWidthText);
+                doc.text(lines, baseX, y_text);
+                y_text += (lines.length * lineHeight) - 2;
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                lines = doc.splitTextToSize(`${client.monitor?.first_name} ${client.monitor?.last_name}`, maxWidthText);
+                doc.text(lines, baseX, y_text);
+                y_text += (lines.length * lineHeight) + 3;
+              }
+              else{
+                y_text += 6;
+              }
 
-              doc.rect(baseX, y_text - lineHeight, maxWidthText, textBoxHeight, 'F');
+              if(client.degree){
+                const rgbColor = this.hexToRgb(client.degree.color);
+                doc.setFillColor(rgbColor.r, rgbColor.g, rgbColor.b);
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'normal');
 
-              doc.text(lines, baseX + 1.5, y_text);
-              doc.setTextColor(70, 70, 70);
-              y_text += textBoxHeight;
+                const text = `${client.degree?.annotation} - ${client.degree?.name}`;
+                lines = doc.splitTextToSize(text, maxWidthText);
+                const textBoxHeight = (lines.length + 0.5) * lineHeight;
+
+                doc.rect(baseX, y_text - lineHeight, maxWidthText, textBoxHeight, 'F');
+
+                doc.text(lines, baseX + 1.5, y_text);
+                doc.setTextColor(70, 70, 70);
+                y_text += textBoxHeight;
+              }
+
+              // Generate QR code
+              const qrData = await QRCode.toDataURL(client.client.id.toString());
+              doc.addImage(qrData, 'JPEG', qrX, y-10, qrSize, qrSize);
+
+              //Next row if not left and not last
+              if (!isLeftColumn || i === clientsData.length - 1) {
+                y += qrSize + lineHeight * 4;
+              }
+
+              if (y >= doc.internal.pageSize.getHeight() - 20) {
+                doc.addPage();
+                y = 10;
+              }
             }
 
-            // Generate QR code
-            const qrData = await QRCode.toDataURL(client.client.id.toString());
-            doc.addImage(qrData, 'JPEG', qrX, y - 10, qrSize, qrSize);
-
-            //Next row if not left and not last
-            if (!isLeftColumn || i === clientsData.length - 1) {
-              y += qrSize + lineHeight * 4;
-            }
-
-            if (y >= doc.internal.pageSize.getHeight() - 20) {
-              doc.addPage();
-              y = 10;
-            }
+            doc.save('clients.pdf');
           }
-
-          doc.save('clients.pdf');
-        }
-        //No clients
-        else {
-          this.snackbar.open(this.translateService.instant('course_without_clients'), 'OK', { duration: 3000 });
-        }
+          //No clients
+          else{
+            this.snackbar.open(this.translateService.instant('course_without_clients'), 'OK', {duration: 3000});
+          }
 
       })
   }

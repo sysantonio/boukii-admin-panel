@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
@@ -7,20 +7,22 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
 import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { CoursesCreateUpdateComponent } from '../courses-create-update/courses-create-update.component';
+import { CoursesCreateUpdateModalComponent } from '../courses-create-update-modal/courses-create-update-modal.component';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 
 @Component({
-  selector: 'vex-course-detail',
-  templateUrl: './course-detail.component.html',
-  styleUrls: ['./course-detail.component.scss'],
+  selector: 'vex-course-detail-modal',
+  templateUrl: './course-detail-modal.component.html',
+  styleUrls: ['./course-detail-modal.component.scss'],
   animations: [fadeInUp400ms, stagger20ms]
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetailModalComponent implements OnInit {
   userAvatar = '../../../../assets/img/avatar.png';
 
   mode: 'create' | 'update' = 'update';
@@ -28,7 +30,15 @@ export class CourseDetailComponent implements OnInit {
   form: UntypedFormGroup;
   monitorsForm = new FormControl();
 
-  loadingMonitors = true;
+  filteredMonitors: Observable<any[]>;
+
+  durations: string[] = [];
+
+  groupedByColor = {};
+  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
+
+  user: any;
+  id: any;
 
   defaults: any = {
     course_type: null,
@@ -103,41 +113,31 @@ export class CourseDetailComponent implements OnInit {
   loading: boolean = true;
 
   //NIVELES
-  user: any;
-  id: any;
-
-  filteredMonitors: Observable<any[]>;
-  durations: string[] = [];
-
-  groupedByColor = {};
-  colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
-
   daySelectedIndex: any = 0;
   subGroupSelectedItemDate: any;
   subGroupSelectedIndex: any = 0;
   selectedDate: string;
   selectedItem: any;
-  selectedDateId: any;
   daysDates = [];
   daysDatesLevels = [];
   monitors = [];
+  loadingMonitors = true;
   levels = [];
   courseUsers = [];
   clients = [];
-  languages = [];
   schoolSports: any = [];
+  languages: any = [];
   countries = MOCK_COUNTRIES;
   rangeForm: UntypedFormGroup;
   showDetail: boolean = false;
   detailData: any;
-  settings: any;
 
   entity = '/booking-users';
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
     { label: 'course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'client', property: 'client', type: 'client', visible: true },
+    { label: 'client', property: 'client_id', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
@@ -149,12 +149,11 @@ export class CourseDetailComponent implements OnInit {
     //{ label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
-
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
-    private snackbar: MatSnackBar, private translateService: TranslateService) {
+    private snackbar: MatSnackBar, private translateService: TranslateService, @Inject(MAT_DIALOG_DATA) public externalData: any) {
+
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-    this.settings = JSON.parse(this.user.schools[0].settings);
-    this.id = this.activatedRoute.snapshot.params.id;
+    this.id = this.externalData.id;
 
     this.generateDurations();
     this.rangeForm = this.fb.group({
@@ -178,31 +177,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.getData();
-
-  }
-
-  reset() {
-    this.filteredMonitors;
-    this.durations = [];
-
-    this.groupedByColor = {};
-    this.colorKeys = []; // Aquí almacenaremos las claves de colores
-
-    this.daySelectedIndex = 0;
-    this.subGroupSelectedItemDate;
-    this.subGroupSelectedIndex = 0;
-    this.selectedDate;
-    this.selectedItem;
-    this.daysDates = [];
-    this.daysDatesLevels = [];
-    this.monitors = [];
-    this.levels = [];
-    this.courseUsers = [];
-    this.clients = [];
-    this.languages = [];
-    this.schoolSports = [];
   }
 
   getData() {
@@ -226,92 +201,6 @@ export class CourseDetailComponent implements OnInit {
             })
 
       })
-  }
-
-  showDetailEvent(event: any) {
-
-    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
-      this.detailData = event.item;
-
-      this.crudService.get('/admin/courses/'+this.detailData.course_id)
-        .subscribe((course) => {
-          this.detailData.course = course.data;
-          this.crudService.get('/sports/'+this.detailData.course.sport_id)
-          .subscribe((sport) => {
-            this.detailData.sport = sport.data;
-          });
-
-          if (this.detailData.degree_id !== null) {
-            this.crudService.get('/degrees/'+this.detailData.degree_id)
-            .subscribe((degree) => {
-              this.detailData.degree = degree.data;
-            })
-          }
-
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+this.detailData.course.sport_id + '&active=1')
-          .subscribe((data) => {
-            //For aureola
-            data.data.forEach((degree: any) => {
-              degree.inactive_color = this.lightenColor(degree.color, 30);
-            });
-            this.detailData.degrees_sport = data.data;
-          });
-
-      })
-
-      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
-        .subscribe((booking) => {
-          this.detailData.users = [];
-
-          booking.data.forEach((element, idx) => {
-            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-              this.detailData.users.push(element);
-
-                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
-                .subscribe((cd) => {
-
-                  if (cd.data.length > 0) {
-                    element.sports= [];
-
-                    cd.data.forEach(c => {
-                      element.sports.push(c);
-                    });
-                  }
-
-
-                })
-
-            }
-          });
-          this.showDetail = true;
-
-        });
-
-
-    } else {
-
-      this.showDetail = event.showDetail;
-      this.detailData = null;
-    }
-
-  }
-
-  private lightenColor(hexColor: string, percent: number): string {
-    let r:any = parseInt(hexColor.substring(1, 3), 16);
-    let g:any = parseInt(hexColor.substring(3, 5), 16);
-    let b:any = parseInt(hexColor.substring(5, 7), 16);
-
-    // Increase the lightness
-    r = Math.round(r + (255 - r) * percent / 100);
-    g = Math.round(g + (255 - g) * percent / 100);
-    b = Math.round(b + (255 - b) * percent / 100);
-
-    // Convert RGB back to hex
-    r = r.toString(16).padStart(2, '0');
-    g = g.toString(16).padStart(2, '0');
-    b = b.toString(16).padStart(2, '0');
-
-    return '#'+r+g+b;
   }
 
   getStations() {
@@ -348,28 +237,63 @@ export class CourseDetailComponent implements OnInit {
     return moment(date, inFormat).format(format);
   }
 
+  reset() {
+    this.filteredMonitors;
+    this.durations = [];
+
+    this.groupedByColor = {};
+    this.colorKeys = []; // Aquí almacenaremos las claves de colores
+
+    this.daySelectedIndex = 0;
+    this.subGroupSelectedItemDate;
+    this.subGroupSelectedIndex = 0;
+    this.selectedDate;
+    this.selectedItem;
+    this.daysDates = [];
+    this.daysDatesLevels = [];
+    this.monitors = [];
+    this.levels = [];
+    this.courseUsers = [];
+    this.clients = [];
+    this.languages = [];
+    this.schoolSports = [];
+  }
+
+  openUpdateCourse() {
+    const dialogRef = this.dialog.open(CoursesCreateUpdateModalComponent, {
+      width: '100%',
+      height: '1200px',
+      maxWidth: '90vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+      data: {id: this.id}
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+      }
+    });
+  }
+
   goTo(route: string) {
     this.router.navigate([route]);
   }
 
-  openUserTransfer(group, subgroup, subgroupNumber, degree) {
+  openUserTransfer(group, subgroup, subgroupNumber) {
     const dialogRef = this.dialog.open(CourseUserTransferComponent, {
       width: '800px',
       height: '800px',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
-      data: {degree: degree, group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor,
-        id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
+      data: {group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor, id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        dialogRef.close();
-      }
 
+      }
       this.reset();
       this.getData();
-
     });
   }
 
@@ -422,13 +346,11 @@ export class CourseDetailComponent implements OnInit {
 
             this.defaults.course_dates.forEach(cs => {
               cs.course_groups.forEach(group => {
-                level.visible = false;
                 if (group.degree_id === level.id) {
                   level.active = true;
                   level.old = true;
-                  level.visible = true;
                 }
-
+                level.visible = false;
               });
             });
             this.selectedItem = this.daysDatesLevels[0].dateString;
@@ -437,7 +359,6 @@ export class CourseDetailComponent implements OnInit {
           });
 
           this.colorKeys = Object.keys(this.groupedByColor);
-          this.loadingMonitors = false;
         }
 
       })
@@ -458,7 +379,7 @@ export class CourseDetailComponent implements OnInit {
           teachers_max: null,
           observations: null,
           auto: null,
-          course_subgroups: []
+          subgroups: []
         }
       }
 
@@ -496,8 +417,8 @@ export class CourseDetailComponent implements OnInit {
         element.course_groups.forEach(group => {
           if (group.degree_id === level.id) {
             group.active = event.source.checked;
-            group.teachers_min = level.id;
             group.degree_id = level.id;
+            group.teachers_min = level.id;
             group.course_date_id = prevGroup.course_date_id;
             group.course_id = prevGroup.course_id;
             group.age_min = level.age_min;
@@ -516,10 +437,9 @@ export class CourseDetailComponent implements OnInit {
 
         });
       });
-      this.checkAvailableMonitors(level.id);
     } else {
-
       // eliminar el curso o desactivarlo
+
       let hasBookings = false;
       const groupsToDelete = [];
       this.defaults.course_dates.forEach(element => {
@@ -547,6 +467,7 @@ export class CourseDetailComponent implements OnInit {
             });
           });
         }
+
       });
 
       if (!hasBookings) {
@@ -561,8 +482,7 @@ export class CourseDetailComponent implements OnInit {
             groupsToDelete.forEach(element => {
               this.crudService.delete('/course-groups', element)
                 .subscribe(() => {
-                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
-
+                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000});
                 })
             });
 
@@ -754,77 +674,77 @@ export class CourseDetailComponent implements OnInit {
       return ret;
     }
 
-  setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
+    setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
 
-    if (event.isUserInput) {
-      if (daySelectedIndex === 0) {
-        let monitorSet = false;
+      if (event.isUserInput) {
+        if (daySelectedIndex === 0) {
+          let monitorSet = false;
 
-          if (!level.old) {
-            this.defaults.course_dates.forEach(courseDate => {
-              if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
+            if (!level.old) {
+              this.defaults.course_dates.forEach(courseDate => {
+                if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
-                this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                  this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                    .subscribe((result: any) => {
+
+                      if (result.data.available) {
+                        courseDate.course_groups.forEach(group => {
+                          if(group.degree_id === level.id && !monitorSet) {
+
+                            group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                            group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+                            monitorSet = true;
+                          }
+                        });
+                      }
+                    })
+                }
+              });
+            } else {
+              this.defaults.course_dates.forEach((courseDate, idx) => {
+                this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
                   .subscribe((result: any) => {
-
                     if (result.data.available) {
-                      courseDate.course_groups.forEach(group => {
-                        if(group.degree_id === level.id && !monitorSet) {
 
+                      this.defaults.course_dates[idx].course_groups.forEach(group => {
+                        if (group.degree_id === level.id) {
+                          group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
                           group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-                          group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
-                          monitorSet = true;
                         }
+
                       });
                     }
                   })
-              }
-            });
-          } else {
-            this.defaults.course_dates.forEach((courseDate, idx) => {
-              this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
-                .subscribe((result: any) => {
-                  if (result.data.available) {
+              });
+            }
+        } else {
+          let monitorSet = false;
 
-                    this.defaults.course_dates[idx].course_groups.forEach(group => {
-                      if (group.degree_id === level.id) {
-                        group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
-                        group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-                      }
+            if (!level.old) {
+              this.defaults.course_dates.forEach(courseDate => {
+                if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
+                  courseDate.course_groups.forEach(group => {
+                    if(group.degree_id === level.id && !monitorSet) {
 
-                    });
-                  }
-                })
-            });
-          }
-      } else {
-        let monitorSet = false;
+                      group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                      group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
+                      monitorSet = true;
+                    }
+                  });
+                }
+              });
+            } else {
+              this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
+                if (group.degree_id === level.id) {
+                  group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
+                  group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
+                }
 
-          if (!level.old) {
-            this.defaults.course_dates.forEach(courseDate => {
-              if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
-                courseDate.course_groups.forEach(group => {
-                  if(group.degree_id === level.id && !monitorSet) {
-
-                    group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-                    group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
-                    monitorSet = true;
-                  }
-                });
-              }
-            });
-          } else {
-            this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
-              if (group.degree_id === level.id) {
-                group.course_subgroups[subGroupSelectedIndex].monitor = monitor;
-                group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
-              }
-
-            });
-          }
+              });
+            }
+        }
       }
     }
-  }
 
   setSubGroupPax(event: any, level: any) {
     if (+event.target.value > this.defaults.max_participants) {
@@ -847,7 +767,6 @@ export class CourseDetailComponent implements OnInit {
   selectItem(item: any, index: any, subGroupIndex: any, subgroup) {
     this.subGroupSelectedIndex = null;
     this.selectedItem = item.dateString;
-    this.selectedDateId = item.id;
     this.selectedDate = item.date;
     this.daySelectedIndex = index;
     this.subGroupSelectedIndex = subGroupIndex;
@@ -961,7 +880,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getClients() {
-    this.crudService.list('/clients/', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 
@@ -1009,6 +928,8 @@ export class CourseDetailComponent implements OnInit {
 
       })
   }
+
+
   getSeparatedDates(dates: any, onLoad: boolean = false) {
 
     this.daysDates = [];
@@ -1051,9 +972,7 @@ export class CourseDetailComponent implements OnInit {
           })
         }
       } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
-          dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''),
-          active: element.active, id: element.id});
+        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
       }
 
     });
@@ -1083,23 +1002,12 @@ export class CourseDetailComponent implements OnInit {
     let ret = [];
 
     this.courseUsers.forEach(courseUser => {
-      if(courseUser.course_group_id === subGroup.course_group_id
-        && courseUser.course_subgroup_id === subGroup.id
-        && courseUser.status === 1) {
+      if(courseUser.course_group_id === subGroup.course_group_id && courseUser.course_subgroup_id === subGroup.id && courseUser.status === 1) {
         ret.push(courseUser);
       }
     });
 
     return ret;
-  }
-
-  getMonitor(id: number) {
-    if (id && id !== null) {
-
-      const monitor = this.monitors.find((m) => m.id === id);
-
-      return monitor;
-    }
   }
 
   save() {
@@ -1109,13 +1017,12 @@ export class CourseDetailComponent implements OnInit {
     if (this.defaults.course_type === 1) {
       this.defaults.course_dates.forEach(dates => {
         const group = [];
-        delete dates.course_subgroups;
         dates.course_groups.forEach(dateGroup => {
           if (dateGroup.course_subgroups.length > 0) {
             group.push(dateGroup);
           }
         });
-        dates.course_groups = group;
+        dates.groups = group;
       });
     }
 
@@ -1153,10 +1060,10 @@ export class CourseDetailComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: this.defaults.currency,//poner currency de reglajes
-        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
+        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1177,24 +1084,6 @@ export class CourseDetailComponent implements OnInit {
       })
 
   }
-
-  calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
-      const hours = duration.split(' ')[0].replace('h', '');
-      const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
-
-      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
-      const hours = duration.split(' ')[0].replace('h', '');
-
-      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
-    } else {
-      const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
-
-      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
-    }
-  }
-
 
   checkAvailableMonitors(level: any) {
     this.loadingMonitors = true;
@@ -1230,7 +1119,7 @@ export class CourseDetailComponent implements OnInit {
       return course.short_description;
     } else {
       const translations = JSON.parse(course.translations);
-      return translations[this.translateService.currentLang].short_description !== null && translations[this.translateService.currentLang].short_description !== '' ? translations[this.translateService.currentLang].short_description : course.short_description;
+      return translations[this.translateService.currentLang].short_description;
     }
   }
 
@@ -1240,7 +1129,7 @@ export class CourseDetailComponent implements OnInit {
       return course.description;
     } else {
       const translations = JSON.parse(course.translations);
-      return translations[this.translateService.currentLang].description !== null && translations[this.translateService.currentLang].description !== '' ? translations[this.translateService.currentLang].description : course.description;
+      return translations[this.translateService.currentLang].description;
     }
   }
 
@@ -1249,9 +1138,11 @@ export class CourseDetailComponent implements OnInit {
       return course.name;
     } else {
       const translations = JSON.parse(course.translations);
-      return translations[this.translateService.currentLang].name !== null && translations[this.translateService.currentLang].name !== '' ? translations[this.translateService.currentLang].name : course.name;
+      return translations[this.translateService.currentLang].name;
     }
   }
+
+
 
   getDateIndex() {
     let ret = 0;
@@ -1339,14 +1230,9 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getClientDegree(sport_id:any,sports:any) {
-    if(sport_id && sports && sports.length){
-      const sportObject = sports.find(sport => sport.sport_id === sport_id);
-      if (sportObject) {
-        return sportObject.degree_id;
-      }
-      else{
-        return 0;
-      }
+    const sportObject = sports.find(sport => sport.sport_id === sport_id);
+    if (sportObject) {
+      return sportObject.degree_id;
     }
     else{
       return 0;
@@ -1366,6 +1252,91 @@ export class CourseDetailComponent implements OnInit {
   getCountryById(countryId: number): string {
     const country = MOCK_COUNTRIES.find(c => c.id === countryId);
     return country ? country.code : 'Aucun';
+  }
+
+  getMonitor(id: number) {
+    if (id && id !== null) {
+
+      const monitor = this.monitors.find((m) => m.id === id);
+
+      return monitor;
+    }
+  }
+
+  showDetailEvent(event: any) {
+
+    if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
+      this.detailData = event.item;
+
+      this.crudService.get('/admin/courses/'+this.detailData.course_id)
+        .subscribe((course) => {
+          this.detailData.course = course.data;
+          this.crudService.get('/sports/'+this.detailData.course.sport_id)
+          .subscribe((sport) => {
+            this.detailData.sport = sport.data;
+          });
+
+          if (this.detailData.degree_id !== null) {
+            this.crudService.get('/degrees/'+this.detailData.degree_id)
+            .subscribe((degree) => {
+              this.detailData.degree = degree.data;
+            })
+          }
+
+      })
+
+      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+        .subscribe((booking) => {
+          this.detailData.users = [];
+
+          booking.data.forEach((element, idx) => {
+            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+              this.detailData.users.push(element);
+
+                this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
+                .subscribe((cd) => {
+
+                  if (cd.data.length > 0) {
+                    element.sports= [];
+
+                    cd.data.forEach(c => {
+                      element.sports.push(c);
+                    });
+                  }
+
+
+                })
+
+            }
+          });
+          this.showDetail = true;
+
+        });
+
+
+    } else {
+
+      this.showDetail = event.showDetail;
+      this.detailData = null;
+    }
+
+  }
+
+  calculateHourEnd(hour: any, duration: any) {
+    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+      const hours = duration.split(' ')[0].replace('h', '');
+      const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
+    } else if(duration.includes('h')) {
+      const hours = duration.split(' ')[0].replace('h', '');
+
+      return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
+    } else {
+      const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
+
+      return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    }
   }
 
   getAgeRange(data: any[]): { age_min: number, age_max: number } {

@@ -1,10 +1,7 @@
-<vex-secondary-toolbar current="">
-  <vex-breadcrumbs [crumbs]="[
-    {icon:'cursos'},
-    {text:'courses.title', title: true,  link: '/courses'},
-    {text: defaults.id, subtitle: true},
-    ]" class="flex-auto"></vex-breadcrumbs>
-</vex-secondary-toolbar>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>X</button>
+</mat-dialog-actions>
+<mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 <div [@stagger]="true"class="p-gutter container"style="max-width: none" >
   <div class="flex flex-col sm:flex-row gap-4" style="width: 100%;float:left;padding: 2%">
     <div @fadeInUp class="card flex-auto">
@@ -84,8 +81,7 @@
                   <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{defaults.price}}</b> {{defaults.currency}}</p>
                   <p style="float: left;width: 50%;text-align: right;color:#ff3085" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
                     {{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}
-                  </b>
-                  {{defaults.currency}}</p>
+                  </b> {{ defaults.currency }}</p>
                 </div>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
@@ -99,7 +95,7 @@
                   <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 2">{{'from' | translate}} {{defaults.age_min}} {{'to' | translate}} {{defaults.age_max}} {{'years' | translate}}</p>
                   <p style="float: left;width: 50%;text-align: right;" *ngIf="defaults.course_type === 1">{{'from' | translate}} {{getAgeRange(defaults.course_dates[0].course_groups).age_min}}
                     {{'to' | translate}} {{getAgeRange(defaults.course_dates[0].course_groups).age_max}} {{'years' | translate}}</p>
-                </div>
+                  </div>
               </div>
 
               <div style="width:50%; margin-top:2%;float:left">
@@ -322,7 +318,7 @@
 
                                             <li style="float: left; width: 13%;margin: 3% 0 0 0;" *ngIf="item.active === 1">
                                               <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex)? '#CEE741': 'red'}"></div>
+                                              [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex) ? '#CEE741': 'red'}"></div>
                                             </li>
                                           </ng-container>
                                         </ul>
@@ -333,7 +329,7 @@
                                     <!-- n iteraciones por alumno-->
                                     <div style="float:left; width: 100%; margin: 5% 0 5% 0;padding: 0 0 0 10%" *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index" >
                                       <p *ngIf="courseUserIndex === 0" style="font-size: 20px;margin: 0 0 2% 0;">
-                                        <img (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1, groupLevel)" src="../../../../assets/img/icons/change.svg" style="float:left;cursor: pointer;">{{'students' | translate }}</p>
+                                        <img (click)="openUserTransfer(groupLevel, subGroup, subGroupIndex + 1)" src="../../../../assets/img/icons/change.svg" style="float:left;cursor: pointer;">{{'students' | translate }}</p>
 
                                       <ng-container>
 
@@ -382,59 +378,21 @@
         </mat-tab>
         <mat-tab label="{{'bookings' | translate }}">
           <vex-page-layout style="margin: 2% 0 0 0;">
-
             <vex-page-layout-content class="-mt-6 fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
                 <vex-aio-table [columns]="columns" [entity]="entity" [title]="'bookings'" [route]="'bookings'"
-                (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'course_id'"
-                               [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
+                (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'course_id'" [with]="['booking','course.courseGroups.courseSubgroups']"
                 [showDetail]="showDetail">
               </vex-aio-table>
             </vex-page-layout-content>
           </vex-page-layout>
 
-          <vex-page-layout-content
-            class="fullwidth col-right"
-            *ngIf="showDetail"
-          >
-            <mat-card>
-
-              <mat-card-header style="display:block">
-                <div style="width: 100%;">
-                  <span style="display: inline-block;width: 80%; text-align: left;">
-                    <mat-card-title>{{'course_detail' | translate}}</mat-card-title>
-                  </span>
-                  <span style="display: inline-block;width: 20%; text-align: right;">
-                    <!--<img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />-->
-                    <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
-                  </span>
-                </div>
-                <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
-                  <mat-card-subtitle style="width:100%;">
-                    <div style="width: 60%;display:inline-block;text-align: left; color: white;">
-                      <b>{{ 'register' | translate}}:</b>
-                      <span style="margin-left: 10px;font-weight: normal;">
-                        <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
-                      </span>
-                    </div>
-                    <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-                      Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
-                    </div>
-                  </mat-card-subtitle>
-                </div>
-              </mat-card-header>
-
           <!--<vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
-            <mat-card style="padding: 0 3%;">
-            <mat-card-header style="display:block">
-                <div style="width: 100%;float: left;">
-
-                </div>
+              <mat-card-header style="display:block">
                 <div style="width: 100%;float:left;">
-                <mat-card-title class="font-bold" style="float: left;width: 100%;">
-                  {{'course_detail' | translate}}
-                  <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
-                </mat-card-title>
-
+                  <mat-card-title class="font-bold" style="float: left;width: 100%;">
+                    {{'course_detail' | translate}}
+                    <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
+                  </mat-card-title>
                 </div>
                 <div style="width:100%; margin-top:5%;float:left">
                 <div style="width: 100%;">
@@ -454,11 +412,11 @@
                     <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
-                    <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
-                      {{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
-                </div>
+                  <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
+                  <p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}
+                  </b> {{detailData?.course.currency}}</p>
+                  <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
+              </div>
                 </div>
                 <ng-container *ngIf="detailData?.course.course_type == 1">
                     <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -471,233 +429,237 @@
                     </div>
                 </ng-container>
                 <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-
             </mat-card-header>-->
 
+          <vex-page-layout-content
+            class="fullwidth col-right"
+            *ngIf="showDetail"
+          >
+            <mat-card>
 
-
-            <mat-card-content>
-              <div class="title-status">
-                <div class="col-left">
-                  <b>{{'from' | translate}}</b>
+              <mat-card-header style="display:block">
+                <div style="width: 100%;">
+                  <span style="display: inline-block;width: 80%; text-align: left;">
+                    <mat-card-title>{{'course_detail' | translate}}</mat-card-title>
+                  </span>
+                  <span style="display: inline-block;width: 20%; text-align: right;">
+                    <img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />
+                    <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+                  </span>
                 </div>
-                <div class="col-right">
-                  <b>{{'to' | translate}}</b>
+                <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+                  <mat-card-subtitle style="width:100%;">
+                    <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+                      <b>{{ 'register' | translate}}:</b>
+                      <span style="margin-left: 10px;font-weight: normal;">
+                        <span>01/08/2024</span><span style="margin-left: 10px;font-style: italic;">11:13h</span>
+                      </span>
+                    </div>
+                    <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+                      Admin <span style="margin-left: 10px;">(Arsene Garcia)</span>
+                    </div>
+                  </mat-card-subtitle>
                 </div>
-              </div>
-              <div class="list-holder">
-                <div class="col-left">
-                  <b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b>
-                </div>
-                <div class="col-right">
-                  <b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b>
-                </div>
-              </div>
+              </mat-card-header>
 
-              <div style="padding:15px 35px;">
-                <mat-divider style="border-color: #e6e6e6;"></mat-divider>
-              </div>
-
-              <div class="holder-deporte">
-                <div class="col-left">
-                  <img *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="60" height="60" />
-                  <img *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="60" height="60" />
-                </div>
-                <div class="col-right">
-                  <div class="client-name">
-                    {{detailData?.course?.name}}
-                  </div>
-                  <div class="client-dates">
-                    <ng-container *ngIf="detailData?.course?.course_type == 1">
-                      {{'colective' | translate}}
-                    </ng-container>
-                    <ng-container *ngIf="detailData?.course?.course_type == 2">
-                      {{'private' | translate}}
-                    </ng-container>
-                  </div>
-                  <div class="client-ubicacion">
-                    <ng-container *ngIf="detailData?.sport">
-                        {{detailData?.sport.name}}
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-
-
-
-              <div class="list-holder" *ngIf="detailData.course_type === 1">
-                <ul>
-                  <ng-container *ngFor="let date of detailData?.course.course_dates">
-                      <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-                  </ng-container>
-                </ul>
-              </div>
-
-              <div class="title-status">
-                <div class="col-left">
-                  <b>{{'price' | translate}}</b>
-                </div>
-                <div class="col-right">
-                  <b>{{'max_pax' | translate}}</b>
-                </div>
-              </div>
-              <div class="list-holder">
-                <div class="col-left">
-                  <div *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</div>
-                  <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</div>
-                </div>
-                <div class="col-right">
-                  <b>{{detailData?.course.max_participants}}</b>
-                </div>
-              </div>
-
-              <mat-divider style="margin-top:10px; margin-bottom:10px; border-color: transparent;"></mat-divider>
-
-
-
-              <div *ngIf="detailData?.course?.course_type == 1">
-                <div class="grupo-holder">
-                  <div class="item" [ngStyle]="{'background': detailData?.degree?.color}">
-                    <div><img src="https://school.boukii.com/assets/icons/award_icon.svg" /></div>
-                    <div>{{detailData?.degree?.annotation}}</div>
-                    <div>{{detailData?.degree?.name}}</div>
-                    <div class="font-bold">{{getSubGroupsIndex()}}</div>
-                  </div>
-                  <div class="item box-background-grey">
-                    <div><img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" /></div>
-                    <div>{{'groups' | translate}}</div>
-                    <div class="font-bold">{{getGroupsQuantity()}}</div>
-                  </div>
-                  <div class="item box-background-grey">
-                    <div><img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" /></div>
-                    <div>{{'duration' | translate}}</div>
-                    <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
-                  </div>
-                  <div class="item box-background-grey">
-                    <div><img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" /></div>
-                    <div>{{'days' | translate}}</div>
-                    <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
-                  </div>
-                </div>
-              </div>
-
-              <ng-container *ngIf="detailData?.course.course_type == 2">
-                <div class="title-actividad">
-                  <div class="title">{{'booking' |translate}}</div>
-                </div>
-
-                <div class="list-holder">
+              <mat-card-content>
+                <div class="title-status">
                   <div class="col-left">
-                    <b>{{getDateFormatLong(detailData?.date)}}</b>
+                    <b>{{'from' | translate}}</b>
                   </div>
                   <div class="col-right">
-                    <b>{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</b>
+                    <b>{{'to' | translate}}</b>
                   </div>
                 </div>
-
-                <div class="title-actividad">
-                  <div class="title">{{'participant' |translate}}</div>
+                <div class="list-holder">
+                  <div class="col-left">
+                    <b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b>
+                  </div>
+                  <div class="col-right">
+                    <b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b>
+                  </div>
+                </div>
+                <div class="title-status">
+                  <div class="col-left">
+                    <b>{{'price' | translate}}</b>
+                  </div>
+                  <div class="col-right">
+                    <b>{{'max_pax' | translate}}</b>
+                  </div>
+                </div>
+                <div class="list-holder">
+                  <div class="col-left">
+                    <div *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</div>
+                    <div *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</div>
+                  </div>
+                  <div class="col-right">
+                    <b>{{detailData?.course.max_participants}}</b>
+                  </div>
+                </div>
+                <div class="list-holder" *ngIf="detailData.course_type === 1">
+                  <ul>
+                    <ng-container *ngFor="let date of detailData?.course.course_dates">
+                        <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
+                    </ng-container>
+                  </ul>
                 </div>
 
-                <div>
-                  <div *ngFor="let client of detailData?.users">
-                    <div class="holder-deporte">
-                      <div class="col-left">
-                        <app-level-user *ngIf="detailData.degrees_sport && detailData.degrees_sport.length" [allLevels]="detailData.degrees_sport" [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                <div style="float: left; width: 100%;margin-bottom:24px;">
+                  <div style="float: left;width: 100%;">
+                      <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
+                      <div style="float: left; width: 20%; margin-top: 5%">
+                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
                       </div>
-                      <div class="col-right">
-                        <div class="client-name">
-                          {{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}
-                        </div>
-                        <div class="client-dates">
-                          <ng-container *ngIf="getClient(client.client_id)?.language1_id">
-                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                      <div style="float: left; width: 75%;margin:6% 0 0 2%">
+                      <p><strong>{{detailData?.course?.name}}</strong></p>
+                      <p>
+                          <ng-container *ngIf="detailData?.course?.course_type == 1">
+                            {{'colective' | translate}}
                           </ng-container>
-                          <ng-container *ngIf="getClient(client.client_id)?.language2_id">
-                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                          <ng-container *ngIf="detailData?.course?.course_type == 2">
+                            {{'private' | translate}}
                           </ng-container>
-                          <ng-container *ngIf="getClient(client.client_id)?.language3_id">
-                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                          <ng-container *ngIf="detailData?.sport">
+                              {{detailData?.sport.name}}
                           </ng-container>
-                          {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
-                          · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
-                        </div>
-                        <div *ngIf="detailData?.degree" class="label" [ngStyle]="{'background': detailData?.degree.color}">{{detailData?.degree.name}}</div>
+                      </p>
                       </div>
-                    </div>
                   </div>
                 </div>
-              </ng-container>
+                <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-
-                <div class="title-actividad">
-                  <div class="title">{{'monitor' | translate }}</div>
-                </div>
-
-                <div *ngIf="detailData.monitor_id !== null">
-                  <div class="holder-deporte">
-                    <div class="col-left">
-                      <app-level-user
-                        *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                        [allLevels]="detailData.degrees_sport"
-                        [selectLevel]="getMonitor(detailData.monitor_id)"
-                        [size]="60"
-                        [userImage]="getMonitor(detailData.monitor_id)?.image !== null && getMonitor(detailData.monitor_id)?.image !== '' ? getMonitor(detailData.monitor_id)?.image : userAvatar"
-                      ></app-level-user>
-                    </div>
-                    <div class="col-right">
-                      <div class="client-name">
-                        {{ getMonitor(detailData.monitor_id)?.first_name }} {{ getMonitor(detailData.monitor_id)?.last_name }}
+                  <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
+                      <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
+                          <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                          <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
+                          <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
+                          <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
                       </div>
-                      <div class="client-dates">
-                        <ng-container *ngIf="getMonitor(detailData.monitor_id)?.language1_id">{{getLanguageById(getMonitor(detailData.monitor_id)?.language1_id)}} · </ng-container>
-                        {{getCountryById(getMonitor(detailData.monitor_id)?.country)}} · {{getBirthYears(getMonitor(detailData.monitor_id)?.birth_date)}}{{'years' | translate }} · {{getMonitor(detailData.monitor_id)?.phone}} · {{getMonitor(detailData.monitor_id)?.email}}
+                      <div class="box-detail-box box-background-grey">
+                          <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                          <div>{{'groups' | translate}}</div>
+                          <div class="font-bold">{{getGroupsQuantity()}}</div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <ng-container *ngIf="detailData?.course.course_type == 1">
-                  <div class="title-actividad">
-                    <div class="col-left">
-                      <div class="title">{{'students' | translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</div>
-                    </div>
-                    <div class="col-right"><mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon></div>
+                      <div class="box-detail-box box-background-grey">
+                          <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                          <div>{{'duration' | translate}}</div>
+                          <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
+                      </div>
+                      <div class="box-detail-box box-background-grey">
+                          <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                          <div>{{'days' | translate}}</div>
+                          <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
+                      </div>
                   </div>
 
-                  <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                    <div *ngFor="let client of detailData?.users">
-                      <div class="holder-deporte">
-                        <div class="col-left">
-                          <app-level-user
-                            *ngIf="detailData.sport"
-                            [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
-                            [size]="60"
-                            [userImage]="getClient(client.client_id).image !== null && getClient(client.client_id).image !== '' ? getClient(client.client_id).image : userAvatar"
-                          ></app-level-user>
-                        </div>
-                        <div class="col-right">
-                          <div class="client-name">
-                            {{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}
+                  <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+
+                  <ng-container *ngIf="detailData?.course.course_type == 2">
+
+                      <div style="width: 100%;float:left;margin-bottom:12px;">
+                          <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' |translate}}</mat-card-title>
+                      </div>
+
+                      <div style="float: left; width: 100%;">
+                          <ul>
+                              <li class="font-bold">{{getDateFormatLong(detailData?.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
+                          </ul>
+                      </div>
+
+                      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+
+                      <div style="width: 100%;float:left;margin-bottom:12px;">
+                          <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'participant' |translate}}</mat-card-title>
+                      </div>
+
+                      <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
+                        <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                          <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
+                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                              <div class="box-detail-user-block-text">
+                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <span>
+                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
+                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      </ng-container>
+                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
+                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      </ng-container>
+                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
+                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      </ng-container>
+                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
+                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                  </span>
+                                  <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
+                                      {{detailData?.degree.name}}
+                                  </div>
+                              </div>
                           </div>
-                          <div class="client-dates">
-                            <ng-container *ngIf="getClient(client.client_id)?.language1_id">{{getLanguageById(getClient(client.client_id)?.language1_id)}} · </ng-container>
-                            <ng-container *ngIf="getClient(client.client_id)?.language2_id">{{getLanguageById(getClient(client.client_id)?.language2_id)}} · </ng-container>
-                            <ng-container *ngIf="getClient(client.client_id)?.language3_id">{{getLanguageById(getClient(client.client_id)?.language3_id)}} · </ng-container>
-                            {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }} · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
-                          </div>
-                        </div>
                       </div>
-                    </div>
+
+                      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+
+                  </ng-container>
+
+                  <div style="width: 100%;float:left;margin-bottom:12px;">
+                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
                   </div>
-                </ng-container>
+
+                  <div *ngIf="detailData.monitor_id !== null" class="box-detail-user-block">
+                      <div class="box-detail-user-block-img">
+                          <img [src]="getMonitor(detailData.monitor_id)?.image ? getMonitor(detailData.monitor_id)?.image : 'assets/img/avatar.png'" />
+                      </div>
+                      <div class="box-detail-user-block-text">
+                          <div>{{ getMonitor(detailData.monitor_id)?.first_name }} {{ getMonitor(detailData.monitor_id)?.last_name }}</div>
+                          <span>
+                              <ng-container *ngIf="getMonitor(detailData.monitor_id)?.language1_id">
+                                  {{getLanguageById(getMonitor(detailData.monitor_id)?.language1_id)}} ·
+                              </ng-container>
+                              {{getCountryById(getMonitor(detailData.monitor_id)?.country)}} · {{getBirthYears(getMonitor(detailData.monitor_id)?.birth_date)}}{{'years' | translate }}
+                              · {{getMonitor(detailData.monitor_id)?.phone}} · {{getMonitor(detailData.monitor_id)?.email}}
+                          </span>
+                      </div>
+                  </div>
+
+                  <ng-container *ngIf="detailData?.course.course_type == 1">
+                      <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
+                          <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                          <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
+                      </div>
+
+                      <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
+                          <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
+                              <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
+                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
+                              <div class="box-detail-user-block-text">
+                                  <div>{{ getClient(client.client_id)?.first_name }} {{ getClient(client.client_id)?.last_name }}</div>
+                                  <span>
+                                      <ng-container *ngIf="getClient(client.client_id)?.language1_id">
+                                          {{getLanguageById(getClient(client.client_id)?.language1_id)}} ·
+                                      </ng-container>
+                                      <ng-container *ngIf="getClient(client.client_id)?.language2_id">
+                                          {{getLanguageById(getClient(client.client_id)?.language2_id)}} ·
+                                      </ng-container>
+                                      <ng-container *ngIf="getClient(client.client_id)?.language3_id">
+                                          {{getLanguageById(getClient(client.client_id)?.language3_id)}} ·
+                                      </ng-container>
+                                      {{getCountryById(getClient(client.client_id)?.country)}} · {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years' | translate }}
+                                      · {{getClient(client.client_id)?.phone}} · {{getClient(client.client_id)?.email}}
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                  </ng-container>
 
               </mat-card-content>
             </mat-card>
           </vex-page-layout-content>
         </mat-tab>
-        <mat-tab label="{{'menu.stats' | translate}}"></mat-tab>
+
+        <mat-tab label="Statistiques" *ngIf="false"></mat-tab>
+
       </mat-tab-group>
     </div>
   </div>

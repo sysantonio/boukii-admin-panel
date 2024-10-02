@@ -9,7 +9,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { CoursesCreateUpdateComponent } from './courses-create-update.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-clients-group/widget-clients-group.module';
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
@@ -27,12 +26,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatExpansionModule} from '@angular/material/expansion';
-import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CourseDetailModalComponent } from './course-detail-modal.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
+import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
+import { ComponentsModule } from 'src/@vex/components/components.module';
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 
 @NgModule({
   imports: [
@@ -67,12 +68,15 @@ import { TranslateModule } from '@ngx-translate/core';
     MatChipsModule,
     MatCheckboxModule,
     AngularEditorModule,
-    MatProgressSpinnerModule,
     MatTabsModule,
-    TranslateModule
+    MatProgressSpinnerModule,
+    TranslateModule,
+    PageLayoutModule,
+    ComponentsModule,
+    ComponentsCustomModule
   ],
-  declarations: [CoursesCreateUpdateComponent],
-  exports: [CoursesCreateUpdateComponent]
+  declarations: [CourseDetailModalComponent],
+  exports: [CourseDetailModalComponent]
 })
-export class CoursesCreateUpdateModule {
+export class CoursesDetailModalModule {
 }

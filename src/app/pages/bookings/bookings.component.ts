@@ -468,7 +468,7 @@ export class BookingsComponent {
     return ret.toFixed(2);
   }
 
-/*  getUniqueBookingUsers(data: any) {
+  getUniqueBookingUsers(data: any) {
     const clientIds = new Set();
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
@@ -484,9 +484,9 @@ export class BookingsComponent {
       }
       return false;
     });
-  }*/
+  }
 
-  getUniqueBookingUsers(data: any) {
+/*  getUniqueBookingUsers(data: any) {
     const uniqueGroups = new Map<string, any>();
 
     data.forEach(item => {
@@ -507,9 +507,9 @@ export class BookingsComponent {
 
     // Convertimos el Map en un array de los valores
     this.bookingUsersUnique = Array.from(uniqueGroups.values());
-  }
+  }*/
 
-  /*getUniqueBookingUsers(data: any) {
+/*  getUniqueBookingUsers(data: any) {
     const uniqueGroups = new Map<string, any>();
 
     data.forEach(item => {

@@ -1,8 +1,3 @@
-.table-show-detail {
-  width: 65%;
-  float:left;
-}
-
 .vex-page-layout-content {
   &.col-right {
     width: 30%;
@@ -120,7 +115,6 @@
           font-weight: 700;
           color: black;
           margin-bottom: 2px;
-          max-width: 600px;
         }
 
         .client-dates {
@@ -173,7 +167,6 @@
           font-weight: 700;
           color: black;
           margin-bottom: 2px;
-          max-width: 600px;
         }
 
         .client-dates {
@@ -210,10 +203,6 @@
         text-align:center;
         font-size: 12px;
         font-family: 'Montserrat', sans-serif;
-
-        &:first-child {
-          color: #fff;
-        }
 
         img {
           display: inline-block;

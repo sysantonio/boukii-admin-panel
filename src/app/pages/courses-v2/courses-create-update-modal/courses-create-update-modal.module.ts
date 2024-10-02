@@ -9,7 +9,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { CoursesCreateUpdateComponent } from './courses-create-update.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-clients-group/widget-clients-group.module';
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
@@ -27,12 +26,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatExpansionModule} from '@angular/material/expansion';
-import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateModule } from '@ngx-translate/core';
+import { CoursesCreateUpdateModalComponent } from './courses-create-update-modal.component';
 
 @NgModule({
   imports: [
@@ -71,8 +69,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatTabsModule,
     TranslateModule
   ],
-  declarations: [CoursesCreateUpdateComponent],
-  exports: [CoursesCreateUpdateComponent]
+  declarations: [CoursesCreateUpdateModalComponent],
+  exports: [CoursesCreateUpdateModalComponent]
 })
-export class CoursesCreateUpdateModule {
+export class CoursesCreateUpdateModalModule {
 }
