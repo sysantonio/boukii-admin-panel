@@ -71,7 +71,7 @@
 </ng-container>
 
 <ng-container *ngIf="isSubheading(item)">
-  <div class="vex-sidenav-subheading">{{ item.label | translate }}</div>
+  <div class="vex-sidenav-subheading" *ngIf="item.label">{{ item.label | translate }}</div>
   <vex-sidenav-item *ngFor="let subItem of item.children" [item]="subItem"
     [level]="0"></vex-sidenav-item>
 </ng-container>
