@@ -44,6 +44,7 @@
   flex-wrap: nowrap;
   flex-direction: column;
   width: 50%;
+  background-color: var(--color-grey5);
   @media only screen and (max-width: 834px) {
     width: 100%;
   }
