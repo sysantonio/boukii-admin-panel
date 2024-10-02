@@ -6,7 +6,7 @@ import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
-import { CourseUserTransferComponent } from '../course-user-transfer/course-user-transfer.component';
+import { CourseUserTransfer2Component } from '../course-user-transfer/course-user-transfer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -353,7 +353,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   openUserTransfer(group, subgroup, subgroupNumber, degree) {
-    const dialogRef = this.dialog.open(CourseUserTransferComponent, {
+    const dialogRef = this.dialog.open(CourseUserTransfer2Component, {
       width: '800px',
       height: '800px',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo

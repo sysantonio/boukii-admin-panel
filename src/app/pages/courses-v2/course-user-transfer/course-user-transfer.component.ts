@@ -27,7 +27,7 @@ export class CourseUserTransfer2Component implements OnInit {
   user: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public defaults: any, private crudService: ApiCrudService,
-   private snackbar: MatSnackBar, private translateService: TranslateService) {
+    private snackbar: MatSnackBar, private translateService: TranslateService) {
 
   }
 
@@ -44,7 +44,7 @@ export class CourseUserTransfer2Component implements OnInit {
   getData() {
     this.courseSubGroups = [];
     this.currentStudents = [];
-    this.crudService.get('/admin/courses/'+this.defaults.id)
+    this.crudService.get('/admin/courses/' + this.defaults.id)
       .subscribe((data) => {
         this.course = data.data;
 
@@ -58,43 +58,43 @@ export class CourseUserTransfer2Component implements OnInit {
           }
         });
 
-        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&course_id='+this.defaults.id)
-            .subscribe((result) => {
-              if (result.data.length > 0) {
-                result.data.forEach(element => {
-                  const exists = this.currentStudents.some(student => student.client_id === element.client_id);
+        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&course_id=' + this.defaults.id)
+          .subscribe((result) => {
+            if (result.data.length > 0) {
+              result.data.forEach(element => {
+                const exists = this.currentStudents.some(student => student.client_id === element.client_id);
 
-                  if (!exists) {
-                    const course = this.course.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD'));
-                    if (course) {
+                if (!exists) {
+                  const course = this.course.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === this.defaults.currentDate.format('YYYY-MM-DD'));
+                  if (course) {
 
-                      if (element.course_subgroup_id === this.defaults.subgroup.id) {
-                        this.currentStudents.push(element);
-                      }
-                      /*const group = course.course_groups.find((g) => g.course_date_id === element.course_date_id);
-
-                      if (group) {
-
-                        group.course_subgroups.forEach(sb => {
-                          if (sb.id === this.defaults.subgroup.id) {
-
-                            this.currentStudents.push(element);
-                          }
-                        });
-                      }*/
+                    if (element.course_subgroup_id === this.defaults.subgroup.id) {
+                      this.currentStudents.push(element);
                     }
+                    /*const group = course.course_groups.find((g) => g.course_date_id === element.course_date_id);
+
+                    if (group) {
+
+                      group.course_subgroups.forEach(sb => {
+                        if (sb.id === this.defaults.subgroup.id) {
+
+                          this.currentStudents.push(element);
+                        }
+                      });
+                    }*/
                   }
-                });
-              }
-              this.loading = false;
-            });
+                }
+              });
+            }
+            this.loading = false;
+          });
 
 
       })
   }
 
   getClients() {
-    this.crudService.list('/clients', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 100000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 
@@ -108,14 +108,14 @@ export class CourseUserTransfer2Component implements OnInit {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
@@ -170,7 +170,7 @@ export class CourseUserTransfer2Component implements OnInit {
 
     this.crudService.post('/clients/transfer', data)
       .subscribe((data) => {
-        this.snackbar.open(this.translateService.instant('snackbar.course.trasnfer_user'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.course.trasnfer_user'), 'OK', { duration: 3000 });
         this.getData();
       })
   }

@@ -40,7 +40,7 @@ import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component
     MatSlideToggleModule,
     CoursesDetailCardModule,
     MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
-    FluxModalModule, CourseComponentsModule
+    FluxModalModule
   ]
 })
 export class CourseDetailNewModule { }

@@ -57,7 +57,6 @@ import { CourseDetailNewModule } from './course-detail-new/course-detail-new.mod
     CoursesCreateUpdateModalModule,
     MatDialogModule,
     ComponentsModule,
-    MatSlideToggleModule,
     MatDividerModule,
     MatCardModule,
     CourseUserTransferModalModule,
