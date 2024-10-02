@@ -36,6 +36,14 @@ import moment from 'moment';
 })
 export class AppComponent {
   user: any;
+  locales: { locale: any, lan: string }[] =
+    [
+      { locale: localeEs, lan: 'es' },
+      { locale: localeIt, lan: 'it-IT' },
+      { locale: localeEnGb, lan: 'en-GB' },
+      { locale: localeDe, lan: 'de' },
+      { locale: localeFr, lan: 'fr' },
+    ]
 
   constructor(
     private configService: ConfigService,

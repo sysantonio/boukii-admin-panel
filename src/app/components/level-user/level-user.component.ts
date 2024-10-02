@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './level-user.component.html',
   styleUrls: ['./level-user.component.scss'],
 })
-export class LevelUserComponent  implements OnInit {
+export class LevelUserComponent implements OnInit {
 
   @Input() allLevels: any[] = [];
   @Input() selectLevel: number = 0;
@@ -15,16 +15,17 @@ export class LevelUserComponent  implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.selectLevel){
+    console.log(this.allLevels)
+    if (this.selectLevel) {
       let index = this.allLevels.findIndex(obj => obj.id === this.selectLevel);
       if (index === -1) {
         this.selectLevel = 0;
       }
-      else{
+      else {
         this.selectLevel = index;
       }
     }
-    else{
+    else {
       this.selectLevel = 0;
     }
   }
@@ -74,19 +75,19 @@ export class LevelUserComponent  implements OnInit {
     const circleAngleSize = 360 / this.allLevels.length;
     const sizeMarker = this.markerRadius * 2;
 
-    const gapAngleSize = ( (this.size / 20) / circleRadius) * (180 / Math.PI);
+    const gapAngleSize = ((this.size / 20) / circleRadius) * (180 / Math.PI);
     const levelAngleSize = circleAngleSize - gapAngleSize;
 
     // Start angle for the selected level
     const shiftAdjustment = circleAngleSize; //manually to fit in gap;
-    const startAngle = ( (this.selectLevel + 1) * circleAngleSize) - shiftAdjustment;
+    const startAngle = ((this.selectLevel + 1) * circleAngleSize) - shiftAdjustment;
     const markerAngle = startAngle + levelAngleSize + sizeMarker; // middle of the gap
 
-    const x =   circleRadius * Math.cos(this.degToRad(markerAngle - 90));
+    const x = circleRadius * Math.cos(this.degToRad(markerAngle - 90));
     const y = circleRadius * Math.sin(this.degToRad(markerAngle - 90));
 
     if (isNaN(x) || isNaN(y)) {
-    //  console.error('getMarkerPosition: Calculated position is NaN');
+      //  console.error('getMarkerPosition: Calculated position is NaN');
       return { x: 0, y: 0 }; // Default safe position
     }
 
