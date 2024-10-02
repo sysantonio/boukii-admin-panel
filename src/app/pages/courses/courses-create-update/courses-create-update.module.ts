@@ -10,16 +10,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { CoursesCreateUpdateComponent } from './courses-create-update.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { WidgetClientsGroupModule } from 'src/@vex/components/widgets/widget-clients-group/widget-clients-group.module';
 import { WidgetClientsSportsModule } from 'src/@vex/components/widgets/widget-clients-sports/widget-clients-sports.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { MatStepperModule } from '@angular/material/stepper';
+import {MatStepperModule} from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
@@ -70,6 +70,13 @@ import { CourseComponentsModule } from '../components/components.module';
     MatProgressSpinnerModule,
     MatTabsModule,
     TranslateModule,
+    FluxToolbarModule,
+    FluxUploadImgModule,
+    MatExpansionModule,
+    FluxLayoutModule,
+    CoursesDetailCardModule,
+    FluxModalModule,
+    FluxDisponibilidadModule,
     CourseComponentsModule
   ],
   declarations: [CoursesCreateUpdateComponent],

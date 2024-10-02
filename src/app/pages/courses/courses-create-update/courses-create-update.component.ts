@@ -82,6 +82,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
   editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
 
+  minDate = new Date(2000, 1, 1);
+  nowDate = new Date()
+  maxDate = new Date(2099, 12, 31);
 
   courseFormGroup: UntypedFormGroup; //El bueno
   extrasFormGroup: UntypedFormGroup; //crear extras nuevas
@@ -231,6 +234,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   sportTypeSelected: number = -1;
+  sportData: any = [];
+  sportDataList = [];
+  sportTypeData = [];
   levels = [];
   monitors = [];
 
