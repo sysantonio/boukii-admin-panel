@@ -60,7 +60,7 @@ blockquote {
 }
 
 .vex-toolbar {
-  box-shadow: none  !important;
+  box-shadow: none !important;
 }
 
 .secondary-toolbar,
@@ -75,7 +75,7 @@ vex-breadcrumbs {
       display: inline-flex;
       align-items: center;
 
-      @media (max-width: 480px)  {
+      @media (max-width: 480px) {
         width: 38px;
         height: 38px;
       }
@@ -100,6 +100,7 @@ vex-breadcrumbs {
     line-height: 28px;
 
     color: rgba(0, 0, 0, 01);
+
     width: auto !important;
     float: none !important;
 
@@ -111,7 +112,7 @@ vex-breadcrumbs {
       margin-right: 8px;
     }*/
 
-    @media (max-width: 480px)  {
+    @media (max-width: 480px) {
       font-size: 16px;
     }
   }
@@ -120,9 +121,8 @@ vex-breadcrumbs {
     font-size: 20px;
     font-weight: 400;
     line-height: 28px;
-    color: rgba(0, 0, 0, 01);
-
-    @media (max-width: 480px)  {
+    color: var(--color-dark1);
+    @media (max-width: 480px) {
       font-size: 12px;
     }
 

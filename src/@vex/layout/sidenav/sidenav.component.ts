@@ -32,10 +32,10 @@ export class SidenavComponent implements OnInit {
   user: any = null;
 
   constructor(private navigationService: NavigationService,
-              private layoutService: LayoutService,
-              private configService: ConfigService,
-              private readonly popoverService: PopoverService,
-              private readonly dialog: MatDialog) { }
+    public layoutService: LayoutService,
+    private configService: ConfigService,
+    private readonly popoverService: PopoverService,
+    private readonly dialog: MatDialog) { }
 
   ngOnInit() {
     this.getUser();
