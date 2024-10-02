@@ -24,7 +24,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, UntypedFormControl } from '@angular/forms';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
@@ -36,7 +36,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { jsPDF } from 'jspdf';
 import * as QRCode from 'qrcode';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {ExcelExportService} from '../../../service/excel.service';
+import { ExcelExportService } from '../../../service/excel.service';
 
 @UntilDestroy()
 @Component({
@@ -166,8 +166,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   allMonitors = false;
 
   constructor(private dialog: MatDialog, public router: Router, private crudService: ApiCrudService,
-              private excelExportService: ExcelExportService, private routeActive: ActivatedRoute,
-              private cdr: ChangeDetectorRef, private translateService: TranslateService, private snackbar: MatSnackBar) {
+    private excelExportService: ExcelExportService, private routeActive: ActivatedRoute,
+    private cdr: ChangeDetectorRef, private translateService: TranslateService, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.schoolId = this.user.schools[0].id;
   }
@@ -184,8 +184,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit() {
     this.routeActive.queryParams.subscribe(params => {
       this.gift = +params['isGift'] || 0; // Valor por defecto
-      if(this.entity.includes('vouchers')) {
-        if(this.gift){
+      if (this.entity.includes('vouchers')) {
+        if (this.gift) {
           this.filter += '&is_gift=1';
         } else {
           this.filter += '&is_gift=0';
@@ -217,14 +217,14 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       })
   }
 
-  onButtonGroupClick($event){
+  onButtonGroupClick($event) {
     let clickedElement = $event.target || $event.srcElement;
 
-    if( clickedElement.nodeName === "BUTTON" ) {
+    if (clickedElement.nodeName === "BUTTON") {
 
       let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
       // if a Button already has Class: .active
-      if( isCertainButtonAlreadyActive ) {
+      if (isCertainButtonAlreadyActive) {
         isCertainButtonAlreadyActive.classList.remove("active");
       }
 
@@ -237,7 +237,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     let filter = '';
 
     if (!all) {
-      if(this.entity.includes('booking')) {
+      if (this.entity.includes('booking')) {
 
         // Filtrar por tipo de curso (colectivo, privado, actividad)
         const courseTypes = [];
@@ -292,7 +292,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
       }
 
-      if(this.entity.includes('courses')) {
+      if (this.entity.includes('courses')) {
         const courseTypes = [];
 
         // Filtrar por tipo de curso (colectivo, privado, actividad)
@@ -317,7 +317,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
             filter = filter + '&course_types[]=' + courseTypes.join('&course_types[]=');
           }
         }
-        if(!this.allCourse) {
+        if (!this.allCourse) {
           if (this.finishedCourse) {
             filter = filter + '&finished=1';
           } else {
@@ -331,46 +331,46 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           filter = filter + '&active=0';
         }
 
-        if(this.sportsControl?.value?.length !== this.sports?.length) {
+        if (this.sportsControl?.value?.length !== this.sports?.length) {
           const ids = [];
           this.sportsControl?.value?.forEach(element => {
             ids.push(element.id);
           });
-          if(ids.length>1) {
+          if (ids.length > 1) {
             filter = filter + '&sports_id[]=' + ids.join('&sports_id[]=');
-          } else if(ids.length == 1) {
-            filter = filter + '&sport_id='+ids[0];
+          } else if (ids.length == 1) {
+            filter = filter + '&sport_id=' + ids[0];
           }
         }
       }
 
-      if(this.entity.includes('monitor')) {
+      if (this.entity.includes('monitor')) {
         if (this.activeMonitor && !this.inactiveMonitor) {
           filter = filter + '&school_active=1';
         } else if (!this.activeMonitor && this.inactiveMonitor) {
           filter = filter + '&school_active=0';
         }
-        if(this.sportsControl?.value?.length !== this.sports?.length) {
+        if (this.sportsControl?.value?.length !== this.sports?.length) {
           const ids = [];
           this.sportsControl?.value?.forEach(element => {
             ids.push(element.id);
           });
-          if(ids.length) {
+          if (ids.length) {
             filter = filter + '&sports_id[]=' + ids.join('&sports_id[]=');
           }
 
 
         }
       }
-      if(this.entity.includes('statistics')) {
+      if (this.entity.includes('statistics')) {
         if (this.selectedFrom) {
-          filter = filter + '&start_date='+moment(this.selectedFrom).format('YYYY-MM-DD');
+          filter = filter + '&start_date=' + moment(this.selectedFrom).format('YYYY-MM-DD');
         }
         if (this.selectedTo) {
-          filter = filter + '&start_to='+moment(this.selectedTo).format('YYYY-MM-DD');
+          filter = filter + '&start_to=' + moment(this.selectedTo).format('YYYY-MM-DD');
         }
       }
-      if(this.entity.includes('vouchers')) {
+      if (this.entity.includes('vouchers')) {
         if (this.gift) {
           filter = filter + '&is_gift=1';
         } else {
@@ -402,8 +402,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       pageSize,
       'desc',
       'id',
-      filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id + this.search +
-      (this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
+      filter + this.searchCtrl.value + '&school_id=' + this.user.schools[0].id + this.search +
+      (this.filterField !== null ? '&' + this.filterColumn + '=' + this.filterField : ''),
       '',
       null,
       this.searchCtrl.value,
@@ -454,7 +454,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   onPageChange(event: PageEvent) {
     // La API puede esperar la primera página como 1, no como 0.
-    this.getData(event.pageIndex +1, event.pageSize);
+    this.getData(event.pageIndex + 1, event.pageSize);
   }
 
   sortData(sort: Sort) {
@@ -509,7 +509,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   update(row: any) {
     if (!this.createOnModal) {
-      this.router.navigate(['/' + this.route + '/' +this.updatePage + '/' +row.id]);
+      this.router.navigate(['/' + this.route + '/' + this.updatePage + '/' + row.id]);
 
     } else {
       this.updateModal(row);
@@ -533,7 +533,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   showDetailFn(row: any) {
-    this.showDetailEvent.emit({showDetail: !this.showDetail, item: row});
+    this.showDetailEvent.emit({ showDetail: !this.showDetail, item: row });
   }
 
   async delete(item: any) {
@@ -541,7 +541,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -560,7 +560,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -568,8 +568,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         if (this.entity.includes('monitor')) {
           const monitorSchool = item.monitors_schools.find((c) => c.school_id === this.user.schools[0].id);
 
-          this.crudService.update('/monitors-schools', {monitor_id: monitorSchool.monitor_id,
-            school_id: monitorSchool.school_id, active_school: !item.active}, monitorSchool.id)
+          this.crudService.update('/monitors-schools', {
+            monitor_id: monitorSchool.monitor_id,
+            school_id: monitorSchool.school_id, active_school: !item.active
+          }, monitorSchool.id)
             .subscribe(() => {
               this.getData(1, 10);
             })
@@ -577,7 +579,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (this.entity.includes('clients')) {
           const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
 
-          this.crudService.update('/clients-schools', {client_id: clientSchool.client_id, school_id: clientSchool.school_id, accepted_at: clientSchool.accepted_at !== null ? null : moment().format('YYYY-MM-DD HH:mm:ss')}, clientSchool.id)
+          this.crudService.update('/clients-schools', { client_id: clientSchool.client_id, school_id: clientSchool.school_id, accepted_at: clientSchool.accepted_at !== null ? null : moment().format('YYYY-MM-DD HH:mm:ss') }, clientSchool.id)
             .subscribe(() => {
               this.getData(1, 10);
             })
@@ -641,7 +643,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       dates.forEach((element, idx) => {
         if (idx < 2) {
           ret = ret + '<b>' + element + '</b>' + '<br>';
-        } else if (idx === 2){
+        } else if (idx === 2) {
           ret = ret + element + '-';
         } else {
           ret = ret + element;
@@ -669,7 +671,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -788,12 +790,12 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -848,14 +850,14 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((monitor) => {
         this.monitors = monitor.data;
       })
   }
 
   getClients() {
-    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 
@@ -865,7 +867,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getSports() {
     this.crudService.list('/school-sports', 1, 10000, 'desc', 'id',
-      '&school_id='+this.user.schools[0].id, '', null, null, ['sport'])
+      '&school_id=' + this.user.schools[0].id, '', null, null, ['sport'])
       .subscribe((data) => {
         this.sports = data.data.map(item => item.sport);
         this.sportsControl.patchValue(this.sports);
@@ -919,7 +921,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   getPaymentMethod(id: number) {
-    switch(id) {
+    switch (id) {
       case 1:
         return 'CASH';
       case 2:
@@ -966,12 +968,12 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     let min = dates.find(objeto => objeto.active === 1 || objeto.active === true);
     let max = dates.slice().reverse().find(objeto => objeto.active === 1 || objeto.active === true);
 
-    return {min: min.date, max: max.date}
+    return { min: min.date, max: max.date }
   }
 
   /* EXPORT QR */
 
-  hexToRgb(hex:string) {
+  hexToRgb(hex: string) {
     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return rgb ? {
       r: parseInt(rgb[1], 16),
@@ -980,15 +982,15 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     } : null;
   }
 
-  exportQR(id:any) {
+  exportQR(id: any) {
     console.log('export');
-    this.crudService.get('/admin/clients/course/'+ id)
+    this.crudService.get('/admin/clients/course/' + id)
       .subscribe(async (data) => {
         console.log(data);
 
         const clientsData = data.data;
 
-        if(clientsData && clientsData.length){
+        if (clientsData && clientsData.length) {
           const doc = new jsPDF();
           const pageWidth = doc.internal.pageSize.getWidth();
           const colWidth = pageWidth / 2;
@@ -1011,10 +1013,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
             doc.text(lines, baseX, y_text);
             y_text += (lines.length + 0.4) * lineHeight;
 
-            if(client.client?.phone || client.client?.telephone){
+            if (client.client?.phone || client.client?.telephone) {
               let clientPhone = '';
-              if(client.client?.phone){clientPhone = client.client.phone;}
-              else{clientPhone = client.client.telephone;}
+              if (client.client?.phone) { clientPhone = client.client.phone; }
+              else { clientPhone = client.client.telephone; }
               doc.setFontSize(14);
               doc.setFont('helvetica', 'normal');
               lines = doc.splitTextToSize(`${clientPhone}`, maxWidthText);
@@ -1028,7 +1030,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
             doc.text(lines, baseX, y_text);
             y_text += (lines.length * lineHeight) - 2;
 
-            if(client.monitor){
+            if (client.monitor) {
               doc.setFontSize(8);
               lines = doc.splitTextToSize(`Professeur - niveau`, maxWidthText);
               doc.text(lines, baseX, y_text);
@@ -1039,11 +1041,11 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
               doc.text(lines, baseX, y_text);
               y_text += (lines.length * lineHeight) + 3;
             }
-            else{
+            else {
               y_text += 6;
             }
 
-            if(client.degree){
+            if (client.degree) {
               const rgbColor = this.hexToRgb(client.degree.color);
               doc.setFillColor(rgbColor.r, rgbColor.g, rgbColor.b);
               doc.setTextColor(255, 255, 255);
@@ -1063,7 +1065,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
             // Generate QR code
             const qrData = await QRCode.toDataURL(client.client.id.toString());
-            doc.addImage(qrData, 'JPEG', qrX, y-10, qrSize, qrSize);
+            doc.addImage(qrData, 'JPEG', qrX, y - 10, qrSize, qrSize);
 
             //Next row if not left and not last
             if (!isLeftColumn || i === clientsData.length - 1) {
@@ -1079,8 +1081,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           doc.save('clients.pdf');
         }
         //No clients
-        else{
-          this.snackbar.open(this.translateService.instant('course_without_clients'), 'OK', {duration: 3000});
+        else {
+          this.snackbar.open(this.translateService.instant('course_without_clients'), 'OK', { duration: 3000 });
         }
 
       })
@@ -1107,8 +1109,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   }
 
-  encontrarPrimeraClaveConValor(obj: any): string | null {
-    if (obj !== null) {
+  encontrarPrimeraClaveConValor(obj: any): any {
+    if (obj !== null) { 
       for (const clave of Object.keys(obj)) {
         if (obj[clave] !== null && clave !== 'intervalo') {
           return obj[clave];
@@ -1129,9 +1131,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     for (const item of data) {
       if (item.monitor_sport_authorized_degrees && item.monitor_sport_authorized_degrees.length > 0) {
         const highestInCurrent = item.monitor_sport_authorized_degrees.reduce((prev, current) =>
-          (prev.degree.degree_order > current.degree.degree_order ) ? prev : current
+          (prev.degree.degree_order > current.degree.degree_order) ? prev : current
         );
-        if (!highestDegree || highestInCurrent.degree.degree_order  > highestDegree.degree.degree_order ) {
+        if (!highestDegree || highestInCurrent.degree.degree_order > highestDegree.degree.degree_order) {
           highestDegree = highestInCurrent;
         }
       }
@@ -1146,7 +1148,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   getDegrees() {
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id='+this.user.schools[0].id + '&active=1')
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data;
       })
@@ -1197,7 +1199,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   copy(item: any) {
-    if(this.entity.includes('course')) {
+    if (this.entity.includes('course')) {
       this.copyCourse(item);
     }
   }
@@ -1311,7 +1313,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         });
       });
       console.log(data);
-    } else if (item.course_type === 2  && item.is_flexible) {
+    } else if (item.course_type === 2 && item.is_flexible) {
       data = {
         course_type: item.course_type,
         is_flexible: item.is_flexible,

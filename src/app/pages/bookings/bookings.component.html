@@ -10,21 +10,19 @@
     </button>
   </vex-secondary-toolbar>-->
 
-  <vex-secondary-toolbar current="">
+  <vex-secondary-toolbar current>
     <vex-breadcrumbs
       [crumbs]="[
     {icon:'reservas'},
     {text:'bookings', title: true},
     {text:'list', subtitle: true},
     ]"
-      class="flex"
-    ></vex-breadcrumbs>
+      class="flex"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
   <vex-page-layout-content
     class="-mt-6 fullwidth"
-    [ngClass]="{'table-show-detail': this.showDetail}"
-  >
+    [ngClass]="{'table-show-detail': this.showDetail}">
     <vex-aio-table
       [columns]="columns"
       [entity]="entity"
@@ -42,8 +40,7 @@
       [filterColumn]="'school_id'"
       [filterField]="user.schools[0].id"
       [sectionIcon]="icon"
-      [showDetail]="showDetail"
-    >
+      [showDetail]="showDetail">
     </vex-aio-table>
   </vex-page-layout-content>
   <vex-page-layout-content class="fullwidth col-right" *ngIf="showDetail">
@@ -51,46 +48,38 @@
       <mat-card-header style="display:block">
         <div style="width: 100%;">
           <span style="display: inline-block;width: 80%; text-align: left;">
-            <mat-card-title
-            >{{'booking' | translate}} #{{detailData.id}}</mat-card-title
-            >
+            <mat-card-title>{{'booking' | translate}}
+              #{{detailData.id}}</mat-card-title>
           </span>
           <span style="display: inline-block;width: 20%; text-align: right;">
             <img
               src="assets/img/icons/edit.svg"
               (click)="goTo('/bookings/update/' + detailData.id)"
-              class="btn-edit"
-            />
+              class="btn-edit" />
             <img
               src="assets/img/icons/close.svg"
               (click)="showDetail = false"
-              class="btn-close"
-            />
+              class="btn-close" />
           </span>
         </div>
         <div
-          style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;"
-        >
+          style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
           <mat-card-subtitle style="width:100%;">
             <div
-              style="width: 60%;display:inline-block;text-align: left; color: white;"
-            >
+              style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span
-                ><span style="margin-left: 10px;font-style: italic;"
-              >{{detailData.created_at | date: 'HH:mm'}}h</span
-              >
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span
+                  style="margin-left: 10px;font-style: italic;">{{detailData.created_at
+                  | date: 'HH:mm'}}h</span>
               </span>
             </div>
             <div *ngIf="detailData.user"
-                 style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;"
-            >
+              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
               {{ detailData.user.username }}
-              <span style="margin-left: 10px;"
-              >({{ detailData.user.first_name + ' ' +  detailData.user.last_name
-                }})</span
-              >
+              <span style="margin-left: 10px;">({{ detailData.user.first_name +
+                ' ' + detailData.user.last_name
+                }})</span>
             </div>
           </mat-card-subtitle>
         </div>
@@ -121,14 +110,12 @@
             <span class="col-right">
               <span
                 style="color:#00C32B"
-                *ngIf="detailData.status === 1 && detailData.paid"
-              >
+                *ngIf="detailData.status === 1 && detailData.paid">
                 {{'payed' | translate | uppercase }}
               </span>
               <span
                 style="color:#FF0000"
-                *ngIf="detailData.status === 1 && !detailData.paid"
-              >
+                *ngIf="detailData.status === 1 && !detailData.paid">
                 {{'no_payed' | translate | uppercase }}
               </span>
             </span>
@@ -143,8 +130,7 @@
                 [allLevels]="detailData.degrees_sport"
                 [selectLevel]="getClientDegree(detailData?.client_main_id)"
                 [size]="60"
-                [userImage]="detailData.client_main?.image !== null && detailData.client_main?.image !== '' ? detailData.client_main?.image : imageAvatar"
-              ></app-level-user>
+                [userImage]="detailData.client_main?.image !== null && detailData.client_main?.image !== '' ? detailData.client_main?.image : imageAvatar"></app-level-user>
             </div>
             <div class="col-right">
               <div class="client-name">
@@ -164,14 +150,12 @@
                 <a
                   href="mailto:{{detailData?.client_main?.email}}"
                   style="cursor:pointer"
-                  title="{{detailData?.client_main?.email}}"
-                >
+                  title="{{detailData?.client_main?.email}}">
                   <mat-icon svgIcon="logo:mail"></mat-icon>
                 </a>
                 <a
                   href="tel:{{detailData?.client_main?.phone}}"
-                  title="{{detailData?.client_main?.phone}}"
-                >
+                  title="{{detailData?.client_main?.phone}}">
                   <mat-icon svgIcon="logo:phone"></mat-icon>
                 </a>
               </div>
@@ -181,8 +165,7 @@
 
         <ng-container
           *ngFor="let bUsers of bookingUsersUnique; let buI = index"
-          [style.marginTop]="buI > 0 ? '35px' : ''"
-        >
+          [style.marginTop]="buI > 0 ? '35px' : ''">
           <div class="title-actividad">
             <div class="col-left">
               <b class="title">{{ 'activity' | translate }} {{buI + 1}}: </b>
@@ -194,14 +177,12 @@
               </b>
               <b
                 style="color:#FF0000;margin-left:10px;"
-                *ngIf="bUsers.status === 2"
-              >
+                *ngIf="bUsers.status === 2">
                 {{'cancelled' | translate | uppercase }}
               </b>
               <b
                 style="color:#FF0000;margin-left:10px;"
-                *ngIf="bUsers.status === 3"
-              >
+                *ngIf="bUsers.status === 3">
                 {{'partial_cancelled' | translate | uppercase }}
               </b>
             </div>
@@ -220,36 +201,40 @@
                         *ngIf="bUsers?.course?.course_type === 1"
                         [src]="bUsers.course.sport.icon_collective"
                         class="avatar h-16 w-16 align-middle"
-                        style="display: inline; margin-right: 0.5rem; border-radius: 5px;"
-                      />
+                        style="display: inline; margin-right: 0.5rem; border-radius: 5px;" />
                       <img
                         *ngIf="bUsers?.course?.course_type !== 1"
                         [src]="bUsers.course.sport.icon_prive"
                         class="avatar h-16 w-16 align-middle"
-                        style="display: inline; margin-right: 0.5rem; border-radius: 5px;"
-                      />
+                        style="display: inline; margin-right: 0.5rem; border-radius: 5px;" />
                     </div>
                     <div class="c-r">
                       <div class="course-title">{{bUsers?.course?.name}}</div>
                       <div class="course-label">
                         {{
-                          (bUsers?.course?.course_type === 2 ? 'private' :
-                            bUsers?.course?.course_type === 1 ? 'collective' : 'activity') | translate
+                        (bUsers?.course?.course_type === 2 ? 'private' :
+                        bUsers?.course?.course_type === 1 ? 'collective' :
+                        'activity') | translate
                         }}
                         {{
-                          (bUsers?.course?.isFlexible ? 'flex' : 'fix') | translate
+                        (bUsers?.course?.isFlexible ? 'flex' : 'fix') |
+                        translate
                         }}
                         {{bUsers?.course?.sport.name}}
                       </div>
                       <ng-container *ngIf="bUsers?.course?.course_type !== 1">
                         <!-- Para course_type distinto de 1 -->
-                        <ng-container *ngFor="let item of detailData.bookingusers">
-                          <div *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
-      <span class="date-course">
-        <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
-        {{ item.date | date: 'dd.MM.YYYY' }}
-        <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
-      </span>
+                        <ng-container
+                          *ngFor="let item of detailData.bookingusers">
+                          <div
+                            *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
+                            <span class="date-course">
+                              <img class="icon-calendar"
+                                src="assets/img/icons/calendar-1.svg" />
+                              {{ item.date | date: 'dd.MM.YYYY' }}
+                              <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
+                              {{ item?.hour_end.substring(0, 5) }}h
+                            </span>
                           </div>
                         </ng-container>
                       </ng-container>
@@ -258,26 +243,32 @@
                       <ng-container *ngIf="bUsers?.course?.course_type === 1">
                         <!-- Si es flexible, mostrar todas las fechas -->
                         <ng-container *ngIf="bUsers?.course?.is_flexible">
-                          <ng-container *ngFor="let item of detailData.bookingusers">
+                          <ng-container
+                            *ngFor="let item of detailData.bookingusers">
                             <div>
-        <span class="date-course">
-          <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
-          {{ item.date | date: 'dd.MM.YYYY' }}
-          <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
-        </span>
+                              <span class="date-course">
+                                <img class="icon-calendar"
+                                  src="assets/img/icons/calendar-1.svg" />
+                                {{ item.date | date: 'dd.MM.YYYY' }}
+                                <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
+                                {{ item?.hour_end.substring(0, 5) }}h
+                              </span>
                             </div>
                           </ng-container>
                         </ng-container>
 
                         <!-- Si no es flexible, filtrar por client_id -->
                         <ng-container *ngIf="!bUsers?.course?.is_flexible">
-                          <ng-container *ngFor="let item of detailData.bookingusers">
+                          <ng-container
+                            *ngFor="let item of detailData.bookingusers">
                             <div *ngIf="item.client_id == bUsers.client_id">
-        <span class="date-course">
-          <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
-          {{ item.date | date: 'dd.MM.YYYY' }}
-          <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
-        </span>
+                              <span class="date-course">
+                                <img class="icon-calendar"
+                                  src="assets/img/icons/calendar-1.svg" />
+                                {{ item.date | date: 'dd.MM.YYYY' }}
+                                <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
+                                {{ item?.hour_end.substring(0, 5) }}h
+                              </span>
                             </div>
                           </ng-container>
                         </ng-container>
@@ -300,8 +291,7 @@
                   <div class="subtitle">
                     <img
                       class="icon-calendar"
-                      src="assets/img/icons/clientes2.svg"
-                    />
+                      src="assets/img/icons/clientes2.svg" />
                     {{'participant' | translate}}
                   </div>
                   <div class="holder-participante">
@@ -312,8 +302,7 @@
                           [allLevels]="detailData.degrees_sport"
                           [selectLevel]="getClientDegree(bUsers.client)"
                           [size]="60"
-                          [userImage]="bUsers?.client?.image !== null && bUsers?.client?.image !== '' ? bUsers?.client?.image : imageAvatar"
-                        ></app-level-user>
+                          [userImage]="bUsers?.client?.image !== null && bUsers?.client?.image !== '' ? bUsers?.client?.image : imageAvatar"></app-level-user>
                       </div>
                       <div class="c-r">
                         <div class="course-title">
@@ -333,14 +322,12 @@
                           <a
                             href="mailto:{{bUsers?.client?.email}}"
                             style="cursor:pointer"
-                            title="{{bUsers?.client?.email}}"
-                          >
+                            title="{{bUsers?.client?.email}}">
                             <mat-icon svgIcon="logo:mail"></mat-icon>
                           </a>
                           <a
                             href="tel:{{bUsers?.client?.phone}}"
-                            title="{{bUsers?.client?.phone}}"
-                          >
+                            title="{{bUsers?.client?.phone}}">
                             <mat-icon svgIcon="logo:phone"></mat-icon>
                           </a>
                         </div>
@@ -353,8 +340,7 @@
                   <div class="subtitle">
                     <img
                       class="icon-calendar"
-                      src="assets/img/icons/monitores-3.svg"
-                    />
+                      src="assets/img/icons/monitores-3.svg" />
                     {{'monitor' | translate}}
                   </div>
                   <div class="holder-participante">
@@ -365,8 +351,7 @@
                           [allLevels]="detailData.degrees_sport"
                           [selectLevel]="getHighestAuthorizedDegree(bUsers?.monitor, bUsers?.course?.sport_id).degree_id"
                           [size]="60"
-                          [userImage]="bUsers?.monitor?.image !== null && bUsers?.monitor?.image !== '' ? bUsers?.monitor?.image : imageAvatar"
-                        ></app-level-user>
+                          [userImage]="bUsers?.monitor?.image !== null && bUsers?.monitor?.image !== '' ? bUsers?.monitor?.image : imageAvatar"></app-level-user>
                       </div>
                       <div class="c-r">
                         <div *ngIf="bUsers?.monitor">
@@ -388,14 +373,12 @@
                             <a
                               href="mailto:{{bUsers?.monitor?.email}}"
                               style="cursor:pointer"
-                              title="{{bUsers?.monitor?.email}}"
-                            >
+                              title="{{bUsers?.monitor?.email}}">
                               <mat-icon svgIcon="logo:mail"></mat-icon>
                             </a>
                             <a
                               href="tel:{{bUsers?.monitor?.phone}}"
-                              title="{{bUsers?.monitor?.phone}}"
-                            >
+                              title="{{bUsers?.monitor?.phone}}">
                               <mat-icon svgIcon="logo:phone"></mat-icon>
                             </a>
                           </div>
@@ -486,8 +469,7 @@
             <div class="col-left">
               <mat-slide-toggle
                 [checked]="detailData?.has_cancellation_insurance"
-                [disabled]="true"
-              ></mat-slide-toggle>
+                [disabled]="true"></mat-slide-toggle>
               {{ 'op_rem_abr' | translate }}
             </div>
             <div class="col-right">
@@ -500,8 +482,7 @@
             <div class="col-left">
               <mat-slide-toggle
                 [disabled]="true"
-                [checked]="detailData?.has_boukii_care"
-              ></mat-slide-toggle>
+                [checked]="detailData?.has_boukii_care"></mat-slide-toggle>
               Boukii Care
             </div>
             <div class="col-right">
@@ -514,8 +495,7 @@
               <div style="width: 100%;" *ngIf="true">
                 <mat-slide-toggle
                   [disabled]="true"
-                  [checked]="existExtras()"
-                ></mat-slide-toggle>
+                  [checked]="existExtras()"></mat-slide-toggle>
                 {{'extras' | translate}}
               </div>
             </div>

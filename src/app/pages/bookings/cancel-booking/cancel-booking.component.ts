@@ -31,7 +31,7 @@ export class CancelBookingModalComponent implements OnInit {
     this.refundForm = this.fb.group({
       reason: ['', Validators.required]
     })
-   this.loading = false;
+    this.loading = false;
   }
 
 
@@ -85,19 +85,19 @@ export class CancelBookingModalComponent implements OnInit {
   }
 
   closeAndSave(type: string) {
-    this.dialogRef.close({type: type});
+    this.dialogRef.close({ type: type });
   }
 
   closeAndSaveRefund(type: string, reason: string) {
-    this.dialogRef.close({type: type, reason: reason});
+    this.dialogRef.close({ type: type, reason: reason });
   }
 
   closeAndSaveGift(type: string) {
-    this.dialogRef.close({type: type});
+    this.dialogRef.close({ type: type });
   }
 
   closeAndSaveBonus(type: string) {
-    this.dialogRef.close({type: type, bonus: this.unifyBonus ? this.defaults.currentBonus : this.selectedBonus, unifyBonus: this.unifyBonus});
+    this.dialogRef.close({ type: type, bonus: this.unifyBonus ? this.defaults.currentBonus : this.selectedBonus, unifyBonus: this.unifyBonus });
   }
 
   setReason(event: any) {
