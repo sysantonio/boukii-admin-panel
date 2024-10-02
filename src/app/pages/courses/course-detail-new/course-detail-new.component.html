@@ -79,9 +79,9 @@
                 </vex-course-detail-card>
               </div>
             </div>
-            <div class="contents"
-              *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
-              <div>
+            <div class="contents">
+              <div
+                *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
                 <div
                   style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">
                   <div style="width: 100%;">
@@ -91,13 +91,64 @@
                     font-weight: 600;
                     line-height: 16px;
                     word-wrap: break-word"> {{'GRUPOS' | translate }}
-                      <mat-icon
+                      <img src="assets/icons/icon/edit2.png" alt
                         (click)="goTo('courses/update/'+id,{step:3})"
-                        class="editbutton">edit</mat-icon>
+                        class="editbutton icon24">
                     </p>
                   </div>
                   <vex-course-detail-nivel style="width: 100%;"
                     [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
+                </div>
+              </div>
+              <div
+                *ngIf="!count(courseFormGroup.controls['levelGrop'].value,'active')">
+                <div class="cardgroup">
+                  <div
+                    style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+                    <div style="width: 100%;">
+                      <p> {{'EXTRAS' | translate }}
+                          <img src="assets/icons/icon/edit2.png" alt
+                          (click)="goTo('courses/update/'+id,{step:4})"
+                          class="editbutton icon24">
+                      </p>
+                    </div>
+                    <ng-container
+                      *ngFor="let item of courseFormGroup.controls['extras'].value">
+                      <div style="width: 100%; display: flex;">
+                        <span style="
+                            color: #222222;
+                             font-size: 14px;
+                             font-weight: 600;
+                             line-height: 18px;
+                             word-wrap: break-word">
+                          {{item.name.slice(0,20)}}
+                        </span>
+                        <span style="
+                            color: #222222;
+                             font-size: 14px;
+                             font-weight: 300;
+                             line-height: 18px;
+                             word-wrap: break-word;
+                             margin-left: auto;">
+                          {{item.price || 0}} CHF/día
+                        </span>
+                      </div>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="courseFormGroup.controls['extras'].value.length===0">
+                      <div>
+                        <button
+                          style="margin-top: 0px !important;"
+                          color="primary"
+                          mat-button
+                          type="button"
+                          class="client-button">
+                          <mat-icon>add</mat-icon>
+                          {{'Añadir extra' | translate }}
+                        </button>
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
               </div>
             </div>

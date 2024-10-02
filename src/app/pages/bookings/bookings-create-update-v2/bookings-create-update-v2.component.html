@@ -135,7 +135,7 @@
       </booking-reservation-detail>
     </div>
   </div>
-  <div  class="mobileFixe" >
+  <div class="mobileFixe">
     <div style="width: 100%;">
       <span class="totalPrice" style="
       color: #222222;
@@ -243,7 +243,8 @@
   </div>
 </vex-flux-modal>
 
-<vex-flux-modal *ngIf="payModal" (Close)="payModal=false" [width]="570" title="Finalizar reserva">
+<vex-flux-modal *ngIf="payModal" (Close)="payModal=false" [width]="570"
+  title="Finalizar reserva">
   <div body>
     <div style="margin: 10px;">
       Pendiente de pago: {{bookingService.calculatePendingPrice()}}

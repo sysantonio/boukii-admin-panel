@@ -186,9 +186,10 @@
                 {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
         </div>
-        <mat-icon *ngIf="detail" (click)="edit.emit(0)"
+        <img src="assets/icons/icon/edit2.png" alt
             style="margin-left: auto;width: 24px;"
-            class="editbutton">edit</mat-icon>
+            *ngIf="detail" (click)="edit.emit(0)"
+            class="editbutton icon24">
     </div>
     <div class="cardgroup">
         <div style="width: 100%;display: flex;">
@@ -205,8 +206,9 @@
                 </p>
             </div>
             <div>
-                <mat-icon *ngIf="detail" (click)="edit.emit(1)"
-                    class="editbutton">edit</mat-icon>
+                <img src="assets/icons/icon/edit2.png" alt
+                    *ngIf="detail" (click)="edit.emit(1)"
+                    class="editbutton icon24">
             </div>
         </div>
         <div style="width: 100%">
@@ -273,8 +275,9 @@
                 </p>
             </div>
             <div>
-                <mat-icon *ngIf="detail" (click)="edit.emit(3)"
-                    class="editbutton">edit</mat-icon>
+                <img src="assets/icons/icon/edit2.png" alt
+                    *ngIf="detail" (click)="edit.emit(3)"
+                    class="editbutton icon24">
             </div>
         </div>
 
@@ -349,8 +352,9 @@
             style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
             <div style="width: 100%;">
                 <p> {{'IDIOMAS' | translate }}
-                    <mat-icon *ngIf="detail" (click)="edit.emit(5)"
-                        class="editbutton">edit</mat-icon>
+                    <img src="assets/icons/icon/edit2.png" alt
+                        *ngIf="detail" (click)="edit.emit(5)"
+                        class="editbutton icon24">
                 </p>
             </div>
             <div style="width: 100%; display: flex;gap: 20px;">
@@ -404,13 +408,14 @@
         </div>
     </div>
     <div class="cardgroup"
-        *ngIf="courseFormGroup.controls['extras'].value.length>0 || detail">
+        *ngIf="courseFormGroup.controls['extras'].value.length>0 || (detail && count(courseFormGroup.controls['levelGrop'].value,'active'))">
         <div
             style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
             <div style="width: 100%;">
                 <p> {{'EXTRAS' | translate }}
-                    <mat-icon *ngIf="detail" (click)="edit.emit(4)"
-                        class="editbutton">edit</mat-icon>
+                    <img src="assets/icons/icon/edit2.png" alt
+                        *ngIf="detail" (click)="edit.emit(4)"
+                        class="editbutton icon24">
                 </p>
             </div>
             <ng-container
@@ -449,7 +454,6 @@
                     </button>
                 </div>
             </ng-container>
-
         </div>
     </div>
 
