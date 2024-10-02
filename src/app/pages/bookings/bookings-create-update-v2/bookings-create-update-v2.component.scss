@@ -133,6 +133,9 @@
     gap: 16px;
     flex-wrap: wrap;
     justify-content: center;
+    > :only-child {
+      margin-right: auto;
+    }
     booking-description-card {
       width: 400px;
       max-width: 100%;
@@ -168,4 +171,7 @@
   width: 100%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
   flex-wrap: wrap;
+  @media (min-width: 1440px) {
+    display: none;
+  }
 }

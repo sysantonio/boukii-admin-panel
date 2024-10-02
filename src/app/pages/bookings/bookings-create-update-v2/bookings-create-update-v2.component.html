@@ -134,7 +134,7 @@
       </booking-reservation-detail>
     </div>
   </div>
-  <div  class="mobileFixe" >
+  <div class="mobileFixe">
     <div style="width: 100%;">
       <span class="totalPrice" style="
       color: #222222;
@@ -242,7 +242,8 @@
   </div>
 </vex-flux-modal>
 
-<vex-flux-modal *ngIf="payModal" (Close)="payModal=false" [width]="570" title="Finalizar reserva">
+<vex-flux-modal *ngIf="payModal" (Close)="payModal=false" [width]="570"
+  title="Finalizar reserva">
   <div body>
     <div style="margin: 10px;">
       Pendiente de pago: {{bookingService.calculatePendingPrice()}}
@@ -250,25 +251,28 @@
 
     <!-- Radio Buttons for Payment Methods -->
     <div style="margin: 10px 0;">
-      <mat-radio-group [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange($event)">
-        <mat-radio-button [value]="1" style="display: block;">Pago directo</mat-radio-button>
+      <mat-radio-group [(ngModel)]="paymentMethod"
+        (change)="onPaymentMethodChange($event)">
+        <mat-radio-button [value]="1" style="display: block;">Pago
+          directo</mat-radio-button>
         <!-- Payment method dropdown only for 'Pago directo' -->
-        <div *ngIf="paymentMethod == 1 || paymentMethod == 4" style="margin: 10px 0;">
+        <div *ngIf="paymentMethod == 1 || paymentMethod == 4"
+          style="margin: 10px 0;">
           <mat-form-field appearance="fill">
             <mat-label>Selecciona la forma de pago</mat-label>
             <mat-select [(ngModel)]="paymentMethod">
-              <mat-option *ngFor="let option of paymentOptions" [value]="option.value">{{option.type}}</mat-option>
+              <mat-option *ngFor="let option of paymentOptions"
+                [value]="option.value">{{option.type}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <mat-radio-button [value]="2" style="display: block;">Pago online</mat-radio-button>
-        <mat-radio-button [value]="5" style="display: block;">Confirmación sin pago</mat-radio-button>
+        <mat-radio-button [value]="2" style="display: block;">Pago
+          online</mat-radio-button>
+        <mat-radio-button [value]="5" style="display: block;">Confirmación sin
+          pago</mat-radio-button>
       </mat-radio-group>
     </div>
-
-
   </div>
-
   <div footer style="display: flex;">
     <button
       style="height: 38px; width: 150px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
