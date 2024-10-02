@@ -38,6 +38,7 @@ import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
+import { CourseComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flu
     FluxLayoutModule,
     CoursesDetailCardModule,
     FluxModalModule,
-    FluxDisponibilidadModule
+    FluxDisponibilidadModule,
+    CourseComponentsModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

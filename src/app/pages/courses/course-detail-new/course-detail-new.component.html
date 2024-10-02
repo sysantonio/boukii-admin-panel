@@ -17,7 +17,7 @@
             <div class="contents" style="border: 1px solid #dee6ea;"
               [style.width]="count(courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'">
               <div style="border-bottom: 1px solid #dee6ea;">
-                <div style="width: calc(50% - 10px);">
+                <div style="width: max-content;">
                   <mat-slide-toggle [checked]="true">
                     <span style="
                       color: #222222;
@@ -39,7 +39,7 @@
                     </span>
                   </mat-slide-toggle>
                 </div>
-                <div style="width: calc(50% - 10px)">
+                <div style="width: max-content;">
                   <mat-slide-toggle [checked]="true">
                     <span style="
                       color: #222222;
@@ -75,13 +75,13 @@
               <div style="padding: 0;border: none;">
                 <vex-course-detail-card style="width: 100%"
                   [courseFormGroup]="courseFormGroup" [detail]="true"
-                  (edit)="goTo('courses/update/'+id,{step:$event})">
+                  (edit)="editModal=$event">
                 </vex-course-detail-card>
               </div>
             </div>
-            <div class="contents"
-              *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
-              <div>
+            <div class="contents">
+              <div
+                *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
                 <div
                   style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">
                   <div style="width: 100%;">
@@ -91,13 +91,64 @@
                     font-weight: 600;
                     line-height: 16px;
                     word-wrap: break-word"> {{'GRUPOS' | translate }}
-                      <mat-icon
-                        (click)="goTo('courses/update/'+id,{step:3})"
-                        class="editbutton">edit</mat-icon>
+                      <img src="assets/icons/icon/edit2.png" alt
+                        (click)="editModal=3"
+                        class="editbutton icon24">
                     </p>
                   </div>
                   <vex-course-detail-nivel style="width: 100%;"
                     [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
+                </div>
+              </div>
+              <div
+                *ngIf="!count(courseFormGroup.controls['levelGrop'].value,'active')">
+                <div class="cardgroup">
+                  <div
+                    style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+                    <div style="width: 100%;">
+                      <p> {{'EXTRAS' | translate }}
+                        <img src="assets/icons/icon/edit2.png" alt
+                          (click)="editModal=4"
+                          class="editbutton icon24">
+                      </p>
+                    </div>
+                    <ng-container
+                      *ngFor="let item of courseFormGroup.controls['extras'].value">
+                      <div style="width: 100%; display: flex;">
+                        <span style="
+                            color: #222222;
+                            font-size: 14px;
+                            font-weight: 600;
+                            line-height: 18px;
+                            word-wrap: break-word">
+                          {{item.name.slice(0,20)}}
+                        </span>
+                        <span style="
+                            color: #222222;
+                            font-size: 14px;
+                            font-weight: 300;
+                            line-height: 18px;
+                            word-wrap: break-word;
+                            margin-left: auto;">
+                          {{item.price || 0}} CHF/día
+                        </span>
+                      </div>
+                    </ng-container>
+                    <ng-container
+                      *ngIf="courseFormGroup.controls['extras'].value.length===0">
+                      <div>
+                        <button
+                          style="margin-top: 0px !important;"
+                          color="primary"
+                          mat-button
+                          type="button"
+                          class="client-button">
+                          <mat-icon>add</mat-icon>
+                          {{'Añadir extra' | translate }}
+                        </button>
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
               </div>
             </div>
@@ -161,7 +212,7 @@
       </div>
     </div>
   </div>
-  <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
+  <div footer style="display: flex;width: 100%;">
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
       color="primary"
@@ -179,5 +230,61 @@
       {{'Enviar' | translate }}
     </button>
   </div>
+</vex-flux-modal>
 
+<vex-flux-modal *ngIf="editModal>0" (Close)="editModal=0"
+  [width]="editModal===3?1150:670"
+  [title]="editModal===1?'Editar detalles':editModal===2?'Editar fechas':editModal===3?'Editar niveles':editModal===4?'Editar extras':'Editar idiomas'">
+  <div body style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <vex-course-componente-detalles
+      style="width: 100%;"
+      *ngIf="editModal===1"
+      [courseFormGroup]="courseFormGroup"
+      mode="update">
+    </vex-course-componente-detalles>
+    <vex-course-componente-fechas
+      style="width: 100%;"
+      *ngIf="editModal===2"
+      [courseFormGroup]="courseFormGroup"
+      mode="update">
+    </vex-course-componente-fechas>
+    <vex-course-componente-niveles
+      style="width: 100%;"
+      *ngIf="editModal===3"
+      [courseFormGroup]="courseFormGroup"
+      mode="update"
+      [levels]="levels">
+    </vex-course-componente-niveles>
+    <vex-course-componente-extras
+      style="width: 100%;"
+      *ngIf="editModal===4"
+      [courseFormGroup]="courseFormGroup"
+      mode="update"
+      [extras]="extras">
+    </vex-course-componente-extras>
+    <vex-course-componente-idiomas
+      style="width: 100%;"
+      *ngIf="editModal===5"
+      [courseFormGroup]="courseFormGroup"
+      mode="update">
+    </vex-course-componente-idiomas>
+  </div>
+  <div footer style="display: flex;width: 100%;">
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+      color="primary"
+      mat-stroked-button
+      type="button" (click)="editModal=0"
+      class="client-button">
+      {{'Cancelar' | translate }}
+    </button>
+    <button
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+      color="primary"
+      mat-raised-button
+      type="button" (click)="editModal=0"
+      class="client-button">
+      {{'Confirmar' | translate }}
+    </button>
+  </div>
 </vex-flux-modal>
