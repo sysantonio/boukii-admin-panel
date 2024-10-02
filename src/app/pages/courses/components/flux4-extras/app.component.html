@@ -51,8 +51,9 @@
 </section>
 
 <vex-flux-modal *ngIf="extrasModal" (Close)="extrasModal=false"
-  [width]="670" title="Crear extra">
-  <div body style="display: flex; column-gap: 20px; flex-wrap: wrap;"
+  [width]="650" title="Crear extra">
+  <div body
+    style="display: flex; column-gap: 20px; flex-wrap: wrap; padding: 0 20px;"
     [formGroup]="extrasFormGroup">
     <mat-form-field appearance="outline"
       style="width: calc(50% - 10px);margin-top: 10px;">
@@ -78,6 +79,8 @@
     <div style="width: 100%">
       <mat-slide-toggle [checked]="true"> Activo </mat-slide-toggle>
     </div>
+  </div>
+  <div footer style="display: flex;width: 100%;">
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
       color="primary"
@@ -88,7 +91,7 @@
       {{'Cancelar' | translate }}
     </button>
     <button
-      style="margin-top: 0px !important;height: 38px; width: 128px;"
+      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
       color="primary"
       mat-raised-button
       (click)="extrasModal=false;extras.push(extrasFormGroup.getRawValue());extrasFormGroup.reset()"
