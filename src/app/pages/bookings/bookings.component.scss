@@ -67,7 +67,7 @@
     padding: 0px !important;
 
     .title-status {
-      background-color: #f2f3f3;
+      background-color: var(--color-grey5);
       padding: 15px 35px;
       display: flex;
       align-items: center;
@@ -223,7 +223,7 @@
 }
 
 .title-actividad {
-  background-color: #f2f3f3;
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;

@@ -15,7 +15,6 @@ export class LevelUserComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.allLevels)
     if (this.selectLevel) {
       let index = this.allLevels.findIndex(obj => obj.id === this.selectLevel);
       if (index === -1) {

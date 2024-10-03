@@ -473,7 +473,7 @@ img[mat-card-image] {
 }
 
 .title-summary {
-  background-color: #f2f3f3;
+  background-color: var(--color-grey5);
   padding: 15px 35px;
 
   b {
@@ -557,7 +557,7 @@ img[mat-card-image] {
     }
 
     .mat-mdc-card-header {
-      background-color: #ed297b;
+      background-color: #2f3844;
       padding: 15px 20px !important;
 
       .mat-mdc-card-title {
@@ -582,7 +582,7 @@ img[mat-card-image] {
     }
 
     .title-status {
-      background-color: #f2f3f3;
+      background-color: var(--color-grey5);
       padding: 15px 20px;
 
       b {

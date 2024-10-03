@@ -418,7 +418,7 @@ img[mat-card-image] {
 
 /* lucho */
 .title-actividad {
-  background-color: #F2F3F3;
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -497,7 +497,7 @@ img[mat-card-image] {
   padding: 0px!important;
 
   .title-status {
-    background-color: #F2F3F3;
+    background-color: var(--color-grey5);
     padding: 15px 35px;
     display: flex;
     align-items: center;

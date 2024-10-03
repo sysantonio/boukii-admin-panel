@@ -653,7 +653,7 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #ed297b;
+    background-color: #2f3844;
     padding: 25px 35px !important;
 
     .mat-mdc-card-title {
@@ -671,7 +671,7 @@
     padding: 0px !important;
 
     .title-status {
-      background-color: #f2f3f3;
+      background-color: var(--color-grey5);
       padding: 15px 35px;
 
       b {
@@ -821,7 +821,7 @@
 }
 
 .title-actividad {
-  background-color: #f2f3f3;
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
