@@ -21,11 +21,11 @@
                 <div style="float: left;width: 50%;">
                   <div style="float: left; margin-right: 2%">
                     <img
-                      [src]="'https://school.boukii.com/assets/icons/collectif_'+ defaults?.sport?.name.toLowerCase() +'2x.png'"
+                      [src]="'https://api.boukii.golembyte.com/storage/icons/collectif_'+ defaults?.sport?.name.toLowerCase() +'2x.png'"
                       width="100" height="100"
                       *ngIf="defaults.course_type === 1">
                     <img
-                      [src]="'https://school.boukii.com/assets/icons/prive_'+ defaults?.sport?.name.toLowerCase() +'2x.png'"
+                      [src]="'https://api.boukii.golembyte.com/storage/icons/prive_'+ defaults?.sport?.name.toLowerCase() +'2x.png'"
                       width="100" height="100"
                       *ngIf="defaults.course_type === 2">
                   </div>
@@ -720,10 +720,10 @@
                 <div class="holder-deporte">
                   <div class="col-left">
                     <img *ngIf="detailData?.course?.course_type == 1"
-                      [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
+                      [src]="'https://api.boukii.golembyte.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
                       width="60" height="60" />
                     <img *ngIf="detailData?.course?.course_type == 2"
-                      [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
+                      [src]="'https://api.boukii.golembyte.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
                       width="60" height="60" />
                   </div>
                   <div class="col-right">
@@ -792,27 +792,27 @@
                     <div class="item"
                       [ngStyle]="{'background': detailData?.degree?.color}">
                       <div><img
-                          src="https://school.boukii.com/assets/icons/award_icon.svg" /></div>
+                          src="https://api.boukii.golembyte.com/storage/icons/award_icon.svg" /></div>
                       <div>{{detailData?.degree?.annotation}}</div>
                       <div>{{detailData?.degree?.name}}</div>
                       <div class="font-bold">{{getSubGroupsIndex()}}</div>
                     </div>
                     <div class="item box-background-grey">
                       <div><img
-                          src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" /></div>
+                          src="https://api.boukii.golembyte.com/storage/icons/icons-outline-profile-2-user-white.svg" /></div>
                       <div>{{'groups' | translate}}</div>
                       <div class="font-bold">{{getGroupsQuantity()}}</div>
                     </div>
                     <div class="item box-background-grey">
                       <div><img
-                          src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" /></div>
+                          src="https://api.boukii.golembyte.com/storage/icons/icons-outline-clock.svg" /></div>
                       <div>{{'duration' | translate}}</div>
                       <div
                         class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                     </div>
                     <div class="item box-background-grey">
                       <div><img
-                          src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" /></div>
+                          src="https://api.boukii.golembyte.com/storage/icons/icons-outline-calendar-tick.svg" /></div>
                       <div>{{'days' | translate}}</div>
                       <div
                         class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>

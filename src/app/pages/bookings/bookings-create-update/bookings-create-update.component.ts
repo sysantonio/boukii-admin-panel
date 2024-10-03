@@ -107,8 +107,8 @@ export class CustomDateAdapter2 extends NativeDateAdapter {
 })
 export class BookingsCreateUpdateComponent implements OnInit {
 
-  privateIcon = 'https://school.boukii.com/assets/icons/prive_ski2x.png';
-  collectifIcon = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
+  privateIcon = 'https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png';
+  collectifIcon = 'https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png';
   customHeader = CustomHeader;
   @Input()
   public monthAndYear = new Date();
@@ -3010,14 +3010,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   /*  getDateFromSelectedDates() {
       let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
-  
+
       const formattedDate = new Date(date).toISOString().split('T')[0];
-  
+
       return this.selectedItem.course_dates.find(i => {
         const courseDate = new Date(i.date).toISOString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
         return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
       });
-  
+
     }*/
 
   getDateFromSelectedDates() {

@@ -114,12 +114,12 @@ export const MOCK_USER1 = {
       sport: {
         id: 1,
         name: "Ski",
-        icon_prive: "https://school.boukii.com/assets/icons/prive_ski2x.png",
+        icon_prive: "https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png",
         icon_collective:
-          "https://school.boukii.com/assets/icons/collectif_ski2x.png",
-        icon_selected: "https://school.boukii.com/assets/apps/sports/Ski.png",
+          "https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png",
+        icon_selected: "https://api.boukii.golembyte.com/storage/apps/sports/Ski.png",
         icon_unselected:
-          "https://school.boukii.com/assets/apps/sports_unselected/Ski.png",
+          "https://api.boukii.golembyte.com/storage/apps/sports_unselected/Ski.png",
         sport_type: 1,
         created_at: "2024-01-24T22:12:28.000000Z",
         updated_at: "2024-01-24T22:12:28.000000Z",
@@ -299,12 +299,12 @@ export const MOCK_USER2 = {
       sport: {
         id: 1,
         name: "Ski",
-        icon_prive: "https://school.boukii.com/assets/icons/prive_ski2x.png",
+        icon_prive: "https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png",
         icon_collective:
-          "https://school.boukii.com/assets/icons/collectif_ski2x.png",
-        icon_selected: "https://school.boukii.com/assets/apps/sports/Ski.png",
+          "https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png",
+        icon_selected: "https://api.boukii.golembyte.com/storage/apps/sports/Ski.png",
         icon_unselected:
-          "https://school.boukii.com/assets/apps/sports_unselected/Ski.png",
+          "https://api.boukii.golembyte.com/storage/apps/sports_unselected/Ski.png",
         sport_type: 1,
         created_at: "2024-01-24T22:12:28.000000Z",
         updated_at: "2024-01-24T22:12:28.000000Z",
@@ -345,12 +345,12 @@ export const MOCK_USER2 = {
       sport: {
         id: 1,
         name: "Ski",
-        icon_prive: "https://school.boukii.com/assets/icons/prive_ski2x.png",
+        icon_prive: "https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png",
         icon_collective:
-          "https://school.boukii.com/assets/icons/collectif_ski2x.png",
-        icon_selected: "https://school.boukii.com/assets/apps/sports/Ski.png",
+          "https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png",
+        icon_selected: "https://api.boukii.golembyte.com/storage/apps/sports/Ski.png",
         icon_unselected:
-          "https://school.boukii.com/assets/apps/sports_unselected/Ski.png",
+          "https://api.boukii.golembyte.com/storage/apps/sports_unselected/Ski.png",
         sport_type: 1,
         created_at: "2024-01-24T22:12:28.000000Z",
         updated_at: "2024-01-24T22:12:28.000000Z",
@@ -395,9 +395,9 @@ export const MOCK_USER2 = {
         icon_prive: null,
         icon_collective: null,
         icon_selected:
-          "https://school.boukii.com/assets/apps/sports/Motocyclisme.png",
+          "https://api.boukii.golembyte.com/storage/apps/sports/Motocyclisme.png",
         icon_unselected:
-          "https://school.boukii.com/assets/apps/sports_unselected/Motocyclisme.png",
+          "https://api.boukii.golembyte.com/storage/apps/sports_unselected/Motocyclisme.png",
         sport_type: 2,
         created_at: "2024-06-18T09:36:26.000000Z",
         updated_at: "2024-06-18T09:36:26.000000Z",

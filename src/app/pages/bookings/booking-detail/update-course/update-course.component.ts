@@ -169,7 +169,7 @@ export class UpdateCourseModalComponent implements OnInit {
       data = {
         sportId: this.defaults.course.sport_id,
         minimumDegreeId: this.dates[0].degree_id,
-        startTime: start.replace(':00', ''),
+        startTime:  start.length  <=5 ? start : start.replace(':00', ''),
         endTime: this.calculateHourEnd(start, this.duration),
         date: moment(date.date).format('YYYY-MM-DD'),
         clientIds: [this.defaults.mainBooking.client_id],
@@ -179,7 +179,7 @@ export class UpdateCourseModalComponent implements OnInit {
       data = {
         sportId: this.defaults.course.sport_id,
         minimumDegreeId: this.dates[0].degree_id,
-        startTime: start.replace(':00', ''),
+        startTime: start.length  <=5 ? start : start.replace(':00', ''),
         endTime: this.calculateHourEnd(start, this.duration),
         date: moment(date.date).format('YYYY-MM-DD'),
         clientIds: [this.defaults.mainBooking.client_id],

@@ -430,7 +430,7 @@
                       <p> {{goal.name}} </p>
                     </div>
                     <div style="float: left; width:5%;margin-left: 2%;">
-                      <div 
+                      <div
                       [style.backgroundColor]="getDegreeScore(goal.id)>0?getDegreeScore(goal.id)>5?'green':'yellow':'#E6E6E6'"
                       style="width: 25px;
                       border-radius: 100%;
@@ -552,8 +552,8 @@
                   <div style="float: left;width: 100%;">
                       <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
                       <div style="float: left; width: 12%; margin-top: 5%">
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://api.boukii.golembyte.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://api.boukii.golembyte.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
                       </div>
                       <div style="float: left; width: 75%;margin:6% 0 0 2%">
                       <p><strong>{{detailData?.course?.name}}</strong></p>
@@ -575,23 +575,23 @@
 
                   <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
                       <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
-                          <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
                           <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
                           <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
                           <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
                       </div>
                       <div class="box-detail-box box-background-grey">
-                          <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
                           <div>{{'groups' | translate}}</div>
                           <div class="font-bold">{{getGroupsQuantity()}}</div>
                       </div>
                       <div class="box-detail-box box-background-grey">
-                          <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
                           <div>{{'duration' | translate}}</div>
                           <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                       </div>
                       <div class="box-detail-box box-background-grey">
-                          <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
                           <div>{{'days' | translate}}</div>
                           <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
                       </div>
@@ -1273,8 +1273,8 @@
                   <div style="float: left;width: 100%;">
                       <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
                       <div style="float: left; width: 12%; margin-top: 5%">
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://api.boukii.golembyte.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://api.boukii.golembyte.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
                       </div>
                       <div style="float: left; width: 75%;margin:6% 0 0 2%">
                       <p><strong>{{detailData?.course?.name}}</strong></p>
@@ -1296,23 +1296,23 @@
 
                   <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
                       <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
-                          <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
                           <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
                           <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
                           <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
                       </div>
                       <div class="box-detail-box box-background-grey">
-                          <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
                           <div>{{'groups' | translate }}</div>
                           <div class="font-bold">{{getGroupsQuantity()}}</div>
                       </div>
                       <div class="box-detail-box box-background-grey">
-                          <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
                           <div>{{'duration' | translate }}</div>
                           <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                       </div>
                       <div class="box-detail-box box-background-grey">
-                          <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                          <img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
                           <div>{{'days' | translate }}</div>
                           <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
                       </div>
