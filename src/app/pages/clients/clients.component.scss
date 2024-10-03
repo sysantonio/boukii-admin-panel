@@ -1,5 +1,6 @@
 .table-show-detail {
-  width: 65%;float:left
+  width: 65%;
+  float: left;
 }
 
 .card-users {
@@ -12,7 +13,7 @@
 }
 
 .active-border {
-  border: 2px solid #E91E63;
+  border: 2px solid #e91e63;
   border-radius: 10px;
 }
 
@@ -31,19 +32,19 @@
     border-radius: 10px;
     padding: 0px;
     margin-top: 30px;
-    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, .25);
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-    @media (max-width: 1280px){
+    @media (max-width: 1280px) {
       width: 50%;
       left: calc(50% - 40px);
     }
 
-    @media (max-width: 1020px){
+    @media (max-width: 1020px) {
       width: 60%;
       left: calc(40% - 40px);
     }
 
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
       width: 90%;
       left: calc(10% - 40px);
     }
@@ -58,9 +59,9 @@
   }
 
   .card-header {
-    display:block;
-    background-color: #2F3844;
-    padding: 25px 35px!important;
+    display: block;
+    background-color: #2f3844;
+    padding: 25px 35px !important;
 
     .mat-mdc-card-title {
       font-weight: 700;
@@ -69,12 +70,12 @@
     }
 
     .mat-icon {
-      fill: white!important;
+      fill: white !important;
     }
   }
 
   .mat-mdc-card-content {
-    padding: 0px 0px 20px 0px!important;
+    padding: 0px 0px 20px 0px !important;
 
     .dots {
       padding: 15px 35px;
@@ -138,13 +139,13 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          var(--color-dark1);
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
-          font-size: .9em;
+          font-family: "Montserrat", sans-serif;
+          font-size: 0.9em;
         }
       }
     }
@@ -181,7 +182,7 @@
     padding: 10px;
     text-align: center;
     cursor: pointer;
-    border-radius: 6px!important;
+    border-radius: 6px !important;
 
     .image {
       margin-bottom: 10px;
@@ -195,13 +196,13 @@
     }
 
     .name {
-      font-family: 'Montserrat', sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 13px;
       font-weight: 700;
     }
 
     .subtitle {
-      font-family: 'Montserrat', sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 11px;
     }
   }
@@ -211,9 +212,9 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: var(--color-dark1)olor-dark1);
+  color: var(--color-dark1);
   margin-bottom: 5px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 
   .col-left {
     width: 40%;
@@ -271,7 +272,7 @@
 }
 
 .title-label {
-  background-color: var(--color-grey5)olor-grey5);
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-bottom: 10px;
 
