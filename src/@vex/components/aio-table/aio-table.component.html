@@ -774,7 +774,7 @@
               [ngClass]="column.cssClasses" mat-cell>
               <div *ngIf="data[i].client_sports.length > 0" class="m-0 body-1"
                 [style.background]="data[i].client_sports[0]?.degree?.color"
-                style="padding: 5%;;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">
+                style="padding: 5%;;color: #fff;border-radius: 5px;width: 100%;text-align: center; font-size:10px;overflow: inherit;">
                 {{data[i].client_sports[0]?.degree?.annotation}}
                 {{data[i].client_sports[0].degree?.name}}
               </div>
@@ -792,7 +792,7 @@
               [ngClass]="column.cssClasses" mat-cell>
               <div class="m-0 body-1"
                 [style.background]="findHighestDegreeIdElement(row[column.property])?.color"
-                style="padding: 5%;;color: #fff;border-radius: 10px;width: 100%;text-align: center; font-size:10px">
+                style="padding: 5%;;color: #fff;border-radius: 5px;width: 100%;text-align: center; font-size:10px;overflow: inherit;">
                 {{findHighestDegreeIdElement(row[column.property])?.annotation}}
                 {{findHighestDegreeIdElement(row[column.property])?.name}}
               </div>
