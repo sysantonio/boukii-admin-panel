@@ -23,7 +23,7 @@ export class ConfigService {
   config$ = this._configSubject.asObservable();
 
   constructor(@Inject(DOCUMENT) private document: Document,
-              private layoutService: LayoutService) {
+    private layoutService: LayoutService) {
     this.config$.subscribe(config => this._updateConfig(config));
   }
 
@@ -79,6 +79,36 @@ export class ConfigService {
     this.document.body.style.setProperty('--color-primary-sidenav-rgb', style.colors.primary.sidenav);
     this.document.body.style.setProperty('--color-primary-contrast', style.colors.primary.contrast.replace('rgb(', '').replace(')', ''));
     this.document.body.style.setProperty('--color-primary-contrast-rgb', style.colors.primary.contrast);
+
+    if (style.colorScheme === "vex-style-light") {
+      this.document.body.style.setProperty('--color-dark1', "#222222");
+      this.document.body.style.setProperty('--color-dark2', "#2f3844");
+      this.document.body.style.setProperty('--color-dark3', "#223042");
+      this.document.body.style.setProperty('--color-dark4', "#1b2d44");
+      this.document.body.style.setProperty('--color-dark5', "#122742");
+      this.document.body.style.setProperty('--color-grey1', "#8b9099");
+      this.document.body.style.setProperty('--color-grey2', "#c7d0d3");
+      this.document.body.style.setProperty('--color-grey3', "#dee6ea");
+      this.document.body.style.setProperty('--color-grey4', "#eff2f5");
+      this.document.body.style.setProperty('--color-grey5', "#f8f9fb");
+
+    } else {
+      this.document.body.style.setProperty('--color-dark1', "#f8f9fb");
+      this.document.body.style.setProperty('--color-dark2', "#eff2f5");
+      this.document.body.style.setProperty('--color-dark3', "#dee6ea");
+      this.document.body.style.setProperty('--color-dark4', "#c7d0d3");
+      this.document.body.style.setProperty('--color-dark5', "#8b9099");
+      this.document.body.style.setProperty('--color-grey1', "#122742");
+      this.document.body.style.setProperty('--color-grey2', "#1b2d44");
+      this.document.body.style.setProperty('--color-grey3', "#223042");
+      this.document.body.style.setProperty('--color-grey4', "#2f3844");
+      this.document.body.style.setProperty('--color-grey5', "#222222");
+
+    }
+
+
+
+
   }
 
   /**

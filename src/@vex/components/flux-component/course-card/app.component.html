@@ -158,7 +158,7 @@
         <div style="width: max-content;"
             [style.minWidth]="courseFormGroup.controls['id']?'':'calc(100% - 60px)'">
             <p
-                style="font-weight: 600; line-height: 18px; min-height: 12px; color: black;font-size: 14px;"
+                style="font-weight: 600; line-height: 18px; min-height: 12px; var(--color-dark1);font-size: 14px;"
                 [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
                 {{courseFormGroup.controls['course_name'].value}}
             </p>
@@ -181,7 +181,7 @@
             font-weight: 600;
             line-height: 18px;
             text-align: right;
-            color: #222222;
+            color: var(--color-dark1);
             ">
                 {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
@@ -200,7 +200,7 @@
                 style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
             <div style="width: 100%;">
                 <p> {{'RESUMEN' | translate }} </p>
-                <p style="color: black;"
+                <p style="var(--color-dark1);"
                     [class]="courseFormGroup.controls['summary'].value?'':'emptyText'"
                     [innerHTML]="courseFormGroup.controls['summary'].value">
                 </p>
@@ -215,20 +215,20 @@
             <p> {{'DESCRIPCIÓN' | translate }} </p>
             <p
                 [class]="courseFormGroup.controls['description'].value?'':'emptyText'"
-                style="color: black;"
+                style="var(--color-dark1);"
                 [innerHTML]="courseFormGroup.controls['description'].value">
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
             <p> {{'PRECIO POR FECHA' | translate }} </p>
             <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
-                style="color: black; font-weight: 400;">
+                style="var(--color-dark1); font-weight: 400;">
                 {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
             <p> {{'PARTICIPANTES MAX.' | translate }} </p>
-            <p style="color: black; font-weight: 400;font-size: 12px;"
+            <p style="var(--color-dark1); font-weight: 400;font-size: 12px;"
                 [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
                 {{courseFormGroup.controls['participants'].value}}
             </p>
@@ -236,7 +236,7 @@
         <div style="width: calc(50% - 10px);"
             *ngIf="courseFormGroup.controls['course_type'].value>1">
             <p> {{'EDAD MIN.' | translate }} </p>
-            <p style="color: black;font-size: 12px;"
+            <p style="var(--color-dark1);font-size: 12px;"
                 [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'">
                 {{courseFormGroup.controls['age_min'].value}}
             </p>
@@ -244,7 +244,7 @@
         <div style="width: calc(50% - 10px);"
             *ngIf="courseFormGroup.controls['course_type'].value>1">
             <p> {{'EDAD MAX.' | translate }} </p>
-            <p style="color: black; font-size: 12px;"
+            <p style="var(--color-dark1); font-size: 12px;"
                 [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'">
                 {{courseFormGroup.controls['age_max'].value}}
             </p>
@@ -254,14 +254,14 @@
         <div style="display: flex;width: 100%;column-gap: 10px;">
             <div style="width: 100%">
                 <p> {{'RESERVABLE DESDE' | translate }} </p>
-                <p style="color: black; font-size: 12px;"
+                <p style="var(--color-dark1); font-size: 12px;"
                     [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
                     {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
                 </p>
             </div>
             <div style="width: 100%">
                 <p> {{'RESERVABLE HASTA' | translate }} </p>
-                <p style="color: black;font-size: 12px;"
+                <p style="var(--color-dark1);font-size: 12px;"
                     [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
                     {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
                 </p>
@@ -269,7 +269,7 @@
             <div style="width: 100%"
                 *ngIf="courseFormGroup.controls['course_type'].value>1">
                 <p> {{'DUR. MIN.' | translate }} </p>
-                <p style="color: black;font-size: 12px;"
+                <p style="var(--color-dark1);font-size: 12px;"
                     [class]="courseFormGroup.controls['duration_min'].value?'':'emptyText'">
                     {{courseFormGroup.controls['duration_min'].value}}
                 </p>
@@ -296,8 +296,8 @@
             <p
                 *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
                 style="font-size: 14px;text-align-last: justify;">
-                <span style="color: black;">{{DateISO(item.date)}}</span>
-                <span style="color: black;"
+                <span style="var(--color-dark1);">{{DateISO(item.date)}}</span>
+                <span style="var(--color-dark1);"
                     *ngIf="courseFormGroup.controls['course_type'].value>1 && item.date_end">-{{DateISO(item.date_end)}}
                 </span>
                 <span> {{item.hour_start}}</span>
@@ -308,14 +308,14 @@
                     {{courseFormGroup.controls['price'].value *
                     item.Duracion || 0}}&nbsp;CHF
                 </span>
-                <span style="color: black;"
+                <span style="var(--color-dark1);"
                     *ngIf="!item.Duracion && courseFormGroup.controls['price'].value>0">
                     {{(courseFormGroup.controls['price'].value *
                     (item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60-item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)).toFixed(2)}}CHF
                 </span>
             </p>
         </div>
-        <div style="width: 100%; color: black;font-weight: 400;"
+        <div style="width: 100%; var(--color-dark1);font-weight: 400;"
             *ngFor="let item of courseFormGroup.controls['discount'].value">
             · Reducción {{item.reduccion}}% reservando
             {{item.day}} fechas
@@ -326,7 +326,7 @@
         font-style: normal;
         font-weight: 400;
         line-height: 16px;">
-            <ng-container style="width: 100%; color: black;font-weight: 400;"
+            <ng-container style="width: 100%; var(--color-dark1);font-weight: 400;"
                 *ngFor="let item of week">
                 <ng-container
                     *ngIf="courseFormGroup.controls['settings'].value.weekDays[item]">
@@ -359,7 +359,7 @@
             </div>
             <div style="width: 100%; display: flex;gap: 20px;">
                 <p style="height: 24px;
-                color: #222222;
+                color: var(--color-dark1);
                  font-size: 14px;
                  font-weight: 600;
                  line-height: 18px;
@@ -368,7 +368,7 @@
                     <mat-icon class="check">check</mat-icon>
                 </p>
                 <p style="height: 24px;
-                color: #222222;
+                color: var(--color-dark1);
                  font-size: 14px;
                  font-weight: 600;
                  line-height: 18px;
@@ -377,7 +377,7 @@
                     <mat-icon class="check">check</mat-icon>
                 </p>
                 <p style="height: 24px;
-                color: #222222;
+                color: var(--color-dark1);
                  font-size: 14px;
                  font-weight: 600;
                  line-height: 18px;
@@ -386,7 +386,7 @@
                     <mat-icon class="check">check</mat-icon>
                 </p>
                 <p style="height: 24px;
-                color: #222222;
+                color: var(--color-dark1);
                  font-size: 14px;
                  font-weight: 600;
                  line-height: 18px;
@@ -395,7 +395,7 @@
                     <mat-icon class="check">check</mat-icon>
                 </p>
                 <p style="height: 24px;
-                color: #222222;
+                color: var(--color-dark1);
                  font-size: 14px;
                  font-weight: 600;
                  line-height: 18px;
@@ -422,7 +422,7 @@
                 *ngFor="let item of courseFormGroup.controls['extras'].value">
                 <div style="width: 100%; display: flex;">
                     <span style="
-                    color: #222222;
+                    color: var(--color-dark1);
                      font-size: 14px;
                      font-weight: 600;
                      line-height: 18px;
@@ -430,7 +430,7 @@
                         {{item.name.slice(0,20)}}
                     </span>
                     <span style="
-                    color: #222222;
+                    color: var(--color-dark1);
                      font-size: 14px;
                      font-weight: 300;
                      line-height: 18px;

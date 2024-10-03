@@ -1,24 +1,28 @@
-<div [class.container]="isVerticalLayout$ | async" class="toolbar w-full px-gutter flex items-center">
-  <button (click)="openSidenav()" [class.hidden]="!mobileQuery" mat-icon-button type="button">
+<div [class.container]="isVerticalLayout$ | async"
+  class="toolbar w-full px-gutter flex items-center">
+  <button (click)="openSidenav()" [class.hidden]="!mobileQuery" mat-icon-button
+    type="button">
     <mat-icon svgIcon="mat:menu"></mat-icon>
   </button>
 
   <a *ngIf="isVerticalLayout$ | async"
-     [routerLink]="['/']"
-     class="ltr:mr-4 rtl:ml-4 block flex items-center">
-    <img alt="Logo" class="w-8 select-none" src="assets/img/demo/logo.svg"/>
-    <h1 [class.hidden]="!mobileQuery" class="title ltr:pl-4 rtl:pr-4 m-0 select-none">EL SOTANO</h1>
+    [routerLink]="['/']"
+    class="ltr:mr-4 rtl:ml-4 block flex items-center">
+    <img alt="Logo" class="w-8 select-none" src="assets/img/demo/logo.svg" />
+    <h1 [class.hidden]="!mobileQuery"
+      class="title ltr:pl-4 rtl:pr-4 m-0 select-none">EL SOTANO</h1>
   </a>
 
   <button *ngIf="isHorizontalLayout$ | async"
-          [class.hidden]="mobileQuery"
-          [matMenuTriggerFor]="addNewMenu"
-          color="primary"
-          mat-flat-button
-          type="button">{{'add' | translate}}
+    [class.hidden]="mobileQuery"
+    [matMenuTriggerFor]="addNewMenu"
+    color="primary"
+    mat-flat-button
+    type="button">{{'add' | translate}}
   </button>
 
-  <mat-menu #addNewMenu="matMenu" [overlapTrigger]="false" xPosition="after" yPosition="below">
+  <mat-menu #addNewMenu="matMenu" [overlapTrigger]="false" xPosition="after"
+    yPosition="below">
     <button mat-menu-item (click)="goTo('/clients/create')">
       <mat-icon svgIcon="mat:person_add"></mat-icon>
       <span>{{'add_client' | translate }}</span>
@@ -54,22 +58,22 @@
 
   <div #megaMenuOriginRef class="ltr:ml-2 rtl:mr-2" *ngIf="false">
     <button *ngIf="isHorizontalLayout$ | async"
-            [class.hidden]="mobileQuery"
-            (click)="openMegaMenu(megaMenuOriginRef)"
-            [ngClass]="{ 'bg-primary/10': megaMenuOpen$ | async }"
-            color="primary"
-            mat-button
-            type="button">
+      [class.hidden]="mobileQuery"
+      (click)="openMegaMenu(megaMenuOriginRef)"
+      [ngClass]="{ 'bg-primary/10': megaMenuOpen$ | async }"
+      color="primary"
+      mat-button
+      type="button">
       <span>Mega Menu</span>
       <mat-icon class="icon-sm" svgIcon="mat:arrow_drop_down"></mat-icon>
     </button>
   </div>
 
-
   <div *ngIf="(isVerticalLayout$ | async) && isNavbarInToolbar$ | async"
-       [class.hidden]="mobileQuery"
-       class="px-gutter flex-none flex items-center">
-    <vex-navigation-item *ngFor="let item of navigationItems" [item]="item"></vex-navigation-item>
+    [class.hidden]="mobileQuery"
+    class="px-gutter flex-none flex items-center">
+    <vex-navigation-item *ngFor="let item of navigationItems"
+      [item]="item"></vex-navigation-item>
   </div>
 
   <span class="flex-1"></span>
@@ -81,10 +85,8 @@
       </button>
     </div>-->
 
-<!--
-    <mat-slide-toggle color="primary" [(ngModel)]="isDarkMode" (change)="toggleDarkMode()">Modo Oscuro</mat-slide-toggle>
--->
-
+    <mat-slide-toggle color="primary" [(ngModel)]="isDarkMode"
+      (change)="toggleDarkMode()">{{isDarkMode?'Modo Oscuro':'Modo Claro'}}</mat-slide-toggle>
 
     <div class="px-1">
       <vex-toolbar-notifications></vex-toolbar-notifications>
@@ -106,7 +108,8 @@
       <vex-toolbar-user></vex-toolbar-user>
     </div>
 
-    <mat-menu #languageMenu="matMenu" overlapTrigger="false" xPosition="before" yPosition="below">
+    <mat-menu #languageMenu="matMenu" overlapTrigger="false" xPosition="before"
+      yPosition="below">
       <button mat-menu-item (click)="changeLang('flag:france', 'fr')">
         <mat-icon svgIcon="flag:france"></mat-icon>
         <span>{{'france' | translate}}</span>
@@ -135,4 +138,6 @@
   </div>
 </div>
 
-<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async" [class.hidden]="mobileQuery"></vex-navigation>
+<vex-navigation
+  *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async"
+  [class.hidden]="mobileQuery"></vex-navigation>

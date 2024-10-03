@@ -1,5 +1,6 @@
 .table-show-detail {
-  width: 64%;float:left
+  width: 64%;
+  float: left;
 }
 
 .vex-page-layout-content {
@@ -13,19 +14,19 @@
     border-radius: 10px;
     padding: 0px;
     margin-top: 30px;
-    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, .25);
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-    @media (max-width: 1280px){
+    @media (max-width: 1280px) {
       width: 50%;
       left: calc(50% - 40px);
     }
 
-    @media (max-width: 1020px){
+    @media (max-width: 1020px) {
       width: 60%;
       left: calc(40% - 40px);
     }
 
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
       width: 90%;
       left: calc(10% - 40px);
     }
@@ -40,8 +41,8 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #2F3844;
-    padding: 25px 35px!important;
+    background-color: #2f3844;
+    padding: 25px 35px !important;
 
     .mat-mdc-card-title {
       font-weight: 700;
@@ -50,12 +51,12 @@
     }
 
     .mat-icon {
-      fill: white!important;
+      fill: white !important;
     }
   }
 
   .mat-mdc-card-content {
-    padding: 0px 0px 20px 0px!important;
+    padding: 0px 0px 20px 0px !important;
 
     .dots {
       padding: 15px 35px;
@@ -71,12 +72,12 @@
     }
 
     .title-status {
-      background-color: #F2F3F3;
+      background-color: #f2f3f3;
       padding: 15px 35px;
       margin-bottom: 8px;
 
       b {
-        color: #4D4D4D;
+        color: #4d4d4d;
         font-size: 1em;
         font-weight: 700;
       }
@@ -97,7 +98,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4D4D4D;
+      color: #4d4d4d;
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -119,13 +120,13 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          color: black;
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
-          font-size: .9em;
+          font-family: "Montserrat", sans-serif;
+          font-size: 0.9em;
         }
       }
     }
@@ -138,7 +139,7 @@
   font-weight: 400;
   color: #000000;
   margin-bottom: 5px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 
   .col-left {
     width: 40%;
@@ -155,7 +156,7 @@
 }
 
 .title-actividad {
-  background-color: #F2F3F3;
+  background-color: #f2f3f3;
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -163,7 +164,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: #4d4d4d;
   }
 
   b {
@@ -183,7 +184,7 @@
     text-align: right;
 
     b {
-      color: #4D4D4D;
+      color: #4d4d4d;
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -196,14 +197,14 @@
 }
 
 .title-label {
-  background-color: #F2F3F3;
+  background-color: #f2f3f3;
   padding: 15px 35px;
   margin-bottom: 10px;
 
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: #4d4d4d;
   }
 
   b {

@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from './add-task/add-task.component';
 import moment, { duration } from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {ColorSchemeName} from '../../config/colorSchemeName';
+import { ColorSchemeName } from '../../config/colorSchemeName';
 @Component({
   selector: 'vex-toolbar',
   templateUrl: './toolbar.component.html',
@@ -37,17 +37,17 @@ export class ToolbarComponent {
   megaMenuOpen$: Observable<boolean> = of(false);
 
   constructor(private layoutService: LayoutService,
-              private configService: ConfigService,
-              private navigationService: NavigationService,
-              private popoverService: PopoverService,
-              private router: Router,
-              private dialog: MatDialog,
-              private snackbar: MatSnackBar,
-              private translateService: TranslateService) {
+    private configService: ConfigService,
+    private navigationService: NavigationService,
+    private popoverService: PopoverService,
+    private router: Router,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar,
+    private translateService: TranslateService) {
 
     this.isDarkMode = this.getThemePreference() === 'dark';
     this.setColor();
-    switch(translateService.getDefaultLang()) {
+    switch (translateService.getDefaultLang()) {
       case 'es':
         this.flag = 'flag:spain';
         break;
@@ -71,12 +71,12 @@ export class ToolbarComponent {
   }
 
   setThemePreference(isDarkMode: boolean): void {
-    sessionStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
+    this.layoutService.DarkMode = isDarkMode ? 'dark' : 'light'
+    sessionStorage.setItem('themePreference', this.layoutService.DarkMode);
   }
 
   getThemePreference(): string {
-    //return sessionStorage.getItem('themePreference') || 'light';
-    return 'light';
+    return sessionStorage.getItem('themePreference') || 'light';
   }
 
   toggleDarkMode(): void {
@@ -101,14 +101,14 @@ export class ToolbarComponent {
 
       this.translateService.use(lang);
       this.translateService.currentLang = lang;
-      sessionStorage.setItem('lang', lang );
+      sessionStorage.setItem('lang', lang);
       // Ajusta el locale de la aplicación
       moment.locale(this.setLocale(lang));
     } else {
 
       this.translateService.setDefaultLang(lang);
       this.translateService.currentLang = lang;
-      sessionStorage.setItem('lang', lang );
+      sessionStorage.setItem('lang', lang);
 
       // Configura el locale de moment.js
       moment.locale(this.setLocale(lang));
@@ -182,7 +182,7 @@ export class ToolbarComponent {
 
     dialog.afterClosed().subscribe((data) => {
       if (data) {
-        this.snackbar.open(this.translateService.instant('task_created'), 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('task_created'), 'OK', { duration: 3000 })
       }
     })
   }

@@ -96,13 +96,10 @@
   flex-direction: column;
 }
 .monitor-lang {
-  font-size: 12px;
-  color: #444;
+    font-size:12px;color:#444;
 }
 .monitor-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: #333;
+    font-size:15px;font-weight:500;color:#333;
 }
 .monitor-icons {
   display: flex;
@@ -271,9 +268,7 @@
   filter: invert(100%);
 }
 .task-text div {
-  font-size: 14px;
-  color: #000;
-  font-weight: 500;
+    font-size:14px;color:#000;font-weight:500;
 }
 .sport-img-week {
   position: absolute;
@@ -653,8 +648,8 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #2F3844;
-    padding: 25px 35px !important;
+    background-color: #ED297B;
+    padding: 25px 35px!important;
 
     .mat-mdc-card-title {
       font-weight: 700;
@@ -716,7 +711,7 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          color: black;
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
