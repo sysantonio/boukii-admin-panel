@@ -76,7 +76,8 @@
       <div class="dateRow">
         <div>
           <span class="hour" (click)="addReduction()"
-            *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.isPaid"
+            *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
+            < bookingData.price_total && !bookingData.isPaid"
             style="
             color: #E91E63;
              font-size: 14px;
@@ -88,7 +89,7 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
-          <span style="width: 100%; float:left" *ngIf="bookingData.reduction !== null;">
+          <span style="width: 100%; float:left" *ngIf="bookingData.reduction != null;">
             <mat-icon *ngIf="!bookingData.isPaid"
               svgIcon="mat:delete"
               style="float: left;color: red; cursor:pointer"
@@ -103,7 +104,8 @@
       </div>
       <div class="dateRow">
         <div>
-          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.isPaid" (click)="addBonus()"
+          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.isPaid"
+                (click)="addBonus()"
             style="
           color: #E91E63;
            font-size: 14px;

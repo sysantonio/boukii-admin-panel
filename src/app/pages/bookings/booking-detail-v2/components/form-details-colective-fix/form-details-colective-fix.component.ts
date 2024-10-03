@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: "booking-form-details-colective-fix",
@@ -17,7 +18,14 @@ export class FormDetailsColectiveFixComponent implements OnInit {
   selectedExtras = [];
   totalExtrasPrice: string = "0 CHF"; // Muestra el precio total de los extras
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,   @Inject(MAT_DIALOG_DATA) public data: any,
+              private dialogRef: MatDialogRef<FormDetailsColectiveFixComponent>) {
+    this.course = data.course;
+    this.utilizer = data.utilizer;
+    this.sportLevel = data.sportLevel;
+    this.initialData = data.initialData;
+    this.stepForm = this.fb.group({});
+  }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -86,6 +94,17 @@ export class FormDetailsColectiveFixComponent implements OnInit {
     courseDatesArray.controls.forEach(group => {
       group.get('extras')?.setValue(this.selectedExtras);
     });
+  }
+
+  submitForm() {
+    if (this.stepForm.valid) {
+      // Cerrar el diálogo pasando los valores del formulario
+      this.dialogRef.close(this.stepForm.value);
+
+    }
+  }
+  cancel() {
+    this.dialogRef.close();
   }
 
 }

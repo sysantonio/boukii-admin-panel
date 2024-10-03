@@ -2259,6 +2259,15 @@ this.activityDatesTable.renderRows();
       })
 
   }
+// Función para obtener el primer valor no vacío
+  getFirstNonEmptyValue(obj: any, field: string, languages: string[]) {
+    for (let lang of languages) {
+      if (obj[lang] && obj[lang][field] && obj[lang][field].trim() !== '') {
+        return obj[lang][field];
+      }
+    }
+    return '';
+  }
 
   update() {
     if (this.defaults.course_type  === 2 ) {
@@ -2266,6 +2275,15 @@ this.activityDatesTable.renderRows();
       this.setDebut(this.defaults.hour_min);
       this.setHourEnd(this.defaults.hour_max);
     }
+
+    // Definir el orden de prioridad de los idiomas
+    const languagePriority = ['fr', 'en', 'es', 'it', 'de'];
+
+    // Obtener el 'name' y 'description' basado en la prioridad de idiomas
+    this.defaults.name = this.getFirstNonEmptyValue(this.defaults.translations, 'name', languagePriority);
+    this.defaults.description = this.getFirstNonEmptyValue(this.defaults.translations, 'description', languagePriority);
+    this.defaults.short_description = this.getFirstNonEmptyValue(this.defaults.translations, 'short_description', languagePriority);
+
 
     let data: any = [];
 
@@ -2417,7 +2435,7 @@ this.activityDatesTable.renderRows();
         hour_max: this.defaults.hour_max,
         settings: JSON.stringify(this.defaults.settings)
       };
-    } else if (this.defaults.course_type === 3  && this.defaults.is_flexible) {
+    } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
       if(this.groups) {
         this.defaults.settings.groups = this.groups;
       }
