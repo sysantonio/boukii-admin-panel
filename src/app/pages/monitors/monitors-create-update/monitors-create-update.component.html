@@ -413,9 +413,9 @@
                         'background': isAuthorized(item) ? item.color : '#fff'
                       }"
                         (click)="authoriseLevel(item)">
-                        <p style="color: #000;text-align: center"
+                        <p style="color: var(--color-dark1);text-align: center"
                         [ngStyle]="{
-                          'color': isAuthorized(item) ? '#fff': '#000'
+                          'color': isAuthorized(item) ? '#fff': 'var(--color-dark1)'
                         }"
                         >{{ item.annotation }}</p>
                       </div>

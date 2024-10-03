@@ -121,12 +121,12 @@
 }
 .monitor-lang {
   font-size: 12px;
-  color: #444;
+  color: var(--color-dark1);
 }
 .monitor-title {
   font-size: 15px;
   font-weight: 500;
-  color: #333;
+  color: var(--color-dark2);
 }
 .monitor-icons {
   display: flex;
@@ -158,7 +158,7 @@
   position: absolute;
   top: 0px;
   right: 1px;
-  color: #000;
+  color: var(--color-dark1);
   font-size: 10px;
   font-weight: 500;
 }
@@ -166,7 +166,7 @@
   position: absolute;
   bottom: 0px;
   right: 1px;
-  color: #000;
+  color: var(--color-dark1);
   font-size: 10px;
   font-weight: 500;
 }
@@ -278,7 +278,7 @@
 }
 .task-text div {
   font-size: 14px;
-  color: #000;
+  color: var(--color-dark1);
   font-weight: 500;
 }
 .sport-img-week {
@@ -332,7 +332,7 @@
   color: #fff;
   padding: 0px 4px;
   width: fit-content;
-  background: #333;
+  background: var(--color-dark2);
   border-radius: 6px;
 }
 .task-wrapper-week {
@@ -374,7 +374,7 @@
   color: #fff;
   padding: 0px 1px;
   width: fit-content;
-  background: #333;
+  background: var(--color-dark2);
   border-radius: 4px;
 }
 
@@ -395,7 +395,7 @@
   left: 0px;
   font-size: 9px;
   background: #eee;
-  color: #444;
+  color: var(--color-dark1);
   border: 1px solid #bbb;
   border-radius: 4px;
   padding: 0px 2px;
@@ -745,7 +745,7 @@
         flex-direction: column;
         border-radius: 6px;
         padding: 2%;
-        color: #000000;
+        color: var(--color-dark1);
         background: #e6e6e6;
         text-align: center;
         font-size: 12px;
@@ -780,7 +780,7 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 5px;
   font-family: "Montserrat", sans-serif;
 

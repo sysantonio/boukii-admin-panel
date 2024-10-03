@@ -328,9 +328,9 @@
                          [ngStyle]="{
                       'background': checkMonitorAuth(item, degree) ? degree.color : '#fff'
                     }">
-                      <p style="color: #000;text-align: center"
+                      <p style="color: var(--color-dark1);text-align: center"
                          [ngStyle]="{
-                        'color': checkMonitorAuth(item, degree) ? '#fff': '#000'
+                        'color': checkMonitorAuth(item, degree) ? '#fff': 'var(--color-dark1)'
                       }"
                       >{{ degree.annotation }}</p>
                     </div>
@@ -1605,9 +1605,9 @@
                           'background': checkMonitorAuth(element, level) ? level.color : '#fff'
                         }"
                           (click)="authoriseCurrentLevel(level, element)">
-                          <p style="color: #000;text-align: center"
+                          <p style="color: var(--color-dark1);text-align: center"
                           [ngStyle]="{
-                            'color': checkMonitorAuth(element, level) ? '#fff': '#000'
+                            'color': checkMonitorAuth(element, level) ? '#fff': 'var(--color-dark1)'
                           }"
                           >{{ level.annotation }}</p>
                         </div>
@@ -1685,9 +1685,9 @@
                         'background': isAuthorized(item) ? item.color : '#fff'
                       }"
                         (click)="authoriseLevel(item)">
-                        <p style="color: #000;text-align: center"
+                        <p style="color: var(--color-dark1);text-align: center"
                         [ngStyle]="{
-                          'color': isAuthorized(item) ? '#fff': '#000'
+                          'color': isAuthorized(item) ? '#fff': 'var(--color-dark1)'
                         }"
                         >{{ item.annotation }}</p>
                       </div>

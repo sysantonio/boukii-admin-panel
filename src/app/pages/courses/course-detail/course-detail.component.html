@@ -315,7 +315,7 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1)--color-dark1)--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px">
                                   {{'groups' | translate}}
                                   {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
                                 </div>
@@ -332,7 +332,7 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px">
                                   {{'age' | translate}}
                                 </div>
                                 <form [formGroup]="rangeForm" novalidate>
@@ -379,7 +379,7 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: #000;background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px">
                                   Duracion<br>
                                   {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start,
                                   defaults.course_dates[daySelectedIndex].hour_end)}}

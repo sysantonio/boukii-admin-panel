@@ -49,8 +49,8 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #2F3844;
-    padding: 25px 35px!important;
+    background-color: #2f3844;
+    padding: 25px 35px !important;
 
     .mat-mdc-card-title {
       font-weight: 700;
@@ -118,7 +118,7 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          var(--color-dark1);
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
@@ -135,7 +135,7 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 5px;
   font-family: "Montserrat", sans-serif;
 
@@ -173,7 +173,7 @@
   padding: 0px 0px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 10px;
 
   .col-left {
@@ -323,7 +323,7 @@
     .course-title {
       font-size: 1.4em;
       font-weight: 700;
-      color: #000000;
+      color: var(--color-dark1);
     }
 
     .course-label {
@@ -373,7 +373,7 @@
     .course-title {
       font-size: 1.4em;
       font-weight: 700;
-      color: #000000;
+      color: var(--color-dark1);
       display: inline-block;
     }
 
@@ -416,7 +416,7 @@
 .total-bottom {
   width: 100%;
   margin-top: 20px;
-  background-color: #2F3844;
+  background-color: #2f3844;
 
   .col-left {
     width: 50%;

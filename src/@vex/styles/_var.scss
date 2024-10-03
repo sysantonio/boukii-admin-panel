@@ -59,7 +59,7 @@ $vex-warn: mat.define-palette((
 
 $vex-theme-foreground: (
   text: black,
-  elevation: #000,
+  elevation: var(--color-dark1),
   divider: rgba(82, 63, 105, 0.06),
   dividers: rgba(82, 63, 105, 0.06)
 ) !default;

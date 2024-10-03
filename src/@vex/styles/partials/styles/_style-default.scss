@@ -113,8 +113,8 @@
   --sidenav-item-color-hover: #{$light-primary-text};
   --sidenav-item-color-active: #{$light-primary-text};
   --sidenav-item-icon-color: #494B74;
-  --sidenav-item-icon-color-hover: #000000;
-  --sidenav-item-icon-color-active: #000000;
+  --sidenav-item-icon-color-hover: var(--color-dark1);
+  --sidenav-item-icon-color-active: var(--color-dark1);
   --sidenav-item-icon-gap: 16px;
   --sidenav-item-icon-size: 24px;
   --sidenav-item-dropdown-background: #{darken($sidenav-background, 3)};
