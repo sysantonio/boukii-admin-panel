@@ -466,7 +466,7 @@ img[mat-card-image] {
 
 .mat-mdc-card-subtitle {
   b {
-    color: #4d4d4d;
+    color: var(--color-dark);
     font-size: 1.3em;
     font-weight: 700;
   }
@@ -477,7 +477,7 @@ img[mat-card-image] {
   padding: 15px 35px;
 
   b {
-    color: #4d4d4d;
+    color: var(--color-dark);
     font-size: 1.4em;
     font-weight: 600;
   }
@@ -524,7 +524,7 @@ img[mat-card-image] {
   position: relative;
   font-size: 1.1em;
   font-weight: 400;
-  color: #4d4d4d;
+  color: var(--color-dark);
   margin-top: 20px;
   margin-bottom: 20px;
 
@@ -607,7 +607,7 @@ img[mat-card-image] {
 
     .title-client {
       padding: 10px 1px;
-      color: #4d4d4d;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -665,7 +665,7 @@ img[mat-card-image] {
   font-family: "Montserrat", sans-serif;
   font-size: 1em;
   font-weight: 400;
-  color: #4d4d4d;
+  color: var(--color-dark);
   margin-bottom: 10px;
 }
 
@@ -688,7 +688,7 @@ img[mat-card-image] {
       font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: #4d4d4d;
+      color: var(--color-dark);
       margin-bottom: 0px;
     }
 

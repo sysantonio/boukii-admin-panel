@@ -95,7 +95,7 @@
       margin-bottom: 8px;
 
       b {
-        color: #4D4D4D;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -116,7 +116,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -238,7 +238,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: var(--color-dark);
   }
 
   b {
@@ -258,7 +258,7 @@
     text-align: right;
 
     b {
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -278,7 +278,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: var(--color-dark);
   }
 
   b {

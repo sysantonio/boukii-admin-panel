@@ -1,6 +1,6 @@
 .table-show-detail {
   width: 65%;
-  float:left;
+  float: left;
 }
 
 .vex-page-layout-content {
@@ -14,19 +14,19 @@
     border-radius: 10px;
     padding: 0px;
     margin-top: 6px;
-    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, .25);
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-    @media (max-width: 1280px){
+    @media (max-width: 1280px) {
       width: 50%;
       left: calc(50% - 40px);
     }
 
-    @media (max-width: 1020px){
+    @media (max-width: 1020px) {
       width: 60%;
       left: calc(40% - 40px);
     }
 
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
       width: 90%;
       left: calc(10% - 40px);
     }
@@ -41,8 +41,8 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #2F3844;
-    padding: 25px 35px!important;
+    background-color: #2f3844;
+    padding: 25px 35px !important;
 
     .mat-mdc-card-title {
       font-weight: 700;
@@ -51,12 +51,12 @@
     }
 
     .mat-icon {
-      fill: white!important;
+      fill: white !important;
     }
   }
 
   .mat-mdc-card-content {
-    padding: 0px 0px 20px 0px!important;
+    padding: 0px 0px 20px 0px !important;
 
     .dots {
       padding: 15px 35px;
@@ -77,7 +77,7 @@
       margin-bottom: 8px;
 
       b {
-        color: #4D4D4D;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -98,7 +98,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -124,8 +124,8 @@
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
-          font-size: .9em;
+          font-family: "Montserrat", sans-serif;
+          font-size: 0.9em;
         }
       }
     }
@@ -136,7 +136,7 @@
       margin-bottom: 8px;
 
       b {
-        color: #4D4D4D;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -177,12 +177,12 @@
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
+          font-family: "Montserrat", sans-serif;
           font-size: 1em;
         }
 
         .client-ubicacion {
-          font-family: 'Montserrat', sans-serif;
+          font-family: "Montserrat", sans-serif;
           font-size: 1em;
         }
       }
@@ -207,9 +207,9 @@
         padding: 2%;
         color: var(--color-dark1);
         background: #e6e6e6;
-        text-align:center;
+        text-align: center;
         font-size: 12px;
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", sans-serif;
 
         &:first-child {
           color: #fff;
@@ -217,8 +217,8 @@
 
         img {
           display: inline-block;
-          width:24px;
-          height:24px;
+          width: 24px;
+          height: 24px;
           margin-bottom: 10px;
         }
       }
@@ -242,7 +242,7 @@
   font-weight: 400;
   color: var(--color-dark1);
   margin-bottom: 5px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 
   .col-left {
     width: 70%;
@@ -261,10 +261,9 @@
       text-align: right;
 
       span {
-        color: #FA9917;
+        color: #fa9917;
       }
     }
-
   }
   .col-right {
     width: 30%;
@@ -275,7 +274,7 @@
 }
 
 .title-actividad {
-  background-color: var(--color-grey5)olor-grey5);
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -283,7 +282,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: var(--color-dark);
   }
 
   b {
@@ -303,7 +302,7 @@
     text-align: right;
 
     b {
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }

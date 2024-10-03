@@ -86,7 +86,7 @@ export class ConfigService {
       this.document.body.style.setProperty('--color-dark3', "#223042");
       this.document.body.style.setProperty('--color-dark4', "#1b2d44");
       this.document.body.style.setProperty('--color-dark5', "#122742");
-      this.document.body.style.setProperty('--color-grey1', "#8b9099");
+      this.document.body.style.setProperty('--color-grey1', "#var(--color-dark1)");
       this.document.body.style.setProperty('--color-grey2', "#c7d0d3");
       this.document.body.style.setProperty('--color-grey3', "#dee6ea");
       this.document.body.style.setProperty('--color-grey4', "#eff2f5");
@@ -97,7 +97,7 @@ export class ConfigService {
       this.document.body.style.setProperty('--color-dark2', "#eff2f5");
       this.document.body.style.setProperty('--color-dark3', "#dee6ea");
       this.document.body.style.setProperty('--color-dark4', "#c7d0d3");
-      this.document.body.style.setProperty('--color-dark5', "#8b9099");
+      this.document.body.style.setProperty('--color-dark5', "#var(--color-dark1)color-dark1)");
       this.document.body.style.setProperty('--color-grey1', "#122742");
       this.document.body.style.setProperty('--color-grey2', "#1b2d44");
       this.document.body.style.setProperty('--color-grey3', "#223042");

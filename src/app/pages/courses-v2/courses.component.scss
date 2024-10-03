@@ -19,7 +19,7 @@
     max-height: calc(100vh - 183px);
     z-index: 100;
     margin-top: 6px;
-    box-shadow: 0px 0px 14.9px 0px var(--color-dark1)1f;
+    box-shadow: 0px 0px 14.9px 0px var(--color-dark1) 1f;
     @media (max-width: 460px) {
       width: calc(100% - 20px);
       min-width: 0;
@@ -35,7 +35,7 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #2F3844;
+    background-color: #2f3844;
     padding: 25px 35px !important;
 
     .mat-mdc-card-title {
@@ -71,7 +71,7 @@
       margin-bottom: 8px;
 
       b {
-        color: #4d4d4d;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -92,7 +92,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4d4d4d;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -130,7 +130,7 @@
       margin-bottom: 8px;
 
       b {
-        color: #4d4d4d;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -234,7 +234,7 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: var(--color-dark1)olor-dark1);
+  color: var(--color-dark1);
   margin-bottom: 5px;
   font-family: "Montserrat", sans-serif;
 
@@ -276,7 +276,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4d4d4d;
+    color: var(--color-dark);
   }
 
   b {
@@ -296,7 +296,7 @@
     text-align: right;
 
     b {
-      color: #4d4d4d;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }

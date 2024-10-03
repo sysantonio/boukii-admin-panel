@@ -621,7 +621,7 @@
           </div>
           <div
             *ngFor="let item of extras"
-            style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px #8B9099 solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
+            style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px #var(--color-dark1) solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
             <mat-checkbox [value]="item.id"
               (change)="selectExtra($event,item)">
             </mat-checkbox>
@@ -632,7 +632,7 @@
                 {{item.product}}
               </div>
               <div
-                style="align-self: stretch; color: #8B9099; font-size: 12px; font-weight: 400; line-height: 16px; word-wrap: break-word">
+                style="align-self: stretch; color: #var(--color-dark1); font-size: 12px; font-weight: 400; line-height: 16px; word-wrap: break-word">
                 {{item.name}}
               </div>
             </div>
@@ -810,7 +810,7 @@
         </span>
         <br>
         <span style="
-        color: #8B9099;
+        color: #var(--color-dark1);
         font-size: 12px;
         font-weight: 400;
         line-height: 16px;
@@ -831,7 +831,7 @@
         </span>
         <br>
         <span style="
-        color: #8B9099;
+        color: #var(--color-dark1);
         font-size: 12px;
         font-weight: 400;
         line-height: 16px;
