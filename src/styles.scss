@@ -542,7 +542,7 @@ body {
   Example:
 
   :root {
-   --sidenav-background: var(--color-dark2)333;
+   --sidenav-background: var(--color-dark2);
   }
 
   All possible variables can be found in @vex/styles/core or by simply inspecting the element you want to change
@@ -640,4 +640,10 @@ body {
 .mat-mdc-outlined-button .mdc-button__ripple {
   background-color: var(--color-grey5);
   border: 1px solidvar(--color-dark1);
+}
+
+.mat-mdc-table,
+.mat-mdc-paginator,
+.mat-mdc-card {
+  background-color: var(--color-grey5) !important;
 }

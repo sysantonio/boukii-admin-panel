@@ -91,7 +91,8 @@ export class ConfigService {
       this.document.body.style.setProperty('--color-grey3', "#dee6ea");
       this.document.body.style.setProperty('--color-grey4', "#eff2f5");
       this.document.body.style.setProperty('--color-grey5', "#f8f9fb");
-
+      this.document.body.style.setProperty('--color-black', "#121212");
+      this.document.body.style.setProperty('--color-white', "#ffffff");
     } else {
       this.document.body.style.setProperty('--color-dark1', "#f8f9fb");
       this.document.body.style.setProperty('--color-dark2', "#eff2f5");
@@ -103,6 +104,8 @@ export class ConfigService {
       this.document.body.style.setProperty('--color-grey3', "#61656D");
       this.document.body.style.setProperty('--color-grey4', "#2f3844");
       this.document.body.style.setProperty('--color-grey5', "#222222");
+      this.document.body.style.setProperty('--color-black', "#ffffff");
+      this.document.body.style.setProperty('--color-white', "#121212");
     }
 
 

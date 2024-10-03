@@ -87,14 +87,14 @@
 
 /** SIDENAV TOOLBAR */
 .vex-sidenav-toolbar__container {
-  background: var(--sidenav-background);
+  background: var(--color-grey5);
 
   @apply sticky top-0 z-10;
 }
 
 .sidenav-toolbar {
   align-items: center;
-  background: var(--sidenav-toolbar-background);
+  background: var(--color-grey5);
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -114,14 +114,14 @@
 
 .vex-sidenav-toolbar__divider {
   height: 1px;
-  background: var(--sidenav-section-divider-color);
+  background: var(--foreground-divider);
 }
 
 /** VEX SIDENAV USER */
 .vex-sidenav-user__container {
-  background: var(--sidenav-toolbar-background);
+  background: var(--color-grey5);
   padding: var(--padding-8) var(--padding-12);
-  border-color: var(--sidenav-section-divider-color);
+  border-color: var(--color-grey5);
   position: sticky;
   bottom: 0;
   left: 0;
@@ -161,7 +161,7 @@
 
 /** VEX SIDENAV SEARCH */
 .vex-sidenav-search__container {
-  background: var(--sidenav-toolbar-background);
+  background: var(--color-grey5);
   padding: 0 var(--padding-12) var(--padding-12);
 
   @apply z-10;
