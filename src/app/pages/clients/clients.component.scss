@@ -138,7 +138,7 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          var(--color-dark1);
+          color: var(--color-dark1);  // O cualquier otra propiedad CSS válida
           margin-bottom: 2px;
         }
 
@@ -211,7 +211,7 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: var(--color-dark1)olor-dark1);
+  color: var(--color-dark1);
   margin-bottom: 5px;
   font-family: 'Montserrat', sans-serif;
 
@@ -271,7 +271,7 @@
 }
 
 .title-label {
-  background-color: var(--color-grey5)olor-grey5);
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-bottom: 10px;
 
