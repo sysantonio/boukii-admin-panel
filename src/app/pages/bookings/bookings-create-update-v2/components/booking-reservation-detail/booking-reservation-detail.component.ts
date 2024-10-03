@@ -65,11 +65,14 @@ export class BookingReservationDetailComponent implements OnInit {
       paid: false,
       notes: '',
       notes_school: '',
+      selectedPaymentOption: '',
       paxes: 0,
       status: 0,
       color: '',
       vouchers: [],
       reduction: null,
+      basket: null,
+      cart: null
     };
   }
 
@@ -100,26 +103,35 @@ export class BookingReservationDetailComponent implements OnInit {
   recalculateBonusPrice() {
     let remainingPrice = this.bookingData.price_total - this.calculateTotalVoucherPrice();
 
-    if(remainingPrice != 0) {
+    if (remainingPrice !== 0) {
       this.bookingData.vouchers.forEach(voucher => {
+        const availableBonus = voucher.bonus.remaining_balance - voucher.bonus.reducePrice;
+
         if (remainingPrice > 0) {
-          if (voucher.bonus.remaining_balance + voucher.bonus.reducePrice >= remainingPrice) {
-            voucher.bonus.reducePrice = voucher.bonus.reducePrice + remainingPrice;
+          if (availableBonus >= remainingPrice) {
+            voucher.bonus.reducePrice += remainingPrice;
             remainingPrice = 0;
           } else {
-            voucher.bonus.reducePrice = voucher.bonus.remaining_balance;
-            remainingPrice -= voucher.bonus.remaining_balance;
+            voucher.bonus.reducePrice += availableBonus;
+            remainingPrice -= availableBonus;
           }
-        } else if (remainingPrice == 0) {
-          voucher.bonus.reducePrice = 0;
         } else {
-          voucher.bonus.reducePrice = voucher.bonus.reducePrice + remainingPrice;
+          const adjustedReducePrice = voucher.bonus.reducePrice + remainingPrice;
+
+          if (adjustedReducePrice >= 0) {
+            voucher.bonus.reducePrice = adjustedReducePrice;
+            remainingPrice = 0;
+          } else {
+            remainingPrice -= voucher.bonus.reducePrice; // Reduce remainingPrice solo por lo que hay en reducePrice.
+            voucher.bonus.reducePrice = 0; // Aseguramos que nunca sea negativo.
+          }
         }
       });
     }
 
     this.updateBookingData();
   }
+
 
   recalculateTva() {
     const basePrice = this.sumActivityTotal()
@@ -156,6 +168,7 @@ export class BookingReservationDetailComponent implements OnInit {
       if (result) {
         this.bookingData.vouchers.push(result);
         this.updateBookingData();
+        this.recalculateBonusPrice();
       }
     });
   }
@@ -187,6 +200,7 @@ export class BookingReservationDetailComponent implements OnInit {
   deleteBonus(index: number): void {
     this.bookingData.vouchers.splice(index, 1);
     this.updateBookingData();
+    this.recalculateBonusPrice();
   }
 
   private calculateReduction(): number {

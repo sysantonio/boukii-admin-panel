@@ -2154,8 +2154,7 @@ export class BookingDetailComponent implements OnInit {
                     this.crudService
                       .post("/admin/bookings/refunds/" + this.id, {
                         amount:
-                          this.finalPrice -
-                          this.booking.price_cancellation_insurance,
+                          priceToRefund,
                       })
                       .subscribe(() => {
                         this.crudService
@@ -2206,7 +2205,7 @@ export class BookingDetailComponent implements OnInit {
                   booking_id: this.id,
                   school_id: this.user.schools[0].id,
                   amount:
-                    this.finalPrice - this.booking.price_cancellation_insurance,
+                    priceToRefund,
                   status: "refund",
                   notes: "other",
                 })
@@ -2235,11 +2234,9 @@ export class BookingDetailComponent implements OnInit {
           const vData = {
             code: "BOU-" + this.generateRandomNumber(),
             quantity:
-              this.booking.price_total -
-              this.booking.price_cancellation_insurance,
+            priceToRefund,
             remaining_balance:
-              this.booking.price_total -
-              this.booking.price_cancellation_insurance,
+            priceToRefund,
             payed: false,
             client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id,

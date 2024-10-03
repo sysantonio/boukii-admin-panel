@@ -18,8 +18,7 @@ import {SchoolService} from '../../../../../../service/school.service';
 @Component({
   selector: "booking-form-details-private",
   templateUrl: "./form-details-private.component.html",
-  styleUrls: ["./form-details-private.component.scss"],
-  encapsulation: ViewEncapsulation.None // Desactiva la encapsulación de estilos
+  styleUrls: ["./form-details-private.component.scss"]
 
 })
 export class FormDetailsPrivateComponent implements OnInit {
@@ -32,6 +31,7 @@ export class FormDetailsPrivateComponent implements OnInit {
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   @Input() stepForm: FormGroup; // Recibe el formulario desde el padre
+  @Input() selectedForm: FormGroup; // Recibe el formulario desde el padre
   @Input() addDateEvent!: boolean; // Recibe el evento como Input
   @Input() removeDateEvent!: boolean; // Recibe el evento como Input
 
@@ -181,6 +181,9 @@ export class FormDetailsPrivateComponent implements OnInit {
   checkLocalOverlap(bookingUsers: any[], currentFormGroup: FormGroup = null): boolean {
     // Recorremos cada normalizedDate
     for (let normalized of this.activitiesBooked) {
+      if (this.selectedForm && this.selectedForm === normalized) {
+        continue; // Saltamos la comparación si es el mismo FormGroup
+      }
       // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
       for (let bookingUser of bookingUsers) {
         const matchingUtilizer = normalized.utilizers.find(
@@ -205,7 +208,7 @@ export class FormDetailsPrivateComponent implements OnInit {
         }
         for (let normalizedDate of this.courseDates.controls) {
 
-          if (currentFormGroup && currentFormGroup === normalizedDate) {
+          if ((currentFormGroup && currentFormGroup === normalizedDate)) {
             continue; // Saltamos la comparación si es el mismo FormGroup
           }
           // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates

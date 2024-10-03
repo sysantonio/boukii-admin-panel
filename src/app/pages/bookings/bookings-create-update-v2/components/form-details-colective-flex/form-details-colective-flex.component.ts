@@ -21,6 +21,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   @Input() stepForm: FormGroup; // Recibe el formulario desde el padre
+  @Input() selectedForm: FormGroup; // Recibe el formulario desde el padre
 
   posibleExtras;
   totalExtraPrice: number[] = [];
@@ -126,6 +127,9 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
   checkLocalOverlap(bookingUsers: any[]): boolean {
     // Recorremos cada normalizedDate
     for (let normalized of this.activitiesBooked) {
+      if (this.selectedForm && this.selectedForm === normalized) {
+        continue; // Saltamos la comparación si es el mismo FormGroup
+      }
       // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
       for (let bookingUser of bookingUsers) {
         const matchingUtilizer = normalized.utilizers.find(

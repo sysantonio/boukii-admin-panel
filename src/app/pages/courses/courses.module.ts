@@ -22,14 +22,14 @@ import { CoursesCreateUpdateModule } from './courses-create-update/courses-creat
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { CourseDetailComponent } from './course-detail/course-detail.component';
 import { CoursesDetailModule } from './course-detail/course-detail.module';
+import { CourseUserTransferComponent } from './course-user-transfer/course-user-transfer.component';
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
 import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { CoursesCreateUpdateModalModule } from './courses-create-update-modal/courses-create-update-modal.module';
 import { CourseDetailNewModule } from './course-detail-new/course-detail-new.module';
-import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/course-card/app.module';
-import { CourseComponentsModule } from './components/components.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -57,13 +57,11 @@ import { CourseComponentsModule } from './components/components.module';
     CoursesCreateUpdateModalModule,
     MatDialogModule,
     ComponentsModule,
-    MatSlideToggleModule,
     MatDividerModule,
     MatCardModule,
     CourseUserTransferModalModule,
-    TranslateModule,
-    CoursesDetailCardModule,
-    CourseComponentsModule
+    TranslateModule
   ]
 })
-export class CoursesModule { }
+export class CoursesModule {
+}

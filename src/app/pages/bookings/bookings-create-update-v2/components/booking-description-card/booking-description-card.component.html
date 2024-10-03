@@ -1,12 +1,14 @@
 <div class="wrapper">
-  <div class="headerWrapper"
-    [ngClass]="{ 'headerHover': isDetail }"
+  <div class="headerWrapper" 
+    [ngClass]="{'header1': course && course.course_type===1,
+      'header2': course && course.course_type===2,
+      'header3': course && course.course_type===3}"
     (click)="isDetail ? summaryMode = !summaryMode : null">
     <span class="sportTitle">{{("00"+index).slice(-2)}}.</span>
     <div *ngIf="sport || course">
-      <img
-        class="icon40"
-        [src]="course?.icon || sport.icon"
+      <img class="icon40"
+        [class]="{ sportImg: !course, courseImg: course }"
+        [src]="course?.icon || sport.icon_selected"
         [alt]="sport.name" />
     </div>
     <div class="sportSkeletonsWrapper" *ngIf="sport && !course">
@@ -28,13 +30,15 @@
     </ng-container>
     <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail"
       (click)="deleteActivity.emit(); $event.stopPropagation()">
-      <img
-        class="icon24"
+      <img [class]="{ sportImg: !course, courseImg: course }"
+        style="min-width: 24px;
+      width: 24px;
+      height: 24px;"
         src="assets/icons/icon/delete.png" alt>
     </div>
   </div>
   <div class="bodyWrapper">
-    <div class="section">
+    <div class="section" style="margin-top: 20px;">
       <div class="sectionTitle">
         <img src="assets/img/icons/clientes2.svg"
           class="icon24" />
@@ -274,7 +278,7 @@
     </div>
   </div>
 
-  <div class="footerWrapper" style="padding-bottom: 20px;">
+  <div class="footerWrapper" style="padding: 20px;">
     {{ "bookings_page.description.total" | translate }}
     <ng-container *ngIf="!total">
       <div class="skeleton medium"></div>

@@ -10,6 +10,8 @@ import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {BookingService} from '../../../../service/bookings.service';
+import {ApiCrudService} from '../../../../service/crud.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -32,6 +34,8 @@ export class BookingsCreateUpdateV2Component {
   clientObs;
   schoolObs;
   total;
+  subtotal;
+  extraPrice;
   deleteModal: boolean = false
   deleteIndex: number = 1
   endModal: boolean = false
@@ -41,14 +45,20 @@ export class BookingsCreateUpdateV2Component {
   payModal: boolean = false;
   paymentMethod: number = 1; // Valor por defecto
   selectedPaymentOption: string = '';
-  paymentOptions: any[] = [{type: 'Tarjeta', value: 4}, {type: 'Efectivo', value: 1}]; // Opciones de pago para "Pago directo"
+  paymentOptions: any[] = [
+    {type: 'Tarjeta', value: 4},
+    {type: 'Efectivo', value: 1},
+    {type: 'Boukii Pay', value: 2}
+  ]; // Opciones de pago para "Pago directo"
 
   constructor(
     public translateService: TranslateService,
     public dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
-    public bookingService: BookingService
+    public bookingService: BookingService,
+    private crudService: ApiCrudService,
+    private router: Router
   ) {
     // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
     this.normalizedDates = []
@@ -79,7 +89,7 @@ export class BookingsCreateUpdateV2Component {
       this.calculateTotal();
     }
 
-    if (this.course && this.dates && this.clientObs && this.schoolObs) {
+    if (this.course && this.dates && formData.controls.step6.touched) {
       if (this.selectedIndexForm === null) {
         this.forms.push(formData);
       } else {
@@ -143,22 +153,28 @@ export class BookingsCreateUpdateV2Component {
       total = this.calculatePrivatePrice();
     }
 
-    // Suma el precio total de los extras elegidos
+    // Calcula el total de los extras
     const extrasTotal = this.dates.reduce((acc, date) => {
       if (date.extras && date.extras.length) {
         const extrasPrice = date.extras.reduce((extraAcc, extra) => {
           const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
-          return extraAcc + price;
+          return extraAcc + price * extra.quantity; // Multiplica el precio del extra por la cantidad
         }, 0);
         return acc + extrasPrice;
       }
       return acc;
     }, 0);
 
-    total += extrasTotal;
+    // Total sin extras
+    const totalSinExtras = total;
 
     // Actualiza el total
+    total += extrasTotal;
     this.total = `${total.toFixed(2)} ${this.course.currency}`;
+
+    // Opcional: Si deseas también almacenar el total sin extras
+    this.subtotal = `${totalSinExtras.toFixed(2)}`;
+    this.extraPrice = `${extrasTotal.toFixed(2)}`; // Total de extras
   }
 
   private calculatePrivatePrice() {
@@ -226,7 +242,8 @@ export class BookingsCreateUpdateV2Component {
       const dates = course_dates ? this.getSelectedDates(course_dates) : [];
 
       // Calcular el total para cada actividad
-      const total = this.calculateIndividualTotal(course, dates, utilizers);
+      const { total, totalSinExtras, extrasTotal } = this.calculateIndividualTotal(course, dates, utilizers);
+
 
       return {
         utilizers,
@@ -236,7 +253,9 @@ export class BookingsCreateUpdateV2Component {
         dates,
         clientObs,
         schoolObs,
-        total: `${total.toFixed(2)} ${course.currency}` // Guardar el total calculado para esta actividad
+        total: `${total} ${course.currency}`, // Guardar el total calculado para esta actividad
+        totalSinExtras: totalSinExtras, // Guardar el total sin extras
+        extrasTotal: extrasTotal // Guardar el total de extras
       };
     });
 
@@ -246,27 +265,58 @@ export class BookingsCreateUpdateV2Component {
   private calculateIndividualTotal(course, dates, utilizers) {
     let total = 0;
 
+    // Calcula el precio base dependiendo del tipo de curso
     if (course.course_type === 1) {
       total = this.calculateColectivePriceForDates(course, dates);
     } else if (course.course_type === 2) {
       total = this.calculatePrivatePriceForDates(course, dates, utilizers);
     }
 
-    // Sumar el total de los extras seleccionados para las fechas
+    // Calcula el total de los extras
+    // Calcula el total de los extras
     const extrasTotal = dates.reduce((acc, date) => {
-      if (date.extras && date.extras.length) {
-        const extrasPrice = date.extras.reduce((extraAcc, extra) => {
-          const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
-          return extraAcc + price;
-        }, 0);
-        return acc + extrasPrice;
+      // Para cursos colectivos
+      if (course.course_type === 1) {
+        if (date.extras && date.extras.length) {
+          const extrasPrice = date.extras.reduce((extraAcc, extra) => {
+            const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+            return extraAcc + (price * (extra.quantity || 1)); // Multiplica el precio del extra por la cantidad
+          }, 0);
+          return acc + extrasPrice;
+        }
       }
-      return acc;
+      // Para cursos privados
+      else if (course.course_type === 2) {
+        // Asegúrate de que 'utilizers' está definido en la fecha
+        if (date.utilizers && date.utilizers.length) {
+          // Sumar el total de extras de cada utilizador
+          date.utilizers.forEach(utilizer => {
+            if (utilizer.extras && utilizer.extras.length) {
+              const extrasPrice = utilizer.extras.reduce((extraAcc, extra) => {
+                const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+                return extraAcc + (price * (extra.quantity || 1)); // Multiplica el precio del extra por la cantidad
+              }, 0);
+              acc += extrasPrice; // Suma el precio de los extras del utilizador al acumulador
+            }
+          });
+        }
+      }
+      return acc; // Retorna el acumulador
     }, 0);
 
+    // Total sin extras
+    const totalSinExtras = total;
+
+    // Suma el total de extras al total general
     total += extrasTotal;
 
-    return total;
+    // Puedes retornar un objeto con ambos totales si lo prefieres
+    return {
+      total: total.toFixed(2),
+      totalSinExtras: totalSinExtras.toFixed(2),
+      extrasTotal: extrasTotal.toFixed(2),
+      currency: course.currency // Incluye la moneda si es necesario
+    };
   }
 
   private calculateColectivePriceForDates(course, dates) {
@@ -420,18 +470,49 @@ export class BookingsCreateUpdateV2Component {
   forceChange(newStep) {
     this.forceStep = newStep;
     this.cdr.detectChanges();
-    
+
   }
 
 
-  onPaymentMethodChange(event: any): void {
-
+  onPaymentMethodChange(event: any) {
+    // Lógica para manejar el cambio de método de pago
+    if (event.value === 1) {
+      // Si se selecciona 'Pago directo', establecer un valor predeterminado o comportamiento necesario
+      this.selectedPaymentOption = null; // Resetear la opción de pago seleccionada si es necesario
+    } else {
+      // Para otros métodos de pago, puedes asignar flags específicos
+      this.selectedPaymentOption = event.value; // Ejemplo: asignar el método seleccionado
+    }
   }
 
   // Método para finalizar la reserva
   finalizeBooking(): void {
-    debugger;
-    console.log('Finalizar con confirmación sin pago');
-    /*let bookingData = this.bookingService.*/
+    let bookingData = this.bookingService.getBookingData();
+    bookingData.cart = this.bookingService.setCart(this.normalizedDates, bookingData);
+    bookingData.payment_method_id = this.paymentMethod;
+    if(this.selectedPaymentOption == 'Boukii Pay') {
+      bookingData.payment_method_id = 2;
+    } else if(this.selectedPaymentOption == 'Tarjeta') {
+      bookingData.payment_method_id = 4;
+    }
+    const user = JSON.parse(localStorage.getItem("boukiiUser"))
+    bookingData.selectedPaymentOption = this.selectedPaymentOption;
+    bookingData.user_id = user.id;
+    this.crudService.post('/admin/bookings', bookingData)
+      .subscribe((result: any) => {
+        if(bookingData.payment_method_id == 2 || bookingData.payment_method_id == 3) {
+          this.crudService.post('/admin/bookings/payments/'+result.data.id, result.data.basket)
+            .subscribe((result: any) => {
+              if(bookingData.payment_method_id == 2) {
+                console.log((result));
+                window.open(result.data, "_self");
+              } else {
+                this.router.navigate(['/bookings/update/' + result.data.id]);
+              }
+            });
+        } else {
+          this.router.navigate(['/bookings/update/' + result.data.id]);
+        }
+      });
   }
 }

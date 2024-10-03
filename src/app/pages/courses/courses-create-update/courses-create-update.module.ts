@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -38,7 +39,6 @@ import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
-import { CourseComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
@@ -83,7 +83,7 @@ import { CourseComponentsModule } from '../components/components.module';
     CoursesDetailCardModule,
     FluxModalModule,
     FluxDisponibilidadModule,
-    CourseComponentsModule
+    MatProgressSpinnerModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

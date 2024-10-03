@@ -13,6 +13,7 @@ export class FormDetailsColectiveFixComponent implements OnInit {
   @Input() sportLevel: any;
   @Input() initialData: any;
   @Input() stepForm: FormGroup;
+  @Input() selectedForm: FormGroup;
   possibleExtras;
   selectedExtras = [];
   totalExtrasPrice: string = "0 CHF"; // Muestra el precio total de los extras

@@ -249,8 +249,8 @@
               [matDatepicker]="pickerDateFrom"
               formControlName="fromDate"
               [min]="minDate"
-              [readonly]="externalData.date"
-              [(ngModel)]="externalData.date || selectedDatePrivate"
+              [readonly]="externalData?.date"
+              [(ngModel)]="externalData?.date || selectedDatePrivate"
               (dateChange)="emitDateChange($event)"
               (dateInput)="emitDateChange($event, true)" />
             <mat-datepicker-toggle
@@ -258,7 +258,7 @@
               [for]="pickerDateFrom"></mat-datepicker-toggle>
             <mat-datepicker
               #pickerDateFrom
-              [startAt]="externalData.date || selectedDatePrivate"
+              [startAt]="externalData?.date || selectedDatePrivate"
               [calendarHeaderComponent]="customHeader"
               (monthSelected)="monthChanged($event, pickerDateFrom)"
               [dateClass]="privateDateClass()"

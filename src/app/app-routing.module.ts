@@ -53,6 +53,11 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'bookings/update-v2/:id',
+        loadChildren: () => import('./pages/bookings/booking-detail-v2/booking-detail-v2.module').then(m => m.BookingDetailV2Module),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'bookings/edit/:id',
         loadChildren: () => import('./pages/bookings/bookings-create-update-edit/bookings-create-update-edit.module').then(m => m.BookingsCreateUpdateEditModule),
         canActivate: [AuthGuard],
@@ -63,8 +68,18 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'courses-v2',
+        loadChildren: () => import('./pages/courses-v2/courses.module').then(m => m.CoursesModule),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'courses/create',
         loadChildren: () => import('./pages/courses/courses-create-update/courses-create-update.module').then(m => m.CoursesCreateUpdateModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'courses/create-v2',
+        loadChildren: () => import('./pages/courses-v2/courses-create-update/courses-create-update.module').then(m => m.CoursesCreateUpdateModule),
         canActivate: [AuthGuard],
       },
       {

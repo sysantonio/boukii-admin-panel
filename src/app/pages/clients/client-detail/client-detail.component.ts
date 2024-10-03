@@ -720,8 +720,8 @@ export class ClientDetailComponent {
 
         this.crudService.delete('/clients-utilizers', id)
           .subscribe(() => {
-            this.getClientUtilisateurs();
             this.snackbar.open(this.translateService.instant('snackbar.client.removed_user'), 'OK', { duration: 3000 });
+            window.location.reload();
           })
       }
     });
@@ -748,6 +748,11 @@ export class ClientDetailComponent {
 
       this.defaultsUser.image = this.imagePreviewUrl;
       this.defaults.image = this.imagePreviewUrl;
+    }
+
+    // Verificar si el password es vacío y eliminarlo del objeto defaults
+    if (this.defaultsUser.password === '') {
+      delete this.defaultsUser.password;
     }
 
     this.defaultsUser.email = this.defaults.email;

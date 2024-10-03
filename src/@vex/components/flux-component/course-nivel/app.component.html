@@ -41,14 +41,12 @@ flex-direction: column;">
                         <img src="assets/icons/icon/calendar.png"
                             class="icon16">
                         <span>
-                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)
-                            || 0}}
+                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value) || 0}}
                             días
                         </span>
                         <span
                             *ngIf="courseFormGroup.controls['duration_min'].value">
-                            {{courseFormGroup.controls['duration_min'].value ||
-                            0}}
+                            {{courseFormGroup.controls['duration_min'].value || 0}}
                         </span>
                     </ng-container>
                     <div style="margin: auto;"></div>
@@ -84,6 +82,7 @@ flex-direction: column;">
                                 {{"No monitor assigned"}}
                             </span>
                         </ng-container>
+
                     </div>
                     <div style="margin-left: auto;">
                         <span
