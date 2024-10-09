@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
@@ -6,11 +6,12 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   templateUrl: "./step-observations.component.html",
   styleUrls: ["./step-observations.component.scss"],
 })
-export class StepObservationsComponent implements OnInit {
+export class StepObservationsComponent implements OnInit, AfterViewInit {
   @Input() initialData: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   stepForm: FormGroup;
+  @ViewChild('clientObsField') clientObsField: ElementRef;
 
   constructor(private fb: FormBuilder) {}
 
@@ -19,6 +20,11 @@ export class StepObservationsComponent implements OnInit {
       clientObs: [this.initialData ? this.initialData.clientObs : ''],
       schoolObs: [this.initialData ? this.initialData.schoolObs : ''],
     });
+    this.setFocusOnClientObs();
+  }
+
+  ngAfterViewInit(): void {
+    this.setFocusOnClientObs();
   }
 
   isFormValid() {
@@ -32,6 +38,12 @@ export class StepObservationsComponent implements OnInit {
   completeStep() {
     if (this.isFormValid()) {
       this.stepCompleted.emit(this.stepForm);
+    }
+  }
+
+  private setFocusOnClientObs(): void {
+    if (this.clientObsField) {
+      this.clientObsField.nativeElement.focus();
     }
   }
 }

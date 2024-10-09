@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import {BookingService} from '../../../../service/bookings.service';
 import {ApiCrudService} from '../../../../service/crud.service';
 import {Router} from '@angular/router';
+import {th} from 'date-fns/locale';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -28,6 +29,7 @@ export class BookingsCreateUpdateV2Component {
   forceStep;
   forms: FormGroup[];
   dates: any;
+  allLevels: any;
   normalizedDates: any[];
   course;
   monitors;
@@ -60,9 +62,9 @@ export class BookingsCreateUpdateV2Component {
     private crudService: ApiCrudService,
     private router: Router
   ) {
-    // TODO: El componente BookingDescriptionCard trabaja con una interfaz asi, si los datos desde el formulario no llegan asi habra que normalizarlos
     this.normalizedDates = []
     this.forms = []
+    this.getDegrees();
   }
 
   handleFormChange(formData) {
@@ -142,6 +144,14 @@ export class BookingsCreateUpdateV2Component {
     this.cdr.detectChanges();
   }
 
+  getDegrees() {
+    const user = JSON.parse(localStorage.getItem("boukiiUser"))
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
+      '&school_id='+user.schools[0].id + '&active=1')
+      .subscribe((data) => {
+        this.allLevels = data.data;
+      })
+  }
 
   calculateTotal() {
     let total = 0;
@@ -175,6 +185,28 @@ export class BookingsCreateUpdateV2Component {
     // Opcional: Si deseas también almacenar el total sin extras
     this.subtotal = `${totalSinExtras.toFixed(2)}`;
     this.extraPrice = `${extrasTotal.toFixed(2)}`; // Total de extras
+  }
+
+  deleteActivity(index) {
+    this.forms.splice(index, 1); // Elimina el formulario del array
+    this.normalizedDates.splice(index, 1); // Elimina el formulario del array
+    this.deleteModal = false;
+    if(this.forms.length == 0){
+      this.currentStep = 0;
+      this.isDetail = false;
+      this.selectedForm = this.fb.group({
+        step1: this.fb.group({}),        // Copia step1
+        step2: this.fb.group({}),            // Vacío
+        step3: this.fb.group({}),            // Vacío
+        step4: this.fb.group({}),            // Vacío
+        step5: this.fb.group({}),            // Vacío
+        step6: this.fb.group({})             // Vacío
+      });
+      this.forceStep = 0;
+
+      // Forzar la detección de cambios
+      this.cdr.detectChanges();
+    }
   }
 
   private calculatePrivatePrice() {

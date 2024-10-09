@@ -2,6 +2,7 @@
   <form [formGroup]="stepForm" class="wrapper">
     <mat-form-field appearance="outline">
       <textarea
+        #clientObsField
         class="textarea"
         type="text"
         placeholder="{{ 'observation_client' | translate }}"

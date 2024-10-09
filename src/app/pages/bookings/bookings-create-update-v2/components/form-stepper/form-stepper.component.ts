@@ -19,6 +19,7 @@ export class BookingFormStepper implements OnChanges {
   @Input() forceStep: number;
   @Input() activitiesBooked: any;
   @Input() selectedDates: any;
+  @Input() allLevels!: any;
   private _selectedForm: FormGroup;
   @Input()
   set selectedForm(value: FormGroup) {
@@ -75,6 +76,7 @@ export class BookingFormStepper implements OnChanges {
   }
 
   // Manejar la finalización de cada paso
+
   handleStepCompletion(step: number, formGroup: FormGroup) {
     this.stepperForm.setControl(`step${step}`, formGroup);
     if (step < this.STEPS_LENGTH) {

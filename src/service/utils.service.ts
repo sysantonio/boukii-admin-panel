@@ -24,6 +24,10 @@ export class UtilsService {
     return age;
   }
 
+  getSportLevels(id: any, allLevels:any) {
+    return allLevels.filter((a) => a.sport_id === id)
+  }
+
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id == id);
     return country ? country.name : "NDF";

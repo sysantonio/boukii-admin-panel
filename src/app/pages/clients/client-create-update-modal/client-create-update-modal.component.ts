@@ -119,7 +119,9 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    if(!this.mode) {
+      this.mode = 'create';
+    }
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.formInfoAccount = this.fb.group({

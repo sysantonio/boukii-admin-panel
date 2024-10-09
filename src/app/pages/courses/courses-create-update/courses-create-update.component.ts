@@ -2303,8 +2303,8 @@ this.activityDatesTable.renderRows();
     let highestDate = moment(sortedDates[sortedDates.length - 1]).format('YYYY-MM-DD');
 
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
-      this.defaults.date_start_res = this.defaults.date_start;
-      this.defaults.date_end_res = this.defaults.date_end;
+     /* this.defaults.date_start_res = this.defaults.date_start;
+      this.defaults.date_end_res = this.defaults.date_end;*/
       this.getSeparatedDates(this.defaults.course_dates);
       data = {
         course_type: this.defaults.course_type,
@@ -2334,8 +2334,8 @@ this.activityDatesTable.renderRows();
       console.log(data);
 
     } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
-      this.defaults.date_start_res = this.defaults.date_start;
-      this.defaults.date_end_res = this.defaults.date_end;
+/*      this.defaults.date_start_res = this.defaults.date_start;
+      this.defaults.date_end_res = this.defaults.date_end;*/
       this.getSeparatedDates(this.defaults.course_dates);
       data = {
         course_type: this.defaults.course_type,

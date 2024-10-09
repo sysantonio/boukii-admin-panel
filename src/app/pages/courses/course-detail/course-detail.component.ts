@@ -1205,12 +1205,13 @@ export class CourseDetailComponent implements OnInit {
       }
     });
     let start = this.defaults.course_dates[this.daySelectedIndex].hour_start;
+    let end = this.defaults.course_dates[this.daySelectedIndex].hour_end;
 
     const data = {
       sportId: this.defaults.sport_id,
       minimumDegreeId: minDegree,
       startTime: start.length  <=5 ? start : start.replace(':00', ''),
-      endTime: this.defaults.course_dates[this.daySelectedIndex].hour_end.replace(':00', ''),
+      endTime: end.length  <=5 ? end : end.replace(':00', ''),
       date: this.daysDatesLevels[this.daySelectedIndex].date
     };
 

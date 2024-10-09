@@ -36,26 +36,28 @@ import { BookingReservationDetailComponent } from './booking-reservation-detail/
 import { AddReductionModalComponent } from './add-reduction/add-reduction.component';
 import { AddDiscountBonusModalComponent } from './add-discount-bonus/add-discount-bonus.component';
 import { MatDividerModule } from '@angular/material/divider';
+import {ComponentsCustomModule} from '../../../../components/components-custom.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    TranslateModule,
-    MatDialogModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatDividerModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        TranslateModule,
+        MatDialogModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatDividerModule,
+        ComponentsCustomModule,
+    ],
     declarations: [
         BookingFormStepper,
         StepOneComponent,

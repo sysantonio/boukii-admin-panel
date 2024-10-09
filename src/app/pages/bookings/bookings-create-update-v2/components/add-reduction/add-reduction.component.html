@@ -21,7 +21,7 @@
     <mat-tab-group class="tabsWrapper">
       <mat-tab>
         <ng-template mat-tab-label>
-          Porcentaje
+          {{ 'bookings_page.reductions.percentaje' | translate }}
         </ng-template>
         <div style="width:100%; display: flex;gap: 16px;  padding: 30px 6px;"
           [formGroup]="form">
@@ -34,8 +34,7 @@
           <mat-form-field appearance="outline" style="width:calc(50% - 8px)">
             <mat-label>{{'bookings_page.reductions.discount'
               |translate}}</mat-label>
-            <input type="number" matInput formControlName="discount"
-              [(ngModel)]="discount" />
+            <input type="number" matInput [value]="totalDiscount | number: '1.2-2'" readonly />
           </mat-form-field>
         </div>
       </mat-tab>

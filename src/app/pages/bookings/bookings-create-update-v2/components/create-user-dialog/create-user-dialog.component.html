@@ -12,28 +12,6 @@
 
 <mat-dialog-content>
   <form [formGroup]="stepForm">
-    <mat-form-field appearance="outline" class="searchInput">
-      <mat-label>{{ "choose_user" | translate }}</mat-label>
-      <input
-        type="text"
-        placeholder="{{ 'choose_user' | translate }}"
-        aria-label="Number"
-        matInput
-        [matAutocomplete]="auto"
-        formControlName="client"
-      />
-
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option
-          *ngFor="let filteredClient of filteredOptions | async"
-          [value]="filteredClient"
-          (onSelectionChange)="setClient($event)"
-        >
-          {{ filteredClient.first_name }} {{ filteredClient.last_name }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
     <div class="newUtilizerSection">
       <h5 class="mb-5">
         {{ "createUtilizer.title" | translate }}
