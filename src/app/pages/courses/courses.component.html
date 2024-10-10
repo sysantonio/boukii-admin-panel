@@ -111,8 +111,25 @@
           <div class="dot" [ngStyle]="{'background-color': detailData.options ? '#CEE741' : '#e6e6e6'}"></div>
           <div class="dot" [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"></div>
         </div>
+        <div class="title-status" *ngIf="detailData.course_type == 1 || detailData.is_flexible">
+          <div class="col-left">
+            <b>{{'courses.date_reservable' |
+              translate}}</b>
+          </div>
+          <div class="col-right">
+            <b>{{'courses.date_reservable_to' | translate}}</b>
+          </div>
+        </div>
+        <div class="list-holder" *ngIf="detailData.course_type == 1 || detailData.is_flexible">
+          <div class="col-left">
+            <b>{{detailData.date_start_res | date: 'dd/MM/YYYY'}}</b>
+          </div>
+          <div class="col-right">
+            <b>{{detailData.date_end_res | date: 'dd/MM/YYYY'}}</b>
+          </div>
+        </div>
 
-        <div class="title-status">
+        <div class="title-status" *ngIf="!detailData.is_flexible && detailData.course_type != 1">
           <div class="col-left">
             <b>{{'from' | translate}}</b>
           </div>
@@ -120,7 +137,7 @@
             <b>{{'to' | translate}}</b>
           </div>
         </div>
-        <div class="list-holder">
+        <div class="list-holder" *ngIf="!detailData.is_flexible && detailData.course_type != 1">
           <div class="col-left">
             <b>{{detailData.date_start | date: 'dd/MM/YYYY'}}</b><br>{{detailData.course_dates[0].hour_start.substring(0, 5)}}h
           </div>
