@@ -290,7 +290,7 @@ export const MOCK_COURSE_PRIVATE = {
   updated_at: "2024-07-16T09:52:01.000000Z",
   deleted_at: null,
   old_id: null,
-  icon: "https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png",
+  icon: "https://api.boukii.com/storage/icons/prive_ski2x.png",
   station: {
     id: 1,
     name: "Les Paccots",
@@ -320,12 +320,12 @@ export const MOCK_COURSE_PRIVATE = {
   sport: {
     id: 1,
     name: "Ski",
-    icon_prive: "https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png",
+    icon_prive: "https://api.boukii.com/storage/icons/prive_ski2x.png",
     icon_collective:
-      "https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png",
-    icon_selected: "https://api.boukii.golembyte.com/storage/apps/sports/Ski.png",
+      "https://api.boukii.com/storage/icons/collectif_ski2x.png",
+    icon_selected: "https://api.boukii.com/storage/apps/sports/Ski.png",
     icon_unselected:
-      "https://api.boukii.golembyte.com/storage/apps/sports_unselected/Ski.png",
+      "https://api.boukii.com/storage/apps/sports_unselected/Ski.png",
     sport_type: 1,
     created_at: "2024-01-24T22:12:28.000000Z",
     updated_at: "2024-01-24T22:12:28.000000Z",
@@ -1089,7 +1089,7 @@ export const MOCK_COURSE_COLECTIVE = {
   updated_at: "2024-08-26T14:48:06.000000Z",
   deleted_at: null,
   old_id: null,
-  icon: "https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png",
+  icon: "https://api.boukii.com/storage/icons/collectif_ski2x.png",
   station: {
     id: 1,
     name: "Les Paccots",
@@ -1119,12 +1119,12 @@ export const MOCK_COURSE_COLECTIVE = {
   sport: {
     id: 1,
     name: "Ski",
-    icon_prive: "https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png",
+    icon_prive: "https://api.boukii.com/storage/icons/prive_ski2x.png",
     icon_collective:
-      "https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png",
-    icon_selected: "https://api.boukii.golembyte.com/storage/apps/sports/Ski.png",
+      "https://api.boukii.com/storage/icons/collectif_ski2x.png",
+    icon_selected: "https://api.boukii.com/storage/apps/sports/Ski.png",
     icon_unselected:
-      "https://api.boukii.golembyte.com/storage/apps/sports_unselected/Ski.png",
+      "https://api.boukii.com/storage/apps/sports_unselected/Ski.png",
     sport_type: 1,
     created_at: "2024-01-24T22:12:28.000000Z",
     updated_at: "2024-01-24T22:12:28.000000Z",

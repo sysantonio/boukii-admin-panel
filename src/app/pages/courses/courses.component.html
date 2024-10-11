@@ -307,7 +307,7 @@
         <div style="float: left; width: 100%;">
           <div style="float: left;width: 100%;">
             <div style="float: left; width: 20%; margin-top: 5%">
-              <img [src]="'https://api.boukii.golembyte.com/storage/icons/prive_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
+              <img [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
             </div>
             <div style="float: left; width: 75%;margin:6% 0 0 2%">
               <p><strong>{{detailData.name}}</strong></p>
@@ -322,7 +322,7 @@
 
 <!--        <div class="holder-deporte">
           <div class="col-left">
-            <img [src]="'https://api.boukii.golembyte.com/storage/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
+            <img [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData.sport.name.toLowerCase()+'2x.png'" width="60" height="60">
             &lt;!&ndash;<app-level-user
               *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
               [allLevels]="detailData.degrees_sport"
@@ -358,27 +358,27 @@
             <div *ngIf="getSubGroups(level.id) > 0">
               <div class="grupo-holder" (click)="selectGroup(level)">
                 <div class="item" [style.background-color]="colorKey">
-                  <div><img src="https://api.boukii.golembyte.com/storage/icons/award_icon.svg" /></div>
+                  <div><img src="https://api.boukii.com/storage/icons/award_icon.svg" /></div>
                   <div>{{level.league}}</div>
                   <div>{{level.annotation}} - {{level.name}}</div>
                 </div>
                 <div class="item">
-                  <div><img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-profile-2-user-white.svg" /></div>
+                  <div><img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" /></div>
                   <div>{{'groups' | translate}}</div>
                   <div><b>{{getGroups(level.id)}}g - {{getSubGroups(level.id)}}p</b></div>
                 </div>
                 <div class="item">
-                  <div><img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-clock.svg" /></div>
+                  <div><img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" /></div>
                   <div>{{'days' | translate}}</div>
                   <div><b>{{detailData.course_dates.length}}</b></div>
                 </div>
                 <div class="item">
-                  <div><img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-calendar-tick.svg" /></div>
+                  <div><img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" /></div>
                   <div>{{'duration' | translate}}</div>
                   <div><b>{{calculateFormattedDuration(detailData.course_dates[0].hour_start, detailData.course_dates[0].hour_end)}}</b></div>
                 </div>
                 <div class="item">
-                  <div><img src="https://api.boukii.golembyte.com/storage/icons/icons-outline-profile-2-user-white.svg" /></div>
+                  <div><img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" /></div>
                   <div>{{'students' | translate}}</div>
                   <div><b>{{getStudents(level.id)}}/{{getMaxStudents(level.id)}}</b></div>
                 </div>

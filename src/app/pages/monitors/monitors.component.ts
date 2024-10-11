@@ -21,7 +21,7 @@ export class MonitorsComponent {
   sports = [];
   user: any;
   imageAvatar = '../../../assets/img/avatar.png';
-  skiImage = 'https://api.boukii.golembyte.com/storage/apps/sports/Ski.png';
+  skiImage = 'https://api.boukii.com/storage/apps/sports/Ski.png';
   groupedByColor = {};
   colorKeys: string[] = []; // Aquí almacenaremos las claves de colores
   mockLevelData = LEVELS;

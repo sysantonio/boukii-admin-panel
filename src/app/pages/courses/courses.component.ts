@@ -20,7 +20,7 @@ export class CoursesComponent {
   showDetail: boolean = false;
   detailData: any;
   selectedLevel: any;
-  imagePath = 'https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png';
+  imagePath = 'https://api.boukii.com/storage/icons/collectif_ski2x.png';
   selectedGroup: any = [];
   monitors: any = [];
   groupedByColor = {};

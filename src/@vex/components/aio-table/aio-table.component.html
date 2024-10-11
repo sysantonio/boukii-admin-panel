@@ -968,8 +968,8 @@
           <ng-container *ngIf="column.type === 'image'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
-              <img *ngIf="row[column.property] === 1" [src]="'https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px;min-width: 48px;min-height: 48px; width: 100%;">
-              <img *ngIf="row[column.property] !== 1" [src]="'https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px;min-width: 48px;min-height: 48px; width: 100%;">
+              <img *ngIf="row[column.property] === 1" [src]="'https://api.boukii.com/storage/icons/collectif_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px;min-width: 48px;min-height: 48px; width: 100%;">
+              <img *ngIf="row[column.property] !== 1" [src]="'https://api.boukii.com/storage/icons/prive_ski2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px;min-width: 48px;min-height: 48px; width: 100%;">
             </td>
           </ng-container>
         </ng-container>-->

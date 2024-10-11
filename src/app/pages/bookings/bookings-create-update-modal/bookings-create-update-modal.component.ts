@@ -100,8 +100,8 @@ export class CustomDateAdapter extends NativeDateAdapter {
 })
 export class BookingsCreateUpdateModalComponent implements OnInit {
 
-  privateIcon = 'https://api.boukii.golembyte.com/storage/icons/prive_ski2x.png';
-  collectifIcon = 'https://api.boukii.golembyte.com/storage/icons/collectif_ski2x.png';
+  privateIcon = 'https://api.boukii.com/storage/icons/prive_ski2x.png';
+  collectifIcon = 'https://api.boukii.com/storage/icons/collectif_ski2x.png';
   customHeader = CustomHeader;
   @Input()
   public monthAndYear = new Date();
