@@ -72,12 +72,12 @@
     }
 
     .title-status {
-      background-color: #f2f3f3;
+      background-color: var(--color-grey4);
       padding: 15px 35px;
       margin-bottom: 8px;
 
       b {
-        color: #4d4d4d;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -98,7 +98,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4d4d4d;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -137,7 +137,7 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 5px;
   font-family: "Montserrat", sans-serif;
 
@@ -156,7 +156,7 @@
 }
 
 .title-actividad {
-  background-color: #f2f3f3;
+  background-color: var(--color-grey4);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -164,7 +164,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4d4d4d;
+    color: var(--color-dark);
   }
 
   b {
@@ -184,7 +184,7 @@
     text-align: right;
 
     b {
-      color: #4d4d4d;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -197,14 +197,14 @@
 }
 
 .title-label {
-  background-color: #f2f3f3;
+  background-color: var(--color-grey4);
   padding: 15px 35px;
   margin-bottom: 10px;
 
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4d4d4d;
+    color: var(--color-dark);
   }
 
   b {

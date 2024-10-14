@@ -364,7 +364,7 @@ export class MonitorDetailComponent {
           this.defaults = data.data;
           console.log(this.defaults);
           this.defaultsUser = data.data.user;
-
+          this.setInitLanguages();
 
           //this.getStations();
           //this.getLanguages();
@@ -638,7 +638,6 @@ export class MonitorDetailComponent {
     return this.crudService.list('/languages', 1, 1000).pipe(
       tap((data) => {
         this.languages = data.data.reverse();
-        this.setInitLanguages();
       })
     );
   }

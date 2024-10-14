@@ -15,10 +15,6 @@
     @apply mx-3 mb-1 rounded;
   }
 
-  .vex-sidenav-toolbar__divider {
-    margin: 0 var(--sidenav-item-padding-horizontal);
-  }
-
   &.vex-style-light {
     --sidenav-item-color: rgba(0, 0, 0, 1);
     --sidenav-item-color-hover: rgba(0, 0, 0, 1);

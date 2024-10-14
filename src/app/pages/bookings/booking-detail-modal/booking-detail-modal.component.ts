@@ -31,8 +31,8 @@ import { RefundBookingModalComponent } from '../refund-booking/refund-booking.co
 })
 export class BookingDetailModalComponent implements OnInit {
 
-  privateIcon = 'https://school.boukii.com/assets/icons/prive_ski2x.png';
-  collectifIcon = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
+  privateIcon = 'https://api.boukii.com/storage/icons/prive_ski2x.png';
+  collectifIcon = 'https://api.boukii.com/storage/icons/collectif_ski2x.png';
   @Input()
   public monthAndYear = new Date();
 

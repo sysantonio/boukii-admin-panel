@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, debounceTime, map, skip, startWith } from "rxjs";
 import { ApiCrudService } from "src/service/crud.service";
 import { ApiResponse } from "src/app/interface/api-response";
+import {
+  ClientCreateUpdateModalComponent
+} from '../../../../clients/client-create-update-modal/client-create-update-modal.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: "booking-step-one",
@@ -20,7 +24,7 @@ export class StepOneComponent implements OnInit {
   mainClient: any;
   expandClients: any[];
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService) {}
+  constructor(private fb: FormBuilder, private crudService: ApiCrudService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
@@ -57,6 +61,33 @@ export class StepOneComponent implements OnInit {
       client: ev.source.value,
       mainClient: this.selectedClient.main_client || this.selectedClient,
     });
+  }
+
+  addClient() {
+
+    const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
+      width: '1000px', // Asegurarse de que no haya un ancho máximo
+      height: '1000px', // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: { id: this.user.schools[0].id }
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+
+        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
+          .subscribe((cl: any) => {
+            const newClient = cl.data.find((c) => c.id = data.data.id);
+            this.selectedClient = newClient;
+            this.stepOneForm.patchValue({
+              client: newClient,
+              mainClient: this.selectedClient,
+            });
+
+          })
+
+      }
+    })
   }
 
   displayFn(client: any): string {

@@ -466,18 +466,18 @@ img[mat-card-image] {
 
 .mat-mdc-card-subtitle {
   b {
-    color: #4d4d4d;
+    color: var(--color-dark);
     font-size: 1.3em;
     font-weight: 700;
   }
 }
 
 .title-summary {
-  background-color: #f2f3f3;
+  background-color: var(--color-grey5);
   padding: 15px 35px;
 
   b {
-    color: #4d4d4d;
+    color: var(--color-dark);
     font-size: 1.4em;
     font-weight: 600;
   }
@@ -524,7 +524,7 @@ img[mat-card-image] {
   position: relative;
   font-size: 1.1em;
   font-weight: 400;
-  color: #4d4d4d;
+  color: var(--color-dark);
   margin-top: 20px;
   margin-bottom: 20px;
 
@@ -543,21 +543,21 @@ img[mat-card-image] {
     border-radius: var(--border-radius);
     --tw-bg-opacity: 1;
     background-color: rgba(
-      var(--background-foreground-rgb),
+      var(--color-grey5),
       var(--tw-bg-opacity)
     );
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
       0 1px 2px -1px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 var(--color-dark1)0),
+      var(--tw-ring-shadow, 0 0 var(--color-dark1)0), var(--tw-shadow);
 
     mat-icon {
       cursor: pointer;
     }
 
     .mat-mdc-card-header {
-      background-color: #ed297b;
+      background-color: #2f3844;
       padding: 15px 20px !important;
 
       .mat-mdc-card-title {
@@ -582,7 +582,7 @@ img[mat-card-image] {
     }
 
     .title-status {
-      background-color: #f2f3f3;
+      background-color: var(--color-grey5);
       padding: 15px 20px;
 
       b {
@@ -607,7 +607,7 @@ img[mat-card-image] {
 
     .title-client {
       padding: 10px 1px;
-      color: #4d4d4d;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -665,7 +665,7 @@ img[mat-card-image] {
   font-family: "Montserrat", sans-serif;
   font-size: 1em;
   font-weight: 400;
-  color: #4d4d4d;
+  color: var(--color-dark);
   margin-bottom: 10px;
 }
 
@@ -680,7 +680,7 @@ img[mat-card-image] {
     .course-title {
       font-size: 1.4em;
       font-weight: 700;
-      color: #000000;
+      color: var(--color-dark1);
       display: inline-block;
     }
 
@@ -688,7 +688,7 @@ img[mat-card-image] {
       font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: #4d4d4d;
+      color: var(--color-dark);
       margin-bottom: 0px;
     }
 
@@ -712,7 +712,7 @@ img[mat-card-image] {
   padding: 0px 0px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 10px;
 
   .col-left {

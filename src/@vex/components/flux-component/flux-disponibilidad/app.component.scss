@@ -24,7 +24,7 @@
 
 .close:hover,
 .close:focus {
-  var(--color-dark1);
+  color: var(--color-dark1);
   text-decoration: none;
   cursor: pointer;
 }

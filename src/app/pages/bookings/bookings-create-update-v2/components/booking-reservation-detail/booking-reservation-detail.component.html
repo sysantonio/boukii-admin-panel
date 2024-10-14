@@ -71,10 +71,9 @@
     </div>
 
     <div class="section" style="margin-bottom: 0;border: none;">
-      <div class="dateRow"
-        *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total">
+      <div class="dateRow">
         <div>
-          <span class="hour" (click)="addReduction()"
+          <span class="hour" (click)="addReduction()"  *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total"
             style="
             color: #E91E63;
              font-size: 14px;
@@ -101,9 +100,9 @@
         </div>
       </div>
       <div class="dateRow"
-        *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total">
+       >
         <div>
-          <span class="hour"
+          <span class="hour"  *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total"
             (click)="addBonus()"
             style="
           color: #E91E63;

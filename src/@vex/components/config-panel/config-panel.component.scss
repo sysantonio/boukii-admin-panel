@@ -94,7 +94,7 @@
 
   &.light {
     background: white;
-    color: #000;
+    color: var(--color-dark1);
   }
 
   &.dark {
@@ -104,7 +104,7 @@
 
   &.flat {
     background: #f5f5f5;
-    color: #000;
+    color: var(--color-dark1);
   }
 }
 

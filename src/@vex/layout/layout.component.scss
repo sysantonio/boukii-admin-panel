@@ -9,7 +9,7 @@
 }
 
 .sidenav {
-  background: var(--sidenav-background);
+  background: var(--color-grey5);
 
   ::ng-deep .mat-drawer-inner-container {
     overflow: hidden;
@@ -17,7 +17,6 @@
 }
 
 .content {
-  background: var(--background-base);
   min-height: calc(100% - var(--toolbar-height) - var(--navigation-height));
   position: relative;
   width: 100%;
@@ -55,7 +54,7 @@
 }
 
 .sidenav-container {
-  background: var(--background-base);
+  background: var(--color-white);
   height: 100%;
   transition: transform .5s cubic-bezier(.2, 1, .3, 1);
 }

@@ -20,7 +20,7 @@ export class CoursesComponent {
   showDetail: boolean = false;
   detailData: any;
   selectedLevel: any;
-  imagePath = 'https://school.boukii.com/assets/icons/collectif_ski2x.png';
+  imagePath = 'https://api.boukii.com/storage/icons/collectif_ski2x.png';
   selectedGroup: any = [];
   monitors: any = [];
   groupedByColor = {};
@@ -179,9 +179,11 @@ export class CoursesComponent {
 
   getStudents(levelId: any) {
     let ret = 0;
+    let bookingDifferentUsers = new Set(); // Usamos Set para evitar duplicados
 
     this.detailData.booking_users.forEach(element => {
-      if (element.degree_id === levelId) {
+      if (element.degree_id === levelId && !bookingDifferentUsers.has(element.client_id)) {
+        bookingDifferentUsers.add(element.client_id); // Añadimos el id al set si no existe
         ret = ret + 1;
       }
     });

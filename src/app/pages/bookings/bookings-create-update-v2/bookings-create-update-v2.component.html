@@ -71,6 +71,7 @@
         [selectedForm]="selectedForm"
         [selectedDates]="normalizedDates[selectedIndexForm] || null"
         (changedCurrentStep)="currentStep = $event; forceStep = $event;"
+        [allLevels] = allLevels
         (changedFormData)="handleFormChange($event)"></booking-form-stepper>
     </mat-card>
     <mat-card class="right-column">
@@ -145,7 +146,7 @@
        line-height: 18px;
        word-wrap: break-word">
         <span style="
-        color: #8B9099;
+        color: #var(--color-dark1);
          font-size: 14px;
          font-family: DM Sans;
          font-weight: 400;
@@ -193,7 +194,7 @@
   [width]="570" title="Eliminar actividad">
   <div body>
     <div style="margin: 10px;">
-      Quieres cancelar “Actividad #{{("00"+deleteIndex).slice(-2)}}”?
+      Quieres cancelar “Actividad #{{("00"+deleteIndex+1).slice(-2)}}”?
     </div>
   </div>
   <div footer style="display: flex;">
@@ -209,7 +210,7 @@
       color="primary"
       mat-raised-button
       type="button"
-      class="client-button">
+      class="client-button" (click)="deleteActivity(deleteIndex)">
       {{ "Si, eliminar" | translate }}
     </button>
   </div>

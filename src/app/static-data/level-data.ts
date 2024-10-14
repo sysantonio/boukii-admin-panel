@@ -160,7 +160,7 @@ export const LEVELS = [{
   "annotation": "PN",
   "degree_order": 9,
   "progress": 0,
-  "color": "#000000",
+  "color": "var(--color-dark1)",
   "age_min": 1,
   "age_max": 99,
   "active": false,

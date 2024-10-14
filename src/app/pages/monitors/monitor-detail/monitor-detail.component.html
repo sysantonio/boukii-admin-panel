@@ -328,9 +328,9 @@
                          [ngStyle]="{
                       'background': checkMonitorAuth(item, degree) ? degree.color : '#fff'
                     }">
-                      <p style="color: #000;text-align: center"
+                      <p style="color: var(--color-dark1);text-align: center"
                          [ngStyle]="{
-                        'color': checkMonitorAuth(item, degree) ? '#fff': '#000'
+                        'color': checkMonitorAuth(item, degree) ? '#fff': 'var(--color-dark1)'
                       }"
                       >{{ degree.annotation }}</p>
                     </div>
@@ -515,8 +515,8 @@
               <div style="float: left;width: 100%;">
                   <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
                   <div style="float: left; width: 20%; margin-top: 5%">
-                      <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                      <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                      <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                      <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
                   </div>
                   <div style="float: left; width: 75%;margin:6% 0 0 2%">
                   <p><strong>{{detailData?.course?.name}}</strong></p>
@@ -538,23 +538,23 @@
 
               <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
                   <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
-                      <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
                       <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
                       <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
                       <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
-                      <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
                       <div>{{'groups' |translate}}</div>
                       <div class="font-bold">{{getGroupsQuantity()}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
-                      <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
                       <div>{{'duration' |translate}}</div>
                       <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
-                      <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
                       <div>{{'days' |translate}}</div>
                       <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
                   </div>
@@ -890,8 +890,8 @@
               <div style="float: left;width: 100%;">
                   <!--ESTAS IMAGENES VENDRAN DEL taskDetailTimeline.SPORT -> icon box -->
                   <div style="float: left; width: 20%; margin-top: 5%">
-                      <img *ngIf="taskDetailTimeline.type == 'collective'" src="https://school.boukii.com/assets/icons/collectif_ski2x.png" class="img-box-detail" />
-                      <img *ngIf="taskDetailTimeline.type == 'private'" src="https://school.boukii.com/assets/icons/prive_ski2x.png" class="img-box-detail" />
+                      <img *ngIf="taskDetailTimeline.type == 'collective'" src="https://api.boukii.com/storage/icons/collectif_ski2x.png" class="img-box-detail" />
+                      <img *ngIf="taskDetailTimeline.type == 'private'" src="https://api.boukii.com/storage/icons/prive_ski2x.png" class="img-box-detail" />
                   </div>
                   <div style="float: left; width: 75%;margin:6% 0 0 2%">
                   <p><strong>{{taskDetailTimeline.name}}</strong></p>
@@ -912,23 +912,23 @@
 
               <div *ngIf="taskDetailTimeline.type == 'collective'" class="box-detail-boxes">
                   <div class="box-detail-box" [ngStyle]="{'background': taskDetailTimeline.degree?.color}">
-                      <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
                       <div class="font-bold font-white">{{taskDetailTimeline.degree?.annotation}}</div>
                       <div class="font-bold font-white">{{taskDetailTimeline.degree?.name}}</div>
                       <div class="font-bold font-white">{{taskDetailTimeline.subgroup_number}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
-                      <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
                       <div>{{'groups' |translate}}</div>
                       <div class="font-bold">{{taskDetailTimeline.total_subgroups}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
-                      <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
                       <div>{{'duration' |translate}}</div>
                       <div class="font-bold">{{getHoursMinutes(taskDetailTimeline.hour_start,taskDetailTimeline.hour_end)}}</div>
                   </div>
                   <div class="box-detail-box box-background-grey">
-                      <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                      <img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
                       <div>{{'days' |translate}}</div>
                       <div class="font-bold">{{taskDetailTimeline.date_index}}/{{taskDetailTimeline.course.course_dates.length}}</div>
                   </div>
@@ -1605,9 +1605,9 @@
                           'background': checkMonitorAuth(element, level) ? level.color : '#fff'
                         }"
                           (click)="authoriseCurrentLevel(level, element)">
-                          <p style="color: #000;text-align: center"
+                          <p style="color: var(--color-dark1);text-align: center"
                           [ngStyle]="{
-                            'color': checkMonitorAuth(element, level) ? '#fff': '#000'
+                            'color': checkMonitorAuth(element, level) ? '#fff': 'var(--color-dark1)'
                           }"
                           >{{ level.annotation }}</p>
                         </div>
@@ -1685,9 +1685,9 @@
                         'background': isAuthorized(item) ? item.color : '#fff'
                       }"
                         (click)="authoriseLevel(item)">
-                        <p style="color: #000;text-align: center"
+                        <p style="color: var(--color-dark1);text-align: center"
                         [ngStyle]="{
-                          'color': isAuthorized(item) ? '#fff': '#000'
+                          'color': isAuthorized(item) ? '#fff': 'var(--color-dark1)'
                         }"
                         >{{ item.annotation }}</p>
                       </div>
@@ -1861,8 +1861,8 @@
             <div style="float: left;width: 100%;">
                 <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
                 <div style="float: left; width: 20%; margin-top: 5%">
-                    <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://school.boukii.com/assets/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                    <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://school.boukii.com/assets/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                    <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                    <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
                 </div>
                 <div style="float: left; width: 75%;margin:6% 0 0 2%">
                 <p><strong>{{detailData?.course?.name}}</strong></p>
@@ -1884,23 +1884,23 @@
 
             <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
                 <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
-                    <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
                     <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
                     <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
                     <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
-                    <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
                     <div>{{'groups' | translate}}</div>
                     <div class="font-bold">{{getGroupsQuantity()}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
-                    <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
                     <div>{{'duration' | translate}}</div>
                     <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
-                    <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
                     <div>{{'days' | translate}}</div>
                     <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
                 </div>
@@ -2189,8 +2189,8 @@
             <div style="float: left;width: 100%;">
                 <!--ESTAS IMAGENES VENDRAN DEL taskDetailTimeline.SPORT -> icon box -->
                 <div style="float: left; width: 20%; margin-top: 5%">
-                    <img *ngIf="taskDetailTimeline.type == 'collective'" src="https://school.boukii.com/assets/icons/collectif_ski2x.png" class="img-box-detail" />
-                    <img *ngIf="taskDetailTimeline.type == 'private'" src="https://school.boukii.com/assets/icons/prive_ski2x.png" class="img-box-detail" />
+                    <img *ngIf="taskDetailTimeline.type == 'collective'" src="https://api.boukii.com/storage/icons/collectif_ski2x.png" class="img-box-detail" />
+                    <img *ngIf="taskDetailTimeline.type == 'private'" src="https://api.boukii.com/storage/icons/prive_ski2x.png" class="img-box-detail" />
                 </div>
                 <div style="float: left; width: 75%;margin:6% 0 0 2%">
                 <p><strong>{{taskDetailTimeline.name}}</strong></p>
@@ -2211,23 +2211,23 @@
 
             <div *ngIf="taskDetailTimeline.type == 'collective'" class="box-detail-boxes">
                 <div class="box-detail-box" [ngStyle]="{'background': taskDetailTimeline.degree?.color}">
-                    <img src="https://school.boukii.com/assets/icons/award_icon.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
                     <div class="font-bold font-white">{{taskDetailTimeline.degree?.annotation}}</div>
                     <div class="font-bold font-white">{{taskDetailTimeline.degree?.name}}</div>
                     <div class="font-bold font-white">{{taskDetailTimeline.subgroup_number}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
-                    <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
                     <div>{{'groups' | translate}}</div>
                     <div class="font-bold">{{taskDetailTimeline.total_subgroups}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
-                    <img src="https://school.boukii.com/assets/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
                     <div>{{'duration' | translate}}</div>
                     <div class="font-bold">{{getHoursMinutes(taskDetailTimeline.hour_start,taskDetailTimeline.hour_end)}}</div>
                 </div>
                 <div class="box-detail-box box-background-grey">
-                    <img src="https://school.boukii.com/assets/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
+                    <img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
                     <div>{{'days' | translate}}</div>
                     <div class="font-bold">{{taskDetailTimeline.date_index}}/{{taskDetailTimeline.course.course_dates.length}}</div>
                 </div>

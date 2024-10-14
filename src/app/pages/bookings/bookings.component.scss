@@ -1,6 +1,6 @@
 .table-show-detail {
   width: 65%;
-  float:left;
+  float: left;
 }
 
 .dot {
@@ -22,19 +22,19 @@
     border-radius: 10px;
     padding: 0px;
     margin-top: 30px;
-    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, .25);
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-    @media (max-width: 1280px){
+    @media (max-width: 1280px) {
       width: 50%;
       left: calc(50% - 40px);
     }
 
-    @media (max-width: 1020px){
+    @media (max-width: 1020px) {
       width: 60%;
       left: calc(40% - 40px);
     }
 
-    @media (max-width: 768px){
+    @media (max-width: 768px) {
       width: 90%;
       left: calc(10% - 40px);
     }
@@ -49,8 +49,8 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #2F3844;
-    padding: 25px 35px!important;
+    background-color: #2f3844;
+    padding: 25px 35px !important;
 
     .mat-mdc-card-title {
       font-weight: 700;
@@ -59,21 +59,21 @@
     }
 
     .mat-icon {
-      fill: white!important;
+      fill: white !important;
     }
   }
 
   .mat-mdc-card-content {
-    padding: 0px!important;
+    padding: 0px !important;
 
     .title-status {
-      background-color: #F2F3F3;
+      background-color: var(--color-grey4);
       padding: 15px 35px;
       display: flex;
       align-items: center;
 
       b {
-        color: #4D4D4D;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -98,7 +98,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -118,13 +118,13 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          var(--color-dark1);
+          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
         .client-dates {
-          font-family: 'Montserrat', sans-serif;
-          font-size: .9em;
+          font-family: "Montserrat", sans-serif;
+          font-size: 0.9em;
         }
       }
     }
@@ -135,9 +135,9 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 5px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 
   .col-left {
     width: 70%;
@@ -156,7 +156,7 @@
       text-align: right;
 
       span {
-        color: #FA9917;
+        color: #fa9917;
       }
     }
   }
@@ -173,7 +173,7 @@
   padding: 0px 0px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 10px;
 
   .col-left {
@@ -193,10 +193,9 @@
       text-align: right;
 
       span {
-        color: #FA9917;
+        color: #fa9917;
       }
     }
-
   }
   .col-right {
     width: 30%;
@@ -214,9 +213,9 @@
 }
 
 .date-course {
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: 300;
-  color: #4D4D4D;
+  color: var(--color-dark);
 
   i {
     font-weight: 500;
@@ -224,7 +223,7 @@
 }
 
 .title-actividad {
-  background-color: #F2F3F3;
+  background-color: var(--color-grey4);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -232,7 +231,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: var(--color-dark);
   }
 
   b {
@@ -252,7 +251,7 @@
     text-align: right;
 
     b {
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -266,23 +265,23 @@
     position: relative;
     font-size: 1.1em;
     font-weight: 400;
-    color: #4D4D4D;
+    color: var(--color-dark);
     margin-top: 20px;
     margin-bottom: 20px;
 
     &:after {
-      content: '';
+      content: "";
       display: block;
       height: 1px;
       width: 100%;
-      background-color: #523F69;
-      opacity: .06;
+      background-color: #523f69;
+      opacity: 0.06;
     }
   }
 }
 
 .dot {
-  background-color: #19F349;
+  background-color: #19f349;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -297,19 +296,19 @@
   position: relative;
   font-size: 1.1em;
   font-weight: 700;
-  color: #4D4D4D;
+  color: var(--color-dark);
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 10px 35px 20px 35px;
 
   &:after {
     position: relative;
-    content: '';
+    content: "";
     display: block;
     height: 1px;
     width: 100%;
-    background-color: #523F69;
-    opacity: .06;
+    background-color: #523f69;
+    opacity: 0.06;
     top: 10px;
   }
 }
@@ -324,14 +323,14 @@
     .course-title {
       font-size: 1.4em;
       font-weight: 700;
-      color: #000000;
+      color: var(--color-dark1);
     }
 
     .course-label {
-      font-family: 'Montserrat', sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: #4D4D4D;
+      color: var(--color-dark);
       margin-bottom: 10px;
     }
 
@@ -356,7 +355,7 @@
     text-align: right;
 
     b {
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -374,15 +373,15 @@
     .course-title {
       font-size: 1.4em;
       font-weight: 700;
-      color: #000000;
+      color: var(--color-dark1);
       display: inline-block;
     }
 
     .course-label {
-      font-family: 'Montserrat', sans-serif;
+      font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: #4D4D4D;
+      color: var(--color-dark);
       margin-bottom: 0px;
     }
 
@@ -406,16 +405,18 @@
   display: inline-block;
   min-width: 50%;
   margin: 2% 0 2% 0;
-  padding:2%;
+  padding: 2%;
   color: #fff;
   font-weight: 500;
   border-radius: 3px;
+  text-align-last: center;
+  text-align: center;
 }
 
 .total-bottom {
   width: 100%;
   margin-top: 20px;
-  background-color: #E91E63;
+  background-color: #2f3844;
 
   .col-left {
     width: 50%;

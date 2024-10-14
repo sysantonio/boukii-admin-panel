@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { debounceTime, map, Observable, startWith } from "rxjs";
 import { ApiResponse } from "src/app/interface/api-response";
 import { ApiCrudService } from "src/service/crud.service";
@@ -16,7 +16,8 @@ export class CreateUserDialogComponent implements OnInit {
     private fb: FormBuilder,
     private crudService: ApiCrudService,
     private langService: LangService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<any>
   ) {}
   user;
   expandClients: any[];
@@ -37,7 +38,6 @@ export class CreateUserDialogComponent implements OnInit {
     });
 
     this.stepForm = this.fb.group({
-      client: ["", Validators.required],
       name: ["", Validators.required],
       surname: ["", Validators.required],
       birthDate: ["", Validators.required],
@@ -84,7 +84,12 @@ export class CreateUserDialogComponent implements OnInit {
   }
 
   handleConfirm() {
-    console.log("confirmar");
+    const data = this.stepForm.value;
+
+    this.dialogRef.close({
+      action: 'new',
+      data: data,
+    })
   }
 
   private getExpandClients(clients: any[]): any[] {

@@ -8,11 +8,14 @@
           [checked]="isChecked(item)"
           (change)="onCheckboxChange($event)"
         ></mat-checkbox>
-        <img
-          [src]="
-            item.image !== null && item.image !== '' ? item.image : userAvatar
-          "
-        />
+        <app-level-user mat-card-avatar
+                        [allLevels]="item.client_sports && item.client_sports.length ?
+                        utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels) : []"
+                        [selectLevel]="item.client_sports && item.client_sports.length ?
+                        item.client_sports[0]?.degree : null"
+                        [size]="60"
+                        [userImage]="item.image !== null && item.image !== '' ? item.image : userAvatar">
+        </app-level-user>
         <div class="utilizerCard__description">
           <h4>{{ item.first_name }} {{ item.last_name }}</h4>
           <span

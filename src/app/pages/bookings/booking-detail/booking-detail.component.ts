@@ -48,8 +48,8 @@ import { switchMap } from "rxjs/operators";
   animations: [stagger20ms, fadeInUp400ms],
 })
 export class BookingDetailComponent implements OnInit {
-  privateIcon = "https://school.boukii.com/assets/icons/prive_ski2x.png";
-  collectifIcon = "https://school.boukii.com/assets/icons/collectif_ski2x.png";
+  privateIcon = "https://api.boukii.com/storage/icons/prive_ski2x.png";
+  collectifIcon = "https://api.boukii.com/storage/icons/collectif_ski2x.png";
   @Input()
   public monthAndYear = new Date();
 

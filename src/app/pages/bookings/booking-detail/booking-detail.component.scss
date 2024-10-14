@@ -418,7 +418,7 @@ img[mat-card-image] {
 
 /* lucho */
 .title-actividad {
-  background-color: #F2F3F3;
+  background-color: var(--color-grey5);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -426,7 +426,7 @@ img[mat-card-image] {
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: var(--color-dark);
 
     b {
       font-weight: 700;
@@ -438,7 +438,7 @@ img[mat-card-image] {
   padding: 0px 35px;
   font-size: .9em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 10px;
 
   .col-left {
@@ -483,7 +483,7 @@ img[mat-card-image] {
 }
 
 .mat-card-header {
-  background-color: #ED297B;
+  background-color: #2F3844;
   padding: 25px 35px!important;
 
   .mat-mdc-card-title {
@@ -497,13 +497,13 @@ img[mat-card-image] {
   padding: 0px!important;
 
   .title-status {
-    background-color: #F2F3F3;
+    background-color: var(--color-grey5);
     padding: 15px 35px;
     display: flex;
     align-items: center;
 
     b {
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1em;
       font-weight: 700;
     }
@@ -536,7 +536,7 @@ img[mat-card-image] {
 
   .title-client {
     padding: 10px 35px;
-    color: #4D4D4D;
+    color: var(--color-dark);
     font-size: 1.1em;
     font-weight: 700;
   }
@@ -558,7 +558,7 @@ img[mat-card-image] {
       .client-name {
         font-size: 1.3em;
         font-weight: 700;
-        var(--color-dark1);
+        color: var(--color-dark1);
         margin-bottom: 2px;
       }
 
@@ -572,7 +572,7 @@ img[mat-card-image] {
 
 .card-header {
   display: block;
-  background-color: #ED297B;
+  background-color: #2F3844;
   padding: 15px 20px !important;
 
   .mat-mdc-card-title {

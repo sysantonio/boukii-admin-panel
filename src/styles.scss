@@ -542,7 +542,7 @@ body {
   Example:
 
   :root {
-   --sidenav-background: #333333;
+   --sidenav-background: var(--color-dark2);
   }
 
   All possible variables can be found in @vex/styles/core or by simply inspecting the element you want to change
@@ -554,6 +554,7 @@ body {
  */
 :root {
   --color-primary-red: #e91e63;
+  --color-black: #121212;
   --color-white: #fff;
   --color-green: #31c044;
   --color-yellow: #ffcf25;
@@ -561,7 +562,7 @@ body {
   --color-blue: #006fcb;
   --color-dark1: #222222;
   --color-dark2: #2f3844;
-  --color-dark3: #223042;
+  --color-dark3: #61656d;
   --color-dark4: #1b2d44;
   --color-dark5: #122742;
   --color-grey1: #8b9099;
@@ -569,6 +570,7 @@ body {
   --color-grey3: #dee6ea;
   --color-grey4: #eff2f5;
   --color-grey5: #f8f9fb;
+
   --font-dinamit: "Dinamit", sans-serif;
   --font-dm: "DM Sans", sans-serif;
   --font-montserrat: "Montserrat", sans-serif;
@@ -637,5 +639,11 @@ body {
 .mat-mdc-outlined-button .mat-mdc-button-ripple,
 .mat-mdc-outlined-button .mdc-button__ripple {
   background-color: var(--color-grey5);
-  border: 1px solid var(--color-dark1);
+  border: 1px solidvar(--color-dark1);
+}
+
+.mat-mdc-table,
+.mat-mdc-paginator,
+.mat-mdc-card {
+  background-color: var(--color-grey5) !important;
 }

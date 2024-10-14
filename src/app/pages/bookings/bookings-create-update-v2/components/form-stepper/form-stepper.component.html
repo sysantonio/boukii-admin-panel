@@ -12,6 +12,7 @@
     <booking-step-two
       [initialData]="stepperForm.get('step2')?.value"
       [client]="stepperForm.get('step1')?.value?.mainClient"
+      [allLevels]="allLevels"
       (stepCompleted)="handleStepCompletion(2, $event)"
       (prevStep)="previousStep()"
     >

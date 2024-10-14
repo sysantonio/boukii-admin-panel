@@ -41,7 +41,7 @@
         <ng-container *ngIf="column.type === 'booking_users_image'" [matColumnDef]="column.property">
           <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
           <td *matCellDef="let row; let i = index" [ngClass]="column.cssClasses" mat-cell>
-            <img [src]="'https://school.boukii.com/assets/icons/'+ getBookingType(data[i].booking_users[0])+'_' + getBookingImage(data[i].booking_users[0]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 40px; width: 40px;">
+            <img [src]="'https://api.boukii.com/storage/icons/'+ getBookingType(data[i].booking_users[0])+'_' + getBookingImage(data[i].booking_users[0]) +'2x.png'" class="avatar h-8 w-8 align-middle"  style="border-radius: 5px; height: 40px; width: 40px;">
             <!--<ng-container *ngIf="data[i].bookingusers > 1" >
               <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
             </ng-container>-->

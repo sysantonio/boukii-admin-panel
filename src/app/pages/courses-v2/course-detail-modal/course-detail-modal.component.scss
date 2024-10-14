@@ -36,7 +36,7 @@
   }
 
   .mat-mdc-card-header {
-    background-color: #ED297B;
+    background-color: #2F3844;
     padding: 25px 35px!important;
 
     .mat-mdc-card-title {
@@ -67,12 +67,12 @@
     }
 
     .title-status {
-      background-color: #F2F3F3;
+      background-color: var(--color-grey4);
       padding: 15px 35px;
       margin-bottom: 8px;
 
       b {
-        color: #4D4D4D;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -93,7 +93,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -125,12 +125,12 @@
     }
 
     .title-grupos {
-      background-color: #F2F3F3;
+      background-color: var(--color-grey4);
       padding: 15px 35px;
       margin-bottom: 8px;
 
       b {
-        color: #4D4D4D;
+        color: var(--color-dark);
         font-size: 1em;
         font-weight: 700;
       }
@@ -198,7 +198,7 @@
         flex-direction: column;
         border-radius: 6px;
         padding: 2%;
-        color: #000;
+        color: var(--color-dark1);
         background: #e6e6e6;
         text-align:center;
         font-size: 12px;
@@ -229,7 +229,7 @@
   padding: 0px 35px;
   font-size: 1em;
   font-weight: 400;
-  color: #000000;
+  color: var(--color-dark1);
   margin-bottom: 5px;
   font-family: 'Montserrat', sans-serif;
 
@@ -264,7 +264,7 @@
 }
 
 .title-actividad {
-  background-color: #F2F3F3;
+  background-color: var(--color-grey4);
   padding: 15px 35px;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -272,7 +272,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: #4D4D4D;
+    color: var(--color-dark);
   }
 
   b {
@@ -292,7 +292,7 @@
     text-align: right;
 
     b {
-      color: #4D4D4D;
+      color: var(--color-dark);
       font-size: 1.4em;
       font-weight: 600;
     }
