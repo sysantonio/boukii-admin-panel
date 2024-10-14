@@ -1689,8 +1689,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   private _filterLevel(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.levels.filter(level => level.annotation.toLowerCase().includes(filterValue));
+    const filterValue = name?.toLowerCase();
+    return this.levels.filter(level => level.annotation?.toLowerCase().includes(filterValue));
   }
 
   private _filterSport(name: string): any[] {
@@ -1755,13 +1755,15 @@ export class BookingsCreateUpdateComponent implements OnInit {
   selectMainUser(user: any) {
     this.defaultsBookingUser.client_id = user.id;
     const client = this.clients.find((c) => c.id === user.id);
-
+    this.selectSport(this.sportDataList[0]);
     client.client_sports.forEach(sport => {
 
       if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
         const level = this.levels.find((l) => l.id === sport.degree_id);
         this.levelForm.patchValue(level);
-        this.defaultsBookingUser.degree_id = level.id;
+        if(level) {
+          this.defaultsBookingUser.degree_id = level.id;
+        }
         this.backToList();
         this.getCourses(level, this.monthAndYear);
       }
@@ -1776,7 +1778,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.borderActive = index;
     this.defaultsBookingUser.client_id = utilizer.id;
     const client = this.allClients.find((c) => c.id === utilizer.id);
-
+    this.selectSport(this.sportDataList[0]);
 
     if (client && client?.client_sports?.length > 0) {
       let hasSport = false;
@@ -1838,7 +1840,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id',
+      '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.sportData = sport.data.reverse();
         this.sportData.forEach(element => {
@@ -1887,7 +1890,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + sportId + '&active=1')
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
-
+        this.levelForm.patchValue(null);
         this.filteredLevel = this.levelForm.valueChanges.pipe(
           startWith(''),
           map((value: any) => typeof value === 'string' ? value : value?.annotation),
