@@ -259,7 +259,7 @@
 
   "bookings_page.buttons.save&CreateBooking": "Guardar y hacer nueva reserva",
   "createUtilizer.title": "O crea un nuevo participante",
-  
+
   "courses.title": "Cursos",
   "courses.levels_and_groups": "Niveles / Grupos",
   "courses.new": "Nuevo curso",
@@ -653,5 +653,26 @@
   "user.noSportsAssigned.prompt": "El usuario seleccionado no tiene deportes asignados. ¿Te gustaría asignarle deportes ahora?",
   "message": "Mensaje",
   "authorized_levels": "Níveles Autorizados",
-  "translate_ia": "Traducir automáticamente"
+  "translate_ia": "Traducir automáticamente",
+  "emails.bookingCreate.greeting": "Hola ",
+  "emails.bookingCreate.thanks": "Gracias por reservar con nosotros tu curso o actividad.",
+  "emails.bookingCreate.reservation_request1": "Te enviamos este mensaje para confirmarte la reserva ",
+  "emails.bookingCreate.reservation_request2": "para las siguientes actividades/cursos.",
+  "emails.bookingCreate.cancel_request1": "La reserva con referencia ",
+  "emails.bookingCreate.cancel_request2": "ha sido cancelada para los siguientes cursos.",
+  "emails.bookingCreate.booking_info1": "Te enviamos este correo electrónico para recordarte tu reserva con referencia ",
+  "emails.bookingCreate.booking_info2": "para las siguientes actividades/cursos.",
+  "emails.bookingCreate.booking_update1": "Te estamos enviando este correo electrónico para informarte que tu reserva con referencia ",
+  "emails.bookingCreate.booking_update2": "ha cambiado, para",
+  "emails.bookingCreate.payment_request1": "Para finalizar la reserva ",
+  "emails.bookingCreate.payment_request2": "para la siguientes actividades/ cursos, deberás abonar ",
+  "emails.bookingCreate.payment_reminder1": "Tienes 24 horas para realizar el pago de la reserva con referencia ",
+  "emails.bookingCreate.qr_finish": "Para finalizar el pago puedes escanear con tu teléfono el siguiente código o pulsar en el link.",
+  "emails.bookingCreate.qr_scan": "Escanea éste código con tu teléfono",
+  "emails.bookingCreate.link_click": "Pulsar en el link",
+  "emails.bookingCreate.pay_booking": "Pagar reserva",
+  "emails.bookingCreate.qr_reminder": "Nota: El código QR de la reserva es de uso exclusivo de la escuela. Presentalo cuando te lo soliciten.",
+  "emails.bookingCreate.footer1": "Este email ha sido generado de manera automatica y no puede recibir respuestas",
+  "emails.bookingCreate.footer2": "Para mas información ponerse en contacto con: ",
+  "emails.bookingCreate.footer3": "Condiciones generales de venta"
 }

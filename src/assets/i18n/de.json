@@ -624,5 +624,27 @@
   "user.noSportsAssigned.prompt": "Dem ausgewählten Benutzer sind keine Sportarten zugewiesen. Möchtest du ihm jetzt Sportarten zuweisen?",
   "message": "Nachricht",
   "authorized_levels": "Autorisierte Stufen",
-  "translate_ia": "Automatisch übersetzen"
+  "translate_ia": "Automatisch übersetzen",
+  "emails.bookingCreate.greeting": "Hallo",
+  "emails.bookingCreate.thanks": "Vielen Dank, dass Sie Ihren Kurs oder Ihre Aktivität bei uns gebucht haben.",
+  "emails.bookingCreate.reservation_request1": "Wir senden Ihnen diese Nachricht, um Ihre Buchung zu bestätigen ",
+  "emails.bookingCreate.reservation_request2": "für die folgenden Aktivitäten/Kurse.",
+  "emails.bookingCreate.cancel_request1": "Die Buchung mit der Referenz ",
+  "emails.bookingCreate.cancel_request2": "wurde für die folgenden Kurse storniert.",
+  "emails.bookingCreate.booking_info1": "Wir senden Ihnen diese E-Mail, um Sie an Ihre Buchung mit der Referenz ",
+  "emails.bookingCreate.booking_info2": "für die folgenden Aktivitäten/Kurse zu erinnern.",
+  "emails.bookingCreate.booking_update1": "Wir senden Ihnen diese E-Mail, um Sie darüber zu informieren, dass Ihre Buchung mit der Referenz ",
+  "emails.bookingCreate.booking_update2": "geändert wurde, für",
+  "emails.bookingCreate.payment_request1": "Um die Buchung abzuschließen ",
+  "emails.bookingCreate.payment_request2": "für die folgenden Aktivitäten/Kurse, müssen Sie bezahlen ",
+  "emails.bookingCreate.payment_reminder1": "Sie haben 24 Stunden Zeit, um die Zahlung der Buchung mit der Referenz ",
+  "emails.bookingCreate.qr_finish": "Um die Zahlung abzuschließen, können Sie den folgenden Code mit Ihrem Telefon scannen oder auf den Link klicken.",
+  "emails.bookingCreate.qr_scan": "Scannen Sie diesen Code mit Ihrem Telefon",
+  "emails.bookingCreate.link_click": "Klicken Sie auf den Link",
+  "emails.bookingCreate.pay_booking": "Buchung bezahlen",
+  "emails.bookingCreate.qr_reminder": "Hinweis: Der QR-Code der Buchung ist ausschließlich für die Schule bestimmt. Zeigen Sie ihn, wenn Sie dazu aufgefordert werden.",
+  "emails.bookingCreate.footer1": "Diese E-Mail wurde automatisch generiert und kann nicht beantwortet werden",
+  "emails.bookingCreate.footer2": "Für weitere Informationen wenden Sie sich an: ",
+  "emails.bookingCreate.footer3": "Allgemeine Verkaufsbedingungen"
+
 }

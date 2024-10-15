@@ -625,6 +625,28 @@
   "user.noSportsAssigned.prompt": "The selected user has no sports assigned. Would you like to assign sports now?",
   "message": "Message",
   "authorized_levels": "Authorised Levels",
-  "translate_ia": "Translate automatically"
+  "translate_ia": "Translate automatically",
+  "emails.bookingCreate.greeting": "Hello",
+  "emails.bookingCreate.thanks": "Thank you for booking your course or activity with us.",
+  "emails.bookingCreate.reservation_request1": "We are sending you this message to confirm the booking ",
+  "emails.bookingCreate.reservation_request2": "for the following activities/courses.",
+  "emails.bookingCreate.cancel_request1": "The reservation with reference ",
+  "emails.bookingCreate.cancel_request2": "has been canceled for the following courses.",
+  "emails.bookingCreate.booking_info1": "We are sending you this email to remind you of your reservation with reference ",
+  "emails.bookingCreate.booking_info2": "for the following activities/courses.",
+  "emails.bookingCreate.booking_update1": "We are sending you this email to inform you that your reservation with reference ",
+  "emails.bookingCreate.booking_update2": "has changed for",
+  "emails.bookingCreate.payment_request1": "To finalize the booking ",
+  "emails.bookingCreate.payment_request2": "for the following activities/courses, you will need to pay ",
+  "emails.bookingCreate.payment_reminder1": "You have 24 hours to make the payment for the reservation with reference ",
+  "emails.bookingCreate.qr_finish": "To finalize the payment, you can scan the following code with your phone or click on the link.",
+  "emails.bookingCreate.qr_scan": "Scan this code with your phone",
+  "emails.bookingCreate.link_click": "Click on the link",
+  "emails.bookingCreate.pay_booking": "Pay reservation",
+  "emails.bookingCreate.qr_reminder": "Note: The reservation QR code is for school use only. Present it when requested.",
+  "emails.bookingCreate.footer1": "This email was automatically generated and cannot receive replies",
+  "emails.bookingCreate.footer2": "For more information contact: ",
+  "emails.bookingCreate.footer3": "General Terms of Sale"
+
 
 }
