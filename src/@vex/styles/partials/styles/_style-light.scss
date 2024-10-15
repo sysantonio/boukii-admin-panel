@@ -15,7 +15,7 @@
   --sidenav-item-background-active: #{darken($sidenav-background, 3)};
   --sidenav-item-color: var(--text-color);
   --sidenav-item-color-hover: var(--text-color);
-  --sidenav-item-color-active: var(--text-color);
+  --color-dark1: var(--text-color);
   --sidenav-item-dropdown-background: #{darken($sidenav-background, 3)};
   --sidenav-item-dropdown-background-hover: #{darken($sidenav-background, 8)};
   --sidenav-item-dropdown-color-hover: var(--text-color);
@@ -23,12 +23,11 @@
   --sidenav-item-dropdown-color-active: var(--text-color);
   --sidenav-item-icon-color-active: rgb(var(--color-primary-sidenav));
   --sidenav-toolbar-background: #{$sidenav-background};
-  --sidenav-toolbar-background-rgb: #{red($sidenav-background)}, #{green($sidenav-background)}, #{blue($sidenav-background)};
+  --sidenav-toolbar-background-rgb: #{red($sidenav-background)},
+    #{green($sidenav-background)}, #{blue($sidenav-background)};
   --sidenav-section-divider-color: #{map-get($vex-theme-foreground, divider)};
 
   .sidenav {
-    @apply border-r border-r-gray-200;
-
     .vex-sidenav-user {
       .vex-sidenav-user__subtitle,
       .vex-sidenav-user__dropdown-icon {

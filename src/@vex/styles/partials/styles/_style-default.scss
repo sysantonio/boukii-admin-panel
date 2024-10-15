@@ -111,7 +111,7 @@
   --sidenav-item-font-weight: 300;
   --sidenav-item-color: #A1A2B6;
   --sidenav-item-color-hover: #{$light-primary-text};
-  --sidenav-item-color-active: #{$light-primary-text};
+  --color-dark1: #{$light-primary-text};
   --sidenav-item-icon-color: #494B74;
   --sidenav-item-icon-color-hover: var(--color-dark1);
   --sidenav-item-icon-color-active: var(--color-dark1);
@@ -121,7 +121,7 @@
   --sidenav-item-dropdown-background-hover: #{darken($sidenav-background, 4)};
   --sidenav-item-dropdown-color-hover: var(--sidenav-item-color-hover);
   --sidenav-item-dropdown-background-active: var(--sidenav-item-dropdown-background-hover);
-  --sidenav-item-dropdown-color-active: var(--sidenav-item-color-active);
+  --sidenav-item-dropdown-color-active: var(--color-dark1);
   --sidenav-item-ripple-color: #{rgb(map-get(map-get($vex-theme, foreground), base), 0.1)};
 
   --sidenav-item-dropdown-gap: 12px;

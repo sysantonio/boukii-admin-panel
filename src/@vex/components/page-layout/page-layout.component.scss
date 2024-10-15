@@ -3,7 +3,8 @@
 }
 
 .vex-page-layout-simple {
-
+  border-bottom: 1px solid var(--is-light-theme, #dee6ea)
+    var(--is-dark-theme, #121212);
   .vex-page-layout-content {
     padding-bottom: var(--padding-gutter);
     padding-top: var(--padding-gutter);
@@ -32,7 +33,9 @@
   box-sizing: content-box !important;
   display: flex;
   flex-direction: row;
-  height: calc(var(--page-layout-header-height) - var(--page-layout-toolbar-height));
+  height: calc(
+    var(--page-layout-header-height) - var(--page-layout-toolbar-height)
+  );
   padding-left: var(--padding);
   padding-right: var(--padding);
   place-content: center flex-start;

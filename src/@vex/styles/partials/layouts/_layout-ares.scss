@@ -1,5 +1,4 @@
 .vex-layout-ares {
-
   --footer-background: var(--background-base);
   --sidenav-background: var(--background-base);
   --toolbar-background: var(--background-base);
@@ -10,8 +9,8 @@
   --sidenav-item-background-active: var(--background-foreground);
   --sidenav-item-color: var(--text-color);
   --sidenav-item-color-hover: var(--text-color);
-  --sidenav-item-color-active: var(--text-color);
-  --sidenav-item-dropdown-color-active: var(--sidenav-item-color-active);
+  --color-dark1: var(--text-color);
+  --sidenav-item-dropdown-color-active: var(--color-dark1);
   --sidenav-item-dropdown-background-active: var(--background-hover);
 
   --sidenav-item-dropdown-background: var(--background-base);
@@ -82,10 +81,10 @@
   }
 
   &.vex-style-default {
-    --sidenav-item-background-active: theme('backgroundColor.primary');
-    --sidenav-item-color-active: theme('textColor.primary-contrast');
+    --sidenav-item-background-active: theme("backgroundColor.primary");
+    --color-dark1: theme("textColor.primary-contrast");
     --sidenav-item-dropdown-color-active: var(--sidenav-item-color);
     --sidenav-item-dropdown-color-hover: var(--text-color);
-    --sidenav-item-icon-color-active: theme('textColor.primary-contrast');
+    --sidenav-item-icon-color-active: theme("textColor.primary-contrast");
   }
 }

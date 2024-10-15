@@ -88,11 +88,11 @@
 /** SIDENAV TOOLBAR */
 .vex-sidenav-toolbar__container {
   background: var(--color-grey5);
-
   @apply sticky top-0 z-10;
 }
 
 .sidenav-toolbar {
+  color: var(--color-dark1);
   align-items: center;
   background: var(--color-grey5);
   box-sizing: border-box;
@@ -114,7 +114,7 @@
 
 .vex-sidenav-toolbar__divider {
   height: 1px;
-  background: var(--foreground-divider);
+  background: var(--is-light-theme, #dee6ea) var(--is-dark-theme, #121212);
 }
 
 /** VEX SIDENAV USER */
@@ -144,6 +144,7 @@
 }
 
 .vex-sidenav-user__title {
+  color: var(--is-light-theme, black) var(--is-dark-theme, white);
   @apply text-sm font-medium whitespace-nowrap transition duration-300 ease-out;
 }
 

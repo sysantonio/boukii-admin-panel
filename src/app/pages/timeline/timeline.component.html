@@ -14,8 +14,7 @@
     ]" class="flex"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
-  <vex-page-layout-content class="-mt-6 fullwidth"
-    style="background-color: var(--color-grey5)">
+  <vex-page-layout-content class="-mt-6 fullwidth">
     <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
     <div class="full-page-timeline"
       [ngClass]="{'timeline-with-detail': showDetail || showBlock}"
@@ -785,7 +784,9 @@
                 class="font-bold font-white">{{taskDetail.subgroup_number}}</div>
             </div>
             <div class="box-detail-box box-background-grey">
-              <img src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg" style="width:24px;" />
+              <img
+                src="https://school.boukii.com/assets/icons/icons-outline-profile-2-user-white.svg"
+                style="width:24px;" />
               <div>{{'groups' |translate}}</div>
               <div class="font-bold">{{taskDetail.total_subgroups}}</div>
             </div>

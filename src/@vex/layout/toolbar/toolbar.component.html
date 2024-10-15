@@ -85,7 +85,7 @@
       </button>
     </div>-->
 
-    <mat-slide-toggle color="primary" [(ngModel)]="layoutService.isDarkMode"
+    <mat-slide-toggle [(ngModel)]="layoutService.isDarkMode"
       (toggleChange)="layoutService.toggleDarkMode()">{{layoutService.isDarkMode?'Modo Oscuro':'Modo Claro'}}</mat-slide-toggle>
 
     <div class="px-1">

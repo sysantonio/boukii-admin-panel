@@ -18,7 +18,8 @@
   top: 118px;
   width: 100%;
   z-index: 1000;
-  background: var(--background-base);
+  background: var(--is-light-theme, #dee6ea) var(--is-dark-theme, #121212);
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
   padding: 16px;
   margin-top: 24px;
   font-size: 15px;
@@ -166,6 +167,7 @@
   display: flex;
 }
 .hour {
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
   min-width: 150px;
   width: 150px;
   height: 40px;

@@ -5,6 +5,8 @@
 
   &.fixed {
     width: var(--toolbar-width);
+    border-bottom: 1px solid var(--is-light-theme, #dee6ea)
+      var(--is-dark-theme, #121212);
   }
 }
 

@@ -239,6 +239,7 @@ vex-calendar {
   }
 }
 body {
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
   font-family: "DM Sans", sans-serif; /* Usa la fuente Dinamit como fuente predeterminada */
 }
 
@@ -669,4 +670,18 @@ body.dark-mode {
 .mat-mdc-paginator,
 .mat-mdc-card {
   background-color: var(--color-grey5) !important;
+}
+
+.mat-mdc-slide-toggle .mdc-switch:enabled + .mdc-label {
+  color: var(--color-dark1);
+}
+* {
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
+}
+.mat-sort-header-content,
+.mat-mdc-row,
+.mat-mdc-paginator-page-size-label,
+.mat-mdc-paginator .mat-mdc-select-value,
+.mat-mdc-paginator {
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
