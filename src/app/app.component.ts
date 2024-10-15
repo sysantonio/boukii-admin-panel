@@ -27,7 +27,6 @@ import localeEnGb from "@angular/common/locales/en-GB";
 import localeEs from "@angular/common/locales/es";
 import localeDe from "@angular/common/locales/de";
 import localeFr from "@angular/common/locales/fr";
-import moment from 'moment';
 
 @Component({
   selector: "vex-root",

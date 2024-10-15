@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
@@ -50,9 +49,8 @@ export class VexLayoutService {
   isMobile = () => this.breakpointObserver.isMatched(`(max-width: 599px)`);
 
   constructor(
-    private router: Router,
     private breakpointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
   openQuickpanel() {
     this._quickpanelOpenSubject.next(true);

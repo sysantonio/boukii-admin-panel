@@ -80,8 +80,8 @@ export class ConfigPanelComponent {
   roundedButtonValue: CSSValue = defaultRoundedButtonBorderRadius;
 
   constructor(private configService: ConfigService,
-              private layoutService: LayoutService,
-              @Inject(DOCUMENT) private document: Document) { }
+    public layoutService: LayoutService,
+    @Inject(DOCUMENT) private document: Document) { }
 
   setConfig(layout: VexConfigName, colorScheme: ColorSchemeName): void {
     this.configService.setConfig(layout);
@@ -108,22 +108,6 @@ export class ConfigPanelComponent {
 
   isSelectedColor(color: ColorVariable): boolean {
     return color === this.selectedColor;
-  }
-
-  enableDarkMode(): void {
-    this.configService.updateConfig({
-      style: {
-        colorScheme: ColorSchemeName.dark
-      }
-    });
-  }
-
-  disableDarkMode(): void {
-    this.configService.updateConfig({
-      style: {
-        colorScheme: ColorSchemeName.default
-      }
-    });
   }
 
   layoutRTLChange(change: MatSlideToggleChange): void {
@@ -186,7 +170,4 @@ export class ConfigPanelComponent {
     });
   }
 
-  isDark(colorScheme: ColorSchemeName): boolean {
-    return colorScheme === ColorSchemeName.dark;
-  }
 }

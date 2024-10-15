@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from './add-task/add-task.component';
-import moment, { duration } from 'moment';
+import moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ColorSchemeName } from '../../config/colorSchemeName';
 @Component({
   selector: 'vex-toolbar',
   templateUrl: './toolbar.component.html',
@@ -33,10 +32,9 @@ export class ToolbarComponent {
   isNavbarInToolbar$: Observable<boolean> = this.configService.config$.pipe(map(config => config.navbar.position === 'in-toolbar'));
   isNavbarBelowToolbar$: Observable<boolean> = this.configService.config$.pipe(map(config => config.navbar.position === 'below-toolbar'));
   userVisible$: Observable<boolean> = this.configService.config$.pipe(map(config => config.toolbar.user.visible));
-  isDarkMode: boolean;
   megaMenuOpen$: Observable<boolean> = of(false);
 
-  constructor(private layoutService: LayoutService,
+  constructor(public layoutService: LayoutService,
     private configService: ConfigService,
     private navigationService: NavigationService,
     private popoverService: PopoverService,
@@ -45,8 +43,6 @@ export class ToolbarComponent {
     private snackbar: MatSnackBar,
     private translateService: TranslateService) {
 
-    this.isDarkMode = this.getThemePreference() === 'dark';
-    this.setColor();
     switch (translateService.getDefaultLang()) {
       case 'es':
         this.flag = 'flag:spain';
@@ -68,25 +64,6 @@ export class ToolbarComponent {
 
   openQuickpanel(): void {
     this.layoutService.openQuickpanel();
-  }
-
-  setThemePreference(isDarkMode: boolean): void {
-    this.layoutService.DarkMode = isDarkMode ? 'dark' : 'light'
-    sessionStorage.setItem('themePreference', this.layoutService.DarkMode);
-  }
-
-  getThemePreference(): string {
-    return sessionStorage.getItem('themePreference') || 'light';
-  }
-
-  toggleDarkMode(): void {
-    this.setColor();
-    this.setThemePreference(this.isDarkMode);
-  }
-
-  setColor(): void {
-    const colorScheme = this.isDarkMode ? ColorSchemeName.dark : ColorSchemeName.light;
-    this.configService.updateConfig({ style: { colorScheme } });
   }
 
   openSidenav(): void {
