@@ -61,7 +61,7 @@
 }
 
 .sidenav-container {
-  background: var(--is-light-theme, #dee6ea) var(--is-dark-theme, #121212);
+  background: var(--is-light-theme, white) var(--is-dark-theme, #121212);
   height: 100%;
   transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
 }

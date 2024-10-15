@@ -844,6 +844,25 @@ export class SettingsComponent implements OnInit {
       })
   }
 
+  setTheme() {
+    //TODO: Save bookingpage color mode
+    /*    if (this.theme === 'dark'){
+    
+          this.configService.updateConfig({
+            style: {
+              colorScheme: ColorSchemeName.dark
+            }
+          });
+        } else {
+    
+          this.configService.updateConfig({
+            style: {
+              colorScheme: ColorSchemeName.light
+            }
+          });
+        }*/
+  }
+
   createExtra(product: string, isEdit: boolean, idx: number, extra: any) {
 
     const dialogRef = this.dialog.open(ExtraCreateUpdateModalComponent, {
