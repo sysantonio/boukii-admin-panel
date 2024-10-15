@@ -61,7 +61,8 @@ export class AppComponent {
     if (this.locales.find((a: any) => a.lan === this.localeId)) Settings.defaultLocale = this.localeId;
     else Settings.defaultLocale = this.locales[0].lan;
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    layoutService.isDarkMode = !layoutService.isDarkMode
+    layoutService.toggleDarkMode()
     const lang = sessionStorage.getItem('lang');
     if (lang && lang.length > 0) {
       this.translateService.setDefaultLang(lang);

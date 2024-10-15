@@ -560,6 +560,21 @@ body {
   --color-yellow: #ffcf25;
   --color-red: #e70f0f;
   --color-blue: #006fcb;
+
+  --font-dinamit: "Dinamit", sans-serif;
+  --font-dm: "DM Sans", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+  --mdc-checkbox-selected-checkmark-color: var(--color-white);
+  --is-light-theme: initial;
+  --is-dark-theme: ;
+}
+
+.dark-mode {
+  --is-light-theme: !important;
+  --is-dark-theme: initial !important;
+}
+
+body {
   --color-dark1: #222222;
   --color-dark2: #2f3844;
   --color-dark3: #61656d;
@@ -570,11 +585,19 @@ body {
   --color-grey3: #dee6ea;
   --color-grey4: #eff2f5;
   --color-grey5: #f8f9fb;
+}
 
-  --font-dinamit: "Dinamit", sans-serif;
-  --font-dm: "DM Sans", sans-serif;
-  --font-montserrat: "Montserrat", sans-serif;
-  --mdc-checkbox-selected-checkmark-color: var(--color-white);
+body.dark-mode {
+  --color-dark1: #f8f9fb;
+  --color-dark2: #eff2f5;
+  --color-dark3: #dee6ea;
+  --color-dark4: #c7d0d3;
+  --color-dark5: #8b9099;
+  --color-grey1: #122742;
+  --color-grey2: #1b2d44;
+  --color-grey3: #61656d;
+  --color-grey4: #2f3844;
+  --color-grey5: #222222;
 }
 
 .mdc-checkbox
