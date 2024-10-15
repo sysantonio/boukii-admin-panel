@@ -79,9 +79,14 @@
   <span class="flex-1"></span>
 
   <div class="-mx-1 flex items-center">
+    <!--<div class="px-1">
+      <button (click)="openSearch()" mat-icon-button type="button">
+        <mat-icon color="primary" svgIcon="mat:search"></mat-icon>
+      </button>
+    </div>-->
 
-    <mat-slide-toggle color="primary" [(ngModel)]="layoutService.isDarkMode"
-      (change)="layoutService.toggleDarkMode()">{{layoutService.isDarkMode?'Modo Oscuro':'Modo Claro'}}</mat-slide-toggle>
+    <mat-slide-toggle color="primary" [(ngModel)]="isDarkMode"
+      (change)="toggleDarkMode()">{{isDarkMode?'Modo Oscuro':'Modo Claro'}}</mat-slide-toggle>
 
     <div class="px-1">
       <vex-toolbar-notifications></vex-toolbar-notifications>
