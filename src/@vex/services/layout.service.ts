@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
@@ -8,7 +7,14 @@ import { BreakpointObserver } from '@angular/cdk/layout';
   providedIn: 'root'
 })
 export class LayoutService {
-  DarkMode: 'dark' | 'light' | any = sessionStorage.getItem('themePreference')
+  isDarkMode: boolean = (sessionStorage.getItem('themePreference') || 'light') === 'dark';
+  toggleDarkMode(): void {
+    this.isDarkMode = !this.isDarkMode;
+    sessionStorage.setItem('themePreference', this.isDarkMode ? 'dark' : 'light');
+    if (this.isDarkMode) this.renderer.addClass(document.body, 'dark-mode');
+    else this.renderer.removeClass(document.body, 'dark-mode');
+  }
+
   private _quickpanelOpenSubject = new BehaviorSubject<boolean>(false);
   quickpanelOpen$ = this._quickpanelOpenSubject.asObservable();
 
@@ -50,8 +56,7 @@ export class LayoutService {
 
   isMobile = () => this.breakpointObserver.isMatched(`(max-width: 599px)`);
 
-  constructor(private router: Router,
-    private breakpointObserver: BreakpointObserver) { }
+  constructor(private renderer: Renderer2, private breakpointObserver: BreakpointObserver) { }
 
   openQuickpanel() {
     this._quickpanelOpenSubject.next(true);
