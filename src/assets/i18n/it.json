@@ -624,6 +624,28 @@
   "message": "Messaggio",
   "authorized_levels": "Livelli Autorizzati",
   "translate_ia": "Traduci automaticamente",
-  "search": "Cerca"
+  "search": "Cerca",
+  "emails.bookingCreate.greeting": "Ciao",
+  "emails.bookingCreate.thanks": "Grazie per aver prenotato con noi il tuo corso o attività.",
+  "emails.bookingCreate.reservation_request1": "Ti inviamo questo messaggio per confermare la prenotazione ",
+  "emails.bookingCreate.reservation_request2": "per le seguenti attività/corsi.",
+  "emails.bookingCreate.cancel_request1": "La prenotazione con riferimento ",
+  "emails.bookingCreate.cancel_request2": "è stata annullata per i seguenti corsi.",
+  "emails.bookingCreate.booking_info1": "Ti inviamo questa e-mail per ricordarti la tua prenotazione con riferimento ",
+  "emails.bookingCreate.booking_info2": "per le seguenti attività/corsi.",
+  "emails.bookingCreate.booking_update1": "Ti stiamo inviando questa e-mail per informarti che la tua prenotazione con riferimento ",
+  "emails.bookingCreate.booking_update2": "è stata modificata per",
+  "emails.bookingCreate.payment_request1": "Per finalizzare la prenotazione ",
+  "emails.bookingCreate.payment_request2": "per le seguenti attività/corsi, dovrai pagare ",
+  "emails.bookingCreate.payment_reminder1": "Hai 24 ore per effettuare il pagamento della prenotazione con riferimento ",
+  "emails.bookingCreate.qr_finish": "Per finalizzare il pagamento, puoi scansionare il codice seguente con il tuo telefono o cliccare sul link.",
+  "emails.bookingCreate.qr_scan": "Scansiona questo codice con il tuo telefono",
+  "emails.bookingCreate.link_click": "Clicca sul link",
+  "emails.bookingCreate.pay_booking": "Paga la prenotazione",
+  "emails.bookingCreate.qr_reminder": "Nota: Il codice QR della prenotazione è ad uso esclusivo della scuola. Presentalo quando richiesto.",
+  "emails.bookingCreate.footer1": "Questa e-mail è stata generata automaticamente e non può ricevere risposte",
+  "emails.bookingCreate.footer2": "Per ulteriori informazioni contattare: ",
+  "emails.bookingCreate.footer3": "Condizioni generali di vendita"
+
 
 }
