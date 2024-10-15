@@ -56,6 +56,7 @@ export class SettingsComponent implements OnInit {
 
   loading: boolean = true;
   mailType: any = 'booking_confirm';
+  mailTypeTrad: any = 'mails.type1';
   subjectFr: any = '';
   subjectEn: any = '';
   subjectEs: any = '';
@@ -74,6 +75,17 @@ export class SettingsComponent implements OnInit {
   currentMails: any = [];
   selectedIndex = 0;
 
+  emailTypes = [
+    { value: 'booking_confirm', label: 'mails.type1' },
+    { value: 'booking_cancel', label: 'mails.type2' },
+    { value: 'booking_update', label: 'mails.type3' },
+    { value: 'payment_link', label: 'mails.type4' },
+    { value: 'payment_confirm', label: 'mails.type5' },
+    { value: 'payment_reminder', label: 'mails.type9' },
+    { value: 'voucher_confirm', label:'mails.type6' },
+    { value: 'voucher_create', label: 'mails.type7' },
+    { value: 'course_reminder', label:'mails.type8' }
+  ];
   filteredHours: string[];
 
   seasonForm: UntypedFormGroup;
@@ -328,6 +340,7 @@ export class SettingsComponent implements OnInit {
 
   setCurrentMailType() {
     const mail = this.currentMails.find((m) => m.type === this.mailType);
+    this.mailTypeTrad = this.emailTypes.find(type => type.value === this.mailType)?.label;
 
     if (mail) {
       const frMail = this.currentMails.find((m) => m.lang === 'fr');

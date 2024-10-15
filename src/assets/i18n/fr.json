@@ -622,5 +622,29 @@
   "user.noSportsAssigned.prompt": "L'utilisateur sélectionné n'a aucun sport attribué. Voulez-vous lui attribuer des sports maintenant?",
   "message": "Message",
   "authorized_levels": "Niveaux Autorisés",
-  "translate_ia": "Traduire automatiquement"
+  "translate_ia": "Traduire automatiquement",
+  "emails.bookingCreate.greeting": "Bonjour",
+  "emails.bookingCreate.thanks": "Merci de réserver avec nous votre cours ou activité.",
+  "emails.bookingCreate.reservation_request1": "Nous vous envoyons ce message pour confirmer la réservation ",
+  "emails.bookingCreate.reservation_request2": "pour les activités/cours suivants.",
+  "emails.bookingCreate.cancel_request1": "La réservation avec référence ",
+  "emails.bookingCreate.cancel_request2": "a été annulée pour les cours suivants.",
+  "emails.bookingCreate.booking_info1": "Nous vous envoyons cet e-mail pour vous rappeler votre réservation avec référence ",
+  "emails.bookingCreate.booking_info2": "pour les activités/cours suivants.",
+  "emails.bookingCreate.booking_update1": "Nous vous envoyons cet e-mail pour vous informer que votre réservation avec référence ",
+  "emails.bookingCreate.booking_update2": "a été modifiée pour",
+  "emails.bookingCreate.payment_request1": "Pour finaliser la réservation ",
+  "emails.bookingCreate.payment_request2": "pour les activités/cours suivants, vous devez payer ",
+  "emails.bookingCreate.payment_reminder1": "Vous avez 24 heures pour effectuer le paiement de la réservation avec référence ",
+  "emails.bookingCreate.qr_finish": "Pour finaliser le paiement, vous pouvez scanner le code suivant avec votre téléphone ou cliquer sur le lien.",
+  "emails.bookingCreate.qr_scan": "Scannez ce code avec votre téléphone",
+  "emails.bookingCreate.link_click": "Cliquez sur le lien",
+  "emails.bookingCreate.pay_booking": "Payer la réservation",
+  "emails.bookingCreate.qr_reminder": "Remarque : Le code QR de la réservation est exclusivement réservé à l'école. Présentez-le lorsque cela vous sera demandé.",
+  "emails.bookingCreate.footer1": "Cet e-mail a été généré automatiquement et ne peut pas recevoir de réponses",
+  "emails.bookingCreate.footer2": "Pour plus d'informations, contactez : ",
+  "emails.bookingCreate.footer3": "Conditions générales de vente"
+
+
+
 }
