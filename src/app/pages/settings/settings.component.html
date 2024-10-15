@@ -7,7 +7,7 @@
     </div>
   </vex-page-layout-header>-->
 
-  <vex-secondary-toolbar current="">
+  <vex-secondary-toolbar current>
     <vex-breadcrumbs [crumbs]="[
     {icon:'reglages'},
     {text:'settings', title: true},
@@ -15,57 +15,84 @@
   </vex-secondary-toolbar>
 
   <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
-  <vex-page-layout-content class="container pt-6" style="max-width: none !important;" *ngIf="!loading">
+  <vex-page-layout-content class="container pt-6"
+    style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
       <mat-tab-group>
         <mat-tab label="{{'season' | translate}}" [formGroup]="seasonForm">
 
           <vex-page-layout>
-            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-              <h1 style="color:#808080;font-size:24px">{{'settings.new_season' | translate}}</h1>
-              <p style="padding: 1%; color:#808080">{{'settings.new_season.save' | translate}}</p>
+            <vex-page-layout-content class="-mt-6 fullwidth"
+              style="margin: 1% 0 0 0">
+              <h1 style="color:#808080;font-size:24px">{{'settings.new_season' |
+                translate}}</h1>
+              <p style="padding: 1%; color:#808080">{{'settings.new_season.save'
+                | translate}}</p>
               <div style="width: 100%; float: left;padding: 1%">
-                <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
+                <div
+                  style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                   <div style="float:left; width:30%">
 
-                    <p style="font-weight: bold; color:#808080">{{'settings.new_season.general' | translate}}</p>
+                    <p
+                      style="font-weight: bold; color:#808080">{{'settings.new_season.general'
+                      | translate}}</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button class="btn-primary-accent" style="float: right;" (click)="saveSeason()">{{'settings.new_season.save' | translate}}</button>
+                    <button class="btn-primary-accent" style="float: right;"
+                      (click)="saveSeason()">{{'settings.new_season.save' |
+                      translate}}</button>
                   </div>
 
                 </div>
-                <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
+                <div
+                  style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                     <div class="flex-auto">
-                      <label for="dateFrom">{{'settings.new_season.start' | translate}}</label>
+                      <label for="dateFrom">{{'settings.new_season.start' |
+                        translate}}</label>
                       <mat-form-field appearance="outline" style="width: 100%">
 
-                        <input matInput id="dateFrom" [matDatepicker]="pickerFrom" formControlName="fromDate" [min]="today" [(ngModel)]="selectedFrom" [value]="selectedFrom">
-                        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerFrom [startAt]="selectedFrom"></mat-datepicker>
+                        <input matInput id="dateFrom"
+                          [matDatepicker]="pickerFrom"
+                          formControlName="fromDate" [min]="today"
+                          [(ngModel)]="selectedFrom" [value]="selectedFrom">
+                        <mat-datepicker-toggle matSuffix
+                          [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom
+                          [startAt]="selectedFrom"></mat-datepicker>
                       </mat-form-field>
                     </div>
                     <div class="flex-auto">
-                      <label for="dateTo">{{'settings.new_season.end' | translate}}</label>
+                      <label for="dateTo">{{'settings.new_season.end' |
+                        translate}}</label>
 
                       <mat-form-field appearance="outline" style="width: 100%">
 
-                        <input matInput id="dateTo" [matDatepicker]="pickerTo" formControlName="toDate" [disabled]="selectedFrom === null" [min]="selectedFrom" [(ngModel)]="selectedTo" [value]="selectedTo">
-                        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerTo [startAt]="selectedTo"></mat-datepicker>
+                        <input matInput id="dateTo" [matDatepicker]="pickerTo"
+                          formControlName="toDate"
+                          [disabled]="selectedFrom === null"
+                          [min]="selectedFrom" [(ngModel)]="selectedTo"
+                          [value]="selectedTo">
+                        <mat-datepicker-toggle matSuffix
+                          [for]="pickerTo"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerTo
+                          [startAt]="selectedTo"></mat-datepicker>
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                     <div class="flex-auto">
-                      <label for="hour">{{'settings.new_season.hour_start' | translate }}</label>
+                      <label for="hour">{{'settings.new_season.hour_start' |
+                        translate }}</label>
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input id="hour" type="text" placeholder="Hora " matInput [matAutocomplete]="matHourFrom" formControlName="startHour">
+                        <input id="hour" type="text" placeholder="Hora "
+                          matInput [matAutocomplete]="matHourFrom"
+                          formControlName="startHour">
                         <mat-autocomplete #matHourFrom="matAutocomplete">
-                          <mat-option *ngFor="let hour of hours" [value]="hour" (onSelectionChange)="selectedFromHour = hour">
+                          <mat-option *ngFor="let hour of hours" [value]="hour"
+                            (onSelectionChange)="selectedFromHour = hour">
                             {{hour}}
                           </mat-option>
                         </mat-autocomplete>
@@ -73,11 +100,16 @@
                     </div>
 
                     <div class="flex-auto">
-                      <label for="endHour">{{'settings.new_season.hour_end' | translate }}</label>
+                      <label for="endHour">{{'settings.new_season.hour_end' |
+                        translate }}</label>
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input id="endHour" type="text" placeholder="Hora" matInput [matAutocomplete]="matHourTo" formControlName="endHour">
+                        <input id="endHour" type="text" placeholder="Hora"
+                          matInput [matAutocomplete]="matHourTo"
+                          formControlName="endHour">
                         <mat-autocomplete #matHourTo="matAutocomplete">
-                          <mat-option *ngFor="let hour of filteredHours" [value]="hour" (onSelectionChange)="selectedToHour = hour">
+                          <mat-option *ngFor="let hour of filteredHours"
+                            [value]="hour"
+                            (onSelectionChange)="selectedToHour = hour">
                             {{hour}}
                           </mat-option>
                         </mat-autocomplete>
@@ -86,27 +118,41 @@
                   </div>
 
                   <div class="sm:flex-row gap-2 sm:gap-6">
-                    <div *ngFor="let holiday of holidays; let i = index" style="width: 49%; float:left;" [ngClass]="{'margin-right': isEven(i)}">
+                    <div *ngFor="let holiday of holidays; let i = index"
+                      style="width: 49%; float:left;"
+                      [ngClass]="{'margin-right': isEven(i)}">
                       <div style="width: 5%;float: left;margin: 4% 0 0 0;">
-                        <mat-icon svgIcon="mat:delete" style="color:red;cursor:pointer" (click)="deleteHoliday(i)"></mat-icon>
+                        <mat-icon svgIcon="mat:delete"
+                          style="color:red;cursor:pointer"
+                          (click)="deleteHoliday(i)"></mat-icon>
 
                       </div>
                       <div style="width: 95%; float:left;">
-                        <label for="holiday-{{i}}">{{'settings.new_season.holiday' | translate }}</label>
+                        <label
+                          for="holiday-{{i}}">{{'settings.new_season.holiday' |
+                          translate }}</label>
 
-                        <mat-form-field appearance="outline" style="width: 100%">
-                          <input matInput [matDatepicker]="picker" [min]="today" id="holiday-{{i}}" (dateChange)="onDateSelect($event, i)" [value]="holiday">
-                          <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
-                          <mat-datepicker #picker [startAt]="today"></mat-datepicker>
+                        <mat-form-field appearance="outline"
+                          style="width: 100%">
+                          <input matInput [matDatepicker]="picker" [min]="today"
+                            id="holiday-{{i}}"
+                            (dateChange)="onDateSelect($event, i)"
+                            [value]="holiday">
+                          <mat-datepicker-toggle matSuffix
+                            [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker
+                            [startAt]="today"></mat-datepicker>
                         </mat-form-field>
                       </div>
                     </div>
                   </div>
-                  <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
+                  <div
+                    style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
                     <div style="width: 5%; float:left;">
 
                       <button class="add-date" mat-fab (click)="addHoliday()">
-                        <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                        <mat-icon svgIcon="mat:add"
+                          class="icon-date"></mat-icon>
                       </button>
                     </div>
                     <div style="width: 95%; float:left;margin: 1% 0 0 0;">
@@ -117,26 +163,36 @@
               </div>
 
               <div style="width: 100%; float: left;padding: 1%">
-                <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
+                <div
+                  style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                   <div style="float:left; width:30%">
 
-                    <p style="font-weight: bold; color:#808080">{{'settings.school.title' | translate}}</p>
+                    <p
+                      style="font-weight: bold; color:#808080">{{'settings.school.title'
+                      | translate}}</p>
                   </div>
                   <div style="float:left; width:70%">
-                    <button class="btn-primary-accent" style="float: right;" (click)="saveContactData();">{{'settings.school.save' | translate}}</button>
+                    <button class="btn-primary-accent" style="float: right;"
+                      (click)="saveContactData();">{{'settings.school.save' |
+                      translate}}</button>
                   </div>
                 </div>
-                <div style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
+                <div
+                  style="width: 100%; float: left; border:#e6e6e6 1px solid;padding: 1%;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'address' | translate}}</mat-label>
 
-                      <input formControlName="contact_phone" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_address">
+                      <input formControlName="contact_phone" matInput required
+                        type="text"
+                        [(ngModel)]="defaultsSchoolData.contact_address">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>Email</mat-label>
-                      <input formControlName="contact_address" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_email">
+                      <input formControlName="contact_address" matInput required
+                        type="text"
+                        [(ngModel)]="defaultsSchoolData.contact_email">
 
                     </mat-form-field>
                   </div>
@@ -144,31 +200,51 @@
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'cp' | translate}}</mat-label>
 
-                      <input formControlName="contact_address_number" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_cp">
+                      <input formControlName="contact_address_number" matInput
+                        required type="text"
+                        [(ngModel)]="defaultsSchoolData.contact_cp">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'phone' | translate}}</mat-label>
-                      <input formControlName="contact_cp" matInput required type="tel" [(ngModel)]="defaultsSchoolData.contact_phone">
+                      <input formControlName="contact_cp" matInput required
+                        type="tel"
+                        [(ngModel)]="defaultsSchoolData.contact_phone">
 
                     </mat-form-field>
                   </div>
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
+                    <mat-form-field appearance="outline"
+                      class="vex-flex-form-field flex-auto">
                       <mat-label>{{'country' | translate }}</mat-label>
-                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="contact_country" >
-                      <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaultsSchoolData.contact_country = country.id">
+                      <input type="text" placeholder="Selecciona una opción"
+                        matInput [formControl]="myControlCountries"
+                        [matAutocomplete]="autoCountry"
+                        formControlName="contact_country">
+                      <mat-autocomplete #autoCountry="matAutocomplete"
+                        [displayWith]="displayFnCountry">
+                        <mat-option
+                          *ngFor="let country of filteredCountries | async"
+                          [value]="country"
+                          (onSelectionChange)="defaultsSchoolData.contact_country = country.id">
                           {{country.name}}
                         </mat-option>
                       </mat-autocomplete>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
+                    <mat-form-field appearance="outline"
+                      class="vex-flex-form-field flex-auto">
                       <mat-label>{{'province' | translate }}</mat-label>
-                      <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="contact_province" >
-                      <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
-                        <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaultsSchoolData.contact_province = province.id">
+                      <input type="text" placeholder="Selecciona una opción"
+                        matInput [formControl]="myControlProvinces"
+                        [matAutocomplete]="autoProvince"
+                        formControlName="contact_province">
+                      <mat-autocomplete #autoProvince="matAutocomplete"
+                        [displayWith]="displayFnProvince">
+                        <mat-option
+                          *ngFor="let province of filteredProvinces | async"
+                          [value]="province"
+                          (onSelectionChange)="defaultsSchoolData.contact_province = province.id">
                           {{province.name}}
                         </mat-option>
                       </mat-autocomplete>
@@ -178,7 +254,9 @@
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'city' | translate}}</mat-label>
 
-                      <input formControlName="contact_city" matInput required type="text" [(ngModel)]="defaultsSchoolData.contact_city">
+                      <input formControlName="contact_city" matInput required
+                        type="text"
+                        [(ngModel)]="defaultsSchoolData.contact_city">
                     </mat-form-field>
                   </div>
                 </div>
@@ -190,51 +268,76 @@
           <mat-tab-group>
             <mat-tab label="{{'settings.sports.title' | translate}}">
               <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.sports.title' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.sports.title'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.sports.subtitle' | translate }}.<br>
                       {{'settings.sports.subtitle_info' | translate }}
                     </p>
-                    <button class="btn-primary-accent" (click)="saveSchoolSports()">{{'save_changes' | translate}}</button>
+                    <button class="btn-primary-accent"
+                      (click)="saveSchoolSports()">{{'save_changes' |
+                      translate}}</button>
                   </div>
 
                   <div style="width: 100%;">
-                    <p style="font-size: 30px;font-weight: bold;color: #808080; margin-bottom: 20px;">{{'winter' | translate }}</p>
+                    <p
+                      style="font-size: 30px;font-weight: bold;color: #808080; margin-bottom: 20px;">{{'winter'
+                      | translate }}</p>
                     <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div class="item" *ngIf="item.sport_type === 1" (click)="setSport(item.id)">
-                          <div class="icon" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}" *ngIf="item.sport_type === 1">
-                            <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                        <div class="item" *ngIf="item.sport_type === 1"
+                          (click)="setSport(item.id)">
+                          <div class="icon"
+                            [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}"
+                            *ngIf="item.sport_type === 1">
+                            <img
+                              [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected" />
                           </div>
-                          <div class="text" *ngIf="item.sport_type === 1">{{ item.name }}</div>
+                          <div class="text" *ngIf="item.sport_type === 1">{{
+                            item.name }}</div>
                         </div>
                       </ng-container>
                     </div>
                   </div>
 
                   <div style="width: 100%;">
-                    <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'summer' | translate }}</p>
+                    <p
+                      style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'summer'
+                      | translate }}</p>
                     <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div class="item" *ngIf="item.sport_type === 2" (click)="setSport(item.id)">
-                          <div class="icon" *ngIf="item.sport_type === 2" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
-                            <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                        <div class="item" *ngIf="item.sport_type === 2"
+                          (click)="setSport(item.id)">
+                          <div class="icon" *ngIf="item.sport_type === 2"
+                            [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                            <img
+                              [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected" />
                           </div>
-                          <div class="text" *ngIf="item.sport_type === 2">{{ item.name }}</div>
+                          <div class="text" *ngIf="item.sport_type === 2">{{
+                            item.name }}</div>
                         </div>
                       </ng-container>
                     </div>
                   </div>
 
                   <div style="width: 100%;">
-                    <p style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'settings.sports.all_sessions' | translate}}</p>
+                    <p
+                      style="font-size: 30px;font-weight: bold;color: #808080; margin-top: 40px; margin-bottom: 20px;">{{'settings.sports.all_sessions'
+                      | translate}}</p>
                     <div class="items-icons">
                       <ng-container *ngFor="let item of sports">
-                        <div class="item" *ngIf="item.sport_type === 3" (click)="setSport(item.id)">
-                          <div class="icon" [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
-                            <img [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected"/>
+                        <div class="item" *ngIf="item.sport_type === 3"
+                          (click)="setSport(item.id)">
+                          <div class="icon"
+                            [ngClass]="{'unselected-icon': sportsList.indexOf(item.id) === -1, 'selected-icon': sportsList.indexOf(item.id) !== -1}">
+                            <img
+                              [src]="sportsList.indexOf(item.id) !== -1 ? item.icon_selected : item.icon_unselected" />
                           </div>
                           <div class="text">{{ item.name }}</div>
                         </div>
@@ -247,22 +350,31 @@
             </mat-tab>
             <mat-tab label="{{'levels' | translate}}">
               <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'levels' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'levels'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.sports.levels.text1' | translate}}<br>
                       {{'settings.sports.levels.text2' | translate}}
                     </p>
-                    <button class="btn-primary-accent" (click)="updateSportDegrees()">{{'save_changes' | translate}}</button>
+                    <button class="btn-primary-accent"
+                      (click)="updateSportDegrees()">{{'save_changes' |
+                      translate}}</button>
                   </div>
 
                   <div class="items-icons" style="margin-bottom: 20px;">
-                    <ng-container *ngFor="let item of schoolSports; let i = index">
-                      <div class="item" (click)="selectSport(item)" [ngClass]="selectedSport === item.id ? 'select' : 'unselect'">
+                    <ng-container
+                      *ngFor="let item of schoolSports; let i = index">
+                      <div class="item" (click)="selectSport(item)"
+                        [ngClass]="selectedSport === item.id ? 'select' : 'unselect'">
                         <div class="icon">
-                          <img [src]="item.icon_selected"/>
-                          <img [src]="item.icon_unselected"/>
+                          <img [src]="item.icon_selected" />
+                          <img [src]="item.icon_unselected" />
                         </div>
                         <div class="text">{{ item.name }}</div>
                       </div>
@@ -286,71 +398,100 @@
 
                   <div style="float: left; width: 100%;">
                     <!-- añadir mat table de niveles-->
-                    <table #reductionTable id="table-level" mat-table [dataSource]="dataSourceLevels" matSort style="border: 1px solid #e6e6e6">
+                    <table #reductionTable id="table-level" mat-table
+                      [dataSource]="dataSourceLevels" matSort
+                      style="border: 1px solid #e6e6e6">
 
                       <ng-container matColumnDef="ageMin">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_from'|translate}}</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          {{'age_from'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-form-field appearance="outline" class="flex-auto">
-                            <input matInput placeholder="{{'acronym'|translate}}" type="number" [value]="element.age_min" [(ngModel)]="element.age_min">
+                          <mat-form-field appearance="outline"
+                            class="flex-auto">
+                            <input matInput
+                              placeholder="{{'acronym'|translate}}"
+                              type="number" [value]="element.age_min"
+                              [(ngModel)]="element.age_min">
                           </mat-form-field>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="ageMax">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'age_to'|translate}}</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          {{'age_to'|translate}}</th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-form-field appearance="outline" class="flex-auto">
-                            <input matInput placeholder="{{'acronym'|translate}}" type="number" [value]="element.age_max" [(ngModel)]="element.age_max">
+                          <mat-form-field appearance="outline"
+                            class="flex-auto">
+                            <input matInput
+                              placeholder="{{'acronym'|translate}}"
+                              type="number" [value]="element.age_max"
+                              [(ngModel)]="element.age_max">
                           </mat-form-field>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="annotation">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'acronym'|translate}} </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          {{'acronym'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
 
-                          <mat-form-field appearance="outline" class="flex-auto">
-                            <input matInput placeholder="{{'acronym'|translate}}" type="text" [value]="element.annotation" [(ngModel)]="element.annotation">
+                          <mat-form-field appearance="outline"
+                            class="flex-auto">
+                            <input matInput
+                              placeholder="{{'acronym'|translate}}" type="text"
+                              [value]="element.annotation"
+                              [(ngModel)]="element.annotation">
                           </mat-form-field>
 
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name'|translate}} </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          {{'name'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-form-field appearance="outline" class="flex-auto">
-                            <input matInput placeholder="{{'name'|translate}}" type="text" [value]="element.name" [(ngModel)]="element.name">
+                          <mat-form-field appearance="outline"
+                            class="flex-auto">
+                            <input matInput placeholder="{{'name'|translate}}"
+                              type="text" [value]="element.name"
+                              [(ngModel)]="element.name">
                           </mat-form-field>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status'|translate}} </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          {{'status'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
-                          <mat-slide-toggle [checked]="element.active" [(ngModel)]="element.active"></mat-slide-toggle>
+                          <mat-slide-toggle [checked]="element.active"
+                            [(ngModel)]="element.active"></mat-slide-toggle>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="color">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'color'|translate}} </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                          {{'color'|translate}} </th>
                         <td mat-cell *matCellDef="let element">
-                          <div style="width: 50%;float: left;height: 35px;border-radius: 5px;" [style.background-color]="element.color">
+                          <div
+                            style="width: 50%;float: left;height: 35px;border-radius: 5px;"
+                            [style.background-color]="element.color">
 
                           </div>
                         </td>
                       </ng-container>
 
                       <ng-container matColumnDef="edit">
-                        <th mat-header-cell *matHeaderCellDef>  </th>
+                        <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element; let idx = index">
-                          <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                          <mat-icon svgIcon="mat:edit"
+                            (click)="editGoal(element, idx)"></mat-icon>
                         </td>
                       </ng-container>
 
-                      <tr mat-header-row *matHeaderRowDef="displayedLevelsColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedLevelsColumns;"></tr>
+                      <tr mat-header-row
+                        *matHeaderRowDef="displayedLevelsColumns"></tr>
+                      <tr mat-row
+                        *matRowDef="let row; columns: displayedLevelsColumns;"></tr>
                     </table>
                   </div>
                 </vex-page-layout-content>
@@ -361,69 +502,88 @@
         </mat-tab>
         <mat-tab label="{{'courses.title' | translate}}">
           <ng-template matStepLabel>{{'prices'|translate}}</ng-template>
-          <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin:2%;">
-            <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.prices.table' | translate}}</h1>
+          <div
+            style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin:2%;">
+            <h1
+              style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.prices.table'
+              | translate}}</h1>
             <p style="padding: 1%; color:#808080;float: left; width: 75%;">
               {{'settings.prices.text' | translate}}<br>
             </p>
-            <button class="btn-primary-accent" (click)="savePrices()">{{'save_changes' | translate}}</button>
+            <button class="btn-primary-accent"
+              (click)="savePrices()">{{'save_changes' | translate}}</button>
           </div>
           <div class="p-6">
 
             <mat-form-field appearance="outline" class="flex-auto">
-              <input matInput placeholder="Enter people number" type="number" [value]="people" [(ngModel)]="people" (ngModelChange)="updateTable()">
+              <input matInput placeholder="Enter people number" type="number"
+                [value]="people" [(ngModel)]="people"
+                (ngModelChange)="updateTable()">
             </mat-form-field>
 
-            <div class="table-container" >
-              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" #scrollContainer>
+            <div class="table-container">
+              <table mat-table [dataSource]="dataSource"
+                class="mat-elevation-z8" #scrollContainer>
                 <caption>{{'price' |translate}} {{'in'|translate}} CFH</caption>
 
                 <!-- Intervalo Column -->
                 <ng-container matColumnDef="intervalo">
-                  <th mat-header-cell *matHeaderCellDef>  {{'interval'|translate}} </th>
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{'interval'|translate}} </th>
                   <td mat-cell *matCellDef="let row"> {{row.intervalo}} </td>
                 </ng-container>
 
                 <!-- Personas Columns -->
-                <ng-container *ngFor="let col of displayedColumns.slice(1)" [matColumnDef]="col">
+                <ng-container *ngFor="let col of displayedColumns.slice(1)"
+                  [matColumnDef]="col">
                   <th mat-header-cell *matHeaderCellDef> {{col}} </th>
                   <td mat-cell *matCellDef="let row">
                     <mat-form-field appearance="outline" class="flex-auto">
-                      <input class="flex-auto" matInput [(ngModel)]="row[col]" style="margin-top:3%">
+                      <input class="flex-auto" matInput [(ngModel)]="row[col]"
+                        style="margin-top:3%">
                     </mat-form-field>
                   </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-row
+                  *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
             </div>
           </div>
         </mat-tab>
         <mat-tab label="{{'settings.book_page' | translate}}">
           <vex-page-layout>
-            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.book_page' | translate}}</h1>
+            <vex-page-layout-content class="-mt-6 fullwidth"
+              style="margin: 1% 0 0 0">
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.book_page'
+                  | translate}}</h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   {{'settings.book_page.text1' | translate}}<br>
                   {{'settings.book_page.text2' | translate}}
                 </p>
-                <button class="btn-primary-accent" (click)="setTheme()">{{'save_changes' | translate}}</button>
+                <button class="btn-primary-accent"
+                  (click)="setTheme()">{{'save_changes' | translate}}</button>
               </div>
 
               <div style="float: left; width: 100%;margin: 0 0 2% 0;">
                 <div style="width:100%; float:left;">
 
-                  <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
+                  <div
+                    style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                     <div style="width: 100%; float: left; ">
-                      <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" >
+                      <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                         <div class="flex-auto">
                           <mat-radio-group [(ngModel)]="theme">
-                            <mat-radio-button class="radio" [value]="'light'">
+                            <mat-radio-button class="radio"
+                              [value]="layoutService.isDarkMode">
                               {{'settings.book_page.light' | translate}}
                             </mat-radio-button>
-                            <mat-radio-button class="radio" [value]="'dark'">
+                            <mat-radio-button class="radio"
+                              [value]="!layoutService.isDarkMode">
                               {{'settings.book_page.dark' | translate}}
                             </mat-radio-button>
                           </mat-radio-group>
@@ -442,37 +602,60 @@
 
             <mat-tab label="{{'salarys' | translate}}">
               <vex-page-layout style="float: left;width: 100%;">
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0;float: left;width: 100%;">
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;width: 100%;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'salarys' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0;float: left;width: 100%;">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;width: 100%;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'salarys'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.monitors.salaris.text1' | translate}}<br>
                       {{'settings.monitors.salaris.text2' | translate}}<br>
                     </p>
 
                   </div>
 
-                  <vex-aio-table style="float: left;width: 100%;margin: 5% 0 0 0;" [columns]="columns" [withHeader]="false" [entity]="entitySalary" [title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [createOnModal]="true" [heigthModal]="'35vh'"></vex-aio-table>
+                  <vex-aio-table
+                    style="float: left;width: 100%;margin: 5% 0 0 0;"
+                    [columns]="columns" [withHeader]="false"
+                    [entity]="entitySalary" [title]="'Salaires'"
+                    [route]="'settings'" [createComponent]="createComponent"
+                    [canDelete]="false" [canDeactivate]="false"
+                    [createOnModal]="true"
+                    [heigthModal]="'35vh'"></vex-aio-table>
                 </vex-page-layout-content>
               </vex-page-layout>
             </mat-tab>
             <mat-tab label="{{'paid_blocks' | translate}}">
               <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0">
 
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'blocks' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'blocks'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.blocks.text1' | translate}}<br>
                       {{'settings.blocks.text2' | translate}}<br>
                     </p>
-                    <button class="btn-primary-accent" (click)="saveBlockages()">{{'save_changes' | translate}}</button>
+                    <button class="btn-primary-accent"
+                      (click)="saveBlockages()">{{'save_changes' |
+                      translate}}</button>
                   </div>
 
                   <div class="p-6">
-                    <mat-form-field appearance="outline" class="flex-auto" *ngFor="let item of blockages" style="width: 30%; margin: 0 2% 0 0">
-                      <span matPrefix class="square-prefix" [ngStyle]="{'background-color': item.color}"></span>
-                      <input matInput placeholder="Enter text" [value]="item.name" [(ngModel)]="item.name">
+                    <mat-form-field appearance="outline" class="flex-auto"
+                      *ngFor="let item of blockages"
+                      style="width: 30%; margin: 0 2% 0 0">
+                      <span matPrefix class="square-prefix"
+                        [ngStyle]="{'background-color': item.color}"></span>
+                      <input matInput placeholder="Enter text"
+                        [value]="item.name" [(ngModel)]="item.name">
                     </mat-form-field>
                   </div>
 
@@ -494,40 +677,65 @@
             </mat-tab>
             <mat-tab label="{{'settings.auths' | translate}}">
               <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'levels' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'levels'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.auths.text1' | translate}}
                     </p>
-                    <button class="btn-primary-accent" (click)="saveMonitorsAuth()">{{'save_changes' | translate}}</button>
+                    <button class="btn-primary-accent"
+                      (click)="saveMonitorsAuth()">{{'save_changes' |
+                      translate}}</button>
                   </div>
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app' | translate}}</h1>
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app'
+                      | translate}}</h1>
                     <div style="width:100%; float:left;">
-                      <p style="width:100%; float:left;">{{'by_default' |translate}} </p>
+                      <p style="width:100%; float:left;">{{'by_default'
+                        |translate}} </p>
                       <div>
-                        <mat-checkbox [(ngModel)]="authorized" (change)="onAuthorizedChange(true)">{{'settings.auths.auth' | translate}}</mat-checkbox>
-                        <mat-checkbox [(ngModel)]="!authorized" (change)="onAuthorizedChange(false)">{{'settings.auths.no_auth' | translate}}</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="authorized"
+                          (change)="onAuthorizedChange(true)">{{'settings.auths.auth'
+                          | translate}}</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="!authorized"
+                          (change)="onAuthorizedChange(false)">{{'settings.auths.no_auth'
+                          | translate}}</mat-checkbox>
                       </div>
                     </div>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.auths.text2' | translate}}<br>
                       {{'settings.auths.text3' | translate}}<br><br>
                       {{'settings.auths.text4' | translate}}
                     </p>
 
                   </div>
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app2' | translate}}</h1>
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app2'
+                      | translate}}</h1>
                     <div style="width:100%; float:left;">
-                      <p style="width:100%; float:left;">{{'by_default' |translate}}</p>
+                      <p style="width:100%; float:left;">{{'by_default'
+                        |translate}}</p>
                       <div>
-                        <mat-checkbox [(ngModel)]="authorizedBookingComm" (change)="onAuthorizedBookingChange(true)">{{'settings.auths.auth' | translate}}</mat-checkbox>
-                        <mat-checkbox [(ngModel)]="!authorizedBookingComm" (change)="onAuthorizedBookingChange(false)">{{'settings.auths.no_auth' | translate}}</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="authorizedBookingComm"
+                          (change)="onAuthorizedBookingChange(true)">{{'settings.auths.auth'
+                          | translate}}</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="!authorizedBookingComm"
+                          (change)="onAuthorizedBookingChange(false)">{{'settings.auths.no_auth'
+                          | translate}}</mat-checkbox>
                       </div>
                     </div>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.auths.text2' | translate}}<br>
                       {{'settings.auths.text3' | translate}}<br><br>
                       {{'settings.auths.text4' | translate}}
@@ -541,21 +749,33 @@
         </mat-tab>
         <mat-tab label="{{'bookings'|translate}}">
           <vex-page-layout>
-            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'bookings'|translate}}</h1>
+            <vex-page-layout-content class="-mt-6 fullwidth"
+              style="margin: 1% 0 0 0">
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">{{'bookings'|translate}}</h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   {{'settings.bookings.text'|translate}}
                 </p>
-                <button class="btn-primary-accent" (click)="saveTaxes()">{{'save_changes' | translate}}</button>
+                <button class="btn-primary-accent"
+                  (click)="saveTaxes()">{{'save_changes' | translate}}</button>
               </div>
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
-                  <mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle> {{'op_rem'|translate}}</h1>
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">
+                  <mat-slide-toggle
+                    [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle>
+                  {{'op_rem'|translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.op_rem_text'|translate}}</p>
+                  <p
+                    style="width:100%; float:left;color:#808080;">{{'settings.bookings.op_rem_text'|translate}}</p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput placeholder="Percentaje" [disabled]="!hasCancellationInsurance" type="number" [value]="hasCancellationInsurance ? cancellationInsurancePercent * 100 : 0" (blur)="updateInsuranceValue($event)">
+                    <input matInput placeholder="Percentaje"
+                      [disabled]="!hasCancellationInsurance" type="number"
+                      [value]="hasCancellationInsurance ? cancellationInsurancePercent * 100 : 0"
+                      (blur)="updateInsuranceValue($event)">
 
                   </mat-form-field>
                 </div>
@@ -566,37 +786,54 @@
                 </p>
 
               </div>
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
-                  <mat-slide-toggle [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care
-                  <span style="color: #e6e6e6">({{'settings.bookings.boukii_care_title' | translate}})</span></h1>
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">
+                  <mat-slide-toggle
+                    [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care
+                  <span
+                    style="color: #e6e6e6">({{'settings.bookings.boukii_care_title'
+                    | translate}})</span></h1>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
                   {{'settings.bookings.boukii_care_text1' |translate}}<br>
                   {{'settings.bookings.boukii_care_text2' |translate}}<br>
                   {{'settings.bookings.boukii_care_text3' |translate}}<br><br>
-                  {{'settings.bookings.boukii_care_text4' |translate}}<a href="" style="text-decoration:none; color: #f53d7c;">Enlace</a>
+                  {{'settings.bookings.boukii_care_text4' |translate}}<a href
+                    style="text-decoration:none; color: #f53d7c;">Enlace</a>
                 </p>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.boukii_care_price' | translate}}</p>
+                  <p
+                    style="width:100%; float:left;color:#808080;">{{'settings.bookings.boukii_care_price'
+                    | translate}}</p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput placeholder="Percentaje" type="number" [value]="boukiiCarePrice" (blur)="updateBoukiiCareValue($event)">
+                    <input matInput placeholder="Percentaje" type="number"
+                      [value]="boukiiCarePrice"
+                      (blur)="updateBoukiiCareValue($event)">
 
                   </mat-form-field>
                 </div>
               </div>
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations' | translate}}</h1>
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations'
+                  | translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;" [innerHTML]="'settings.bookings.cancelations.text1' | translate"></p>
+                  <p style="width:100%; float:left;color:#808080;"
+                    [innerHTML]="'settings.bookings.cancelations.text1' | translate"></p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput type="number" [value]="cancellationNoRem" (blur)="updateCancelationNoRem($event)">
+                    <input matInput type="number" [value]="cancellationNoRem"
+                      (blur)="updateCancelationNoRem($event)">
 
                   </mat-form-field>
                 </div>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;" [innerHTML]="'settings.bookings.cancelations.text3' | translate"></p>
+                  <p style="width:100%; float:left;color:#808080;"
+                    [innerHTML]="'settings.bookings.cancelations.text3' | translate"></p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput type="number" [value]="cancellationRem" (blur)="updateCancelationRem($event)">
+                    <input matInput type="number" [value]="cancellationRem"
+                      (blur)="updateCancelationRem($event)">
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; color:#808080;float: left; width: 75%;">
@@ -605,13 +842,20 @@
                 </p>
               </div>
 
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
-                  <mat-slide-toggle [(ngModel)]="hasTVA"></mat-slide-toggle>{{'tva' | translate}}</h1>
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">
+                  <mat-slide-toggle
+                    [(ngModel)]="hasTVA"></mat-slide-toggle>{{'tva' |
+                  translate}}</h1>
                 <div style="width:100%; float:left;">
-                  <p style="width:100%; float:left;color:#808080;">{{'settings.bookings.tva.text1' | translate}}</p>
+                  <p
+                    style="width:100%; float:left;color:#808080;">{{'settings.bookings.tva.text1'
+                    | translate}}</p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput placeholder="TVA" type="number" [value]="tva* 100" (blur)="updateTVAValue($event)">
+                    <input matInput placeholder="TVA" type="number"
+                      [value]="tva* 100" (blur)="updateTVAValue($event)">
 
                   </mat-form-field>
                 </div>
@@ -620,13 +864,17 @@
                 </p>
 
               </div>
-              <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">
+              <div
+                style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                <h1
+                  style="color:#808080;font-size:24px;float: left; width: 100%;">
                   {{'currency' | translate}}</h1>
                 <div style="width:100%; float:left;">
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <mat-select placeholder="{{'currency' | translate}}" [(ngModel)]="currency">
-                      <mat-option *ngFor="let item of currencies" [value]="item">
+                    <mat-select placeholder="{{'currency' | translate}}"
+                      [(ngModel)]="currency">
+                      <mat-option *ngFor="let item of currencies"
+                        [value]="item">
                         {{ item }}
                       </mat-option>
                     </mat-select>
@@ -642,32 +890,44 @@
 
             <mat-tab label="{{'rent' | translate}}" *ngIf="false">
 
-
               <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'extras' | translate}} / {{'course_options' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0">
+                  <div
+                    style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'extras'
+                      | translate}} / {{'course_options' | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text1' | translate}}<br>
                       {{'settings.bookings.extras.text2' | translate}}<br>
-                      {{'settings.bookings.extras.text3' | translate}}<strong>{{'settings.bookings.extras.text4' | translate}}
-                    </strong>
+                      {{'settings.bookings.extras.text3' |
+                      translate}}<strong>{{'settings.bookings.extras.text4' |
+                        translate}}
+                      </strong>
                       {{'settings.bookings.extras.text5' | translate}}
                     </p>
 
                   </div>
 
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'rent' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'rent'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text4' | translate}}<br>
                       {{'settings.bookings.extras.text5' | translate}}<br>
                     </p>
 
                   </div>
 
-                  <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  <div
+                    style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text6' | translate}}
                     </p>
                     <div style="float: left;width: 100%;padding: 1%">
@@ -681,68 +941,89 @@
                     <div style="float: left;width: 100%;padding: 1%">
                       <div style="float: left; width: 10%;">
                         <div style="float: left; width: 100%;">
-                          <img style="float: left; width: 40%;background: #e6e6e6; border-radius: 10px;border: solid 1px #808080" src="https://api.boukii.com/storage/apps/sports/Ski.png"/>
+                          <img
+                            style="float: left; width: 40%;background: #e6e6e6; border-radius: 10px;border: solid 1px #808080"
+                            src="https://api.boukii.com/storage/apps/sports/Ski.png" />
                         </div>
                       </div>
                       <div style="float: left;width: 90%;">
 
-                        <table #extrasSportTable id="table-extras-sports" mat-table [dataSource]="dataSourceSport" matSort style="border: 1px solid #e6e6e6">
+                        <table #extrasSportTable id="table-extras-sports"
+                          mat-table [dataSource]="dataSourceSport" matSort
+                          style="border: 1px solid #e6e6e6">
 
                           <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                            <th mat-header-cell *matHeaderCellDef
+                              mat-sort-header> Id </th>
                             <td mat-cell *matCellDef="let element"> 1 </td>
                           </ng-container>
 
                           <ng-container matColumnDef="sport">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Deporte </th>
+                            <th mat-header-cell *matHeaderCellDef
+                              mat-sort-header> Deporte </th>
                             <td mat-cell *matCellDef="let element"> Ski </td>
                           </ng-container>
 
                           <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-                            <td mat-cell *matCellDef="let element"> Botas de esqui </td>
+                            <th mat-header-cell *matHeaderCellDef
+                              mat-sort-header> Nombre </th>
+                            <td mat-cell *matCellDef="let element"> Botas de
+                              esqui </td>
                           </ng-container>
 
                           <ng-container matColumnDef="price">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prix - {{ currency || 'CHF' }} / Dia </th>
-                            <td mat-cell *matCellDef="let element"> 30 {{ currency || 'CHF' }}/dia </td>
+                            <th mat-header-cell *matHeaderCellDef
+                              mat-sort-header> Prix - {{ currency || 'CHF' }} /
+                              Dia </th>
+                            <td mat-cell *matCellDef="let element"> 30 {{
+                              currency || 'CHF' }}/dia </td>
                           </ng-container>
 
                           <ng-container matColumnDef="tva">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> TVA </th>
+                            <th mat-header-cell *matHeaderCellDef
+                              mat-sort-header> TVA </th>
                             <td mat-cell *matCellDef="let element">
                               0%
                             </td>
                           </ng-container>
 
                           <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                            <th mat-header-cell *matHeaderCellDef
+                              mat-sort-header> Status </th>
                             <td mat-cell *matCellDef="let element">
-                              <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+                              <mat-slide-toggle
+                                [checked]="true"></mat-slide-toggle>
 
                             </td>
                           </ng-container>
 
                           <ng-container matColumnDef="edit">
-                            <th mat-header-cell *matHeaderCellDef>  </th>
-                            <td mat-cell *matCellDef="let element; let idx = index">
-                              <mat-icon svgIcon="mat:edit" (click)="editGoal(element, idx)"></mat-icon>
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell
+                              *matCellDef="let element; let idx = index">
+                              <mat-icon svgIcon="mat:edit"
+                                (click)="editGoal(element, idx)"></mat-icon>
                             </td>
                           </ng-container>
 
                           <ng-container matColumnDef="delete">
-                            <th mat-header-cell *matHeaderCellDef>  </th>
-                            <td mat-cell *matCellDef="let element; let idx = index">
-                              <mat-icon svgIcon="mat:delete" (click)="editGoal(element, idx)"></mat-icon>
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell
+                              *matCellDef="let element; let idx = index">
+                              <mat-icon svgIcon="mat:delete"
+                                (click)="editGoal(element, idx)"></mat-icon>
                             </td>
                           </ng-container>
 
-                          <tr mat-header-row *matHeaderRowDef="displayedSportColumns"></tr>
-                          <tr mat-row *matRowDef="let row; columns: displayedSportColumns;"></tr>
+                          <tr mat-header-row
+                            *matHeaderRowDef="displayedSportColumns"></tr>
+                          <tr mat-row
+                            *matRowDef="let row; columns: displayedSportColumns;"></tr>
                         </table>
                         <div class="flex-auto" style="margin: 1% 0 0 0">
-                          <button class="add-date" mat-fab >
-                            <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
+                          <button class="add-date" mat-fab>
+                            <mat-icon svgIcon="mat:add"
+                              class="icon-date"></mat-icon>
                           </button>
                         </div>
                       </div>
@@ -753,219 +1034,299 @@
             </mat-tab>
             <mat-tab label="{{'others' | translate}}">
               <vex-page-layout>
-                <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-                  <div style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'extras' | translate}} / {{'course_options' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                <vex-page-layout-content class="-mt-6 fullwidth"
+                  style="margin: 1% 0 0 0">
+                  <div
+                    style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'extras'
+                      | translate}} / {{'course_options' | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text1' | translate}}<br>
                       {{'settings.bookings.extras.text2' | translate}}<br>
-                      {{'settings.bookings.extras.text3' | translate}}<strong>{{'settings.bookings.extras.text3_1' | translate}}
-                    </strong> {{'settings.bookings.extras.text3_2' | translate}}
+                      {{'settings.bookings.extras.text3' |
+                      translate}}<strong>{{'settings.bookings.extras.text3_1' |
+                        translate}}
+                      </strong> {{'settings.bookings.extras.text3_2' |
+                      translate}}
                     </p>
 
                   </div>
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">Forfait</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">Forfait</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text4' | translate}}<br>
                       {{'settings.bookings.extras.text5' | translate}}<br>
                     </p>
 
                   </div>
 
-                  <table #forfaitTable id="table-extras-forfaits" mat-table [dataSource]="dataSourceForfait" matSort style="border: 1px solid #e6e6e6">
+                  <table #forfaitTable id="table-extras-forfaits" mat-table
+                    [dataSource]="dataSourceForfait" matSort
+                    style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.id }}
+                      </td>
                     </ng-container>
 
                     <ng-container matColumnDef="product">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'product' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'product' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.product
+                        }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'name' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.name }}
+                      </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'price' | translate}} - CHF / {{'day' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price
+                        }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'tva' | translate}} </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'tva' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status' | translate}} </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'status' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
+                        <mat-slide-toggle [checked]="element.status"
+                          [disabled]="true"></mat-slide-toggle>
 
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="edit">
-                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <th mat-header-cell *matHeaderCellDef> </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:edit" (click)="createExtra('Forfait', true, idx, element)"></mat-icon>
+                        <mat-icon svgIcon="mat:edit"
+                          (click)="createExtra('Forfait', true, idx, element)"></mat-icon>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="delete">
-                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <th mat-header-cell *matHeaderCellDef> </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:delete" (click)="deleteExtra(idx, 'Forfait')"></mat-icon>
+                        <mat-icon svgIcon="mat:delete"
+                          (click)="deleteExtra(idx, 'Forfait')"></mat-icon>
                       </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
+                    <tr mat-header-row
+                      *matHeaderRowDef="displayedExtrasColumns"></tr>
+                    <tr mat-row
+                      *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
-                  <div class="flex-auto" style="margin: 1% 0 0 0" >
-                    <button class="add-date" mat-fab (click)="createExtra('Forfait', false, null, null)" [disabled]="dataSourceForfait.data.length === 2">
+                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                    <button class="add-date" mat-fab
+                      (click)="createExtra('Forfait', false, null, null)"
+                      [disabled]="dataSourceForfait.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
 
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'transport' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'transport'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text7' | translate}}<br>
                       {{'settings.bookings.extras.text8' | translate}}<br>
                     </p>
                   </div>
 
-                  <table *ngIf="false" #transportTable id="table-extras-transport" mat-table [dataSource]="dataSourceTransport" matSort style="border: 1px solid #e6e6e6">
+                  <table *ngIf="false" #transportTable
+                    id="table-extras-transport" mat-table
+                    [dataSource]="dataSourceTransport" matSort
+                    style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.id }}
+                      </td>
                     </ng-container>
 
                     <ng-container matColumnDef="product">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'product' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'product' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.product
+                        }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'name' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.name }}
+                      </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'price' | translate}} - CHF / {{'day' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price
+                        }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'tva' | translate}} </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'tva' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status' | translate}} </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'status' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
+                        <mat-slide-toggle [checked]="element.status"
+                          [disabled]="true"></mat-slide-toggle>
 
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="edit">
-                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <th mat-header-cell *matHeaderCellDef> </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:edit" (click)="createExtra('Transport', true, idx, element)"></mat-icon>
+                        <mat-icon svgIcon="mat:edit"
+                          (click)="createExtra('Transport', true, idx, element)"></mat-icon>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="delete">
-                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <th mat-header-cell *matHeaderCellDef> </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:delete" (click)="deleteExtra(idx, 'Transport')"></mat-icon>
+                        <mat-icon svgIcon="mat:delete"
+                          (click)="deleteExtra(idx, 'Transport')"></mat-icon>
                       </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
+                    <tr mat-header-row
+                      *matHeaderRowDef="displayedExtrasColumns"></tr>
+                    <tr mat-row
+                      *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
-                  <div  class="flex-auto" style="margin: 1% 0 0 0">
-                    <button class="add-date" mat-fab (click)="createExtra('Transport', false, null, null)" [disabled]="dataSourceTransport.data.length === 2">
+                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                    <button class="add-date" mat-fab
+                      (click)="createExtra('Transport', false, null, null)"
+                      [disabled]="dataSourceTransport.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
 
-                  <div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
-                    <h1 style="color:#808080;font-size:24px;float: left; width: 100%;">{{'food' | translate}}</h1>
-                    <p style="padding: 1%; color:#808080;float: left; width: 75%;">
+                  <div
+                    style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
+                    <h1
+                      style="color:#808080;font-size:24px;float: left; width: 100%;">{{'food'
+                      | translate}}</h1>
+                    <p
+                      style="padding: 1%; color:#808080;float: left; width: 75%;">
                       {{'settings.bookings.extras.text9' | translate}}<br>
                       {{'settings.bookings.extras.text10' | translate}}<br>
                     </p>
                   </div>
 
-                  <table #foodTable id="table-extras-food" mat-table [dataSource]="dataSourceFood" matSort style="border: 1px solid #e6e6e6">
+                  <table #foodTable id="table-extras-food" mat-table
+                    [dataSource]="dataSourceFood" matSort
+                    style="border: 1px solid #e6e6e6">
 
                     <ng-container matColumnDef="id">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.id }}
+                      </td>
                     </ng-container>
 
                     <ng-container matColumnDef="product">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'product' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'product' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.product
+                        }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'name' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'name' | translate}} </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.name }}
+                      </td>
                     </ng-container>
 
                     <ng-container matColumnDef="price">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'price' | translate}} - CHF / {{'day' | translate}} </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.price }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'price' | translate}} - CHF / {{'day' | translate}}
+                      </th>
+                      <td mat-cell *matCellDef="let element"> {{ element.price
+                        }} {{ currency || 'CHF' }}/{{'day' | translate}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="tva">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'tva' | translate}} </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'tva' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         {{ element.tva }}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="status">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{'status' | translate}} </th>
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{'status' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle [checked]="element.status" [disabled]="true"></mat-slide-toggle>
+                        <mat-slide-toggle [checked]="element.status"
+                          [disabled]="true"></mat-slide-toggle>
 
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="edit">
-                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <th mat-header-cell *matHeaderCellDef> </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:edit" (click)="createExtra('Food', true, idx, element)"></mat-icon>
+                        <mat-icon svgIcon="mat:edit"
+                          (click)="createExtra('Food', true, idx, element)"></mat-icon>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="delete">
-                      <th mat-header-cell *matHeaderCellDef>  </th>
+                      <th mat-header-cell *matHeaderCellDef> </th>
                       <td mat-cell *matCellDef="let element; let idx = index">
-                        <mat-icon svgIcon="mat:delete" (click)="deleteExtra(idx, 'Food')"></mat-icon>
+                        <mat-icon svgIcon="mat:delete"
+                          (click)="deleteExtra(idx, 'Food')"></mat-icon>
                       </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedExtrasColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
+                    <tr mat-header-row
+                      *matHeaderRowDef="displayedExtrasColumns"></tr>
+                    <tr mat-row
+                      *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
 
-                  <div  class="flex-auto" style="margin: 1% 0 0 0">
-                    <button class="add-date" mat-fab (click)="createExtra('Food', false, null, null)" [disabled]="dataSourceFood.data.length === 2">
+                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                    <button class="add-date" mat-fab
+                      (click)="createExtra('Food', false, null, null)"
+                      [disabled]="dataSourceFood.data.length === 2">
                       <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
                     </button>
                   </div>
@@ -977,24 +1338,39 @@
         <mat-tab label="Mails">
 
           <vex-page-layout>
-            <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-              <div class="main-container" style="display: flex; justify-content: space-between;">
+            <vex-page-layout-content class="-mt-6 fullwidth"
+              style="margin: 1% 0 0 0">
+              <div class="main-container"
+                style="display: flex; justify-content: space-between;">
                 <!-- Sección del Formulario -->
                 <div class="form-container" style="flex: 1; margin-right: 1%;">
-                  <h1 style="color:#808080;font-size:24px">{{'mailbox' | translate}}</h1>
-                  <p style="padding: 1%; color:#808080">{{'compose' | translate}}</p>
+                  <h1 style="color:#808080;font-size:24px">{{'mailbox' |
+                    translate}}</h1>
+                  <p style="padding: 1%; color:#808080">{{'compose' |
+                    translate}}</p>
                   <div class="block w-full">
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <mat-select placeholder="{{'mails.type' | translate}}" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
-                        <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
-                        <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
-                        <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
-                        <mat-option value="payment_link">{{'mails.type4' | translate}}</mat-option>
-                        <mat-option value="payment_confirm">{{'mails.type5' | translate}}</mat-option>
-                        <mat-option value="payment_reminder">{{'mails.type9' | translate}}</mat-option>
-                        <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
-                        <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>
-                        <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
+                      <mat-select placeholder="{{'mails.type' | translate}}"
+                        [(ngModel)]="mailType"
+                        (selectionChange)="setCurrentMailType()">
+                        <mat-option value="booking_confirm">{{'mails.type1' |
+                          translate}}</mat-option>
+                        <mat-option value="booking_cancel">{{'mails.type2' |
+                          translate}}</mat-option>
+                        <mat-option value="booking_update">{{'mails.type3' |
+                          translate}}</mat-option>
+                        <mat-option value="payment_link">{{'mails.type4' |
+                          translate}}</mat-option>
+                        <mat-option value="payment_confirm">{{'mails.type5' |
+                          translate}}</mat-option>
+                        <mat-option value="payment_reminder">{{'mails.type9' |
+                          translate}}</mat-option>
+                        <mat-option value="voucher_confirm">{{'mails.type6' |
+                          translate}}</mat-option>
+                        <mat-option value="voucher_create">{{'mails.type7' |
+                          translate}}</mat-option>
+                        <mat-option value="course_reminder">{{'mails.type8' |
+                          translate}}</mat-option>
                       </mat-select>
                     </mat-form-field>
                     <!--<input cdkFocusInitial matInput type="text"/>
@@ -1014,96 +1390,118 @@
                     </mat-form-field>
                   </div>-->
 
-                  <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
+                  <mat-tab-group [selectedIndex]="selectedIndex"
+                    (selectedTabChange)="onTabChange($event)">
                     <mat-tab label="{{'france' | translate }}">
                       <mat-form-field appearance="outline" class="block w-full">
                         <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectFr" [value]="subjectFr"/>
+                        <input matInput type="text" [(ngModel)]="subjectFr"
+                          [value]="subjectFr" />
                       </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="titleFr"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="titleFr"></quill-editor>
                       </div>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'message' | translate }}</p>
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="bodyFr"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="bodyFr"></quill-editor>
                       </div>
 
                     </mat-tab>
                     <mat-tab label="{{'english' | translate }}">
                       <mat-form-field appearance="outline" class="block w-full">
                         <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
+                        <input matInput type="text" [(ngModel)]="subjectEn"
+                          [value]="subjectEn" />
                       </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="titleEn"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="titleEn"></quill-editor>
                       </div>
 
-
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="bodyEn"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="bodyEn"></quill-editor>
                       </div>
                     </mat-tab>
-                    <mat-tab label="{{'spanish' | translate }}" >
+                    <mat-tab label="{{'spanish' | translate }}">
                       <mat-form-field appearance="outline" class="block w-full">
                         <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectEs" [value]="subjectEs"/>
+                        <input matInput type="text" [(ngModel)]="subjectEs"
+                          [value]="subjectEs" />
                       </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="titleEs"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="titleEs"></quill-editor>
                       </div>
 
-
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="bodyEs"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="bodyEs"></quill-editor>
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'germany' | translate }}">
                       <mat-form-field appearance="outline" class="block w-full">
                         <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectIt" [value]="subjectIt"/>
+                        <input matInput type="text" [(ngModel)]="subjectIt"
+                          [value]="subjectIt" />
                       </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="titleIt"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="titleIt"></quill-editor>
                       </div>
 
-
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="bodyIt"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="bodyIt"></quill-editor>
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'italian' | translate }}">
                       <mat-form-field appearance="outline" class="block w-full">
                         <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
+                        <input matInput type="text" [(ngModel)]="subjectDe"
+                          [value]="subjectDe" />
                       </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="titleDe"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="titleDe"></quill-editor>
                       </div>
 
-
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                                      class="flex-auto flex flex-col" [(ngModel)]="bodyDe"></quill-editor>
+                        <quill-editor
+                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                          class="flex-auto flex flex-col"
+                          [(ngModel)]="bodyDe"></quill-editor>
                       </div>
 
                     </mat-tab>
@@ -1130,32 +1528,39 @@
                       <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
                     </button>
                   </div>-->
-                  <div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
+                  <div
+                    style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
                     <div style="float:left; width:100%">
-                      <button class="btn-primary-accent" style="float: right;" (click)="saveDefaultMail()">{{'save' | translate}}</button>
-                      <button class="btn-primary-accent" style="float: right; margin-right: 10px;" (click)="openPreview()">{{'preview' | translate}}</button>
+                      <button class="btn-primary-accent" style="float: right;"
+                        (click)="saveDefaultMail()">{{'save' |
+                        translate}}</button>
+                      <button class="btn-primary-accent"
+                        style="float: right; margin-right: 10px;"
+                        (click)="openPreview()">{{'preview' |
+                        translate}}</button>
 
                     </div>
 
                   </div>
                 </div>
-                <div class="preview-container" style="flex: 1; margin-left: 1%;overflow-y: auto;">
-                  <h1 style="color:#808080;font-size:24px">{{'preview' | translate}}</h1>
-                  <div class="preview-content" style="border: 1px solid #e6e6e6; padding: 1%; overflow-y: auto;">
+                <div class="preview-container"
+                  style="flex: 1; margin-left: 1%;overflow-y: auto;">
+                  <h1 style="color:#808080;font-size:24px">{{'preview' |
+                    translate}}</h1>
+                  <div class="preview-content"
+                    style="border: 1px solid #e6e6e6; padding: 1%; overflow-y: auto;">
                     <!-- Aquí puedes mostrar el contenido del correo en vista previa -->
                     <vex-confirm-mail
                       [subject]="getEmailContent().subject"
                       [title]="getEmailContent().title"
                       [body]="getEmailContent().body"
-                      [type]="mailTypeTrad"
-                    >
+                      [type]="mailTypeTrad">
 
                     </vex-confirm-mail>
 
                   </div>
                 </div>
               </div>
-
 
             </vex-page-layout-content>
 

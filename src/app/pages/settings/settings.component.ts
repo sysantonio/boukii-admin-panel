@@ -23,15 +23,16 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
 import { ConfigService } from 'src/@vex/config/config.service';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
 import { SchoolService } from 'src/service/school.service';
 import { TranslateService } from '@ngx-translate/core';
-import {DateAdapter} from '@angular/material/core';
-import {th} from 'date-fns/locale';
-import {dropdownAnimation} from '../../../@vex/animations/dropdown.animation';
-import {PreviewModalComponent} from '../../components/preview-modal/preview-modal.component';
+import { DateAdapter } from '@angular/material/core';
+import { th } from 'date-fns/locale';
+import { dropdownAnimation } from '../../../@vex/animations/dropdown.animation';
+import { PreviewModalComponent } from '../../components/preview-modal/preview-modal.component';
+import { LayoutService } from 'src/@vex/services/layout.service';
 
 @Component({
   selector: 'vex-settings',
@@ -82,9 +83,9 @@ export class SettingsComponent implements OnInit {
     { value: 'payment_link', label: 'mails.type4' },
     { value: 'payment_confirm', label: 'mails.type5' },
     { value: 'payment_reminder', label: 'mails.type9' },
-    { value: 'voucher_confirm', label:'mails.type6' },
+    { value: 'voucher_confirm', label: 'mails.type6' },
     { value: 'voucher_create', label: 'mails.type7' },
-    { value: 'course_reminder', label:'mails.type8' }
+    { value: 'course_reminder', label: 'mails.type8' }
   ];
   filteredHours: string[];
 
@@ -109,7 +110,7 @@ export class SettingsComponent implements OnInit {
   dataSource: any;
   displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
   dataSourceLevels = new MatTableDataSource([]);
-  displayedLevelsColumns: string[] = ['ageMin','ageMax', 'annotation', 'name', 'status', 'color', 'edit'];
+  displayedLevelsColumns: string[] = ['ageMin', 'ageMax', 'annotation', 'name', 'status', 'color', 'edit'];
 
   dataSourceSport = new MatTableDataSource([]);
   dataSourceForfait = new MatTableDataSource([]);
@@ -197,7 +198,8 @@ export class SettingsComponent implements OnInit {
 
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
     private configService: ConfigService, private dialog: MatDialog, private schoolService: SchoolService,
-              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
+    public layoutService: LayoutService,
+    private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.filteredHours = this.hours;
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
@@ -226,13 +228,13 @@ export class SettingsComponent implements OnInit {
 
   getData() {
     this.loading = true;
-    this.crudService.get('/schools/'+this.user.schools[0].id)
+    this.crudService.get('/schools/' + this.user.schools[0].id)
       .subscribe((data) => {
 
         this.school = data.data;
         this.getDegrees();
 
-        forkJoin([this.getSchoolSeason(),this.getSports(),this.getBlockages(), this.getSchoolSports()])
+        forkJoin([this.getSchoolSeason(), this.getSports(), this.getBlockages(), this.getSchoolSports()])
           .subscribe((data: any) => {
             this.season = data[0].data.filter((s) => s.is_active)[0];
             this.sports = data[1].data;
@@ -300,16 +302,16 @@ export class SettingsComponent implements OnInit {
             });
 
             const settings = JSON.parse(this.school.settings);
-            this.people = settings &&  settings.prices_range.people ? settings.prices_range.people : this.people;
+            this.people = settings && settings.prices_range.people ? settings.prices_range.people : this.people;
             this.displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
-            this.dataSource = settings &&  settings.prices_range.prices && settings.prices_range.prices !== null ? settings.prices_range.prices :
-            this.intervalos.map(intervalo => {
-              const fila: any = { intervalo: this.formatIntervalo(intervalo) };
-              for (let i = 1; i <= this.people; i++) {
-                fila[`${i}`] = '';
-              }
-              return fila;
-            });
+            this.dataSource = settings && settings.prices_range.prices && settings.prices_range.prices !== null ? settings.prices_range.prices :
+              this.intervalos.map(intervalo => {
+                const fila: any = { intervalo: this.formatIntervalo(intervalo) };
+                for (let i = 1; i <= this.people; i++) {
+                  fila[`${i}`] = '';
+                }
+                return fila;
+              });
 
 
             this.hasCancellationInsurance = settings?.taxes?.cancellation_insurance_percent !== null && parseFloat(settings?.taxes?.cancellation_insurance_percent) !== 0 && !isNaN(parseFloat(settings?.taxes?.cancellation_insurance_percent));
@@ -426,7 +428,7 @@ export class SettingsComponent implements OnInit {
         body: this.bodyFr,
         title: this.titleFr,
         school_id: this.school.id,
-        lang:'fr'
+        lang: 'fr'
       }],
       [{
         type: this.mailType,
@@ -434,7 +436,7 @@ export class SettingsComponent implements OnInit {
         body: this.bodyEn,
         title: this.titleEn,
         school_id: this.school.id,
-        lang:'en'
+        lang: 'en'
       }],
       [{
         type: this.mailType,
@@ -442,7 +444,7 @@ export class SettingsComponent implements OnInit {
         body: this.bodyEs,
         title: this.titleEs,
         school_id: this.school.id,
-        lang:'es'
+        lang: 'es'
       }],
       [{
         type: this.mailType,
@@ -450,7 +452,7 @@ export class SettingsComponent implements OnInit {
         body: this.bodyDe,
         title: this.titleIt,
         school_id: this.school.id,
-        lang:'de'
+        lang: 'de'
       }],
       [{
         type: this.mailType,
@@ -458,11 +460,11 @@ export class SettingsComponent implements OnInit {
         body: this.bodyIt,
         title: this.titleDe,
         school_id: this.school.id,
-        lang:'it'
+        lang: 'it'
       }]
     ];
 
-    for (let i = 0; i<5; i++) {
+    for (let i = 0; i < 5; i++) {
 
       const existMail = this.currentMails.find((c) => c.lang === data[i][0].lang && c.type === data[i][0].type);
 
@@ -482,7 +484,7 @@ export class SettingsComponent implements OnInit {
 
             if (i === 4) {
 
-              this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', { duration: 3000 });
 
             }
 
@@ -492,7 +494,7 @@ export class SettingsComponent implements OnInit {
           .subscribe((res) => {
 
             if (i === 4) {
-              this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', { duration: 3000 });
 
             }
 
@@ -577,26 +579,26 @@ export class SettingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        if(data.deletedGoals.length > 1) {
+        if (data.deletedGoals.length > 1) {
           data.deletedGoals.forEach(element => {
             this.crudService.delete('/degrees-school-sport-goals', element.id)
               .subscribe((res) => {
-                this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_update'), 'OK', {duration: 3000});
+                this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_update'), 'OK', { duration: 3000 });
               })
           });
         }
         data.goals.forEach(element => {
-          if(element.id) {
+          if (element.id) {
 
-          this.crudService.update('/degrees-school-sport-goals', element, element.id)
-          .subscribe((data) => {
-            this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_update'), 'OK', {duration: 3000});
-          })
+            this.crudService.update('/degrees-school-sport-goals', element, element.id)
+              .subscribe((data) => {
+                this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_update'), 'OK', { duration: 3000 });
+              })
           } else {
             this.crudService.create('/degrees-school-sport-goals', element)
-            .subscribe((data) => {
-              this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_created'), 'OK', {duration: 3000});
-            })
+              .subscribe((data) => {
+                this.snackbar.open(this.translateService.instant('snackbar.settings.objectives_created'), 'OK', { duration: 3000 });
+              })
           }
 
 
@@ -635,7 +637,7 @@ export class SettingsComponent implements OnInit {
   }
 
   getSchoolSeason() {
-    return this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id);
+    return this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id=' + this.user.schools[0].id);
   }
 
   deleteHoliday(index: any) {
@@ -669,20 +671,20 @@ export class SettingsComponent implements OnInit {
 
     if (this.season && this.season !== null) {
       this.crudService.update('/seasons', data, this.season.id)
-      .subscribe((res) => {
-        console.log(res);
-        this.snackbar.open(this.translateService.instant('snackbar.settings.season_created'), 'Close', {duration: 3000});
-        this.getData();
-        this.schoolService.refreshSchoolData();
-      });
+        .subscribe((res) => {
+          console.log(res);
+          this.snackbar.open(this.translateService.instant('snackbar.settings.season_created'), 'Close', { duration: 3000 });
+          this.getData();
+          this.schoolService.refreshSchoolData();
+        });
     } else {
       this.crudService.create('/seasons', data)
-      .subscribe((res) => {
-        console.log(res);
-        this.snackbar.open(this.translateService.instant('snackbar.settings.season_updated'), 'Close', {duration: 3000});
-        this.getData();
-        this.schoolService.refreshSchoolData();
-      });
+        .subscribe((res) => {
+          console.log(res);
+          this.snackbar.open(this.translateService.instant('snackbar.settings.season_updated'), 'Close', { duration: 3000 });
+          this.getData();
+          this.schoolService.refreshSchoolData();
+        });
     }
 
   }
@@ -703,7 +705,7 @@ export class SettingsComponent implements OnInit {
     this.crudService.update('/schools', data, this.school.id)
       .subscribe((res) => {
         console.log(res);
-        this.snackbar.open(this.translateService.instant('snackbar.settings.save'), this.translateService.instant('cancel'), {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.save'), this.translateService.instant('cancel'), { duration: 3000 });
         this.schoolService.refreshSchoolData();
         //this.getData();
       });
@@ -711,7 +713,7 @@ export class SettingsComponent implements OnInit {
 
   saveSchoolSports() {
 
-    this.crudService.update('/schools', {sport_ids: this.sportsList}, this.school.id +'/sports')
+    this.crudService.update('/schools', { sport_ids: this.sportsList }, this.school.id + '/sports')
       .subscribe((res) => {
         console.log(res);
         res.data.sports.forEach(sport => {
@@ -739,7 +741,7 @@ export class SettingsComponent implements OnInit {
 
         });
         setTimeout(() => {
-          this.snackbar.open(this.translateService.instant('snackbar.settings.sports'), 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.settings.sports'), 'OK', { duration: 3000 });
 
           this.getData();
         }, 1000);
@@ -749,16 +751,16 @@ export class SettingsComponent implements OnInit {
   savePrices() {
 
     const data = {
-      prices_range: {people: this.people, prices: this.dataSource},
+      prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
-      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
       degrees: this.dataSourceLevels.data
     }
 
-    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
+    this.crudService.update('/schools', { name: this.school.name, description: this.school.description, settings: JSON.stringify(data) }, this.school.id)
       .subscribe(() => {
-        this.snackbar.open(this.translateService.instant('snackbar.settings.prices'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.prices'), 'OK', { duration: 3000 });
         this.schoolService.refreshSchoolData();
       })
   }
@@ -768,12 +770,12 @@ export class SettingsComponent implements OnInit {
   }
 
   getSchoolSports() {
-    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.school.id);
+    return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.school.id);
   }
 
   getSchoolSportDegrees() {
     this.sportsList.forEach((element, idx) => {
-      this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.school.id + '&sport_id='+element)
+      this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.school.id + '&sport_id=' + element)
         .subscribe((data) => {
           this.schoolSports[idx].degrees = data.data;
           this.selectedSport = this.schoolSports[0].id;
@@ -783,9 +785,9 @@ export class SettingsComponent implements OnInit {
 
   getDegrees() {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.school.id)
-        .subscribe((data) => {
-          this.degrees = data.data;
-        })
+      .subscribe((data) => {
+        this.degrees = data.data;
+      })
   }
 
   setSport(id: number) {
@@ -793,15 +795,15 @@ export class SettingsComponent implements OnInit {
 
     if (this.sportsList.length === 0) {
       this.sportsList.push(id);
-    } else if(this.sportsList.length > 0 && index === -1) {
+    } else if (this.sportsList.length > 0 && index === -1) {
       this.sportsList.push(id);
-    } else if(this.sportsList.length > 0 && index !== -1) {
+    } else if (this.sportsList.length > 0 && index !== -1) {
       this.sportsList.splice(index, 1);
     }
   }
 
   getBlockages() {
-    return this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&default=1');
+    return this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&default=1');
   }
 
   saveBlockages() {
@@ -812,7 +814,7 @@ export class SettingsComponent implements OnInit {
         })
     });
 
-    this.snackbar.open(this.translateService.instant('snackbar.settings.blocks'), 'OK', {duration: 3000});
+    this.snackbar.open(this.translateService.instant('snackbar.settings.blocks'), 'OK', { duration: 3000 });
   }
 
 
@@ -827,38 +829,19 @@ export class SettingsComponent implements OnInit {
 
   saveMonitorsAuth() {
     const data = {
-      prices_range: {people: this.people, prices: this.dataSource},
+      prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
-      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
       degrees: this.dataSourceLevels.data
     }
 
-    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
+    this.crudService.update('/schools', { name: this.school.name, description: this.school.description, settings: JSON.stringify(data) }, this.school.id)
       .subscribe(() => {
-        this.snackbar.open(this.translateService.instant('snackbar.settings.auths'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.auths'), 'OK', { duration: 3000 });
         this.getData();
         this.schoolService.refreshSchoolData();
       })
-  }
-
-  setTheme() {
-      //TODO: Save bookingpage color mode
-/*    if (this.theme === 'dark'){
-
-      this.configService.updateConfig({
-        style: {
-          colorScheme: ColorSchemeName.dark
-        }
-      });
-    } else {
-
-      this.configService.updateConfig({
-        style: {
-          colorScheme: ColorSchemeName.light
-        }
-      });
-    }*/
   }
 
   createExtra(product: string, isEdit: boolean, idx: number, extra: any) {
@@ -893,7 +876,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  selectSport(item: any ) {
+  selectSport(item: any) {
     this.selectedSport = item.id;
     this.dataSourceLevels.data = item.degrees
   }
@@ -908,9 +891,9 @@ export class SettingsComponent implements OnInit {
       this.dataSourceForfait.data.push({
         id: 'FOR-' + this.generateRandomNumber(),
         product: 'Forfait',
-        name: data.name ,
-        price: data.price ,
-        tva: data.tva ,
+        name: data.name,
+        price: data.price,
+        tva: data.tva,
         status: data.status
       });
     }
@@ -928,9 +911,9 @@ export class SettingsComponent implements OnInit {
       this.dataSourceFood.data.push({
         id: 'FOR-' + this.generateRandomNumber(),
         product: 'Forfait',
-        name: data.name ,
-        price: data.price ,
-        tva: data.tva ,
+        name: data.name,
+        price: data.price,
+        tva: data.tva,
         status: data.status
       });
     }
@@ -948,9 +931,9 @@ export class SettingsComponent implements OnInit {
       this.dataSourceTransport.data.push({
         id: 'FOR-' + this.generateRandomNumber(),
         product: 'Forfait',
-        name: data.name ,
-        price: data.price ,
-        tva: data.tva ,
+        name: data.name,
+        price: data.price,
+        tva: data.tva,
         status: data.status
       });
     }
@@ -963,7 +946,7 @@ export class SettingsComponent implements OnInit {
 
       this.dataSourceForfait.data.splice(index, 1);
       this.dateTableForfait.renderRows();
-    } else if (type=== 'Food') {
+    } else if (type === 'Food') {
       this.dataSourceFood.data.splice(index, 1);
       this.dateTableFood.renderRows();
     } else if (type === 'Transport') {
@@ -976,16 +959,16 @@ export class SettingsComponent implements OnInit {
 
   saveExtra() {
     const data = {
-      prices_range: {people: this.people, prices: this.dataSource},
+      prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
-      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
       degrees: this.dataSourceLevels.data
     }
 
-    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
+    this.crudService.update('/schools', { name: this.school.name, description: this.school.description, settings: JSON.stringify(data) }, this.school.id)
       .subscribe(() => {
-        this.snackbar.open(this.translateService.instant('snackbar.settings.extras'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.extras'), 'OK', { duration: 3000 });
         this.schoolService.refreshSchoolData();
 
         this.getData();
@@ -996,21 +979,23 @@ export class SettingsComponent implements OnInit {
   saveTaxes() {
 
     const data = {
-      taxes: {cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+      taxes: {
+        cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
         boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
-        tva: this.hasTVA ? this.tva : 0},
-      cancellations: {with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem},
-      prices_range: {people: this.people, prices: this.dataSource},
+        tva: this.hasTVA ? this.tva : 0
+      },
+      cancellations: { with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem },
+      prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
-      extras: {forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data},
+      extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
       degrees: this.dataSourceLevels.data
     }
 
-    this.crudService.update('/schools', {name: this.school.name, description: this.school.description, settings: JSON.stringify(data)}, this.school.id)
+    this.crudService.update('/schools', { name: this.school.name, description: this.school.description, settings: JSON.stringify(data) }, this.school.id)
       .subscribe(() => {
 
-        this.snackbar.open(this.translateService.instant('snackbar.settings.taxes'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.settings.taxes'), 'OK', { duration: 3000 });
         this.schoolService.refreshSchoolData();
         this.getData();
 
@@ -1050,7 +1035,7 @@ export class SettingsComponent implements OnInit {
         })
     });
 
-    this.snackbar.open(this.translateService.instant('snackbar.settings.levels'), 'OK', {duration: 3000});
+    this.snackbar.open(this.translateService.instant('snackbar.settings.levels'), 'OK', { duration: 3000 });
   }
 
   generateRandomNumber() {
