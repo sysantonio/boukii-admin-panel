@@ -1,5 +1,5 @@
 :host {
-  background: var(--color-grey5);
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
   box-sizing: border-box;
   color: var(--toolbar-color);
   display: block;

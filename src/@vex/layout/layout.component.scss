@@ -11,7 +11,7 @@
 .sidenav {
   border-right: 1px solid var(--is-light-theme, #dee6ea)
     var(--is-dark-theme, #121212);
-  background: var(--color-grey5);
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
   ::ng-deep .mat-drawer-inner-container {
     overflow: hidden;
   }
@@ -96,7 +96,8 @@
 
   .content {
     margin-top: calc(var(--toolbar-height) + var(--navigation-height));
-    background-color: var(--is-light-theme, white) var(--is-dark-theme, #121212);
+    background-color: var(--is-light-theme, #f8f9fb)
+      var(--is-dark-theme, #121212);
   }
 }
 .has-fixed-footer {

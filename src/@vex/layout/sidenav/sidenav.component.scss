@@ -87,14 +87,13 @@
 
 /** SIDENAV TOOLBAR */
 .vex-sidenav-toolbar__container {
-  background: var(--color-grey5);
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
   @apply sticky top-0 z-10;
 }
 
 .sidenav-toolbar {
   color: var(--color-dark1);
   align-items: center;
-  background: var(--color-grey5);
   box-sizing: border-box;
   display: flex;
   flex-direction: row;

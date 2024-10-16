@@ -685,3 +685,6 @@ body.dark-mode {
 .mat-mdc-paginator {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
+.mat-mdc-dialog-container .mdc-dialog__container {
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
+}

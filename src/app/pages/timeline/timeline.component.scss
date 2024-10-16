@@ -18,11 +18,14 @@
   top: 118px;
   width: 100%;
   z-index: 1000;
-  background: var(--is-light-theme, #dee6ea) var(--is-dark-theme, #121212);
+  background: var(--is-light-theme, #eff2f5) var(--is-dark-theme, #2f3844);
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
   padding: 16px;
   margin-top: 24px;
   font-size: 15px;
+}
+.header-navigation2 {
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }
 .header-navigation-flex {
   width: 100%;
