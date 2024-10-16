@@ -1860,7 +1860,8 @@
                         <div style="float: left;width: 16%;margin: 0 0 0 2%;"
                           *ngIf="groupLevel.active">
                           <div
-                            style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1)--color-dark1)--color-dark1);background: #e6e6e6;text-align: center;">
+                            style="width:100%;border-radius: 0;height: 100px;padding: 2%; color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
+ ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;">
                             {{'groups' | translate}}
                             {{defaults?.course_dates[0]?.groups[groupIndex]?.subgroups.length}}g
                           </div>
@@ -1876,7 +1877,8 @@
                         <div style="float: left;width: 16%;margin: 0 0 0 2%;"
                           *ngIf="groupLevel.active">
                           <div
-                            style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1)--color-dark1)--color-dark1)--color-dark1);background: #e6e6e6;text-align: center;">
+                            style="width:100%;border-radius: 0;height: 100px;padding: 2%; color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
+ ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;">
                             {{'age' | translate}}
                           </div>
                           <form [formGroup]="rangeForm" novalidate>
@@ -1916,7 +1918,8 @@
                         <div style="float: left;width: 16%;margin: 0 0 0 2%;"
                           *ngIf="groupLevel.active">
                           <div
-                            style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;">
+                            style="width:100%;border-radius: 0;height: 100px;padding: 2%; color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
+ ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);text-align: center;">
                             {{'duration' | translate}}<br>
                             {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start,
                             defaults.course_dates[daySelectedIndex].hour_end)}}
@@ -1932,7 +1935,8 @@
                         <div style="float: left;width: 16%;margin: 0 0 0 2%;"
                           *ngIf="groupLevel.active">
                           <div
-                            style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;">
+                            style="width:100%;border-radius: 0%;height: 100px;padding: 2%; color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
+ ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);text-align: center;">
                             {{'students' | translate}}
                             <strong>0/{{defaults.max_participants}}</strong>
                           </div>

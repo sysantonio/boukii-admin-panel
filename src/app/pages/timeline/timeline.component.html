@@ -46,7 +46,7 @@
               translate}}</button>
 
             <mat-form-field appearance="outline" class="flex-auto"
-              style="max-height: 56px; background-color: white">
+              style="max-height: 56px;">
               <input matInput [matDatepicker]="pickerFrom"
                 placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
                 (ngModelChange)="onDateChange()">
@@ -850,17 +850,17 @@
                         |translate}}
                       </div>
                       <div>
-                        <mat-icon svgIcon="logo:message-text"></mat-icon>
+                        <mat-icon>message-text</mat-icon>
                         <a
                           href="mailto:{{client.client.email}}"
-                          style="cursor:pointer"
+                          style="cursor: pointer;"
                           title="{{client.client.email}}">
-                          <mat-icon svgIcon="logo:mail"></mat-icon>
+                          <mat-icon>mail</mat-icon>
                         </a>
                         <a
                           href="tel:{{client.client.phone}}"
                           title="{{client.client.phone}}">
-                          <mat-icon svgIcon="logo:phone"></mat-icon>
+                          <mat-icon>phone</mat-icon>
                         </a>
                       </div>
                     </div>

@@ -1,5 +1,7 @@
 :root {
   .mat-mdc-dialog-container .mdc-dialog__surface {
+    background-color: var(--is-light-theme, #ffffff)
+      var(--is-dark-theme, #222222);
     @apply rounded-lg;
   }
 

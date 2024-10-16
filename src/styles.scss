@@ -468,14 +468,6 @@ body {
   --mdc-switch-unselected-track-color: #e0e0e0;
 }
 
-.mat-mdc-slide-toggle .mdc-form-field {
-  color: var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));
-}
-
-.mat-mdc-slide-toggle .mdc-switch--disabled + label {
-  color: rgba(0, 0, 0, 0.38);
-}
-
 .mat-mdc-slide-toggle.mat-accent {
   --mdc-switch-selected-focus-state-layer-color: #d81b60;
   --mdc-switch-selected-handle-color: #d81b60;
@@ -682,9 +674,22 @@ body.dark-mode {
 .mat-mdc-row,
 .mat-mdc-paginator-page-size-label,
 .mat-mdc-paginator .mat-mdc-select-value,
-.mat-mdc-paginator {
+.mat-mdc-paginator,
+.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs
+  > .mat-mdc-tab-header
+  .mat-mdc-tab,
+.mat-mdc-slide-toggle .mdc-switch--disabled + label {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
-.mat-mdc-dialog-container .mdc-dialog__container {
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
+}
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
+.mat-stepper-vertical,
+.mat-stepper-horizontal {
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
+}
+.mat-mdc-table .mat-mdc-cell,
+.mat-table .mat-mdc-header-cell {
+  border-bottom-color: rgba(82, 63, 105, 6);
 }
