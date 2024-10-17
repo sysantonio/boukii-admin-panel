@@ -29,18 +29,25 @@ table caption {
 }
 
 .add-date {
-  box-shadow: none;background: #fff;border: 1px solid #e6e6e6;border-radius: 100%;
+  box-shadow: none;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 100%;
 }
 
 .icon-date {
-  color: #e6e6e6; font-size: 10px;width: 50px;height: 50px;
+  color: #e6e6e6;
+  font-size: 10px;
+  width: 50px;
+  height: 50px;
 }
 
-.add-date:hover   {
-  box-shadow: none;background: #e6e6e6;border: 1px solid #e6e6e6;
-
+.add-date:hover {
+  box-shadow: none;
+  background: #e6e6e6;
+  border: 1px solid #e6e6e6;
 }
-.add-date:hover .icon-date  {
+.add-date:hover .icon-date {
   color: #fff;
 }
 
@@ -57,7 +64,12 @@ table caption {
   border: solid 1px #e91e63;
 }
 
-$border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Input Border
+$border-color: rgba(
+  82,
+  63,
+  105,
+  0.12
+); // Equal to Material Design Outline Input Border
 
 .vex-mail-compose-editor {
   min-height: 250px;
@@ -77,7 +89,6 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
 
     &.ql-blank::before {
       font-style: normal;
-      @apply text-sm text-secondary;
     }
   }
 }
@@ -87,14 +98,14 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
 }
 
 .selected-item {
-  border: 1px solid #E01D5F;
+  border: 1px solid #e01d5f;
   background-color: #f0f0f4;
 }
 
 .items-icons {
   .item {
-    cursor:pointer;
-    display:inline-block;
+    cursor: pointer;
+    display: inline-block;
     vertical-align: top;
     padding: 10px 10px;
 
@@ -104,10 +115,10 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
         border: solid 1px #e91e63;
 
         img {
-          &:nth-child(1){
+          &:nth-child(1) {
             display: inline-block;
           }
-          &:nth-child(2){
+          &:nth-child(2) {
             display: none;
           }
         }
@@ -120,10 +131,10 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
         border: solid 1px #e6e6e6;
 
         img {
-          &:nth-child(1){
+          &:nth-child(1) {
             display: none;
           }
-          &:nth-child(2){
+          &:nth-child(2) {
             display: inline-block;
           }
         }
@@ -132,18 +143,18 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
 
     .icon {
       height: 40px;
-      width:40px;
-      display:inline-block;
+      width: 40px;
+      display: inline-block;
       vertical-align: middle;
       border-radius: 6px;
       padding: 5px;
     }
 
     .text {
-      display:inline-block;
+      display: inline-block;
       vertical-align: middle;
       width: 120px;
-      padding-left:10px;
+      padding-left: 10px;
       font-size: 12px;
       line-height: 15px;
     }

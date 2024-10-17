@@ -154,7 +154,6 @@ module.exports = {
         ...theme('colors'),
         black: 'var(--text-color)',
         white: 'var(--text-color-light)',
-        'secondary': 'var(--text-secondary)',
         'hint': 'var(--text-hint)',
         'primary-contrast': 'rgb(var(--color-primary-contrast))',
         'accent-contrast': 'rgb(var(--color-accent-contrast))',

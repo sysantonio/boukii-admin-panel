@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import "../../var";
 
 .vex-style-dark {
@@ -15,11 +15,19 @@
 
   // Colors
   --background-foreground: #{map-get(map-get($vex-dark-theme, background), card)};
-  --background-foreground-rgb: #{red(map-get(map-get($vex-dark-theme, background), card))}, #{green(map-get(map-get($vex-dark-theme, background), card))}, #{blue(map-get(map-get($vex-dark-theme, background), card))};
-  --footer-color: var(--text-color);
-  --navigation-color: var(--text-color);
-  --text-color: #{$light-primary-text};
-  --toolbar-color: #{$light-primary-text};
+  --background-foreground-rgb: #{red(
+        map-get(map-get($vex-dark-theme, background), card)
+      )},
+    #{green(map-get(map-get($vex-dark-theme, background), card))},
+    #{blue(map-get(map-get($vex-dark-theme, background), card))};
+  --footer-color: var(--is-light-theme, rgba(white, 0.7))
+    var(--is-dark-theme, rgba(black, 0.7));
+  --navigation-color: var(--is-light-theme, rgba(white, 0.7))
+    var(--is-dark-theme, rgba(black, 0.7));
+  --text-color: var(--is-light-theme, rgba(white, 0.7))
+    var(--is-dark-theme, rgba(black, 0.7));
+  --toolbar-color: var(--is-light-theme, rgba(white, 0.7))
+    var(--is-dark-theme, rgba(black, 0.7));
   --text-color-light: #{$dark-primary-text};
 
   // Toolbar
