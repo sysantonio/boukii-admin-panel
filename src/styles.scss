@@ -680,8 +680,9 @@ body.dark-mode {
 .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title,
 .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle,
 .mat-mdc-card-title-group .mat-mdc-card-title,
-.mat-mdc-card-title-group .mat-mdc-card-subtitle {
-  color: var(--is-light-theme, #121212), var(--is-dark-theme, #dee6ea) !important;
+.mat-mdc-card-title-group .mat-mdc-card-subtitle,
+.mat-mdc-tab .mdc-tab__text-label {
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
 
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {

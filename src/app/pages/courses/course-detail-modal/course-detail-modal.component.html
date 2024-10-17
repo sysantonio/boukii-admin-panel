@@ -219,7 +219,7 @@
                               </div>
 
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px" >
+                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px" >
                                   {{'age' | translate}}
                                 </div>
                                 <form [formGroup]="rangeForm" novalidate>
@@ -249,7 +249,7 @@
                                 </form>
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px" >
+                                <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px" >
                                   Duracion<br>
                                   {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
                                 </div>
@@ -259,7 +259,7 @@
                                 </mat-form-field>
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
-                                <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px" >
+                                <div style="width:100%;border-radius: 0%;height: 100px;padding: 2%;color: var(--color-dark1);background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px" >
                                   {{'students' | translate}} <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
                                 <mat-form-field appearance="outline" class="flex-auto" style="width: 100%; margin-top: 10%">

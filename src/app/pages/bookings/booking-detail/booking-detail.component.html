@@ -13,14 +13,13 @@
   *ngIf="!loading">
   <div class="flex flex-col sm:flex-row">
     <div class="column-container">
-      <!-- Aquí añade tu otro contenedor o lo que necesites -->
       <div class="card-container">
-        <!-- Nuevo contenedor para las cards -->
         <div
-          style="height: 100%; padding: 1px"
+          style="height: 100%; padding: 1px;background-color: var(--color-grey5) !important;"
           @fadeInUp
           class="card flex-auto">
-          <div class="px-6 py-4 border-b flex items-center">
+          <div class="px-6 py-4 border-b flex items-center"
+            style="background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #121212);">
             <h2 class="title m-0" style="width: 80%;">
               {{ "booking_info" | translate }} - {{ booking.id }}
             </h2>
@@ -540,7 +539,7 @@
                   *ngIf="courses[bI].options && courses[bI].course_type == 3">
                   <div
                     *ngFor="let group of getSettingsOptions(item.courseDates[0].course); let i = index; trackBy: trackByIndex"
-                    style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                    style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;">
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <div style="width: 65%;">
                         <strong>{{ group.groupName }} - {{group.optionName}}
@@ -567,7 +566,7 @@
                     </div>
                   </div>
 
-                  <!--<div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
+                  <!--<div style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
                       <mat-slide-toggle>Alquiler material</mat-slide-toggle>
@@ -588,7 +587,7 @@
                   </div>
                 </div>
 
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
+                <div style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
                       <mat-slide-toggle>Comida</mat-slide-toggle>
@@ -600,7 +599,7 @@
 
                 </div>
 
-                <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;" *ngIf="false">
+                <div style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%;" *ngIf="false">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
                       <mat-slide-toggle>Transporte</mat-slide-toggle>
@@ -681,7 +680,7 @@
                   style="width: 100%;"
                   class="text-border"></mat-divider>
 
-                <div style="width: 100%;float:left;margin: 20px 0 0 0;">
+                <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{

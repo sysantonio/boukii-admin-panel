@@ -14,9 +14,11 @@
 
   <vex-page-layout-content class="-mt-6 fullwidth">
 
-    <div class="card overflow-auto -mt-16">
+    <div class="card overflow-auto">
 
-      <div style="float:left; width: 100%; padding:2%" *ngIf="openFilters">
+      <div
+        style="float:left; width: 100%; padding:2%;"
+        *ngIf="openFilters">
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
           <span style="float:left; width: 100%; font-size:16px">{{
@@ -89,7 +91,7 @@
       </div>
 
       <div
-        class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+        class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center" style="background-color: var(--is-light-theme, #eff2f5) var(--is-dark-theme, #2f3844);">
 
         <div *ngIf="selection.hasValue()" class="mr-4 pr-4 border-r flex-none">
           <button (click)="deleteMultiple(selection.selected)"
@@ -600,7 +602,7 @@
             <td *matCellDef="let row; let i = index"
               [ngClass]="column.cssClasses" mat-cell>
               <strong><span
-                  style="color:#2D9BF0">{{data[i].total_reservations}}</span>/{{data[i].total_available_places.toFixed(0)}}</strong>
+                  style="color:#2D9BF0">{{data[i].total_reservations}}</span>/{{data[i].total_available_places}}</strong>
             </td>
           </ng-container>
         </ng-container>
@@ -1013,7 +1015,7 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 p-0 leading-none flex items-center justify-center hover:bg-hover text-primary bg-primary/10"
                 mat-icon-button>
-                <mat-icon class="icon-sm" >phone</mat-icon>
+                <mat-icon class="icon-sm">phone</mat-icon>
               </a>
 
               <a (click)="$event.stopPropagation()"
