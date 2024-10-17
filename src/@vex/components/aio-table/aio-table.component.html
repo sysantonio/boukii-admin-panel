@@ -2,7 +2,7 @@
 
   <vex-page-layout-header *ngIf="withHeader"
     class="pb-16 flex flex-col items-start justify-center"
-    style="background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));height: 30px;">
+    style="height: 0;">
     <!--<div
          class="w-full flex flex-col sm:flex-row justify-between fullwidth">
       <div>
@@ -1013,13 +1013,13 @@
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 p-0 leading-none flex items-center justify-center hover:bg-hover text-primary bg-primary/10"
                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="logo:phone"></mat-icon>
+                <mat-icon class="icon-sm" >phone</mat-icon>
               </a>
 
               <a (click)="$event.stopPropagation()"
                 class="w-8 h-8 p-0 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal/10"
                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="logo:mail"></mat-icon>
+                <mat-icon class="icon-sm">mail</mat-icon>
               </a>
 
               <a (click)="$event.stopPropagation()"

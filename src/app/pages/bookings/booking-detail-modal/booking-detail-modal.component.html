@@ -450,15 +450,15 @@
                 &ensp;{{'years' | translate}}
               </mat-card-subtitle>
               <mat-card-subtitle>
-                <mat-icon svgIcon="logo:message-text"></mat-icon>
+                <mat-icon>message-text</mat-icon>
                 <a href="tel:{{getClient(booking.client_main_id)?.phone}}"
                   title="{{getClient(booking.client_main_id)?.phone}}">
-                  <mat-icon svgIcon="logo:phone"></mat-icon>
+                  <mat-icon>phone</mat-icon>
                 </a>
                 <a href="mailto:{{getClient(booking.client_main_id)?.email}}"
                   style="cursor:pointer"
                   title="{{getClient(booking.client_main_id)?.email}}">
-                  <mat-icon svgIcon="logo:mail"></mat-icon>
+                  <mat-icon>mail</mat-icon>
                 </a>
               </mat-card-subtitle>
             </mat-card-header>

@@ -33,6 +33,11 @@ import { trackByValue } from '../../utils/track-by';
             <img src="../assets/img/icons/{{crumb.icon}}.svg" />
           </i>
         </ng-container>
+        <ng-container *ngIf="crumb.icon2">
+          <i class="icon">
+            <img src="../assets/img/icons/{{crumb.icon2}}.png" />
+          </i>
+        </ng-container>
       </a>
       </ng-template>
     </ng-container>

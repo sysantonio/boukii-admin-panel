@@ -31,12 +31,12 @@
 
           <h1 @fadeInRight class="headline text-white">{{defaults.first_name}} {{defaults.last_name}}</h1>
 
-          <mat-icon style="color:white" svgIcon="logo:message-text" ></mat-icon>
+          <mat-icon style="color:white" >message-text" ></mat-icon>
           <a href="mailto:{{defaults.email}}" style="cursor:pointer" title="{{defaults.email}}">
-            <mat-icon style="color:white" svgIcon="logo:mail"></mat-icon>
+            <mat-icon style="color:white" >main</mat-icon>
           </a>
           <a href="tel:{{defaults.phone}}" style="cursor:pointer" title="{{defaults.phone}}">
-            <mat-icon style="color:white" svgIcon="logo:phone"></mat-icon>
+            <mat-icon style="color:white" >phone</mat-icon>
           </a>
         </div>
       </div>
@@ -154,7 +154,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="logo:phone"></mat-icon>
+                  <mat-icon class="icon-sm" >phone</mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -168,7 +168,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="logo:mail"></mat-icon>
+                  <mat-icon class="icon-sm" >main</mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -182,7 +182,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="logo:message-text"></mat-icon>
+                  <mat-icon class="icon-sm" >message-text"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -812,7 +812,7 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>Email</mat-label>
                     <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
-                    <mat-icon class="mr-2" matPrefix svgIcon="logo:mail"></mat-icon>
+                    <mat-icon class="mr-2" matPrefix >main</mat-icon>
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="flex-auto">
@@ -868,13 +868,13 @@
                   <mat-label>{{'phone' | translate }}</mat-label>
 
                   <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+                  <mat-icon class="mr-2" matPrefix >phone</mat-icon>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'mobile' | translate }}</mat-label>
                   <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+                  <mat-icon class="mr-2" matPrefix >phone</mat-icon>
                 </mat-form-field>
               </div>
 

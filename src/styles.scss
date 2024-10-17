@@ -318,7 +318,6 @@ body {
       }
 
       .cal-event-action {
-
         & + .cal-event-action {
           @apply ml-3;
         }
@@ -672,9 +671,19 @@ body.dark-mode {
 .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs
   > .mat-mdc-tab-header
   .mat-mdc-tab,
-.mat-mdc-slide-toggle .mdc-switch--disabled + label {
-  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
+.mat-mdc-slide-toggle .mdc-switch--disabled + label,
+.mdc-text-field--no-label:not(.mdc-text-field--textarea)
+  .mat-mdc-form-field-input-control.mdc-text-field__input,
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control,
+.mat-mdc-card-subtitle ~ .mat-mdc-card-title,
+.mat-mdc-card-title ~ .mat-mdc-card-subtitle,
+.mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title,
+.mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle,
+.mat-mdc-card-title-group .mat-mdc-card-title,
+.mat-mdc-card-title-group .mat-mdc-card-subtitle {
+  color: var(--is-light-theme, #121212), var(--is-dark-theme, #dee6ea) !important;
 }
+
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }

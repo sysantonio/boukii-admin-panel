@@ -77,7 +77,7 @@
               <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>Email</mat-label>
                 <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
-                <mat-icon class="mr-2" matPrefix svgIcon="logo:mail"></mat-icon>
+                <mat-icon class="mr-2" matPrefix >main</mat-icon>
                 <mat-error *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
                   {{'clients.creation.errors.email' | translate }}
                 </mat-error>
@@ -124,14 +124,14 @@
                 <mat-label>{{'phone' | translate }}</mat-label>
 
                 <input formControlName="phone" matInput type="tel"  [(ngModel)]="defaults.telephone">
-                <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+                <mat-icon class="mr-2" matPrefix >phone</mat-icon>
 
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="flex-auto">
                 <mat-label>{{'mobile' | translate }}</mat-label>
                 <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-                <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+                <mat-icon class="mr-2" matPrefix >phone</mat-icon>
 
                 <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
                   {{'clients.creation.errors.mobile' | translate }}
@@ -192,7 +192,7 @@
                     {{language.name}}
                   </mat-option>
                 </mat-select>
-                <mat-icon class="mr-2" matPrefix svgIcon="logo:message-text"></mat-icon>
+                <mat-icon class="mr-2" matPrefix >message-text"></mat-icon>
               </mat-form-field>
             </div>
 

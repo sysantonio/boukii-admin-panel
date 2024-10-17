@@ -208,7 +208,7 @@ export class AppComponent {
             label: "timeline.timeline",
             route: "/timeline",
             icon: "../assets/img/icons/planificador-2.png",
-            icon_active: "../assets/img/icons/planificador.svg",
+            icon_active: "../assets/img/icons/planificador.png",
 
             routerLinkActiveOptions: { exact: true },
           },
