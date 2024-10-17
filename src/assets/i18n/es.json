@@ -623,7 +623,7 @@
   "min_price": "Precio mínimo",
   "used": "Utilizado",
   "forgot_message": "Recibirá un link para resetear su contraseña en su bandeja de entrada",
-  "set_pwd": "Ingresa tu nueva contraseña",
+  "set_pwd": "Ingresa tu nueva contraseña, la contraseña debe contener una letra mayuscula, una minuscula, un numero y un caracter especial.",
   "repeat_pwd": "Repetir contraseña",
   "must_pwd": "La constraseña es obligatoria",
   "pwd_length": "La contraseña no tiene un formato correcto. Tiene que contener un de 6 caracteres",

@@ -592,7 +592,7 @@
   "min_price": "Prix minime",
   "used": "Utilisé",
   "forgot_message": "Vous recevrez un lien pour réinitialiser votre mot de passe dans votre boîte de réception",
-  "set_pwd": "Entrez votre nouveau mot de passe",
+  "set_pwd": "Saisissez votre nouveau mot de passe, le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial.",
   "repeat_pwd": "Répéter le mot de passe",
   "must_pwd": "Mot de passe requis",
   "pwd_length": "Le mot de passe n'est pas au bon format. ",

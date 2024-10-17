@@ -25,6 +25,7 @@ export class RecoverPasswordComponent implements OnInit {
   visibleRepeat = false;
   loading = true;
   updated = false;
+  flag: any = 'flag:spain';
   token: any;
   id: any;
 
@@ -48,6 +49,21 @@ export class RecoverPasswordComponent implements OnInit {
     });
 
     this.loading = false;
+  }
+
+  changeLang(flag: string, lang: string) {
+
+    this.flag = flag;
+
+    if (this.translateService.getLangs().indexOf(lang) !== -1) {
+
+      this.translateService.use(lang);
+      this.translateService.currentLang = lang;
+    } else {
+
+      this.translateService.setDefaultLang(lang);
+      this.translateService.currentLang = lang;
+    }
   }
 
   passwordValidator(formControl: FormControl) {

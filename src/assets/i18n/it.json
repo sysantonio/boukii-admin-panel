@@ -594,7 +594,7 @@
   "min_price": "Prezzo minimo",
   "used": "Usato",
   "forgot_message": "Riceverai un link per reimpostare la password nella tua casella di posta",
-  "set_pwd": "Inserisci la tua nuova password",
+  "set_pwd": "Inserisci la tua nuova password, la password deve contenere una lettera maiuscola, una lettera minuscola, un numero e un carattere speciale.",
   "repeat_pwd": "Ripeti la password",
   "must_pwd": "E 'richiesta la password",
   "pwd_length": "La password non è nel formato corretto. ",

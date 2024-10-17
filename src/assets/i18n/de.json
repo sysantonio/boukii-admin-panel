@@ -595,7 +595,7 @@
   "min_price": "Minimaler Preis",
   "used": "Gebraucht",
   "forgot_message": "Sie erhalten in Ihrem Posteingang einen Link zum Zurücksetzen Ihres Passworts",
-  "set_pwd": "Gib dein neues Passwort ein",
+  "set_pwd": "Geben Sie Ihr neues Passwort ein, das Passwort muss einen Großbuchstaben, einen Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.",
   "repeat_pwd": "Passwort wiederholen",
   "must_pwd": "Passwort wird benötigt",
   "pwd_length": "Das Passwort hat nicht das richtige Format. ",

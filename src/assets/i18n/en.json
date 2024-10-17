@@ -596,7 +596,7 @@
   "min_price": "Minimal price",
   "used": "Used",
   "forgot_message": "You will receive a link to reset your password in your inbox",
-  "set_pwd": "Enter your new password",
+  "set_pwd": "Enter your new password, the password must contain an uppercase letter, a lowercase letter, a number, and a special character.",
   "repeat_pwd": "Repeat password",
   "must_pwd": "Password is required",
   "pwd_length": "The password is not in the correct format. ",

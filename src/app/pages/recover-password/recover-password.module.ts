@@ -11,23 +11,25 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RecoverPasswordComponent } from './recover-password.component';
 import { RecoverPasswordRoutingModule } from './recover-password-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
+import {MatMenuModule} from '@angular/material/menu';
 
 
 @NgModule({
   declarations: [RecoverPasswordComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatSnackBarModule,
-    FormsModule,
-    MatTooltipModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    RecoverPasswordRoutingModule,
-    TranslateModule
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatIconModule,
+        MatSnackBarModule,
+        FormsModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        RecoverPasswordRoutingModule,
+        TranslateModule,
+        MatMenuModule
+    ]
 })
 export class RecoverPasswordModule {
 }
