@@ -476,7 +476,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     this.dataSource.sort = this.sort;
 
     // Llama a getData con la primera página. Asegúrate de que este valor coincida con cómo tu API espera la primera página.
-    this.getData(1, 10); // Si tu API espera que la primera página sea 1 en lugar de 0.
+     this.getData(this.pageIndex, this.pageSize); // Si tu API espera que la primera página sea 1 en lugar de 0.
 
     // ... otros inicializadores
   }
@@ -501,7 +501,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.getData(1, 10);
+         this.getData(this.pageIndex, this.pageSize);
 
       }
     });
@@ -527,7 +527,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.getData(1, 10);
+         this.getData(this.pageIndex, this.pageSize);
       }
     });
   }
@@ -546,10 +546,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-
         this.crudService.delete(this.deleteEntity, item.id)
           .subscribe(() => {
-            this.getData(1, 10);
+             this.getData(this.pageIndex, this.pageSize);
           })
       }
     });
@@ -573,7 +572,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
             school_id: monitorSchool.school_id, active_school: !item.active
           }, monitorSchool.id)
             .subscribe(() => {
-              this.getData(1, 10);
+              this.getData(this.pageIndex, this.pageSize);
             })
 
         } else if (this.entity.includes('clients')) {
@@ -581,7 +580,16 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
           this.crudService.update('/clients-schools', { client_id: clientSchool.client_id, school_id: clientSchool.school_id, accepted_at: clientSchool.accepted_at !== null ? null : moment().format('YYYY-MM-DD HH:mm:ss') }, clientSchool.id)
             .subscribe(() => {
-              this.getData(1, 10);
+              this.getData(this.pageIndex, this.pageSize);
+            })
+
+        } else if (this.entity.includes('courses')) {
+          const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
+
+          this.crudService.update('/courses', {
+            active: false}, item.id)
+            .subscribe(() => {
+              this.getData(this.pageIndex, this.pageSize);
             })
 
         }
@@ -1110,7 +1118,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   encontrarPrimeraClaveConValor(obj: any): any {
-    if (obj !== null) { 
+    if (obj !== null) {
       for (const clave of Object.keys(obj)) {
         if (obj[clave] !== null && clave !== 'intervalo') {
           return obj[clave];
@@ -1388,7 +1396,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     this.crudService.create('/admin/courses', data)
       .subscribe((res) => {
         console.log(res);
-        this.getData(1, 10);
+         this.getData(this.pageIndex, this.pageSize);
       })
   }
 }
