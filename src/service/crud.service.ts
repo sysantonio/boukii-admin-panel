@@ -63,8 +63,8 @@ export class ApiCrudService extends ApiService {
     return this.http.post<ApiResponse>(this.baseUrl + model, data, {headers: this.getHeadersLogin()});
   }
 
-  recoverPassword(model: string, data: any, id: any): Observable < ApiResponse > {
-    return this.http.put<ApiResponse>(this.baseUrl + model+ '/' + id, data, {headers: this.getHeadersLogin()});
+  recoverPassword(model: string, data: any): Observable < ApiResponse > {
+    return this.http.put<ApiResponse>(this.baseUrl + model, data, {headers: this.getHeadersLogin()});
   }
 
   create(model: string, data: any): Observable < ApiResponse > {
