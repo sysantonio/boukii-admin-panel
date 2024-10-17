@@ -59,7 +59,7 @@
   --text-color-light: #{$light-primary-text};
   --text-secondary: var(--is-light-theme, rgba(white, 0.7))
     var(--is-dark-theme, rgba(black, 0.7));
-    
+
   --text-secondary-light: var(--is-light-theme, rgba(white, 0.7))
     var(--is-dark-theme, rgba(black, 0.7));
   --text-hint: #{$dark-disabled-text};
@@ -113,10 +113,6 @@
   --sidenav-toolbar-background-rgb: #{red(darken($sidenav-background, 1.5))},
     #{green(darken($sidenav-background, 1.5))},
     #{blue(darken($sidenav-background, 1.5))};
-  --sidenav-section-divider-color: #{map-get(
-      map-get($vex-dark-theme, foreground),
-      divider
-    )};
 
   // Sidenav Item
   --sidenav-item-min-height: 48px;

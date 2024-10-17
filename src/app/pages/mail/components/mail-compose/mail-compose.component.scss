@@ -18,7 +18,6 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
 
     &.ql-blank::before {
       font-style: normal;
-      @apply text-sm text-secondary;
     }
   }
 }

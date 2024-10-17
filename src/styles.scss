@@ -318,7 +318,6 @@ body {
       }
 
       .cal-event-action {
-        @apply text-secondary;
 
         & + .cal-event-action {
           @apply ml-3;
@@ -337,10 +336,6 @@ body {
 
     b {
       font-weight: 500;
-    }
-
-    &.cal-weekend span {
-      @apply text-secondary;
     }
 
     &.cal-today {
@@ -413,7 +408,6 @@ body {
       justify-content: flex-end;
 
       .cal-event-action {
-        @apply text-secondary;
         height: auto;
 
         .icon {
