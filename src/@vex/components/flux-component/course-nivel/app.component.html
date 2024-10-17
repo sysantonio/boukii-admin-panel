@@ -41,12 +41,14 @@ flex-direction: column;">
                         <img src="assets/icons/icon/calendar.png"
                             class="icon16">
                         <span>
-                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value) || 0}}
+                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)
+                            || 0}}
                             días
                         </span>
                         <span
                             *ngIf="courseFormGroup.controls['duration_min'].value">
-                            {{courseFormGroup.controls['duration_min'].value || 0}}
+                            {{courseFormGroup.controls['duration_min'].value ||
+                            0}}
                         </span>
                     </ng-container>
                     <div style="margin: auto;"></div>
@@ -60,7 +62,7 @@ flex-direction: column;">
                 *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal">
                 <div
                     *ngFor="let ix of [].constructor(item.Subgrupo);;index as i"
-                    style="padding: 10px;width: 100%; background-color: #EFF2F5;border: 1px solid var(--Grey-03, #DEE6EA);display: flex;align-items: center;height: 60%;">
+                    style="padding: 10px;width: 100%; background-color: #EFF2F5;border: 1px solid #DEE6EA;display: flex;align-items: center;height: 60%;">
                     <div>
                         <ng-container *ngIf="checkbox">
                             <mat-checkbox> </mat-checkbox>
