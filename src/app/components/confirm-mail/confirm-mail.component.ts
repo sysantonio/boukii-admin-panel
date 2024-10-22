@@ -8,7 +8,6 @@ import {ConfigService} from '../../../@vex/config/config.service';
   styleUrls: ['./confirm-mail.component.scss']
 })
 export class ConfirmMailComponent {
-  @Input() subject: string;
   @Input() title: string;
   @Input() type: string;
   @Input() body: string;

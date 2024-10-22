@@ -1121,6 +1121,11 @@
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>{{'deactivate' | translate }}</span>
     </button>
+    <button (click)="delete(item)" mat-menu-item
+            *ngIf="canDeactivate && entity.includes('courses') && item.booking_users.length == 0">
+      <mat-icon svgIcon="mat:delete"></mat-icon>
+      <span>{{'delete_title' | translate }}</span>
+    </button>
     <button (click)="copy(item)" mat-menu-item *ngIf="canDuplicate">
       <mat-icon svgIcon="mat:file_copy"></mat-icon>
       <span>{{'duplicate' | translate }}</span>

@@ -992,8 +992,8 @@
                         <mat-option value="payment_link">{{'mails.type4' | translate}}</mat-option>
                         <mat-option value="payment_confirm">{{'mails.type5' | translate}}</mat-option>
                         <mat-option value="payment_reminder">{{'mails.type9' | translate}}</mat-option>
-                        <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
-                        <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>
+<!--                        <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
+                        <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>-->
                         <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
                       </mat-select>
                     </mat-form-field>
@@ -1016,10 +1016,6 @@
 
                   <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
                     <mat-tab label="{{'france' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
-                        <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectFr" [value]="subjectFr"/>
-                      </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
@@ -1035,10 +1031,6 @@
 
                     </mat-tab>
                     <mat-tab label="{{'english' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
-                        <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
-                      </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
@@ -1053,10 +1045,6 @@
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'spanish' | translate }}" >
-                      <mat-form-field appearance="outline" class="block w-full">
-                        <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectEs" [value]="subjectEs"/>
-                      </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
@@ -1071,10 +1059,6 @@
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'germany' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
-                        <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectIt" [value]="subjectIt"/>
-                      </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
@@ -1089,10 +1073,6 @@
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'italian' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
-                        <mat-label>{{'subject' | translate}}</mat-label>
-                        <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
-                      </mat-form-field>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
@@ -1144,7 +1124,6 @@
                   <div class="preview-content" style="border: 1px solid #e6e6e6; padding: 1%; overflow-y: auto;">
                     <!-- Aquí puedes mostrar el contenido del correo en vista previa -->
                     <vex-confirm-mail
-                      [subject]="getEmailContent().subject"
                       [title]="getEmailContent().title"
                       [body]="getEmailContent().body"
                       [type]="mailTypeTrad"

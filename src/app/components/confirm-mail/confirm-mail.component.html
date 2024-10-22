@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{ subject }}</title>
+  <title>Email</title>
 
   <!-- CSS Reset -->
   <style>
@@ -132,7 +132,7 @@
 </table>
 
 <!-- Email introduction payment link-->
-<div style="width: 100%;" *ngIf="type == 'mails.type4'">
+<div style="width: 100%;" *ngIf="type == 'mails.type4' || type == 'mails.type9'">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" class="center-on-narrow">
     <tr>
       <td valign="top" align="center" style="padding-top:20px; padding-bottom:15px;">
@@ -145,7 +145,11 @@
                     <font face="Arial, Helvetica, sans-serif" style="font-size:16px; line-height:21px; color:var(--color-dark1)olor-dark1);">
                       {{'emails.bookingCreate.greeting' | translate}} <strong> {{'username' | translate}}</strong>
                       <br><br>
-                      {{'emails.bookingCreate.payment_request1' | translate}} <strong>#2316</strong> {{'emails.bookingCreate.payment_request1' | translate}} "<strong>97 CHF</strong>"
+                      <div [innerHTML]="title"></div>
+                      <br><br>
+                      <ng-container  *ngIf="type == 'mails.type9'"> {{'emails.bookingCreate.payment_reminder1' | translate}}<strong>#2316</strong>  {{'emails.bookingCreate.payment_request2' | translate}} "<strong>97 CHF</strong>" </ng-container>
+
+                      <ng-container  *ngIf="type == 'mails.type4'"> {{'emails.bookingCreate.payment_request1' | translate}} <strong>#2316</strong>  {{'emails.bookingCreate.payment_request2' | translate}} "<strong>97 CHF</strong>"</ng-container>
                       <br><br>
                       {{'emails.bookingCreate.qr_finish' | translate}}
                     </font>
@@ -161,7 +165,7 @@
 </div>
 
 <!-- payment link-->
-<div style="width: 100%;" *ngIf="type == 'mails.type4'">
+<div style="width: 100%;" *ngIf="type == 'mails.type4' || type == 'mails.type9'">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" class="center-on-narrow">
     <tr>
       <td align="center" style="padding-top:30px; padding-bottom:30px;">
@@ -202,7 +206,7 @@
 </div>
 
 <!-- Email introduction not payment link-->
-<div style="width: 100%;" *ngIf="type != 'mails.type4'">
+<div style="width: 100%;" *ngIf="type != 'mails.type4' && type != 'mails.type9'">
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" class="center-on-narrow">
     <tr>
@@ -213,7 +217,7 @@
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="580" style="margin: auto; width:580px" class="email-container">
                 <tr>
                   <td class="left-on-narrow" align="left" valign="middle">
-                    <div [innerHTML]="title"></div>
+
                     <font face="Arial, Helvetica, sans-serif" style="font-size:16px; line-height:21px; color:var(--color-dark1);">
                       {{'emails.bookingCreate.greeting' | translate}} <strong> {{'username' | translate}}</strong>
                       <br><br>
@@ -224,12 +228,13 @@
                       <ng-container  *ngIf="type == 'mails.type1'"> {{'emails.bookingCreate.reservation_request1' | translate}}<strong>#2316</strong>  {{'emails.bookingCreate.reservation_request2' | translate}}</ng-container>
                       <ng-container  *ngIf="type == 'mails.type2'"> {{'emails.bookingCreate.cancel_request1' | translate}}<strong>#2316</strong>  {{'emails.bookingCreate.cancel_request2' | translate}}</ng-container>
                       <ng-container  *ngIf="type == 'mails.type3'"> {{'emails.bookingCreate.booking_update1' | translate}}<strong>#2316</strong>  {{'emails.bookingCreate.booking_update2' | translate}}</ng-container>
-                      <ng-container  *ngIf="type == 'mails.type9'"> {{'emails.bookingCreate.payment_reminder1' | translate}}<strong>#2316</strong>  </ng-container>
                       <ng-container  *ngIf="type == 'mails.type8'"> {{'emails.bookingCreate.booking_info1' | translate}}<strong>#2316</strong> {{'emails.bookingCreate.booking_info2' | translate}}</ng-container>
 
 
 
                     </font>
+                    <br><br>
+                    <div [innerHTML]="title"></div>
                     <br><br>
                     <font face="Arial, Helvetica, sans-serif" style="font-size:14px; line-height:19px; color:var(--color-dark1);">
                       {{'emails.bookingCreate.qr_reminder' | translate}}
@@ -246,7 +251,7 @@
 </div>
 
 <!-- Activity list -->
-<div style="width: 100%;" *ngIf="type != 'mails.type4'">
+<div style="width: 100%;" *ngIf="type != 'mails.type4' && type != 'mails.type9'">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" class="center-on-narrow">
     <tr>
       <td valign="top" align="center" style="padding-top:20px; padding-bottom:0px;">
