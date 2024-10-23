@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
   max-width: 80vw;
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
 }
 
 p {
@@ -38,4 +38,8 @@ p {
 .navigation-buttons {
   display: flex;
   align-items: center;
+}
+p,
+h4 {
+  color: var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff);
 }

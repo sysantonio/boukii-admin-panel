@@ -686,15 +686,26 @@ div {
 .mat-mdc-form-field
   .mdc-text-field--outlined
   .mdc-notched-outline--upgraded
-  .mdc-floating-label--float-above {
+  .mdc-floating-label--float-above,
+.mat-mdc-form-field:not(.mat-form-field-disabled)
+  .mat-mdc-floating-label.mdc-floating-label,
+.mat-mdc-raised-button[disabled][disabled],
+.mat-mdc-menu-content,
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text,
+:root .mat-mdc-menu-item .mat-icon {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
 
-.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
+.mat-mdc-menu-content,
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-stepper-vertical,
 .mat-stepper-horizontal {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
+}
+.mdc-text-field--outlined .mdc-notched-outline {
+  border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff);
 }
