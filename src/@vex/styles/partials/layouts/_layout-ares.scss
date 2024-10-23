@@ -1,7 +1,10 @@
 .vex-layout-ares {
-  --footer-background: var(--background-base);
-  --sidenav-background: var(--background-base);
-  --toolbar-background: var(--background-base);
+  --footer-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
+  --sidenav-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
+  --toolbar-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
 
   --sidenav-color: var(--text-color);
   --sidenav-section-divider-color: transparent;
@@ -13,12 +16,15 @@
   --sidenav-item-dropdown-color-active: var(--color-dark1);
   --sidenav-item-dropdown-background-active: var(--background-hover);
 
-  --sidenav-item-dropdown-background: var(--background-base);
+  --sidenav-item-dropdown-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
   --sidenav-item-dropdown-background-hover: var(--background-hover);
 
-  --secondary-toolbar-background: var(--background-base);
+  --secondary-toolbar-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
 
-  --sidenav-toolbar-background: var(--background-base);
+  --sidenav-toolbar-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
 
   --secondary-toolbar-height: 64px;
 
@@ -70,7 +76,8 @@
   }
 
   .vex-page-layout-header {
-    background: var(--background-base);
+    background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
     color: var(--text-color);
 
     vex-breadcrumbs {

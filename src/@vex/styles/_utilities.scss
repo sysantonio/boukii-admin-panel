@@ -36,7 +36,8 @@
 .bg-pattern {
   background: linear-gradient(
       135deg,
-      var(--background-base) 22px,
+      var(--is-light-theme, rgb(245, 245, 248))
+        var(--is-dark-theme, black) 22px,
       var(--background-hover) 22px,
       var(--background-hover) 24px,
       transparent 24px,
@@ -47,7 +48,8 @@
     ),
     linear-gradient(
         225deg,
-        var(--background-base) 22px,
+        var(--is-light-theme, rgb(245, 245, 248))
+          var(--is-dark-theme, black) 22px,
         var(--background-hover) 22px,
         var(--background-hover) 24px,
         transparent 24px,
@@ -57,7 +59,8 @@
         transparent 69px
       )
       0 64px;
-  background-color: var(--background-base);
+  background-color: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);
   background-size: 64px 128px;
 }
 

@@ -83,44 +83,43 @@
             </div>
           </mat-card-subtitle>
         </div>
+        <div class="title-status">
+          <span
+            style="color:#00C32B;background-color: #B2EFAD;"
+            *ngIf="isActive">
+            {{'active' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(68, 74, 88, 1);background-color: rgba(227, 227, 227, 1);"
+            *ngIf="isFinished">
+            {{'finished' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(146, 26, 0, 1);background-color: rgba(247, 187, 153, 1);"
+            *ngIf="detailData.status === 2">
+            {{'cancelled' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(83, 65, 0, 1);background-color: rgba(247, 227, 153, 1);"
+            *ngIf="detailData.status === 3">
+            {{'partial_cancelled' | translate | uppercase }}
+          </span>
+
+          <span
+            style="color:#00C32B;background-color: #B2EFAD;"
+            *ngIf="detailData.status === 1 && detailData.paid">
+            {{'payed' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(146, 26, 0, 1);background-color: rgba(247, 187, 153, 1)"
+            *ngIf="detailData.status === 1 && !detailData.paid">
+            {{'no_payed' | translate | uppercase }}
+          </span>
+        </div>
       </mat-card-header>
 
       <mat-card-content>
         <div style="width: 100%;">
-          <div class="title-status">
-            <span class="col-left">
-              <b>{{ 'status' | translate}}:</b>
-            </span>
-
-            <span class="col-center">
-              <span style="color:#00C32B" *ngIf="isActive">
-                {{'active' | translate | uppercase }}
-              </span>
-              <span style="color:#A4A3A3" *ngIf="isFinished">
-                {{'finished' | translate | uppercase }}
-              </span>
-              <span style="color:#FF0000" *ngIf="detailData.status === 2">
-                {{'cancelled' | translate | uppercase }}
-              </span>
-              <span style="color:#FA9917" *ngIf="detailData.status === 3">
-                {{'partial_cancelled' | translate | uppercase }}
-              </span>
-            </span>
-
-            <span class="col-right">
-              <span
-                style="color:#00C32B"
-                *ngIf="detailData.status === 1 && detailData.paid">
-                {{'payed' | translate | uppercase }}
-              </span>
-              <span
-                style="color:#FF0000"
-                *ngIf="detailData.status === 1 && !detailData.paid">
-                {{'no_payed' | translate | uppercase }}
-              </span>
-            </span>
-          </div>
-
           <div class="title-client">{{'client' | translate}}</div>
           <div class="holder-client">
             <div class="col-left">
@@ -503,7 +502,7 @@
               </div>
             </div>
             <div class="col-right">
-              {{getExtrasPrice()}} {{detailData.currency}}
+              {{getExtrasPrice().toFixed(2)}} {{detailData.currency}}
             </div>
           </div>
         </div>

@@ -10,7 +10,20 @@
   display: inline-block;
   margin: 7px 5px 0 0;
 }
-
+.title-status {
+  gap: 8px;
+  display: flex;
+  margin-top: 12px;
+  span {
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: DM Sans;
+    font-weight: 600;
+    line-height: 16px;
+    word-wrap: break-word;
+  }
+}
 .vex-page-layout-content {
   &.col-right {
     width: 30%;
@@ -66,39 +79,9 @@
   .mat-mdc-card-content {
     padding: 0px !important;
 
-    .title-status {
-      background-color: var(--color-grey4);
-      padding: 15px 35px;
-      display: flex;
-      align-items: center;
-
-      b {
-        color: var(--color-dark);
-        font-size: 1em;
-        font-weight: 700;
-      }
-
-      .col-left {
-        width: 25%; /* Ajusta el porcentaje según sea necesario */
-        text-align: left;
-      }
-
-      .col-center {
-        width: 50%; /* Ajusta el porcentaje según sea necesario */
-        text-align: center;
-      }
-
-      .col-right {
-        width: 25%; /* Ajusta el porcentaje según sea necesario */
-        text-align: right;
-        font-size: 1em;
-        font-weight: 700;
-      }
-    }
-
     .title-client {
       padding: 10px 35px;
-      color: var(--color-dark);
+      color: var(--color-dark1);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -215,7 +198,7 @@
 .date-course {
   font-size: 0.9em;
   font-weight: 300;
-  color: var(--color-dark);
+  color: var(--color-dark1);
 
   i {
     font-weight: 500;
@@ -231,7 +214,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: var(--color-dark);
+    color: var(--color-dark1);
   }
 
   b {
@@ -251,7 +234,7 @@
     text-align: right;
 
     b {
-      color: var(--color-dark);
+      color: var(--color-dark1);
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -265,7 +248,7 @@
     position: relative;
     font-size: 1.1em;
     font-weight: 400;
-    color: var(--color-dark);
+    color: var(--color-dark1);
     margin-top: 20px;
     margin-bottom: 20px;
 
@@ -296,7 +279,7 @@
   position: relative;
   font-size: 1.1em;
   font-weight: 700;
-  color: var(--color-dark);
+  color: var(--color-dark1);
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 10px 35px 20px 35px;
@@ -330,7 +313,7 @@
       font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: var(--color-dark);
+      color: var(--color-dark1);
       margin-bottom: 10px;
     }
 
@@ -355,7 +338,7 @@
     text-align: right;
 
     b {
-      color: var(--color-dark);
+      color: var(--color-dark1);
       font-size: 1.4em;
       font-weight: 600;
     }
@@ -381,7 +364,7 @@
       font-family: "Montserrat", sans-serif;
       font-size: 1em;
       font-weight: 400;
-      color: var(--color-dark);
+      color: var(--color-dark1);
       margin-bottom: 0px;
     }
 

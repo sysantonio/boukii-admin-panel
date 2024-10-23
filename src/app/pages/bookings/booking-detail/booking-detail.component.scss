@@ -426,7 +426,7 @@ img[mat-card-image] {
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: var(--color-dark);
+    color: var(--color-dark1);
 
     b {
       font-weight: 700;
@@ -503,7 +503,7 @@ img[mat-card-image] {
     align-items: center;
 
     b {
-      color: var(--color-dark);
+      color: var(--color-dark1);
       font-size: 1em;
       font-weight: 700;
     }
@@ -536,7 +536,7 @@ img[mat-card-image] {
 
   .title-client {
     padding: 10px 35px;
-    color: var(--color-dark);
+    color: var(--color-dark1);
     font-size: 1.1em;
     font-weight: 700;
   }

@@ -1,10 +1,12 @@
 .vex-layout-hermes {
   --toolbar-height: 100px;
-  --secondary-toolbar-background: var(--background-base);
+  --secondary-toolbar-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
   --secondary-toolbar-height: 64px;
 
   &.vex-style-light {
-    --toolbar-background: var(--background-base);
+    --toolbar-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
   }
 
   &.vex-style-default {
@@ -15,7 +17,8 @@
   }
 
   &.vex-style-dark {
-    --toolbar-background: var(--background-base);
+    --toolbar-background: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);;
   }
 
   // Hide sidenav on vertical layout:

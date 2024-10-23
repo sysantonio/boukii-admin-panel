@@ -69,7 +69,8 @@
   --foreground-divider: #{map-get(map-get($vex-theme, foreground), divider)};
 
   // Background
-  --background-base: rgb(245, 245, 248);
+  --background-base: var(--is-light-theme, rgb(245, 245, 248))
+    var(--is-dark-theme, black);
   --background-foreground: #{map-get(map-get($vex-theme, background), card)};
   --background-foreground-rgb: #{red(
         map-get(map-get($vex-theme, background), card)
