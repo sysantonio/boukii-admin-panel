@@ -693,7 +693,3 @@ body.dark-mode {
 .mat-stepper-horizontal {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
 }
-.mat-mdc-table .mat-mdc-cell,
-.mat-table .mat-mdc-header-cell {
-  border-bottom-color: rgba(82, 63, 105, 6);
-}

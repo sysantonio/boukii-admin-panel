@@ -30,10 +30,11 @@ import { ComponentsCustomModule } from '../../components/components-custom.modul
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BookingDetailModalModule } from '../bookings/booking-detail-modal/booking-detail-modal.module';
 import { CourseUserTransferTimelineModalModule } from './course-user-transfer-timeline/course-user-transfer-timeline.module';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-unmatch-monitor.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { IconComponent } from 'src/@vex/components/icon/app.component';
 
 @NgModule({
   declarations: [TimelineComponent],
@@ -49,6 +50,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SecondaryToolbarModule,
     MatIconModule,
     ChartModule,
+    IconComponent,
     WidgetQuickLineChartModule,
     WidgetQuickValueCenterModule,
     WidgetQuickValueStartModule,

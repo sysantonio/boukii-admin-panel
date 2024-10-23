@@ -7,8 +7,9 @@ import { Router } from '@angular/router';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { SchoolService } from 'src/service/school.service';
-import {map} from 'rxjs/operators';
-import {forkJoin} from 'rxjs';
+import { map } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { LayoutService } from 'src/@vex/services/layout.service';
 
 @Component({
   selector: 'vex-bookings',
@@ -39,7 +40,7 @@ export class BookingsComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
-    { label: 'course', property: 'booking_users', type: 'booking_users', visible: true},
+    { label: 'course', property: 'booking_users', type: 'booking_users', visible: true },
     { label: 'client', property: 'client_main', type: 'client', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
@@ -54,15 +55,15 @@ export class BookingsComponent {
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
-  constructor(private crudService: ApiCrudService, private router: Router, private schoolService: SchoolService) {
+  constructor(private crudService: ApiCrudService, private router: Router, private schoolService: SchoolService, public LayoutService: LayoutService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
     this.schoolService.getSchoolData(this.user).subscribe((school) => {
       this.school = school.data;
-      if(!JSON.parse(this.school.settings).taxes?.cancellation_insurance_percent) {
+      if (!JSON.parse(this.school.settings).taxes?.cancellation_insurance_percent) {
         this.columns = this.columns.filter(column => column.property !== 'has_cancellation_insurance');
       }
-      if(!JSON.parse(this.school.settings).taxes?.boukii_care_price) {
+      if (!JSON.parse(this.school.settings).taxes?.boukii_care_price) {
         this.columns = this.columns.filter(column => column.property !== 'has_boukii_care');
 
       }
@@ -143,14 +144,14 @@ export class BookingsComponent {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
@@ -210,7 +211,7 @@ export class BookingsComponent {
       maxDate > new Date();
   }
 
-  isActiveBookingUser(bu:any): boolean {
+  isActiveBookingUser(bu: any): boolean {
     // Compara la fecha más futura con la fecha actual
     return bu.status === 1 &&
       new Date(bu.date) > new Date();
@@ -280,7 +281,7 @@ export class BookingsComponent {
       maxDate < new Date();
   }
 
-  isFinishedBookingUser(bu:any): boolean {
+  isFinishedBookingUser(bu: any): boolean {
     // Compara la fecha más futura con la fecha actual
     return bu.status === 1 &&
       new Date(bu.date) < new Date();
@@ -291,7 +292,7 @@ export class BookingsComponent {
   }
 
   getClients() {
-    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id, '&with[]=clientSports')
+    this.crudService.list('/clients', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id, '&with[]=clientSports')
       .subscribe((client) => {
         this.clients = client.data;
       })
@@ -299,7 +300,7 @@ export class BookingsComponent {
 
   getMonitors() {
     this.crudService.list('/monitors', 1, 10000, 'desc',
-      'id', '&school_id='+this.user.schools[0].id, '', null, '',
+      'id', '&school_id=' + this.user.schools[0].id, '', null, '',
       ['sports', 'monitorsSchools', 'monitorsSchools', 'monitorSportsDegrees.monitorSportAuthorizedDegrees.degree', 'user'])
       .subscribe((monitor) => {
         this.monitors = monitor.data;
@@ -308,7 +309,7 @@ export class BookingsComponent {
 
 
   getSports() {
-    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.sports = sport.data;
       })
@@ -354,7 +355,7 @@ export class BookingsComponent {
   }
 
   getPaymentMethod(id: number) {
-    switch(id) {
+    switch (id) {
       case 1:
         return 'CASH';
       case 2:
@@ -374,9 +375,9 @@ export class BookingsComponent {
   }
 
   private lightenColor(hexColor: string, percent: number): string {
-    let r:any = parseInt(hexColor.substring(1, 3), 16);
-    let g:any = parseInt(hexColor.substring(3, 5), 16);
-    let b:any = parseInt(hexColor.substring(5, 7), 16);
+    let r: any = parseInt(hexColor.substring(1, 3), 16);
+    let g: any = parseInt(hexColor.substring(3, 5), 16);
+    let b: any = parseInt(hexColor.substring(5, 7), 16);
 
     // Increase the lightness
     r = Math.round(r + (255 - r) * percent / 100);
@@ -388,7 +389,7 @@ export class BookingsComponent {
     g = g.toString(16).padStart(2, '0');
     b = b.toString(16).padStart(2, '0');
 
-    return '#'+r+g+b;
+    return '#' + r + g + b;
   }
 
   getDegree(degreeId: any) {
@@ -476,7 +477,7 @@ export class BookingsComponent {
 
     this.bookingUsersUnique = data.filter(item => {
       if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
-        (item.course.course_type != 1  && !uniqueMonitors.has(item.monitor_id))) {
+        (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
         clientIds.add(item.client_id);
         uniqueDates.add(item.date);
         uniqueMonitors.add(item.monitor_id);
@@ -486,51 +487,51 @@ export class BookingsComponent {
     });
   }
 
-/*  getUniqueBookingUsers(data: any) {
-    const uniqueGroups = new Map<string, any>();
-
-    data.forEach(item => {
-      // Crear una clave única por fecha y monitor
-      const key = `${item.date}-${item.monitor_id}`;
-
-      if (uniqueGroups.has(key)) {
-        const existingItem = uniqueGroups.get(key);
-        // Si el precio actual es mayor que el del existente, reemplázalo
-        if (item.price > existingItem.price) {
+  /*  getUniqueBookingUsers(data: any) {
+      const uniqueGroups = new Map<string, any>();
+  
+      data.forEach(item => {
+        // Crear una clave única por fecha y monitor
+        const key = `${item.date}-${item.monitor_id}`;
+  
+        if (uniqueGroups.has(key)) {
+          const existingItem = uniqueGroups.get(key);
+          // Si el precio actual es mayor que el del existente, reemplázalo
+          if (item.price > existingItem.price) {
+            uniqueGroups.set(key, item);
+          }
+        } else {
+          // Si no existe el grupo, lo añadimos al Map
           uniqueGroups.set(key, item);
         }
-      } else {
-        // Si no existe el grupo, lo añadimos al Map
-        uniqueGroups.set(key, item);
-      }
-    });
+      });
+  
+      // Convertimos el Map en un array de los valores
+      this.bookingUsersUnique = Array.from(uniqueGroups.values());
+    }*/
 
-    // Convertimos el Map en un array de los valores
-    this.bookingUsersUnique = Array.from(uniqueGroups.values());
-  }*/
-
-/*  getUniqueBookingUsers(data: any) {
-    const uniqueGroups = new Map<string, any>();
-
-    data.forEach(item => {
-      // Crear una clave única para cada combinación de client_id, date y monitor_id
-      const key = `${item.client_id}-${item.date}-${item.monitor_id}`;
-
-      // Si el grupo ya existe, comparamos los precios y nos quedamos con el más alto
-      if (uniqueGroups.has(key)) {
-        const existingItem = uniqueGroups.get(key);
-        if (item.price > existingItem.price) {
+  /*  getUniqueBookingUsers(data: any) {
+      const uniqueGroups = new Map<string, any>();
+  
+      data.forEach(item => {
+        // Crear una clave única para cada combinación de client_id, date y monitor_id
+        const key = `${item.client_id}-${item.date}-${item.monitor_id}`;
+  
+        // Si el grupo ya existe, comparamos los precios y nos quedamos con el más alto
+        if (uniqueGroups.has(key)) {
+          const existingItem = uniqueGroups.get(key);
+          if (item.price > existingItem.price) {
+            uniqueGroups.set(key, item);
+          }
+        } else {
+          // Si el grupo no existe, lo añadimos
           uniqueGroups.set(key, item);
         }
-      } else {
-        // Si el grupo no existe, lo añadimos
-        uniqueGroups.set(key, item);
-      }
-    });
-
-    // Convertimos el map en un array de los valores
-    this.bookingUsersUnique = Array.from(uniqueGroups.values());
-  }*/
+      });
+  
+      // Convertimos el map en un array de los valores
+      this.bookingUsersUnique = Array.from(uniqueGroups.values());
+    }*/
 
   orderBookingUsers(users: any[]) {
     return users.sort((a, b) => {
@@ -546,7 +547,7 @@ export class BookingsComponent {
   }
 
   getBookingsLogs(id) {
-    this.crudService.list('/booking-logs', 1, 10000, 'desc', 'id', '&booking_id='+id)
+    this.crudService.list('/booking-logs', 1, 10000, 'desc', 'id', '&booking_id=' + id)
       .subscribe((data) => {
         this.bookingLog = data.data;
       })

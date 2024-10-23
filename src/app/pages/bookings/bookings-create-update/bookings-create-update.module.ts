@@ -35,6 +35,7 @@ import { AddClientSportModalModule } from '../add-client-sport/add-client-sport.
 import { TranslateModule } from '@ngx-translate/core';
 import { QRCodeModule } from 'angularx-qrcode';
 import { ComponentsCustomModule } from '../../../components/components-custom.module';
+import { IconComponent } from 'src/@vex/components/icon/app.component';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -51,7 +52,7 @@ export const MY_DATE_FORMATS = {
 @NgModule({
   imports: [
     FormsModule,
-    CommonModule,
+    CommonModule, IconComponent,
     ReactiveFormsModule,
     MatDialogModule,
     MatInputModule,

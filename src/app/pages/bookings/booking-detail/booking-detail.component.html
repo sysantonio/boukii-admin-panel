@@ -680,7 +680,8 @@
                   style="width: 100%;"
                   class="text-border"></mat-divider>
 
-                <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px;">
+                <div
+                  style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px;">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{
@@ -843,19 +844,20 @@
                         }}
                         &ensp;{{ "years" | translate }}
                       </mat-card-subtitle>
-                      <mat-card-subtitle>
-                        <mat-icon>message-text</mat-icon>
-                        <a
-                          href="tel:{{ getClient(booking.client_main_id)?.phone }}"
-                          title="{{ getClient(booking.client_main_id)?.phone }}">
-                          <mat-icon>phone</mat-icon>
-                        </a>
-                        <a
+                      <mat-card-subtitle style="display: flex;">
+                        <vex-icon src="chat">
+                        </vex-icon>
+                        <vex-icon
+                          src="mail"
                           href="mailto:{{ getClient(booking.client_main_id)?.email }}"
                           style="cursor:pointer"
                           title="{{ getClient(booking.client_main_id)?.email }}">
-                          <mat-icon>mail</mat-icon>
-                        </a>
+                        </vex-icon>
+                        <vex-icon
+                          src="phone"
+                          href="tel:{{ getClient(booking.client_main_id)?.phone }}"
+                          title="{{ getClient(booking.client_main_id)?.phone }}">
+                        </vex-icon>
                       </mat-card-subtitle>
                     </div>
                   </div>
@@ -990,7 +992,7 @@
                 </ng-container>
 
                 <div class="mat-divider"
-                  style="margin: 10px 0 5px 0;!important;border-top-color: #A4A3A3;width: 100%;"></div>
+                  style="margin: 10px 0 5px 0 !important;border-top-color: #A4A3A3;width: 100%;"></div>
 
                 <div style="margin-bottom: 10px;">
                   <div class="col-left"><b>Subtotal</b></div>
@@ -1115,7 +1117,7 @@
                 </div>
 
                 <div class="mat-divider"
-                  style="margin: 10px 0 5px 0;!important;border-top-color: #A4A3A3;width: 100%;"></div>
+                  style="margin: 10px 0 5px 0 !important;border-top-color: #A4A3A3;width: 100%;"></div>
 
                 <div>
                   <div class="col-left"><b>{{ "total" | translate | uppercase
@@ -1225,7 +1227,7 @@
                 </div>
 
                 <div class="mat-divider"
-                  style="margin: 10px 0 10px 0;!important;border-top-color: #A4A3A3;width: 100%;"></div>
+                  style="margin: 10px 0 10px 0 !important;border-top-color: #A4A3A3;width: 100%;"></div>
 
                 <div
                   *ngIf="bonus.length > 0 || (booking.status !== 2 && bookingPendingPrice > 0)">

@@ -849,19 +849,20 @@
                         {{getBirthYears(client.client.birth_date)}} {{'years'
                         |translate}}
                       </div>
-                      <div>
-                        <mat-icon>message-text</mat-icon>
-                        <a
+                      <div style="display: flex;">
+                        <vex-icon src="chat">
+                        </vex-icon>
+                        <vex-icon
+                          src="mail"
                           href="mailto:{{client.client.email}}"
                           style="cursor: pointer;"
                           title="{{client.client.email}}">
-                          <mat-icon>mail</mat-icon>
-                        </a>
-                        <a
+                        </vex-icon>
+                        <vex-icon
+                          src="phone"
                           href="tel:{{client.client.phone}}"
                           title="{{client.client.phone}}">
-                          <mat-icon>phone</mat-icon>
-                        </a>
+                        </vex-icon>
                       </div>
                     </div>
                   </div>
@@ -923,19 +924,20 @@
                     {{getBirthYears(client.client.birth_date)}} {{'years'
                     |translate}}
                   </span>
-                  <div>
-                    <mat-icon >message-text"></mat-icon>
-                    <a
+                  <div style="display: flex;">
+                    <vex-icon src="chat">
+                    </vex-icon>
+                    <vex-icon
+                      src="mail"
                       href="mailto:{{client.client.email}}"
-                      style="cursor:pointer"
+                      style="cursor: pointer;"
                       title="{{client.client.email}}">
-                      <mat-icon >main</mat-icon>
-                    </a>
-                    <a
+                    </vex-icon>
+                    <vex-icon
+                      src="phone"
                       href="tel:{{client.client.phone}}"
                       title="{{client.client.phone}}">
-                      <mat-icon >phone</mat-icon>
-                    </a>
+                    </vex-icon>
                   </div>
                   <div *ngIf="taskDetail.degree"
                     class="box-detail-user-blocklevel"
@@ -984,19 +986,20 @@
                       {{getBirthYears(taskDetail.monitor.birth_date)}} {{'years'
                       | translate }}
                     </div>
-                    <div>
-                      <mat-icon >message-text"></mat-icon>
-                      <a
+                    <div style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{taskDetail.monitor.email}}"
                         style="cursor:pointer"
                         title="{{taskDetail.monitor.email}}">
-                        <mat-icon >main</mat-icon>
-                      </a>
-                      <a
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
                         href="tel:{{taskDetail.monitor.phone}}"
                         title="{{taskDetail.monitor.phone}}">
-                        <mat-icon >phone</mat-icon>
-                      </a>
+                      </vex-icon>
                     </div>
                   </div>
                 </div>
@@ -1086,19 +1089,20 @@
                         {{getBirthYears(client.client.birth_date)}} {{'years'
                         |translate}}
                       </div>
-                      <div>
-                        <mat-icon >message-text"></mat-icon>
-                        <a
+                      <div style="display: flex;">
+                        <vex-icon src="chat">
+                        </vex-icon>
+                        <vex-icon
+                          src="mail"
                           href="mailto:{{client.client.email}}"
                           style="cursor:pointer"
                           title="{{client.client.email}}">
-                          <mat-icon >main</mat-icon>
-                        </a>
-                        <a
+                        </vex-icon>
+                        <vex-icon
+                          src="phone"
                           href="tel:{{client.client.phone}}"
                           title="{{client.client.phone}}">
-                          <mat-icon >phone</mat-icon>
-                        </a>
+                        </vex-icon>
                       </div>
                       <div>
                         <span style="float:left;cursor:pointer"
@@ -1296,19 +1300,20 @@
 
                 </span>
               </div>
-              <div>
-                <mat-icon >message-text"></mat-icon>
-                <a
+              <div style="display: flex;">
+                <vex-icon src="chat">
+                </vex-icon>
+                <vex-icon
+                  src="mail"
                   href="mailto:{{taskDetail.monitor.email}}"
                   style="cursor:pointer"
                   title="{{taskDetail.monitor.email}}">
-                  <mat-icon >main</mat-icon>
-                </a>
-                <a
+                </vex-icon>
+                <vex-icon
+                  src="phone"
                   href="tel:{{taskDetail.monitor.phone}}"
                   title="{{taskDetail.monitor.phone}}">
-                  <mat-icon >phone</mat-icon>
-                </a>
+                </vex-icon>
               </div>
             </div>
           </div>

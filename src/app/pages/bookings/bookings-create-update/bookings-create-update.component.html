@@ -878,19 +878,20 @@
               {{calculateAge(defaults.client_main_id.birth_date)
               }}&ensp;{{'years' | translate}}
             </div>
-            <div>
-              <mat-icon>message-text</mat-icon>
-              <a
+            <div style="display: flex;">
+              <vex-icon src="chat">
+              </vex-icon>
+              <vex-icon
+                src="mail"
                 href="mailto:{{getClient(defaults.client_main_id.id)?.email}}"
                 style="cursor:pointer"
                 title="{{getClient(defaults.client_main_id.id)?.email}}">
-                <mat-icon>mail</mat-icon>
-              </a>
-              <a
+              </vex-icon>
+              <vex-icon
+                src="phone"
                 href="tel:{{getClient(defaults.client_main_id.id)?.phone}}"
                 title="{{getClient(defaults.client_main_id.id)?.phone}}">
-                <mat-icon>phone</mat-icon>
-              </a>
+              </vex-icon>
             </div>
           </div>
         </div>
@@ -929,19 +930,20 @@
                       {{calculateAge(people.birth_date) }} &ensp;{{'years' |
                       translate}}
                     </div>
-                    <div>
-                      <mat-icon>message-text</mat-icon>
-                      <a
+                    <div style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{getClient(people.id)?.email}}"
                         style="cursor:pointer"
                         title="{{getClient(people.id)?.email}}">
-                        <mat-icon>mail</mat-icon>
-                      </a>
-                      <a
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
                         href="tel:{{getClient(people.id)?.phone}}"
                         title="{{getClient(people.id)?.phone}}">
-                        <mat-icon>phone</mat-icon>
-                      </a>
+                      </vex-icon>
                     </div>
                   </div>
                 </div>
@@ -1041,19 +1043,20 @@
                       {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id))
                       }} {{'years' | translate }}
                     </div>
-                    <div>
-                      <mat-icon >message-text"></mat-icon>
-                      <a
+                    <div style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{getMonitor(item.courseDates[0].monitor_id)?.email}}"
                         style="cursor:pointer"
                         title="{{getMonitor(item.courseDates[0].monitor_id)?.email}}">
-                        <mat-icon >main</mat-icon>
-                      </a>
-                      <a
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
                         href="tel:{{getMonitor(item.courseDates[0].monitor_id)?.phone}}"
                         title="{{getMonitor(item.courseDates[0].monitor_id)?.phone}}">
-                        <mat-icon >phone</mat-icon>
-                      </a>
+                      </vex-icon>
                     </div>
                   </div>
                   <div *ngIf="item.courseDates[0].course?.course_type === 1">
@@ -1767,7 +1770,8 @@
                       style="float: left;width: 100%;"
                       class="text-border"></mat-divider>
 
-                    <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
+                    <div
+                      style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                         <mat-form-field appearance="outline" class="flex-auto">
                           <mat-label>{{
@@ -2326,25 +2330,20 @@
                       {{calculateAge(defaults.client_main_id.birth_date) }}
                       &ensp;{{'years' | translate}}
                     </mat-card-subtitle>
-                    <mat-card-subtitle>
-                      <mat-icon
-                        style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                        >message-text"></mat-icon>
-                      <a
-                        href="tel:{{getClient(defaults.client_main_id)?.phone}}"
-                        title="{{getClient(defaults.client_main_id)?.phone}}">
-                        <mat-icon
-                          style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                          >phone</mat-icon>
-                      </a>
-                      <a
+                    <mat-card-subtitle style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{getClient(defaults.client_main_id)?.email}}"
                         style="cursor:pointer"
                         title="{{getClient(defaults.client_main_id)?.email}}">
-                        <mat-icon
-                          style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                          >main</mat-icon>
-                      </a>
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
+                        href="tel:{{getClient(defaults.client_main_id)?.phone}}"
+                        title="{{getClient(defaults.client_main_id)?.phone}}">
+                      </vex-icon>
                     </mat-card-subtitle>
                   </mat-card-header>
 

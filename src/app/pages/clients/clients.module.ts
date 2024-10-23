@@ -28,6 +28,7 @@ import { AddClientUserModalModule } from './add-client-user/add-client-user.modu
 import { ClientsCreateUpdateModalModule } from './client-create-update-modal/client-create-update-modal.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from 'src/app/components/components-custom.module';
+import { IconComponent } from 'src/@vex/components/icon/app.component';
 
 @NgModule({
   declarations: [ClientsComponent],
@@ -44,7 +45,7 @@ import { ComponentsCustomModule } from 'src/app/components/components-custom.mod
     WidgetQuickLineChartModule,
     WidgetQuickValueCenterModule,
     WidgetQuickValueStartModule,
-    WidgetLargeGoalChartModule,
+    WidgetLargeGoalChartModule, IconComponent,
     WidgetAssistantModule,
     WidgetLargeChartModule,
     WidgetTableModule,
