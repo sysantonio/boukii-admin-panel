@@ -776,7 +776,8 @@ export class BookingDetailComponent implements OnInit {
 
   create() {
     if (
-      this.defaults.payment_method_id === 2
+      this.defaults.payment_method_id === 2 ||
+      this.defaults.payment_method_id === 3
     ) {
       this.loading = true;
       const observables = [];
@@ -824,10 +825,14 @@ export class BookingDetailComponent implements OnInit {
 
       this.crudService
         .post("/admin/bookings/payments/" + this.id, basket)
-
         .subscribe((result: any) => {
-          console.log(result);
-          window.open(result.data, "_self");
+          if( this.defaults.payment_method_id === 3) {
+            this.snackbar.open(this.translateService.instant('snackbar.booking_detail.send_mail'), 'OK', { duration: 1000 });
+          } else {
+            console.log(result);
+            window.open(result.data, "_self");
+          }
+
         });
     } else {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
