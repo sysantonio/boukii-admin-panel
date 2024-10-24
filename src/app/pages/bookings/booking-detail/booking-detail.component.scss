@@ -599,3 +599,17 @@ img[mat-card-image] {
 mat-card-subtitle {
   font-family: "Montserrat", sans-serif;
 }
+.title-status {
+  gap: 8px;
+  display: flex;
+  margin-top: 12px;
+  span {
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: DM Sans;
+    font-weight: 600;
+    line-height: 16px;
+    word-wrap: break-word;
+  }
+}

@@ -765,42 +765,42 @@
                     </div>
                   </mat-card-subtitle>
                 </div>
+                <div class="title-status">
+                  <span
+                    style="color:#00C32B;background-color: #B2EFAD;"
+                    *ngIf="isActive">
+                    {{'active' | translate | uppercase }}
+                  </span>
+                  <span
+                    style="color:rgba(68, 74, 88, 1);background-color: rgba(227, 227, 227, 1);"
+                    *ngIf="isFinished">
+                    {{'finished' | translate | uppercase }}
+                  </span>
+                  <span
+                    style="color:rgba(146, 26, 0, 1);background-color: rgba(247, 187, 153, 1);"
+                    *ngIf="booking.status === 2">
+                    {{'cancelled' | translate | uppercase }}
+                  </span>
+                  <span
+                    style="color:rgba(83, 65, 0, 1);background-color: rgba(247, 227, 153, 1);"
+                    *ngIf="booking.status === 3">
+                    {{'partial_cancelled' | translate | uppercase }}
+                  </span>
+
+                  <span
+                    style="color:#00C32B;background-color: #B2EFAD;"
+                    *ngIf="booking.status === 1 && booking.paid">
+                    {{'payed' | translate | uppercase }}
+                  </span>
+                  <span
+                    style="color:rgba(146, 26, 0, 1);background-color: rgba(247, 187, 153, 1)"
+                    *ngIf="booking.status === 1 && !booking.paid">
+                    {{'no_payed' | translate | uppercase }}
+                  </span>
+                </div>
               </mat-card-header>
 
               <mat-card-content>
-                <div class="title-status">
-                  <span class="col-left">
-                    <b>{{ 'status' | translate}}:</b>
-                  </span>
-
-                  <span class="col-center">
-                    <span style="color:#00C32B" *ngIf="isActive">
-                      {{'active' | translate | uppercase }}
-                    </span>
-                    <span style="color:#A4A3A3" *ngIf="isFinished">
-                      {{'finished' | translate | uppercase }}
-                    </span>
-                    <span style="color:#FF0000" *ngIf="booking.status === 2">
-                      {{'cancelled' | translate | uppercase }}
-                    </span>
-                    <span style="color:#FA9917" *ngIf="booking.status === 3">
-                      {{'partial_cancelled' | translate | uppercase }}
-                    </span>
-                  </span>
-
-                  <span class="col-right">
-                    <span
-                      style="color:#00C32B"
-                      *ngIf="booking.status === 1 && booking.paid">
-                      {{'payed' | translate | uppercase }}
-                    </span>
-                    <span
-                      style="color:#FF0000"
-                      *ngIf="booking.status === 1 && !booking.paid">
-                      {{'no_payed' | translate | uppercase }}
-                    </span>
-                  </span>
-                </div>
 
                 <div class="holder-client">
                   <div style="display: inline-block; width: 80%;">
