@@ -399,7 +399,7 @@
                                 *ngIf="groupLevel.active">
                                 <div
                                   style="width:100%;border-radius: 0%;height: 100px;padding: 2%;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px"
-                                  [style.color]="calculateMaxGroup(groupLevel)>defaults.max_participants?'red':'black'">
+                                  [style.color]="calculateMaxGroup(groupLevel)>defaults.max_participants?'red':'var(--color-dark1)'">
                                   {{'students' | translate}}
                                   <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
@@ -606,7 +606,7 @@
 <mat-card style="padding: 0 3%;">
 <mat-card-header style="display:block">
 <div style="width: 100%;float: left;">
-
+%
 </div>
 <div style="width: 100%;float:left;">
 <mat-card-title class="font-bold" style="float: left;width: 100%;">

@@ -14,7 +14,8 @@
 
 .card {
   @apply shadow bg-foreground;
-  background: var(--color-grey5);
+  background: var(--is-light-theme, #ffffff)
+    var(--is-dark-theme, var(--color-grey5)) !important;
 }
 
 .avatar {
@@ -36,8 +37,7 @@
 .bg-pattern {
   background: linear-gradient(
       135deg,
-      var(--is-light-theme, rgb(245, 245, 248))
-        var(--is-dark-theme, black) 22px,
+      var(--is-light-theme, rgb(245, 245, 248)) var(--is-dark-theme, black) 22px,
       var(--background-hover) 22px,
       var(--background-hover) 24px,
       transparent 24px,
@@ -48,8 +48,8 @@
     ),
     linear-gradient(
         225deg,
-        var(--is-light-theme, rgb(245, 245, 248))
-          var(--is-dark-theme, black) 22px,
+        var(--is-light-theme, rgb(245, 245, 248)) var(--is-dark-theme, black)
+          22px,
         var(--background-hover) 22px,
         var(--background-hover) 24px,
         transparent 24px,

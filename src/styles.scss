@@ -645,6 +645,22 @@ body.dark-mode {
 .mat-mdc-card {
   height: fit-content;
 }
+
+.angular-editor-textarea {
+  margin: 0 !important;
+  border-top: 0 !important;
+}
+.angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button,
+.ae-font .ae-picker-options {
+  border: none !important;
+  background: none !important;
+}
+
+.angular-editor-toolbar,
+.ae-font .ae-picker-label {
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #1d1d1d) !important;
+}
+
 .mat-mdc-outlined-button .mat-mdc-button-ripple,
 .mat-mdc-outlined-button .mdc-button__ripple {
   background-color: var(--color-grey5);
@@ -652,9 +668,12 @@ body.dark-mode {
 }
 
 .mat-mdc-table,
-.mat-mdc-paginator,
-.mat-mdc-card {
+.mat-mdc-paginator {
   background-color: var(--color-grey5) !important;
+}
+.mat-mdc-card {
+  background-color: var(--is-light-theme, #ffffff)
+    var(--is-dark-theme, var(--color-grey5)) !important;
 }
 
 .mat-mdc-slide-toggle .mdc-switch:enabled + .mdc-label {
@@ -663,6 +682,7 @@ body.dark-mode {
 div {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
 }
+
 .mat-sort-header-content,
 .mat-mdc-row,
 .mat-mdc-paginator-page-size-label,
@@ -692,10 +712,29 @@ div {
 .mat-mdc-raised-button[disabled][disabled],
 .mat-mdc-menu-content,
 .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text,
-:root .mat-mdc-menu-item .mat-icon {
+:root .mat-mdc-menu-item .mat-icon,
+.mdc-form-field > label,
+.mat-mdc-card-content:last-child,
+.mat-mdc-table tbody,
+.mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-cell,
+.mat-mdc-footer-cell,
+.mat-mdc-header-row,
+.mat-mdc-row,
+.mat-mdc-footer-row,
+.mat-mdc-table .mat-mdc-header-cell {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
 
+.mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mdc-notched-outline__trailing {
+  border-color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
+}
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-mdc-menu-content,
 .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
@@ -706,6 +745,10 @@ div {
 .mat-stepper-horizontal {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
 }
-.mdc-text-field--outlined .mdc-notched-outline {
-  border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff);
+input::placeholder {
+  color: var(--is-light-theme, #acacac) var(--is-dark-theme, #ebebeb) !important;
+}
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+  .mdc-notched-outline__notch {
+  border-left: white;
 }

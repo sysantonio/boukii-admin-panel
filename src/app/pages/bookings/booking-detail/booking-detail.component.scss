@@ -10,20 +10,20 @@
 .custom-card {
   transition: all 0.3s ease;
   box-shadow: none;
-  border: 1px solid #E6E6E6; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
-  color: #E6E6E6;
+  border: 1px solid #e6e6e6; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
+  color: #e6e6e6;
   text-align: center;
   cursor: pointer;
 }
 
 .selected-collectif {
-  background-color: #FAC710; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #fac710; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .selected-prive {
-  background-color: #8FD14F; /* Color de fondo ligero para mejorar la selección */
-  color: #fff
+  background-color: #8fd14f; /* Color de fondo ligero para mejorar la selección */
+  color: #fff;
 }
 
 .smaller-calendar {
@@ -37,10 +37,9 @@
 }
 
 .columns-container {
-  display: flex;  /* Establecemos un contenedor flex */
-  width: 100%;    /* Aseguramos que tome todo el ancho disponible */
+  display: flex; /* Establecemos un contenedor flex */
+  width: 100%; /* Aseguramos que tome todo el ancho disponible */
   height: 100%; /* Asegura que ocupe toda la altura disponible */
-
 }
 
 .calendar-column {
@@ -58,7 +57,6 @@
   max-height: 100%; /* Cambia esto para que ocupe toda la altura disponible */
   overflow-y: auto;
 }
-
 
 .custom-list-item {
   display: flex;
@@ -86,7 +84,7 @@
   flex-direction: column;
   justify-content: center; /* Alinea el contenido verticalmente al centro */
   flex-grow: 1; /* Ocupa el espacio restante */
-  padding: 10px 0 0 15px;/* Espacio entre la imagen y el contenido */
+  padding: 10px 0 0 15px; /* Espacio entre la imagen y el contenido */
   float: left;
   width: 80%;
 }
@@ -108,9 +106,8 @@ mat-list {
   background-color: rgba(255, 48, 133, 0.1);
 }
 
-
 .reservation-detail-card {
-  width: 31%;
+  width: 45%;
   position: relative;
   margin: 1%;
   float: left;
@@ -118,18 +115,20 @@ mat-list {
 }
 
 .delete-icon {
-  cursor: pointer;    /* Cambia el cursor a una mano cuando pasas sobre el icono */
+  cursor: pointer; /* Cambia el cursor a una mano cuando pasas sobre el icono */
 }
 
 .column-container {
   padding: 1rem; /* Añade un pequeño padding alrededor para separar el contenido de las bordas */
 }
 
-.column-container:nth-child(1) { /* Selecciona la primera columna */
+.column-container:nth-child(1) {
+  /* Selecciona la primera columna */
   flex: 7; /* Esto representa el 70% */
 }
 
-.column-container:nth-child(2) { /* Selecciona la segunda columna */
+.column-container:nth-child(2) {
+  /* Selecciona la segunda columna */
   flex: 3; /* Esto representa el 30% */
 }
 
@@ -141,9 +140,9 @@ mat-list {
 
 /* Ajusta la imagen de fondo de mat-card-avatar */
 mat-card-avatar {
-  background-size: cover;  /* Ajusta la imagen para que cubra completamente el elemento */
-  background-position: center;  /* Centra la imagen */
-  background-repeat: no-repeat;  /* Asegura que la imagen no se repita */
+  background-size: cover; /* Ajusta la imagen para que cubra completamente el elemento */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Asegura que la imagen no se repita */
   color: red;
 }
 
@@ -158,30 +157,30 @@ mat-card-avatar {
 }*/
 /* Estilos para el contenido de la tarjeta */
 .content-title {
-  margin: 16px 0;  /* Esto añade un poco de espacio arriba y abajo del título, ajusta según lo que necesites */
+  margin: 16px 0; /* Esto añade un poco de espacio arriba y abajo del título, ajusta según lo que necesites */
 }
 
 /* Alinea horizontalmente el avatar y el nombre del usuario */
 .user-info {
-  display: flex;  /* Habilita flexbox */
-  align-items: center;  /* Alinea verticalmente al centro los ítems */
-  gap: 8px;  /* Espacio entre el avatar y el nombre, puedes ajustarlo según tus necesidades */
+  display: flex; /* Habilita flexbox */
+  align-items: center; /* Alinea verticalmente al centro los ítems */
+  gap: 8px; /* Espacio entre el avatar y el nombre, puedes ajustarlo según tus necesidades */
   margin: 10px 0 0 0;
 }
 
 .user-avatar {
-  width: 50px;  /* Puedes ajustar según tus necesidades */
+  width: 50px; /* Puedes ajustar según tus necesidades */
   height: 50px;
-  border-radius: 50%;  /* Hace que la imagen sea redonda */
-  object-fit: contain;  /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
+  border-radius: 50%; /* Hace que la imagen sea redonda */
+  object-fit: contain; /* En caso de que la imagen no tenga las dimensiones exactas, esto la ajustará */
 }
 
 .centered-chip-list {
   display: flex;
-  justify-content: center;  /* Centra el chip horizontalmente */
-  align-items: center;      /* Centra el chip verticalmente, aunque esto podría no ser necesario si el contenedor es del tamaño del chip */
-  width: 100%;  /* Ocupa el ancho total de su contenedor padre */
-  margin-top: 16px;  /* Espacio arriba del chip list, ajusta según lo que necesites */
+  justify-content: center; /* Centra el chip horizontalmente */
+  align-items: center; /* Centra el chip verticalmente, aunque esto podría no ser necesario si el contenedor es del tamaño del chip */
+  width: 100%; /* Ocupa el ancho total de su contenedor padre */
+  margin-top: 16px; /* Espacio arriba del chip list, ajusta según lo que necesites */
 }
 .opaque-box {
   width: 100%;
@@ -210,7 +209,7 @@ mat-card-avatar {
 }
 
 .reservation-multiple .title {
-  font-size: 1.25rem!important
+  font-size: 1.25rem !important;
 }
 
 .reservation-multiple .subtitle {
@@ -234,18 +233,20 @@ mat-card-avatar {
   justify-content: center;
   text-align: center;
   border-radius: 10px;
-  background: #FFF !important;
-  color: #F53D7C !important;
+  background: #fff !important;
+  color: #f53d7c !important;
 }
 
-.square-button:active, .square-button:hover, .square-button.selected {
-  background: #F53D7C !important;
-  color: #FFF !important;
+.square-button:active,
+.square-button:hover,
+.square-button.selected {
+  background: #f53d7c !important;
+  color: #fff !important;
 }
 
 .client-container {
   width: 100%;
-  float: left
+  float: left;
 }
 
 .client-search-container {
@@ -274,7 +275,7 @@ mat-card-avatar {
 }
 
 .active-border {
-  border: 2px solid #E91E63;
+  border: 2px solid #e91e63;
 }
 
 .card-users mat-card-header {
@@ -300,13 +301,13 @@ mat-card-subtitle {
 }
 
 ::ng-deep .with-course .mat-calendar-body-cell-content {
-  background-color: #FAC710 !important;
-  border: 1px solid #FAC710 !important;
+  background-color: #fac710 !important;
+  border: 1px solid #fac710 !important;
 }
 
 ::ng-deep .with-course-private .mat-calendar-body-cell-content {
-  background-color: #2FCA45 !important;
-  border: 1px solid #2FCA45 !important;
+  background-color: #2fca45 !important;
+  border: 1px solid #2fca45 !important;
 }
 
 .icon-wrapper {
@@ -322,18 +323,24 @@ img[mat-card-image] {
 }
 
 .add-date {
-  box-shadow: none;background: #fff;border: 1px solid #e6e6e6;
+  box-shadow: none;
+  background: #fff;
+  border: 1px solid #e6e6e6;
 }
 
 .icon-date {
-  color: #e6e6e6; font-size: 10px;width: 50px;height: 50px;
+  color: #e6e6e6;
+  font-size: 10px;
+  width: 50px;
+  height: 50px;
 }
 
-.add-date:hover   {
-  box-shadow: none;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;border: 1px solid #e6e6e6;
-
+.add-date:hover {
+  box-shadow: none;
+  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);
+  border: 1px solid #e6e6e6;
 }
-.add-date:hover .icon-date  {
+.add-date:hover .icon-date {
   color: #fff;
 }
 
@@ -358,11 +365,13 @@ img[mat-card-image] {
     float: left;
   }
 
-  .column-container:nth-child(1) { /* Selecciona la primera columna */
+  .column-container:nth-child(1) {
+    /* Selecciona la primera columna */
     flex: 1; /* Esto representa el 70% */
   }
 
-  .column-container:nth-child(2) { /* Selecciona la segunda columna */
+  .column-container:nth-child(2) {
+    /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
   }
   .button-cancel {
@@ -381,11 +390,13 @@ img[mat-card-image] {
     float: left;
   }
 
-  .column-container:nth-child(1) { /* Selecciona la primera columna */
+  .column-container:nth-child(1) {
+    /* Selecciona la primera columna */
     flex: 1; /* Esto representa el 70% */
   }
 
-  .column-container:nth-child(2) { /* Selecciona la segunda columna */
+  .column-container:nth-child(2) {
+    /* Selecciona la segunda columna */
     flex: 1; /* Esto representa el 30% */
   }
   .button-cancel {
@@ -415,7 +426,6 @@ img[mat-card-image] {
   justify-content: center;
 }
 
-
 /* lucho */
 .title-actividad {
   background-color: var(--color-grey5);
@@ -436,7 +446,7 @@ img[mat-card-image] {
 
 .list-box {
   padding: 0px 35px;
-  font-size: .9em;
+  font-size: 0.9em;
   font-weight: 400;
   color: var(--color-dark1);
   margin-bottom: 10px;
@@ -458,7 +468,7 @@ img[mat-card-image] {
       text-align: right;
 
       span {
-        color: #FA9917;
+        color: #fa9917;
       }
     }
   }
@@ -483,8 +493,8 @@ img[mat-card-image] {
 }
 
 .mat-card-header {
-  background-color: #2F3844;
-  padding: 25px 35px!important;
+  background-color: #2f3844;
+  padding: 25px 35px !important;
 
   .mat-mdc-card-title {
     font-weight: 700;
@@ -494,7 +504,7 @@ img[mat-card-image] {
 }
 
 .mat-mdc-card-content {
-  padding: 0px!important;
+  padding: 0px !important;
 
   .title-status {
     background-color: var(--color-grey5);
@@ -563,8 +573,8 @@ img[mat-card-image] {
       }
 
       .client-dates {
-        font-family: 'Montserrat', sans-serif;
-        font-size: .9em;
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.9em;
       }
     }
   }
@@ -572,7 +582,7 @@ img[mat-card-image] {
 
 .card-header {
   display: block;
-  background-color: #2F3844;
+  background-color: #2f3844;
   padding: 15px 20px !important;
 
   .mat-mdc-card-title {
@@ -582,10 +592,10 @@ img[mat-card-image] {
   }
 
   .mat-icon {
-    fill: white!important;
+    fill: white !important;
   }
 }
 
 mat-card-subtitle {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }

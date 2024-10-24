@@ -42,27 +42,27 @@
               *ngIf="getPrivateNoAssigned() === 0 && getColNoAssigned() === 0"></mat-icon>
             <mat-icon svgIcon="mat:warning" style="margin:2%; color:red"
               *ngIf="getPrivateNoAssigned() > 0 || getColNoAssigned() > 0"></mat-icon>
-            <p style="text-align: center;font-size: 20px;color: #808080">{{
+            <p style="text-align: center;font-size: 20px;">{{
               'courses.title' | translate }}</p>
           </div>
           <div style="width: 100%;">
             <mat-icon svgIcon="logo:cursos"
               style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
             <p
-              style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{
+              style="float: left;width:100%;text-align: center;font-size: 20px;"><b>{{
                 'courses.title' | translate }}</b></p>
           </div>
           <div style="width: 100%;margin: 5% 0 0 0;display: inline-flex;">
             <div
               style="width: 48%;border-right: 2px solid #e6e6e6; display:inline-block; vertical-align:top;">
-              <p style="width:100%;text-align: center;color: #808080">{{
+              <p style="width:100%;text-align: center;">{{
                 'private' | translate }}</p>
               <p
                 style="width:100%;text-align: center;color:#F24726; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getPrivateNoAssigned()}}</p>
             </div>
             <div style="width: 48%;">
               <p
-                style="width:100%;text-align: center;color: #808080; display:inline-block; vertical-align:top;">{{
+                style="width:100%;text-align: center; display:inline-block; vertical-align:top;">{{
                 'colective' | translate }}</p>
               <p
                 style="width:100%;text-align: center;color:#CEE741; font-size: 40px;font-weight: bold;margin: 8% 0 0 0">{{getColNoAssigned()}}</p>
@@ -79,7 +79,7 @@
               *ngIf="getPaidBookings() > 0"></mat-icon>
             <mat-icon svgIcon="mat:check" style="margin:2%; color:#CEE741"
               *ngIf="getPaidBookings() === 0"></mat-icon>
-            <p style="text-align: center;font-size: 20px;color: #808080">{{
+            <p style="text-align: center;font-size: 20px;">{{
               'bookings' | translate }}</p>
           </div>
 
@@ -87,7 +87,7 @@
             <mat-icon svgIcon="logo:reservas"
               style="width:75px; height:75px; margin: 0 0 0 37%"></mat-icon>
             <p
-              style="float: left;width:100%;text-align: center;font-size: 20px;color: #808080"><b>{{
+              style="float: left;width:100%;text-align: center;font-size: 20px;"><b>{{
                 'no_payed' | translate }}</b></p>
           </div>
 
