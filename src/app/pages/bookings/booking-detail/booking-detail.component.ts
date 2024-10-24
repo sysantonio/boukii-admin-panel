@@ -776,8 +776,7 @@ export class BookingDetailComponent implements OnInit {
 
   create() {
     if (
-      this.defaults.payment_method_id === 2 ||
-      this.defaults.payment_method_id === 3
+      this.defaults.payment_method_id === 2
     ) {
       this.loading = true;
       const observables = [];
