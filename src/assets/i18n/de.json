@@ -645,6 +645,8 @@
   "emails.bookingCreate.qr_reminder": "Hinweis: Der QR-Code der Buchung ist ausschließlich für die Schule bestimmt. Zeigen Sie ihn, wenn Sie dazu aufgefordert werden.",
   "emails.bookingCreate.footer1": "Diese E-Mail wurde automatisch generiert und kann nicht beantwortet werden",
   "emails.bookingCreate.footer2": "Für weitere Informationen wenden Sie sich an: ",
-  "emails.bookingCreate.footer3": "Allgemeine Verkaufsbedingungen"
+  "emails.bookingCreate.footer3": "Allgemeine Verkaufsbedingungen",
+  "snackbar.password_updated_error": "Der Link zum Zurücksetzen des Passworts ist abgelaufen. Bitte erstellen Sie einen neuen und versuchen Sie es erneut."
+
 
 }

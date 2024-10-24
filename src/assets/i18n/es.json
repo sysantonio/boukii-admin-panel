@@ -470,6 +470,7 @@
   "snackbar.monitor.salary_created": "Salario creado correctamente",
   "snackbar.monitor.salary_updated": "Salario modificado correctamente",
   "snackbar.password_updated": "Contraseña actualizada corectamente",
+  "snackbar.password_updated_error": "El link para resetear la contraseña ha caducado, por favor genere uno nuevo y vuelva a intentarlo",
   "snackbar.settings.objectives_update": "Objetivos modificados correctamente",
   "snackbar.settings.objectives_created": "Objetivos creados correctamente",
   "snackbar.settings.season_created": "Temporada guardada con éxito",

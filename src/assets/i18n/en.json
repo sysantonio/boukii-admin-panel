@@ -646,7 +646,9 @@
   "emails.bookingCreate.qr_reminder": "Note: The reservation QR code is for school use only. Present it when requested.",
   "emails.bookingCreate.footer1": "This email was automatically generated and cannot receive replies",
   "emails.bookingCreate.footer2": "For more information contact: ",
-  "emails.bookingCreate.footer3": "General Terms of Sale"
+  "emails.bookingCreate.footer3": "General Terms of Sale",
+  "snackbar.password_updated_error": "The password reset link has expired, please generate a new one and try again."
+
 
 
 }

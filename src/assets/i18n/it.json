@@ -645,7 +645,8 @@
   "emails.bookingCreate.qr_reminder": "Nota: Il codice QR della prenotazione è ad uso esclusivo della scuola. Presentalo quando richiesto.",
   "emails.bookingCreate.footer1": "Questa e-mail è stata generata automaticamente e non può ricevere risposte",
   "emails.bookingCreate.footer2": "Per ulteriori informazioni contattare: ",
-  "emails.bookingCreate.footer3": "Condizioni generali di vendita"
+  "emails.bookingCreate.footer3": "Condizioni generali di vendita",
+  "snackbar.password_updated_error": "Il link per reimpostare la password è scaduto. Si prega di generarne uno nuovo e riprovare."
 
 
 }

@@ -79,15 +79,21 @@ export class RecoverPasswordComponent implements OnInit {
       return { passwordStrength: true };
     }
   }
-
   send() {
-    //this.authService.login(this.form.value.email, this.form.value.password);
-    this.crudService.recoverPassword('/reset-password', {token: this.token,
-      password: this.form.value.password, password_confirmation: this.form.value.password_repeat})
-      .subscribe(() => {
-        this.snackbar.open(this.translateService.instant('snackbar.password_updated') , 'OK', {duration: 3000});
-        this.updated = true;
-      })
+    this.crudService.recoverPassword('/reset-password', {
+      token: this.token,
+      password: this.form.value.password,
+      password_confirmation: this.form.value.password_repeat
+    })
+      .subscribe({
+        next: () => {
+          this.snackbar.open(this.translateService.instant('snackbar.password_updated'), 'OK', { duration: 3000 });
+          this.updated = true;
+        },
+        error: () => {
+          this.snackbar.open(this.translateService.instant('snackbar.password_updated_error'), 'OK', { duration: 3000 });
+        }
+      });
   }
 
   toggleVisibility() {

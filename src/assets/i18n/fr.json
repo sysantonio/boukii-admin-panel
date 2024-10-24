@@ -643,7 +643,9 @@
   "emails.bookingCreate.qr_reminder": "Remarque : Le code QR de la réservation est exclusivement réservé à l'école. Présentez-le lorsque cela vous sera demandé.",
   "emails.bookingCreate.footer1": "Cet e-mail a été généré automatiquement et ne peut pas recevoir de réponses",
   "emails.bookingCreate.footer2": "Pour plus d'informations, contactez : ",
-  "emails.bookingCreate.footer3": "Conditions générales de vente"
+  "emails.bookingCreate.footer3": "Conditions générales de vente",
+  "snackbar.password_updated_error": "Le lien de réinitialisation du mot de passe a expiré, veuillez en générer un nouveau et réessayer."
+
 
 
 
