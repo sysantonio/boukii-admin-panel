@@ -646,7 +646,7 @@
   "emails.bookingCreate.footer1": "Diese E-Mail wurde automatisch generiert und kann nicht beantwortet werden",
   "emails.bookingCreate.footer2": "Für weitere Informationen wenden Sie sich an: ",
   "emails.bookingCreate.footer3": "Allgemeine Verkaufsbedingungen",
-  "snackbar.password_updated_error": "Der Link zum Zurücksetzen des Passworts ist abgelaufen. Bitte erstellen Sie einen neuen und versuchen Sie es erneut."
-
+  "snackbar.password_updated_error": "Der Link zum Zurücksetzen des Passworts ist abgelaufen. Bitte erstellen Sie einen neuen und versuchen Sie es erneut.",
+  "link_send":"Link gesendet"
 
 }

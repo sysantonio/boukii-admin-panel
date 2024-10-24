@@ -647,8 +647,8 @@
   "emails.bookingCreate.footer1": "This email was automatically generated and cannot receive replies",
   "emails.bookingCreate.footer2": "For more information contact: ",
   "emails.bookingCreate.footer3": "General Terms of Sale",
-  "snackbar.password_updated_error": "The password reset link has expired, please generate a new one and try again."
-
+  "snackbar.password_updated_error": "The password reset link has expired, please generate a new one and try again.",
+  "link_send":"Link sent"
 
 
 }

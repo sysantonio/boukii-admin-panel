@@ -675,5 +675,6 @@
   "emails.bookingCreate.qr_reminder": "Nota: El código QR de la reserva es de uso exclusivo de la escuela. Presentalo cuando te lo soliciten.",
   "emails.bookingCreate.footer1": "Este email ha sido generado de manera automatica y no puede recibir respuestas",
   "emails.bookingCreate.footer2": "Para mas información ponerse en contacto con: ",
-  "emails.bookingCreate.footer3": "Condiciones generales de venta"
+  "emails.bookingCreate.footer3": "Condiciones generales de venta",
+  "link_send":"Link enviado"
 }

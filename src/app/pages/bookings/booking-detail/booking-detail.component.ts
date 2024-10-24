@@ -828,6 +828,7 @@ export class BookingDetailComponent implements OnInit {
         .subscribe((result: any) => {
           if( this.defaults.payment_method_id === 3) {
             this.snackbar.open(this.translateService.instant('snackbar.booking_detail.send_mail'), 'OK', { duration: 1000 });
+            this.loading = false;
           } else {
             console.log(result);
             window.open(result.data, "_self");
