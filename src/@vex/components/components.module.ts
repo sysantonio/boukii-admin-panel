@@ -1,18 +1,18 @@
 
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSelectModule} from '@angular/material/select';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AioTableComponent } from './aio-table/aio-table.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -33,34 +33,34 @@ import { DateTimeDialogEditComponent } from './date-time-dialog-edit/date-time-d
 
 
 @NgModule({
-    imports: [
-      FormsModule,
-      ReactiveFormsModule,
-      CommonModule,
-      PageLayoutModule,
-      BreadcrumbsModule,
-      MatPaginatorModule,
-      MatTableModule,
-      MatSortModule,
-      MatCheckboxModule,
-      MatIconModule,
-      MatButtonModule,
-      MatMenuModule,
-      MatTooltipModule,
-      MatSelectModule,
-      MatButtonToggleModule,
-      MatDialogModule,
-      LayoutModule,
-      MatSnackBarModule,
-      MatProgressSpinnerModule,
-      BookingsCreateUpdateModule,
-      CoursesCreateUpdateModule,
-      MatAutocompleteModule,
-      MatDatepickerModule,
-      MatNativeDateModule,
-      MatInputModule,
-      TranslateModule
-    ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    PageLayoutModule,
+    BreadcrumbsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatButtonToggleModule,
+    MatDialogModule,
+    LayoutModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    BookingsCreateUpdateModule,
+    CoursesCreateUpdateModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    TranslateModule
+  ],
   declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent, PrivateDatesDialogComponent, DateTimeDialogEditComponent],
   exports: [AioTableComponent]
 })

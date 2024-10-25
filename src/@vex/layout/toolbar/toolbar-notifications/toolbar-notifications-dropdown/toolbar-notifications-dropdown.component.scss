@@ -34,6 +34,7 @@
 }
 
 .notification {
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
   color: var(--text-color);
   padding: var(--padding-16) var(--padding);
   position: relative;

@@ -22,8 +22,7 @@ export class ConfigService {
   private _configSubject = new BehaviorSubject(this.configs.find(c => c.id === this.defaultConfig));
   config$ = this._configSubject.asObservable();
 
-  constructor(@Inject(DOCUMENT) private document: Document,
-    private layoutService: LayoutService) {
+  constructor(@Inject(DOCUMENT) private document: Document) {
     this.config$.subscribe(config => this._updateConfig(config));
   }
 
@@ -46,7 +45,6 @@ export class ConfigService {
     this._setLayoutClass(config.id);
     this._setStyle(config.style);
     this._setDirection(config.direction);
-    this._setSidenavState(config.sidenav.state);
     this._emitResize();
   }
 
@@ -80,37 +78,6 @@ export class ConfigService {
     this.document.body.style.setProperty('--color-primary-contrast', style.colors.primary.contrast.replace('rgb(', '').replace(')', ''));
     this.document.body.style.setProperty('--color-primary-contrast-rgb', style.colors.primary.contrast);
 
-    if (style.colorScheme === "vex-style-light") {
-      this.document.body.style.setProperty('--color-dark1', "#222222");
-      this.document.body.style.setProperty('--color-dark2', "#2f3844");
-      this.document.body.style.setProperty('--color-dark3', "#61656D");
-      this.document.body.style.setProperty('--color-dark4', "#1b2d44");
-      this.document.body.style.setProperty('--color-dark5', "#122742");
-      this.document.body.style.setProperty('--color-grey1', "#8b9099");
-      this.document.body.style.setProperty('--color-grey2', "#c7d0d3");
-      this.document.body.style.setProperty('--color-grey3', "#dee6ea");
-      this.document.body.style.setProperty('--color-grey4', "#eff2f5");
-      this.document.body.style.setProperty('--color-grey5', "#f8f9fb");
-      this.document.body.style.setProperty('--color-black', "#121212");
-      this.document.body.style.setProperty('--color-white', "#ffffff");
-    } else {
-      this.document.body.style.setProperty('--color-dark1', "#f8f9fb");
-      this.document.body.style.setProperty('--color-dark2', "#eff2f5");
-      this.document.body.style.setProperty('--color-dark3', "#dee6ea");
-      this.document.body.style.setProperty('--color-dark4', "#c7d0d3");
-      this.document.body.style.setProperty('--color-dark5', "#8b9099");
-      this.document.body.style.setProperty('--color-grey1', "#122742");
-      this.document.body.style.setProperty('--color-grey2', "#1b2d44");
-      this.document.body.style.setProperty('--color-grey3', "#61656D");
-      this.document.body.style.setProperty('--color-grey4', "#2f3844");
-      this.document.body.style.setProperty('--color-grey5', "#222222");
-      this.document.body.style.setProperty('--color-black', "#ffffff");
-      this.document.body.style.setProperty('--color-white', "#121212");
-    }
-
-
-
-
   }
 
   /**
@@ -128,9 +95,6 @@ export class ConfigService {
     this.document.body.dir = direction;
   }
 
-  private _setSidenavState(sidenavState: 'expanded' | 'collapsed'): void {
-    sidenavState === 'expanded' ? this.layoutService.expandSidenav() : this.layoutService.collapseSidenav();
-  }
 
   private _setLayoutClass(layout: VexConfigName): void {
     this.configs.forEach(c => {

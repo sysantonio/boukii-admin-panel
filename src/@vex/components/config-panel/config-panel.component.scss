@@ -24,10 +24,6 @@
   }
 }
 
-.subheading {
-  @apply my-4 uppercase text-xs text-secondary font-medium;
-}
-
 .layout + .layout {
   margin-top: var(--padding);
 }

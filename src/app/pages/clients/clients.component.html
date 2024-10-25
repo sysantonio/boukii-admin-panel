@@ -7,7 +7,7 @@
     </button>
   </vex-secondary-toolbar>-->
 
-  <vex-secondary-toolbar current="">
+  <vex-secondary-toolbar current>
     <vex-breadcrumbs [crumbs]="[
     {icon:'clientes'},
     {text:'clients', title: true},
@@ -15,18 +15,21 @@
     ]" class="flex"></vex-breadcrumbs>
   </vex-secondary-toolbar>
 
-  <vex-page-layout-content class="fullwidth" [ngClass]="{'table-show-detail': this.showDetail}">
-    <vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'clients'"
-                   [route]="'clients'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
-                   (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'" [filterField]="user.schools[0].id" [sectionIcon]="icon"
-                   [with]="['sports','clientSports.degree','clientsSchools','utilizers']"
-                   [showDetail]="showDetail"></vex-aio-table>
+  <vex-page-layout-content class="fullwidth"
+    [ngClass]="{'table-show-detail': this.showDetail}">
+    <vex-aio-table [columns]="columns" [entity]="entity"
+      [deleteEntity]="deleteEntity" [title]="'clients'"
+      [route]="'clients'" [createComponent]="createComponent"
+      [canDelete]="false" [canDeactivate]="true"
+      (showDetailEvent)="showDetailEvent($event)" [filterColumn]="'school_id'"
+      [filterField]="user.schools[0].id" [sectionIcon]="icon"
+      [with]="['sports','clientSports.degree','clientsSchools','utilizers']"
+      [showDetail]="showDetail"></vex-aio-table>
   </vex-page-layout-content>
 
   <vex-page-layout-content
     class="fullwidth col-right"
-    *ngIf="showDetail"
-  >
+    *ngIf="showDetail">
     <mat-card>
       <mat-card-header class="card-header">
         <div style="width: 100%;">
@@ -34,16 +37,23 @@
             <mat-card-title>{{'client_detail' | translate}}</mat-card-title>
           </span>
           <span style="display: inline-block;width: 20%; text-align: right;">
-            <img src="assets/img/icons/edit.svg" (click)="goTo('/clients/update/'+detailData.id)" class="btn-edit" />
-            <img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" />
+            <img src="assets/img/icons/edit.svg"
+              (click)="goTo('/clients/update/'+detailData.id)"
+              class="btn-edit" />
+            <img src="assets/img/icons/close.svg" (click)="showDetail = false"
+              class="btn-close" />
           </span>
         </div>
-        <div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
+        <div
+          style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
           <mat-card-subtitle style="width:100%;">
-            <div style="width: 60%;display:inline-block;text-align: left; color: white;">
+            <div
+              style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span style="margin-left: 10px;font-style: italic;">{{detailData.created_at | date: 'HH:mm'}}h</span>
+                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span
+                  style="margin-left: 10px;font-style: italic;">{{detailData.created_at
+                  | date: 'HH:mm'}}h</span>
               </span>
             </div>
             <!-- <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
@@ -65,7 +75,8 @@
           <div class="holder-client">
             <div class="col-left">
               <div class="image" *ngIf="!clientSport?.length">
-                <img [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
+                <img
+                  [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
               </div>
 
               <app-level-user *ngIf="clientSport?.length"
@@ -80,23 +91,24 @@
                 {{detailData.first_name}} {{detailData.last_name}}
               </div>
               <div class="client-dates">
-                {{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}
+                {{getLanguage(detailData.language1_id)}} ·
+                {{getCountry(detailData.country)}} ·
+                {{calculateAge(detailData.birth_date)}} {{'years' | translate }}
               </div>
-              <div>
-                <mat-icon svgIcon="logo:message-text"></mat-icon>
-                <a
+              <div style="display: flex;">
+                <vex-icon src="chat">
+                </vex-icon>
+                <vex-icon
+                  src="mail"
                   href="mailto:{{detailData?.email}}"
                   style="cursor:pointer"
-                  title="{{detailData?.email}}"
-                >
-                  <mat-icon svgIcon="logo:mail"></mat-icon>
-                </a>
-                <a
+                  title="{{detailData?.email}}">
+                </vex-icon>
+                <vex-icon
+                  src="phone"
                   href="tel:{{detailData?.phone}}"
-                  title="{{detailData?.phone}}"
-                >
-                  <mat-icon svgIcon="logo:phone"></mat-icon>
-                </a>
+                  title="{{detailData?.phone}}">
+                </vex-icon>
               </div>
             </div>
           </div>
@@ -112,7 +124,8 @@
           <div class="holder-client">
             <div class="col-left">
               <div class="image" *ngIf="!utilizer?.client_sports?.length">
-                <img [src]="utilizer.image !== null && utilizer.image !== '' ? utilizer.image : imageAvatar" />
+                <img
+                  [src]="utilizer.image !== null && utilizer.image !== '' ? utilizer.image : imageAvatar" />
               </div>
 
               <app-level-user *ngIf="utilizer?.client_sports?.length"
@@ -127,32 +140,36 @@
                 {{utilizer.first_name}} {{utilizer.last_name}}
               </div>
               <div class="client-dates">
-                {{getLanguage(utilizer.language1_id)}} · {{getCountry(utilizer.country)}} · {{calculateAge(utilizer.birth_date)}} {{'years' | translate }}
+                {{getLanguage(utilizer.language1_id)}} ·
+                {{getCountry(utilizer.country)}} ·
+                {{calculateAge(utilizer.birth_date)}} {{'years' | translate }}
               </div>
-              <div>
-                <mat-icon svgIcon="logo:message-text"></mat-icon>
-                <a
+              <div style="display: flex;">
+                <vex-icon src="chat">
+                </vex-icon>
+                <vex-icon
+                  src="mail"
                   href="mailto:{{utilizer?.email}}"
                   style="cursor:pointer"
-                  title="{{utilizer?.email}}"
-                >
-                  <mat-icon svgIcon="logo:mail"></mat-icon>
-                </a>
-                <a
+                  title="{{utilizer?.email}}">
+                </vex-icon>
+                <vex-icon
+                  src="phone"
                   href="tel:{{utilizer?.phone}}"
-                  title="{{utilizer?.phone}}"
-                >
-                  <mat-icon svgIcon="logo:phone"></mat-icon>
-                </a>
+                  title="{{utilizer?.phone}}">
+                </vex-icon>
               </div>
             </div>
           </div>
         </div>
 
         <div class="cards-user-holder">
-          <div class="cards-user" (click)="mainIdSelected = true; utilizerSportLoaded = false;" [ngClass]="{'active-border': mainIdSelected}">
+          <div class="cards-user"
+            (click)="mainIdSelected = true; utilizerSportLoaded = false;"
+            [ngClass]="{'active-border': mainIdSelected}">
             <div class="image" *ngIf="!clientSport?.length">
-              <img [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
+              <img
+                [src]="detailData.image !== null && detailData.image !== '' ? detailData.image : imageAvatar" />
             </div>
 
             <app-level-user *ngIf="clientSport?.length"
@@ -161,12 +178,19 @@
               [size]="60"
               [userImage]="detailData.image ? detailData?.image : imageAvatar">
             </app-level-user>
-            <div class="name">{{ detailData.first_name }} {{ detailData.last_name }}</div>
-            <div class="subtitle">{{getLanguage(detailData.language1_id)}} · {{getCountry(detailData.country)}} · {{calculateAge(detailData.birth_date)}} {{'years' | translate }}</div>
+            <div class="name">{{ detailData.first_name }} {{
+              detailData.last_name }}</div>
+            <div class="subtitle">{{getLanguage(detailData.language1_id)}} ·
+              {{getCountry(detailData.country)}} ·
+              {{calculateAge(detailData.birth_date)}} {{'years' | translate
+              }}</div>
           </div>
-          <div  class="cards-user" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)" [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
+          <div class="cards-user" *ngFor="let item of utilizers; let i = index"
+            (click)="toggleBorder(i, item)"
+            [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
             <div class="image" *ngIf="!item?.client_sports?.length">
-              <img [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" />
+              <img
+                [src]="item.image !== null && item.image !== '' ? item.image : imageAvatar" />
             </div>
 
             <app-level-user *ngIf="item?.client_sports?.length"
@@ -176,7 +200,9 @@
               [userImage]="item.image ? item?.image : imageAvatar">
             </app-level-user>
             <div class="name">{{ item.first_name }} {{ item.last_name }}</div>
-            <div class="subtitle">{{ getLanguage(item.language1_id) }} · {{calculateAge(item.birth_date) }} {{'years' | translate }} · {{ getCountry(item.country) }}</div>
+            <div class="subtitle">{{ getLanguage(item.language1_id) }} ·
+              {{calculateAge(item.birth_date) }} {{'years' | translate }} · {{
+              getCountry(item.country) }}</div>
           </div>
         </div>
 
@@ -189,14 +215,18 @@
 
           <div class="deportes-holder">
             <ng-container *ngFor="let item of clientSport">
-            <ng-container *ngIf="item.school_id == user.schools[0].id">
-              <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
-                <div style="text-align: center;width: 100%;">
-                  <img [src]="item.sport.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': item?.degree?.color, 'border-color': item?.degree?.color}" />
-                </div>
-                <div style="text-align: center;width: 100%;">{{item?.sport.name}}</div>
-                <div style="text-align: center;width: 100%;">
-                  <div [ngStyle]="{
+              <ng-container *ngIf="item.school_id == user.schools[0].id">
+                <div
+                  style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
+                  <div style="text-align: center;width: 100%;">
+                    <img [src]="item.sport.icon_selected" width="50" height="50"
+                      style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                      [ngStyle]="{'background-color': item?.degree?.color, 'border-color': item?.degree?.color}" />
+                  </div>
+                  <div
+                    style="text-align: center;width: 100%;">{{item?.sport.name}}</div>
+                  <div style="text-align: center;width: 100%;">
+                    <div [ngStyle]="{
                     'color': '#fff',
                     'background-color': item?.degree?.color,
                     'border-color': item?.degree?.color,
@@ -204,15 +234,19 @@
                     'padding': '3px',
                     'border-radius': '6px'
                   }">
-                    <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.degree?.annotation}} {{item?.degree?.name}}</div>
+                      <div
+                        style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.degree?.annotation}}
+                        {{item?.degree?.name}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ng-container>
+              </ng-container>
             </ng-container>
 
             <div style="width:100%; margin-top:20px;">
-              <button class="btn-primary-accent" style="width: 100%;" (click)="createBooking();">{{'add_booking' | translate }}</button>
+              <button class="btn-primary-accent" style="width: 100%;"
+                (click)="createBooking();">{{'add_booking' | translate
+                }}</button>
             </div>
           </div>
         </div>
@@ -267,13 +301,17 @@
           <div class="deportes-holder">
             <ng-container *ngFor="let item of utilizer?.client_sports">
               <ng-container *ngIf="item.school_id == user.schools[0].id">
-              <div style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
-                <div style="text-align: center;width: 100%;">
-                  <img [src]="item.sport.icon_selected" width="50" height="50" style="border-radius: 6px; border: solid 1px #808080;display:inline-block;" [ngStyle]="{'background-color': item?.degree?.color,'border-color': item?.degree?.color}" />
-                </div>
-                <div style="text-align: center;width: 100%;">{{item.sport?.name}}</div>
-                <div style="text-align: center;width: 100%;">
-                  <div [ngStyle]="{
+                <div
+                  style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;">
+                  <div style="text-align: center;width: 100%;">
+                    <img [src]="item.sport.icon_selected" width="50" height="50"
+                      style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                      [ngStyle]="{'background-color': item?.degree?.color,'border-color': item?.degree?.color}" />
+                  </div>
+                  <div
+                    style="text-align: center;width: 100%;">{{item.sport?.name}}</div>
+                  <div style="text-align: center;width: 100%;">
+                    <div [ngStyle]="{
                   'color': '#fff',
                   'background-color': item?.degree?.color,
                   'border-color': item?.degree?.color,
@@ -281,15 +319,19 @@
                   'padding': '3px',
                   'border-radius': '6px'
                 }">
-                    <div style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.degree?.annotation}} {{item?.degree?.name}}</div>
+                      <div
+                        style="text-align: center;pading: 0px 3px; font-size:12px;">{{item?.degree?.annotation}}
+                        {{item?.degree?.name}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ng-container>
+              </ng-container>
             </ng-container>
 
             <div style="width:100%; margin-top:20px;">
-              <button class="btn-primary-accent" style="width: 100%;" (click)="createBooking();">{{'add_booking' | translate }}</button>
+              <button class="btn-primary-accent" style="width: 100%;"
+                (click)="createBooking();">{{'add_booking' | translate
+                }}</button>
             </div>
           </div>
         </div>

@@ -878,19 +878,20 @@
               {{calculateAge(defaults.client_main_id.birth_date)
               }}&ensp;{{'years' | translate}}
             </div>
-            <div>
-              <mat-icon svgIcon="logo:message-text"></mat-icon>
-              <a
+            <div style="display: flex;">
+              <vex-icon src="chat">
+              </vex-icon>
+              <vex-icon
+                src="mail"
                 href="mailto:{{getClient(defaults.client_main_id.id)?.email}}"
                 style="cursor:pointer"
                 title="{{getClient(defaults.client_main_id.id)?.email}}">
-                <mat-icon svgIcon="logo:mail"></mat-icon>
-              </a>
-              <a
+              </vex-icon>
+              <vex-icon
+                src="phone"
                 href="tel:{{getClient(defaults.client_main_id.id)?.phone}}"
                 title="{{getClient(defaults.client_main_id.id)?.phone}}">
-                <mat-icon svgIcon="logo:phone"></mat-icon>
-              </a>
+              </vex-icon>
             </div>
           </div>
         </div>
@@ -929,19 +930,20 @@
                       {{calculateAge(people.birth_date) }} &ensp;{{'years' |
                       translate}}
                     </div>
-                    <div>
-                      <mat-icon svgIcon="logo:message-text"></mat-icon>
-                      <a
+                    <div style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{getClient(people.id)?.email}}"
                         style="cursor:pointer"
                         title="{{getClient(people.id)?.email}}">
-                        <mat-icon svgIcon="logo:mail"></mat-icon>
-                      </a>
-                      <a
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
                         href="tel:{{getClient(people.id)?.phone}}"
                         title="{{getClient(people.id)?.phone}}">
-                        <mat-icon svgIcon="logo:phone"></mat-icon>
-                      </a>
+                      </vex-icon>
                     </div>
                   </div>
                 </div>
@@ -1041,19 +1043,20 @@
                       {{calculateAge(getMonitorBirth(item.courseDates[0].monitor_id))
                       }} {{'years' | translate }}
                     </div>
-                    <div>
-                      <mat-icon svgIcon="logo:message-text"></mat-icon>
-                      <a
+                    <div style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{getMonitor(item.courseDates[0].monitor_id)?.email}}"
                         style="cursor:pointer"
                         title="{{getMonitor(item.courseDates[0].monitor_id)?.email}}">
-                        <mat-icon svgIcon="logo:mail"></mat-icon>
-                      </a>
-                      <a
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
                         href="tel:{{getMonitor(item.courseDates[0].monitor_id)?.phone}}"
                         title="{{getMonitor(item.courseDates[0].monitor_id)?.phone}}">
-                        <mat-icon svgIcon="logo:phone"></mat-icon>
-                      </a>
+                      </vex-icon>
                     </div>
                   </div>
                   <div *ngIf="item.courseDates[0].course?.course_type === 1">
@@ -1248,7 +1251,7 @@
                     [ariaLabel]="'QR Code image with the following content...'"
                     [cssClass]="'center'"
                     [colorDark]="'#808080'"
-                    [colorLight]="'var(--color-grey5)olor-grey5)'"
+                    [colorLight]="'var(--color-grey5)'"
                     [elementType]="'canvas'"
                     [errorCorrectionLevel]="'H'"
                     [imageSrc]="'../../../../assets/img/10.png'"
@@ -1387,7 +1390,7 @@
                     style="width: 100%; float:left; color: #868686;"
                     *ngIf="item.courseDates[0].showOptions">
                     <div
-                      style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                      style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;">
                       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                         <div style="width: 65%;">
                           <strong>Forfait</strong>
@@ -1470,7 +1473,7 @@
                         style="width: 100%; float:left; color: #868686;"
                         *ngIf="people.showOptions">
                         <div
-                          style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                          style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;">
                           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                             <div style="width: 65%;">
                               <strong>Forfait</strong>
@@ -1528,7 +1531,7 @@
                       *ngIf="item.courseDates[0].showOptions">
                       <div
                         *ngFor="let group of getSettingsOptions(item.courseDates[0].course); let i = index; trackBy: trackByIndex"
-                        style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;">
+                        style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;">
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                           <div style="width: 65%;">
                             <strong>{{ group.groupName }} - {{group.optionName}}
@@ -1611,7 +1614,7 @@
 
                       <div style="width: 100%; float:left">
                         <div
-                          style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                          style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                           *ngIf="item.courseDates[0].course.course_type == 1">
                           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                             <div style="width: 50%;">
@@ -1645,7 +1648,7 @@
                           </div>
                         </div>
 
-                        <!--<div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
+                        <!--<div style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <div style="width: 65%;">
                         <mat-slide-toggle>Alquiler material</mat-slide-toggle>
@@ -1666,7 +1669,7 @@
                     </div>
                   </div>
 
-                  <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;" *ngIf="false">
+                  <div style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;" *ngIf="false">
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <div style="width: 65%;">
                         <mat-slide-toggle>Comida</mat-slide-toggle>
@@ -1678,7 +1681,7 @@
 
                   </div>
 
-                  <div style="width: 100%; float:left;background: #e6e6e6;padding: 2%;" *ngIf="false">
+                  <div style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%;" *ngIf="false">
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <div style="width: 65%;">
                         <mat-slide-toggle>Transporte</mat-slide-toggle>
@@ -1767,7 +1770,8 @@
                       style="float: left;width: 100%;"
                       class="text-border"></mat-divider>
 
-                    <div style="width: 100%;float:left;margin: 20px 0 0 0;">
+                    <div
+                      style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                         <mat-form-field appearance="outline" class="flex-auto">
                           <mat-label>{{
@@ -1893,7 +1897,7 @@
 
               <div style="width: 100%; float:left" *ngIf="item.courseDates[0].showOptions">
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
@@ -1950,7 +1954,7 @@
 
               <div style="width: 100%; float:left" *ngIf="people.showOptions">
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
@@ -1982,7 +1986,7 @@
                 </div>
 
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                   *ngIf="false"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -2009,7 +2013,7 @@
                 </div>
 
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                   *ngIf="false"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -2023,7 +2027,7 @@
                 </div>
 
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%;"
                   *ngIf="false"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -2124,7 +2128,7 @@
 
               <div style="width: 100%; float:left">
                 <div *ngIf="item.courseDates[0].course?.course_type === 1"
-                     style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                     style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <div style="width: 65%;">
@@ -2156,7 +2160,7 @@
                 </div>
 
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                   *ngIf="false"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -2183,7 +2187,7 @@
                 </div>
 
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%; margin-bottom: 15px;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%; margin-bottom: 15px;"
                   *ngIf="false"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -2197,7 +2201,7 @@
                 </div>
 
                 <div
-                  style="width: 100%; float:left;background: #e6e6e6;padding: 2%;"
+                  style="width: 100%; float:left;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;padding: 2%;"
                   *ngIf="false"
                 >
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -2257,7 +2261,7 @@
                 class="text-border"
               ></mat-divider>
 
-              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
+              <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                   <mat-form-field appearance="outline" class="flex-auto">
                     <mat-label>{{'observation_client' | translate}}</mat-label>
@@ -2286,7 +2290,7 @@
                 style="float: left;width: 100%;"
                 class="text-border"
               ></mat-divider>
-              <div style="width: 100%;float:left;margin: 20px 0 0 0;">
+              <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                 <p style="font-size: 12px;">
                   <strong>{{'register' | translate}}</strong
                   >:{{ minDate | date: 'dd/MM/YYYY'}}
@@ -2326,25 +2330,20 @@
                       {{calculateAge(defaults.client_main_id.birth_date) }}
                       &ensp;{{'years' | translate}}
                     </mat-card-subtitle>
-                    <mat-card-subtitle>
-                      <mat-icon
-                        style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                        svgIcon="logo:message-text"></mat-icon>
-                      <a
-                        href="tel:{{getClient(defaults.client_main_id)?.phone}}"
-                        title="{{getClient(defaults.client_main_id)?.phone}}">
-                        <mat-icon
-                          style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                          svgIcon="logo:phone"></mat-icon>
-                      </a>
-                      <a
+                    <mat-card-subtitle style="display: flex;">
+                      <vex-icon src="chat">
+                      </vex-icon>
+                      <vex-icon
+                        src="mail"
                         href="mailto:{{getClient(defaults.client_main_id)?.email}}"
                         style="cursor:pointer"
                         title="{{getClient(defaults.client_main_id)?.email}}">
-                        <mat-icon
-                          style="filter: invert(48%) sepia(55%) saturate(0%) hue-rotate(164deg) brightness(93%) contrast(92%)"
-                          svgIcon="logo:mail"></mat-icon>
-                      </a>
+                      </vex-icon>
+                      <vex-icon
+                        src="phone"
+                        href="tel:{{getClient(defaults.client_main_id)?.phone}}"
+                        title="{{getClient(defaults.client_main_id)?.phone}}">
+                      </vex-icon>
                     </mat-card-subtitle>
                   </mat-card-header>
 

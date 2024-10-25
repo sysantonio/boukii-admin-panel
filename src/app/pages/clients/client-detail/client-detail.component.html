@@ -1,5 +1,5 @@
-<vex-secondary-toolbar current="">
-  <vex-breadcrumbs  [crumbs]="[
+<vex-secondary-toolbar current>
+  <vex-breadcrumbs [crumbs]="[
     {icon:'clientes'},
     {text:'clients', title: true, link: '/clients'},
     {text:'client_info', subtitle: true}
@@ -10,7 +10,8 @@
     <div class="h-64 relative overflow-hidden">
       <img
         class="w-full h-full object-cover"
-        src="../../../../assets/img/family.jpg" style="object-position: 0% 59%;" />
+        src="../../../../assets/img/family.jpg"
+        style="object-position: 0% 59%;" />
       <div
         class="absolute bg-black opacity-25 top-0 right-0 bottom-0 left-0 w-full h-full z-0"></div>
 
@@ -19,38 +20,52 @@
         [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'" />
     </div>
 
-    <div class="z-10 relative -mt-16 px-6 flex items-center" style="margin-top: -6rem !important;position: relative;bottom: 80px;" >
+    <div class="z-10 relative -mt-16 px-6 flex items-center"
+      style="margin-top: -6rem !important;position: relative;bottom: 80px;">
       <img
         @scaleIn
         class="avatar h-24 w-24 flex-none align-start hidden sm:block border-2 border-white"
         [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'" />
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
-        <div class="h-16 items-end">
-          <p @fadeInRight class="headline text-white" style="font-size: 12px;">{{getLanguage(defaults.language1_id)}} · {{getCountry(defaults.country)}} · {{calculateAge(defaults.birth_date)}} {{'years' | translate }}</p>
+        <div class="h-16 items-end" style="display: flex;">
+          <p @fadeInRight class="headline text-white"
+            style="font-size: 12px;">{{getLanguage(defaults.language1_id)}} ·
+            {{getCountry(defaults.country)}} ·
+            {{calculateAge(defaults.birth_date)}} {{'years' | translate }}</p>
 
-          <h1 @fadeInRight class="headline text-white">{{defaults.first_name}} {{defaults.last_name}}</h1>
-
-          <mat-icon style="color:white" svgIcon="logo:message-text" ></mat-icon>
-          <a href="mailto:{{defaults.email}}" style="cursor:pointer" title="{{defaults.email}}">
-            <mat-icon style="color:white" svgIcon="logo:mail"></mat-icon>
-          </a>
-          <a href="tel:{{defaults.phone}}" style="cursor:pointer" title="{{defaults.phone}}">
-            <mat-icon style="color:white" svgIcon="logo:phone"></mat-icon>
-          </a>
+          <h1 @fadeInRight class="headline text-white">{{defaults.first_name}}
+            {{defaults.last_name}}</h1>
+          <vex-icon src="chat">
+          </vex-icon>
+          <vex-icon
+            src="mail"
+            href="mailto:{{defaults.email}}"
+            style="cursor:pointer"
+            title="{{defaults.email}}">
+          </vex-icon>
+          <vex-icon
+            src="phone"
+            href="tel:{{defaults.phone}}"
+            style="cursor:pointer"
+            title="{{defaults.phone}}">
+          </vex-icon>
         </div>
       </div>
     </div>
   </div>
   <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
-  <div class="mt-6 flex flex-col md:flex-row md:items-start" [formGroup]="formInfoAccount" *ngIf="!loading && !editing">
-    <div style="margin-left:0; margin-right: 1.5rem" class="card max-w-unset md:max-w-xs w-full flex-none md:ltr:ml-6 md:rtl:mr-6 mt-6 md:mt-0">
+  <div class="mt-6 flex flex-col md:flex-row md:items-start"
+    [formGroup]="formInfoAccount" *ngIf="!loading && !editing">
+    <div style="margin-left:0; margin-right: 1.5rem"
+      class="card max-w-unset md:max-w-xs w-full flex-none md:ltr:ml-6 md:rtl:mr-6 mt-6 md:mt-0">
       <div class="px-6 py-4 border-b">
         <h2 class="title m-0">{{'users' | translate }}</h2>
       </div>
 
-      <div @stagger class="px-6 py-4 flex flex-col gap-4" style="cursor:pointer;">
+      <div @stagger class="px-6 py-4 flex flex-col gap-4"
+        style="cursor:pointer;">
         <div
           class="flex items-center" (click)="changeClientData(mainId)">
           <img
@@ -63,12 +78,15 @@
             class="avatar ltr:mr-3 rtl:ml-3 flex-none" />
 
           <div @fadeInRight class="flex-auto">
-            <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ mainClient?.first_name }} {{ mainClient?.last_name }}</h4>
+            <h4 class="body-2 m-0 leading-snug"
+              style="width: 90%; float:left">{{ mainClient?.first_name }} {{
+              mainClient?.last_name }}</h4>
           </div>
         </div>
         <div
           *ngFor="let user of clientUsers;"
-          class="flex items-center" style="cursor:pointer;" (click)="changeClientData(user.id)">
+          class="flex items-center" style="cursor:pointer;"
+          (click)="changeClientData(user.id)">
           <img
             @scaleIn
             [src]="user?.image === null || user?.image === '' ? '../../../../assets/img/avatar.png': user?.image"
@@ -76,11 +94,14 @@
             class="avatar ltr:mr-3 rtl:ml-3 flex-none"
             [ngStyle]="{
               'border': +id === user.id && this.id !== mainId ? '#FF3085 1px solid' : 'none'
-            }"
-            />
+            }" />
           <div @fadeInRight class="flex-auto">
-            <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ user?.first_name }} {{ user?.last_name }}</h4>
-            <span class="body-2 m-0 leading-snug"  style="width: 10%; float:left" (click)="deleteUserClient(user?.utilizer_id)"><mat-icon svgIcon="mat:delete"></mat-icon></span>
+            <h4 class="body-2 m-0 leading-snug"
+              style="width: 90%; float:left">{{ user?.first_name }} {{
+              user?.last_name }}</h4>
+            <span class="body-2 m-0 leading-snug" style="width: 10%; float:left"
+              (click)="deleteUserClient(user?.utilizer_id)"><mat-icon
+                svgIcon="mat:delete"></mat-icon></span>
           </div>
         </div>
 
@@ -92,23 +113,29 @@
           </div>
         </div>
 
-
       </div>
     </div>
 
-    <mat-tab-group style="width: 100%" [selectedIndex]="selectedTabPreviewIndex" (selectedTabChange)="onTabChange($event)">
+    <mat-tab-group style="width: 100%" [selectedIndex]="selectedTabPreviewIndex"
+      (selectedTabChange)="onTabChange($event)">
       <mat-tab label="{{'card' | translate}}">
         <div class="flex-auto">
           <div class="card">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'personal_data' | translate }}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showInfo" (click)="showInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showInfo" (click)="showInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"(click)="showInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more"
+                  style="float:right;cursor:pointer" *ngIf="!showInfo"
+                  (click)="showInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less"
+                  style="float:right;cursor:pointer" *ngIf="showInfo"
+                  (click)="showInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"
+                  (click)="showInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo">
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              *ngIf="showInfo">
               <div class="py-3 flex items-center">
                 <div
                   @scaleIn
@@ -117,7 +144,8 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'name_client' | translate }}</p>
+                  <p class="m-0 caption text-hint">{{'name_client' | translate
+                    }}</p>
                   <p class="m-0 body-1">{{defaults.first_name}}</p>
                 </div>
 
@@ -131,7 +159,8 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'surname' | translate }}</p>
+                  <p class="m-0 caption text-hint">{{'surname' | translate
+                    }}</p>
                   <p class="m-0 body-1">{{defaults.last_name}}</p>
                 </div>
               </div>
@@ -140,12 +169,15 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="mat:calendar_today"></mat-icon>
+                  <mat-icon class="icon-sm"
+                    svgIcon="mat:calendar_today"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'birth_date' | translate }}</p>
-                  <p class="m-0 body-1">{{defaults.birth_date | date: 'dd/MM/YYYY'}}
+                  <p class="m-0 caption text-hint">{{'birth_date' | translate
+                    }}</p>
+                  <p class="m-0 body-1">{{defaults.birth_date | date:
+                    'dd/MM/YYYY'}}
                   </p>
                 </div>
               </div>
@@ -154,7 +186,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="logo:phone"></mat-icon>
+                  <mat-icon class="icon-sm">phone</mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -168,7 +200,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="logo:mail"></mat-icon>
+                  <mat-icon class="icon-sm">main</mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -182,7 +214,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm" svgIcon="logo:message-text"></mat-icon>
+                  <mat-icon class="icon-sm">message-text"></mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -197,13 +229,19 @@
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'address' | translate}}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showAddressInfo" (click)="showAddressInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showAddressInfo" (click)="showAddressInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showAddressInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more"
+                  style="float:right;cursor:pointer" *ngIf="!showAddressInfo"
+                  (click)="showAddressInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less"
+                  style="float:right;cursor:pointer" *ngIf="showAddressInfo"
+                  (click)="showAddressInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"
+                  (click)="showAddressInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showAddressInfo">
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              *ngIf="showAddressInfo">
               <div class="py-3 flex items-center">
                 <div
                   @scaleIn
@@ -253,7 +291,8 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'province' | translate }}</p>
+                  <p class="m-0 caption text-hint">{{'province' | translate
+                    }}</p>
                   <p class="m-0 body-1">{{getCountry(defaults.country)}}
                   </p>
                 </div>
@@ -264,20 +303,28 @@
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'sports' | translate }}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showSportInfo" (click)="showSportInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showSportInfo" (click)="showSportInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showSportInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more"
+                  style="float:right;cursor:pointer" *ngIf="!showSportInfo"
+                  (click)="showSportInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less"
+                  style="float:right;cursor:pointer" *ngIf="showSportInfo"
+                  (click)="showSportInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"
+                  (click)="showSportInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showSportInfo">
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              *ngIf="showSportInfo">
 
               <div *ngFor="let item of clientSport">
                 <div class="py-3 flex items-center">
                   <div
                     @scaleIn
                     class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px; " [style.background-color]="item?.level?.color">
+                    <img [src]="item.icon_selected"
+                      style="border-radius: 10px 0 10px 10px; "
+                      [style.background-color]="item?.level?.color">
                   </div>
 
                   <div @fadeInRight *ngIf="!editSportInfo">
@@ -296,8 +343,12 @@
 
                   <div @fadeInRight *ngIf="!editSportInfo">
                     <p class="m-0 caption text-hint">Level</p>
-                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
-                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
+                    <div
+                      style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;"
+                      [style.background-color]="item?.level?.color">
+                      <p class="m-0 body-1"
+                        style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}}
+                        - {{item?.level?.name}}</p>
                     </div>
                   </div>
                 </div>
@@ -308,13 +359,19 @@
           <div class="card" style="margin: 3% 0 0 0;">
             <div class="px-6 py-4 border-b">
               <h2 class="title m-0">{{'other_info' | translate }}
-                <mat-icon svgIcon="mat:expand_more" style="float:right;cursor:pointer" *ngIf="!showPersonalInfo" (click)="showPersonalInfoEvent(true)"></mat-icon>
-                <mat-icon svgIcon="mat:expand_less" style="float:right;cursor:pointer" *ngIf="showPersonalInfo" (click)="showPersonalInfoEvent(false)"></mat-icon>
-                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer" (click)="showPersonalInfoEditEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_more"
+                  style="float:right;cursor:pointer" *ngIf="!showPersonalInfo"
+                  (click)="showPersonalInfoEvent(true)"></mat-icon>
+                <mat-icon svgIcon="mat:expand_less"
+                  style="float:right;cursor:pointer" *ngIf="showPersonalInfo"
+                  (click)="showPersonalInfoEvent(false)"></mat-icon>
+                <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"
+                  (click)="showPersonalInfoEditEvent(true)"></mat-icon>
               </h2>
             </div>
 
-            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showPersonalInfo">
+            <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              *ngIf="showPersonalInfo">
               <div class="py-3 flex items-center">
                 <div
                   @scaleIn
@@ -323,8 +380,10 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'username' | translate }}</p>
-                  <p class="m-0 body-1">{{defaultsUser.username || 'No asigned'}}</p>
+                  <p class="m-0 caption text-hint">{{'username' | translate
+                    }}</p>
+                  <p class="m-0 body-1">{{defaultsUser.username ||
+                    'No asigned'}}</p>
                 </div>
 
               </div>
@@ -350,8 +409,10 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'observation_school'| translate }}</p>
-                  <p class="m-0 body-1">{{defaultsObservations?.notes || 'No asigned'}}</p>
+                  <p class="m-0 caption text-hint">{{'observation_school'|
+                    translate }}</p>
+                  <p class="m-0 body-1">{{defaultsObservations?.notes ||
+                    'No asigned'}}</p>
                 </div>
 
               </div>
@@ -364,8 +425,10 @@
                 </div>
 
                 <div @fadeInRight>
-                  <p class="m-0 caption text-hint">{{'observation_general' | translate}}</p>
-                  <p class="m-0 body-1">{{defaultsObservations?.general || 'No asigned'}}</p>
+                  <p class="m-0 caption text-hint">{{'observation_general' |
+                    translate}}</p>
+                  <p class="m-0 body-1">{{defaultsObservations?.general ||
+                    'No asigned'}}</p>
                 </div>
 
               </div>
@@ -377,53 +440,82 @@
 
       <mat-tab label="{{'sports' | translate }}">
         <div class="card" style="margin: 3% 0 0 0;text-align: -webkit-center;">
-          <div class="px-6 py-4 border-b" style="width: 100%;max-width:1700px;text-align: start;">
+          <div class="px-6 py-4 border-b"
+            style="width: 100%;max-width:1700px;text-align: start;">
             <h2 class="title m-0">{{'sport_evolution' | translate }}
-            <mat-icon svgIcon="mat:delete" style="float:right;cursor:pointer"  ></mat-icon>
-            <mat-icon svgIcon="mat:edit" style="float:right;cursor:pointer"></mat-icon>
+              <mat-icon svgIcon="mat:delete"
+                style="float:right;cursor:pointer"></mat-icon>
+              <mat-icon svgIcon="mat:edit"
+                style="float:right;cursor:pointer"></mat-icon>
             </h2>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 gap-4" style="border-bottom: 1px solid var(--color-grey5); padding:30px;width: 100%;max-width:1700px;text-align: start;">
+          <div class="px-6 py-4 grid grid-cols-1 gap-4"
+            style="border-bottom: 1px solid var(--color-grey5); padding:30px;width: 100%;max-width:1700px;text-align: start;">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
-                <div style="float: left; text-align: -webkit-center;" *ngFor="let item of clientSport" (click)="selectSportEvo(item)">
-                  <img [src]="selectedSport?.degree_id === item.degree_id ? item.icon_selected : item.icon_unselected" style="border-radius: 20%;border:1px solid; cursor:pointer;margin:0 10px"
-                  [ngStyle]="{
+                <div style="float: left; text-align: -webkit-center;"
+                  *ngFor="let item of clientSport"
+                  (click)="selectSportEvo(item)">
+                  <img
+                    [src]="selectedSport?.degree_id === item.degree_id ? item.icon_selected : item.icon_unselected"
+                    style="border-radius: 20%;border:1px solid; cursor:pointer;margin:0 10px"
+                    [ngStyle]="{
                     'background': selectedSport?.degree_id === item.degree_id ? '#e91e63' : '#e6e6e6',
                     'border': selectedSport?.degree_id === item.degree_id ? '#fff' : '#808080'
                   }">
-                  <p style="width: 100%;float: left;text-wrap: nowrap;"> {{item.name}}</p>
+                  <p style="width: 100%;float: left;text-wrap: nowrap;">
+                    {{item.name}}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid var(--color-grey5); padding:30px;justify-content: space-between;width: 100%;max-width:1700px;min-height: 400px;text-align: start;">
-            <div class="py-4 flex" style="width: 100%;max-width:1500px;margin: 0 30px;">
+          <div class="px-6 py-4 flex gap-4"
+            style="border-bottom: 1px solid var(--color-grey5); padding:30px;justify-content: space-between;width: 100%;max-width:1700px;min-height: 400px;text-align: start;">
+            <div class="py-4 flex"
+              style="width: 100%;max-width:1500px;margin: 0 30px;">
               <div style="float: left; width:100%;">
                 <div style="float: left; width:100%;">
-                  <div style="float: left; width:100%;display:flex;align-items: center;">
-                    <mat-icon svgIcon="mat:chevron_left" class="icon-sm flex-none" style="float:left;position: relative;cursor:pointer;height: 2rem;width:2rem;align-content: center;" (click)="changeLevel(-1)"></mat-icon>
-                    <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
+                  <div
+                    style="float: left; width:100%;display:flex;align-items: center;">
+                    <mat-icon svgIcon="mat:chevron_left"
+                      class="icon-sm flex-none"
+                      style="float:left;position: relative;cursor:pointer;height: 2rem;width:2rem;align-content: center;"
+                      (click)="changeLevel(-1)"></mat-icon>
+                    <img [src]="selectedSport?.icon_selected"
+                      [style.background]="selectedSport?.level?.color"
+                      [style.border]="selectedSport?.level?.color"
+                      style="float: left;border-radius: 20%;border:1px solid">
                     <div style="max-width: 1500px;width:100%;padding:0 30px">
-                      <p style="float: left; width:100%;font-size: 12px;position: relative;">{{selectedSport?.level?.league}} - {{calculateGoalsScore()}}%</p>
-                      <h1 style="float: left; width:100%;font-size: 20px;position: relative;">
-                        {{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}
+                      <p
+                        style="float: left; width:100%;font-size: 12px;position: relative;">{{selectedSport?.level?.league}}
+                        - {{calculateGoalsScore()}}%</p>
+                      <h1
+                        style="float: left; width:100%;font-size: 20px;position: relative;">
+                        {{selectedSport?.level?.annotation}} /
+                        {{selectedSport?.level?.name}}
                       </h1>
                     </div>
-                    <mat-icon svgIcon="mat:chevron_right" class="icon-sm flex-none" style="float:right;position: relative;cursor:pointer;height: 2rem;width:2rem;align-content: center;"(click)="changeLevel(1)"></mat-icon>
+                    <mat-icon svgIcon="mat:chevron_right"
+                      class="icon-sm flex-none"
+                      style="float:right;position: relative;cursor:pointer;height: 2rem;width:2rem;align-content: center;"
+                      (click)="changeLevel(1)"></mat-icon>
                   </div>
 
                   <div style="float: left; width:100%;margin: 2% 0 0 0;">
 
-                    <mat-progress-bar mode="determinate" [value]="calculateGoalsScore()" [color]="selectedSport?.level?.color"></mat-progress-bar>
+                    <mat-progress-bar mode="determinate"
+                      [value]="calculateGoalsScore()"
+                      [color]="selectedSport?.level?.color"></mat-progress-bar>
 
                   </div>
 
-                  <div style="float: left; width:100%;margin: 30px 0 0 0;" *ngFor="let goal of selectedGoal">
+                  <div style="float: left; width:100%;margin: 30px 0 0 0;"
+                    *ngFor="let goal of selectedGoal">
 
                     <div style="float: left; width:3%;margin-right: 2%;">
-                      <mat-icon svgIcon="mat:settings" style="color: gray"></mat-icon>
+                      <mat-icon svgIcon="mat:settings"
+                        style="color: gray"></mat-icon>
                     </div>
 
                     <div style="float: left; width:88%;">
@@ -431,8 +523,8 @@
                     </div>
                     <div style="float: left; width:5%;margin-left: 2%;">
                       <div
-                      [style.backgroundColor]="getDegreeScore(goal.id)>0?getDegreeScore(goal.id)>5?'green':'yellow':'#E6E6E6'"
-                      style="width: 25px;
+                        [style.backgroundColor]="getDegreeScore(goal.id)>0?getDegreeScore(goal.id)>5?'green':'yellow':'#E6E6E6'"
+                        style="width: 25px;
                       border-radius: 100%;
                       height: 25px;
                       margin: 0 auto;">
@@ -444,44 +536,62 @@
             </div>
             <div class="py-2 flex items-center">
               <div style="float: left; width:100%;">
-                <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="getGoalImage()"></app-level-user>
+                <app-level-user *ngIf="!coloring" [allLevels]="allLevels"
+                  [selectLevel]="selectedSport?.level?.id" [size]="200"
+                  [userImage]="getGoalImage()"></app-level-user>
               </div>
             </div>
           </div>
-          <div class="px-6 py-4 flex gap-4" style="border-bottom: 1px solid var(--color-grey5); padding:30px;width: 100%;max-width:1700px;text-align: start;">
+          <div class="px-6 py-4 flex gap-4"
+            style="border-bottom: 1px solid var(--color-grey5); padding:30px;width: 100%;max-width:1700px;text-align: start;">
             <div class="py-6 flex items-center">
-                <!--<div style="float: left; width:100%;margin-top: 5%" >
+              <!--<div style="float: left; width:100%;margin-top: 5%" >
                   <h1 style="float: left; width:100%;font-size: 20px;">{{'historical' | translate }}</h1>
                   <h2 style="float: left; width:100%;font-size: 20px;" *ngIf="getEvaluationsData().length === 0">{{'no_data' | translate }}</h2>
 
                 </div>-->
 
-                <div style="float: left; width:100%;margin-top: 5%" >
-                  <h1 style="float: left; width:100%;font-size: 20px;">{{'multimedia' | translate }}</h1>
-                  <h2 style="float: left; width:100%;font-size: 20px;" *ngIf="getEvaluationsData().length === 0">{{'no_data' | translate }}</h2>
-                  <div style="float: left; width: 100%; border-radius: 10px;" *ngFor="let item of getEvaluationsData()">
-                    <ng-container style="float: left; width: 25%; border-radius: 10px;" *ngFor="let file of item.files">
-                      <img *ngIf="file.type === 'image'" [src]="file.file" style="height: 150px;width: 150px;object-fit: cover;">
+              <div style="float: left; width:100%;margin-top: 5%">
+                <h1
+                  style="float: left; width:100%;font-size: 20px;">{{'multimedia'
+                  | translate }}</h1>
+                <h2 style="float: left; width:100%;font-size: 20px;"
+                  *ngIf="getEvaluationsData().length === 0">{{'no_data' |
+                  translate }}</h2>
+                <div style="float: left; width: 100%; border-radius: 10px;"
+                  *ngFor="let item of getEvaluationsData()">
+                  <ng-container
+                    style="float: left; width: 25%; border-radius: 10px;"
+                    *ngFor="let file of item.files">
+                    <img *ngIf="file.type === 'image'" [src]="file.file"
+                      style="height: 150px;width: 150px;object-fit: cover;">
 
-                      <video *ngIf="file.type === 'video'" width="150" heigth="150" controls>
-                        <source [src]="file.file" type="video/mp4">
-                        <source [src]="file.file" type="video/ogg">
-                      </video>
+                    <video *ngIf="file.type === 'video'" width="150"
+                      heigth="150" controls>
+                      <source [src]="file.file" type="video/mp4">
+                      <source [src]="file.file" type="video/ogg">
+                    </video>
 
-                    </ng-container>
-                  </div>
-
+                  </ng-container>
                 </div>
 
-                <div style="float: left; width:100%;margin-top: 5%" >
-                  <h1 style="float: left; width:100%;font-size: 20px;">{{'monitor_comments' | translate }}</h1>
-                  <h2 style="float: left; width:100%;font-size: 20px;" *ngIf="getEvaluationsData().length === 0">{{'no_data' | translate }}</h2>
-                  <mat-form-field appearance="outline" class="flex-auto" style="width: 100%" *ngFor="let item of getEvaluationsData()">
-                    <input matInput [readonly]=true type="text" [value]="item.observations">
+              </div>
 
-                  </mat-form-field>
+              <div style="float: left; width:100%;margin-top: 5%">
+                <h1
+                  style="float: left; width:100%;font-size: 20px;">{{'monitor_comments'
+                  | translate }}</h1>
+                <h2 style="float: left; width:100%;font-size: 20px;"
+                  *ngIf="getEvaluationsData().length === 0">{{'no_data' |
+                  translate }}</h2>
+                <mat-form-field appearance="outline" class="flex-auto"
+                  style="width: 100%" *ngFor="let item of getEvaluationsData()">
+                  <input matInput [readonly]=true type="text"
+                    [value]="item.observations">
 
-                </div>
+                </mat-form-field>
+
+              </div>
             </div>
           </div>
         </div>
@@ -489,216 +599,310 @@
 
       <mat-tab label="{{'course' | translate }}">
         <div class="card" style="margin: 3% 0 0 0;">
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-1 gap-4" style="border-bottom: 1px solid var(--color-grey5); padding:30px">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-1 gap-4"
+            style="border-bottom: 1px solid var(--color-grey5); padding:30px">
             <vex-page-layout style="margin: 2% 0 0 0;">
 
-                <vex-page-layout-content class="-mt-6 fullwidth" >
-                  <vex-aio-table [columns]="columns" [entity]="entity" [title]="'courses.title'" [route]="'bookings'"
-                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'"
-                                 [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
+              <vex-page-layout-content class="-mt-6 fullwidth">
+                <vex-aio-table [columns]="columns" [entity]="entity"
+                  [title]="'courses.title'" [route]="'bookings'"
+                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
+                  [filterColumn]="'client_id'"
+                  [with]="['booking','course.courseGroups.courseSubgroups', 'client']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
             </vex-page-layout>
 
-            <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
+            <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline"
+              *ngIf="showDetail">
               <mat-card style="padding: 0 3%;">
-              <mat-card-header style="display:block">
+                <mat-card-header style="display:block">
                   <div style="width: 100%;float: left;">
 
                   </div>
                   <div style="width: 100%;float:left;">
-                  <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' | translate}}</mat-card-title>
-                  <mat-icon svgIcon="mat:close" style="float: right;cursor:pointer; color:red;" (click)="close()"></mat-icon>
+                    <mat-card-title class="font-bold"
+                      style="float: left;width: 80%;">{{'course_detail' |
+                      translate}}</mat-card-title>
+                    <mat-icon svgIcon="mat:close"
+                      style="float: right;cursor:pointer; color:red;"
+                      (click)="close()"></mat-icon>
 
                   </div>
                   <div style="width:100%; margin-top:5%;float:left">
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
-                      <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 80%;text-align: left;"><b>{{'from'
+                          | translate }}</b></p>
+                      <p
+                        style="float: left;width: 20%;text-align: right;"><b>{{'to'
+                          | translate }}</b></p>
+                    </div>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start
+                          | date: 'dd/MM/YYYY'}}</b></p>
+                      <p
+                        style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end
+                          | date: 'dd/MM/YYYY'}}</b></p>
+                    </div>
                   </div>
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
-                      <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
-                  </div>
-                  </div>
-                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
                   <div style="width:100%; margin-top:5%;float:left">
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate }}</b></p>
-                      <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate }}</b></p>
-                  </div>
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
-                      <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
-                  </div>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 35%;text-align: left;"><b>{{'price'
+                          | translate }}</b></p>
+                      <p
+                        style="float: left;width: 65%;text-align: right;"><b>{{'max_pax'
+                          | translate }}</b></p>
+                    </div>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b>
+                        {{detailData?.course.currency}}</p>
+                      <p
+                        style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
+                    </div>
                   </div>
                   <ng-container *ngIf="detailData?.course.course_type == 1">
-                      <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-                      <div style="float: left; width: 100%;margin-top: 5%;">
+                    <mat-divider
+                      style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                    <div style="float: left; width: 100%;margin-top: 5%;">
                       <ul>
-                          <ng-container *ngFor="let date of detailData?.course.course_dates">
-                              <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-                          </ng-container>
+                        <ng-container
+                          *ngFor="let date of detailData?.course.course_dates">
+                          <li
+                            [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}}
+                            <i
+                              style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
+                        </ng-container>
                       </ul>
-                      </div>
+                    </div>
                   </ng-container>
-                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-              </mat-card-header>
-              <mat-card-content>
-                <div style="float: left; width: 100%;margin-bottom:24px;">
-                  <div style="float: left;width: 100%;">
+                </mat-card-header>
+                <mat-card-content>
+                  <div style="float: left; width: 100%;margin-bottom:24px;">
+                    <div style="float: left;width: 100%;">
                       <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
                       <div style="float: left; width: 12%; margin-top: 5%">
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                        <img style="width: 75px; height: 75px;"
+                          *ngIf="detailData?.course?.course_type == 1"
+                          [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
+                          width="100" height="100" />
+                        <img style="width: 75px; height: 75px;"
+                          *ngIf="detailData?.course?.course_type == 2"
+                          [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
+                          width="100" height="100" />
                       </div>
                       <div style="float: left; width: 75%;margin:6% 0 0 2%">
-                      <p><strong>{{detailData?.course?.name}}</strong></p>
-                      <p>
-                          <ng-container *ngIf="detailData?.course?.course_type == 1">
+                        <p><strong>{{detailData?.course?.name}}</strong></p>
+                        <p>
+                          <ng-container
+                            *ngIf="detailData?.course?.course_type == 1">
                             {{'colective' | translate}}
                           </ng-container>
-                          <ng-container *ngIf="detailData?.course?.course_type == 2">
+                          <ng-container
+                            *ngIf="detailData?.course?.course_type == 2">
                             {{'private' | translate}}
                           </ng-container>
                           <ng-container *ngIf="detailData?.sport">
-                              {{detailData?.sport.name}}
+                            {{detailData?.sport.name}}
                           </ng-container>
-                      </p>
+                        </p>
                       </div>
+                    </div>
                   </div>
-                </div>
-                <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-                  <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
-                      <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
-                          <img src="https://api.boukii.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
-                          <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
-                          <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
-                          <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
-                      </div>
-                      <div class="box-detail-box box-background-grey">
-                          <img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
-                          <div>{{'groups' | translate}}</div>
-                          <div class="font-bold">{{getGroupsQuantity()}}</div>
-                      </div>
-                      <div class="box-detail-box box-background-grey">
-                          <img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
-                          <div>{{'duration' | translate}}</div>
-                          <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
-                      </div>
-                      <div class="box-detail-box box-background-grey">
-                          <img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
-                          <div>{{'days' | translate}}</div>
-                          <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
-                      </div>
+                  <div *ngIf="detailData?.course?.course_type == 1"
+                    class="box-detail-boxes">
+                    <div class="box-detail-box"
+                      [ngStyle]="{'background': detailData?.degree?.color}">
+                      <img
+                        src="https://api.boukii.com/storage/icons/award_icon.svg"
+                        style="width:24px;height:24px;" />
+                      <div
+                        class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
+                      <div
+                        class="font-bold font-white">{{detailData?.degree?.name}}</div>
+                      <div
+                        class="font-bold font-white">{{getSubGroupsIndex()}}</div>
+                    </div>
+                    <div class="box-detail-box box-background-grey">
+                      <img
+                        src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg"
+                        style="width:24px;height:24px;" />
+                      <div>{{'groups' | translate}}</div>
+                      <div class="font-bold">{{getGroupsQuantity()}}</div>
+                    </div>
+                    <div class="box-detail-box box-background-grey">
+                      <img
+                        src="https://api.boukii.com/storage/icons/icons-outline-clock.svg"
+                        style="width:24px;height:24px;" />
+                      <div>{{'duration' | translate}}</div>
+                      <div
+                        class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
+                    </div>
+                    <div class="box-detail-box box-background-grey">
+                      <img
+                        src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg"
+                        style="width:24px;height:24px;" />
+                      <div>{{'days' | translate}}</div>
+                      <div
+                        class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
+                    </div>
                   </div>
 
-                  <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                   <ng-container *ngIf="detailData?.course.course_type == 2">
 
-                      <div style="width: 100%;float:left;margin-bottom:12px;">
-                          <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' | translate}}</mat-card-title>
-                      </div>
+                    <div style="width: 100%;float:left;margin-bottom:12px;">
+                      <mat-card-title class="font-bold"
+                        style="float: left;width: 80%;">{{'booking' |
+                        translate}}</mat-card-title>
+                    </div>
 
-                      <div style="float: left; width: 100%;">
-                          <ul>
-                              <li class="font-bold">{{getDateFormatLong(detailData?.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
-                          </ul>
-                      </div>
+                    <div style="float: left; width: 100%;">
+                      <ul>
+                        <li
+                          class="font-bold">{{getDateFormatLong(detailData?.date)}}
+                          <i
+                            style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
+                      </ul>
+                    </div>
 
-                      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                    <mat-divider
+                      style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
-                      <div style="width: 100%;float:left;margin-bottom:12px;">
-                          <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'user' | translate }}</mat-card-title>
-                      </div>
+                    <div style="width: 100%;float:left;margin-bottom:12px;">
+                      <mat-card-title class="font-bold"
+                        style="float: left;width: 100%;">{{'user' | translate
+                        }}</mat-card-title>
+                    </div>
 
-                      <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                        <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
-                          <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
-                              <div class="box-detail-user-block-text">
-                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
-                                  <span>
-                                      <ng-container *ngIf="client?.language1_id">
-                                          {{getLanguageById(client?.language1_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language2_id">
-                                          {{getLanguageById(client?.language2_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language3_id">
-                                          {{getLanguageById(client?.language3_id)}} ·
-                                      </ng-container>
-                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
-                                      · {{client?.phone}} · {{client?.email}}
-                                  </span>
-                                  <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
-                                      {{detailData?.degree.name}}
-                                  </div>
-                              </div>
+                    <div
+                      style="display:flex;width:100%;flex-direction:column;gap:8px;">
+                      <div *ngFor="let client of detailData?.users"
+                        class="box-detail-user-block">
+                        <app-level-user *ngIf="detailData.sport"
+                          [allLevels]="getAllLevelsBySport()"
+                          [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
+                          [size]="60"
+                          [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <div class="box-detail-user-block-text">
+                          <div>{{ client?.first_name }} {{ client?.last_name
+                            }}</div>
+                          <span>
+                            <ng-container *ngIf="client?.language1_id">
+                              {{getLanguageById(client?.language1_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language2_id">
+                              {{getLanguageById(client?.language2_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language3_id">
+                              {{getLanguageById(client?.language3_id)}} ·
+                            </ng-container>
+                            {{getCountryById(client?.country)}} ·
+                            {{getBirthYears(client?.birth_date)}} {{'years' |
+                            translate }}
+                            · {{client?.phone}} · {{client?.email}}
+                          </span>
+                          <div *ngIf="detailData?.degree"
+                            class="box-detail-user-blocklevel"
+                            [ngStyle]="{'background': detailData?.degree.color}">
+                            {{detailData?.degree.name}}
                           </div>
+                        </div>
                       </div>
+                    </div>
 
-                      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                    <mat-divider
+                      style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                   </ng-container>
 
                   <div style="width: 100%;float:left;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
+                    <mat-card-title class="font-bold"
+                      style="float: left;width: 80%;">{{'monitor' | translate
+                      }}</mat-card-title>
                   </div>
 
                   <div *ngIf="defaults" class="box-detail-user-block">
-                      <div class="box-detail-user-block-img">
-                          <img [src]="defaults.image ? defaults.image : '../../../../assets/img/avatar.png'" />
-                      </div>
-                      <div class="box-detail-user-block-text">
-                          <div>{{ defaults.first_name }} {{ defaults.last_name }}</div>
-                          <span>
-                              <ng-container *ngIf="defaults.language1_id">
-                                  {{getLanguageById(defaults.language1_id)}} ·
-                              </ng-container>
-                              {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}} {{'years' | translate }}
-                              · {{defaults.phone}} · {{defaults.email}}
-                          </span>
-                      </div>
+                    <div class="box-detail-user-block-img">
+                      <img
+                        [src]="defaults.image ? defaults.image : '../../../../assets/img/avatar.png'" />
+                    </div>
+                    <div class="box-detail-user-block-text">
+                      <div>{{ defaults.first_name }} {{ defaults.last_name
+                        }}</div>
+                      <span>
+                        <ng-container *ngIf="defaults.language1_id">
+                          {{getLanguageById(defaults.language1_id)}} ·
+                        </ng-container>
+                        {{getCountryById(defaults.country)}} ·
+                        {{getBirthYears(defaults.birth_date)}} {{'years' |
+                        translate }}
+                        · {{defaults.phone}} · {{defaults.email}}
+                      </span>
+                    </div>
                   </div>
 
                   <ng-container *ngIf="detailData?.course.course_type == 1">
-                      <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                          <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate}} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
-                          <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
-                      </div>
+                    <div
+                      style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
+                      <mat-card-title class="font-bold"
+                        style="float: left;width: 80%;">{{'students' |
+                        translate}}
+                        {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                      <mat-icon class="cursor-pointer"
+                        style="float: right;width: 10%;"
+                        svgIcon="mat:swap_horiz"></mat-icon>
+                    </div>
 
-                      <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                          <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
-                              <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
-                              <div class="box-detail-user-block-text">
-                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
-                                  <span>
-                                      <ng-container *ngIf="client?.language1_id">
-                                          {{getLanguageById(client?.language1_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language2_id">
-                                          {{getLanguageById(client?.language2_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language3_id">
-                                          {{getLanguageById(client?.language3_id)}} ·
-                                      </ng-container>
-                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
-                                      · {{client?.phone}} · {{client?.email}}
-                                  </span>
-                              </div>
-                          </div>
+                    <div
+                      style="display:flex;width:100%;flex-direction:column;gap:8px;">
+                      <div *ngFor="let client of detailData?.users"
+                        class="box-detail-user-block">
+                        <app-level-user *ngIf="detailData.sport"
+                          [allLevels]="getAllLevelsBySport()"
+                          [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
+                          [size]="60"
+                          [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <div class="box-detail-user-block-text">
+                          <div>{{ client?.first_name }} {{ client?.last_name
+                            }}</div>
+                          <span>
+                            <ng-container *ngIf="client?.language1_id">
+                              {{getLanguageById(client?.language1_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language2_id">
+                              {{getLanguageById(client?.language2_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language3_id">
+                              {{getLanguageById(client?.language3_id)}} ·
+                            </ng-container>
+                            {{getCountryById(client?.country)}} ·
+                            {{getBirthYears(client?.birth_date)}} {{'years' |
+                            translate }}
+                            · {{client?.phone}} · {{client?.email}}
+                          </span>
+                        </div>
                       </div>
+                    </div>
                   </ng-container>
 
-              </mat-card-content>
-            </mat-card>
+                </mat-card-content>
+              </mat-card>
             </vex-page-layout-content>
           </div>
         </div>
@@ -710,15 +914,16 @@
 
   </div>
 
-
-  <div class="mt-6 flex flex-col md:flex-row md:items-start"*ngIf="!loading && editing">
+  <div class="mt-6 flex flex-col md:flex-row md:items-start"
+    *ngIf="!loading && editing">
     <div style="margin-left:0; margin-right: 1.5rem"
       class="card max-w-unset md:max-w-xs w-full flex-none md:ltr:ml-6 md:rtl:mr-6 mt-6 md:mt-0">
       <div class="px-6 py-4 border-b">
         <h2 class="title m-0">{{'users' | translate }}</h2>
       </div>
 
-      <div @stagger class="px-6 py-4 flex flex-col gap-4" style="cursor:pointer;">
+      <div @stagger class="px-6 py-4 flex flex-col gap-4"
+        style="cursor:pointer;">
         <div
           class="flex items-center" (click)="changeClientData(mainId)">
           <img
@@ -731,12 +936,15 @@
             class="avatar ltr:mr-3 rtl:ml-3 flex-none" />
 
           <div @fadeInRight class="flex-auto">
-            <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ mainClient?.first_name }} {{ mainClient?.last_name }}</h4>
+            <h4 class="body-2 m-0 leading-snug"
+              style="width: 90%; float:left">{{ mainClient?.first_name }} {{
+              mainClient?.last_name }}</h4>
           </div>
         </div>
         <div
           *ngFor="let user of clientUsers;"
-          class="flex items-center" style="cursor:pointer;" (click)="changeClientData(user.id)">
+          class="flex items-center" style="cursor:pointer;"
+          (click)="changeClientData(user.id)">
           <img
             @scaleIn
             [src]="user?.image === null || user?.image === '' ? '../../../../assets/img/avatar.png': user?.image"
@@ -744,11 +952,14 @@
             class="avatar ltr:mr-3 rtl:ml-3 flex-none"
             [ngStyle]="{
               'border': +id === defaults.id && this.id !== mainId ? '#FF3085 1px solid' : 'none'
-            }"
-            />
+            }" />
           <div @fadeInRight class="flex-auto">
-            <h4 class="body-2 m-0 leading-snug" style="width: 90%; float:left">{{ user?.first_name }} {{ user?.last_name }}</h4>
-            <span class="body-2 m-0 leading-snug"  style="width: 10%; float:left" (click)="deleteUserClient(user?.utilizer_id)"><mat-icon svgIcon="mat:delete"></mat-icon></span>
+            <h4 class="body-2 m-0 leading-snug"
+              style="width: 90%; float:left">{{ user?.first_name }} {{
+              user?.last_name }}</h4>
+            <span class="body-2 m-0 leading-snug" style="width: 10%; float:left"
+              (click)="deleteUserClient(user?.utilizer_id)"><mat-icon
+                svgIcon="mat:delete"></mat-icon></span>
           </div>
         </div>
 
@@ -760,12 +971,13 @@
           </div>
         </div>
 
-
       </div>
     </div>
-    <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChange($event)" *ngIf="!loading && editing">
+    <mat-tab-group style="width: 100%" (selectedTabChange)="onTabChange($event)"
+      *ngIf="!loading && editing">
       <mat-tab label="Profile">
-        <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false" [selectedIndex]="selectedTabIndex">
+        <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="false"
+          [selectedIndex]="selectedTabIndex">
 
           <ng-template matStepperIcon="edit">
             <mat-icon svgIcon="mat:done_all"></mat-icon>
@@ -777,73 +989,96 @@
 
           <mat-step [stepControl]="formInfoAccount">
             <form [formGroup]="formInfoAccount">
-              <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
+              <ng-template matStepLabel>{{'monitors.creation.info' | translate
+                }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <div class="image-container">
-                  <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'" alt="Image Preview" style="width: 200px;height: 200px;border-radius: 100%;object-fit: fill;">
+                  <img
+                    [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'"
+                    alt="Image Preview"
+                    style="width: 200px;height: 200px;border-radius: 100%;object-fit: fill;">
                 </div>
 
                 <div class="input-container">
 
-                  <input type="file" formControlName="image" placeholder="Select an image" (change)="onFileChanged($event)" id="file"/>
-                    <label for="file" class="btn-1"><mat-icon svgIcon="mat:cloud_upload"></mat-icon></label>
-                    <p style="font-size: 12px">{{'image_max' | translate}}</p>
-                    <p style="font-size: 12px">{{'image_format' | translate}}</p>
-                    <p style="font-size: 12px">{{'image_recomendation' | translate}}</p>
+                  <input type="file" formControlName="image"
+                    placeholder="Select an image"
+                    (change)="onFileChanged($event)" id="file" />
+                  <label for="file" class="btn-1"><mat-icon
+                      svgIcon="mat:cloud_upload"></mat-icon></label>
+                  <p style="font-size: 12px">{{'image_max' | translate}}</p>
+                  <p style="font-size: 12px">{{'image_format' | translate}}</p>
+                  <p style="font-size: 12px">{{'image_recomendation' |
+                    translate}}</p>
                 </div>
               </div>
 
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-                  <mat-form-field appearance="outline" class="flex-auto">
-                    <mat-label>{{'name_client' | translate }}</mat-label>
-                    <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
-                    <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-                  </mat-form-field>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"
+                style="margin: 3% 0 0 0;">
+                <mat-form-field appearance="outline" class="flex-auto">
+                  <mat-label>{{'name_client' | translate }}</mat-label>
+                  <input formControlName="name" matInput required type="text"
+                    [(ngModel)]="defaults.first_name">
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
+                </mat-form-field>
 
-                  <mat-form-field appearance="outline" class="flex-auto">
-                    <mat-label>{{'surname' | translate }}</mat-label>
-                    <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
-                    <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-                  </mat-form-field>
+                <mat-form-field appearance="outline" class="flex-auto">
+                  <mat-label>{{'surname' | translate }}</mat-label>
+                  <input formControlName="surname" matInput required type="text"
+                    [(ngModel)]="defaults.last_name">
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
+                </mat-form-field>
               </div>
 
-                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                  <mat-form-field appearance="outline" class="flex-auto">
-                    <mat-label>Email</mat-label>
-                    <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
-                    <mat-icon class="mr-2" matPrefix svgIcon="logo:mail"></mat-icon>
-                  </mat-form-field>
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                <mat-form-field appearance="outline" class="flex-auto">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput required type="mail"
+                    [(ngModel)]="defaults.email">
+                  <mat-icon class="mr-2" matPrefix>main</mat-icon>
+                </mat-form-field>
 
-                  <mat-form-field appearance="outline" class="flex-auto">
-                    <mat-label>{{'username' | translate }}</mat-label>
-                    <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
-                    <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-                  </mat-form-field>
-                </div>
-
+                <mat-form-field appearance="outline" class="flex-auto">
+                  <mat-label>{{'username' | translate }}</mat-label>
+                  <input formControlName="username" matInput type="text"
+                    [(ngModel)]="defaultsUser.username">
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
+                </mat-form-field>
+              </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>Password</mat-label>
-                  <input formControlName="password" matInput type="password" [(ngModel)]="defaultsUser.password">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:lock"></mat-icon>
+                  <input formControlName="password" matInput type="password"
+                    [(ngModel)]="defaultsUser.password">
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:lock"></mat-icon>
                 </mat-form-field>
               </div>
 
-
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <div style="float:right">
-                  {{'active' |translate}} <mat-slide-toggle [checked]="defaultsUser.active" (change)="setActive($event)"></mat-slide-toggle>
+                  {{'active' |translate}} <mat-slide-toggle
+                    [checked]="defaultsUser.active"
+                    (change)="setActive($event)"></mat-slide-toggle>
                 </div>
               </div>
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
-                <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
+                <button mat-button type="button"
+                  (click)="editing = false; selectedTabIndex = 0">{{'cancel' |
+                  translate }}</button>
+                <button mat-button type="button"
+                  (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button color="primary" [disabled]="formInfoAccount.invalid"
+                  mat-raised-button (click)="save()">
                   {{'save' | translate}}
                 </button>
-                <button [disabled]="formInfoAccount.invalid" color="primary" mat-raised-button matStepperNext>
+                <button [disabled]="formInfoAccount.invalid" color="primary"
+                  mat-raised-button matStepperNext>
                   {{'next' | translate}}
                 </button>
               </div>
@@ -851,14 +1086,21 @@
           </mat-step>
           <mat-step [stepControl]="formPersonalInfo">
             <form [formGroup]="formPersonalInfo">
-              <ng-template matStepLabel>{{'personal_data' | translate }}</ng-template>
+              <ng-template matStepLabel>{{'personal_data' | translate
+                }}</ng-template>
 
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"
+                style="margin: 3% 0 0 0;">
 
                 <mat-form-field appearance="outline" class="flex-auto">
-                  <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date">
-                  <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+                  <input matInput [matDatepicker]="pickerFrom"
+                    placeholder="{{'birth_date' | translate }}"
+                    formControlName="fromDate" [max]="minDate"
+                    [(ngModel)]="defaults.birth_date">
+                  <mat-datepicker-toggle matSuffix
+                    [for]="pickerFrom"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerFrom
+                    [startAt]="minDate"></mat-datepicker>
                 </mat-form-field>
 
               </div>
@@ -867,14 +1109,16 @@
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'phone' | translate }}</mat-label>
 
-                  <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+                  <input formControlName="phone" matInput type="tel"
+                    [(ngModel)]="defaults.telephone">
+                  <mat-icon class="mr-2" matPrefix>phone</mat-icon>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'mobile' | translate }}</mat-label>
-                  <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:phone"></mat-icon>
+                  <input formControlName="mobile" matInput required type="tel"
+                    [(ngModel)]="defaults.phone">
+                  <mat-icon class="mr-2" matPrefix>phone</mat-icon>
                 </mat-form-field>
               </div>
 
@@ -882,52 +1126,75 @@
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'address' | translate }}</mat-label>
 
-                  <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+                  <input formControlName="address" matInput type="text"
+                    [(ngModel)]="defaults.address">
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'cp' | translate }}</mat-label>
-                  <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+                  <input formControlName="postalCode" matInput type="text"
+                    [(ngModel)]="defaults.cp">
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
                 </mat-form-field>
               </div>
 
-
-
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
+                <mat-form-field appearance="outline"
+                  class="vex-flex-form-field flex-auto">
                   <mat-label>{{'country' | translate }}</mat-label>
-                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry">
-                  <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
-                    <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
+                  <input type="text" placeholder="Selecciona una opción"
+                    matInput [formControl]="myControlCountries"
+                    [matAutocomplete]="autoCountry">
+                  <mat-autocomplete #autoCountry="matAutocomplete"
+                    [displayWith]="displayFnCountry">
+                    <mat-option
+                      *ngFor="let country of filteredCountries | async"
+                      [value]="country"
+                      (onSelectionChange)="defaults.country = country.id">
                       {{country.name}}
                     </mat-option>
                   </mat-autocomplete>
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
+                <mat-form-field appearance="outline"
+                  class="vex-flex-form-field flex-auto">
                   <mat-label>{{'province' | translate }}</mat-label>
-                  <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince">
-                  <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
-                    <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
+                  <input type="text" placeholder="Selecciona una opción"
+                    matInput [formControl]="myControlProvinces"
+                    [matAutocomplete]="autoProvince">
+                  <mat-autocomplete #autoProvince="matAutocomplete"
+                    [displayWith]="displayFnProvince">
+                    <mat-option
+                      *ngFor="let province of filteredProvinces | async"
+                      [value]="province"
+                      (onSelectionChange)="defaults.province = province.id">
                       {{province.name}}
                     </mat-option>
                   </mat-autocomplete>
-                  <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
+                  <mat-icon class="mr-2" matPrefix
+                    svgIcon="logo:task"></mat-icon>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'langs' | translate }}</mat-label>
                   <mat-select [formControl]="languagesControl" multiple>
                     <mat-select-trigger>
-                      <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
+                      <div
+                        *ngIf="selectedLanguages.length > 0; else placeholderLangs">
                         {{ getSelectedLanguageNames() }}
                       </div>
-                      <ng-template #placeholderLangs>{{'choose_langs' | translate }}</ng-template>
+                      <ng-template #placeholderLangs>{{'choose_langs' |
+                        translate }}</ng-template>
                     </mat-select-trigger>
-                    <mat-option *ngFor="let language of filteredLanguages | async" [value]="language" (onSelectionChange)="toggleSelectionLanguages($event, language)">
+                    <mat-option
+                      *ngFor="let language of filteredLanguages | async"
+                      [value]="language"
+                      (onSelectionChange)="toggleSelectionLanguages($event, language)">
                       {{language.name}}
                     </mat-option>
                   </mat-select>
@@ -935,36 +1202,45 @@
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
-                <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button  color="primary" [disabled]="formInfoAccount.invalid" mat-raised-button (click)="save()">
+                <button mat-button type="button"
+                  (click)="editing = false; selectedTabIndex = 0">{{'cancel' |
+                  translate }}</button>
+                <button mat-button type="button"
+                  (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button color="primary" [disabled]="formInfoAccount.invalid"
+                  mat-raised-button (click)="save()">
                   {{'save' | translate}}
                 </button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button matStepperNext>
+                <button [disabled]="formPersonalInfo.invalid" color="primary"
+                  mat-raised-button matStepperNext>
                   {{'next' |translate}}
                 </button>
               </div>
             </form>
           </mat-step>
 
-
           <mat-step [stepControl]="formSportInfo">
             <form [formGroup]="formSportInfo">
               <ng-template matStepLabel>{{'sports' |translate}}</ng-template>
 
-              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 2% 0 0 0;">
+              <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"
+                style="margin: 2% 0 0 0;">
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'sports' |translate}}</mat-label>
                   <mat-select [formControl]="sportsControl" multiple>
 
                     <mat-select-trigger>
-                      <div *ngIf="sportsControl.value?.length > 0; else placeholder">
+                      <div
+                        *ngIf="sportsControl.value?.length > 0; else placeholder">
                         {{ getSelectedSportsNames() }}
                       </div>
-                      <ng-template #placeholder>{{'choose_sports' | translate }}</ng-template>
+                      <ng-template #placeholder>{{'choose_sports' | translate
+                        }}</ng-template>
                     </mat-select-trigger>
 
-                    <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection($event, sport)">
+                    <mat-option *ngFor="let sport of filteredSports | async"
+                      [value]="sport"
+                      (onSelectionChange)="toggleSelection($event, sport)">
                       {{sport.name}}
                     </mat-option>
                   </mat-select>
@@ -974,41 +1250,57 @@
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                 <!-- Añadir niños con modal -->
-                <mat-table #sportsCurrentTable [dataSource]="sportsCurrentData" >
-                  <caption style="width: 100%;float: left;text-align: left;"> {{'current_sport' | translate }}</caption>
+                <mat-table #sportsCurrentTable [dataSource]="sportsCurrentData">
+                  <caption style="width: 100%;float: left;text-align: left;">
+                    {{'current_sport' | translate }}</caption>
 
                   <!-- Otros contenedores según tu descripción -->
 
                   <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> {{'name' | translate }}</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef> {{'name' | translate
+                      }}</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                      <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-form-field appearance="outline" class="flex-auto"
+                        style="margin: 2% 0 0 0;">
                         <mat-label>{{'name' | translate }}</mat-label>
-                        <input matInput [value]="element.name" type="text" [readonly]="true">
+                        <input matInput [value]="element.name" type="text"
+                          [readonly]="true">
                       </mat-form-field>
                     </mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="level">
-                    <mat-header-cell *matHeaderCellDef>{{'level' | translate }}</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>{{'level' | translate
+                      }}</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                      <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-form-field appearance="outline" class="flex-auto"
+                        style="margin: 2% 0 0 0;">
                         <mat-label>{{'level' | translate }}</mat-label>
-                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="autoLevel" [value]="element?.level?.name" [(ngModel)]="element.level"/>
-                      <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                        <mat-option *ngFor="let level of element?.degrees" [value]="level"  (onSelectionChange)="element.level = level" (onSelectionChange)="updateLevel(element, level)">
-                          {{level.annotation}} - {{level.name}}
-                        </mat-option>
-                      </mat-autocomplete>
+                        <input type="text" placeholder="Pick one"
+                          aria-label="Number" matInput
+                          [matAutocomplete]="autoLevel"
+                          [value]="element?.level?.name"
+                          [(ngModel)]="element.level" />
+                        <mat-autocomplete #autoLevel="matAutocomplete"
+                          [displayWith]="displayFnLevel">
+                          <mat-option *ngFor="let level of element?.degrees"
+                            [value]="level"
+                            (onSelectionChange)="element.level = level"
+                            (onSelectionChange)="updateLevel(element, level)">
+                            {{level.annotation}} - {{level.name}}
+                          </mat-option>
+                        </mat-autocomplete>
                       </mat-form-field>
                     </mat-cell>
                   </ng-container>
 
-
                   <ng-container matColumnDef="delete">
-                    <mat-header-cell *matHeaderCellDef class="delete-column">Eliminar</mat-header-cell>
-                    <mat-cell *matCellDef="let element; let i = index" class="delete-column">
-                      <mat-icon svgIcon="mat:delete" (click)="removeSport(i, element)"></mat-icon>
+                    <mat-header-cell *matHeaderCellDef
+                      class="delete-column">Eliminar</mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index"
+                      class="delete-column">
+                      <mat-icon svgIcon="mat:delete"
+                        (click)="removeSport(i, element)"></mat-icon>
                     </mat-cell>
                   </ng-container>
                   <!-- Ícono para eliminar
@@ -1019,37 +1311,51 @@
                     </mat-cell>
                   </ng-container> -->
 
-                  <mat-header-row *matHeaderRowDef="displayedCurrentColumns"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedCurrentColumns;"></mat-row>
+                  <mat-header-row
+                    *matHeaderRowDef="displayedCurrentColumns"></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: displayedCurrentColumns;"></mat-row>
                 </mat-table>
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
                 <!-- Añadir niños con modal -->
-                <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.sportsData.data.length > 0">
-                  <caption style="width: 100px"> {{'sports' | translate }}</caption>
+                <mat-table #sportsTable [dataSource]="sportsData"
+                  *ngIf="this.sportsData.data.length > 0">
+                  <caption style="width: 100px"> {{'sports' | translate
+                    }}</caption>
 
                   <!-- Otros contenedores según tu descripción -->
 
                   <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> {{'name' | translate }}</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef> {{'name' | translate
+                      }}</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                      <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-form-field appearance="outline" class="flex-auto"
+                        style="margin: 2% 0 0 0;">
                         <mat-label>{{'name' | translate }}</mat-label>
-                        <input matInput [value]="element.name" type="text" [readonly]="true">
+                        <input matInput [value]="element.name" type="text"
+                          [readonly]="true">
                       </mat-form-field>
                     </mat-cell>
                   </ng-container>
 
                   <ng-container matColumnDef="date">
-                    <mat-header-cell *matHeaderCellDef>{{'level' | translate }}</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>{{'level' | translate
+                      }}</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                      <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
+                      <mat-form-field appearance="outline" class="flex-auto"
+                        style="margin: 2% 0 0 0;">
                         <mat-label>{{'level' | translate }}</mat-label>
-                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
-                        <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                          <mat-option *ngFor="let level of element.degrees" [value]="level">
+                        <input type="text" placeholder="Pick one"
+                          aria-label="Number" matInput [formControl]="levelForm"
+                          [matAutocomplete]="autoLevel"
+                          [(ngModel)]="element.level" />
+                        <mat-autocomplete #autoLevel="matAutocomplete"
+                          [displayWith]="displayFnLevel">
+                          <mat-option *ngFor="let level of element.degrees"
+                            [value]="level">
                             {{level.annotation}} - {{level.name}}
                           </mat-option>
                         </mat-autocomplete>
@@ -1065,15 +1371,21 @@
                     </mat-cell>
                   </ng-container> -->
 
-                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  <mat-header-row
+                    *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </mat-table>
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
-                <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button>
+                <button mat-button type="button"
+                  (click)="editing = false; selectedTabIndex = 0">{{'cancel' |
+                  translate }}</button>
+                <button mat-button type="button"
+                  (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button [disabled]="formPersonalInfo.invalid" color="primary"
+                  mat-raised-button>
                   {{'save' |translate}}
                 </button>
               </div>
@@ -1083,33 +1395,41 @@
 
           <mat-step [stepControl]="formOtherInfo">
             <form [formGroup]="formOtherInfo">
-              <ng-template matStepLabel>{{'other_info' | translate }}</ng-template>
+              <ng-template matStepLabel>{{'other_info' | translate
+                }}</ng-template>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'observation_general' |translate}}</mat-label>
-                  <textarea formControlName="summary" matInput [(ngModel)]="defaultsObservations.general"></textarea>
+                  <textarea formControlName="summary" matInput
+                    [(ngModel)]="defaultsObservations.general"></textarea>
                 </mat-form-field>
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'observation_school' |translate}}</mat-label>
-                  <textarea formControlName="notes" matInput [(ngModel)]="defaultsObservations.notes"></textarea>
+                  <textarea formControlName="notes" matInput
+                    [(ngModel)]="defaultsObservations.notes"></textarea>
                 </mat-form-field>
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'historical' | translate }}</mat-label>
-                  <textarea formControlName="hitorical" matInput [(ngModel)]="defaultsObservations.historical"></textarea>
+                  <textarea formControlName="hitorical" matInput
+                    [(ngModel)]="defaultsObservations.historical"></textarea>
                 </mat-form-field>
               </div>
 
               <div class="actions flex items-center justify-end gap-2">
-                <button mat-button type="button" (click)="editing = false; selectedTabIndex = 0">{{'cancel' | translate }}</button>
-                <button mat-button type="button" (click)="goTo('/clients')">{{'go_list' | translate }}</button>
-                <button [disabled]="formPersonalInfo.invalid" color="primary" mat-raised-button (click)="save()">
+                <button mat-button type="button"
+                  (click)="editing = false; selectedTabIndex = 0">{{'cancel' |
+                  translate }}</button>
+                <button mat-button type="button"
+                  (click)="goTo('/clients')">{{'go_list' | translate }}</button>
+                <button [disabled]="formPersonalInfo.invalid" color="primary"
+                  mat-raised-button (click)="save()">
                   {{'save' | translate}}
                 </button>
               </div>
@@ -1127,41 +1447,62 @@
             </h2>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo" style="border-bottom: 1px solid var(--color-grey5); padding:5%">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+            *ngIf="showInfo"
+            style="border-bottom: 1px solid var(--color-grey5); padding:5%">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
-                <div style="float: left; width:25%;" *ngFor="let item of clientSport" (click)="selectSportEvo(item)">
-                  <img [src]="selectedSport?.sport_id === item.sport_id ? item.icon_selected : item.icon_unselected" style="float: left;border-radius: 20%;border:1px solid; cursor:pointer;"
-                  [ngStyle]="{
+                <div style="float: left; width:25%;"
+                  *ngFor="let item of clientSport"
+                  (click)="selectSportEvo(item)">
+                  <img
+                    [src]="selectedSport?.sport_id === item.sport_id ? item.icon_selected : item.icon_unselected"
+                    style="float: left;border-radius: 20%;border:1px solid; cursor:pointer;"
+                    [ngStyle]="{
                     'background': selectedSport?.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
                     'border': selectedSport?.sport_id === item.sport_id ? '#fff' : '#808080'
                   }">
-                  <p style="width: 50%;float: left;text-align: center;text-wrap: nowrap;"> {{item.name}}</p>
+                  <p
+                    style="width: 50%;float: left;text-align: center;text-wrap: nowrap;">
+                    {{item.name}}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4" *ngIf="showInfo" style="border-bottom: 1px solid var(--color-grey5); padding:5%">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4"
+            *ngIf="showInfo"
+            style="border-bottom: 1px solid var(--color-grey5); padding:5%">
             <div class="py-3 flex items-center">
               <div style="float: left; width:100%;">
 
                 <div style="float: left; width:100%;">
                   <div style="float: left; width:20%;">
-                    <img [src]="selectedSport?.icon_selected" [style.background]="selectedSport?.level?.color" [style.border]="selectedSport?.level?.color" style="float: left;border-radius: 20%;border:1px solid">
+                    <img [src]="selectedSport?.icon_selected"
+                      [style.background]="selectedSport?.level?.color"
+                      [style.border]="selectedSport?.level?.color"
+                      style="float: left;border-radius: 20%;border:1px solid">
                   </div>
                   <div style="float: left; width:80%;">
-                    <p style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}} - {{calculateGoalsScore() === 0 ? 0 : calculateGoalsScore()}}%</p>
-                    <h1 style="float: left; width:100%;font-size: 20px;">{{selectedSport?.level?.annotation}} / {{selectedSport?.level?.name}}</h1>
+                    <p
+                      style="float: left; width:100%;font-size: 12px;">{{selectedSport?.level?.league}}
+                      - {{calculateGoalsScore() === 0 ? 0 :
+                      calculateGoalsScore()}}%</p>
+                    <h1
+                      style="float: left; width:100%;font-size: 20px;">{{selectedSport?.level?.annotation}}
+                      / {{selectedSport?.level?.name}}</h1>
 
                   </div>
 
                   <div style="float: left; width:100%;margin: 2% 0 0 0;">
-                    <mat-progress-bar mode="determinate" [value]="calculateGoalsScore()" [color]="selectedSport?.level?.color"></mat-progress-bar>
+                    <mat-progress-bar mode="determinate"
+                      [value]="calculateGoalsScore()"
+                      [color]="selectedSport?.level?.color"></mat-progress-bar>
 
                   </div>
 
-                  <div style="float: left; width:100%;margin: 30px 0 0 0;" *ngFor="let goal of selectedGoal">
+                  <div style="float: left; width:100%;margin: 30px 0 0 0;"
+                    *ngFor="let goal of selectedGoal">
 
                     <div style="float: left; width:3%;margin-right: 15px;">
                       <mat-icon svgIcon="mat:donut_large"></mat-icon>
@@ -1177,22 +1518,25 @@
                     </div>
 
                     <div style="float: left; width:5%;margin-right: 15px;">
-                      <mat-icon svgIcon="mat:star_half" style="color: yellow"></mat-icon>
+                      <mat-icon svgIcon="mat:star_half"
+                        style="color: yellow"></mat-icon>
 
                     </div>
 
                     <div style="float: left; width:5%;">
-                      <mat-icon svgIcon="mat:check" style="color: green"></mat-icon>
+                      <mat-icon svgIcon="mat:check"
+                        style="color: green"></mat-icon>
 
                     </div>
 
                   </div>
                 </div>
 
-
-
-                <div style="float: left; width:100%;margin-top: 5%" *ngIf="false">
-                  <h1 style="float: left; width:100%;font-size: 20px;">{{'historical' | translate }}</h1>
+                <div style="float: left; width:100%;margin-top: 5%"
+                  *ngIf="false">
+                  <h1
+                    style="float: left; width:100%;font-size: 20px;">{{'historical'
+                    | translate }}</h1>
 
                 </div>
 
@@ -1202,7 +1546,9 @@
             <div class="py-3 flex items-center">
 
               <div style="float: left; width:100%;">
-                <app-level-user *ngIf="!coloring" [allLevels]="allLevels" [selectLevel]="selectedSport?.level?.id" [size]="200" [userImage]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'"></app-level-user>
+                <app-level-user *ngIf="!coloring" [allLevels]="allLevels"
+                  [selectLevel]="selectedSport?.level?.id" [size]="200"
+                  [userImage]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'"></app-level-user>
 
               </div>
             </div>
@@ -1212,214 +1558,306 @@
 
       <mat-tab label="{{'course' | translate }}">
         <div class="card" style="margin: 3% 0 0 0;">
-          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-1 gap-4" style="border-bottom: 1px solid var(--color-grey5); padding:5%">
+          <div class="px-6 py-4 grid grid-cols-1 sm:grid-cols-1 gap-4"
+            style="border-bottom: 1px solid var(--color-grey5); padding:5%">
             <vex-page-layout style="margin: 2% 0 0 0;">
 
-                <vex-page-layout-content class="-mt-6 fullwidth" >
-                  <vex-aio-table [columns]="columns" [entity]="entity" [title]="'bookings'" [route]="'bookings'"
-                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id" [filterColumn]="'client_id'"
-                                 [with]="['booking','course.courseGroups.courseSubgroups', 'clientMain']"
+              <vex-page-layout-content class="-mt-6 fullwidth">
+                <vex-aio-table [columns]="columns" [entity]="entity"
+                  [title]="'bookings'" [route]="'bookings'"
+                  (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
+                  [filterColumn]="'client_id'"
+                  [with]="['booking','course.courseGroups.courseSubgroups', 'clientMain']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
             </vex-page-layout>
 
-            <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
+            <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline"
+              *ngIf="showDetail">
               <mat-card style="padding: 0 3%;">
-              <mat-card-header style="display:block">
+                <mat-card-header style="display:block">
                   <div style="width: 100%;float: left;">
 
                   </div>
                   <div style="width: 100%;float:left;">
-                  <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'course_detail' |translate}}</mat-card-title>
+                    <mat-card-title class="font-bold"
+                      style="float: left;width: 80%;">{{'course_detail'
+                      |translate}}</mat-card-title>
                   </div>
                   <div style="width:100%; margin-top:5%;float:left">
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
-                      <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 80%;text-align: left;"><b>{{'from'
+                          | translate }}</b></p>
+                      <p
+                        style="float: left;width: 20%;text-align: right;"><b>{{'to'
+                          | translate }}</b></p>
+                    </div>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start
+                          | date: 'dd/MM/YYYY'}}</b></p>
+                      <p
+                        style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end
+                          | date: 'dd/MM/YYYY'}}</b></p>
+                    </div>
                   </div>
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
-                      <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
-                  </div>
-                  </div>
-                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
                   <div style="width:100%; margin-top:5%;float:left">
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate }}</b></p>
-                      <p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate }}</b></p>
-                  </div>
-                  <div style="width: 100%;">
-                      <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
-                      <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
-                  </div>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 35%;text-align: left;"><b>{{'price'
+                          | translate }}</b></p>
+                      <p
+                        style="float: left;width: 65%;text-align: right;"><b>{{'max_pax'
+                          | translate }}</b></p>
+                    </div>
+                    <div style="width: 100%;">
+                      <p
+                        style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.price}}</b>
+                        {{detailData?.course.currency}}</p>
+                      <p
+                        style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
+                    </div>
                   </div>
                   <ng-container *ngIf="detailData?.course.course_type == 1">
-                      <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-                      <div style="float: left; width: 100%;margin-top: 5%;">
+                    <mat-divider
+                      style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                    <div style="float: left; width: 100%;margin-top: 5%;">
                       <ul>
-                          <ng-container *ngFor="let date of detailData?.course.course_dates">
-                              <li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-                          </ng-container>
+                        <ng-container
+                          *ngFor="let date of detailData?.course.course_dates">
+                          <li
+                            [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}}
+                            <i
+                              style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
+                        </ng-container>
                       </ul>
-                      </div>
+                    </div>
                   </ng-container>
-                  <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-              </mat-card-header>
-              <mat-card-content>
-                <div style="float: left; width: 100%;margin-bottom:24px;">
-                  <div style="float: left;width: 100%;">
+                </mat-card-header>
+                <mat-card-content>
+                  <div style="float: left; width: 100%;margin-bottom:24px;">
+                    <div style="float: left;width: 100%;">
                       <!--ESTAS IMAGENES VENDRAN DEL detailData?.SPORT -> icon box -->
                       <div style="float: left; width: 12%; margin-top: 5%">
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 1" [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
-                          <img style="width: 75px; height: 75px;" *ngIf="detailData?.course?.course_type == 2" [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'" width="100" height="100" />
+                        <img style="width: 75px; height: 75px;"
+                          *ngIf="detailData?.course?.course_type == 1"
+                          [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
+                          width="100" height="100" />
+                        <img style="width: 75px; height: 75px;"
+                          *ngIf="detailData?.course?.course_type == 2"
+                          [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
+                          width="100" height="100" />
                       </div>
                       <div style="float: left; width: 75%;margin:6% 0 0 2%">
-                      <p><strong>{{detailData?.course?.name}}</strong></p>
-                      <p>
-                          <ng-container *ngIf="detailData?.course?.course_type == 1">
+                        <p><strong>{{detailData?.course?.name}}</strong></p>
+                        <p>
+                          <ng-container
+                            *ngIf="detailData?.course?.course_type == 1">
                             {{'colective' | translate }}
                           </ng-container>
-                          <ng-container *ngIf="detailData?.course?.course_type == 2">
+                          <ng-container
+                            *ngIf="detailData?.course?.course_type == 2">
                             {{'private' | translate }}
                           </ng-container>
                           <ng-container *ngIf="detailData?.sport">
-                              {{detailData?.sport.name}}
+                            {{detailData?.sport.name}}
                           </ng-container>
-                      </p>
+                        </p>
                       </div>
+                    </div>
                   </div>
-                </div>
-                <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
 
-                  <div *ngIf="detailData?.course?.course_type == 1" class="box-detail-boxes">
-                      <div class="box-detail-box" [ngStyle]="{'background': detailData?.degree?.color}">
-                          <img src="https://api.boukii.com/storage/icons/award_icon.svg" style="width:24px;height:24px;" />
-                          <div class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
-                          <div class="font-bold font-white">{{detailData?.degree?.name}}</div>
-                          <div class="font-bold font-white">{{getSubGroupsIndex()}}</div>
-                      </div>
-                      <div class="box-detail-box box-background-grey">
-                          <img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" style="width:24px;height:24px;" />
-                          <div>{{'groups' | translate }}</div>
-                          <div class="font-bold">{{getGroupsQuantity()}}</div>
-                      </div>
-                      <div class="box-detail-box box-background-grey">
-                          <img src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" style="width:24px;height:24px;" />
-                          <div>{{'duration' | translate }}</div>
-                          <div class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
-                      </div>
-                      <div class="box-detail-box box-background-grey">
-                          <img src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" style="width:24px;height:24px;" />
-                          <div>{{'days' | translate }}</div>
-                          <div class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
-                      </div>
+                  <div *ngIf="detailData?.course?.course_type == 1"
+                    class="box-detail-boxes">
+                    <div class="box-detail-box"
+                      [ngStyle]="{'background': detailData?.degree?.color}">
+                      <img
+                        src="https://api.boukii.com/storage/icons/award_icon.svg"
+                        style="width:24px;height:24px;" />
+                      <div
+                        class="font-bold font-white">{{detailData?.degree?.annotation}}</div>
+                      <div
+                        class="font-bold font-white">{{detailData?.degree?.name}}</div>
+                      <div
+                        class="font-bold font-white">{{getSubGroupsIndex()}}</div>
+                    </div>
+                    <div class="box-detail-box box-background-grey">
+                      <img
+                        src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg"
+                        style="width:24px;height:24px;" />
+                      <div>{{'groups' | translate }}</div>
+                      <div class="font-bold">{{getGroupsQuantity()}}</div>
+                    </div>
+                    <div class="box-detail-box box-background-grey">
+                      <img
+                        src="https://api.boukii.com/storage/icons/icons-outline-clock.svg"
+                        style="width:24px;height:24px;" />
+                      <div>{{'duration' | translate }}</div>
+                      <div
+                        class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
+                    </div>
+                    <div class="box-detail-box box-background-grey">
+                      <img
+                        src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg"
+                        style="width:24px;height:24px;" />
+                      <div>{{'days' | translate }}</div>
+                      <div
+                        class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
+                    </div>
                   </div>
 
-                  <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                  <mat-divider
+                    style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                   <ng-container *ngIf="detailData?.course.course_type == 2">
 
-                      <div style="width: 100%;float:left;margin-bottom:12px;">
-                          <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'booking' | translate }}</mat-card-title>
-                      </div>
+                    <div style="width: 100%;float:left;margin-bottom:12px;">
+                      <mat-card-title class="font-bold"
+                        style="float: left;width: 80%;">{{'booking' | translate
+                        }}</mat-card-title>
+                    </div>
 
-                      <div style="float: left; width: 100%;">
-                          <ul>
-                              <li class="font-bold">{{getDateFormatLong(detailData?.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
-                          </ul>
-                      </div>
+                    <div style="float: left; width: 100%;">
+                      <ul>
+                        <li
+                          class="font-bold">{{getDateFormatLong(detailData?.date)}}
+                          <i
+                            style="text-align: right;float:right">{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</i></li>
+                      </ul>
+                    </div>
 
-                      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                    <mat-divider
+                      style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
-                      <div style="width: 100%;float:left;margin-bottom:12px;">
-                          <mat-card-title class="font-bold" style="float: left;width: 100%;">{{'user' | translate }}</mat-card-title>
-                      </div>
+                    <div style="width: 100%;float:left;margin-bottom:12px;">
+                      <mat-card-title class="font-bold"
+                        style="float: left;width: 100%;">{{'user' | translate
+                        }}</mat-card-title>
+                    </div>
 
-                      <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                        <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
-                          <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
-                              <div class="box-detail-user-block-text">
-                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
-                                  <span>
-                                      <ng-container *ngIf="client?.language1_id">
-                                          {{getLanguageById(client?.language1_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language2_id">
-                                          {{getLanguageById(client?.language2_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language3_id">
-                                          {{getLanguageById(client?.language3_id)}} ·
-                                      </ng-container>
-                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
-                                      · {{client?.phone}} · {{client?.email}}
-                                  </span>
-                                  <div *ngIf="detailData?.degree" class="box-detail-user-blocklevel" [ngStyle]="{'background': detailData?.degree.color}">
-                                      {{detailData?.degree.name}}
-                                  </div>
-                              </div>
+                    <div
+                      style="display:flex;width:100%;flex-direction:column;gap:8px;">
+                      <div *ngFor="let client of detailData?.users"
+                        class="box-detail-user-block">
+                        <app-level-user *ngIf="detailData.sport"
+                          [allLevels]="getAllLevelsBySport()"
+                          [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
+                          [size]="60"
+                          [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <div class="box-detail-user-block-text">
+                          <div>{{ client?.first_name }} {{ client?.last_name
+                            }}</div>
+                          <span>
+                            <ng-container *ngIf="client?.language1_id">
+                              {{getLanguageById(client?.language1_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language2_id">
+                              {{getLanguageById(client?.language2_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language3_id">
+                              {{getLanguageById(client?.language3_id)}} ·
+                            </ng-container>
+                            {{getCountryById(client?.country)}} ·
+                            {{getBirthYears(client?.birth_date)}} {{'years' |
+                            translate }}
+                            · {{client?.phone}} · {{client?.email}}
+                          </span>
+                          <div *ngIf="detailData?.degree"
+                            class="box-detail-user-blocklevel"
+                            [ngStyle]="{'background': detailData?.degree.color}">
+                            {{detailData?.degree.name}}
                           </div>
+                        </div>
                       </div>
+                    </div>
 
-                      <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+                    <mat-divider
+                      style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
 
                   </ng-container>
 
                   <div style="width: 100%;float:left;margin-bottom:12px;">
-                      <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'monitor' | translate }}</mat-card-title>
+                    <mat-card-title class="font-bold"
+                      style="float: left;width: 80%;">{{'monitor' | translate
+                      }}</mat-card-title>
                   </div>
 
                   <div *ngIf="defaults" class="box-detail-user-block">
-                      <div class="box-detail-user-block-img">
-                          <img [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'" />
-                      </div>
-                      <div class="box-detail-user-block-text">
-                          <div>{{ defaults.first_name }} {{ defaults.last_name }}</div>
-                          <span>
-                              <ng-container *ngIf="defaults.language1_id">
-                                  {{getLanguageById(defaults.language1_id)}} ·
-                              </ng-container>
-                              {{getCountryById(defaults.country)}} · {{getBirthYears(defaults.birth_date)}} {{'years' | translate }}
-                              · {{defaults.phone}} · {{defaults.email}}
-                          </span>
-                      </div>
+                    <div class="box-detail-user-block-img">
+                      <img
+                        [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'" />
+                    </div>
+                    <div class="box-detail-user-block-text">
+                      <div>{{ defaults.first_name }} {{ defaults.last_name
+                        }}</div>
+                      <span>
+                        <ng-container *ngIf="defaults.language1_id">
+                          {{getLanguageById(defaults.language1_id)}} ·
+                        </ng-container>
+                        {{getCountryById(defaults.country)}} ·
+                        {{getBirthYears(defaults.birth_date)}} {{'years' |
+                        translate }}
+                        · {{defaults.phone}} · {{defaults.email}}
+                      </span>
+                    </div>
                   </div>
 
                   <ng-container *ngIf="detailData?.course.course_type == 1">
-                      <div style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
-                          <mat-card-title class="font-bold" style="float: left;width: 80%;">{{'students' | translate }} {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
-                          <mat-icon class="cursor-pointer" style="float: right;width: 10%;" svgIcon="mat:swap_horiz"></mat-icon>
-                      </div>
+                    <div
+                      style="width: 100%;float:left;margin-top:32px;margin-bottom:12px;">
+                      <mat-card-title class="font-bold"
+                        style="float: left;width: 80%;">{{'students' | translate
+                        }}
+                        {{detailData?.users.length}}/{{detailData?.course.max_participants}}</mat-card-title>
+                      <mat-icon class="cursor-pointer"
+                        style="float: right;width: 10%;"
+                        svgIcon="mat:swap_horiz"></mat-icon>
+                    </div>
 
-                      <div style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                          <div *ngFor="let client of detailData?.users" class="box-detail-user-block">
-                              <app-level-user *ngIf="detailData.sport" [allLevels]="getAllLevelsBySport()"
-                                [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)" [size]="60" [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
-                              <div class="box-detail-user-block-text">
-                                  <div>{{ client?.first_name }} {{ client?.last_name }}</div>
-                                  <span>
-                                      <ng-container *ngIf="client?.language1_id">
-                                          {{getLanguageById(client?.language1_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language2_id">
-                                          {{getLanguageById(client?.language2_id)}} ·
-                                      </ng-container>
-                                      <ng-container *ngIf="client?.language3_id">
-                                          {{getLanguageById(client?.language3_id)}} ·
-                                      </ng-container>
-                                      {{getCountryById(client?.country)}} · {{getBirthYears(client?.birth_date)}} {{'years' | translate }}
-                                      · {{client?.phone}} · {{client?.email}}
-                                  </span>
-                              </div>
-                          </div>
+                    <div
+                      style="display:flex;width:100%;flex-direction:column;gap:8px;">
+                      <div *ngFor="let client of detailData?.users"
+                        class="box-detail-user-block">
+                        <app-level-user *ngIf="detailData.sport"
+                          [allLevels]="getAllLevelsBySport()"
+                          [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
+                          [size]="60"
+                          [userImage]="client.image ? client.image : 'assets/img/avatar.png'"></app-level-user>
+                        <div class="box-detail-user-block-text">
+                          <div>{{ client?.first_name }} {{ client?.last_name
+                            }}</div>
+                          <span>
+                            <ng-container *ngIf="client?.language1_id">
+                              {{getLanguageById(client?.language1_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language2_id">
+                              {{getLanguageById(client?.language2_id)}} ·
+                            </ng-container>
+                            <ng-container *ngIf="client?.language3_id">
+                              {{getLanguageById(client?.language3_id)}} ·
+                            </ng-container>
+                            {{getCountryById(client?.country)}} ·
+                            {{getBirthYears(client?.birth_date)}} {{'years' |
+                            translate }}
+                            · {{client?.phone}} · {{client?.email}}
+                          </span>
+                        </div>
                       </div>
+                    </div>
                   </ng-container>
 
-              </mat-card-content>
-            </mat-card>
+                </mat-card-content>
+              </mat-card>
             </vex-page-layout-content>
           </div>
         </div>

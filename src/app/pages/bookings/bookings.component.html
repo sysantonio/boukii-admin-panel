@@ -83,29 +83,27 @@
             </div>
           </mat-card-subtitle>
         </div>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div style="width: 100%;">
-          <div class="title-status">
-            <span class="col-left">
-              <b>{{ 'status' | translate}}:</b>
-            </span>
-
-            <span class="col-center">
-              <span style="color:#00C32B" *ngIf="isActive">
-                {{'active' | translate | uppercase }}
-              </span>
-              <span style="color:#A4A3A3" *ngIf="isFinished">
-                {{'finished' | translate | uppercase }}
-              </span>
-              <span style="color:#FF0000" *ngIf="detailData.status === 2">
-                {{'cancelled' | translate | uppercase }}
-              </span>
-              <span style="color:#FA9917" *ngIf="detailData.status === 3">
-                {{'partial_cancelled' | translate | uppercase }}
-              </span>
-            </span>
+        <div class="title-status">
+          <span
+            style="color:#00C32B;background-color: #B2EFAD;"
+            *ngIf="isActive">
+            {{'active' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(68, 74, 88, 1);background-color: rgba(227, 227, 227, 1);"
+            *ngIf="isFinished">
+            {{'finished' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(146, 26, 0, 1);background-color: rgba(247, 187, 153, 1);"
+            *ngIf="detailData.status === 2">
+            {{'cancelled' | translate | uppercase }}
+          </span>
+          <span
+            style="color:rgba(83, 65, 0, 1);background-color: rgba(247, 227, 153, 1);"
+            *ngIf="detailData.status === 3">
+            {{'partial_cancelled' | translate | uppercase }}
+          </span>
 
             <span class="col-right">
               <span
@@ -126,6 +124,8 @@
             </span>
           </div>
 
+      <mat-card-content>
+        <div style="width: 100%;">
           <div class="title-client">{{'client' | translate}}</div>
           <div class="holder-client">
             <div class="col-left">
@@ -150,19 +150,20 @@
                 {{calculateAge(detailData?.client_main?.birth_date)}}
                 &ensp;{{'years' | translate}}
               </div>
-              <div>
-                <mat-icon svgIcon="logo:message-text"></mat-icon>
-                <a
+              <div style="display: flex;">
+                <vex-icon src="chat">
+                </vex-icon>
+                <vex-icon
+                  src="mail"
                   href="mailto:{{detailData?.client_main?.email}}"
                   style="cursor:pointer"
                   title="{{detailData?.client_main?.email}}">
-                  <mat-icon svgIcon="logo:mail"></mat-icon>
-                </a>
-                <a
+                </vex-icon>
+                <vex-icon
+                  src="phone"
                   href="tel:{{detailData?.client_main?.phone}}"
                   title="{{detailData?.client_main?.phone}}">
-                  <mat-icon svgIcon="logo:phone"></mat-icon>
-                </a>
+                </vex-icon>
               </div>
             </div>
           </div>
@@ -322,19 +323,20 @@
                           {{calculateAge(bUsers?.client?.birth_date)}}
                           {{'years' | translate }}
                         </div>
-                        <div>
-                          <mat-icon svgIcon="logo:message-text"></mat-icon>
-                          <a
+                        <div style="display: flex;">
+                          <vex-icon src="chat">
+                          </vex-icon>
+                          <vex-icon
+                            src="mail"
                             href="mailto:{{bUsers?.client?.email}}"
                             style="cursor:pointer"
                             title="{{bUsers?.client?.email}}">
-                            <mat-icon svgIcon="logo:mail"></mat-icon>
-                          </a>
-                          <a
+                          </vex-icon>
+                          <vex-icon
+                            src="phone"
                             href="tel:{{bUsers?.client?.phone}}"
                             title="{{bUsers?.client?.phone}}">
-                            <mat-icon svgIcon="logo:phone"></mat-icon>
-                          </a>
+                          </vex-icon>
                         </div>
                       </div>
                     </div>
@@ -373,19 +375,20 @@
                             {{calculateAge(bUsers?.monitor?.birth_date)}}
                             {{'years' | translate}}
                           </div>
-                          <div>
-                            <mat-icon svgIcon="logo:message-text"></mat-icon>
-                            <a
-                              href="mailto:{{bUsers?.monitor?.email}}"
+                          <div style="display: flex;">
+                            <vex-icon src="chat">
+                            </vex-icon>
+                            <vex-icon
+                              src="mail"
+                              href="mailto:{{bUsers?.client?.email}}"
                               style="cursor:pointer"
-                              title="{{bUsers?.monitor?.email}}">
-                              <mat-icon svgIcon="logo:mail"></mat-icon>
-                            </a>
-                            <a
-                              href="tel:{{bUsers?.monitor?.phone}}"
-                              title="{{bUsers?.monitor?.phone}}">
-                              <mat-icon svgIcon="logo:phone"></mat-icon>
-                            </a>
+                              title="{{bUsers?.client?.email}}">
+                            </vex-icon>
+                            <vex-icon
+                              src="phone"
+                              href="tel:{{bUsers?.client?.phone}}"
+                              title="{{bUsers?.client?.phone}}">
+                            </vex-icon>
                           </div>
                           <!--    <ng-container
                                 *ngFor="let item of bUsers?.monitor.monitor_sports_degrees_details"
@@ -505,7 +508,7 @@
               </div>
             </div>
             <div class="col-right">
-              {{getExtrasPrice()}} {{detailData.currency}}
+              {{getExtrasPrice().toFixed(2)}} {{detailData.currency}}
             </div>
           </div>
         </div>

@@ -37,6 +37,7 @@
 
   .mat-mdc-card-header {
     background-color: #2f3844;
+    background-color: #2f3844;
     padding: 25px 35px !important;
 
     .mat-mdc-card-title {
@@ -72,7 +73,7 @@
       margin-bottom: 8px;
 
       b {
-        color: var(--color-dark);
+        color: var(--color-dark1);
         font-size: 1em;
         font-weight: 700;
       }
@@ -93,7 +94,7 @@
 
     .title-client {
       padding: 10px 35px;
-      color: var(--color-dark);
+      color: var(--color-dark1);
       font-size: 1.1em;
       font-weight: 700;
     }
@@ -113,7 +114,6 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
@@ -130,7 +130,7 @@
       margin-bottom: 8px;
 
       b {
-        color: var(--color-dark);
+        color: var(--color-dark1);
         font-size: 1em;
         font-weight: 700;
       }
@@ -165,7 +165,6 @@
         .client-name {
           font-size: 1.3em;
           font-weight: 700;
-          color: var(--color-dark1);
           margin-bottom: 2px;
         }
 
@@ -199,7 +198,8 @@
         border-radius: 6px;
         padding: 2%;
         color: var(--color-dark1);
-        background: #e6e6e6;
+        background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);
+
         text-align: center;
         font-size: 12px;
         font-family: "Montserrat", sans-serif;
@@ -271,7 +271,7 @@
   .title {
     font-size: 1.2em;
     font-weight: 700;
-    color: var(--color-dark);
+    color: var(--color-dark1);
   }
 
   b {
@@ -291,7 +291,7 @@
     text-align: right;
 
     b {
-      color: var(--color-dark);
+      color: var(--color-dark1);
       font-size: 1.4em;
       font-weight: 600;
     }

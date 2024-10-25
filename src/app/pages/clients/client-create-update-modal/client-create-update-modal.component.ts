@@ -16,7 +16,7 @@ import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { ApiCrudService } from 'src/service/crud.service';
-import {DateAdapter} from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'vex-client-create-update-modal',
@@ -77,12 +77,12 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     province: null,
     country: null,
     image: null,
-    language1_id:null,
-    language2_id:null,
-    language3_id:null,
-    language4_id:null,
-    language5_id:null,
-    language6_id:null,
+    language1_id: null,
+    language2_id: null,
+    language3_id: null,
+    language4_id: null,
+    language5_id: null,
+    language6_id: null,
     user_id: null,
     station_id: null
   }
@@ -106,11 +106,11 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
   loading: boolean = true;
   user: any;
-  mode: 'create' |'update';
+  mode: 'create' | 'update';
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private router: Router,
     private snackbar: MatSnackBar, private dialogRef: MatDialogRef<any>, private translateService: TranslateService,
-              private dateAdapter: DateAdapter<Date>) {
+    private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.today = new Date()
@@ -119,7 +119,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.mode) {
+    if (!this.mode) {
       this.mode = 'create';
     }
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
@@ -312,7 +312,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', { duration: 3000 });
     }
   }
 
@@ -321,14 +321,14 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
-          .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data.reverse();
-          });
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + element.sport_id)
+            .subscribe((data) => {
+              this.schoolSports[idx].degrees = data.data.reverse();
+            });
         });
       })
   }
@@ -338,7 +338,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
-            if(element.id === sport.sport_id) {
+            if (element.id === sport.sport_id) {
               sport.name = element.name;
             }
           });
@@ -378,7 +378,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
         this.crudService.create('/clients', this.defaults)
           .subscribe((client) => {
-            this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', { duration: 3000 });
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -386,18 +386,18 @@ export class ClientCreateUpdateModalComponent implements OnInit {
               .subscribe((obs) => {
                 console.log('client observation created');
               })
-            this.crudService.create('/clients-schools', {client_id: client.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
+            this.crudService.create('/clients-schools', { client_id: client.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
               .subscribe((clientSchool) => {
                 this.sportsData.data.forEach(element => {
 
-                  this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+                  this.crudService.create('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
                     .subscribe(() => {
                       console.log('client sport created');
                     })
                 });
 
                 setTimeout(() => {
-                  this.dialogRef.close({data: client});
+                  this.dialogRef.close({ data: client });
 
                 }, 1000);
               })
@@ -405,7 +405,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
       })
   }
 
-  update() {}
+  update() { }
 
   setLanguages() {
     if (this.selectedLanguages.length >= 1) {
@@ -430,8 +430,8 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   }
 
   goToStep3(stepper: MatStepper) {
-    if(this.selectedLanguages.length === 0) {
-      this.snackbar.open(this.translateService.instant('nackbar.client.mandatory_language'), 'OK', {duration: 3000});
+    if (this.selectedLanguages.length === 0) {
+      this.snackbar.open(this.translateService.instant('nackbar.client.mandatory_language'), 'OK', { duration: 3000 });
       return;
     }
 

@@ -1,12 +1,13 @@
 .vex-sidenav-item {
   align-items: center;
   box-sizing: border-box;
-  color: var(--sidenav-item-color);
+  color: var(--color-dark1);
   cursor: pointer;
   display: flex;
   flex-direction: row;
   min-height: var(--sidenav-item-min-height);
-  padding: var(--sidenav-item-padding-vertical) var(--sidenav-item-padding-horizontal);
+  padding: var(--sidenav-item-padding-vertical)
+    var(--sidenav-item-padding-horizontal);
   position: relative;
   text-decoration: none;
   transition: var(--trans-ease-out);
@@ -23,11 +24,11 @@
     }
 
     .vex-sidenav-item__label {
-      color: var(--sidenav-item-color-active);
+      color: var(--color-dark1);
     }
 
     .vex-sidenav-item__dropdown-icon {
-      color: var(--sidenav-item-color-active);
+      color: var(--color-dark1);
     }
   }
 
@@ -57,7 +58,12 @@
 @for $i from 1 through 6 {
   :host(.item-level-#{$i}) .vex-sidenav-item {
     background: var(--sidenav-item-dropdown-background);
-    padding-inline-start: calc(var(--sidenav-item-icon-size) + var(--sidenav-item-icon-gap) + var(--sidenav-item-padding-horizontal) + (var(--sidenav-item-dropdown-gap) * #{$i - 1}));
+    padding-inline-start: calc(
+      var(--sidenav-item-icon-size) +
+        var(--sidenav-item-icon-gap) +
+        var(--sidenav-item-padding-horizontal) +
+        (var(--sidenav-item-dropdown-gap) * #{$i - 1})
+    );
 
     &.vex-sidenav-item--active {
       background: var(--sidenav-item-dropdown-background-active);
@@ -77,7 +83,9 @@
   }
 }
 
-.vex-sidenav-item__icon, .vex-sidenav-item__label, .vex-sidenav-item__dropdown-icon {
+.vex-sidenav-item__icon,
+.vex-sidenav-item__label,
+.vex-sidenav-item__dropdown-icon {
   transition: inherit;
 }
 

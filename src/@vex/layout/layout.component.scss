@@ -9,8 +9,9 @@
 }
 
 .sidenav {
-  background: var(--color-grey5);
-
+  border-right: 1px solid var(--is-light-theme, #dee6ea)
+    var(--is-dark-theme, #121212);
+  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
   ::ng-deep .mat-drawer-inner-container {
     overflow: hidden;
   }
@@ -23,7 +24,10 @@
 }
 
 .has-footer .content {
-  min-height: calc(100% - var(--toolbar-height) - var(--navigation-height) - var(--footer-height));
+  min-height: calc(
+    100% - var(--toolbar-height) - var(--navigation-height) -
+      var(--footer-height)
+  );
 }
 
 .scroll-disabled {
@@ -37,7 +41,10 @@
 
   &.has-fixed-footer .content,
   &.has-footer .content {
-    height: calc(100% - var(--toolbar-height) - var(--navigation-height) - var(--footer-height));
+    height: calc(
+      100% - var(--toolbar-height) - var(--navigation-height) -
+        var(--footer-height)
+    );
     min-height: unset;
   }
 }
@@ -54,9 +61,9 @@
 }
 
 .sidenav-container {
-  background: var(--color-white);
+  background: var(--is-light-theme, white) var(--is-dark-theme, #121212);
   height: 100%;
-  transition: transform .5s cubic-bezier(.2, 1, .3, 1);
+  transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .sidenav-content {
@@ -70,9 +77,10 @@
 
   .sidenav-container {
     pointer-events: none;
-    transform: perspective(1000px) translate3d(0, 50vh, 0) rotate3d(1, 0, 0, 30deg);
+    transform: perspective(1000px) translate3d(0, 50vh, 0)
+      rotate3d(1, 0, 0, 30deg);
     transform-origin: 50vw 50vh;
-    transition: transform .5s cubic-bezier(.2, 1, .3, 1);
+    transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1);
     @apply rounded shadow-2xl overflow-visible;
   }
 }
@@ -82,13 +90,16 @@
     position: fixed;
     width: var(--toolbar-width);
     z-index: 50;
+    border-bottom: 1px solid var(--is-light-theme, #dee6ea)
+      var(--is-dark-theme, #121212);
   }
 
   .content {
     margin-top: calc(var(--toolbar-height) + var(--navigation-height));
+    background-color: var(--is-light-theme, #f8f9fb)
+      var(--is-dark-theme, #121212);
   }
 }
-
 .has-fixed-footer {
   ::ng-deep .vex-footer {
     box-shadow: var(--footer-elevation);
@@ -97,12 +108,16 @@
 
   .content {
     margin-bottom: var(--footer-height);
-    min-height: calc(100% - var(--toolbar-height) - var(--navigation-height) - var(--footer-height));
+    min-height: calc(
+      100% - var(--toolbar-height) - var(--navigation-height) -
+        var(--footer-height)
+    );
   }
 
   &.scroll-disabled .content {
-    height: calc(100% - var(--toolbar-height) - var(--navigation-height) - var(--footer-height));
+    height: calc(
+      100% - var(--toolbar-height) - var(--navigation-height) -
+        var(--footer-height)
+    );
   }
 }
-
-

@@ -1,8 +1,8 @@
 <vex-page-layout>
 
   <vex-page-layout-header *ngIf="withHeader"
-                          class="pb-16 flex flex-col items-start justify-center"
-                          style="background-color: rgba(var(--background-foreground-rgb), var(--tw-bg-opacity));height: 30px;">
+    class="pb-16 flex flex-col items-start justify-center"
+    style="height: 0;">
     <!--<div
          class="w-full flex flex-col sm:flex-row justify-between fullwidth">
       <div>
@@ -14,9 +14,11 @@
 
   <vex-page-layout-content class="-mt-6 fullwidth">
 
-    <div class="card overflow-auto -mt-16">
+    <div class="card overflow-auto">
 
-      <div style="float:left; width: 100%; padding:2%" *ngIf="openFilters">
+      <div
+        style="float:left; width: 100%; padding:2%;"
+        *ngIf="openFilters">
 
         <div style="float:left; width: 30%" *ngIf="entity.includes('bookings')">
           <span style="float:left; width: 100%; font-size:16px">{{
@@ -89,7 +91,7 @@
       </div>
 
       <div
-        class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+        class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center" style="background-color: var(--is-light-theme, #eff2f5) var(--is-dark-theme, #2f3844);">
 
         <div *ngIf="selection.hasValue()" class="mr-4 pr-4 border-r flex-none">
           <button (click)="deleteMultiple(selection.selected)"
@@ -489,8 +491,8 @@
             <td *matCellDef="let row; let i = index"
                 [ngClass]="column.cssClasses" mat-cell>
               <img *ngIf="row[column.property] != 'multiple'"
-                   [src]="row[column.property]" class="avatar h-8 w-8 align-middle"
-                   style="border-radius: 5px;min-width: 48px;min-height: 48px; width: 100%;">
+                [src]="row[column.property]" class="avatar h-8 w-8 align-middle"
+                style="border-radius: 5px;min-width: 48px;min-height: 48px;">
               <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
@@ -508,8 +510,8 @@
             <td *matCellDef="let row; let i = index"
                 [ngClass]="column.cssClasses" mat-cell>
               <img [src]="row[column.property]?.sport"
-                   class="avatar h-8 w-8 align-middle"
-                   style="border-radius: 5px;min-width: 48px;min-height: 48px; width: 100%;">
+                class="avatar h-8 w-8 align-middle"
+                style="border-radius: 5px;min-width: 48px;min-height: 48px;">
               <!--<ng-container *ngIf="data[i].booking_users > 1" >
                 <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ 'MULTIPLE'}}</td>
               </ng-container>-->
@@ -598,7 +600,7 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell
                 mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row; let i = index"
-                [ngClass]="column.cssClasses" mat-cell>
+              [ngClass]="column.cssClasses" mat-cell>
               <strong>
                 <span
                   style="color:#2D9BF0">{{data[i].total_reservations}}
@@ -1014,15 +1016,15 @@
           <td *matCellDef="let row" mat-cell>
             <div class="flex">
               <a (click)="$event.stopPropagation()"
-                 class="w-8 h-8 p-0 leading-none flex items-center justify-center hover:bg-hover text-primary bg-primary/10"
-                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="logo:phone"></mat-icon>
+                class="w-8 h-8 p-0 leading-none flex items-center justify-center hover:bg-hover text-primary bg-primary/10"
+                mat-icon-button>
+                <mat-icon class="icon-sm">phone</mat-icon>
               </a>
 
               <a (click)="$event.stopPropagation()"
-                 class="w-8 h-8 p-0 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal/10"
-                 mat-icon-button>
-                <mat-icon class="icon-sm" svgIcon="logo:mail"></mat-icon>
+                class="w-8 h-8 p-0 leading-none flex items-center justify-center ml-1 hover:bg-hover text-teal bg-teal/10"
+                mat-icon-button>
+                <mat-icon class="icon-sm">mail</mat-icon>
               </a>
 
               <a (click)="$event.stopPropagation()"

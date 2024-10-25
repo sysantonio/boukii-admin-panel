@@ -24,6 +24,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { BookingDetailComponent } from './booking-detail/booking-detail.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
+import { IconComponent } from 'src/@vex/components/icon/app.component';
 
 @NgModule({
   declarations: [BookingsComponent],
@@ -51,7 +52,8 @@ import { ComponentsCustomModule } from '../../components/components-custom.modul
     MatDividerModule,
     MatSlideToggleModule,
     TranslateModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    IconComponent
   ]
 })
 export class BookingsModule {

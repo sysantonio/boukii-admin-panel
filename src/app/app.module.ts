@@ -10,11 +10,11 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { AuthService } from 'src/service/auth.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import {PreviewModalComponent} from './components/preview-modal/preview-modal.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {ComponentsCustomModule} from './components/components-custom.module';
+import { PreviewModalComponent } from './components/preview-modal/preview-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ComponentsCustomModule } from './components/components-custom.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {

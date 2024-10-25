@@ -48,11 +48,13 @@
     </div>
 
   </vex-scrollbar>
-  <div class="vex-sidenav-footer flex items-center justify-center px-6 py-6 select-none flex-none" style="height: 35px">
-    <img *ngIf="layoutService.DarkMode==='dark'"
+  <div
+    class="vex-sidenav-footer flex items-center justify-center px-6 py-6 select-none flex-none"
+    style="height: 35px">
+    <img *ngIf="layoutService.isDarkMode"
       src="../../../assets/img/login-logo-head2.png" style="width:75%" />
-    <img *ngIf="layoutService.DarkMode==='light'"
-      src="../../../assets/img/logo-login-head.png" style="width:75%"/>
+    <img *ngIf="!layoutService.isDarkMode"
+      src="../../../assets/img/logo-login-head.png" style="width:75%" />
   </div>
   <div *ngIf="userVisible$ | async"
     class="vex-sidenav-user__container flex-none">

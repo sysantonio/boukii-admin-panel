@@ -79,7 +79,7 @@
   width:calc(50% - 6px);height:110px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0px;margin-bottom:4px;
 }
 .box-background-grey {
-  background: #e6e6e6;
+  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;
 }
 .box-detail-user-block {
   display:flex;width:100%;align-items:center;gap:12px;

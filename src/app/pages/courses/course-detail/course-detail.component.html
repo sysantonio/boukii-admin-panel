@@ -315,7 +315,8 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1)--color-dark1)--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
+ ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);text-align: center;border-radius:10px">
                                   {{'groups' | translate}}
                                   {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
                                 </div>
@@ -332,7 +333,8 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%; color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
+ ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);text-align: center;border-radius:10px">
                                   {{'age' | translate}}
                                 </div>
                                 <form [formGroup]="rangeForm" novalidate>
@@ -379,7 +381,7 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: #e6e6e6;text-align: center;border-radius:10px">
+                                  style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px">
                                   Duracion<br>
                                   {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start,
                                   defaults.course_dates[daySelectedIndex].hour_end)}}
@@ -396,8 +398,8 @@
                                 style="float: left;width: 16%;margin: 0 0 0 2%;"
                                 *ngIf="groupLevel.active">
                                 <div
-                                  style="width:100%;border-radius: 0%;height: 100px;padding: 2%;background: #e6e6e6;text-align: center;border-radius:10px"
-                                  [style.color]="calculateMaxGroup(groupLevel)>defaults.max_participants?'red':'black'">
+                                  style="width:100%;border-radius: 0%;height: 100px;padding: 2%;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px"
+                                  [style.color]="calculateMaxGroup(groupLevel)>defaults.max_participants?'red':'var(--color-dark1)'">
                                   {{'students' | translate}}
                                   <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
@@ -407,7 +409,7 @@
                                   <input type="number"
                                     placeholder="Max per Group"
                                     [value]="calculateMaxGroup(groupLevel)"
-                                    aria-label="Number" matInput/>
+                                    aria-label="Number" matInput />
                                   <mat-error
                                     *ngIf="groupLevel.max_participants > defaults.max_participants">
                                     {{'courses.errors.students' | translate }}
@@ -415,82 +417,123 @@
                                 </mat-form-field>
                               </div>
 
-                              <ng-container *ngIf="groupLevel.active && groupLevel.visible">
+                              <ng-container
+                                *ngIf="groupLevel.active && groupLevel.visible">
                                 <table style="margin-left: 10%"
                                   *ngFor="let subGroup of readSubGroups(groupLevel.id); let subGroupIndex = index">
                                   <thead>
-                                  <tr>
-                                    <td>
-                                      <mat-icon svgIcon="mat:delete" style="color:red;cursor: pointer;float:left;" (click)="deleteSubGroup(subGroup)">
-                                      </mat-icon>
-                                      <span [style.color]="colorKey">
-            <strong>{{groupLevel.annotation}}</strong> - {{groupLevel.name}} - {{ subGroupIndex + 1 }}
-          </span>
-                                    </td>
-                                    <td *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;">
-          <span *ngIf="dayLevel.active === 1" (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
-                [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
-                style="text-align: center; cursor: pointer;">
-            {{ dayLevel.dateString }}
-          </span>
-                                    </td>
-                                  </tr>
+                                    <tr>
+                                      <td>
+                                        <mat-icon svgIcon="mat:delete"
+                                          style="color:red;cursor: pointer;float:left;"
+                                          (click)="deleteSubGroup(subGroup)">
+                                        </mat-icon>
+                                        <span [style.color]="colorKey">
+                                          <strong>{{groupLevel.annotation}}</strong>
+                                          - {{groupLevel.name}} - {{
+                                          subGroupIndex + 1 }}
+                                        </span>
+                                      </td>
+                                      <td
+                                        *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;">
+                                        <span *ngIf="dayLevel.active === 1"
+                                          (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
+                                          [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
+                                          style="text-align: center; cursor: pointer;">
+                                          {{ dayLevel.dateString }}
+                                        </span>
+                                      </td>
+                                    </tr>
                                   </thead>
 
                                   <tbody *ngIf="subGroupSelectedIndex !== null">
-                                  <tr>
-                                    <td>
-          <span style="float: left; width: 20%;" (click)="subGroupSelectedIndex = subGroupIndex;">
-            <label for="monitor" style="font-size: 20px;">{{'monitor' | translate}}</label>
+                                    <tr>
+                                      <td>
+                                        <span style="float: left; width: 20%;"
+                                          (click)="subGroupSelectedIndex = subGroupIndex;">
+                                          <label for="monitor"
+                                            style="font-size: 20px;">{{'monitor'
+                                            | translate}}</label>
 
-            <mat-spinner *ngIf="loadingMonitors"></mat-spinner>
+                                          <mat-spinner
+                                            *ngIf="loadingMonitors"></mat-spinner>
 
-            <mat-form-field appearance="outline" class="flex-auto" *ngIf="!loadingMonitors">
-              <input type="text" id="monitor" placeholder="Select monitor" matInput [matAutocomplete]="autoMoniteur"
-                     [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)" />
-              <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
-                <ng-container *ngFor="let monitor of filteredMonitors | async">
-                  <mat-option *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
-                              (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
-                    {{monitor?.first_name || ''}} {{monitor?.last_name || ''}}
-                  </mat-option>
-                </ng-container>
-              </mat-autocomplete>
-              <mat-icon matPrefix svgIcon="mat:person"></mat-icon>
-            </mat-form-field>
-          </span>
-                                    </td>
-                                    <td *ngFor="let item of daysDatesLevels; let dayIndex = index;">
-          <span *ngIf="item.active === 1">
-            <div style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                 [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex) ? '#CEE741' : 'red'}"></div>
-          </span>
-                                    </td>
-                                  </tr>
+                                          <mat-form-field appearance="outline"
+                                            class="flex-auto"
+                                            *ngIf="!loadingMonitors">
+                                            <input type="text" id="monitor"
+                                              placeholder="Select monitor"
+                                              matInput
+                                              [matAutocomplete]="autoMoniteur"
+                                              [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)" />
+                                            <mat-autocomplete
+                                              #autoMoniteur="matAutocomplete"
+                                              [displayWith]="displayFnMoniteurs">
+                                              <ng-container
+                                                *ngFor="let monitor of filteredMonitors | async">
+                                                <mat-option
+                                                  *ngIf="!checkIfExistInDate(daySelectedIndex, monitor, groupLevel)"
+                                                  (onSelectionChange)="setSubGroupMonitor($event, monitor, groupLevel, subGroupSelectedIndex, daySelectedIndex)">
+                                                  {{monitor?.first_name || ''}}
+                                                  {{monitor?.last_name || ''}}
+                                                </mat-option>
+                                              </ng-container>
+                                            </mat-autocomplete>
+                                            <mat-icon matPrefix
+                                              svgIcon="mat:person"></mat-icon>
+                                          </mat-form-field>
+                                        </span>
+                                      </td>
+                                      <td
+                                        *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+                                        <span *ngIf="item.active === 1">
+                                          <div
+                                            style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                            [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex) ? '#CEE741' : 'red'}"></div>
+                                        </span>
+                                      </td>
+                                    </tr>
 
-                                  <!-- Iteración por alumno -->
-                                  <tr *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index">
-                                    <td>
-                                      <div style="float: left; width: 100%;">
-                                        <div style="float: left; width: 25%;">
-                                          <img [src]="getClient(courseUser.client_id)?.image || userAvatar"
-                                               style="border-radius: 100%;height: 50px;width: 50px;">
+                                    <!-- Iteración por alumno -->
+                                    <tr
+                                      *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index">
+                                      <td>
+                                        <div style="float: left; width: 100%;">
+                                          <div style="float: left; width: 25%;">
+                                            <img
+                                              [src]="getClient(courseUser.client_id)?.image || userAvatar"
+                                              style="border-radius: 100%;height: 50px;width: 50px;">
+                                          </div>
+                                          <div style="float: left; width: 75%;">
+                                            <p style="font-size: 16px;">{{
+                                              getClient(courseUser.client_id)?.first_name
+                                              }} {{
+                                              getClient(courseUser.client_id)?.last_name
+                                              }}</p>
+                                            <p style="font-size: 10px;">{{
+                                              getLanguage(getClient(courseUser.client_id)?.language1_id)
+                                              }} · {{
+                                              getCountry(getClient(courseUser.client_id)?.country)
+                                              }} · {{
+                                              calculateAge(getClient(courseUser.client_id)?.birth_date)
+                                              }} {{ 'years' | translate }}</p>
+                                            <img *ngIf="courseUserIndex === 0"
+                                              (click)="openUserTransfer(groupLevel, subGroup, courseUserIndex + 1, groupLevel)"
+                                              src="../../../../assets/img/icons/change.svg"
+                                              style="float:left;cursor: pointer;">
+                                          </div>
                                         </div>
-                                        <div style="float: left; width: 75%;">
-                                          <p style="font-size: 16px;">{{ getClient(courseUser.client_id)?.first_name }} {{ getClient(courseUser.client_id)?.last_name }}</p>
-                                          <p style="font-size: 10px;">{{ getLanguage(getClient(courseUser.client_id)?.language1_id) }} · {{ getCountry(getClient(courseUser.client_id)?.country) }} · {{ calculateAge(getClient(courseUser.client_id)?.birth_date) }} {{ 'years' | translate }}</p>
-                                          <img *ngIf="courseUserIndex === 0" (click)="openUserTransfer(groupLevel, subGroup, courseUserIndex + 1, groupLevel)" src="../../../../assets/img/icons/change.svg" style="float:left;cursor: pointer;">
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td *ngFor="let item of daysDatesLevels; let dayIndex = index;">
-          <span *ngIf="item.active === 1">
-            <div style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
-                 [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741' : 'red'}">
-            </div>
-          </span>
-                                    </td>
-                                  </tr>
+                                      </td>
+                                      <td
+                                        *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+                                        <span *ngIf="item.active === 1">
+                                          <div
+                                            style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
+                                            [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741' : 'red'}">
+                                          </div>
+                                        </span>
+                                      </td>
+                                    </tr>
                                   </tbody>
                                 </table>
                               </ng-container>
@@ -563,7 +606,7 @@
 <mat-card style="padding: 0 3%;">
 <mat-card-header style="display:block">
 <div style="width: 100%;float: left;">
-
+%
 </div>
 <div style="width: 100%;float:left;">
 <mat-card-title class="font-bold" style="float: left;width: 100%;">

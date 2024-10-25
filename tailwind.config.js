@@ -84,7 +84,7 @@ module.exports = {
       },
       backgroundColor: theme => ({
         ...theme('colors'),
-        base: 'var(--background-base)',
+        base: 'var(--is-light-theme, rgb(245, 245, 248)) var(--is-dark-theme, black)',
         foreground: withOpacityValue('--color-grey5'),
         'app-bar': 'var(--color-grey5)',
         hover: 'var(--background-hover)',
@@ -154,7 +154,6 @@ module.exports = {
         ...theme('colors'),
         black: 'var(--text-color)',
         white: 'var(--text-color-light)',
-        'secondary': 'var(--text-secondary)',
         'hint': 'var(--text-hint)',
         'primary-contrast': 'rgb(var(--color-primary-contrast))',
         'accent-contrast': 'rgb(var(--color-accent-contrast))',

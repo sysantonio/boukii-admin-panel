@@ -330,7 +330,7 @@ img[mat-card-image] {
 }
 
 .add-date:hover   {
-  box-shadow: none;background: #e6e6e6;border: 1px solid #e6e6e6;
+  box-shadow: none;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;border: 1px solid #e6e6e6;
 
 }
 .add-date:hover .icon-date  {
