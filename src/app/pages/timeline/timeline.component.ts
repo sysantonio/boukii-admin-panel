@@ -637,7 +637,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         booking.date = courseDate ? courseDate.date : null;
         booking.hour_start = courseDate ? courseDate.hour_start : null;
         booking.hour_end = courseDate ? courseDate.hour_end : null;
-        booking.bookings_number = booking.booking_users.length;
+        booking.bookings_number = booking.booking_users?.length;
         booking.bookings_clients = booking.booking_users;
       }
     });
@@ -729,7 +729,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           monitor: monitor,
           course_id: booking.course_id,
           course_date_id: booking.course_date_id,
-          course_subgroup_id: booking.booking_users && booking.booking_users.length > 0 ? booking.booking_users[0].course_subgroup_id : null,
+          course_subgroup_id: booking.booking_users && booking.booking_users?.length > 0 ? booking.booking_users[0].course_subgroup_id : null,
           subgroup_number: booking.subgroup_number,
           total_subgroups: booking.total_subgroups,
           course: booking.course,
