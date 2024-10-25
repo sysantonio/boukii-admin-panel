@@ -1218,7 +1218,7 @@
                           <mat-form-field appearance="outline" class="flex-auto" style="width: 100%; margin-top: 10%;" *ngIf="groupLevel.active">
                             <mat-select placeholder="Nivel minimo del profesor" (selectionChange)="setLevelTeacher(groupLevel)" [value]="calculateMonitorLevel(groupLevel)">
                               <mat-option *ngFor="let item of levels" [value]="item">
-                                {{ item.league }} - {{ item.name }}
+                                {{ item.annotation }} - {{ item.name }}
                               </mat-option>
                             </mat-select>
                           </mat-form-field>

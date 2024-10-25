@@ -402,7 +402,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       pageSize,
       'desc',
       'id',
-      filter + this.searchCtrl.value + '&school_id=' + this.user.schools[0].id + this.search +
+       this.searchCtrl.value + filter + '&school_id=' + this.user.schools[0].id + this.search +
       (this.filterField !== null ? '&' + this.filterColumn + '=' + this.filterField : ''),
       '',
       null,
