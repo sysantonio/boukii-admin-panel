@@ -1,8 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, map, startWith } from 'rxjs';
 import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
@@ -20,7 +17,7 @@ export class AddDiscountBonusModalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.crudService.list('/vouchers', 1, 10000, 'desc', 'id', '&school_id='+this.defaults.school_id + '&client_id='+this.defaults.client_id + '&payed=0')
+    this.crudService.list('/vouchers', 1, 10000, 'desc', 'id', '&school_id=' + this.defaults.school_id + '&client_id=' + this.defaults.client_id + '&payed=0')
       .subscribe((data) => {
         this.bonuses = data.data;
       })
