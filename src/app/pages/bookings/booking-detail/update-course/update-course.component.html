@@ -1,12 +1,14 @@
-<form >
+<form>
   <div class="flex items-center" mat-dialog-title>
-    <h2 class="headline m-0 flex-auto">{{'bookings_page.edit_dates.title' | translate }}</h2>
+    <h2 class="headline m-0 flex-auto">{{'bookings_page.edit_dates.title' |
+      translate }}</h2>
 
     <!--<button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>-->
 
-    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+    <button class="text-secondary" mat-dialog-close mat-icon-button
+      type="button">
       <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
   </div>
@@ -16,40 +18,48 @@
   <mat-dialog-content class="flex flex-col">
 
     <mat-dialog-actions align="end">
-      <button color="primary" mat-flat-button (click)="closeModal()">{{'confirm' | translate}}</button>
-      <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no' | translate}}</button>
+      <button color="primary" mat-flat-button (click)="closeModal()">{{'confirm'
+        | translate}}</button>
+      <button color="primary" mat-flat-button [mat-dialog-close]="false">{{'no'
+        | translate}}</button>
     </mat-dialog-actions>
 
-    <ng-container *ngIf="(defaults.course.course_type === 2 || defaults.course.course_type === 3) ">
-        <ng-container *ngIf="(defaults.course.course_type === 2 || defaults.course.course_type === 3)">
-          <mat-form-field appearance="outline" class="flex-auto" style="width: 48%; margin-right: 2%">
-            <mat-label>{{'hour' | translate}}</mat-label>
-            <mat-select
-              [(ngModel)]="hourStart"
-              [ngModelOptions]="{standalone: true}"
-            >
-              <mat-option *ngFor="let time of generateCourseHours(defaults.course.course_dates[0].hour_start,
+    <ng-container
+      *ngIf="(defaults.course.course_type === 2 || defaults.course.course_type === 3) ">
+      <ng-container
+        *ngIf="(defaults.course.course_type === 2 || defaults.course.course_type === 3)">
+        <mat-form-field appearance="outline" class="flex-auto"
+          style="width: 48%; margin-right: 2%">
+          <mat-label>{{'hour' | translate}}</mat-label>
+          <mat-select
+            [(ngModel)]="hourStart"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option
+              *ngFor="let time of generateCourseHours(defaults.course.course_dates[0].hour_start,
               defaults.course.course_dates[0].hour_end, '5min', '5min')"
-              [value]="time" [disabled]="calculateAvailableHours(defaults.course, time)"
-                (onSelectionChange)="setHourStart($event, time, dates[0]); setHourEnd(dates[0])">{{ time }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-
-        <mat-form-field appearance="outline" class="flex-auto" style="width: 48%">
-          <mat-label>{{'dates' | translate}}</mat-label>
-          <mat-select [(ngModel)]="selectedCourseDateId" [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let date of selectedDates" [value]="date.id" [disabled]="!isAfter(date)">
-              {{ date.date | date: 'dd/MM/YYYY' }}
-            </mat-option>
+              [value]="time"
+              [disabled]="calculateAvailableHours(defaults.course, time)"
+              (onSelectionChange)="setHourStart($event, time, dates[0]); setHourEnd(dates[0])">{{
+              time }}</mat-option>
           </mat-select>
         </mat-form-field>
+      </ng-container>
+
+      <mat-form-field appearance="outline" class="flex-auto" style="width: 48%">
+        <mat-label>{{'dates' | translate}}</mat-label>
+        <mat-select [(ngModel)]="selectedCourseDateId"
+          [ngModelOptions]="{standalone: true}">
+          <mat-option *ngFor="let date of selectedDates" [value]="date.id"
+            [disabled]="!isAfter(date)">
+            {{ date.date | date: 'dd/MM/YYYY' }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <mat-form-field
         appearance="outline"
         class="flex-auto"
-        (click)="checkAvailableMonitors(hourStart);"
-      >
+        (click)="checkAvailableMonitors(hourStart);">
         <mat-label>{{'choose_monitor' | translate }}</mat-label>
         <input
           type="text"
@@ -57,17 +67,14 @@
           aria-label="Number"
           matInput
           [matAutocomplete]="autoMoniteur"
-          [disabled]="!selectedCourseDateId || !hourStart"
-        />
+          [disabled]="!selectedCourseDateId || !hourStart" />
         <mat-autocomplete
           #autoMoniteur="matAutocomplete"
-          [displayWith]="displayFnMoniteurs"
-        >
+          [displayWith]="displayFnMoniteurs">
           <mat-option
             *ngFor="let monitor of filteredMonitors | async"
             [value]="monitor"
-            (onSelectionChange)="selectedMonitorId = monitor.id;"
-          >
+            (onSelectionChange)="selectedMonitorId = monitor.id;">
             {{monitor.first_name}} {{monitor.last_name}}
           </mat-option>
         </mat-autocomplete>
@@ -76,7 +83,7 @@
 
     </ng-container>
 
-<!--    <div style="width:100%" *ngIf="defaults.course.course_type === 1 || (defaults.course.course_type === 2 && !defaults.course.is_flexible)">
+    <!--    <div style="width:100%" *ngIf="defaults.course.course_type === 1 || (defaults.course.course_type === 2 && !defaults.course.is_flexible)">
       <mat-form-field appearance="outline" class="flex-auto" style="width: 50%;" *ngIf="defaults.course.course_type === 2">
         <mat-label>{{'hour' | translate}}</mat-label>
         <mat-select [(ngModel)]="hourStart" [ngModelOptions]="{standalone: true}">
@@ -97,6 +104,5 @@
       </mat-form-field>
     </div>-->
   </mat-dialog-content>
-
 
 </form>

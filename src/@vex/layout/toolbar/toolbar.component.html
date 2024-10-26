@@ -16,9 +16,11 @@
   <button *ngIf="isHorizontalLayout$ | async"
     [class.hidden]="mobileQuery"
     [matMenuTriggerFor]="addNewMenu"
-    color="primary"
     mat-flat-button
-    type="button">{{'add' | translate}}
+    type="button">
+    <span style="color: white;">
+      {{'add' | translate}}
+    </span>
   </button>
 
   <mat-menu #addNewMenu="matMenu" [overlapTrigger]="false" xPosition="after"
