@@ -170,8 +170,8 @@
             </div>
 
             <mat-card-header
-              style="justify-content: space-evenly;align-items: flex-start;">
-              <div
+              style="padding: 0 16px; align-items: center">
+              <div style="margin:0"
                 mat-card-avatar
                 [style.background-image]="
                   'url(' +
@@ -205,11 +205,9 @@
                 style="color: #EA0C60;">
                 {{ parseFloatValue(getTotalBook(bI, item)) }}
                 {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
-
               </div>
-
               <div
-                style="color: #EA0C60;"
+                style="color: #EA0C60;margin-left:auto"
                 *ngIf="!getCourse(item?.courseDates[0]?.course_id)?.is_flexible">
                 {{ getAmountCourse(bookingUsersUnique, bI) }}
                 {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
@@ -217,7 +215,7 @@
             </mat-card-header>
             <mat-card-content>
               <ul
-                style="font-size: 12px;margin: 10px 0 0 0; width: 100%;text-align: center;">
+                style="font-size: 12px;margin: 10px 16px; width: 100%;">
                 <ng-container *ngFor="let date of item?.courseDates">
                   <li>
                     <mat-icon
@@ -748,10 +746,11 @@
                     <div
                       style="width: 60%;display:inline-block;text-align: left; color: white;">
                       <b>{{ 'register' | translate}}:</b>
-                      <span style="margin-left: 10px;font-weight: normal;">
-                        <span>{{booking.created_at | date:
+                      <span
+                        style="margin-left: 10px;font-weight: normal;color: white;">
+                        <span style="color: white;">{{booking.created_at | date:
                           'dd/MM/YYYY'}}</span><span
-                          style="margin-left: 10px;font-style: italic;">{{booking.created_at
+                          style="margin-left: 10px;font-style: italic;color: white;">{{booking.created_at
                           | date: 'HH:mm'}}h</span>
                       </span>
                     </div>
@@ -759,7 +758,7 @@
                     <div *ngIf="booking.user"
                       style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
                       {{ booking.user.username }}
-                      <span style="margin-left: 10px;">({{
+                      <span style="margin-left: 10px;color: white;">({{
                         booking.user.first_name + ' ' + booking.user.last_name
                         }})</span>
                     </div>
