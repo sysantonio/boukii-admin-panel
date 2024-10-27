@@ -15,7 +15,6 @@ export class ConfirmUnmatchMonitorComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.defaults);
     const monitorLanguages = {
       "language1_id": this.defaults.monitor.language1_id,
       "language2_id": this.defaults.monitor.language2_id,
