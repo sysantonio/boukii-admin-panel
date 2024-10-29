@@ -18,7 +18,7 @@
   <vex-page-layout-content class="container pt-6"
     style="max-width: none !important;" *ngIf="!loading">
     <div class="card">
-      <mat-tab-group>
+      <mat-tab-group (selectedTabChange)="onFullTabChange($event)">
         <mat-tab label="{{'season' | translate}}" [formGroup]="seasonForm">
 
           <vex-page-layout>

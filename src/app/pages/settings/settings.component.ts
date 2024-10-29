@@ -226,6 +226,7 @@ export class SettingsComponent implements OnInit {
 
   }
 
+
   getData() {
     this.loading = true;
     this.crudService.get('/schools/' + this.user.schools[0].id)
@@ -234,12 +235,13 @@ export class SettingsComponent implements OnInit {
         this.school = data.data;
         this.getDegrees();
 
-        forkJoin([this.getSchoolSeason(), this.getSports(), this.getBlockages(), this.getSchoolSports()])
+        forkJoin([this.getSchoolSeason(), this.getSports(), this.getBlockages(), this.getSchoolSports(), this.getEmails()])
           .subscribe((data: any) => {
             this.season = data[0].data.filter((s) => s.is_active)[0];
             this.sports = data[1].data;
             this.blockages = data[2].data;
             this.schoolSports = data[3].data;
+            this.currentMails = data[4].data;
             data[3].data.forEach((element, idx) => {
               this.sportsList.push(element.sport_id);
 
@@ -340,52 +342,66 @@ export class SettingsComponent implements OnInit {
       });
   }
 
+  getEmails() {
+    return this.crudService.list('/mails', 1, 10000, 'asc', 'id', '&school_id=' + this.user.schools[0].id);
+  }
+
   setCurrentMailType() {
     const mail = this.currentMails.find((m) => m.type === this.mailType);
     this.mailTypeTrad = this.emailTypes.find(type => type.value === this.mailType)?.label;
-
+    debugger;
     if (mail) {
       const frMail = this.currentMails.find((m) => m.lang === 'fr');
 
       this.bodyFr = frMail?.body;
+      this.titleFr = frMail?.title;
       this.subjectFr = frMail?.subject;
     } else {
       this.bodyFr = '';
+      this.titleFr = '';
       this.subjectFr = '';
     }
     if (mail) {
       const enMail = this.currentMails.find((m) => m.lang === 'en');
 
       this.bodyEn = enMail?.body;
+      this.titleEn = enMail?.title;
       this.subjectEn = enMail?.subject;
     } else {
       this.bodyEn = '';
+      this.titleEn = '';
       this.subjectEn = '';
     }
     if (mail) {
       const esMail = this.currentMails.find((m) => m.lang === 'es');
 
       this.bodyEs = esMail?.body;
+      this.titleEs = esMail?.title;
       this.subjectEs = esMail?.subject;
     } else {
       this.bodyEs = '';
+      this.titleEs = '';
       this.subjectEs = '';
     }
     if (mail) {
       const deMail = this.currentMails.find((m) => m.lang === 'de');
       this.bodyDe = deMail?.body;
+      this.titleDe = deMail?.title;
       this.subjectDe = deMail?.subject;
     } else {
       this.bodyDe = '';
+      this.titleDe = '';
       this.subjectDe = '';
     }
     if (mail) {
       const itMail = this.currentMails.find((m) => m.lang === 'it');
 
       this.bodyIt = itMail?.body;
+      this.titleIt = itMail?.title;
       this.subjectIt = itMail?.subject;
     } else {
       this.bodyIt = '';
+      this.titleIt = '';
       this.subjectIt = '';
     }
   }
@@ -508,6 +524,12 @@ export class SettingsComponent implements OnInit {
   onTabChange(event: any) {
     this.selectedIndex = event.index;
     this.setCurrentMailType();
+  }
+
+  onFullTabChange(event: any) {
+    if(event.index == 7) {
+      this.setCurrentMailType();
+    }
   }
 
   addHoliday() {

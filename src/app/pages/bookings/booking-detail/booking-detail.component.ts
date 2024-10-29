@@ -364,18 +364,23 @@ export class BookingDetailComponent implements OnInit {
 
               this.bookingUsers = [...this.booking.booking_users];
               this.getUniqueBookingUsers();
+              debugger;
 
-              const groupedByCourseId = this.booking.booking_users.reduce(
+              // Agrupación de booking_users
+              const groupedByCourseOrClientId = this.booking.booking_users.reduce(
                 (accumulator, currentValue) => {
-                  // Obtiene el course_id del objeto actual
-                  const key = currentValue.course_id;
+                  const course = currentValue.course;
+                  const isCourseTypeOne = course.course_type === 1;
 
-                  // Si el acumulador ya no tiene este course_id como clave, inicialízalo
+                  // Usa `client_id` como clave si course_type es 1, de lo contrario usa `course_id`
+                  const key = isCourseTypeOne ? currentValue.client_id : currentValue.course_id;
+
+                  // Inicializa la clave en el acumulador si aún no existe
                   if (!accumulator[key]) {
                     accumulator[key] = [];
                   }
 
-                  // Agrega el objeto actual al array correspondiente para este course_id
+                  // Agrega el objeto actual al array correspondiente para este curso o cliente
                   accumulator[key].push(currentValue);
 
                   return accumulator;
@@ -383,14 +388,14 @@ export class BookingDetailComponent implements OnInit {
                 {}
               );
 
-              for (const courseId in groupedByCourseId) {
-                if (groupedByCourseId.hasOwnProperty(courseId)) {
-                  let course = groupedByCourseId[courseId][0].course;
-                  if (
-                    course.course_type === 2 &&
-                    this.booking.old_id === null
-                  ) {
-                    groupedByCourseId[courseId].forEach((element, idx) => {
+// Procesa los grupos de acuerdo al tipo de curso
+              for (const key in groupedByCourseOrClientId) {
+                if (groupedByCourseOrClientId.hasOwnProperty(key)) {
+                  const elements = groupedByCourseOrClientId[key];
+                  const course = elements[0].course;
+
+                  if (course.course_type === 2 && this.booking.old_id === null) {
+                    elements.forEach((element) => {
                       const dataBook = {
                         price_total: 0,
                         courseDates: [],
@@ -411,9 +416,8 @@ export class BookingDetailComponent implements OnInit {
                         this.clientsIds.push(element.client_id);
                         this.bookingsToCreate.push(dataBook);
                       } else {
-                        dataBook.relatedMainClient =
-                          this.booking.client_main_id;
-                        dataBook.clients.push(courseId);
+                        dataBook.relatedMainClient = this.booking.client_main_id;
+                        dataBook.clients.push(element.client_id);
                         this.clientsIds.push(element.client_id);
                       }
                     });
@@ -430,7 +434,8 @@ export class BookingDetailComponent implements OnInit {
                     data.degrees_sport = this.degreesClient.filter(
                       (degree) => degree.sport_id === course.sport_id
                     );
-                    groupedByCourseId[courseId].forEach((element, idx) => {
+
+                    elements.forEach((element, idx) => {
                       if (course.course_type === 1 && !course.is_flexible) {
                         if (idx === 0) {
                           data.price_total = parseFloat(element.price);
@@ -612,15 +617,22 @@ export class BookingDetailComponent implements OnInit {
 
   getUniqueBookingUsers() {
     const clientIds = new Set();
-    this.bookingUsersUnique = this.bookingUsers.filter((item) => {
-      if (!clientIds.has(item.course_id) || !clientIds.has(item.client_id)) {
-        clientIds.add(item.course_id);
+    const uniqueDates = new Set();
+    const uniqueMonitors = new Set();
+    this.bookingUsersUnique = [];
+
+    this.bookingUsersUnique = this.bookingUsers.filter(item => {
+      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
+        (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
         clientIds.add(item.client_id);
+        uniqueDates.add(item.date);
+        uniqueMonitors.add(item.monitor_id);
         return true;
       }
       return false;
     });
   }
+
 
   generateArray(paxes: number) {
     this.persons = [];
