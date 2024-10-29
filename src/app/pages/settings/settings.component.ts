@@ -847,14 +847,14 @@ export class SettingsComponent implements OnInit {
   setTheme() {
     //TODO: Save bookingpage color mode
     /*    if (this.theme === 'dark'){
-    
+
           this.configService.updateConfig({
             style: {
               colorScheme: ColorSchemeName.dark
             }
           });
         } else {
-    
+
           this.configService.updateConfig({
             style: {
               colorScheme: ColorSchemeName.light
