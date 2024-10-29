@@ -557,7 +557,10 @@
                 [title]="'bookings'" [route]="'bookings'"
                 (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
                 [filterColumn]="'course_id'"
-                [with]="['bookingUsers','bookingUsers.course.courseGroups.courseSubgroups', 'bookingUsers.client']"
+                             [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
+      'bookingUsers.client.clientSports.degree',
+       'clientMain.clientSports.degree', 'user',
+       'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
                 [showDetail]="showDetail">
               </vex-aio-table>
             </vex-page-layout-content>
