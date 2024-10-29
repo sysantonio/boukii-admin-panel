@@ -410,7 +410,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
     // Detectar cambios manualmente para asegurarse de que Angular reconozca los cambios
     this.cdr.detectChanges();
 
-    console.log(this.selectedSports);
   }
 
   getSelectedSportsNames(): string {
@@ -465,8 +464,6 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   create() {
     this.loading = true;
-    console.log(this.defaults);
-    console.log(this.defaultsUser);
     this.defaultsUser.email = this.defaults.email;
     this.defaultsUser.image = this.imagePreviewUrl;
     this.defaults.image = this.imagePreviewUrl;

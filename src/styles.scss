@@ -679,7 +679,14 @@ body.dark-mode {
 .mat-mdc-slide-toggle .mdc-switch:enabled + .mdc-label {
   color: var(--color-dark1);
 }
-div {
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+span {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
 }
 
@@ -733,7 +740,7 @@ div {
   .mdc-notched-outline__notch,
 .mdc-text-field--outlined:not(.mdc-text-field--disabled)
   .mdc-notched-outline__trailing {
-  border-color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
+  border-color: #dee6ea !important;
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-mdc-menu-content,
@@ -742,7 +749,8 @@ div {
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-stepper-vertical,
-.mat-stepper-horizontal {
+.mat-stepper-horizontal,
+.simplebar-offset {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
 }
 input::placeholder {

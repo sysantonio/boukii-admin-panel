@@ -395,7 +395,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
   searchBookings(firstDate: string, lastDate: string) {
     this.crudService.get('/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=' + 99999).subscribe(
       (data: any) => {
-        //console.log(data.data);
         this.processData(data.data);
       },
       error => {
@@ -902,7 +901,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
       .filter(task => {
         const monitorIndex = this.filteredMonitors.findIndex(m => m.id === task.monitor_id);
         if (!(monitorIndex >= 0)) {
-          //console.log(task);
         }
         return monitorIndex >= 0;
       })
@@ -1147,7 +1145,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
   // LOGIC
 
   toggleDetail(task: any) {
-    //console.log(task);
     if (task.booking_id) {
       if (task.grouped_tasks && task.grouped_tasks.length > 1) {
         //Open Modal grouped courses
@@ -1308,7 +1305,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
         clientIds: clientIds
       };
 
-      //console.log(data);
 
       this.matchTeacher(monitor.id).then((res) => {
         if (res) {
@@ -1325,7 +1321,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
             if (result) {
               this.crudService.post('/admin/monitors/available', data)
                 .subscribe((response) => {
-                  //console.log(response);
                   this.monitorsForm = response.data;
 
                   ret = this.monitorsForm.find((m) => m.id === monitor.id);
@@ -1345,12 +1340,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
                         subgroup_id: subgroup_id
                       };
 
-                      //console.log(data);
-
                       this.crudService.post('/admin/planner/monitors/transfer', data)
                         .subscribe((data) => {
-                          //console.log(data);
-                          //this.getData();
                           this.moveTask = false;
                           this.taskMoved = null;
                           this.hideDetail();
@@ -1406,7 +1397,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
                           subgroup_id: subgroup_id
                         };
 
-                        //console.log(data);
 
                         this.crudService.post('/admin/planner/monitors/transfer', data)
                           .subscribe((data) => {
@@ -1451,7 +1441,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
         } else {
           this.crudService.post('/admin/monitors/available', data)
             .subscribe((response) => {
-              //console.log(response);
               this.monitorsForm = response.data;
 
               ret = this.monitorsForm.find((m) => m.id === monitor.id);
@@ -1470,13 +1459,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
                     booking_users: all_booking_users,
                     subgroup_id: subgroup_id
                   };
-
-                  //console.log(data);
-
                   this.crudService.post('/admin/planner/monitors/transfer', data)
                     .subscribe((data) => {
-                      //console.log(data);
-                      //this.getData();
                       this.moveTask = false;
                       this.taskMoved = null;
                       this.hideDetail();
@@ -1532,12 +1516,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
                       subgroup_id: subgroup_id
                     };
 
-                    //console.log(data);
 
                     this.crudService.post('/admin/planner/monitors/transfer', data)
                       .subscribe((data) => {
 
-                        //this.getData();
                         this.moveTask = false;
                         this.taskMoved = null;
                         this.hideDetail();
@@ -1694,12 +1676,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
       subgroup_id: subgroup_id
     };
 
-    //console.log(data);
 
     this.crudService.post('/admin/planner/monitors/transfer', data)
       .subscribe((data) => {
 
-        //this.getData();
         this.editedMonitor = null;
         this.showEditMonitor = false;
         this.hideDetail();

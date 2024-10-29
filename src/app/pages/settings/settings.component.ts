@@ -672,7 +672,6 @@ export class SettingsComponent implements OnInit {
     if (this.season && this.season !== null) {
       this.crudService.update('/seasons', data, this.season.id)
         .subscribe((res) => {
-          console.log(res);
           this.snackbar.open(this.translateService.instant('snackbar.settings.season_created'), 'Close', { duration: 3000 });
           this.getData();
           this.schoolService.refreshSchoolData();
@@ -680,7 +679,6 @@ export class SettingsComponent implements OnInit {
     } else {
       this.crudService.create('/seasons', data)
         .subscribe((res) => {
-          console.log(res);
           this.snackbar.open(this.translateService.instant('snackbar.settings.season_updated'), 'Close', { duration: 3000 });
           this.getData();
           this.schoolService.refreshSchoolData();
@@ -704,7 +702,6 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', data, this.school.id)
       .subscribe((res) => {
-        console.log(res);
         this.snackbar.open(this.translateService.instant('snackbar.settings.save'), this.translateService.instant('cancel'), { duration: 3000 });
         this.schoolService.refreshSchoolData();
         //this.getData();
@@ -715,7 +712,6 @@ export class SettingsComponent implements OnInit {
 
     this.crudService.update('/schools', { sport_ids: this.sportsList }, this.school.id + '/sports')
       .subscribe((res) => {
-        console.log(res);
         res.data.sports.forEach(sport => {
 
           const hasDegrees = this.degrees.filter((s) => s.sport_id === sport.id).length > 0;
@@ -731,7 +727,6 @@ export class SettingsComponent implements OnInit {
 
               this.crudService.create('/degrees', degree)
                 .subscribe((data) => {
-                  console.log(data)
                   this.schoolService.refreshSchoolData();
                 });
             });

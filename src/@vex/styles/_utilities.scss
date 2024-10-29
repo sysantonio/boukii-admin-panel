@@ -16,6 +16,7 @@
   @apply shadow bg-foreground;
   background: var(--is-light-theme, #ffffff)
     var(--is-dark-theme, var(--color-grey5)) !important;
+  border-radius: 10px;
 }
 
 .avatar {

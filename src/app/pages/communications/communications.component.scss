@@ -1,6 +1,8 @@
 .drawer {
   max-width: 90%;
   width: 400px;
+  border-right-color: var(--is-light-theme, #ffffff)
+    var(--is-dark-theme, #1d1d1d);
 
   ::ng-deep .mat-drawer-inner-container {
     overflow: hidden;

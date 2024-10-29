@@ -351,7 +351,7 @@ img[mat-card-image] {
 
 .add-date:hover {
   box-shadow: none;
-  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;
+  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);
   border: 1px solid #e6e6e6;
 }
 .add-date:hover .icon-date {
@@ -542,15 +542,12 @@ img[mat-card-image] {
   &.col-right {
     border-radius: var(--border-radius);
     --tw-bg-opacity: 1;
-    background-color: rgba(
-      var(--color-grey5),
-      var(--tw-bg-opacity)
-    );
+    background-color: rgba(var(--color-grey5), var(--tw-bg-opacity));
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
       0 1px 2px -1px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 var(--color-dark1)0),
-      var(--tw-ring-shadow, 0 0 var(--color-dark1)0), var(--tw-shadow);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 var(--color-dark1) 0),
+      var(--tw-ring-shadow, 0 0 var(--color-dark1) 0), var(--tw-shadow);
 
     mat-icon {
       cursor: pointer;

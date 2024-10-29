@@ -1,5 +1,5 @@
 .table-show-detail {
-  width: 65%;
+  width: 100%;
   float: left;
 }
 
@@ -78,6 +78,7 @@
 
   .mat-mdc-card-content {
     padding: 0px !important;
+    background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 
     .title-client {
       padding: 10px 35px;

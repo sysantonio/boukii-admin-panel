@@ -83,7 +83,7 @@ img {
   display: block !important;
 }
 .table-show-detail {
-  width: 65%;
+  width: 100%;
   float: left;
 }
 
@@ -527,7 +527,7 @@ img {
   margin-bottom: 4px;
 }
 .box-background-grey {
-  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;
+  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);
 }
 .box-detail-user-block {
   display: flex;
