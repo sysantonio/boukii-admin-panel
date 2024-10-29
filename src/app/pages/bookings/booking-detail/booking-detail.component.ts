@@ -364,7 +364,6 @@ export class BookingDetailComponent implements OnInit {
 
               this.bookingUsers = [...this.booking.booking_users];
               this.getUniqueBookingUsers();
-              debugger;
 
               // Agrupación de booking_users
               const groupedByCourseOrClientId = this.booking.booking_users.reduce(
@@ -1918,15 +1917,7 @@ export class BookingDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        const bookingLog = {
-          booking_id: this.id,
-          action: "refund",
-          description: "refund booking",
-          user_id: this.user.id,
-          before_change: "confirmed",
-          school_id: this.user.schools[0].id,
-        };
-        this.crudService.post("/booking-logs", bookingLog).subscribe(() => {});
+
 
         if (data.type === "no_refund") {
           this.crudService

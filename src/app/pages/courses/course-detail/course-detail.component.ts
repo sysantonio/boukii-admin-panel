@@ -132,21 +132,22 @@ export class CourseDetailComponent implements OnInit {
   detailData: any;
   settings: any;
 
-  entity = '/booking-users';
+  entity = '/bookings';
   columns: TableColumn<any>[] = [
-    { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
-    { label: 'course', property: 'course', type: 'course_type_data', visible: true},
-    { label: 'client', property: 'client', type: 'client', visible: true },
+    { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
+    { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
+    { label: 'course', property: 'booking_users', type: 'booking_users', visible: true },
+    { label: 'client', property: 'client_main', type: 'client', visible: true },
+    { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
+    { label: 'op_rem_abr', property: 'has_cancellation_insurance', type: 'light', visible: true },
+    { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
+    { label: 'price', property: 'price_total', type: 'price', visible: true },
+    { label: 'method_paiment', property: 'payment_method', type: 'payment_method', visible: true },
     { label: 'bonus', property: 'bonus', type: 'light', visible: true },
-    //{ label: 'OP. Rem', property: 'has_cancellation_insurance', type: 'light_data', visible: true },
-    //{ label: 'B. Care', property: 'has_boukii_care', type: 'light_data', visible: true },
-    { label: 'price', property: 'price', type: 'price', visible: true },
-    //{ label: 'M. Paiment', property: 'payment_method', type: 'text', visible: true },
-    //{ label: 'Status', property: 'paid', type: 'payment_status_data', visible: true },
-    //{ label: 'Status 2', property: 'cancelation', type: 'cancelation_status', visible: true },
+    { label: 'paid', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'status', property: 'status', type: 'cancelation_status', visible: true },
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 

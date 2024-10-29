@@ -81,6 +81,12 @@
                 ' ' + detailData.user.last_name
                 }})</span>
             </div>
+            <div
+                 style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+              {{ 'from' | translate }}
+              <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'web'">{{'page_created' | translate}}</span>
+              <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'admin'">{{'api_created' | translate}}</span>
+            </div>
           </mat-card-subtitle>
         </div>
         <div class="title-status">

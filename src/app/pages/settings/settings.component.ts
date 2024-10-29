@@ -349,7 +349,7 @@ export class SettingsComponent implements OnInit {
   setCurrentMailType() {
     const mail = this.currentMails.find((m) => m.type === this.mailType);
     this.mailTypeTrad = this.emailTypes.find(type => type.value === this.mailType)?.label;
-    debugger;
+
     if (mail) {
       const frMail = this.currentMails.find((m) => m.lang === 'fr');
 
