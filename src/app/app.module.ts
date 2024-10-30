@@ -15,6 +15,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { PreviewModalComponent } from './components/preview-modal/preview-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ComponentsCustomModule } from './components/components-custom.module';
+import { DateUniqueByPipe } from './pipes/date-unique-by.pipe';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -22,27 +23,27 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent, PreviewModalComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
-    // Vex
-    VexModule,
-    CustomLayoutModule,
-    ComponentsModule,
-    MatDialogModule,
-    ComponentsCustomModule
-  ],
-  providers: [AuthService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent, DashboardComponent, PreviewModalComponent, DateUniqueByPipe],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        // Vex
+        VexModule,
+        CustomLayoutModule,
+        ComponentsModule,
+        MatDialogModule,
+        ComponentsCustomModule
+    ],
+    providers: [AuthService, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

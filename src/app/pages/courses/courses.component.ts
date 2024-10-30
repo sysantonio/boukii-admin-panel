@@ -104,7 +104,10 @@ export class CoursesComponent {
               }
             });
           })
-        this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id='+ this.detailData.id)
+        this.crudService.list('/booking-users', 1, 10000,
+          'desc', 'id',
+          '&school_id=' + this.detailData.school_id + '&course_id='+ this.detailData.id,
+          null, null, null, ['courseDate'])
           .subscribe((bookingUser) => {
             this.detailData.users = [];
             this.detailData.users = bookingUser.data;
@@ -179,15 +182,24 @@ export class CoursesComponent {
 
   getStudents(levelId: any) {
     let ret = 0;
-    let bookingDifferentUsers = new Set(); // Usamos Set para evitar duplicados
+    let bookingDifferentUsers = new Set();
+
+    if (!this.detailData?.booking_users || this.detailData.booking_users.length === 0) {
+      console.warn('booking_users is empty or undefined');
+      return ret;
+    }
 
     this.detailData.booking_users.forEach(element => {
-      if (element.degree_id === levelId && !bookingDifferentUsers.has(element.client_id)) {
-        bookingDifferentUsers.add(element.client_id); // Añadimos el id al set si no existe
-        ret = ret + 1;
+      console.log('Element:', element); // Verifica los datos de cada elemento
+      console.log('Comparing degree_id:', element.degree_id, 'with levelId:', levelId);
+
+      if (element.course_subgroup.degree.id === levelId && !bookingDifferentUsers.has(element.client_id) && element.status == 1) {
+        bookingDifferentUsers.add(element.client_id);
+        ret += 1;
       }
     });
 
+    console.log('Total students for level', levelId, ':', ret);
     return ret;
   }
 

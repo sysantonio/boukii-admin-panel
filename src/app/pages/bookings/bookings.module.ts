@@ -25,9 +25,10 @@ import { BookingDetailComponent } from './booking-detail/booking-detail.componen
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
+import {DateUniqueByPipe} from '../../pipes/date-unique-by.pipe';
 
 @NgModule({
-  declarations: [BookingsComponent],
+  declarations: [BookingsComponent,DateUniqueByPipe],
   imports: [
     CommonModule,
     LayoutModule,
@@ -54,6 +55,9 @@ import { IconComponent } from 'src/@vex/components/icon/app.component';
     TranslateModule,
     ComponentsCustomModule,
     IconComponent
+  ],
+  exports: [
+    DateUniqueByPipe
   ]
 })
 export class BookingsModule {

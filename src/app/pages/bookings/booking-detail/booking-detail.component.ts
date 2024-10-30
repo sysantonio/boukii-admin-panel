@@ -371,8 +371,8 @@ export class BookingDetailComponent implements OnInit {
                   const course = currentValue.course;
                   const isCourseTypeOne = course.course_type === 1;
 
-                  // Usa `client_id` como clave si course_type es 1, de lo contrario usa `course_id`
-                  const key = isCourseTypeOne ? currentValue.client_id : currentValue.course_id;
+                  // Usa `client_id-course_id` como clave si course_type es 1, de lo contrario solo `course_id`
+                  const key = isCourseTypeOne ? `${currentValue.client_id}-${currentValue.course_id}` : currentValue.course_id;
 
                   // Inicializa la clave en el acumulador si aún no existe
                   if (!accumulator[key]) {

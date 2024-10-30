@@ -195,6 +195,21 @@ export class BookingsComponent {
     return clientSport.degree_id;
   }
 
+  getClientDegreeObject(client: any) {
+    if (!client || !client.client_sports || !client.client_sports.length) {
+      return 0;
+    }
+    const sportId = this.detailData.bookingusers && this.detailData.bookingusers[0] ? this.detailData.bookingusers[0].course.sport_id : null;
+    if (!sportId) {
+      return 0;
+    }
+    const clientSport = client.client_sports.find(cs => cs.sport_id === sportId && cs.school_id == this.user.schools[0].id);
+    if (!clientSport || !clientSport.degree_id) {
+      return 0;
+    }
+    return clientSport.degree;
+  }
+
   get isActive(): boolean {
     if (!this.detailData.booking_users || this.detailData.booking_users.length === 0) {
       return false;
@@ -447,11 +462,10 @@ export class BookingsComponent {
 
   getExtrasPrice() {
     let ret = 0;
-
     this.detailData.bookingusers.forEach(element => {
       if (element.courseExtras && element.courseExtras.length > 0 && !ret) {
         element.courseExtras.forEach(ce => {
-          ret = ret + parseFloat(ce.price);
+          ret = ret + parseFloat(ce.course_extra.price);
         });
       }
     });
@@ -470,30 +484,33 @@ export class BookingsComponent {
   }
 
   getUniqueBookingUsers(data: any) {
-    const clientIds = new Set();
-    const uniqueDates = new Set();
-    const uniqueMonitors = new Set();
-    this.bookingUsersUnique = [];
+    const uniqueEntriesMap = new Map();
 
-    this.bookingUsersUnique = data.filter(item => {
-      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
-        (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
-        clientIds.add(item.client_id);
-        uniqueDates.add(item.date);
-        uniqueMonitors.add(item.monitor_id);
-        return true;
+    data.forEach(item => {
+      const key = `${item.client_id}-${item.course_id}`;
+
+      if (!uniqueEntriesMap.has(key)) {
+        uniqueEntriesMap.set(key, {
+          ...item,
+          bookingusers: [] // Crea un array de bookingusers para almacenar cada fecha
+        });
       }
-      return false;
+
+      // Agrega la fecha actual al array de bookingusers
+      uniqueEntriesMap.get(key).bookingusers.push(item);
     });
+
+    // Convertir el Map en un array de objetos únicos con fechas agrupadas
+    this.bookingUsersUnique = Array.from(uniqueEntriesMap.values());
   }
 
   /*  getUniqueBookingUsers(data: any) {
       const uniqueGroups = new Map<string, any>();
-  
+
       data.forEach(item => {
         // Crear una clave única por fecha y monitor
         const key = `${item.date}-${item.monitor_id}`;
-  
+
         if (uniqueGroups.has(key)) {
           const existingItem = uniqueGroups.get(key);
           // Si el precio actual es mayor que el del existente, reemplázalo
@@ -505,18 +522,18 @@ export class BookingsComponent {
           uniqueGroups.set(key, item);
         }
       });
-  
+
       // Convertimos el Map en un array de los valores
       this.bookingUsersUnique = Array.from(uniqueGroups.values());
     }*/
 
   /*  getUniqueBookingUsers(data: any) {
       const uniqueGroups = new Map<string, any>();
-  
+
       data.forEach(item => {
         // Crear una clave única para cada combinación de client_id, date y monitor_id
         const key = `${item.client_id}-${item.date}-${item.monitor_id}`;
-  
+
         // Si el grupo ya existe, comparamos los precios y nos quedamos con el más alto
         if (uniqueGroups.has(key)) {
           const existingItem = uniqueGroups.get(key);
@@ -528,7 +545,7 @@ export class BookingsComponent {
           uniqueGroups.set(key, item);
         }
       });
-  
+
       // Convertimos el map en un array de los valores
       this.bookingUsersUnique = Array.from(uniqueGroups.values());
     }*/

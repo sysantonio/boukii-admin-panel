@@ -70,19 +70,19 @@
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;color: white;">
                 <span style="color: white;">{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span
-                  style="margin-left: 10px;font-style: italic;color: white;">{{detailData.created_at
-                  | date: 'HH:mm'}}h</span>
+                style="margin-left: 10px;font-style: italic;color: white;">{{detailData.created_at
+                | date: 'HH:mm'}}h</span>
               </span>
             </div>
             <div *ngIf="detailData.user"
-              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+                 style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
               {{ detailData.user.username }}
               <span style="margin-left: 10px;color: white;">({{ detailData.user.first_name +
-                ' ' + detailData.user.last_name
+              ' ' + detailData.user.last_name
                 }})</span>
             </div>
             <div
-                 style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
               {{ 'from' | translate }}
               <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'web'">{{'page_created' | translate}}</span>
               <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'admin'">{{'api_created' | translate}}</span>
@@ -223,13 +223,13 @@
                       <div class="course-title">{{bUsers?.course?.name}}</div>
                       <div class="course-label">
                         {{
-                        (bUsers?.course?.course_type === 2 ? 'private' :
-                        bUsers?.course?.course_type === 1 ? 'collective' :
-                        'activity') | translate
+                          (bUsers?.course?.course_type === 2 ? 'private' :
+                            bUsers?.course?.course_type === 1 ? 'collective' :
+                              'activity') | translate
                         }}
                         {{
-                        (bUsers?.course?.isFlexible ? 'flex' : 'fix') |
-                        translate
+                          (bUsers?.course?.isFlexible ? 'flex' : 'fix') |
+                            translate
                         }}
                         {{bUsers?.course?.sport.name}}
                       </div>
@@ -241,7 +241,7 @@
                             *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
                             <span class="date-course">
                               <img class="icon-calendar"
-                                src="assets/img/icons/calendar-1.svg" />
+                                   src="assets/img/icons/calendar-1.svg" />
                               {{ item.date | date: 'dd.MM.YYYY' }}
                               <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
                               {{ item?.hour_end.substring(0, 5) }}h
@@ -252,38 +252,14 @@
 
                       <!-- Para course_type 1 -->
                       <ng-container *ngIf="bUsers?.course?.course_type === 1">
-                        <!-- Si es flexible, mostrar todas las fechas -->
-                        <ng-container *ngIf="bUsers?.course?.is_flexible">
-                          <ng-container
-                            *ngFor="let item of detailData.bookingusers">
-                            <div>
-                              <span class="date-course">
-                                <img class="icon-calendar"
-                                  src="assets/img/icons/calendar-1.svg" />
-                                {{ item.date | date: 'dd.MM.YYYY' }}
-                                <i>{{ item?.hour_start.substring(0, 5) }}h</i>
-                                -
-                                {{ item?.hour_end.substring(0, 5) }}h
-                              </span>
-                            </div>
-                          </ng-container>
-                        </ng-container>
-
-                        <!-- Si no es flexible, filtrar por client_id -->
-                        <ng-container *ngIf="!bUsers?.course?.is_flexible">
-                          <ng-container
-                            *ngFor="let item of detailData.bookingusers">
-                            <div *ngIf="item.client_id == bUsers.client_id">
-                              <span class="date-course">
-                                <img class="icon-calendar"
-                                  src="assets/img/icons/calendar-1.svg" />
-                                {{ item.date | date: 'dd.MM.YYYY' }}
-                                <i>{{ item?.hour_start.substring(0, 5) }}h</i>
-                                -
-                                {{ item?.hour_end.substring(0, 5) }}h
-                              </span>
-                            </div>
-                          </ng-container>
+                        <ng-container *ngFor="let item of bUsers.bookingusers">
+                          <div>
+                            <span class="date-course">
+                              <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+                              {{ item.date | date: 'dd.MM.YYYY' }}
+                              <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
+                            </span>
+                          </div>
                         </ng-container>
                       </ng-container>
                     </div>
@@ -330,6 +306,13 @@
                           {{calculateAge(bUsers?.client?.birth_date)}}
                           {{'years' | translate }}
                         </div>
+                        <div class="m-0 body-1" *ngIf="getClientDegreeObject(bUsers.client)"
+                             [style.background]="getClientDegreeObject(bUsers.client)?.color"
+                             style="padding: 5%;;color: #fff;border-radius: 5px;width: 100%;text-align: center; font-size:10px;overflow: inherit;">
+                          {{getClientDegreeObject(bUsers.client)?.annotation}}
+                          {{getClientDegreeObject(bUsers.client)?.name}}
+                        </div>
+                        <div *ngIf="!getClientDegreeObject(bUsers.client)">{{"level" | translate}} NDF</div>
                         <div style="display: flex;">
                           <vex-icon src="chat">
                           </vex-icon>
@@ -515,7 +498,7 @@
               </div>
             </div>
             <div class="col-right">
-              {{getExtrasPrice().toFixed(2)}} {{detailData.currency}}
+              {{getExtrasPrice()}} {{detailData.currency}}
             </div>
           </div>
         </div>

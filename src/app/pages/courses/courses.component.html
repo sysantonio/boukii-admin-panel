@@ -24,7 +24,7 @@
       [canDuplicate]="true"
       (showDetailEvent)="showDetailEvent($event)"
       [showDetail]="showDetail"
-      [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers', 'sport']"
+      [with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers.courseSubgroup.degree', 'sport']"
       [updatePage]="'detail'" [filterColumn]="'school_id'"
       [filterField]="user.schools[0].id"></vex-aio-table>
   </vex-page-layout-content>
