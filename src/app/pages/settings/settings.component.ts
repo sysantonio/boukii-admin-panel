@@ -351,7 +351,7 @@ export class SettingsComponent implements OnInit {
     this.mailTypeTrad = this.emailTypes.find(type => type.value === this.mailType)?.label;
 
     if (mail) {
-      const frMail = this.currentMails.find((m) => m.lang === 'fr');
+      const frMail = this.currentMails.find(m => m.lang === 'fr' && m.type === this.mailType);
 
       this.bodyFr = frMail?.body;
       this.titleFr = frMail?.title;
@@ -362,7 +362,7 @@ export class SettingsComponent implements OnInit {
       this.subjectFr = '';
     }
     if (mail) {
-      const enMail = this.currentMails.find((m) => m.lang === 'en');
+      const enMail = this.currentMails.find((m) => m.lang === 'en' && m.type === this.mailType);
 
       this.bodyEn = enMail?.body;
       this.titleEn = enMail?.title;
@@ -373,7 +373,7 @@ export class SettingsComponent implements OnInit {
       this.subjectEn = '';
     }
     if (mail) {
-      const esMail = this.currentMails.find((m) => m.lang === 'es');
+      const esMail = this.currentMails.find((m) => m.lang === 'es' && m.type === this.mailType);
 
       this.bodyEs = esMail?.body;
       this.titleEs = esMail?.title;
@@ -384,7 +384,7 @@ export class SettingsComponent implements OnInit {
       this.subjectEs = '';
     }
     if (mail) {
-      const deMail = this.currentMails.find((m) => m.lang === 'de');
+      const deMail = this.currentMails.find((m) => m.lang === 'de' && m.type === this.mailType);
       this.bodyDe = deMail?.body;
       this.titleDe = deMail?.title;
       this.subjectDe = deMail?.subject;
@@ -394,7 +394,7 @@ export class SettingsComponent implements OnInit {
       this.subjectDe = '';
     }
     if (mail) {
-      const itMail = this.currentMails.find((m) => m.lang === 'it');
+      const itMail = this.currentMails.find((m) => m.lang === 'it' && m.type === this.mailType);
 
       this.bodyIt = itMail?.body;
       this.titleIt = itMail?.title;
