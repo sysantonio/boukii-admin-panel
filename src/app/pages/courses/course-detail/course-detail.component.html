@@ -440,7 +440,7 @@
                                           (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
                                           [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
                                           style="text-align: center; cursor: pointer;">
-                                          {{ dayLevel.dateString }}
+                                          {{ dayLevel.date }}
                                         </span>
                                       </td>
                                     </tr>
@@ -496,26 +496,26 @@
 
                                     <!-- Iteración por alumno -->
                                     <tr
-                                      *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index">
+                                      *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index" style="height: 100px;">
                                       <td>
                                         <div style="float: left; width: 100%;">
                                           <div style="float: left; width: 25%;">
                                             <img
-                                              [src]="getClient(courseUser.client_id)?.image || userAvatar"
+                                              [src]="courseUser.client?.image || userAvatar"
                                               style="border-radius: 100%;height: 50px;width: 50px;">
                                           </div>
                                           <div style="float: left; width: 75%;">
                                             <p style="font-size: 16px;">{{
-                                              getClient(courseUser.client_id)?.first_name
+                                              courseUser.client?.first_name
                                               }} {{
-                                              getClient(courseUser.client_id)?.last_name
+                                                courseUser.client?.last_name
                                               }}</p>
                                             <p style="font-size: 10px;">{{
-                                              getLanguage(getClient(courseUser.client_id)?.language1_id)
+                                              getLanguage(courseUser.client?.language1_id)
                                               }} · {{
-                                              getCountry(getClient(courseUser.client_id)?.country)
+                                              getCountry(courseUser.client?.country)
                                               }} · {{
-                                              calculateAge(getClient(courseUser.client_id)?.birth_date)
+                                              calculateAge(courseUser.client?.birth_date)
                                               }} {{ 'years' | translate }}</p>
                                             <img *ngIf="courseUserIndex === 0"
                                               (click)="openUserTransfer(groupLevel, subGroup, courseUserIndex + 1, groupLevel)"
