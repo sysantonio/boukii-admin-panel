@@ -468,7 +468,8 @@ export class BookingDetailComponent implements OnInit {
                 this.calculateFinalPrice();
 
                 this.booking.price_total = this.finalPrice;
-                this.booking.price_cancellation_insurance = this.getOpRemPrice();
+
+                this.booking.price_cancellation_insurance = this.booking.has_cancellation_insurance ? this.getOpRemPrice() : 0;
                 //  this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
                 if (updateBooking) {
                   this.booking.paid = this.bookingPendingPrice <= 0;
@@ -790,6 +791,7 @@ export class BookingDetailComponent implements OnInit {
       this.defaults.payment_method_id === 2 ||
       this.defaults.payment_method_id === 3
     ) {
+      debugger;
       this.loading = true;
       const observables = [];
 
