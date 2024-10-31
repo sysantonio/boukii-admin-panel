@@ -435,7 +435,8 @@
                                         </span>
                                       </td>
                                       <td
-                                        *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;">
+                                        *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;" style="width: 100px;
+    text-align: center;">
                                         <span *ngIf="dayLevel.active === 1"
                                           (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
                                           [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
