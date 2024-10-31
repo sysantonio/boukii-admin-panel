@@ -475,7 +475,7 @@ export class CourseDetailComponent implements OnInit {
     const group = courseDate.course_groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
 
     if (group) {
-      const find = group.course_subgroups[gIndex].course_date_id === courseDate.id ? group.course_subgroups[gIndex] : null;
+      const find = group.course_subgroups[gIndex]?.course_date_id === courseDate.id ? group.course_subgroups[gIndex] : null;
       return find && find?.monitor_id !== null;
 
     }
