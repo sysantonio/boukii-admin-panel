@@ -7,7 +7,7 @@
 </vex-secondary-toolbar>
 <div [@stagger]="true" class="p-gutter container" style="max-width: none">
   <div class="flex flex-col sm:flex-row gap-4"
-    style="width: 100%;float:left;padding: 2%">
+       style="width: 100%;float:left;padding: 2%">
     <div @fadeInUp class="card flex-auto">
       <mat-tab-group>
         <mat-tab label="{{'course' | translate }}">
@@ -35,9 +35,9 @@
                   </div>
 
                   <div style="float: right;" style="float: right;cursor:pointer"
-                    (click)="goTo('/courses/update/'+id)">
+                       (click)="goTo('/courses/update/'+id)">
                     <i class="fa fa-edit"
-                      style="color: #ff3085;font-size: 30px;"></i>
+                       style="color: #ff3085;font-size: 30px;"></i>
                   </div>
                 </div>
                 <div style="float: left;width: 50%;">
@@ -45,19 +45,19 @@
 
                     <div style="float: right;margin: 0 0 0 25px;">
                       <mat-slide-toggle [checked]="defaults?.options"
-                        [disabled]="true">
+                                        [disabled]="true">
                         {{'options' | translate}}
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0;">
                       <mat-slide-toggle [checked]="defaults?.online"
-                        [disabled]="true">
+                                        [disabled]="true">
                         Online
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0 25px 0 0;">
                       <mat-slide-toggle [checked]="defaults?.active"
-                        [disabled]="true">
+                                        [disabled]="true">
                         {{'status' | translate}}
                       </mat-slide-toggle>
                     </div>
@@ -72,56 +72,56 @@
                 <img
                   [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/defult.jpg'">
                 <ul style="margin: 2% 0 0 0;"
-                  *ngIf="defaults.course_type === 2">
+                    *ngIf="defaults.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
-                      translate}}</strong></li>
+                    translate}}</strong></li>
                   <li>{{parseDateToDay(defaults.course_dates[0].date,
                     'YYYY-MM-DD', 'dddd')}},
                     {{parseDateToDay(defaults.course_dates[0].date,
-                    'YYYY-MM-DD', 'LL')}}
+                      'YYYY-MM-DD', 'LL')}}
                     <i
                       style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[0].hour_start,
                       'HH:mm:ss', 'HH:mm')}}h -
                       {{parseDateToDay(defaults.course_dates[0].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i>
+                        'HH:mm:ss', 'HH:mm')}}h</i>
                   </li>
                   <li>{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
                     'YYYY-MM-DD', 'dddd')}},
                     {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                    'YYYY-MM-DD', 'LL')}}
+                      'YYYY-MM-DD', 'LL')}}
                     <i
                       style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_start,
                       'HH:mm:ss', 'HH:mm')}}h -
                       {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i>
+                        'HH:mm:ss', 'HH:mm')}}h</i>
                   </li>
                 </ul>
 
                 <ul style="margin: 2% 0 0 0;"
-                  *ngIf="defaults.course_type === 1">
+                    *ngIf="defaults.course_type === 1">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
-                      translate}}</strong></li>
+                    translate}}</strong></li>
                   <li
                     *ngFor="let item of defaults.course_dates">{{parseDateToDay(item.date,
                     'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date,
                     'YYYY-MM-DD', 'LL')}} <i
-                      style="text-align: right;float:right">{{parseDateToDay(item.hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i></li>
+                    style="text-align: right;float:right">{{parseDateToDay(item.hour_start,
+                    'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end,
+                    'HH:mm:ss', 'HH:mm')}}h</i></li>
                 </ul>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
                 <div style="width: 100%;">
                   <p
                     style="float: left;width: 80%;text-align: left;"><b>{{'summary'
-                      | translate}}</b></p>
+                    | translate}}</b></p>
                   <p
                     style="float: left;width: 20%;text-align: right;"><b>{{'price'
-                      | translate}}</b></p>
+                    | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"
-                    [innerHTML]="getShotrDescription(defaults)">
+                     [innerHTML]="getShotrDescription(defaults)">
 
                   </p>
                   <p
@@ -131,10 +131,10 @@
                   <p
                     style="float: left;width: 50%;text-align: right;color:#ff3085"
                     *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
-                      {{'from' | translate }} {{
+                    {{'from' | translate }} {{
                       encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range))
-                      }}
-                    </b>
+                    }}
+                  </b>
                     {{defaults.currency}}</p>
                 </div>
               </div>
@@ -142,21 +142,21 @@
                 <div style="width: 100%;">
                   <p
                     style="float: left;width: 80%;text-align: left;"><b>{{'courses.desc'
-                      | translate}}</b></p>
+                    | translate}}</b></p>
                   <p
                     style="float: left;width: 20%;text-align: right;"><b>{{'age'
-                      | translate}}</b></p>
+                    | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
                   <p style="float: left;width: 50%;text-align: left;"
-                    [innerHTML]="getDescription(defaults)">
+                     [innerHTML]="getDescription(defaults)">
                   </p>
                   <p style="float: left;width: 50%;text-align: right;"
-                    *ngIf="defaults.course_type === 2">{{'from' | translate}}
+                     *ngIf="defaults.course_type === 2">{{'from' | translate}}
                     {{defaults.age_min}} {{'to' | translate}}
                     {{defaults.age_max}} {{'years' | translate}}</p>
                   <p style="float: left;width: 50%;text-align: right;"
-                    *ngIf="defaults.course_type === 1">{{'from' | translate}}
+                     *ngIf="defaults.course_type === 1">{{'from' | translate}}
                     {{getAgeRange(defaults.course_dates[0].course_groups).age_min}}
                     {{'to' | translate}}
                     {{getAgeRange(defaults.course_dates[0].course_groups).age_max}}
@@ -173,8 +173,8 @@
                       <mat-label>{{'courses.date_reservable' |
                         translate}}</mat-label>
                       <input matInput id="dateFrom"
-                        [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
-                        [readonly]="true">
+                             [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
+                             [readonly]="true">
                     </mat-form-field>
                   </div>
                   <div class="flex-auto">
@@ -183,8 +183,8 @@
                       <mat-label>{{'courses.date_reservable_to' |
                         translate}}</mat-label>
                       <input matInput id="dateTo"
-                        [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
-                        [readonly]="true">
+                             [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
+                             [readonly]="true">
                     </mat-form-field>
                   </div>
                 </div>
@@ -194,18 +194,18 @@
                     <mat-form-field appearance="outline" style="width: 100%">
                       <mat-label>{{'duration' | translate}}</mat-label>
                       <input id="duration" matInput required type="text"
-                        placeholder="{{'duration' | translate}}"
-                        [value]="defaults.duration ? defaults.duration : getShortestDuration(defaults?.course_dates)"
-                        [readonly]="true">
+                             placeholder="{{'duration' | translate}}"
+                             [value]="defaults.duration ? defaults.duration : getShortestDuration(defaults?.course_dates)"
+                             [readonly]="true">
                     </mat-form-field>
                   </div>
                   <div class="flex-auto" style="width: 50%; float:left">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <mat-label>{{'max_pax' | translate}}</mat-label>
                       <input id="participants" matInput required type="number"
-                        [value]="defaults.max_participants"
-                        [(ngModel)]="defaults.max_participants"
-                        [readonly]="true">
+                             [value]="defaults.max_participants"
+                             [(ngModel)]="defaults.max_participants"
+                             [readonly]="true">
                     </mat-form-field>
                   </div>
                 </div>
@@ -215,7 +215,7 @@
         </mat-tab>
 
         <mat-tab label="{{'level' | translate }}"
-          *ngIf="defaults.course_type === 1">
+                 *ngIf="defaults.course_type === 1">
           <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 
           <mat-card style="padding: 0 3%;" *ngIf="!loading">
@@ -247,11 +247,11 @@
             </mat-card-header>
             <mat-card-content style="margin-top: 5%;">
               <button mat-raised-button color="accent"
-                style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;border-radius: 0;height: 50px;margin: 0 0 1% 0;float: right;"
-                (click)="save()">{{'save_changes' | translate}}</button>
+                      style="color: #fff;background: #f53d7c;padding: 1%;width: 15%;border-radius: 0;height: 50px;margin: 0 0 1% 0;float: right;"
+                      (click)="save()">{{'save_changes' | translate}}</button>
 
               <div class="flex flex-col sm:flex-row gap-4"
-                style="width: 100%;float:left;" *ngIf="!loading">
+                   style="width: 100%;float:left;" *ngIf="!loading">
                 <div @fadeInUp class="card flex-auto">
                   <mat-card style="padding: 0 3%;">
                     <mat-card-content style="margin-top: 5%;">
@@ -297,15 +297,15 @@
                                   {{groupLevel.name}}
                                 </div>
                                 <mat-form-field appearance="outline"
-                                  class="flex-auto"
-                                  style="width: 100%; margin-top: 10%;"
-                                  *ngIf="groupLevel.active">
+                                                class="flex-auto"
+                                                style="width: 100%; margin-top: 10%;"
+                                                *ngIf="groupLevel.active">
                                   <mat-select
                                     placeholder="Nivel minimo del profesor"
                                     (selectionChange)="setLevelTeacher($event, groupLevel)"
                                     [value]="calculateMonitorLevel(groupLevel)">
                                     <mat-option *ngFor="let item of levels"
-                                      [value]="item">
+                                                [value]="item">
                                       {{ item.annotation }} - {{ item.name }}
                                     </mat-option>
                                   </mat-select>
@@ -323,8 +323,8 @@
                                 <div
                                   style="width: 100%; margin-top: 10%;height: 60px">
                                   <button mat-button color="accent"
-                                    style="width: 100%;border-radius: 5px;color:#fff !important;background: #ff3085;height: 100%"
-                                    (click)="addSubGroup(groupLevel)">Añadir
+                                          style="width: 100%;border-radius: 5px;color:#fff !important;background: #ff3085;height: 100%"
+                                          (click)="addSubGroup(groupLevel)">Añadir
                                     subgrupo</button>
                                 </div>
                               </div>
@@ -339,12 +339,12 @@
                                 </div>
                                 <form [formGroup]="rangeForm" novalidate>
                                   <mat-form-field appearance="outline"
-                                    style="width: 45%; margin-top: 10%;margin-right: 10%">
+                                                  style="width: 45%; margin-top: 10%;margin-right: 10%">
                                     <input type="number" placeholder="Min."
-                                      aria-label="Number" matInput [min]="0"
-                                      (blur)="setMinAge($event, groupLevel)"
-                                      [value]="groupLevel.age_min"
-                                      [value]="calculateAgeMin(groupLevel)" />
+                                           aria-label="Number" matInput [min]="0"
+                                           (blur)="setMinAge($event, groupLevel)"
+                                           [value]="groupLevel.age_min"
+                                           [value]="calculateAgeMin(groupLevel)" />
                                     <mat-error *ngIf="minAge.errors?.['min']">
                                       {{'courses.errors.min_age_levels' |
                                       translate}}
@@ -355,12 +355,12 @@
                                     </mat-error>
                                   </mat-form-field>
                                   <mat-form-field appearance="outline"
-                                    style="width: 45%; margin-top: 10%">
+                                                  style="width: 45%; margin-top: 10%">
                                     <input type="number" placeholder="Max"
-                                      aria-label="Number" matInput [min]="0"
-                                      (blur)="setMaxAge($event, groupLevel)"
-                                      [value]="groupLevel.age_max"
-                                      [value]="calculateAgeMax(groupLevel)" />
+                                           aria-label="Number" matInput [min]="0"
+                                           (blur)="setMaxAge($event, groupLevel)"
+                                           [value]="groupLevel.age_max"
+                                           [value]="calculateAgeMax(groupLevel)" />
                                     <mat-error
                                       *ngIf="maxAge.errors?.['ageRange']">
                                       {{'courses.errors.max_age_range' |
@@ -387,11 +387,11 @@
                                   defaults.course_dates[daySelectedIndex].hour_end)}}
                                 </div>
                                 <mat-form-field appearance="outline"
-                                  style="width: 100%; margin-top: 10%;margin-right: 10%">
+                                                style="width: 100%; margin-top: 10%;margin-right: 10%">
                                   <input type="text" placeholder="Duración"
-                                    aria-label="Number" matInput
-                                    [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)"
-                                    [readonly]="true" />
+                                         aria-label="Number" matInput
+                                         [value]="calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)"
+                                         [readonly]="true" />
                                 </mat-form-field>
                               </div>
                               <div
@@ -404,12 +404,12 @@
                                   <strong>{{calculateStudentsGroup(groupLevel)}}/{{calculateMaxGroup(groupLevel)}}</strong>
                                 </div>
                                 <mat-form-field appearance="outline"
-                                  class="flex-auto"
-                                  style="width: 100%; margin-top: 10%">
+                                                class="flex-auto"
+                                                style="width: 100%; margin-top: 10%">
                                   <input type="number"
-                                    placeholder="Max per Group"
-                                    [value]="calculateMaxGroup(groupLevel)"
-                                    aria-label="Number" matInput />
+                                         placeholder="Max per Group"
+                                         [value]="calculateMaxGroup(groupLevel)"
+                                         aria-label="Number" matInput />
                                   <mat-error
                                     *ngIf="groupLevel.max_participants > defaults.max_participants">
                                     {{'courses.errors.students' | translate }}
@@ -420,53 +420,53 @@
                               <ng-container
                                 *ngIf="groupLevel.active && groupLevel.visible">
                                 <table style="margin-left: 10%"
-                                  *ngFor="let subGroup of readSubGroups(groupLevel.id); let subGroupIndex = index">
+                                       *ngFor="let subGroup of readSubGroups(groupLevel.id); let subGroupIndex = index">
                                   <thead>
-                                    <tr>
-                                      <td>
-                                        <mat-icon svgIcon="mat:delete"
-                                          style="color:red;cursor: pointer;float:left;"
-                                          (click)="deleteSubGroup(subGroup)">
-                                        </mat-icon>
-                                        <span [style.color]="colorKey">
+                                  <tr>
+                                    <td>
+                                      <mat-icon svgIcon="mat:delete"
+                                                style="color:red;cursor: pointer;float:left;"
+                                                (click)="deleteSubGroup(subGroup)">
+                                      </mat-icon>
+                                      <span [style.color]="colorKey">
                                           <strong>{{groupLevel.annotation}}</strong>
                                           - {{groupLevel.name}} - {{
                                           subGroupIndex + 1 }}
                                         </span>
-                                      </td>
-                                      <td
-                                        *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;" style="width: 100px;
+                                    </td>
+                                    <td
+                                      *ngFor="let dayLevel of daysDatesLevels; let dayIndex = index;" style="width: 100px;
     text-align: center;">
                                         <span *ngIf="dayLevel.active === 1"
-                                          (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
-                                          [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
-                                          style="text-align: center; cursor: pointer;">
+                                              (click)="selectItem(dayLevel, dayIndex, subGroupIndex, subGroup)"
+                                              [style.color]="selectedItem === dayLevel.dateString && dayIndex === daySelectedIndex && subGroupIndex === subGroupSelectedIndex ? '#FF3085' : ''"
+                                              style="text-align: center; cursor: pointer;">
                                           {{ dayLevel.date }}
                                         </span>
-                                      </td>
-                                    </tr>
+                                    </td>
+                                  </tr>
                                   </thead>
 
                                   <tbody *ngIf="subGroupSelectedIndex !== null">
-                                    <tr>
-                                      <td>
+                                  <tr>
+                                    <td>
                                         <span style="float: left; width: 20%;"
-                                          (click)="subGroupSelectedIndex = subGroupIndex;">
+                                              (click)="subGroupSelectedIndex = subGroupIndex;">
                                           <label for="monitor"
-                                            style="font-size: 20px;">{{'monitor'
+                                                 style="font-size: 20px;">{{'monitor'
                                             | translate}}</label>
 
                                           <mat-spinner
                                             *ngIf="loadingMonitors"></mat-spinner>
 
                                           <mat-form-field appearance="outline"
-                                            class="flex-auto"
-                                            *ngIf="!loadingMonitors">
+                                                          class="flex-auto"
+                                                          *ngIf="!loadingMonitors">
                                             <input type="text" id="monitor"
-                                              placeholder="Select monitor"
-                                              matInput
-                                              [matAutocomplete]="autoMoniteur"
-                                              [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)" />
+                                                   placeholder="Select monitor"
+                                                   matInput
+                                                   [matAutocomplete]="autoMoniteur"
+                                                   [value]="getMonitorValue(groupLevel, subGroupIndex, daySelectedIndex)" />
                                             <mat-autocomplete
                                               #autoMoniteur="matAutocomplete"
                                               [displayWith]="displayFnMoniteurs">
@@ -481,60 +481,60 @@
                                               </ng-container>
                                             </mat-autocomplete>
                                             <mat-icon matPrefix
-                                              svgIcon="mat:person"></mat-icon>
+                                                      svgIcon="mat:person"></mat-icon>
                                           </mat-form-field>
                                         </span>
-                                      </td>
-                                      <td
-                                        *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+                                    </td>
+                                    <td
+                                      *ngFor="let item of daysDatesLevels; let dayIndex = index;">
                                         <span *ngIf="item.active === 1">
                                           <div
                                             style="background-color: #CEE741;width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
                                             [ngStyle]="{'background-color': hasMonitorAssigned(item, groupLevel, subGroupIndex) ? '#CEE741' : 'red'}"></div>
                                         </span>
-                                      </td>
-                                    </tr>
+                                    </td>
+                                  </tr>
 
-                                    <!-- Iteración por alumno -->
-                                    <tr
-                                      *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index" style="height: 100px;">
-                                      <td>
-                                        <div style="float: left; width: 100%;">
-                                          <div style="float: left; width: 25%;">
-                                            <img
-                                              [src]="courseUser.client?.image || userAvatar"
-                                              style="border-radius: 100%;height: 50px;width: 50px;">
-                                          </div>
-                                          <div style="float: left; width: 75%;">
-                                            <p style="font-size: 16px;">{{
-                                              courseUser.client?.first_name
-                                              }} {{
-                                                courseUser.client?.last_name
-                                              }}</p>
-                                            <p style="font-size: 10px;">{{
-                                              getLanguage(courseUser.client?.language1_id)
-                                              }} · {{
-                                              getCountry(courseUser.client?.country)
-                                              }} · {{
-                                              calculateAge(courseUser.client?.birth_date)
-                                              }} {{ 'years' | translate }}</p>
-                                            <img *ngIf="courseUserIndex === 0"
-                                              (click)="openUserTransfer(groupLevel, subGroup, courseUserIndex + 1, groupLevel)"
-                                              src="../../../../assets/img/icons/change.svg"
-                                              style="float:left;cursor: pointer;">
-                                          </div>
+                                  <!-- Iteración por alumno -->
+                                  <tr
+                                    *ngFor="let courseUser of getCourseUsers(subGroup); let courseUserIndex = index" style="height: 100px;">
+                                    <td>
+                                      <div style="float: left; width: 100%;">
+                                        <div style="float: left; width: 25%;">
+                                          <img
+                                            [src]="courseUser.client?.image || userAvatar"
+                                            style="border-radius: 100%;height: 50px;width: 50px;">
                                         </div>
-                                      </td>
-                                      <td
-                                        *ngFor="let item of daysDatesLevels; let dayIndex = index;">
+                                        <div style="float: left; width: 75%;">
+                                          <p style="font-size: 16px;">{{
+                                              courseUser.client?.first_name
+                                            }} {{
+                                              courseUser.client?.last_name
+                                            }}</p>
+                                          <p style="font-size: 10px;">{{
+                                              getLanguage(courseUser.client?.language1_id)
+                                            }} · {{
+                                              getCountry(courseUser.client?.country)
+                                            }} · {{
+                                              calculateAge(courseUser.client?.birth_date)
+                                            }} {{ 'years' | translate }}</p>
+                                          <img *ngIf="courseUserIndex === 0"
+                                               (click)="openUserTransfer(groupLevel, subGroup, courseUserIndex + 1, groupLevel)"
+                                               src="../../../../assets/img/icons/change.svg"
+                                               style="float:left;cursor: pointer;">
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td
+                                      *ngFor="let item of daysDatesLevels; let dayIndex = index;">
                                         <span *ngIf="item.active === 1">
                                           <div
                                             style="width: 25px;border-radius: 100%;height: 25px;margin: 0 auto;"
                                             [ngStyle]="{'background-color': isInDay(item.date, courseUser.client_id) ? '#CEE741' : 'red'}">
                                           </div>
                                         </span>
-                                      </td>
-                                    </tr>
+                                    </td>
+                                  </tr>
                                   </tbody>
                                 </table>
                               </ng-container>
@@ -553,38 +553,39 @@
           <vex-page-layout style="margin: 2% 0 0 0;">
 
             <vex-page-layout-content class="-mt-6 fullwidth"
-              [ngClass]="{'table-show-detail': showDetail}">
+                                     [ngClass]="{'table-show-detail': showDetail}">
               <vex-aio-table [columns]="columns" [entity]="entity"
-                [title]="'bookings'" [route]="'bookings'"
-                (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
-                [filterColumn]="'course_id'"
+                             [title]="'bookings'" [route]="'bookings'"
+                             (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
+                             [filterColumn]="'course_id'"
                              [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
-      'bookingUsers.client.clientSports.degree',
-       'clientMain.clientSports.degree', 'user',
-       'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
-                [showDetail]="showDetail">
+                                      'bookingUsers.client.clientSports.degree',
+                                      'bookingUsers.courseSubGroup.degree',
+                                       'clientMain.clientSports.degree', 'user',
+                                       'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
+                             [showDetail]="showDetail">
               </vex-aio-table>
             </vex-page-layout-content>
           </vex-page-layout>
 
-          <vex-page-layout-content
-            class="fullwidth col-right"
-            *ngIf="showDetail">
+          <vex-page-layout-content class="fullwidth col-right" *ngIf="showDetail">
             <mat-card>
-
               <mat-card-header style="display:block">
                 <div style="width: 100%;">
-                  <span
-                    style="display: inline-block;width: 80%; text-align: left;">
-                    <mat-card-title>{{'course_detail' |
-                      translate}}</mat-card-title>
-                  </span>
-                  <span
-                    style="display: inline-block;width: 20%; text-align: right;">
-                    <!--<img src="assets/img/icons/edit.svg" (click)="goTo('/courses/detail/'+detailData.id)" class="btn-edit" />-->
-                    <img src="assets/img/icons/close.svg"
-                      (click)="showDetail = false" class="btn-close" />
-                  </span>
+          <span style="display: inline-block;width: 80%; text-align: left;">
+            <mat-card-title>{{'booking' | translate}}
+              #{{detailData.id}}</mat-card-title>
+          </span>
+                  <span style="display: inline-block;width: 20%; text-align: right;">
+            <img
+              src="assets/img/icons/edit.svg"
+              (click)="goTo('/bookings/update/' + detailData.id)"
+              class="btn-edit" />
+            <img
+              src="assets/img/icons/close.svg"
+              (click)="showDetail = false"
+              class="btn-close" />
+          </span>
                 </div>
                 <div
                   style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
@@ -592,347 +593,542 @@
                     <div
                       style="width: 60%;display:inline-block;text-align: left; color: white;">
                       <b>{{ 'register' | translate}}:</b>
-                      <span style="margin-left: 10px;font-weight: normal;">
-                        <span>01/08/2024</span><span
-                          style="margin-left: 10px;font-style: italic;">11:13h</span>
-                      </span>
+                      <span style="margin-left: 10px;font-weight: normal;color: white;">
+                <span style="color: white;">{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span
+                        style="margin-left: 10px;font-style: italic;color: white;">{{detailData.created_at
+                        | date: 'HH:mm'}}h</span>
+              </span>
+                    </div>
+                    <div *ngIf="detailData.user"
+                         style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+                      {{ detailData.user.username }}
+                      <span style="margin-left: 10px;color: white;">({{ detailData.user.first_name +
+                      ' ' + detailData.user.last_name
+                        }})</span>
                     </div>
                     <div
                       style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-                      Admin <span style="margin-left: 10px;">(Arsene
-                        Garcia)</span>
+                      {{ 'from' | translate }}
+                      <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'web'">{{'page_created' | translate}}</span>
+                      <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'admin'">{{'api_created' | translate}}</span>
                     </div>
                   </mat-card-subtitle>
                 </div>
+                <div class="title-status">
+          <span
+            style="color:#00C32B;background-color: #B2EFAD;"
+            *ngIf="isActive">
+            {{'active' | translate | uppercase }}
+          </span>
+                  <span
+                    style="color:rgba(68, 74, 88, 1);background-color: #E3E3E3;"
+                    *ngIf="isFinished">
+            {{'finished' | translate | uppercase }}
+          </span>
+                  <span
+                    style="color:rgba(146, 26, 0, 1);background-color: #F7BB99;"
+                    *ngIf="detailData.status === 2">
+            {{'cancelled' | translate | uppercase }}
+          </span>
+                  <span
+                    style="color:rgba(83, 65, 0, 1);background-color:#F7E399;"
+                    *ngIf="detailData.status === 3">
+            {{'partial_cancelled' | translate | uppercase }}
+          </span>
+                  <span class="col-right">
+            <span
+              style="color:#00C32B;background-color: #B2EFAD;"
+              *ngIf="detailData.status === 1 && detailData.paid">
+              {{'payed' | translate | uppercase }}
+            </span>
+            <span
+              style="color:#FF0000;background-color: #F7BB99;"
+              *ngIf="detailData.status === 1 && !detailData.paid && detailData.payment_method_id != 3">
+              {{'no_payed' | translate | uppercase }}
+            </span>
+            <span
+              style="color:#FA9917;background-color: #F7E399;"
+              *ngIf="detailData.status === 1 && !detailData.paid && detailData.payment_method_id == 3">
+              {{'link_send' | translate | uppercase }}
+            </span>
+          </span>
+                </div>
               </mat-card-header>
-
-              <!--<vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline" *ngIf="showDetail">
-<mat-card style="padding: 0 3%;">
-<mat-card-header style="display:block">
-<div style="width: 100%;float: left;">
-%
-</div>
-<div style="width: 100%;float:left;">
-<mat-card-title class="font-bold" style="float: left;width: 100%;">
-{{'course_detail' | translate}}
-<img src="assets/img/icons/close.svg" (click)="showDetail = false" class="btn-close" style="float: right;" />
-</mat-card-title>
-
-</div>
-<div style="width:100%; margin-top:5%;float:left">
-<div style="width: 100%;">
-<p style="float: left;width: 80%;text-align: left;"><b>{{'from' | translate }}</b></p>
-<p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
-</div>
-<div style="width: 100%;">
-<p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
-<p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
-</div>
-</div>
-<mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-
-<div style="width:100%; margin-top:5%;float:left">
-<div style="width: 100%;">
-<p style="float: left;width: 35%;text-align: left;"><b>{{'price' | translate}}</b></p>
-<p style="float: left;width: 65%;text-align: right;"><b>{{'max_pax' | translate}}</b></p>
-</div>
-<div style="width: 100%;">
-<p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b> {{detailData?.course.currency}}</p>
-<p style="float: left;width: 50%;text-align: left;" *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>
-{{'from' | translate }} {{ encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range)) }}</b> {{detailData?.course.currency}}</p>
-<p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.max_participants}}</b></p>
-</div>
-</div>
-<ng-container *ngIf="detailData?.course.course_type == 1">
-<mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-<div style="float: left; width: 100%;margin-top: 5%;">
-<ul>
-<ng-container *ngFor="let date of detailData?.course.course_dates">
-<li [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}} <i style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-</ng-container>
-</ul>
-</div>
-</ng-container>
-<mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
-
-</mat-card-header>-->
-
               <mat-card-content>
-                <div class="title-status">
-                  <div class="col-left">
-                    <b>{{'from' | translate}}</b>
-                  </div>
-                  <div class="col-right">
-                    <b>{{'to' | translate}}</b>
-                  </div>
-                </div>
-                <div class="list-holder">
-                  <div class="col-left">
-                    <b>{{detailData?.course.date_start | date:
-                      'dd/MM/YYYY'}}</b>
-                  </div>
-                  <div class="col-right">
-                    <b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b>
-                  </div>
-                </div>
-
-                <div style="padding:15px 35px;">
-                  <mat-divider style="border-color: #e6e6e6;"></mat-divider>
-                </div>
-
-                <div class="holder-deporte">
-                  <div class="col-left">
-                    <img *ngIf="detailData?.course?.course_type == 1"
-                      [src]="'https://api.boukii.com/storage/icons/collectif_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
-                      width="60" height="60" />
-                    <img *ngIf="detailData?.course?.course_type == 2"
-                      [src]="'https://api.boukii.com/storage/icons/prive_'+ detailData?.sport?.name.toLowerCase() +'2x.png'"
-                      width="60" height="60" />
-                  </div>
-                  <div class="col-right">
-                    <div class="client-name">
-                      {{detailData?.course?.name}}
-                    </div>
-                    <div class="client-dates">
-                      <ng-container
-                        *ngIf="detailData?.course?.course_type == 1">
-                        {{'colective' | translate}}
-                      </ng-container>
-                      <ng-container
-                        *ngIf="detailData?.course?.course_type == 2">
-                        {{'private' | translate}}
-                      </ng-container>
-                    </div>
-                    <div class="client-ubicacion">
-                      <ng-container *ngIf="detailData?.sport">
-                        {{detailData?.sport.name}}
-                      </ng-container>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="list-holder" *ngIf="detailData.course_type === 1">
-                  <ul>
-                    <ng-container
-                      *ngFor="let date of detailData?.course.course_dates">
-                      <li
-                        [ngClass]="{'font-bold': date.id == detailData?.course_date_id}">{{getDateFormatLong(date.date)}}
-                        <i
-                          style="text-align: right;float:right">{{getHourRangeFormat(date.hour_start,date.hour_end)}}</i></li>
-                    </ng-container>
-                  </ul>
-                </div>
-
-                <div class="title-status">
-                  <div class="col-left">
-                    <b>{{'price' | translate}}</b>
-                  </div>
-                  <div class="col-right">
-                    <b>{{'max_pax' | translate}}</b>
-                  </div>
-                </div>
-                <div class="list-holder">
-                  <div class="col-left">
-                    <div
-                      *ngIf="defaults.course_type === 1 || (defaults.course_type === 2 && !defaults.is_flexible)"><b>{{detailData?.course.price}}</b>
-                      {{detailData?.course.currency}}</div>
-                    <div
-                      *ngIf="defaults.course_type === 2 && defaults.is_flexible"><b>{{'from'
-                        | translate }} {{
-                        encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(defaults.price_range))
-                        }}</b> {{detailData?.course.currency}}</div>
-                  </div>
-                  <div class="col-right">
-                    <b>{{detailData?.course.max_participants}}</b>
-                  </div>
-                </div>
-
-                <mat-divider
-                  style="margin-top:10px; margin-bottom:10px; border-color: transparent;"></mat-divider>
-
-                <div *ngIf="detailData?.course?.course_type == 1">
-                  <div class="grupo-holder">
-                    <div class="item"
-                      [ngStyle]="{'background': detailData?.degree?.color}">
-                      <div><img
-                          src="https://api.boukii.com/storage/icons/award_icon.svg" /></div>
-                      <div>{{detailData?.degree?.annotation}}</div>
-                      <div>{{detailData?.degree?.name}}</div>
-                      <div class="font-bold">{{getSubGroupsIndex()}}</div>
-                    </div>
-                    <div class="item box-background-grey">
-                      <div><img
-                          src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg" /></div>
-                      <div>{{'groups' | translate}}</div>
-                      <div class="font-bold">{{getGroupsQuantity()}}</div>
-                    </div>
-                    <div class="item box-background-grey">
-                      <div><img
-                          src="https://api.boukii.com/storage/icons/icons-outline-clock.svg" /></div>
-                      <div>{{'duration' | translate}}</div>
-                      <div
-                        class="font-bold">{{getHoursMinutes(detailData?.hour_start,detailData?.hour_end)}}</div>
-                    </div>
-                    <div class="item box-background-grey">
-                      <div><img
-                          src="https://api.boukii.com/storage/icons/icons-outline-calendar-tick.svg" /></div>
-                      <div>{{'days' | translate}}</div>
-                      <div
-                        class="font-bold">{{getDateIndex()}}/{{detailData?.course?.course_dates?.length}}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <ng-container *ngIf="detailData?.course.course_type == 2">
-                  <div class="title-actividad">
-                    <div class="title">{{'booking' |translate}}</div>
-                  </div>
-
-                  <div class="list-holder">
+                <div style="width: 100%;">
+                  <div class="title-client">{{'client' | translate}}</div>
+                  <div class="holder-client">
                     <div class="col-left">
-                      <b>{{getDateFormatLong(detailData?.date)}}</b>
-                    </div>
-                    <div class="col-right">
-                      <b>{{getHourRangeFormat(detailData?.hour_start,calculateHourEnd(detailData?.hour_start,detailData.course.duration))}}</b>
-                    </div>
-                  </div>
-
-                  <div class="title-actividad">
-                    <div class="title">{{'participant' |translate}}</div>
-                  </div>
-
-                  <div>
-                    <div *ngFor="let client of detailData?.users">
-                      <div class="holder-deporte">
-                        <div class="col-left">
-                          <app-level-user
-                            *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                            [allLevels]="detailData.degrees_sport"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
-                            [size]="60"
-                            [userImage]="getClient(client.client_id).image ? getClient(client.client_id).image : 'assets/img/avatar.png'"></app-level-user>
-                        </div>
-                        <div class="col-right">
-                          <div class="client-name">
-                            {{ getClient(client.client_id)?.first_name }} {{
-                            getClient(client.client_id)?.last_name }}
-                          </div>
-                          <div class="client-dates">
-                            <ng-container
-                              *ngIf="getClient(client.client_id)?.language1_id">
-                              {{getLanguageById(getClient(client.client_id)?.language1_id)}}
-                              ·
-                            </ng-container>
-                            <ng-container
-                              *ngIf="getClient(client.client_id)?.language2_id">
-                              {{getLanguageById(getClient(client.client_id)?.language2_id)}}
-                              ·
-                            </ng-container>
-                            <ng-container
-                              *ngIf="getClient(client.client_id)?.language3_id">
-                              {{getLanguageById(getClient(client.client_id)?.language3_id)}}
-                              ·
-                            </ng-container>
-                            {{getCountryById(getClient(client.client_id)?.country)}}
-                            ·
-                            {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years'
-                            | translate }}
-                            · {{getClient(client.client_id)?.phone}} ·
-                            {{getClient(client.client_id)?.email}}
-                          </div>
-                          <div *ngIf="detailData?.degree" class="label"
-                            [ngStyle]="{'background': detailData?.degree.color}">{{detailData?.degree.name}}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </ng-container>
-
-                <div class="title-actividad">
-                  <div class="title">{{'monitor' | translate }}</div>
-                </div>
-
-                <div *ngIf="detailData.monitor_id !== null">
-                  <div class="holder-deporte">
-                    <div class="col-left">
+                      <!--<img [src]="detailData.client_main?.image !== null ? detailData.client_main?.image : userAvatar" width="60" height="60" style="border-radius: 100%">-->
                       <app-level-user
                         *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                         [allLevels]="detailData.degrees_sport"
-                        [selectLevel]="getMonitor(detailData.monitor_id)"
+                        [selectLevel]="getClientDegree(detailData?.client_main_id)"
                         [size]="60"
-                        [userImage]="getMonitor(detailData.monitor_id)?.image !== null && getMonitor(detailData.monitor_id)?.image !== '' ? getMonitor(detailData.monitor_id)?.image : userAvatar"></app-level-user>
+                        [userImage]="detailData.client_main?.image !== null && detailData.client_main?.image !== '' ? detailData.client_main?.image : userAvatar"></app-level-user>
                     </div>
                     <div class="col-right">
                       <div class="client-name">
-                        {{ getMonitor(detailData.monitor_id)?.first_name }} {{
-                        getMonitor(detailData.monitor_id)?.last_name }}
+                        {{detailData?.client_main?.first_name}}
+                        {{detailData?.client_main?.last_name}}
                       </div>
                       <div class="client-dates">
-                        <ng-container
-                          *ngIf="getMonitor(detailData.monitor_id)?.language1_id">{{getLanguageById(getMonitor(detailData.monitor_id)?.language1_id)}}
-                          · </ng-container>
-                        {{getCountryById(getMonitor(detailData.monitor_id)?.country)}}
+                        {{getLanguage(detailData?.client_main?.language1_id)}}
                         ·
-                        {{getBirthYears(getMonitor(detailData.monitor_id)?.birth_date)}}{{'years'
-                        | translate }} ·
-                        {{getMonitor(detailData.monitor_id)?.phone}} ·
-                        {{getMonitor(detailData.monitor_id)?.email}}
+                        {{getCountry(detailData?.client_main?.country) }}
+                        ·
+                        {{calculateAge(detailData?.client_main?.birth_date)}}
+                        &ensp;{{'years' | translate}}
+                      </div>
+                      <div style="display: flex;">
+                        <vex-icon src="chat">
+                        </vex-icon>
+                        <vex-icon
+                          src="mail"
+                          href="mailto:{{detailData?.client_main?.email}}"
+                          style="cursor:pointer"
+                          title="{{detailData?.client_main?.email}}">
+                        </vex-icon>
+                        <vex-icon
+                          src="phone"
+                          href="tel:{{detailData?.client_main?.phone}}"
+                          title="{{detailData?.client_main?.phone}}">
+                        </vex-icon>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <ng-container *ngIf="detailData?.course.course_type == 1">
+                <ng-container
+                  *ngFor="let bUsers of bookingUsersUnique; let buI = index"
+                  [style.marginTop]="buI > 0 ? '35px' : ''">
                   <div class="title-actividad">
                     <div class="col-left">
-                      <div class="title">{{'students' | translate}}
-                        {{detailData?.users.length}}/{{detailData?.course.max_participants}}</div>
+                      <b class="title">{{ 'activity' | translate }} {{buI + 1}}: </b>
+                      <b style="color:#00C32B" *ngIf="isActiveBookingUser(bUsers)">
+                        {{'active' | translate | uppercase }}
+                      </b>
+                      <b style="color:#A4A3A3" *ngIf="isFinishedBookingUser(bUsers)">
+                        {{'finished' | translate | uppercase }}
+                      </b>
+                      <b
+                        style="color:#FF0000;margin-left:10px;"
+                        *ngIf="bUsers.status === 2">
+                        {{'cancelled' | translate | uppercase }}
+                      </b>
+                      <b
+                        style="color:#FF0000;margin-left:10px;"
+                        *ngIf="bUsers.status === 3">
+                        {{'partial_cancelled' | translate | uppercase }}
+                      </b>
                     </div>
-                    <div class="col-right"><mat-icon class="cursor-pointer"
-                        style="float: right;width: 10%;"
-                        svgIcon="mat:swap_horiz"></mat-icon></div>
+                    <div class="col-right">
+                      <b>{{bUsers.price}} {{ detailData.currency }}</b>
+                    </div>
                   </div>
 
-                  <div
-                    style="display:flex;width:100%;flex-direction:column;gap:8px;">
-                    <div *ngFor="let client of detailData?.users">
-                      <div class="holder-deporte">
-                        <div class="col-left">
-                          <app-level-user
-                            *ngIf="detailData.sport"
-                            [allLevels]="getAllLevelsBySport()"
-                            [selectLevel]="getClientDegree(detailData?.sport.id, client.sports)"
-                            [size]="60"
-                            [userImage]="getClient(client.client_id).image !== null && getClient(client.client_id).image !== '' ? getClient(client.client_id).image : userAvatar"></app-level-user>
-                        </div>
-                        <div class="col-right">
-                          <div class="client-name">
-                            {{ getClient(client.client_id)?.first_name }} {{
-                            getClient(client.client_id)?.last_name }}
+                  <div>
+                    <div class="holder-content">
+                      <div>
+                        <div class="holder-actividad">
+                          <div class="col-left">
+                            <div class="c-l">
+                              <img
+                                *ngIf="bUsers?.course?.course_type === 1"
+                                [src]="bUsers.course.sport.icon_collective"
+                                class="avatar h-16 w-16 align-middle"
+                                style="display: inline; margin-right: 0.5rem; border-radius: 5px;" />
+                              <img
+                                *ngIf="bUsers?.course?.course_type !== 1"
+                                [src]="bUsers.course.sport.icon_prive"
+                                class="avatar h-16 w-16 align-middle"
+                                style="display: inline; margin-right: 0.5rem; border-radius: 5px;" />
+                            </div>
+                            <div class="c-r">
+                              <div class="course-title">{{bUsers?.course?.name}}</div>
+                              <div class="course-label">
+                                {{
+                                  (bUsers?.course?.course_type === 2 ? 'private' :
+                                    bUsers?.course?.course_type === 1 ? 'collective' :
+                                      'activity') | translate
+                                }}
+                                {{
+                                  (bUsers?.course?.isFlexible ? 'flex' : 'fix') |
+                                    translate
+                                }}
+                                {{bUsers?.course?.sport.name}}
+                              </div>
+                              <ng-container *ngIf="bUsers?.course?.course_type == 1">
+                                <div class="m-0 body-1"
+                                     [style.background]="bUsers?.course_sub_group.degree.color"
+                                     style="color: #fff;border-radius: 5px;width: 30%;text-align: center; font-size:10px;overflow: inherit;">
+                                  {{bUsers?.course_sub_group.degree?.annotation}}
+                                  {{bUsers?.course_sub_group.degree?.name}}
+                                </div>
+                              </ng-container>
+                              <ng-container *ngIf="bUsers?.course?.course_type !== 1">
+                                <!-- Para course_type distinto de 1 -->
+                                <ng-container
+                                  *ngFor="let item of detailData.bookingusers">
+                                  <div
+                                    *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
+                            <span class="date-course">
+                              <img class="icon-calendar"
+                                   src="assets/img/icons/calendar-1.svg" />
+                              {{ item.date | date: 'dd.MM.YYYY' }}
+                              <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
+                              {{ item?.hour_end.substring(0, 5) }}h
+                            </span>
+                                  </div>
+                                </ng-container>
+                              </ng-container>
+
+                              <!-- Para course_type 1 -->
+                              <ng-container *ngIf="bUsers?.course?.course_type === 1">
+                                <ng-container *ngFor="let item of bUsers.bookingusers">
+                                  <div>
+                            <span class="date-course">
+                              <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+                              {{ item.date | date: 'dd.MM.YYYY' }}
+                              <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
+                            </span>
+                                  </div>
+                                </ng-container>
+                              </ng-container>
+                            </div>
                           </div>
-                          <div class="client-dates">
-                            <ng-container
-                              *ngIf="getClient(client.client_id)?.language1_id">{{getLanguageById(getClient(client.client_id)?.language1_id)}}
-                              · </ng-container>
-                            <ng-container
-                              *ngIf="getClient(client.client_id)?.language2_id">{{getLanguageById(getClient(client.client_id)?.language2_id)}}
-                              · </ng-container>
-                            <ng-container
-                              *ngIf="getClient(client.client_id)?.language3_id">{{getLanguageById(getClient(client.client_id)?.language3_id)}}
-                              · </ng-container>
-                            {{getCountryById(getClient(client.client_id)?.country)}}
-                            ·
-                            {{getBirthYears(getClient(client.client_id)?.birth_date)}}{{'years'
-                            | translate }} ·
-                            {{getClient(client.client_id)?.phone}} ·
-                            {{getClient(client.client_id)?.email}}
+                          <div class="col-right">
+                            <!--{{(bUsers?.course?.course_type === 1 ? 'colective' : 'private' )| translate}} {{getSportName(bUsers?.course?.sport_id)}}-->
+                            {{bUsers?.price}} {{bUsers?.currency}}
+                          </div>
+
+                        </div>
+                        <!--<div style="float: left; width: 100%;" *ngIf="bUsers.course.course_type">
+                          <div style="float: left; width: 75%;color:#fff; padding:5%;margin-top: 5%;font-size:12px" [ngStyle]="{'background-color': getDegree(bUsers?.degree_id)?.color}">
+                            {{getDegree(bUsers?.degree_id)?.league}} - {{getDegree(bUsers?.degree_id)?.annotation}}/{{getDegree(bUsers?.degree_id)?.name}}
+                          </div>
+                        </div>-->
+
+                        <div>
+                          <div class="subtitle">
+                            <img
+                              class="icon-calendar"
+                              src="assets/img/icons/clientes2.svg" />
+                            {{'participant' | translate}}
+                          </div>
+                          <div class="holder-participante">
+                            <div class="col-left">
+                              <div class="c-l">
+                                <app-level-user
+                                  *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                                  [allLevels]="detailData.degrees_sport"
+                                  [selectLevel]="getClientDegree(bUsers.client)"
+                                  [size]="60"
+                                  [userImage]="bUsers?.client?.image !== null && bUsers?.client?.image !== '' ? bUsers?.client?.image : userAvatar"></app-level-user>
+                              </div>
+                              <div class="c-r">
+                                <div class="course-title">
+                                  {{bUsers?.client?.first_name}}
+                                  {{bUsers?.client?.last_name}}
+                                </div>
+                                <div class="course-label">
+                                  {{getLanguage(bUsers?.client?.language1_id)}}
+                                  ·
+                                  {{ getCountry(bUsers?.client?.country) }}
+                                  ·
+                                  {{calculateAge(bUsers?.client?.birth_date)}}
+                                  {{'years' | translate }}
+                                </div>
+                                <div class="m-0 body-1" *ngIf="getClientDegreeObject(bUsers.client)"
+                                     [style.background]="getClientDegreeObject(bUsers.client)?.color"
+                                     style="padding: 5%;;color: #fff;border-radius: 5px;width: 100%;text-align: center; font-size:10px;overflow: inherit;">
+                                  {{getClientDegreeObject(bUsers.client)?.annotation}}
+                                  {{getClientDegreeObject(bUsers.client)?.name}}
+                                </div>
+                                <div *ngIf="!getClientDegreeObject(bUsers.client)">{{"level" | translate}} NDF</div>
+                                <div style="display: flex;">
+                                  <vex-icon src="chat">
+                                  </vex-icon>
+                                  <vex-icon
+                                    src="mail"
+                                    href="mailto:{{bUsers?.client?.email}}"
+                                    style="cursor:pointer"
+                                    title="{{bUsers?.client?.email}}">
+                                  </vex-icon>
+                                  <vex-icon
+                                    src="phone"
+                                    href="tel:{{bUsers?.client?.phone}}"
+                                    title="{{bUsers?.client?.phone}}">
+                                  </vex-icon>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div class="subtitle">
+                            <img
+                              class="icon-calendar"
+                              src="assets/img/icons/monitores-3.svg" />
+                            {{'monitor' | translate}}
+                          </div>
+                          <div class="holder-participante">
+                            <div class="col-left">
+                              <div class="c-l" *ngIf="bUsers?.monitor">
+                                <app-level-user
+                                  *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
+                                  [allLevels]="detailData.degrees_sport"
+                                  [selectLevel]="getHighestAuthorizedDegree(bUsers?.monitor, bUsers?.course?.sport_id).degree_id"
+                                  [size]="60"
+                                  [userImage]="bUsers?.monitor?.image !== null && bUsers?.monitor?.image !== '' ? bUsers?.monitor?.image : userAvatar"></app-level-user>
+                              </div>
+                              <div class="c-r">
+                                <div *ngIf="bUsers?.monitor">
+                                  <div class="course-title">
+                                    {{bUsers?.monitor?.first_name}}
+                                    {{bUsers?.monitor?.last_name}}
+                                  </div>
+                                  <span class="dot"></span>
+                                  <div class="course-label">
+                                    {{getLanguage(bUsers?.monitor?.language1_id)}}
+                                    ·
+                                    {{ getCountry(bUsers?.monitor?.country) }}
+                                    ·
+                                    {{calculateAge(bUsers?.monitor?.birth_date)}}
+                                    {{'years' | translate}}
+                                  </div>
+                                  <div style="display: flex;">
+                                    <vex-icon src="chat">
+                                    </vex-icon>
+                                    <vex-icon
+                                      src="mail"
+                                      href="mailto:{{bUsers?.client?.email}}"
+                                      style="cursor:pointer"
+                                      title="{{bUsers?.client?.email}}">
+                                    </vex-icon>
+                                    <vex-icon
+                                      src="phone"
+                                      href="tel:{{bUsers?.client?.phone}}"
+                                      title="{{bUsers?.client?.phone}}">
+                                    </vex-icon>
+                                  </div>
+                                  <!--    <ng-container
+                                        *ngFor="let item of bUsers?.monitor.monitor_sports_degrees_details"
+                                      >
+                                        <div
+                                          style="width: calc(33.33% - 4px);display:inline-block;vertical-align:top;margin-right:4px;"
+                                          *ngIf="item.school_id === user?.schools[0]?.id && bUsers?.course?.sport_id === item.sport_id"
+                                        >
+                                          <div style="text-align: center;width: 100%;">
+                                            <img
+                                              [src]="item.sport_icon_selected"
+                                              width="50"
+                                              height="50"
+                                              style="border-radius: 6px; border: solid 1px #808080;display:inline-block;"
+                                              [ngStyle]="{'background-color': item.degree?.color}"
+                                            />
+                                          </div>
+                                          <div style="text-align: center;width: 100%;">
+                                            {{item?.sport_name}}
+                                          </div>
+                                          <div style="text-align: center;width: 100%;">
+                                            <div
+                                              [ngStyle]="{
+                              'color': '#fff',
+                              'background-color':item.degree?.color,
+                              'border-color': item.degree?.color,
+                              'width': '100%',
+                              'padding': '3px',
+                              'border-radius': '6px'
+                            }"
+                                            >
+                                              <div
+                                                style="text-align: center;padding: 0px 3px; font-size:12px;"
+                                              >
+                                                {{item.degree?.annotation}}
+                                                {{item.degree?.name}}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div
+                                            style="text-align: center;width: 100%; float: left"
+                                          >
+                                            <span
+                                              *ngFor="let auth of item.monitor_sport_authorized_degrees"
+                                            >
+                                              <span
+                                                style="width: 15px; height: 15px; margin: 4px 0 0 4px;  float: left; border-radius: 3px;"
+                                                [style.background]="auth?.degree?.color"
+                                              ></span>
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </ng-container>-->
+                                  <!--<div
+                                    class="label-user"
+                                    [ngStyle]="{'background': getDegree(bUsers?.degree_id)?.color !== null ? getDegree(bUsers?.degree_id)?.color : ''}"
+                                  >
+                                    {{getDegree(bUsers?.degree_id)?.annotation}}
+                                    {{getDegree(bUsers?.degree_id)?.level}}
+                                  </div>-->
+                                </div>
+                                <div *ngIf="!bUsers?.monitor">
+                                  <div class="course-label">
+                                    {{'no_monitor' | translate}}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </ng-container>
+                <div class="title-actividad">
+                  <div class="col-left">
+                    <b class="title">{{ 'ispaid' | translate }}:</b>
+                  </div>
+                  <div class="col-right">
+                    <b>{{detailData.paid_total}} {{ detailData.currency }}</b>
+                  </div>
+                </div>
+                <div class="subtitle-sub">{{ 'options' | translate }}</div>
+                <div style="padding: 0px 35px;">
+                  <div class="list-inner-holder">
+                    <div class="col-left">
+                      <mat-slide-toggle
+                        [checked]="detailData?.has_cancellation_insurance"
+                        [disabled]="true"></mat-slide-toggle>
+                      {{ 'op_rem_abr' | translate }}
+                    </div>
+                    <div class="col-right">
+                      {{detailData.price_cancellation_insurance}}
+                      {{detailData.currency}}
+                    </div>
+                  </div>
 
+                  <div class="list-inner-holder">
+                    <div class="col-left">
+                      <mat-slide-toggle
+                        [disabled]="true"
+                        [checked]="detailData?.has_boukii_care"></mat-slide-toggle>
+                      Boukii Care
+                    </div>
+                    <div class="col-right">
+                      {{detailData.price_boukii_care}} {{detailData.currency}}
+                    </div>
+                  </div>
+
+                  <div class="list-inner-holder">
+                    <div class="col-left">
+                      <div style="width: 100%;" *ngIf="true">
+                        <mat-slide-toggle
+                          [disabled]="true"
+                          [checked]="existExtras()"></mat-slide-toggle>
+                        {{'extras' | translate}}
+                      </div>
+                    </div>
+                    <div class="col-right">
+                      {{getExtrasPrice()}} {{detailData.currency}}
+                    </div>
+                  </div>
+                </div>
+                <div class="subtitle-sub">{{ 'method_paiment' | translate }}</div>
+                <div class="list-holder" *ngIf="bonus?.length > 0">
+                  <div class="col-left">
+                    {{'bonus' | translate}}
+                  </div>
+                  <div class="col-right">
+                    -{{getBonusPrice()}} {{detailData.currency}}
+                  </div>
+                </div>
+                <div class="list-holder" *ngIf="detailData.payment_method != 6">
+                  <div class="col-left">
+                    <div class="col-l">
+                      {{ getPaymentMethod(detailData.payment_method) | translate }}
+                    </div>
+                    <!--   TODO: revisar metodo de pago cuando hay varios pagos y que estado poner?? -->
+                    <!--            <div class="col-r">
+                                  <span style="#FA9917">En attend de paiment</span>
+                                </div>
+                              </div>
+                              <div class="col-right">
+                                165.00 CHF
+                              </div>-->
+                  </div>
+                </div>
+
+                <!--<div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+                  <h3
+                    style="font-size: 1.5rem!important;"
+                    *ngIf="bookingLog.length > 0"
+                  >
+                    {{'change_history' | translate}}
+                  </h3>
+                  <div class="opaque-box" *ngIf="bookingLog.length > 0">
+                    <ng-container *ngFor="let item of bookingLog">
+                      <span style="width: 100%; float:left">
+                        <p style="float:left" *ngIf="item.action == 'created by api'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'api_created' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'refund'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'cancel_refund' | translate }}
+                        </p>
+                        <p
+                          style="float:left"
+                          *ngIf="item.action == 'refund_boukii_pay'"
+                        >
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'refund_boukii_pay' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'full_cancel'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'full_cancel' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'partial_cancel'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'partial_cancel' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'no_refund'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'cancel_no_refund' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'refund_cash'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'refund_cash' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'voucher_refund'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'voucher_refund' | translate }}
+                        </p>
+                        <p style="float:left" *ngIf="item.action == 'update'">
+                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{'mails.type3' | translate }}
+                        </p>
+                      </span>
+                    </ng-container>
+                  </div>
+                </div>-->
+                <div class="total-bottom">
+                  <div class="col-left">
+                    <ul>
+                      <li class="total">
+                        <b>{{'total' | translate | uppercase}}</b>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-right">
+                    <ul>
+                      <li class="total">
+                        {{detailData?.price_total}} {{detailData.currency}}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </mat-card-content>
             </mat-card>
           </vex-page-layout-content>

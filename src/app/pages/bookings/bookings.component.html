@@ -35,6 +35,7 @@
       (showDetailEvent)="showDetailEvent($event)"
       [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
       'bookingUsers.client.clientSports.degree',
+            'bookingUsers.courseSubGroup.degree',
        'clientMain.clientSports.degree', 'user',
        'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
       [filterColumn]="'school_id'"
@@ -233,6 +234,14 @@
                         }}
                         {{bUsers?.course?.sport.name}}
                       </div>
+                      <ng-container *ngIf="bUsers?.course?.course_type == 1">
+                        <div class="m-0 body-1"
+                             [style.background]="bUsers?.course_sub_group.degree.color"
+                             style="color: #fff;border-radius: 5px;width: 30%;text-align: center; font-size:10px;overflow: inherit;">
+                          {{bUsers?.course_sub_group.degree?.annotation}}
+                          {{bUsers?.course_sub_group.degree?.name}}
+                        </div>
+                      </ng-container>
                       <ng-container *ngIf="bUsers?.course?.course_type !== 1">
                         <!-- Para course_type distinto de 1 -->
                         <ng-container
