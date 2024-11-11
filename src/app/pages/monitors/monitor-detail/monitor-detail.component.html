@@ -299,7 +299,7 @@
                   <div
                     @scaleIn
                     class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: contain !important; " [style.background-color]="item.level.color">
+                    <img [src]="item.icon_selected" style="border-radius: 10px 0 10px 10px;height:40px !important; width: 40px !important; object-fit: contain !important; " [style.background-color]="item?.level?.color">
                   </div>
 
                   <div @fadeInRight *ngIf="!editSportInfo">
@@ -314,8 +314,8 @@
 
                   <div @fadeInRight *ngIf="!editSportInfo">
                     <p class="m-0 caption text-hint">{{'level' | translate}}</p>
-                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item.level.color">
-                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item.level.annotation}} - {{item.level.name}}</p>
+                    <div style="padding: 5%;color: #fff;width: 100%;border-radius: 10px 0 10px;width: 250px;" [style.background-color]="item?.level?.color">
+                      <p class="m-0 body-1" style="text-wrap: pretty;text-align: center;">{{item?.level?.annotation}} - {{item?.level?.name}}</p>
                     </div>
                   </div>
 
