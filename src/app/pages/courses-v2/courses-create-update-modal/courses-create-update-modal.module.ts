@@ -31,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateModule } from '@ngx-translate/core';
 import { CoursesCreateUpdateModalComponent } from './courses-create-update-modal.component';
+import {QuillEditorComponent} from 'ngx-quill';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import { CoursesCreateUpdateModalComponent } from './courses-create-update-modal
     AngularEditorModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    TranslateModule
+    TranslateModule,
+    QuillEditorComponent
   ],
   declarations: [CoursesCreateUpdateModalComponent],
   exports: [CoursesCreateUpdateModalComponent]

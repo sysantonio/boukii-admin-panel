@@ -348,10 +348,10 @@
                     <label for="summary_fr"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_fr"
+                    <quill-editor style="display: block !important;" id="summary_fr"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.short_description"
-                      formControlName="summary"></angular-editor>
+                      formControlName="summary"></quill-editor>
                     <mat-error
                       *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                       {{'courses.errors.summary' | translate}}
@@ -363,10 +363,10 @@
                     <label for="description_fr"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_fr"
+                    <quill-editor style="display: block !important;" id="description_fr"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.description"
-                      formControlName="description"></angular-editor>
+                      formControlName="description"></quill-editor>
                     <mat-error
                       *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                       {{'courses.errors.desc' | translate}}
@@ -379,10 +379,10 @@
                     <label for="summary_en"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_en"
+                    <quill-editor style="display: block !important;" id="summary_en"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.short_description"
-                      formControlName="summary_en"></angular-editor>
+                      formControlName="summary_en"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -390,10 +390,10 @@
                     <label for="description_en"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_en"
+                    <quill-editor style="display: block !important;" id="description_en"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.description"
-                      formControlName="description_en"></angular-editor>
+                      formControlName="description_en"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="DE">
@@ -402,10 +402,10 @@
                     <label for="summary_de"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_de"
+                    <quill-editor style="display: block !important;" id="summary_de"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.short_description"
-                      formControlName="summary_de"></angular-editor>
+                      formControlName="summary_de"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -413,10 +413,10 @@
                     <label for="description_de"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_de"
+                    <quill-editor style="display: block !important;" id="description_de"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.description"
-                      formControlName="description_de"></angular-editor>
+                      formControlName="description_de"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="ES">
@@ -425,10 +425,10 @@
                     <label for="summary_es"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_es"
+                    <quill-editor style="display: block !important;" id="summary_es"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.short_description"
-                      formControlName="summary_es"></angular-editor>
+                      formControlName="summary_es"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -436,10 +436,10 @@
                     <label for="description_es"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_es"
+                    <quill-editor style="display: block !important;" id="description_es"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.description"
-                      formControlName="description_es"></angular-editor>
+                      formControlName="description_es"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="IT">
@@ -448,10 +448,10 @@
                     <label for="summary_it"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_it"
+                    <quill-editor style="display: block !important;" id="summary_it"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.short_description"
-                      formControlName="summary_it"></angular-editor>
+                      formControlName="summary_it"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -459,10 +459,10 @@
                     <label for="description_it"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_it"
+                    <quill-editor style="display: block !important;" id="description_it"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.description"
-                      formControlName="description_it"></angular-editor>
+                      formControlName="description_it"></quill-editor>
                   </div>
                 </mat-tab>
               </mat-tab-group>
@@ -1355,10 +1355,10 @@
                     <label for="summary_fr"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_fr"
+                    <quill-editor style="display: block !important;" id="summary_fr"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.short_description"
-                      formControlName="summary"></angular-editor>
+                      formControlName="summary"></quill-editor>
                     <mat-error
                       *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                       {{'courses.errors.summary' | translate}}
@@ -1370,10 +1370,10 @@
                     <label for="description_fr"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_fr"
+                    <quill-editor style="display: block !important;" id="description_fr"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.description"
-                      formControlName="description"></angular-editor>
+                      formControlName="description"></quill-editor>
                     <mat-error
                       *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                       {{'courses.errors.desc' | translate}}
@@ -1386,10 +1386,10 @@
                     <label for="summary_en"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_en"
+                    <quill-editor style="display: block !important;" id="summary_en"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.short_description"
-                      formControlName="summary_en"></angular-editor>
+                      formControlName="summary_en"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -1397,10 +1397,10 @@
                     <label for="description_en"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_en"
+                    <quill-editor style="display: block !important;" id="description_en"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.description"
-                      formControlName="description_en"></angular-editor>
+                      formControlName="description_en"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="DE">
@@ -1409,10 +1409,10 @@
                     <label for="summary_de"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_de"
+                    <quill-editor style="display: block !important;" id="summary_de"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.short_description"
-                      formControlName="summary_de"></angular-editor>
+                      formControlName="summary_de"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -1420,10 +1420,10 @@
                     <label for="description_de"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_de"
+                    <quill-editor style="display: block !important;" id="description_de"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.description"
-                      formControlName="description_de"></angular-editor>
+                      formControlName="description_de"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="ES">
@@ -1432,10 +1432,10 @@
                     <label for="summary_es"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_es"
+                    <quill-editor style="display: block !important;" id="summary_es"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.short_description"
-                      formControlName="summary_es"></angular-editor>
+                      formControlName="summary_es"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -1443,10 +1443,10 @@
                     <label for="description_es"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_es"
+                    <quill-editor style="display: block !important;" id="description_es"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.description"
-                      formControlName="description_es"></angular-editor>
+                      formControlName="description_es"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="IT">
@@ -1455,11 +1455,11 @@
                     <label for="summary_it"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_it"
+                    <quill-editor style="display: block !important;" id="summary_it"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.short_description"
                       formControlName="summary_it"
-                      [config]="editorConfig"></angular-editor>
+                      ></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%;margin:15px 0"
@@ -1467,10 +1467,10 @@
                     <label for="description_it"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_it"
+                    <quill-editor style="display: block !important;" style="display: block !important;" id="description_it"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.description"
-                      formControlName="description_it"></angular-editor>
+                      formControlName="description_it"></quill-editor>
                   </div>
                 </mat-tab>
               </mat-tab-group>
@@ -2396,10 +2396,10 @@
                     <label for="summary_fr"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_fr"
+                    <quill-editor style="display: block !important;" id="summary_fr"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.short_description"
-                      formControlName="summary"></angular-editor>
+                      formControlName="summary"></quill-editor>
                     <mat-error
                       *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                       {{'courses.errors.summary' | translate}}
@@ -2411,10 +2411,10 @@
                     <label for="description_fr"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_fr"
+                    <quill-editor style="display: block !important;" id="description_fr"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.description"
-                      formControlName="description"></angular-editor>
+                      formControlName="description"></quill-editor>
                     <mat-error
                       *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                       {{'courses.errors.desc' | translate}}
@@ -2427,10 +2427,10 @@
                     <label for="summary_en"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_en"
+                    <quill-editor style="display: block !important;" id="summary_en"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.short_description"
-                      formControlName="summary_en"></angular-editor>
+                      formControlName="summary_en"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%"
@@ -2438,10 +2438,10 @@
                     <label for="description_en"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_en"
+                    <quill-editor style="display: block !important;" id="description_en"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.description"
-                      formControlName="description_en"></angular-editor>
+                      formControlName="description_en"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="DE">
@@ -2450,10 +2450,10 @@
                     <label for="summary_de"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_de"
+                    <quill-editor style="display: block !important;" id="summary_de"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.short_description"
-                      formControlName="summary_de"></angular-editor>
+                      formControlName="summary_de"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%"
@@ -2461,10 +2461,10 @@
                     <label for="description_de"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_de"
+                    <quill-editor style="display: block !important;" id="description_de"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.description"
-                      formControlName="description_de"></angular-editor>
+                      formControlName="description_de"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="ES">
@@ -2473,10 +2473,10 @@
                     <label for="summary_es"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_es"
+                    <quill-editor style="display: block !important;" id="summary_es"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.short_description"
-                      formControlName="summary_es"></angular-editor>
+                      formControlName="summary_es"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%"
@@ -2484,10 +2484,10 @@
                     <label for="description_es"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_es"
+                    <quill-editor style="display: block !important;" id="description_es"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.description"
-                      formControlName="description_es"></angular-editor>
+                      formControlName="description_es"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="IT">
@@ -2496,10 +2496,10 @@
                     <label for="summary_it"
                       style="font-size: 18px">{{'courses.summary' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="summary_it"
+                    <quill-editor style="display: block !important;" id="summary_it"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.short_description"
-                      formControlName="summary_it"></angular-editor>
+                      formControlName="summary_it"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%"
@@ -2507,10 +2507,10 @@
                     <label for="description_it"
                       style="font-size: 18px">{{'courses.desc' | translate}}
                       <span style="color:red">(*)</span></label>
-                    <angular-editor id="description_it"
+                    <quill-editor style="display: block !important;" id="description_it"
                       placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.description"
-                      formControlName="description_it"></angular-editor>
+                      formControlName="description_it"></quill-editor>
                   </div>
                 </mat-tab>
               </mat-tab-group>

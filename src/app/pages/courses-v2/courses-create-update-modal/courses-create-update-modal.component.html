@@ -236,7 +236,8 @@
                 <mat-tab label="FR">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
+
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></quill-editor>
                     <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                       {{'courses.errors.summary' | translate}}
                     </mat-error>
@@ -244,7 +245,7 @@
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></quill-editor>
                     <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                       {{'courses.errors.desc' | translate}}
                     </mat-error>
@@ -253,45 +254,45 @@
                 <mat-tab label="EN">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="DE">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="ES">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="IT">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></quill-editor>
                   </div>
                 </mat-tab>
               </mat-tab-group>
@@ -918,7 +919,7 @@
                 <mat-tab label="FR">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.short_description" formControlName="summary"></quill-editor>
                     <mat-error *ngIf="courseInfoFormGroup?.controls?.summary?.errors?.['required']">
                       {{'courses.errors.summary' | translate}}
                     </mat-error>
@@ -926,7 +927,7 @@
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 0">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.fr.description" formControlName="description"></quill-editor>
                     <mat-error *ngIf="courseInfoFormGroup?.controls?.description?.errors?.['required']">
                       {{'courses.errors.desc' | translate}}
                     </mat-error>
@@ -935,45 +936,45 @@
                 <mat-tab label="EN">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.short_description" formControlName="summary_en"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 1">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.en.description" formControlName="description_en"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="DE">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.short_description" formControlName="summary_de"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 2">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.de.description" formControlName="description_de"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="ES">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.short_description" formControlName="summary_es"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 3">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.es.description" formControlName="description_es"></quill-editor>
                   </div>
                 </mat-tab>
                 <mat-tab label="IT">
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
                     <label for="summary" style="font-size: 18px">{{'courses.summary' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.short_description" formControlName="summary_it"></quill-editor>
                   </div>
 
                   <div class="flex-auto" style="width: 100%" *ngIf="selectedTabDescIndex === 4">
                     <label for="summary" style="font-size: 18px">{{'courses.desc' | translate}} <span style="color:red">(*)</span></label>
-                    <angular-editor placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></angular-editor>
+                    <quill-editor style="display: block !important;" placeholder="{{'enter_text' | translate}}" [(ngModel)]="defaults.translations.it.description" formControlName="description_it"></quill-editor>
                   </div>
                 </mat-tab>
               </mat-tab-group>

@@ -72,16 +72,16 @@
             matInput required type="text">
         </mat-form-field>
         <div style="margin: 10px 0;">
-          <angular-editor id="summary" style="width: 100%"
+          <quill-editor style="display: block !important;" id="summary" style="width: 100%"
             [placeholder]="'courses.summary' | translate"
-            formControlName="summary" [config]="editor1Config">
-          </angular-editor>
+            formControlName="summary">
+          </quill-editor>
         </div>
         <div style="margin: 20px 0;">
-          <angular-editor id="description" style="width: 100%"
+          <quill-editor style="display: block !important;" id="description" style="width: 100%"
             [placeholder]="'courses.desc' | translate"
-            formControlName="description" [config]="editor2Config">
-          </angular-editor>
+            formControlName="description">
+          </quill-editor>
         </div>
         <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
           <mat-form-field appearance="outline"
@@ -680,18 +680,17 @@
                 matInput required type="text">
             </mat-form-field>
             <div style="margin: 10px 0;">
-              <angular-editor id="summary" style="width: 100%"
+              <quill-editor style="display: block !important;" id="summary" style="width: 100%"
                 [placeholder]="'courses.summary' | translate"
                 [formControlName]="'summary_'+item.Code"
-                [config]="editor1Config">
-              </angular-editor>
+               >
+              </quill-editor>
             </div>
             <div style="margin: 20px 0;">
-              <angular-editor id="description" style="width: 100%"
+              <quill-editor style="display: block !important;" id="description" style="width: 100%"
                 [placeholder]="'courses.desc' | translate"
-                [formControlName]="'description_'+item.Code"
-                [config]="editor2Config">
-              </angular-editor>
+                [formControlName]="'description_'+item.Code">
+              </quill-editor>
             </div>
           </ng-template>
         </mat-expansion-panel>
