@@ -343,6 +343,7 @@ export class BookingDetailComponent implements OnInit {
             .get("/bookings/" + this.id, [
               "user",
               "vouchersLogs.voucher",
+              "bookingUsers.client.clientSports",
               "bookingUsers.course.courseDates",
               "bookingUsers.bookingUserExtras.courseExtra",
             ])
@@ -1449,6 +1450,17 @@ export class BookingDetailComponent implements OnInit {
       return sportObject?.degree_id;
     }
   }
+
+  getClientDegreeByClient(client: any, sport_id: number) {
+    if (client && client !== null && sport_id && sport_id !== null) {
+      const sportObject = client?.client_sports.find(
+        (obj) => obj.sport_id === sport_id && obj.school_id == this.user.schools[0].id
+      );
+
+      return sportObject?.degree_id;
+    }
+  }
+
 
   getClient(id: number) {
     if (id && id !== null) {

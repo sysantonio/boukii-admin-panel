@@ -269,23 +269,23 @@
                     *ngIf="item.degrees_sport && item.degrees_sport.length"
                     [allLevels]="item.degrees_sport"
                     [selectLevel]="
-                      getClientDegree(bu?.client_id, item.sport_id)
+                      getClientDegreeByClient(bu?.client, item.sport_id)
                     "
                     [size]="40"
                     [userImage]="
-                      getClientAvatar(bu?.client_id) !== null &&
-                      getClientAvatar(bu?.client_id) !== ''
-                        ? getClientAvatar(bu?.client_id)
+                      bu?.client.image !== null &&
+                      bu?.client.image !== ''
+                        ? bu?.client.image
                         : userAvatar
                     "></app-level-user>
                   <!--<div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'"></div>-->
                   <mat-card-subtitle>{{
-                    getClientName(bu?.client_id)
+                      bu.client?.first_name + " " + bu.client?.last_name
                     }}</mat-card-subtitle>
                   <mat-card-subtitle>{{
-                    getLanguage(getClient(bu?.client_id)?.language1_id) }} ·
-                    {{ getCountry(getClient(bu?.client_id)?.country) }} ·
-                    {{ calculateAge(getClient(bu?.client_id)?.birth_date) }}
+                    getLanguage(bu?.client?.language1_id) }} ·
+                    {{ getCountry(bu?.client?.country) }} ·
+                    {{ calculateAge(bu?.client?.birth_date) }}
                     {{ "years" | translate }}</mat-card-subtitle>
                 </mat-card-header>
 
