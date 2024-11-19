@@ -673,7 +673,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
         }
         else if (type == 'private') {
-          const sportObject = booking.bookings_clients[0]?.client.sports.find(sport => sport.id === booking.course.sport_id);
+          const sportObject = booking?.bookings_clients?.[0]?.client?.sports?.find(
+            sport => sport.id === booking?.course?.sport_id
+          );
           if (sportObject && sportObject.pivot && sportObject.pivot.degree_id) {
             degree = this.degrees.find(degree => degree.id === sportObject.pivot.degree_id);
           }
@@ -685,7 +687,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
           //Booking color
           booking_color = booking.color;
         } else if (type == 'activity') {
-          const sportObject = booking.bookings_clients[0]?.client.sports.find(sport => sport.id === booking.course.sport_id);
+          const sportObject = booking?.bookings_clients?.[0]?.client?.sports?.find(
+            sport => sport.id === booking?.course?.sport_id
+          );
+
+
           if (sportObject && sportObject.pivot && sportObject.pivot.degree_id) {
             degree = this.degrees.find(degree => degree.id === sportObject.pivot.degree_id);
           }

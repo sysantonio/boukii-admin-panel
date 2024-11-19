@@ -37,6 +37,7 @@ import { jsPDF } from 'jspdf';
 import * as QRCode from 'qrcode';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExcelExportService } from '../../../service/excel.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -182,6 +183,15 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit() {
+    this.searchCtrl.valueChanges
+      .pipe(
+        debounceTime(500), // Espera 300 ms tras cada cambio
+        distinctUntilChanged() // Solo dispara si el valor realmente cambia
+      )
+      .subscribe((searchValue) => {
+        this.pageIndex = 1;
+        this.getFilteredData(this.pageIndex, this.pageSize, this.filter);
+      });
     this.routeActive.queryParams.subscribe(params => {
       this.gift = +params['isGift'] || 0; // Valor por defecto
       if (this.entity.includes('vouchers')) {
