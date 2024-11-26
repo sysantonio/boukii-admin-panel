@@ -568,6 +568,27 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
+  async restore(item: any) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      data: {
+        message: this.translateService.instant('restore_text'),
+        title: this.translateService.instant('restore_title')
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        // Cambia delete por restore
+        this.crudService.restore(this.deleteEntity, item.id)
+          .subscribe(() => {
+            this.getData(this.pageIndex, this.pageSize); // Recargar datos después de restaurar
+          });
+      }
+    });
+  }
+
   deactivate(item: any) {
 
     const dialogRef = this.dialog.open(ConfirmModalComponent, {

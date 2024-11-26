@@ -518,6 +518,8 @@
   "pax_limit_reached": "Für diesen Kurs ist die Teilnehmerzahl begrenzt: ",
   "delete_text": "Möchten Sie diesen Artikel entfernen?",
   "delete_title": "Löschen",
+  "restore_text": "Sind Sie sicher, dass Sie dieses Element wiederherstellen möchten?",
+  "restore_title": "Element wiederherstellen",
   "update_date_warning": "Diese Aktion könnte sich auf eine oder mehrere Reservierungen auswirken. ",
   "update_date_warning_title": "Änderung des Kurstermins",
   "work_day": "Der Tag",

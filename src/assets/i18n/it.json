@@ -517,6 +517,8 @@
   "pax_limit_reached": "Il corso è a numero chiuso: ",
   "delete_text": "Vuoi rimuovere questo elemento?",
   "delete_title": "Eliminare",
+  "restore_text": "Sei sicuro di voler ripristinare questo elemento?",
+  "restore_title": "Ripristina elemento",
   "update_date_warning": "Questa azione potrebbe influenzare una o più prenotazioni. ",
   "update_date_warning_title": "Modifica data corso",
   "work_day": "Il giorno",

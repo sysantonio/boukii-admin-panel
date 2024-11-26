@@ -79,6 +79,10 @@ export class ApiCrudService extends ApiService {
     return this.http.put<ApiResponse>(this.baseUrl + model + '/' + id, data, { headers: this.getHeaders() });
   }
 
+  restore(entity: string, id: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}${entity}/${id}/restore`, {});
+  }
+
   massiveUpdate(model: string, data: any): Observable < ApiResponse > {
     return this.http.put<ApiResponse>(this.baseUrl + model + '/multiple', data, { headers: this.getHeaders() });
   }

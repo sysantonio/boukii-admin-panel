@@ -546,6 +546,8 @@
   "pax_limit_reached": "Este curso tiene un número limitado de personas: ",
   "delete_text": "¿Quieres eliminar este elemento?",
   "delete_title": "Eliminar",
+  "restore_text": "¿Estás seguro de que quieres restaurar este elemento?",
+  "restore_title": "Restaurar Elemento",
   "update_date_warning": "Esta acción podría afectar a una o varias reservas. ¿Desea continuar?",
   "update_date_warning_title": "Modificación de fecha de curso",
   "work_day": "La jornada",

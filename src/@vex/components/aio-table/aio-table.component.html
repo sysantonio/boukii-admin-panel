@@ -1139,5 +1139,13 @@
       <mat-icon svgIcon="mat:file_copy"></mat-icon>
       <span>{{'duplicate' | translate }}</span>
     </button>
+    <button (click)="delete(item)" mat-menu-item *ngIf="entity.includes('vouchers') && !trashed">
+      <mat-icon svgIcon="mat:delete"></mat-icon>
+      <span>{{'delete_title' | translate }}</span>
+    </button>
+    <button (click)="restore(item)" mat-menu-item *ngIf="entity.includes('vouchers') && trashed">
+      <mat-icon svgIcon="mat:delete"></mat-icon>
+      <span>{{'restore_title' | translate }}</span>
+    </button>
   </ng-template>
 </mat-menu>
