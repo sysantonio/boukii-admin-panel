@@ -463,6 +463,7 @@
   "table.filter.course": "Type of course",
   "table.filter.single": "Individual",
   "table.filter.multiple": "Multiple",
+  "table.filter.trashed": "Deleted",
   "inactive": "Idle",
   "finished": "Finished",
   "all": "All",

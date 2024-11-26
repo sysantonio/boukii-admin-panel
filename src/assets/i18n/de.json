@@ -462,6 +462,7 @@
   "table.filter.course": "Art natürlich",
   "table.filter.single": "Individuell",
   "table.filter.multiple": "Mehrere",
+  "table.filter.trashed": "Gelöscht",
   "inactive": "Leerlauf",
   "finished": "Abgeschlossen",
   "all": "Alle",

@@ -145,6 +145,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   reservationTypeSingle = false;
   reservationTypeMultiple = false;
+  trashed = false;
 
   courseColective = false;
   coursePrivate = false;
@@ -385,6 +386,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           filter = filter + '&is_gift=1';
         } else {
           filter = filter + '&is_gift=0';
+        }
+        if (this.trashed) {
+          filter = filter + '&onlyTrashed=true';
         }
       }
     }

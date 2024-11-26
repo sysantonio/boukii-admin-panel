@@ -31,6 +31,14 @@
             | translate}}</mat-checkbox>
         </div>
 
+        <div style="float:left; width: 30%" *ngIf="entity.includes('vouchers')">
+          <span style="float:left; width: 100%; font-size:16px">{{
+              'table.filter.booking' | translate}}</span>
+          <mat-checkbox color="primary" [checked]="trashed"
+                        (change)="trashed = !trashed; filterData()">{{'table.filter.trashed'
+            | translate}}</mat-checkbox>
+        </div>
+
         <div style="float:left; width: 30%"
              *ngIf="(entity.includes('bookings') || entity.includes('courses'))">
           <span style="float:left; width: 100%; font-size:16px">{{
@@ -291,7 +299,7 @@
         </button>
 
         <button class="ml-4 flex-none" (click)="openFilters = !openFilters"
-                *ngIf="!entity.includes('statistics') && !entity.includes('vouchers') &&
+                *ngIf="!entity.includes('statistics')  &&
                 !entity.includes('users') && !entity.includes('clients')"
                 mat-icon-button
                 matTooltip="Filter Data"

@@ -461,6 +461,7 @@
   "table.filter.course": "Tipo di corso",
   "table.filter.single": "Individuale",
   "table.filter.multiple": "Molteplici",
+  "table.filter.trashed": "Eliminato",
   "inactive": "Oziare",
   "finished": "Finalizzato",
   "all": "Tutto",
