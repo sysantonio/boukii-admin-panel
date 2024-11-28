@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, Input, Inject, Optional} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, Inject, Optional } from '@angular/core';
 import {
   FormControl,
   UntypedFormBuilder,
@@ -15,7 +15,7 @@ import {
 } from "rxjs";
 import { stagger20ms } from "src/@vex/animations/stagger.animation";
 import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
-import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from "../bookings-create-update-modal/bookings-create-update-modal.component";
 import { ApiCrudService } from "src/service/crud.service";
 import {
@@ -251,7 +251,7 @@ export class BookingDetailComponent implements OnInit {
 
   async ngOnInit() {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
-    if(!this.incData) {
+    if (!this.incData) {
       this.id = this.activatedRoute.snapshot.params.id;
     } else {
       this.id = this.incData.id;
@@ -268,7 +268,7 @@ export class BookingDetailComponent implements OnInit {
     try {
       const data: any = await this.crudService
         .get(
-          "/degrees?perPage=" + 99999 + "&school_id=" +  this.user.schools[0].id
+          "/degrees?perPage=" + 99999 + "&school_id=" + this.user.schools[0].id
         )
         .toPromise();
       this.degreesClient = data.data.sort(
@@ -388,7 +388,7 @@ export class BookingDetailComponent implements OnInit {
                 {}
               );
 
-// Procesa los grupos de acuerdo al tipo de curso
+              // Procesa los grupos de acuerdo al tipo de curso
               for (const key in groupedByCourseOrClientId) {
                 if (groupedByCourseOrClientId.hasOwnProperty(key)) {
                   const elements = groupedByCourseOrClientId[key];
@@ -465,55 +465,55 @@ export class BookingDetailComponent implements OnInit {
               });
 
 
-                this.calculateDiscounts();
-                this.calculateFinalPrice();
+              this.calculateDiscounts();
+              this.calculateFinalPrice();
 
-                this.booking.price_total = this.finalPrice;
+              this.booking.price_total = this.finalPrice;
 
-                this.booking.price_cancellation_insurance = this.booking.has_cancellation_insurance ? this.getOpRemPrice() : 0;
-                //  this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
-                if (updateBooking) {
-                  this.booking.paid = this.bookingPendingPrice <= 0;
-                  this.crudService
-                    .update(
-                      "/bookings",
-                      {
-                        price_total: parseFloat(this.finalPrice),
-                        price_cancellation_insurance:
-                          this.finalPrice -
-                          Math.round(
-                            (this.finalPrice /
-                              (+this.cancellationInsurance.toFixed(2) + 1)) *
-                            100
-                          ) /
-                          100,
-                        paid: this.bookingPendingPrice <= 0,
-                        send_mail: true,
-                      },
-                      this.id
-                    )
-                    .subscribe(() => {
-                      this.bookingPendingPrice =
-                        parseFloat(this.booking.price_total) -
-                        parseFloat(this.booking.paid_total);
-                    });
-                }
-                if (this.bookingPendingPrice < 0 && this.booking.paid) {
-                  const dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    data: {
-                      message: "",
-                      title: this.translateService.instant("refund_title"),
+              this.booking.price_cancellation_insurance = this.booking.has_cancellation_insurance ? this.getOpRemPrice() : 0;
+              //  this.bookingPendingPrice = parseFloat(this.booking.price_total) - parseFloat(this.booking.paid_total);
+              if (updateBooking) {
+                this.booking.paid = this.bookingPendingPrice <= 0;
+                this.crudService
+                  .update(
+                    "/bookings",
+                    {
+                      price_total: parseFloat(this.finalPrice),
+                      price_cancellation_insurance:
+                        this.finalPrice -
+                        Math.round(
+                          (this.finalPrice /
+                            (+this.cancellationInsurance.toFixed(2) + 1)) *
+                          100
+                        ) /
+                        100,
+                      paid: this.bookingPendingPrice <= 0,
+                      send_mail: true,
                     },
+                    this.id
+                  )
+                  .subscribe(() => {
+                    this.bookingPendingPrice =
+                      parseFloat(this.booking.price_total) -
+                      parseFloat(this.booking.paid_total);
                   });
+              }
+              if (this.bookingPendingPrice < 0 && this.booking.paid) {
+                const dialogRef = this.dialog.open(ConfirmModalComponent, {
+                  data: {
+                    message: "",
+                    title: this.translateService.instant("refund_title"),
+                  },
+                });
 
-                  dialogRef.afterClosed().subscribe((data: any) => {
-                    if (data) {
-                      this.refundBooking();
-                    }
-                  });
-                }
+                dialogRef.afterClosed().subscribe((data: any) => {
+                  if (data) {
+                    this.refundBooking();
+                  }
+                });
+              }
 
-                this.loading = false;
+              this.loading = false;
             });
         });
       });
@@ -531,7 +531,7 @@ export class BookingDetailComponent implements OnInit {
         this.bookingUsersUnique.filter(
           (b) => b.course_id === this.courses[index].id
         ).length
-        ];
+      ];
     } else {
       return this.courses[index].price;
     }
@@ -569,13 +569,13 @@ export class BookingDetailComponent implements OnInit {
       maxDate < new Date();
   }
 
-  isFinishedBookingUser(bu:any): boolean {
+  isFinishedBookingUser(bu: any): boolean {
     // Compara la fecha más futura con la fecha actual
     return bu.status === 1 &&
       new Date(bu.date) < new Date();
   }
 
-  isActiveBookingUser(bu:any): boolean {
+  isActiveBookingUser(bu: any): boolean {
     // Compara la fecha más futura con la fecha actual
     return bu.status === 1 &&
       new Date(bu.date) > new Date();
@@ -589,7 +589,7 @@ export class BookingDetailComponent implements OnInit {
     let settings = typeof course.settings === 'string' ?
       JSON.parse(course.settings) : course.settings;
 
-    if(settings?.groups) {
+    if (settings?.groups) {
       settings.groups.forEach(group => {
         group.paxes = 0;
       });
@@ -840,7 +840,7 @@ export class BookingDetailComponent implements OnInit {
       this.crudService
         .post("/admin/bookings/payments/" + this.id, basket)
         .subscribe((result: any) => {
-          if( this.defaults.payment_method_id === 3) {
+          if (this.defaults.payment_method_id === 3) {
             this.snackbar.open(this.translateService.instant('snackbar.booking_detail.send_mail'), 'OK', { duration: 1000 });
             this.loading = false;
           } else {
@@ -1519,7 +1519,7 @@ export class BookingDetailComponent implements OnInit {
     this.bookingUsersUnique.forEach((element) => {
       this.crudService
         .update("/booking-users", { notes: event.target.value }, element.id)
-        .subscribe(() => {});
+        .subscribe(() => { });
     });
 
     this.snackbar.open(
@@ -1537,7 +1537,7 @@ export class BookingDetailComponent implements OnInit {
           { notes_school: event.target.value },
           element.id
         )
-        .subscribe(() => {});
+        .subscribe(() => { });
     });
     this.snackbar.open(
       this.translateService.instant("snackbar.booking_detail.notes_school"),
@@ -1675,44 +1675,44 @@ export class BookingDetailComponent implements OnInit {
     if (this.courses.length > 0) {
       this.bookingsToCreate.forEach((b, idx) => {
 
-          if (
-            this.courses[idx].is_flexible &&
-            (this.courses[idx].course_type === 2 || this.courses[idx].course_type === 3)
-          ) {
-            ret = ret + this.getPrivateFlexPrice(b.courseDates);
-            b.price_total = this.getPrivateFlexPrice(b.courseDates);
-          } else if (
-            !this.courses[idx].is_flexible &&
-            this.courses[idx].course_type === 2
-          ) {
-            ret =
-              ret + parseFloat(this.courses[idx]?.price) * b.courseDates.length;
-            b.price_total =
-              parseFloat(this.courses[idx]?.price) * b.courseDates.length;
-          } else if (
-            this.courses[idx].is_flexible &&
-            this.courses[idx].course_type === 1
-          ) {
-            const discounts =
-              typeof this.courses[idx].discounts === "string"
-                ? JSON.parse(this.courses[idx].discounts)
-                : this.courses[idx].discounts;
-            let price = b?.courseDates[0].price * b.courseDates.length;
-            let discount = 0;
-            ret = ret + b?.courseDates[0].price * b.courseDates.length;
-            if (!noDiscount) {
-              discounts.forEach((element) => {
-                if (element.date === b.courseDates.length) {
-                  ret = ret - ret * (element.percentage / 100);
-                  discount = price - price * (element.percentage / 100);
-                }
-              });
-            }
-            ret = ret - discount;
-            b.price_total = price;
-          } else {
-            ret = ret + b?.price_total;
+        if (
+          this.courses[idx].is_flexible &&
+          (this.courses[idx].course_type === 2 || this.courses[idx].course_type === 3)
+        ) {
+          ret = ret + this.getPrivateFlexPrice(b.courseDates);
+          b.price_total = this.getPrivateFlexPrice(b.courseDates);
+        } else if (
+          !this.courses[idx].is_flexible &&
+          this.courses[idx].course_type === 2
+        ) {
+          ret =
+            ret + parseFloat(this.courses[idx]?.price) * b.courseDates.length;
+          b.price_total =
+            parseFloat(this.courses[idx]?.price) * b.courseDates.length;
+        } else if (
+          this.courses[idx].is_flexible &&
+          this.courses[idx].course_type === 1
+        ) {
+          const discounts =
+            typeof this.courses[idx].discounts === "string"
+              ? JSON.parse(this.courses[idx].discounts)
+              : this.courses[idx].discounts;
+          let price = b?.courseDates[0].price * b.courseDates.length;
+          let discount = 0;
+          ret = ret + b?.courseDates[0].price * b.courseDates.length;
+          if (!noDiscount) {
+            discounts.forEach((element) => {
+              if (element.date === b.courseDates.length) {
+                ret = ret - ret * (element.percentage / 100);
+                discount = price - price * (element.percentage / 100);
+              }
+            });
           }
+          ret = ret - discount;
+          b.price_total = price;
+        } else {
+          ret = ret + b?.price_total;
+        }
 
       });
 
@@ -1870,13 +1870,13 @@ export class BookingDetailComponent implements OnInit {
           courseExtra.forEach((element) => {
             this.crudService
               .delete("/course-extras", element.id)
-              .subscribe(() => {});
+              .subscribe(() => { });
           });
 
           bookingExtra.forEach((element) => {
             this.crudService
               .delete("/booking-user-extras", element.id)
-              .subscribe(() => {});
+              .subscribe(() => { });
           });
 
           setTimeout(() => {
@@ -1903,13 +1903,13 @@ export class BookingDetailComponent implements OnInit {
 
             this.crudService
               .delete("/course-extras", element.id)
-              .subscribe(() => {});
+              .subscribe(() => { });
           });
 
           bookingExtra.forEach((element) => {
             this.crudService
               .delete("/booking-user-extras", element.id)
-              .subscribe(() => {});
+              .subscribe(() => { });
           });
 
           setTimeout(() => {
@@ -1949,7 +1949,7 @@ export class BookingDetailComponent implements OnInit {
                   status: "no_refund",
                   notes: "no refund applied",
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
 
               this.snackbar.open(
                 this.translateService.instant("snackbar.booking_detail.update"),
@@ -2061,7 +2061,7 @@ export class BookingDetailComponent implements OnInit {
                       status: "refund",
                       notes: "voucher",
                     })
-                    .subscribe(() => {});
+                    .subscribe(() => { });
                   this.crudService
                     .create("/vouchers", vData)
                     .subscribe((result) => {
@@ -2115,7 +2115,7 @@ export class BookingDetailComponent implements OnInit {
           before_change: "confirmed",
           school_id: this.user.schools[0].id,
         };
-        this.crudService.post("/booking-logs", bookingLog).subscribe(() => {});
+        this.crudService.post("/booking-logs", bookingLog).subscribe(() => { });
 
         if (data.type === "no_refund") {
           this.crudService
@@ -2138,7 +2138,7 @@ export class BookingDetailComponent implements OnInit {
                       status: "no_refund",
                       notes: "no refund applied",
                     })
-                    .subscribe(() => {});
+                    .subscribe(() => { });
                   this.crudService
                     .post("/admin/bookings/cancel", {
                       bookingUsers: this.bookingUsers.map((b) => b.id),
@@ -2231,7 +2231,7 @@ export class BookingDetailComponent implements OnInit {
                   status: "refund",
                   notes: "other",
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
 
               this.crudService
                 .update("/bookings", { status: 2 }, this.booking.id)
@@ -2256,9 +2256,9 @@ export class BookingDetailComponent implements OnInit {
           const vData = {
             code: "BOU-" + this.generateRandomNumber(),
             quantity:
-            priceToRefund,
+              priceToRefund,
             remaining_balance:
-            priceToRefund,
+              priceToRefund,
             payed: false,
             client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id,
@@ -2279,7 +2279,7 @@ export class BookingDetailComponent implements OnInit {
                     .post("/admin/bookings/cancel", {
                       bookingUsers: this.bookingUsers.map((b) => b.id),
                     })
-                    .subscribe(() => {});
+                    .subscribe(() => { });
 
                   /*                  this.crudService.create('/payments', {booking_id: this.id, school_id: this.user.schools[0].id, amount: this.finalPrice, status: 'refund', notes: 'voucher'})
                     .subscribe(() => {
@@ -2367,11 +2367,11 @@ export class BookingDetailComponent implements OnInit {
   deletePartialBooking(index: number, book: any) {
     let bookTotalPrice = 0;
     if (book.courseDates[0].course.course_type == 1) {
-      bookTotalPrice  = book.price_total + this.getCourseExtraForfaitPriceByCourse(
+      bookTotalPrice = book.price_total + this.getCourseExtraForfaitPriceByCourse(
         book.courseDates[0]
       );
     } else {
-      bookTotalPrice  = book.price_total + this.getCourseExtraForfaitPriceByDateHour(
+      bookTotalPrice = book.price_total + this.getCourseExtraForfaitPriceByDateHour(
         book.courseDates[0]
       );
     }
@@ -2380,7 +2380,7 @@ export class BookingDetailComponent implements OnInit {
       this.getBookingUsersByCourse(book.courseDates[0].course_id) :
       this.getBookingUsersByCourseDateAndHour(book.courseDates[0].course_date_id, book.courseDates[0].hour_start,
         book.courseDates[0].hour_end, book.courseDates[0].monitor_id)
-    if(book.courseDates[0].course.course_type == 1 && book.courseDates[0].course.is_flexible) {
+    if (book.courseDates[0].course.course_type == 1 && book.courseDates[0].course.is_flexible) {
       bookTotalPrice -= this.getDiscountPrice(book);
     }
     const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
@@ -2405,7 +2405,7 @@ export class BookingDetailComponent implements OnInit {
           before_change: "confirmed",
           school_id: this.user.schools[0].id,
         };
-        this.crudService.post("/booking-logs", bookingLog).subscribe(() => {});
+        this.crudService.post("/booking-logs", bookingLog).subscribe(() => { });
 
         let priceToRemove = this.booking.paid ? 0 : bookTotalPrice;
 
@@ -2427,19 +2427,19 @@ export class BookingDetailComponent implements OnInit {
                   status: "no_refund",
                   notes: "no refund applied",
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
               bookingUsers.forEach((element) => {
                 element.status = 2;
                 this.crudService
                   .update("/booking-users", { status: 2 }, element.id)
-                  .subscribe(() => {});
+                  .subscribe(() => { });
               });
 
               this.crudService
                 .post("/admin/bookings/cancel", {
                   bookingUsers: bookingUsers.map((b) => b.id),
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
             });
           this.snackbar.open(
             this.translateService.instant("snackbar.booking_detail.delete"),
@@ -2466,14 +2466,14 @@ export class BookingDetailComponent implements OnInit {
                       element.status = 2;
                       this.crudService
                         .update("/booking-users", { status: 2 }, element.id)
-                        .subscribe(() => {});
+                        .subscribe(() => { });
                     });
 
                     this.crudService
                       .post("/admin/bookings/cancel", {
                         bookingUsers: this.bookingUsers.map((b) => b.id),
                       })
-                      .subscribe(() => {});
+                      .subscribe(() => { });
                     this.snackbar.open(
                       this.translateService.instant(
                         "snackbar.booking_detail.update"
@@ -2513,19 +2513,19 @@ export class BookingDetailComponent implements OnInit {
                   status: "refund",
                   notes: "other",
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
               bookingUsers.forEach((element) => {
                 element.status = 2;
                 this.crudService
                   .update("/booking-users", { status: 2 }, element.id)
-                  .subscribe(() => {});
+                  .subscribe(() => { });
               });
 
               this.crudService
                 .post("/admin/bookings/cancel", {
                   bookingUsers: bookingUsers.map((b) => b.id),
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
             });
           this.snackbar.open(
             this.translateService.instant("snackbar.booking_detail.delete"),
@@ -2553,7 +2553,7 @@ export class BookingDetailComponent implements OnInit {
                 element.status = 2;
                 this.crudService
                   .update("/booking-users", { status: 2 }, element.id)
-                  .subscribe(() => {});
+                  .subscribe(() => { });
               });
             });
 
@@ -2561,7 +2561,7 @@ export class BookingDetailComponent implements OnInit {
             .post("/admin/bookings/cancel", {
               bookingUsers: bookingUsers.map((b) => b.id),
             })
-            .subscribe(() => {});
+            .subscribe(() => { });
           this.crudService
             .create("/payments", {
               booking_id: this.id,
@@ -2570,7 +2570,7 @@ export class BookingDetailComponent implements OnInit {
               status: "refund",
               notes: "voucher",
             })
-            .subscribe(() => {});
+            .subscribe(() => { });
 
           this.crudService.create("/vouchers", vData).subscribe((result) => {
             this.crudService
@@ -2758,7 +2758,7 @@ export class BookingDetailComponent implements OnInit {
           "/bookings",
           {
             price_cancellation_insurance:
-            this.booking.price_cancellation_insurance,
+              this.booking.price_cancellation_insurance,
             has_cancellation_insurance: true,
           },
           this.id
@@ -2832,7 +2832,7 @@ export class BookingDetailComponent implements OnInit {
                   user_id: this.user.id,
                   reason: data.reason,
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
               this.getData(true);
             });
         } else {
@@ -2855,7 +2855,7 @@ export class BookingDetailComponent implements OnInit {
                   user_id: this.user.id,
                   reason: data.reason,
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
               this.getData(true);
             });
         }
@@ -2905,7 +2905,7 @@ export class BookingDetailComponent implements OnInit {
                   user_id: this.user.id,
                   reason: data.reason,
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
               this.getData(true);
             });
         } else {
@@ -2929,7 +2929,7 @@ export class BookingDetailComponent implements OnInit {
                   user_id: this.user.id,
                   reason: data.reason,
                 })
-                .subscribe(() => {});
+                .subscribe(() => { });
               this.getData(true);
             });
         }
@@ -3025,7 +3025,7 @@ export class BookingDetailComponent implements OnInit {
     if (this.booking.paid && this.booking.status === 1) {
       price =
         +this.booking.paid_total - this.priceRefund - this.priceNoRefund
-    } else if(this.booking.status !== 1 && !this.booking.paid){
+    } else if (this.booking.status !== 1 && !this.booking.paid) {
       price =
         this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
     } else {
@@ -3051,7 +3051,7 @@ export class BookingDetailComponent implements OnInit {
     let extraPrice = 0;
     this.courseExtra.forEach((element) => {
 
-        extraPrice = extraPrice + +element.price;
+      extraPrice = extraPrice + +element.price;
 
     });
 
@@ -3141,7 +3141,7 @@ export class BookingDetailComponent implements OnInit {
       if (this.booking.paid) {
         this.bookingPendingPrice =
           this.finalPrice - +this.booking.paid_total - this.priceRefund - this.priceNoRefund
-      } else if(this.booking.status !== 1) {
+      } else if (this.booking.status !== 1) {
         this.bookingPendingPrice =
           this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
       } else {
@@ -3392,9 +3392,9 @@ export class BookingDetailComponent implements OnInit {
     this.bookingService.editData.selectedPrice =
       this.courses[index].course_type == 1 ? this.parseFloatValue(this.getTotalBook(index, item)) +
         this.getCourseExtraForfaitPrice(item.courseDates[0]) : this.parseFloatValue(this.getTotalBook(index, item)) +
-        this.getCourseExtraForfaitPriceByDateHour(
-          item.courseDates[0]
-        )
+      this.getCourseExtraForfaitPriceByDateHour(
+        item.courseDates[0]
+      )
 
     this.router.navigate(["bookings/edit/" + this.id]);
   }
@@ -3469,13 +3469,13 @@ export class BookingDetailComponent implements OnInit {
           this.bookingExtras.forEach((element) => {
             this.crudService
               .delete("/booking-user-extras", element.id)
-              .subscribe(() => {});
+              .subscribe(() => { });
           });
 
           this.courseExtra.forEach((element) => {
             this.crudService
               .delete("/course-extras", element.id)
-              .subscribe(() => {});
+              .subscribe(() => { });
           });
 
           setTimeout(() => {
@@ -3490,7 +3490,7 @@ export class BookingDetailComponent implements OnInit {
 
             this.crudService
               .post("/booking-logs", bookingLog)
-              .subscribe(() => {});
+              .subscribe(() => { });
 
             this.getData(true);
           }, 500);

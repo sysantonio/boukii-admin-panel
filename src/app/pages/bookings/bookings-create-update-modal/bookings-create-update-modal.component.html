@@ -1314,7 +1314,8 @@
                             [value]="forfait"
                             (change)="setForfait($event, forfait, item, bI)"
                             [checked]="item?.forfait?.id === forfait.id">
-                            <span>{{forfait.id}}</span>
+                            <span>                                  {{forfait.product}} - {{ forfait.name }}
+                            </span>
                           </mat-checkbox>
                         </li>
                       </ul>
@@ -1593,7 +1594,9 @@
                 <ng-container
                   *ngFor="let item of bookingsToCreate; let i = index">
                   <span style="width: 100%; float:left" *ngIf="item.forfait">
-                    <p style="float:left">Forfait {{item.forfait.id}}</p>
+                    <p style="float:left">
+                      {{item.forfait.product}} - {{ item.forfait.name }}
+                    </p>
                     <p style="float:right">
                       {{(item.forfait.price * item.courseDates.length *
                       item.paxes) + ((item.forfait.price *

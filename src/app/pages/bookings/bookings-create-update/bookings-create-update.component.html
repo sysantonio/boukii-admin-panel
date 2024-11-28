@@ -1416,9 +1416,9 @@
                                 [value]="forfait"
                                 (change)="setForfait($event, forfait, item, null)"
                                 [checked]="item?.forfait?.id === forfait.id">
-                                <span style="color: #868686;">{{
-                                  forfait.id
-                                  }}</span>
+                                <span style="color: #868686;">
+                                  {{forfait.product}} - {{ forfait.name }}
+                                </span>
                               </mat-checkbox>
                             </li>
                           </ul>
@@ -1500,9 +1500,9 @@
                                     [value]="forfait"
                                     (change)="setForfait($event, forfait, item, people)"
                                     [checked]="people?.forfait?.id === forfait.id">
-                                    <span style="color: #868686;">{{
-                                      forfait.id
-                                      }}</span>
+                                    <span style="color: #868686;">
+                                      {{forfait.product}} - {{ forfait.name }}
+                                    </span>
                                   </mat-checkbox>
                                 </li>
                               </ul>
@@ -1641,7 +1641,9 @@
                                   [value]="forfait"
                                   (change)="setForfait($event, forfait, item, null)"
                                   [checked]="item?.forfait?.id === forfait.id">
-                                  <span>{{forfait.id}}</span>
+                                  <span> {{forfait.product}} - {{ forfait.name
+                                    }}
+                                  </span>
                                 </mat-checkbox>
                               </li>
                             </ul>
@@ -1921,7 +1923,8 @@
                           (change)="setForfait($event, forfait, item, null)"
                           [checked]="item?.forfait?.id === forfait.id"
                         >
-                          <span>{{forfait.id}}</span>
+                          <span>                                  {{forfait.product}} - {{ forfait.name }}
+</span>
                         </mat-checkbox>
                       </li>
                     </ul>
@@ -1978,7 +1981,8 @@
                           (change)="setForfait($event, forfait, item, people)"
                           [checked]="people?.forfait?.id === forfait.id"
                         >
-                          <span>{{forfait.id}}</span>
+                          <span>                                  {{forfait.product}} - {{ forfait.name }}
+</span>
                         </mat-checkbox>
                       </li>
                     </ul>
@@ -2152,7 +2156,8 @@
                           (change)="setForfait($event, forfait, item, bI)"
                           [checked]="item?.forfait?.id === forfait.id"
                         >
-                          <span>{{forfait.id}}</span>
+                          <span>                                  {{forfait.product}} - {{ forfait.name }}
+</span>
                         </mat-checkbox>
                       </li>
                     </ul>

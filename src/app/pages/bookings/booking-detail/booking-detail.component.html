@@ -340,9 +340,8 @@
                             [disabled]="booking.status === 2 || bu.status === 2 || !canUpdate(
                     item?.courseDates[item?.courseDates.length - 1]?.date
                   )">
-                            <span>{{
-                              forfait.id
-                              }}</span>
+                            <span> {{forfait.product}} - {{ forfait.name }}
+                            </span>
                           </mat-checkbox>
                         </li>
                       </ul>
@@ -527,7 +526,7 @@
                           [checked]="
                             getCourseExtraForfait(forfait, item.courseDates[0])
                           ">
-                          <span>{{ forfait.id }}</span>
+                          <span>{{forfait.product}} - {{ forfait.name }}</span>
                         </mat-checkbox>
                       </li>
                     </ul>

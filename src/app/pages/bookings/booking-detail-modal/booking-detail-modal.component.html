@@ -311,7 +311,8 @@
                           [disabled]="item?.courseDates[0]?.status === 2"
                           (change)="setForfait($event, forfait, item, bI)"
                           [checked]="getCourseExtraForfait(forfait, item.courseDates[0])">
-                          <span>{{forfait.id}}</span>
+                          <span> {{forfait.product}} - {{ forfait.name }}
+                          </span>
                         </mat-checkbox>
                       </li>
 
