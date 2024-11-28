@@ -66,31 +66,33 @@
         <div
           style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
           <mat-card-subtitle style="width:100%;">
-            <div
-              style="width: 60%;display:inline-block;text-align: left; color: white;">
+            <div style="color: white;">
               <b>{{ 'register' | translate}}:</b>
-              <span style="margin-left: 10px;font-weight: normal;color: white;">
-                <span style="color: white;">{{detailData.created_at | date:
-                  'dd/MM/YYYY'}}</span><span
-                  style="margin-left: 10px;font-style: italic;color: white;">{{detailData.created_at
-                  | date: 'HH:mm'}}h</span>
+              <span style="margin-left: 5px;font-weight: normal;color: white;">
+                <span style="color: white;">
+                  {{detailData.created_at | date: 'dd/MM/YYYY'}}
+                </span>
+                <span
+                  style="margin-left: 5px;font-style: italic;color: white;">
+                  {{detailData.created_at | date: 'HH:mm'}}h
+                </span>
               </span>
             </div>
             <div *ngIf="detailData.user"
-              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-              {{ detailData.user.username }}
-              <span style="margin-left: 10px;color: white;">({{
+              style="color: white;font-weight: normal;">
+              <b> {{ "by" | translate }}: </b>
+              <span style="margin-left: 5px;color: white;">
+                {{ detailData.user.username }} ({{
                 detailData.user.first_name +
                 ' ' + detailData.user.last_name
                 }})</span>
             </div>
-            <div
-              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-              {{ 'from' | translate }}
-              <span style="margin-left: 10px;color: white;"
+            <div style="color: white;font-weight: normal;">
+              <b> {{ 'from' | translate }}: </b>
+              <span style="margin-left: 5px;color: white;"
                 *ngIf="detailData.source == 'web'">{{'page_created' |
                 translate}}</span>
-              <span style="margin-left: 10px;color: white;"
+              <span style="margin-left: 5px;color: white;"
                 *ngIf="detailData.source == 'admin'">{{'api_created' |
                 translate}}</span>
             </div>

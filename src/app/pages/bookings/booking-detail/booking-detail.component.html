@@ -65,7 +65,7 @@
                 </p>
                 <p
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
-                  <strong>{{ "register" | translate }}</strong>:{{
+                  <strong>{{ "register" | translate }}</strong>: {{
                   bookingsToCreate[0].courseDates[0].created_at
                   | date: "dd/MM/YYYY"
                   }}
@@ -76,7 +76,8 @@
                 </p>
                 <p
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
-                  <strong>{{ "from" | translate }}:</strong>: {{ booking.source }}
+                  <strong>{{ "from" | translate }}:</strong>: {{ booking.source
+                  }}
                 </p>
                 <p
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
@@ -280,7 +281,7 @@
                     "></app-level-user>
                   <!--<div mat-card-avatar [style.background-image]="'url(' + (getClientAvatar(booking.client_main_id) !== null ? getClientAvatar(booking.client_main_id) : userAvatar) + ')'"></div>-->
                   <mat-card-subtitle>{{
-                      bu.client?.first_name + " " + bu.client?.last_name
+                    bu.client?.first_name + " " + bu.client?.last_name
                     }}</mat-card-subtitle>
                   <mat-card-subtitle>{{
                     getLanguage(bu?.client?.language1_id) }} ·
@@ -744,28 +745,35 @@
                   style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
                   <mat-card-subtitle style="width:100%;">
                     <div
-                      style="width: 60%;display:inline-block;text-align: left; color: white;">
+                      style="color: white;">
                       <b>{{ 'register' | translate}}:</b>
                       <span
-                        style="margin-left: 10px;font-weight: normal;color: white;">
-                        <span style="color: white;">{{booking.created_at | date:
-                          'dd/MM/YYYY'}}</span><span
-                          style="margin-left: 10px;font-style: italic;color: white;">{{booking.created_at
-                          | date: 'HH:mm'}}h</span>
+                        style="margin-left: 5px;font-weight: normal;color: white;">
+                        <span style="color: white;">
+                          {{booking.created_at | date: 'dd/MM/YYYY'}}
+                        </span>
+                        <span
+                          style="margin-left: 5px;font-style: italic;color: white;">
+                          {{booking.created_at | date: 'HH:mm'}}h
+                        </span>
                       </span>
                     </div>
-
                     <div *ngIf="booking.user"
-                      style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-                      {{ booking.user.username }}
-                      <span style="margin-left: 10px;color: white;">({{
+                      style="color: white;font-weight: normal;">
+                      <b> {{ "by" | translate }}: </b>
+                      <span style="margin-left: 5px;color: white;">
+                        {{ booking.user.username }} ({{
                         booking.user.first_name + ' ' + booking.user.last_name
                         }})</span>
                     </div>
-                    <div
-                      style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
-                      {{ 'from' | translate }}
-                      <span style="margin-left: 10px;color: white;" >{{booking.source}}</span>
+                    <div style="color: white;font-weight: normal;">
+                      <b> {{ 'from' | translate }}: </b>
+                      <span style="margin-left: 5px;color: white;"
+                        *ngIf="booking.source == 'web'">{{'page_created' |
+                        translate}}</span>
+                      <span style="margin-left: 5px;color: white;"
+                        *ngIf="booking.source == 'admin'">{{'api_created' |
+                        translate}}</span>
                     </div>
                   </mat-card-subtitle>
                 </div>
