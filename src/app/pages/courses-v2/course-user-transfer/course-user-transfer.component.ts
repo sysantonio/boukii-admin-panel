@@ -8,7 +8,7 @@ import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
-  selector: 'vex-course-user-transfer',
+  selector: 'vex-course-user-transfer2',
   templateUrl: './course-user-transfer.component.html',
   styleUrls: ['./course-user-transfer.component.scss']
 })
