@@ -24,20 +24,19 @@
           <vex-page-layout>
             <vex-page-layout-content class="-mt-6 fullwidth"
               style="margin: 1% 0 0 0">
-              <h1 style=";font-size:24px">{{'settings.new_season' |
+              <h1 style="font-size:24px">{{'settings.new_season' |
                 translate}}</h1>
               <p style="padding: 1%; ">{{'settings.new_season.save'
                 | translate}}</p>
               <div style="width: 100%; float: left;padding: 1%">
                 <div
-                  style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
-                  <div style="float:left; width:30%">
-
+                  style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;display: flex;align-items: center;justify-content: space-between;flex-wrap: wrap;">
+                  <div>
                     <p
                       style="font-weight: bold; ">{{'settings.new_season.general'
                       | translate}}</p>
                   </div>
-                  <div style="float:left; width:70%">
+                  <div>
                     <button class="btn-primary-accent" style="float: right;"
                       (click)="saveSeason()">{{'settings.new_season.save' |
                       translate}}</button>
@@ -147,15 +146,14 @@
                     </div>
                   </div>
                   <div
-                    style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
-                    <div style="width: 5%; float:left;">
-
+                    style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;    display: flex; align-items: center;gap: 2%;">
+                    <div>
                       <button class="add-date" mat-fab (click)="addHoliday()">
                         <mat-icon svgIcon="mat:add"
                           class="icon-date"></mat-icon>
                       </button>
                     </div>
-                    <div style="width: 95%; float:left;margin: 1% 0 0 0;">
+                    <div>
                       <p>{{'settings.new_season.holiday_add' | translate }}</p>
                     </div>
                   </div>
@@ -164,14 +162,14 @@
 
               <div style="width: 100%; float: left;padding: 1%">
                 <div
-                  style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
-                  <div style="float:left; width:30%">
+                  style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;display: flex;align-items: center;justify-content: space-between;flex-wrap: wrap;">
+                  <div>
 
                     <p
                       style="font-weight: bold; ">{{'settings.school.title'
                       | translate}}</p>
                   </div>
-                  <div style="float:left; width:70%">
+                  <div>
                     <button class="btn-primary-accent" style="float: right;"
                       (click)="saveContactData();">{{'settings.school.save' |
                       translate}}</button>
@@ -273,7 +271,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'settings.sports.title'
+                      style="font-size:24px;float: left; width: 100%;">{{'settings.sports.title'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -355,7 +353,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'levels'
+                      style="font-size:24px;float: left; width: 100%;">{{'levels'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -505,7 +503,7 @@
           <div
             style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin:2%;">
             <h1
-              style=";font-size:24px;float: left; width: 100%;">{{'settings.prices.table'
+              style="font-size:24px;float: left; width: 100%;">{{'settings.prices.table'
               | translate}}</h1>
             <p style="padding: 1%; ;float: left; width: 75%;">
               {{'settings.prices.text' | translate}}<br>
@@ -559,7 +557,7 @@
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">{{'settings.book_page'
+                  style="font-size:24px;float: left; width: 100%;">{{'settings.book_page'
                   | translate}}</h1>
                 <p style="padding: 1%; ;float: left; width: 75%;">
                   {{'settings.book_page.text1' | translate}}<br>
@@ -607,7 +605,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;width: 100%;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'salarys'
+                      style="font-size:24px;float: left; width: 100%;">{{'salarys'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -636,7 +634,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'blocks'
+                      style="font-size:24px;float: left; width: 100%;">{{'blocks'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -682,7 +680,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'levels'
+                      style="font-size:24px;float: left; width: 100%;">{{'levels'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -695,7 +693,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app'
+                      style="font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app'
                       | translate}}</h1>
                     <div style="width:100%; float:left;">
                       <p style="width:100%; float:left;">{{'by_default'
@@ -720,7 +718,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app2'
+                      style="font-size:24px;float: left; width: 100%;">{{'settings.auths.messages_app2'
                       | translate}}</h1>
                     <div style="width:100%; float:left;">
                       <p style="width:100%; float:left;">{{'by_default'
@@ -754,7 +752,7 @@
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">{{'bookings'|translate}}</h1>
+                  style="font-size:24px;float: left; width: 100%;">{{'bookings'|translate}}</h1>
                 <p style="padding: 1%; ;float: left; width: 75%;">
                   {{'settings.bookings.text'|translate}}
                 </p>
@@ -764,7 +762,7 @@
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">
+                  style="font-size:24px;float: left; width: 100%;">
                   <mat-slide-toggle
                     [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle>
                   {{'op_rem'|translate}}</h1>
@@ -776,7 +774,7 @@
                       [disabled]="!hasCancellationInsurance" type="number"
                       [value]="hasCancellationInsurance ? cancellationInsurancePercent * 100 : 0"
                       (blur)="updateInsuranceValue($event)">
-
+                    <span matTextSuffix>%</span>
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; ;float: left; width: 75%;">
@@ -789,7 +787,7 @@
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">
+                  style="font-size:24px;float: left; width: 100%;">
                   <mat-slide-toggle
                     [(ngModel)]="hasBoukiiCare"></mat-slide-toggle> Boukii Care
                   <span
@@ -807,15 +805,16 @@
                     style="width:100%; float:left;;">{{'settings.bookings.boukii_care_price'
                     | translate}}</p>
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput placeholder="Percentaje" type="number" [value]="3" (blur)="updateBoukiiCareValue($event)">
-
+                    <input matInput placeholder="Percentaje" type="number"
+                      [value]="3" (blur)="updateBoukiiCareValue($event)">
+                    <span matTextSuffix>%</span>
                   </mat-form-field>
                 </div>
               </div>
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations'
+                  style="font-size:24px;float: left; width: 100%;">{{'settings.bookings.cancelations'
                   | translate}}</h1>
                 <div style="width:100%; float:left;">
                   <p style="width:100%; float:left;;"
@@ -823,7 +822,7 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput type="number" [value]="cancellationNoRem"
                       (blur)="updateCancelationNoRem($event)">
-
+                    <span matTextSuffix>h</span>
                   </mat-form-field>
                 </div>
                 <div style="width:100%; float:left;">
@@ -832,6 +831,7 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput type="number" [value]="cancellationRem"
                       (blur)="updateCancelationRem($event)">
+                    <span matTextSuffix>h</span>
                   </mat-form-field>
                 </div>
                 <p style="padding: 1%; ;float: left; width: 75%;">
@@ -843,7 +843,7 @@
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">
+                  style="font-size:24px;float: left; width: 100%;">
                   <mat-slide-toggle
                     [(ngModel)]="hasTVA"></mat-slide-toggle>{{'tva' |
                   translate}}</h1>
@@ -854,18 +854,17 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput placeholder="TVA" type="number"
                       [value]="tva* 100" (blur)="updateTVAValue($event)">
-
+                    <span matTextSuffix>%</span>
                   </mat-form-field>
                 </div>
-                <p style="padding: 1%; ;float: left; width: 75%;">
+                <!--<p style="padding: 1%; ;float: left; width: 75%;">
                   {{'settings.bookings.tva.text1' | translate}}
-                </p>
-
+                </p>-->
               </div>
               <div
                 style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                 <h1
-                  style=";font-size:24px;float: left; width: 100%;">
+                  style="font-size:24px;float: left; width: 100%;">
                   {{'currency' | translate}}</h1>
                 <div style="width:100%; float:left;">
                   <mat-form-field appearance="outline" class="flex-auto">
@@ -894,7 +893,7 @@
                   <div
                     style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'extras'
+                      style="font-size:24px;float: left; width: 100%;">{{'extras'
                       | translate}} / {{'course_options' | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -912,7 +911,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'rent'
+                      style="font-size:24px;float: left; width: 100%;">{{'rent'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -929,7 +928,7 @@
                       {{'settings.bookings.extras.text6' | translate}}
                     </p>
                     <div style="float: left;width: 100%;padding: 1%">
-                      <p style=";float: left; width: 100%;">
+                      <p style="float: left; width: 100%;">
                         {{'sport' | translate}}
                       </p>
                       <mat-checkbox [checked]="true">Ski</mat-checkbox>
@@ -1037,7 +1036,7 @@
                   <div
                     style="float: left; width: 100%;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'extras'
+                      style="font-size:24px;float: left; width: 100%;">{{'extras'
                       | translate}} / {{'course_options' | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -1054,7 +1053,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">Forfait</h1>
+                      style="font-size:24px;float: left; width: 100%;">Forfait</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
                       {{'settings.bookings.extras.text4' | translate}}<br>
@@ -1146,7 +1145,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'transport'
+                      style="font-size:24px;float: left; width: 100%;">{{'transport'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -1239,7 +1238,7 @@
                   <div
                     style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
                     <h1
-                      style=";font-size:24px;float: left; width: 100%;">{{'food'
+                      style="font-size:24px;float: left; width: 100%;">{{'food'
                       | translate}}</h1>
                     <p
                       style="padding: 1%; ;float: left; width: 75%;">
@@ -1342,22 +1341,31 @@
                 style="display: flex; justify-content: space-between;">
                 <!-- Sección del Formulario -->
                 <div class="form-container" style="flex: 1; margin-right: 1%;">
-                  <h1 style=";font-size:24px">{{'mailbox' |
+                  <h1 style="font-size:24px">{{'mailbox' |
                     translate}}</h1>
                   <p style="padding: 1%; ">{{'compose' |
                     translate}}</p>
                   <div class="block w-full">
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <mat-select placeholder="{{'mails.type' | translate}}" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
-                        <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
-                        <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
-                        <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
-                        <mat-option value="payment_link">{{'mails.type4' | translate}}</mat-option>
-                        <mat-option value="payment_confirm">{{'mails.type5' | translate}}</mat-option>
-                        <mat-option value="payment_reminder">{{'mails.type9' | translate}}</mat-option>
-<!--                        <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
+                      <mat-select placeholder="{{'mails.type' | translate}}"
+                        [(ngModel)]="mailType"
+                        (selectionChange)="setCurrentMailType()">
+                        <mat-option value="booking_confirm">{{'mails.type1' |
+                          translate}}</mat-option>
+                        <mat-option value="booking_cancel">{{'mails.type2' |
+                          translate}}</mat-option>
+                        <mat-option value="booking_update">{{'mails.type3' |
+                          translate}}</mat-option>
+                        <mat-option value="payment_link">{{'mails.type4' |
+                          translate}}</mat-option>
+                        <mat-option value="payment_confirm">{{'mails.type5' |
+                          translate}}</mat-option>
+                        <mat-option value="payment_reminder">{{'mails.type9' |
+                          translate}}</mat-option>
+                        <!--                        <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
                         <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>-->
-                        <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
+                        <mat-option value="course_reminder">{{'mails.type8' |
+                          translate}}</mat-option>
                       </mat-select>
                     </mat-form-field>
                     <!--<input cdkFocusInitial matInput type="text"/>
@@ -1532,7 +1540,7 @@
                 </div>
                 <div class="preview-container"
                   style="flex: 1; margin-left: 1%;overflow-y: auto;">
-                  <h1 style=";font-size:24px">{{'preview' |
+                  <h1 style="font-size:24px">{{'preview' |
                     translate}}</h1>
                   <div class="preview-content"
                     style="border: 1px solid #e6e6e6; padding: 1%; overflow-y: auto;">
