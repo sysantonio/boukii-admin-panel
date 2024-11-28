@@ -20,3 +20,6 @@ a {
 button {
   border-radius: 3px !important;
 }
+::ng-deep .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  background: none;
+}
