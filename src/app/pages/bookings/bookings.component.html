@@ -70,23 +70,29 @@
               style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;color: white;">
-                <span style="color: white;">{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span
-                style="margin-left: 10px;font-style: italic;color: white;">{{detailData.created_at
-                | date: 'HH:mm'}}h</span>
+                <span style="color: white;">{{detailData.created_at | date:
+                  'dd/MM/YYYY'}}</span><span
+                  style="margin-left: 10px;font-style: italic;color: white;">{{detailData.created_at
+                  | date: 'HH:mm'}}h</span>
               </span>
             </div>
             <div *ngIf="detailData.user"
-                 style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
+              style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
               {{ detailData.user.username }}
-              <span style="margin-left: 10px;color: white;">({{ detailData.user.first_name +
-              ' ' + detailData.user.last_name
+              <span style="margin-left: 10px;color: white;">({{
+                detailData.user.first_name +
+                ' ' + detailData.user.last_name
                 }})</span>
             </div>
             <div
               style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
               {{ 'from' | translate }}
-              <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'web'">{{'page_created' | translate}}</span>
-              <span style="margin-left: 10px;color: white;" *ngIf="detailData.source == 'admin'">{{'api_created' | translate}}</span>
+              <span style="margin-left: 10px;color: white;"
+                *ngIf="detailData.source == 'web'">{{'page_created' |
+                translate}}</span>
+              <span style="margin-left: 10px;color: white;"
+                *ngIf="detailData.source == 'admin'">{{'api_created' |
+                translate}}</span>
             </div>
           </mat-card-subtitle>
         </div>
@@ -224,20 +230,20 @@
                       <div class="course-title">{{bUsers?.course?.name}}</div>
                       <div class="course-label">
                         {{
-                          (bUsers?.course?.course_type === 2 ? 'private' :
-                            bUsers?.course?.course_type === 1 ? 'collective' :
-                              'activity') | translate
+                        (bUsers?.course?.course_type === 2 ? 'private' :
+                        bUsers?.course?.course_type === 1 ? 'collective' :
+                        'activity') | translate
                         }}
                         {{
-                          (bUsers?.course?.isFlexible ? 'flex' : 'fix') |
-                            translate
+                        (bUsers?.course?.isFlexible ? 'flex' : 'fix') |
+                        translate
                         }}
                         {{bUsers?.course?.sport.name}}
                       </div>
                       <ng-container *ngIf="bUsers?.course?.course_type == 1">
                         <div class="m-0 body-1"
-                             [style.background]="bUsers?.course_sub_group.degree.color"
-                             style="color: #fff;border-radius: 5px;width: 30%;text-align: center; font-size:10px;overflow: inherit;">
+                          [style.background]="bUsers?.course_sub_group.degree.color"
+                          style="color: #fff;border-radius: 5px;width: 30%;text-align: center; font-size:10px;overflow: inherit;">
                           {{bUsers?.course_sub_group.degree?.annotation}}
                           {{bUsers?.course_sub_group.degree?.name}}
                         </div>
@@ -250,7 +256,7 @@
                             *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
                             <span class="date-course">
                               <img class="icon-calendar"
-                                   src="assets/img/icons/calendar-1.svg" />
+                                src="assets/img/icons/calendar-1.svg" />
                               {{ item.date | date: 'dd.MM.YYYY' }}
                               <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
                               {{ item?.hour_end.substring(0, 5) }}h
@@ -264,9 +270,11 @@
                         <ng-container *ngFor="let item of bUsers.bookingusers">
                           <div>
                             <span class="date-course">
-                              <img class="icon-calendar" src="assets/img/icons/calendar-1.svg" />
+                              <img class="icon-calendar"
+                                src="assets/img/icons/calendar-1.svg" />
                               {{ item.date | date: 'dd.MM.YYYY' }}
-                              <i>{{ item?.hour_start.substring(0, 5) }}h</i> - {{ item?.hour_end.substring(0, 5) }}h
+                              <i>{{ item?.hour_start.substring(0, 5) }}h</i> -
+                              {{ item?.hour_end.substring(0, 5) }}h
                             </span>
                           </div>
                         </ng-container>
@@ -315,13 +323,16 @@
                           {{calculateAge(bUsers?.client?.birth_date)}}
                           {{'years' | translate }}
                         </div>
-                        <div class="m-0 body-1" *ngIf="getClientDegreeObject(bUsers.client)"
-                             [style.background]="getClientDegreeObject(bUsers.client)?.color"
-                             style="padding: 5%;;color: #fff;border-radius: 5px;width: 100%;text-align: center; font-size:10px;overflow: inherit;">
+                        <div class="m-0 body-1"
+                          *ngIf="getClientDegreeObject(bUsers.client)"
+                          [style.background]="getClientDegreeObject(bUsers.client)?.color"
+                          style="padding: 5px;color: #fff;border-radius: 5px;width: 100%;text-align: center; font-size:10px;overflow: inherit;">
                           {{getClientDegreeObject(bUsers.client)?.annotation}}
                           {{getClientDegreeObject(bUsers.client)?.name}}
                         </div>
-                        <div *ngIf="!getClientDegreeObject(bUsers.client)">{{"level" | translate}} NDF</div>
+                        <div
+                          *ngIf="!getClientDegreeObject(bUsers.client)">{{"level"
+                          | translate}} NDF</div>
                         <div style="display: flex;">
                           <vex-icon src="chat">
                           </vex-icon>
@@ -521,7 +532,7 @@
           </div>
         </div>
         <div class="list-holder" *ngIf="detailData.payment_method != 6">
-          <div class="col-left">
+          <div><!--class="col-left"-->
             <div class="col-l">
               {{ getPaymentMethod(detailData.payment_method) | translate }}
             </div>
