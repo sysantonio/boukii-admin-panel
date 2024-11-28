@@ -1017,7 +1017,7 @@
                           <tr mat-row
                             *matRowDef="let row; columns: displayedSportColumns;"></tr>
                         </table>
-                        <div class="flex-auto" style="margin: 1% 0 0 0">
+                        <div class="flex-auto" style="margin: 1% 0">
                           <button class="add-date" mat-fab>
                             <mat-icon svgIcon="mat:add"
                               class="icon-date"></mat-icon>
@@ -1320,7 +1320,7 @@
                       *matRowDef="let row; columns: displayedExtrasColumns;"></tr>
                   </table>
 
-                  <div class="flex-auto" style="margin: 1% 0 0 0">
+                  <div class="flex-auto" style="margin: 1% 0">
                     <button class="add-date" mat-fab
                       (click)="createExtra('Food', false, null, null)"
                       [disabled]="dataSourceFood.data.length === 2">
