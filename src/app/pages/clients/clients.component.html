@@ -244,7 +244,7 @@
             </ng-container>
 
             <div style="width:100%; margin-top:20px;">
-              <button class="btn-primary-accent" style="width: 100%;"
+              <button class="btn-primary-accent" style="width: 100%;" *ngIf="checkClientStatus(detailData.clients_schools)"
                 (click)="createBooking();">{{'add_booking' | translate
                 }}</button>
             </div>

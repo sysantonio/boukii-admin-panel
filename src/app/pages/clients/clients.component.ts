@@ -84,12 +84,24 @@ export class ClientsComponent {
     });
   }
 
+  checkClientStatus(data: any) {
+    let ret = false;
+    data.forEach(element => {
+      if (element.school_id === this.user.schools[0].id) {
+        ret = element.accepted_at !== null;
+      }
+    });
+
+    return ret;
+  }
+
+
   showDetailEvent(event: any) {
 
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.mainIdSelected = true;
       this.crudService.get('/clients/'+event.item.id,
-        ['clientSports.sport', 'clientSports.degree',
+        ['clientSports.sport', 'clientSports.degree', 'clientsSchools',
           'utilizers.clientSports.sport', 'utilizers.clientSports.degree'])
       .subscribe((data) => {
         this.detailData = data.data;
