@@ -287,7 +287,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.minDate = new Date();
-    if (this.externalData) {
+    if (this.externalData && this.externalData.date) {
       this.minDate = new Date(this.externalData.date);
     }
     // Establecer la fecha mínima como la fecha actual
@@ -375,6 +375,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
           setTimeout(() => {
             //this.clientsForm.patchValue(this.clients[0]);
+            if (this.externalData && this.externalData.client) {
+              this.getUtilzers(this.externalData.client, false)
+            }
+
             this.loadingCalendar = false;
             this.loading = false;
           }, 800);
@@ -429,7 +433,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   setCourseType(type: string, id: number, levelSelected = null) {
     this.monthAndYear = new Date();
-    if (this.externalData) {
+    if (this.externalData && this.externalData.date) {
       this.monthAndYear = new Date(this.externalData.date);
     }
 
@@ -554,7 +558,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       } else {
         this.calculatePaxesPrivateFix();
       }
-      if (this.externalData) {
+      if (this.externalData && this.externalData.date) {
         this.setCourseDateItemPrivateNoFlexible(this.courseDates[0], { value: this.externalData.date });
         this.courseDates[0].hour_start = this.externalData.hour;
         this.generateCourseDurations(

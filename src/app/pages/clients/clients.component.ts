@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BookingsCreateUpdateModalComponent } from '../bookings/bookings-create-update-modal/bookings-create-update-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { BookingsCreateUpdateComponent } from '../bookings/bookings-create-update/bookings-create-update.component';
 
 @Component({
   selector: 'vex-clients',
@@ -66,7 +67,7 @@ export class ClientsComponent {
 
   createBooking() {
     this.detailData.client_sport = this.clientSport;
-    const dialogRef = this.dialog.open(BookingsCreateUpdateModalComponent, {
+    const dialogRef = this.dialog.open(BookingsCreateUpdateComponent, {
       width: '100%',
       height: '1200px',
       maxWidth: '90vw',
