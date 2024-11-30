@@ -1,7 +1,4 @@
 .dropdown {
-  background: var(--background-foreground);
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
   box-shadow: var(--elevation-z4);
   max-width: 100vw;
   overflow: hidden;
@@ -28,7 +25,8 @@
 }
 
 .dropdown-footer {
-  background: var(--background-app-bar);
+  background: var(--is-light-theme, var(--background-app-bar))
+    var(--is-dark-theme, #222222);
   border-top: 1px solid var(--foreground-divider);
   padding: var(--padding-8) var(--padding);
 }

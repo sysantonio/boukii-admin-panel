@@ -1,7 +1,7 @@
 <div class="body-2 p-6 bg-primary text-primary-contrast">
-  <p>{{'today' | translate}}</p>
-  <div class="display-1">{{ dayName }}</div>
-  <div class="display-1">{{ date }}</div>
+  <p class="white">{{'today' | translate}}</p>
+  <div class="display-1 white">{{ dayName }}</div>
+  <div class="display-1 white">{{ date }}</div>
 </div>
 
 <mat-divider></mat-divider>
@@ -9,11 +9,13 @@
 <mat-nav-list>
   <div class="section-header">
     <h3 matSubheader>{{'today_task_list' | translate}}</h3>
-    <div class="navigation-buttons">
-      <button mat-icon-button (click)="previousPage()" [disabled]="currentPage === 1" >
+    <div class="navigation-buttons" *ngIf="paginatedCurrentTasks.length>0">
+      <button mat-icon-button (click)="previousPage()"
+        [disabled]="currentPage === 1">
         <mat-icon svgIcon="mat:navigate_before"></mat-icon>
       </button>
-      <button mat-icon-button (click)="nextPage()"[disabled]="currentPage * pageSize >= todayTasks.length">
+      <button mat-icon-button (click)="nextPage()"
+        [disabled]="currentPage * pageSize >= todayTasks.length">
         <mat-icon svgIcon="mat:navigate_next"></mat-icon>
       </button>
     </div>
@@ -25,11 +27,13 @@
   <mat-divider></mat-divider>
   <div class="section-header">
     <h3 matSubheader>{{'all_tasks' | translate}}</h3>
-    <div class="navigation-buttons">
-      <button mat-icon-button (click)="previousPageAll()" [disabled]="currentPageAll === 1" >
+    <div class="navigation-buttons" *ngIf="paginatedAllTasks.length>0">
+      <button mat-icon-button (click)="previousPageAll()"
+        [disabled]="currentPageAll === 1">
         <mat-icon svgIcon="mat:navigate_before"></mat-icon>
       </button>
-      <button mat-icon-button (click)="nextPageAll()"[disabled]="currentPageAll * pageSizeAll >= allTasks.length">
+      <button mat-icon-button (click)="nextPageAll()"
+        [disabled]="currentPageAll * pageSizeAll >= allTasks.length">
         <mat-icon svgIcon="mat:navigate_next"></mat-icon>
       </button>
     </div>

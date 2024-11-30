@@ -1,5 +1,6 @@
 {
-  "add": "Aggiungere...",
+  "add...": "Aggiungere...",
+  "add": "Aggiungere",
   "calendar": "Calendario",
   "vouchers": "Buoni acquisto",
   "gift_vouchers": "Buoni regalo",
@@ -7,9 +8,8 @@
   "add_client": "Aggiungi cliente",
   "add_task": "Aggiungi attività",
   "add_booking": "Aggiungi prenotazione",
-  "add_subgroup":"Aggiungi un sottogruppo",
-  "duracion":"Durata",
-
+  "add_subgroup": "Aggiungi un sottogruppo",
+  "duracion": "Durata",
   "france": "francese",
   "english": "Inglese",
   "germany": "Tedesco",
@@ -278,7 +278,6 @@
   "courses.transfer.title": "Studente trasferitore",
   "bonus.new_bonus": "Nuovo bonus",
   "bonus.edit_bonus": "Modifica bonus",
-
   "bonus.code": "Codice",
   "bonus.generate": "Genera il codice automaticamente",
   "monitors.creation.title": "Nuovo monitor",
@@ -654,6 +653,5 @@
   "emails.bookingCreate.footer2": "Per ulteriori informazioni contattare: ",
   "emails.bookingCreate.footer3": "Condizioni generali di vendita",
   "snackbar.password_updated_error": "Il link per reimpostare la password è scaduto. Si prega di generarne uno nuovo e riprovare.",
-  "link_send":"Link inviato"
-
+  "link_send": "Link inviato"
 }

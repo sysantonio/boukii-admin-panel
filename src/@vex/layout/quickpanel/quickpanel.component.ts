@@ -21,7 +21,7 @@ export class QuickpanelComponent implements OnInit {
   currentPageAll = 1;
   pageSizeAll = 5;
 
-  user:any;
+  user: any;
   constructor(private crudService: ApiCrudService, private translateService: TranslateService) { }
 
   ngOnInit() {
@@ -32,14 +32,14 @@ export class QuickpanelComponent implements OnInit {
   }
 
   getTodayTasks() {
-    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&start_date='+moment().format('YYYY-MM-DD') + '&end_date='+moment().format('YYYY-MM-DD'))
+    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&start_date=' + moment().format('YYYY-MM-DD') + '&end_date=' + moment().format('YYYY-MM-DD'))
       .subscribe((tasks) => {
         this.todayTasks = tasks.data;
       })
   }
 
   getAllTasks() {
-    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id + '&start_date='+moment().add(1, 'd').format('YYYY-MM-DD'))
+    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&start_date=' + moment().add(1, 'd').format('YYYY-MM-DD'))
       .subscribe((tasks) => {
         this.allTasks = tasks.data;
       })
