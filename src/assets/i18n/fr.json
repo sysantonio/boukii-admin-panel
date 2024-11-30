@@ -245,7 +245,7 @@
   "bookings_page.select_utilizers": "Sélectionnez un ou plusieurs participants",
   "courses.title": "Cours",
   "courses.levels_and_groups": "Niveaux / Groupes",
-  "courses.new": "Nouveau cours",
+  "courses.new": "Ajouter un sous-groupe",
   "courses.update": "Édition de cours",
   "courses.coursename": "Nom du cours",
   "courses.min_age": "Âge minimum",
