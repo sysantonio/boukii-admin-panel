@@ -88,7 +88,9 @@
     </div>-->
 
     <mat-slide-toggle [(ngModel)]="layoutService.isDarkMode"
-      (toggleChange)="layoutService.toggleDarkMode()">{{layoutService.isDarkMode?'Modo Oscuro':'Modo Claro'}}</mat-slide-toggle>
+      (toggleChange)="layoutService.toggleDarkMode()">
+      {{layoutService.isDarkMode?'Modo Oscuro':'Modo Claro' | translate}}
+    </mat-slide-toggle>
 
     <div class="px-1">
       <vex-toolbar-notifications></vex-toolbar-notifications>

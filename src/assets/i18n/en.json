@@ -10,7 +10,8 @@
   "add_booking": "Add reservation",
   "add_subgroup":"Add a subgroup",
   "duracion":"Duration",
-
+  "Modo Claro": "Light Mode",
+  "Modo Oscuro": "Dark Mode",
   "france": "French",
   "english": "English",
   "germany": "German",
