@@ -213,7 +213,7 @@
                                   {{'groups' | translate}} {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
                                 </div>
                                 <div style="width: 100%; margin-top: 10%;height: 60px">
-                                  <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">Añadir subgrupo</button>
+                                  <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">{{'add_subgroup' | translate }}</button>
                                 </div>
                               </div>
 
@@ -249,7 +249,7 @@
                               </div>
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%;color: var(--color-dark1);background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;text-align: center;border-radius:10px" >
-                                  Duracion<br>
+                                  {{'duracion' | translate}}<br>
                                   {{calculateFormattedDuration(defaults.course_dates[daySelectedIndex].hour_start, defaults.course_dates[daySelectedIndex].hour_end)}}
                                 </div>
                                 <mat-form-field appearance="outline" style="width: 100%; margin-top: 10%;margin-right: 10%">

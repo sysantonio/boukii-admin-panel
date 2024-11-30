@@ -7,6 +7,9 @@
   "add_client": "Add client",
   "add_task": "Add task",
   "add_booking": "Add reservation",
+  "add_subgroup":"Add a subgroup",
+  "duracion":"Duration",
+
   "france": "French",
   "english": "English",
   "germany": "German",

@@ -7,6 +7,9 @@
   "add_client": "Kunde hinzufügen",
   "add_task": "Aufgabe hinzufügen",
   "add_booking": "Reservierung hinzufügen",
+  "add_subgroup":"Untergruppe hinzufügen",
+  "duracion":"Dauer",
+
   "france": "Französisch",
   "english": "Englisch",
   "germany": "Deutsch",

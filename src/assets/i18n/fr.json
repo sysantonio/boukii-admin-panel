@@ -7,6 +7,9 @@
   "add_client": "Ajouter un client",
   "add_task": "Ajouter une tâche",
   "add_booking": "Ajouter une réservation",
+  "add_subgroup":"Ajouter un sous-groupe",
+  "duracion":"Durée",
+
   "france": "Français",
   "english": "Anglais",
   "germany": "Allemand",

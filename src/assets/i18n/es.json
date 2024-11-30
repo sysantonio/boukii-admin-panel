@@ -1,5 +1,6 @@
 {
-  "add": "Añadir...",
+  "add...": "Añadir...",
+  "add": "Añadir",
   "calendar": "Calendario",
   "vouchers": "Bonos de compra",
   "gift_vouchers": "Bonos de regalo",
@@ -7,6 +8,9 @@
   "add_client": "Añadir cliente",
   "add_task": "Añadir tarea",
   "add_booking": "Añadir reserva",
+  "add_subgroup":"Agregar un subgrupo",
+  "duracion":"Duración",
+
   "france": "Francés",
   "english": "Inglés",
   "spanish": "Español",
