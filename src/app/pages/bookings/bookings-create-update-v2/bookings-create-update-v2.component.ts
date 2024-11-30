@@ -536,7 +536,6 @@ export class BookingsCreateUpdateV2Component {
           this.crudService.post('/admin/bookings/payments/'+result.data.id, result.data.basket)
             .subscribe((result: any) => {
               if(bookingData.payment_method_id == 2) {
-                console.log((result));
                 window.open(result.data, "_self");
               } else {
                 this.router.navigate(['/bookings/update/' + result.data.id]);

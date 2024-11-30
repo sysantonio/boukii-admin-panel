@@ -527,7 +527,7 @@ export class SettingsComponent implements OnInit {
   }
 
   onFullTabChange(event: any) {
-    if(event.index == 7) {
+    if (event.index == 7) {
       this.setCurrentMailType();
     }
   }
@@ -669,13 +669,11 @@ export class SettingsComponent implements OnInit {
   saveSeason() {
 
     let holidays = [];
-
     if (this.season && this.season !== null) {
-
       holidays = this.holidays;
     } else {
       this.holidaysSelected.forEach(element => {
-        console.log(moment(element).format('YYYY-MM-DD'));
+        //console.log(moment(element).format('YYYY-MM-DD'));
         holidays.push(moment(element).format('YYYY-MM-DD'));
       });
     }
@@ -1065,12 +1063,8 @@ export class SettingsComponent implements OnInit {
 
   updateSportDegrees() {
     this.dataSourceLevels.data.forEach(element => {
-      this.crudService.update('/degrees', element, element.id)
-        .subscribe((degree) => {
-          console.log(degree);
-        })
+      this.crudService.update('/degrees', element, element.id).subscribe((degree) => { })
     });
-
     this.snackbar.open(this.translateService.instant('snackbar.settings.levels'), 'OK', { duration: 3000 });
   }
 

@@ -186,8 +186,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
         map(value => this._filterStations(value))
       );
 
-      this.myControlStations.valueChanges.subscribe(value => {
-        this.formInfoAccount.get('station').setValue(value);
+    this.myControlStations.valueChanges.subscribe(value => {
+      this.formInfoAccount.get('station').setValue(value);
     });
 
     this.filteredCountries = this.myControlCountries.valueChanges.pipe(
@@ -426,7 +426,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', { duration: 3000 });
     }
   }
 
@@ -443,11 +443,11 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
-            if(element.id === sport.sport_id) {
+            if (element.id === sport.sport_id) {
               sport.name = element.name;
             }
           });
@@ -476,7 +476,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
         this.crudService.create('/monitors', this.defaults)
           .subscribe((monitor) => {
-            this.snackbar.open(this.translateService.instant('snackbar.monitor.create'), 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.monitor.create'), 'OK', { duration: 3000 });
 
             const schoolRel = {
               monitor_id: monitor.data.id,
@@ -486,24 +486,22 @@ export class MonitorsCreateUpdateComponent implements OnInit {
             }
 
             this.crudService.create('/monitors-schools', schoolRel)
-              .subscribe((a) => {
-                console.log(a)
-              })
+            .subscribe((a) => { })
 
-            this.crudService.create('/monitors-schools', {monitor_id: monitor.data.id, school_id: this.user.schools[0].id})
+            this.crudService.create('/monitors-schools', { monitor_id: monitor.data.id, school_id: this.user.schools[0].id })
               .subscribe((monitorSchool) => {
                 this.sportsData.data.forEach(element => {
-                  this.crudService.create('/monitor-sports-degrees', {is_default: false, monitor_id: monitor.data.id, sport_id: element.sport_id,
-                    school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id, allow_adults: element.allowAdults ? element.allowAdults : false})
+                  this.crudService.create('/monitor-sports-degrees', {
+                    is_default: false, monitor_id: monitor.data.id, sport_id: element.sport_id,
+                    school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id, allow_adults: element.allowAdults ? element.allowAdults : false
+                  })
                     .subscribe((e) => {
                       this.authorisedLevels.forEach(auLevel => {
 
-                        if(e.data.sport_id === auLevel.sport_id) {
+                        if (e.data.sport_id === auLevel.sport_id) {
 
-                          this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel.id})
-                          .subscribe((d) => {
-                            console.log(d)
-                          })
+                          this.crudService.create('/monitor-sport-authorized-degrees', { monitor_sport_id: e.data.id, degree_id: auLevel.id })
+                          .subscribe((d) => {                         })
                         }
                       });
                     })
@@ -518,10 +516,10 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.station_id)
+          this.crudService.get('/stations/' + element.station_id)
             .subscribe((data) => {
               this.stations.push(data.data);
 
@@ -531,14 +529,14 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
-          .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data;
-          });
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + element.sport_id)
+            .subscribe((data) => {
+              this.schoolSports[idx].degrees = data.data;
+            });
         });
       })
   }
@@ -570,7 +568,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   getSalarySchoolData() {
-    this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         this.salaryData = data.data;
       })
@@ -578,12 +576,12 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   authoriseLevel(level) {
 
-      const index = this.authorisedLevels.find(l => l.id === level.id && l.sport_id === level.sport_id);
-      if (index) {
-        this.authorisedLevels.splice(index, 1);
-      } else {
-        this.authorisedLevels.push(level);
-      }
+    const index = this.authorisedLevels.find(l => l.id === level.id && l.sport_id === level.sport_id);
+    if (index) {
+      this.authorisedLevels.splice(index, 1);
+    } else {
+      this.authorisedLevels.push(level);
+    }
   }
 
   isAuthorized(level: any) {
@@ -592,20 +590,20 @@ export class MonitorsCreateUpdateComponent implements OnInit {
 
   setValueSpouse(value: any) {
 
-      this.defaults.partner_works = value.value === 'y';
-      this.cdr.detectChanges();
+    this.defaults.partner_works = value.value === 'y';
+    this.cdr.detectChanges();
   }
 
   setValueLocation(value: any) {
 
-      this.defaults.family_allowance = value.value === 'y';
-      this.cdr.detectChanges();
+    this.defaults.family_allowance = value.value === 'y';
+    this.cdr.detectChanges();
 
   }
 
   goToStep3(stepper: MatStepper) {
-    if(this.selectedLanguages.length === 0) {
-      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', {duration: 3000});
+    if (this.selectedLanguages.length === 0) {
+      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', { duration: 3000 });
       return;
     }
 
@@ -613,8 +611,8 @@ export class MonitorsCreateUpdateComponent implements OnInit {
   }
 
   goToStep5(stepper: MatStepper) {
-    if(this.selectedSports.length === 0) {
-      this.snackbar.open(this.translateService.instant('snackbar.client.sport_language'), 'OK', {duration: 3000});
+    if (this.selectedSports.length === 0) {
+      this.snackbar.open(this.translateService.instant('snackbar.client.sport_language'), 'OK', { duration: 3000 });
       return;
     }
 

@@ -769,7 +769,6 @@ export class BookingDetailModalComponent implements OnInit {
         this.crudService.post('/admin/bookings/payments/' + this.id, basket)
 
           .subscribe((result: any) => {
-            console.log((result));
             window.open(result.data, "_self");
           })
       } else {
@@ -1018,8 +1017,6 @@ export class BookingDetailModalComponent implements OnInit {
 
     this.crudService.post('/availability', rq)
       .subscribe((data) => {
-        console.log(data);
-
         this.defaultsBookingUser.degree_id = level.id;
         this.courses = data.data;
         if (!fromPrivate) {
@@ -1704,10 +1701,7 @@ export class BookingDetailModalComponent implements OnInit {
                 .subscribe((result) => {
 
                   this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
-                        .subscribe((vresult) => {
-                          console.log(vresult);
-
-                        })
+                        .subscribe((vresult) => { })
                         this.snackbar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', {duration: 1000});
                         this.getData();
                 })
@@ -1832,10 +1826,7 @@ export class BookingDetailModalComponent implements OnInit {
                 .subscribe((result) => {
 
                   this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
-                        .subscribe((vresult) => {
-                          console.log(vresult);
-
-                        })
+                        .subscribe((vresult) => { })
                   this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
                   this.dialogRef.close();
 
@@ -1987,9 +1978,7 @@ export class BookingDetailModalComponent implements OnInit {
             .subscribe((result) => {
 
               this.crudService.create('/vouchers-logs', {voucher_id: result.data.id,booking_id: this.id, amount: -vData.quantity})
-                .subscribe((vresult) => {
-                console.log(vresult);
-            })
+                .subscribe((vresult) => { })
           })
           this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
 

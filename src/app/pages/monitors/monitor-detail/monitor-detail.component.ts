@@ -3,7 +3,7 @@ import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup, Validator
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Observable, map, startWith, retry, catchError, of, forkJoin, tap} from 'rxjs';
+import { Observable, map, startWith, retry, catchError, of, forkJoin, tap } from 'rxjs';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -22,8 +22,8 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { BookingDetailModalComponent } from '../../bookings/booking-detail-modal/booking-detail-modal.component';
 import { CourseUserTransferTimelineComponent } from '../../timeline/course-user-transfer-timeline/course-user-transfer-timeline.component';
 import { TranslateService } from '@ngx-translate/core';
-import {DateAdapter} from '@angular/material/core';
-import {switchMap} from 'rxjs/operators';
+import { DateAdapter } from '@angular/material/core';
+import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'vex-monitor-detail',
   templateUrl: './monitor-detail.component.html',
@@ -41,7 +41,7 @@ export class MonitorDetailComponent {
   columns: TableColumn<any>[] = [
     { label: 'Id', property: 'id', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'type', property: 'booking', type: 'booking_users_image_monitors', visible: true },
-    { label: 'course', property: 'course', type: 'course_type_data', visible: true},
+    { label: 'course', property: 'course', type: 'course_type_data', visible: true },
     { label: 'client', property: 'client', type: 'client', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'Options', property: 'options', type: 'text', visible: true },
@@ -118,8 +118,8 @@ export class MonitorDetailComponent {
   minDateChild: Date;
   childrenData = new _MatTableDataSource([]);
 
-  displayedCurrentColumns: string[] = [ 'delete', 'name', 'level', 'salary', 'auth'];
-  displayedColumns: string[] = [ 'name', 'level', 'salary', 'auth'];
+  displayedCurrentColumns: string[] = ['delete', 'name', 'level', 'salary', 'auth'];
+  displayedColumns: string[] = ['name', 'level', 'salary', 'auth'];
   displayedColumnsChildren: string[] = ['name', 'date'];
   mockCivilStatus: string[] = ['Single', 'Mariée', 'Veuf', 'Divorcé'];
   mockCountriesData = MOCK_COUNTRIES;
@@ -189,30 +189,30 @@ export class MonitorDetailComponent {
 
   //Planificador
   hoursRange: string[];
-  hoursRangeMinusLast:string[];
+  hoursRangeMinusLast: string[];
   hoursRangeMinutes: string[];
-  activeSchool:any=null;
-  sports:any[] = [];
-  degrees:any[] = [];
-  showDetailTimeline:boolean=false;
-  idDetailTimeline:any;
-  taskDetailTimeline:any;
-  showBlockTimeline:boolean=false;
-  idBlockTimeline:any;
-  blockDetailTimeline:any;
+  activeSchool: any = null;
+  sports: any[] = [];
+  degrees: any[] = [];
+  showDetailTimeline: boolean = false;
+  idDetailTimeline: any;
+  taskDetailTimeline: any;
+  showBlockTimeline: boolean = false;
+  idBlockTimeline: any;
+  blockDetailTimeline: any;
 
-  showEditBlock:boolean = false;
-  allHoursDay:boolean=false;
-  startTimeDay:string;
-  endTimeDay:string;
-  nameBlockDay:string;
-  divideDay:boolean=false;
-  startTimeDivision:string;
-  endTimeDivision:string;
+  showEditBlock: boolean = false;
+  allHoursDay: boolean = false;
+  startTimeDay: string;
+  endTimeDay: string;
+  nameBlockDay: string;
+  divideDay: boolean = false;
+  startTimeDivision: string;
+  endTimeDivision: string;
 
-  monitorSchoolRel:any;
-  plannerTasks:any[] =[];
-  vacationDays:any[];
+  monitorSchoolRel: any;
+  plannerTasks: any[] = [];
+  vacationDays: any[];
   tasksCalendarStyle: any[];
   filteredTasks: any[];
   currentDate = new Date();
@@ -222,11 +222,11 @@ export class MonitorDetailComponent {
   currentMonth: string = '';
   weeksInMonth: any[] = [];
 
-  searchDate:any;
+  searchDate: any;
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private crudService: ApiCrudService, private snackbar: MatSnackBar, private router: Router,
-              private activatedRoute: ActivatedRoute, private dialog: MatDialog, public translateService: TranslateService,
-              private dateAdapter: DateAdapter<Date>) {
+    private activatedRoute: ActivatedRoute, private dialog: MatDialog, public translateService: TranslateService,
+    private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.mockLevelData.forEach(level => {
@@ -346,7 +346,7 @@ export class MonitorDetailComponent {
       );
 
       this.myControlCountries.valueChanges.subscribe(country => {
-        if(country) {
+        if (country) {
           this.myControlProvinces.setValue('');  // Limpia la selección anterior de la provincia
           this.filteredProvinces = this._filterProvinces(country.id);
         }
@@ -357,12 +357,11 @@ export class MonitorDetailComponent {
   }
 
   getData() {
-    return this.crudService.get('/monitors/'+this.id, ['user'])
+    return this.crudService.get('/monitors/' + this.id, ['user'])
       .pipe(
         tap((data) => {
 
           this.defaults = data.data;
-          console.log(this.defaults);
           this.defaultsUser = data.data.user;
           this.setInitLanguages();
 
@@ -422,7 +421,7 @@ export class MonitorDetailComponent {
             this.getSportsTimeline();
 
 
-            this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id='+this.user.schools[0].id+'&is_active=1')
+            this.crudService.list('/seasons', 1, 10000, 'asc', 'id', '&school_id=' + this.user.schools[0].id + '&is_active=1')
               .subscribe((season) => {
                 let hour_start = '08:00';
                 let hour_end = '18:00';
@@ -449,7 +448,7 @@ export class MonitorDetailComponent {
 
   }
 
-  onDateChange(event:any) {
+  onDateChange(event: any) {
     this.currentDate = event.value;
     this.timelineView = 'day';
     this.updateView();
@@ -629,7 +628,7 @@ export class MonitorDetailComponent {
           this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
         }
       } else {
-        this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', { duration: 3000 });
       }
     }
   }
@@ -643,11 +642,11 @@ export class MonitorDetailComponent {
   }
 
   getSports() {
-    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
-            if(element.id === sport.sport_id) {
+            if (element.id === sport.sport_id) {
               sport.name = element.name;
               sport.icon_selected = element.icon_selected;
             }
@@ -684,11 +683,11 @@ export class MonitorDetailComponent {
       );
   }
   getSchoolSportDegreesOld() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + element.sport_id)
             .subscribe((data) => {
               this.schoolSports[idx].degrees = data.data
             });
@@ -698,7 +697,7 @@ export class MonitorDetailComponent {
   }
 
   getSchoolRel() {
-    return this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id='+this.id +'&school_id='+this.user.schools[0].id)
+    return this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id=' + this.id + '&school_id=' + this.user.schools[0].id)
       .pipe(
         map((data) => {
           this.monitorSchoolRel = data.data;
@@ -708,7 +707,7 @@ export class MonitorDetailComponent {
 
   getMonitorSportsDegree() {
     return this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id',
-      '&monitor_id='+this.id+'&school_id='+this.user.schools[0].id, null, null, null,
+      '&monitor_id=' + this.id + '&school_id=' + this.user.schools[0].id, null, null, null,
       ['monitorSportAuthorizedDegrees'])
       .pipe(
         map((monitorDegree) => {
@@ -745,11 +744,9 @@ export class MonitorDetailComponent {
           this.selectedSports = selectedSports;
           this.sportsControl.setValue(selectedSports);
           this.monitorSportsDegree = monitorDegree.data;
-
-          console.log(this.sportsCurrentData.data);
           const availableSports = [];
           this.schoolSports.forEach(element => {
-            if(!this.sportsCurrentData.data.find((s) => s.id === element.id)) {
+            if (!this.sportsCurrentData.data.find((s) => s.id === element.id)) {
               availableSports.push(element);
             }
           });
@@ -762,7 +759,7 @@ export class MonitorDetailComponent {
             selectedSports.forEach(element => {
               element.degrees.forEach(dg => {
                 if (dg.id === mDG.monitor_sport_authorized_degrees[0]?.degree_id) {
-                  element.authorisedLevels =  mDG.monitor_sport_authorized_degrees;
+                  element.authorisedLevels = mDG.monitor_sport_authorized_degrees;
 
                 }
               });
@@ -777,7 +774,7 @@ export class MonitorDetailComponent {
 
   getMonitorSportsDegreeOld() {
     this.crudService.list('/monitor-sports-degrees', 1, 10000, 'desc', 'id',
-      '&monitor_id='+this.id+'&school_id='+this.user.schools[0].id, null, null, null, ['monitorSportAuthorizedDegrees'])
+      '&monitor_id=' + this.id + '&school_id=' + this.user.schools[0].id, null, null, null, ['monitorSportAuthorizedDegrees'])
       .subscribe((monitorDegree) => {
         let selectedSports = []; // Obtén los deportes actualmente seleccionados o inicializa un arreglo vacío
         const level = [];
@@ -812,11 +809,9 @@ export class MonitorDetailComponent {
         this.selectedSports = selectedSports;
         this.sportsControl.setValue(selectedSports);
         this.monitorSportsDegree = monitorDegree.data;
-
-        console.log(this.sportsCurrentData.data);
         const availableSports = [];
         this.schoolSports.forEach(element => {
-          if(!this.sportsCurrentData.data.find((s) => s.id === element.id)) {
+          if (!this.sportsCurrentData.data.find((s) => s.id === element.id)) {
             availableSports.push(element);
           }
         });
@@ -834,12 +829,9 @@ export class MonitorDetailComponent {
                 element.degrees.forEach(dg => {
                   if (dg.id === data.data[0].degree_id) {
                     element.authorisedLevels = data.data;
-
                   }
                 });
-
               });
-              console.log(data);
             })
         });
       })
@@ -892,7 +884,7 @@ export class MonitorDetailComponent {
   setInitLanguages() {
 
     this.languages.forEach(element => {
-      if(element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
+      if (element.id === this.defaults.language1_id || element.id === this.defaults.language2_id || element.id === this.defaults.language3_id
         || element.id === this.defaults.language4_id || element.id === this.defaults.language5_id || element.id === this.defaults.language6_id) {
         this.selectedLanguages.push(element);
       }
@@ -986,21 +978,21 @@ export class MonitorDetailComponent {
   authoriseCurrentLevel(level, element) {
 
     const index = element.authorisedLevels ? element.authorisedLevels.findIndex(l => l.degree_id === level.id) : -1;
-    const authLevel = element.authorisedLevels ?  element.authorisedLevels.find(l => l.degree_id === level.id): null;
+    const authLevel = element.authorisedLevels ? element.authorisedLevels.find(l => l.degree_id === level.id) : null;
     if (index !== -1) {
       this.crudService.delete('/monitor-sport-authorized-degrees', authLevel.id)
         .subscribe(() => {
           element.authorisedLevels.splice(index, 1);
-          this.snackbar.open(this.translateService.instant('snackbar.monitor.delete_auth'), 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.monitor.delete_auth'), 'OK', { duration: 3000 });
         });
     } else {
-      this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: element.monitor_sports_degree_id, degree_id: level.id})
+      this.crudService.create('/monitor-sport-authorized-degrees', { monitor_sport_id: element.monitor_sports_degree_id, degree_id: level.id })
         .subscribe((data) => {
-          if( !element.authorisedLevels) {
+          if (!element.authorisedLevels) {
             element.authorisedLevels = [];
           }
           element.authorisedLevels.push(data.data);
-          this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth'), 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth'), 'OK', { duration: 3000 });
 
         });
     }
@@ -1021,7 +1013,7 @@ export class MonitorDetailComponent {
 
       this.crudService.update('/monitor-sports-degrees', data, auLevel.monitor_sport_id)
         .subscribe(() => {
-          this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth_adult'), 'OK', {duration: 3000});
+          this.snackbar.open(this.translateService.instant('snackbar.monitor.add_auth_adult'), 'OK', { duration: 3000 });
           this.getData();
         })
     });
@@ -1041,7 +1033,7 @@ export class MonitorDetailComponent {
   }
 
   getSalarySchoolData() {
-    return this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id='+this.user.schools[0].id)
+    return this.crudService.list('/school-salary-levels', 1, 10000, 'desc', 'pay', '&school_id=' + this.user.schools[0].id)
       .pipe(
         map((data) => {
           this.salaryData = data.data;
@@ -1052,9 +1044,9 @@ export class MonitorDetailComponent {
   checkMonitorAuth(item: any, id: any) {
     let ret = false;
 
-    if (item.authorisedLevels){
+    if (item.authorisedLevels) {
       item.authorisedLevels.forEach(element => {
-        if((element.degree_id || element.id) === id.id && !ret) {
+        if ((element.degree_id || element.id) === id.id && !ret) {
           ret = true;
         }
       });
@@ -1066,9 +1058,9 @@ export class MonitorDetailComponent {
   checkMonitorAuthAdults(item: any) {
     let ret = false;
 
-    if (item.authorisedLevels){
+    if (item.authorisedLevels) {
       this.monitorSportsDegree.forEach(element => {
-        if(element.sport_id === item.sport_id && element.allow_adults && !ret) {
+        if (element.sport_id === item.sport_id && element.allow_adults && !ret) {
           ret = true;
         }
       });
@@ -1080,7 +1072,7 @@ export class MonitorDetailComponent {
   getSalary(id: any) {
     let ret: any;
     this.salaryData.forEach(element => {
-      if(element.id === id) {
+      if (element.id === id) {
         ret = element;
       }
     });
@@ -1093,7 +1085,7 @@ export class MonitorDetailComponent {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-      data: {message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title')}
+      data: { message: this.translateService.instant('delete_text'), title: this.translateService.instant('delete_title') }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -1113,8 +1105,6 @@ export class MonitorDetailComponent {
 
   save() {
     this.loading = true;
-    console.log(this.defaults);
-    console.log(this.defaultsUser);
     this.defaultsUser.email = this.defaults.email;
     this.defaultsUser.image = this.imagePreviewUrl;
     this.defaults.image = this.imagePreviewUrl;
@@ -1136,27 +1126,23 @@ export class MonitorDetailComponent {
               active_school: this.defaultsUser.active
             }
             this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel[0].id)
-              .subscribe((a) => {
-                console.log(a)
-              })
+            .subscribe((a) => {})
             // revisar a partir de aqui
             this.sportsData.data.forEach(element => {
-              this.crudService.create('/monitor-sports-degrees', {is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id})
+              this.crudService.create('/monitor-sports-degrees', { is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id })
                 .subscribe((e) => {
                   this.authorisedLevels.forEach(auLevel => {
 
-                    if(e.data.sport_id === auLevel.sport_id) {
+                    if (e.data.sport_id === auLevel.sport_id) {
 
-                      this.crudService.create('/monitor-sport-authorized-degrees', {monitor_sport_id: e.data.id, degree_id: auLevel.id})
-                        .subscribe((d) => {
-                          console.log(d)
-                        })
+                      this.crudService.create('/monitor-sport-authorized-degrees', { monitor_sport_id: e.data.id, degree_id: auLevel.id })
+                        .subscribe((d) => {                   })
                     }
                   });
                 })
             });
             setTimeout(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', { duration: 3000 });
               window.location.reload();
             }, 3000);
           })
@@ -1164,17 +1150,23 @@ export class MonitorDetailComponent {
   }
 
   updateLevel(monitorDegree, level) {
-    this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
-      degree_id: level.id, salary_level: monitorDegree.salary_id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+    this.crudService.update('/monitor-sports-degrees', {
+      is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
+      degree_id: level.id, salary_level: monitorDegree.salary_id
+    }, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
-        this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', {duration: 3000});      })
+        this.snackbar.open(this.translateService.instant('snackbar.client.level_updated'), 'OK', { duration: 3000 });
+      })
   }
 
   updateSalary(monitorDegree, salary) {
-    this.crudService.update('/monitor-sports-degrees', {is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
-      degree_id: monitorDegree.level.id, salary_level: salary.id}, monitorDegree.authorisedLevels[0].monitor_sport_id)
+    this.crudService.update('/monitor-sports-degrees', {
+      is_default: true, monitor_id: this.id, sport_id: monitorDegree.sport_id, school_id: this.user.schools[0].id,
+      degree_id: monitorDegree.level.id, salary_level: salary.id
+    }, monitorDegree.authorisedLevels[0].monitor_sport_id)
       .subscribe((data) => {
-        this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000});      })
+        this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', { duration: 3000 });
+      })
   }
 
   toggleVisibility() {
@@ -1200,7 +1192,7 @@ export class MonitorDetailComponent {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -1228,53 +1220,53 @@ export class MonitorDetailComponent {
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
       this.detailData = event.item;
       this.detailData.sport = this.detailData.course.sport;
-      if(this.detailData.course.course_type == 2) {
+      if (this.detailData.course.course_type == 2) {
         //this.detailData.date_full =
       }
-/*      this.crudService.get('/admin/courses/'+this.detailData.course_id)
-        .subscribe((course) => {
-
-          this.crudService.get('/sports/'+this.detailData.course.sport_id)
-            .subscribe((sport) => {
-              this.detailData.sport = sport.data;
-            });
-
-          if (this.detailData.degree_id !== null) {
-            this.crudService.get('/degrees/'+this.detailData.degree_id)
-              .subscribe((degree) => {
-                this.detailData.degree = degree.data;
-              })
-          }
-
-        })*/
+      /*      this.crudService.get('/admin/courses/'+this.detailData.course_id)
+              .subscribe((course) => {
+      
+                this.crudService.get('/sports/'+this.detailData.course.sport_id)
+                  .subscribe((sport) => {
+                    this.detailData.sport = sport.data;
+                  });
+      
+                if (this.detailData.degree_id !== null) {
+                  this.crudService.get('/degrees/'+this.detailData.degree_id)
+                    .subscribe((degree) => {
+                      this.detailData.degree = degree.data;
+                    })
+                }
+      
+              })*/
       this.showDetail = true;
-/*      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
-        .subscribe((booking) => {
-          this.detailData.users = [];
-
-          booking.data.forEach((element, idx) => {
-            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-              this.detailData.users.push(element);
-
-              this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
-                .subscribe((cd) => {
-
-                  if (cd.data.length > 0) {
-                    element.sports= [];
-
-                    cd.data.forEach(c => {
-                      element.sports.push(c);
-                    });
+      /*      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
+              .subscribe((booking) => {
+                this.detailData.users = [];
+      
+                booking.data.forEach((element, idx) => {
+                  if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+                    this.detailData.users.push(element);
+      
+                    this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
+                      .subscribe((cd) => {
+      
+                        if (cd.data.length > 0) {
+                          element.sports= [];
+      
+                          cd.data.forEach(c => {
+                            element.sports.push(c);
+                          });
+                        }
+      
+      
+                      })
+      
                   }
-
-
-                })
-
-            }
-          });
-          this.showDetail = true;
-
-        });*/
+                });
+                this.showDetail = true;
+      
+              });*/
 
 
     } else {
@@ -1315,7 +1307,7 @@ export class MonitorDetailComponent {
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
         if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-          ret = idx +1;
+          ret = idx + 1;
         }
       });
     }
@@ -1344,7 +1336,7 @@ export class MonitorDetailComponent {
       this.detailData.course.course_dates.forEach((element, idx) => {
         const group = element.course_groups.find((g) => g.id === this.detailData.course_group_id);
 
-        if (group){
+        if (group) {
           group.course_subgroups.forEach((s, sindex) => {
             if (s.id === this.detailData.course_subgroup_id) {
               ret = sindex + 1;
@@ -1360,8 +1352,8 @@ export class MonitorDetailComponent {
     return moment.utc(date).format('dddd, D MMMM YYYY');
   }
 
-  getHoursMinutes(hour_start:string, hour_end:string) {
-    const parseTime = (time:string) => {
+  getHoursMinutes(hour_start: string, hour_end: string) {
+    const parseTime = (time: string) => {
       const [hours, minutes] = time.split(':').map(Number);
       return { hours, minutes };
     };
@@ -1380,21 +1372,21 @@ export class MonitorDetailComponent {
     return `${durationHours}h${durationMinutes}m`;
   }
 
-  getHourRangeFormat(hour_start:string,hour_end:string) {
-    return hour_start.substring(0, 5)+' - '+hour_end.substring(0, 5);
+  getHourRangeFormat(hour_start: string, hour_end: string) {
+    return hour_start.substring(0, 5) + ' - ' + hour_end.substring(0, 5);
   }
 
-  getClientDegree(sport_id:any,sports:any) {
+  getClientDegree(sport_id: any, sports: any) {
     const sportObject = sports.find(sport => sport.sport_id === sport_id);
     if (sportObject) {
       return sportObject.degree_id;
     }
-    else{
+    else {
       return 0;
     }
   }
 
-  getBirthYears(date:string) {
+  getBirthYears(date: string) {
     const birthDate = moment(date);
     return moment().diff(birthDate, 'years');
   }
@@ -1410,12 +1402,12 @@ export class MonitorDetailComponent {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -1429,19 +1421,17 @@ export class MonitorDetailComponent {
   //Planificador
 
 
-  getSportsTimeline(){
-    return this.crudService.get('/sports?perPage='+99999).pipe(
+  getSportsTimeline() {
+    return this.crudService.get('/sports?perPage=' + 99999).pipe(
       map((data) => {
-        console.log(data);
         this.sports = data.data;
       }));
 
   }
 
-  getDegrees(){
-    return this.crudService.get('/degrees?perPage='+99999).pipe(
+  getDegrees() {
+    return this.crudService.get('/degrees?perPage=' + 99999).pipe(
       map((data) => {
-        console.log(data);
         this.degrees = data.data.sort((a, b) => a.degree_order - b.degree_order);
         this.degrees.forEach((degree: any) => {
           degree.inactive_color = this.lightenColor(degree.color, 30);
@@ -1450,9 +1440,9 @@ export class MonitorDetailComponent {
   }
 
   private lightenColor(hexColor: string, percent: number): string {
-    let r:any = parseInt(hexColor.substring(1, 3), 16);
-    let g:any = parseInt(hexColor.substring(3, 5), 16);
-    let b:any = parseInt(hexColor.substring(5, 7), 16);
+    let r: any = parseInt(hexColor.substring(1, 3), 16);
+    let g: any = parseInt(hexColor.substring(3, 5), 16);
+    let b: any = parseInt(hexColor.substring(5, 7), 16);
 
     // Increase the lightness
     r = Math.round(r + (255 - r) * percent / 100);
@@ -1464,7 +1454,7 @@ export class MonitorDetailComponent {
     g = g.toString(16).padStart(2, '0');
     b = b.toString(16).padStart(2, '0');
 
-    return '#'+r+g+b;
+    return '#' + r + g + b;
   }
 
   async calculateWeeksInMonth() {
@@ -1502,7 +1492,7 @@ export class MonitorDetailComponent {
       const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
       firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
       lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
-      this.searchBookings(firstDate,lastDate);
+      this.searchBookings(firstDate, lastDate);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
         const taskDate = new Date(task.date);
@@ -1513,7 +1503,7 @@ export class MonitorDetailComponent {
       const endMonth = endOfMonth(date);
       firstDate = moment(startMonth).format('YYYY-MM-DD');
       lastDate = moment(endMonth).format('YYYY-MM-DD');
-      this.searchBookings(firstDate,lastDate);
+      this.searchBookings(firstDate, lastDate);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
         const taskDate = new Date(task.date);
@@ -1523,15 +1513,14 @@ export class MonitorDetailComponent {
       const dateStr = date.toISOString().split('T')[0];
       firstDate = moment(date).format('YYYY-MM-DD');
       lastDate = firstDate;
-      this.searchBookings(firstDate,lastDate);
+      this.searchBookings(firstDate, lastDate);
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => task.date === dateStr);*/
     }
   }
 
-  searchBookings(firstDate:string,lastDate:string){
-    this.crudService.get('/admin/getPlanner?date_start='+firstDate+'&date_end='+lastDate+'&school_id='+this.activeSchool+'&monitor_id='+this.id+'&perPage='+99999).subscribe(
-      (data:any) => {
-        console.log(data);
+  searchBookings(firstDate: string, lastDate: string) {
+    this.crudService.get('/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&monitor_id=' + this.id + '&perPage=' + 99999).subscribe(
+      (data: any) => {
         this.processData(data.data);
       },
       error => {
@@ -1540,7 +1529,7 @@ export class MonitorDetailComponent {
     );
   }
 
-  normalizeToArray(data:any) {
+  normalizeToArray(data: any) {
     //Nwds sometimes as object sometimes as array
     if (Array.isArray(data)) {
       return data;
@@ -1551,7 +1540,7 @@ export class MonitorDetailComponent {
     return [];
   }
 
-  processData(data:any) {
+  processData(data: any) {
     let allNwds = [];
     let allBookings = [];
 
@@ -1626,11 +1615,11 @@ export class MonitorDetailComponent {
     });
 
 
-    let tasksCalendar:any = [
+    let tasksCalendar: any = [
       //BOOKINGS
       ...allBookings.map(booking => {
         let type;
-        switch(booking.course.course_type) {
+        switch (booking.course.course_type) {
           case 1:
             type = 'collective';
             break;
@@ -1648,14 +1637,13 @@ export class MonitorDetailComponent {
 
         //Get Sport and Degree objects
         const sport = this.sports.find(s => s.id === booking.course.sport_id);
-        console.log(sport);
         const degrees_sport = this.degrees.filter(degree => degree.sport_id === booking.course.sport_id);
         let degree = {};
         let booking_color = null;
-        if(type == 'collective'){
+        if (type == 'collective') {
           degree = this.degrees.find(degree => degree.id === booking.degree_id) || degrees_sport[0];
         }
-        else if(type == 'private'){
+        else if (type == 'private') {
           const sportObject = booking?.bookings_clients?.[0]?.client?.sports?.find(
             sport => sport.id === booking?.course?.sport_id
           );
@@ -1717,7 +1705,7 @@ export class MonitorDetailComponent {
         }
         const hourTimesNwd = nwd.full_day ? {
           hour_start: this.hoursRange[0],
-          hour_end: this.hoursRange[this.hoursRange.length-1]
+          hour_end: this.hoursRange[this.hoursRange.length - 1]
         } : {
           hour_start: nwd.start_time.substring(0, 5),
           hour_end: nwd.end_time.substring(0, 5)
@@ -1743,19 +1731,14 @@ export class MonitorDetailComponent {
         };
       })
     ];
-
     console.log('Combined Tasks Calendar:', tasksCalendar);
-
     this.calculateTaskPositions(tasksCalendar);
-
-    console.log(allBookings);
-    console.log(allNwds);
   }
 
-  async calculateTaskPositions(tasks:any) {
+  async calculateTaskPositions(tasks: any) {
     const pixelsPerMinute = 150 / 60;
     const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
-    let plannerTasks = tasks.map((task:any) => {
+    let plannerTasks = tasks.map((task: any) => {
       //Style for days
       const startTime = this.parseTime(task.hour_start);
       const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
@@ -1814,9 +1797,9 @@ export class MonitorDetailComponent {
 
       //Background color of block tasks
       if (task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed') {
-        style['background-color'] = this.hexToRgbA(task.color,0.4);
-        styleWeek['background-color'] = this.hexToRgbA(task.color,0.4);
-        styleMonth['background-color'] = this.hexToRgbA(task.color,0.4);
+        style['background-color'] = this.hexToRgbA(task.color, 0.4);
+        styleWeek['background-color'] = this.hexToRgbA(task.color, 0.4);
+        styleMonth['background-color'] = this.hexToRgbA(task.color, 0.4);
       }
 
       return {
@@ -1833,7 +1816,7 @@ export class MonitorDetailComponent {
     console.log('Planner Tasks:', this.plannerTasks);
   }
 
-  hexToRgbA(hex:string, transparency = 1) {
+  hexToRgbA(hex: string, transparency = 1) {
     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!rgb) {
       return null;
@@ -1888,7 +1871,7 @@ export class MonitorDetailComponent {
     return date.toTimeString().substring(0, 5);
   }
 
-  getMonthWeekInfo(dateString:any) {
+  getMonthWeekInfo(dateString: any) {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -1956,21 +1939,21 @@ export class MonitorDetailComponent {
     const week = this.weeksInMonth[weekIndex];
     const weekStartDate = new Date(week.startWeek);
     const specificDate = addDays(weekStartDate, dayIndex);
-    if(isSameMonth(specificDate, this.currentDate)){
+    if (isSameMonth(specificDate, this.currentDate)) {
       return !this.vacationDays.includes(moment(specificDate).format('YYYY-MM-DD'));
     }
-    else{
+    else {
       return false;
     }
   }
 
-  isDayVisibleWeek(dayIndex:number){
+  isDayVisibleWeek(dayIndex: number) {
     const startOfWeek = moment(this.currentDate).startOf('isoWeek');
     const specificDate = startOfWeek.add(dayIndex, 'days');
     return !this.vacationDays.includes(moment(specificDate).format('YYYY-MM-DD'));
   }
 
-  isDayVisibleDay(){
+  isDayVisibleDay() {
     if (this.vacationDays) {
 
       return !this.vacationDays.includes(moment(this.currentDate).format('YYYY-MM-DD'));
@@ -1980,10 +1963,9 @@ export class MonitorDetailComponent {
 
   // LOGIC
 
-  toggleDetailTimeline(task:any){
-    if(task.booking_id){
+  toggleDetailTimeline(task: any) {
+    if (task.booking_id) {
       //Load course
-      console.log(task);
       this.idDetailTimeline = task.booking_id;
       this.taskDetailTimeline = task;
       this.hideBlockTimeline();
@@ -1992,7 +1974,7 @@ export class MonitorDetailComponent {
     }
   }
 
-  toggleBlockTimeline(block:any){
+  toggleBlockTimeline(block: any) {
     this.idBlockTimeline = block.block_id;
     this.blockDetailTimeline = block;
     this.hideDetailTimeline();
@@ -2024,30 +2006,25 @@ export class MonitorDetailComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-
-        console.log(result);
-      }
+      if (result) { }
     });
   }
 
-  handleDbClickEvent(action: string, event: any, type:string, position:any, hourDay?:any, positionWeek?:any): void {
+  handleDbClickEvent(action: string, event: any, type: string, position: any, hourDay?: any, positionWeek?: any): void {
 
-    if(type == 'day' && !this.isDayVisibleDay()){
+    if (type == 'day' && !this.isDayVisibleDay()) {
       return;
     }
-    if(type == 'week' && !this.isDayVisibleWeek(position)){
+    if (type == 'week' && !this.isDayVisibleWeek(position)) {
       return;
     }
-    if(type == 'month' && !this.isDayInMonth(position, positionWeek)){
+    if (type == 'month' && !this.isDayInMonth(position, positionWeek)) {
       return;
     }
     /* GET DATE,HOUR,MONITOR -> DOUBLE CLICK */
 
     let dateInfo;
     let currentDate = moment(this.currentDate);
-    console.log(currentDate);
-
     switch (type) {
       case 'day':
         dateInfo = {
@@ -2060,8 +2037,6 @@ export class MonitorDetailComponent {
       case 'week':
         let mondayOfWeek = currentDate.clone().startOf('isoWeek');
         let weekDayDate = mondayOfWeek.add(position, 'days');
-        console.log(mondayOfWeek);
-        console.log(weekDayDate);
         dateInfo = {
           date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
           date_format: moment(weekDayDate).format('DD-MM-YYYY'),
@@ -2084,12 +2059,7 @@ export class MonitorDetailComponent {
       default:
         throw new Error('Invalid type');
     }
-
-    console.log(dateInfo);
-
     /* END DATA DOUBLE CLICK */
-
-    console.log(action, event);
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       data: {
         event,
@@ -2117,7 +2087,7 @@ export class MonitorDetailComponent {
           //Promise for each date
           const promises = dates.map(date => {
             const data = {
-              default:false, user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: date, end_date: date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
+              default: false, user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: date, end_date: date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
             };
             return this.crudService.create('/monitor-nwds', data).toPromise();
           });
@@ -2138,30 +2108,30 @@ export class MonitorDetailComponent {
             }
           }).catch(error => {
             console.error('Error in range dates:', error);
-            this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('error'), 'OK', { duration: 3000 });
           });
 
         }
-        else{
+        else {
           //ONLY 1 DAY
           const data = {
-            default:false, user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
+            default: false, user_nwd_subtype_id: result.user_nwd_subtype_id, color: result.color, monitor_id: dateInfo.monitor_id, start_date: result.start_date, end_date: result.end_date, start_time: result.full_day ? null : `${result.start_time}:00`, end_time: result.full_day ? null : `${result.end_time}:00`, full_day: result.full_day, station_id: result.station_id, school_id: result.school_id, description: result.description
           }
           this.crudService.create('/monitor-nwds', data)
             .subscribe((data) => {
 
-                //this.getData();
-                this.loadBookings(this.currentDate);
-                this.snackbar.open(this.translateService.instant('event_created'), 'OK', {duration: 3000});
-              },
+              //this.getData();
+              this.loadBookings(this.currentDate);
+              this.snackbar.open(this.translateService.instant('event_created'), 'OK', { duration: 3000 });
+            },
               (error) => {
                 // Error handling code
                 console.error('Error occurred:', error);
-                if(error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd"){
-                  this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', {duration: 3000});
+                if (error.error && error.error.message && error.error.message == "El monitor está ocupado durante ese tiempo y no se puede crear el MonitorNwd") {
+                  this.snackbar.open(this.translateService.instant('monitor_busy'), 'OK', { duration: 3000 });
                 }
-                else{
-                  this.snackbar.open(this.translateService.instant('error'), 'OK', {duration: 3000});
+                else {
+                  this.snackbar.open(this.translateService.instant('error'), 'OK', { duration: 3000 });
                 }
               })
         }
@@ -2245,14 +2215,14 @@ export class MonitorDetailComponent {
 
   get filteredStartHoursDivision() {
     const startIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[0]) : this.hoursRangeMinutes.indexOf(this.startTimeDay);
-    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
+    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
     return this.hoursRangeMinutes.slice(startIndex + 1, endIndex - 1);
   }
 
   get filteredEndHoursDivision() {
     const defaultStartIndex = this.calculateDefaultStartTimeDivisionIndex();
     const startIndex = this.startTimeDivision ? this.hoursRangeMinutes.indexOf(this.startTimeDivision) : defaultStartIndex;
-    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf( this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1] ) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
+    const endIndex = this.allHoursDay ? this.hoursRangeMinutes.indexOf(this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]) : this.hoursRangeMinutes.indexOf(this.endTimeDay);
     return this.hoursRangeMinutes.slice(startIndex + 1, endIndex);
   }
 
@@ -2278,17 +2248,13 @@ export class MonitorDetailComponent {
       color: this.blockDetailTimeline.color_block,
       user_nwd_subtype_id: this.blockDetailTimeline.user_nwd_subtype_id,
     };
-    let firstBlockData:any = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date };
-    let secondBlockData:any;
+    let firstBlockData: any = { ...commonData, start_date: this.blockDetailTimeline.start_date, end_date: this.blockDetailTimeline.end_date };
+    let secondBlockData: any;
 
     // Calculate time moments
     firstBlockData.start_time = this.allHoursDay ? `${this.hoursRangeMinutes[0]}:00` : `${this.startTimeDay}:00`;
     firstBlockData.end_time = this.divideDay ? `${this.startTimeDivision}:00` : (this.allHoursDay ? `${this.hoursRangeMinutes[this.hoursRangeMinutes.length - 1]}:00` : `${this.endTimeDay}:00`);
     firstBlockData.full_day = this.allHoursDay && !this.divideDay;
-
-    console.log(this.blockDetailTimeline);
-    console.log(firstBlockData);
-
     // Function update first block -> CALL LATER
     const updateFirstBlock = () => {
       this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetailTimeline.block_id).subscribe(
@@ -2370,7 +2336,7 @@ export class MonitorDetailComponent {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 3000 });
       }
     });
   }
@@ -2381,8 +2347,10 @@ export class MonitorDetailComponent {
       height: '800px',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
-      data: {degree: this.taskDetailTimeline.degree, subgroup: this.taskDetailTimeline.course_subgroup_id, id: this.taskDetailTimeline.course_id,
-        subgroupNumber: this.taskDetailTimeline.subgroup_number, currentDate: moment(this.taskDetailTimeline.date), degrees: this.taskDetailTimeline.degrees_sport}
+      data: {
+        degree: this.taskDetailTimeline.degree, subgroup: this.taskDetailTimeline.course_subgroup_id, id: this.taskDetailTimeline.course_id,
+        subgroupNumber: this.taskDetailTimeline.subgroup_number, currentDate: moment(this.taskDetailTimeline.date), degrees: this.taskDetailTimeline.degrees_sport
+      }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

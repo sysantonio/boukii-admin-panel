@@ -1275,8 +1275,6 @@ export class CourseDetailComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
-      console.log(data);
-
     } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -1300,15 +1298,12 @@ export class CourseDetailComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
-      console.log(data);
     }
 
     this.crudService.update('/admin/courses', data, this.id)
       .subscribe((res) => {
-        console.log(res);
         this.goTo('/courses');
       })
-
   }
 
   calculateHourEnd(hour: any, duration: any) {

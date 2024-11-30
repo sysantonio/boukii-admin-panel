@@ -844,7 +844,6 @@ export class BookingDetailComponent implements OnInit {
             this.snackbar.open(this.translateService.instant('snackbar.booking_detail.send_mail'), 'OK', { duration: 1000 });
             this.loading = false;
           } else {
-            console.log(result);
             window.open(result.data, "_self");
           }
 
@@ -966,9 +965,7 @@ export class BookingDetailComponent implements OnInit {
                   booking_id: bookingId,
                   amount: element.bonus.reducePrice,
                 })
-                .subscribe((vresult) => {
-                  console.log(vresult);
-                });
+                .subscribe((vresult) => {                });
             });
         }
       });
@@ -1158,10 +1155,6 @@ export class BookingDetailComponent implements OnInit {
       )
       .subscribe((data) => {
         this.levels = data.data.sort((a, b) => a.degree_order - b.degree_order);
-
-        console.log(this.levels);
-        console.log(sportId);
-
         this.filteredLevel = this.levelForm.valueChanges.pipe(
           startWith(""),
           map((value: any) =>
@@ -1171,8 +1164,6 @@ export class BookingDetailComponent implements OnInit {
             annotation ? this._filterLevel(annotation) : this.levels.slice()
           )
         );
-        console.log(this.filteredLevel);
-
         if (onLoad) {
           this.clients[0].sports.forEach((sport) => {
             if (sport.id === this.defaults.sport_id) {
@@ -1246,8 +1237,6 @@ export class BookingDetailComponent implements OnInit {
     };
 
     this.crudService.post("/availability", rq).subscribe((data) => {
-      console.log(data);
-
       this.defaultsBookingUser.degree_id = level.id;
       this.courses = data.data;
       if (!fromPrivate) {
@@ -2071,9 +2060,7 @@ export class BookingDetailComponent implements OnInit {
                           booking_id: this.id,
                           amount: -vData.quantity,
                         })
-                        .subscribe((vresult) => {
-                          console.log(vresult);
-                        });
+                        .subscribe((vresult) => {                        });
                       this.snackbar.open(
                         this.translateService.instant(
                           "snackbar.booking_detail.update"
@@ -2294,9 +2281,7 @@ export class BookingDetailComponent implements OnInit {
                           booking_id: this.id,
                           amount: -vData.quantity,
                         })
-                        .subscribe((vresult) => {
-                          console.log(vresult);
-                        });
+                        .subscribe((vresult) => {                       });
                       this.snackbar.open(
                         this.translateService.instant(
                           "snackbar.booking_detail.delete"
@@ -2579,9 +2564,7 @@ export class BookingDetailComponent implements OnInit {
                 booking_id: this.id,
                 amount: -vData.quantity,
               })
-              .subscribe((vresult) => {
-                console.log(vresult);
-              });
+              .subscribe((vresult) => {              });
           });
           this.snackbar.open(
             this.translateService.instant("snackbar.booking_detail.delete"),
@@ -2654,10 +2637,8 @@ export class BookingDetailComponent implements OnInit {
             "OK",
             { duration: 1000 }
           );
-          console.log(data);
         },
         (error) => {
-          console.log(error);
           this.snackbar.open(
             this.translateService.instant(
               "snackbar.booking_detail.send_mail.error"
@@ -3499,16 +3480,14 @@ export class BookingDetailComponent implements OnInit {
     }
   }
 
-  removeDuplicates(array, key) {
+  removeDuplicates(array: any, key: any) {
     const unique = array
-      .map((e) => e[key])
+      .map((e: any) => e[key])
       // Almacena las claves y elimina los duplicados.
-      .map((e, i, final) => final.indexOf(e) === i && i)
+      .map((e: any, i: any, final: any) => final.indexOf(e) === i && i)
       // Elimina las claves duplicadas y mapea el array.
-      .filter((e) => array[e])
-      .map((e) => array[e]);
-
-    console.log(unique);
+      .filter((e: any) => array[e])
+      .map((e: any) => array[e]);
     // Aquí puedes usar 'unique', que es tu array sin duplicados.
   }
 

@@ -1,12 +1,12 @@
-import {ChangeDetectorRef, Component, Inject, OnInit, Optional} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {FormBuilder} from '@angular/forms';
-import {BookingService} from '../../../../service/bookings.service';
-import {ApiCrudService} from '../../../../service/crud.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { ChangeDetectorRef, Component, Inject, OnInit, Optional } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { FormBuilder } from '@angular/forms';
+import { BookingService } from '../../../../service/bookings.service';
+import { ApiCrudService } from '../../../../service/crud.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'booking-detail-v2',
@@ -44,7 +44,7 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.incData) {
+    if (!this.incData) {
       this.id = this.activatedRoute.snapshot.params.id;
     } else {
       this.id = this.incData.id;
@@ -201,10 +201,8 @@ export class BookingDetailV2Component implements OnInit {
     return Object.values(groupedActivities);
   }
 
-  editActivity(data, index) {
-    console.log(data);
-    console.log(this.groupedActivities[index]);
-    if(data.course_dates) {
+  editActivity(data: any, index: any) {
+    if (data.course_dates) {
 
       this.crudService.post('/admin/bookings/update',
         {
@@ -228,7 +226,7 @@ export class BookingDetailV2Component implements OnInit {
         });
 
     }
-    if(data.schoolObs || data.clientObs) {
+    if (data.schoolObs || data.clientObs) {
       this.groupedActivities[index].schoolObs = data.schoolObs;
       this.groupedActivities[index].clientObs = data.clientObs;
     }
@@ -242,7 +240,7 @@ export class BookingDetailV2Component implements OnInit {
       date.booking_users.map(b => b.id)
     );
     this.crudService.post('/admin/bookings/cancel',
-      {bookingUsers: bookingUserIds})
+      { bookingUsers: bookingUserIds })
       .subscribe((response) => {
         this.groupedActivities[index].status = 2;
         let bookingData = {
@@ -250,7 +248,7 @@ export class BookingDetailV2Component implements OnInit {
           vouchers: response.data.voucher_logs
         };
         this.bookingData$.next(bookingData);
-        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', {duration: 3000});
+        this.snackbar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', { duration: 3000 });
         this.deleteModal = false;
       });
   }

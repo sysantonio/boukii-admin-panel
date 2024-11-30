@@ -30,7 +30,6 @@ export class WidgetClientsSportsNoSwiperComponent implements OnInit {
     } else {
       this.selectedSports.push(sportId);
     }
-    console.log(this.selectedSports);
   }
 
   isSportSelected(sportId: number): boolean {

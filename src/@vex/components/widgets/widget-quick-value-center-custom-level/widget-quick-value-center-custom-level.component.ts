@@ -43,7 +43,6 @@ export class WidgetQuickValueCenterCustomLevelComponent implements OnInit {
     } else {
       this.selectedLevels.push(levelId);
     }
-    console.log(this.selectedLevels);
   }
 
   isLevelSelected(levelId: number): boolean {

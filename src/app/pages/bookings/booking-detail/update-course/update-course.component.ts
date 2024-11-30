@@ -232,8 +232,6 @@ export class UpdateCourseModalComponent implements OnInit {
           });
           this.crudService.post('/admin/bookings/checkbooking', checkAval)
             .subscribe((response) => {
-
-              console.log(response);
               this.dates.forEach(element => {
                 updateBookingUserRQS.push(this.crudService.update('/booking-users',
                   {monitor_id: this.selectedMonitorId,
@@ -328,8 +326,6 @@ export class UpdateCourseModalComponent implements OnInit {
                   });
 
                   if (this.noAvailableMonitorDate.length > 0) {
-
-                    console.log(this.noAvailableMonitorDate);
 
                     const noDispoRef = this.dialog.open(NoMonitorDateModalComponent, {
                       data: {title: this.translateService.instant('monitor_no_available'), message: this.translateService.instant('monitor_no_available_text'),
@@ -678,8 +674,6 @@ export class UpdateCourseModalComponent implements OnInit {
                   });
 
                   if (this.noAvailableMonitorDate.length > 0) {
-
-                    console.log(this.noAvailableMonitorDate);
 
                     const noDispoRef = this.dialog.open(NoMonitorDateModalComponent, {
                       data: {title: this.translateService.instant('monitor_no_available'), message: this.translateService.instant('monitor_no_available_text'),

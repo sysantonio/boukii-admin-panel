@@ -288,8 +288,6 @@ export class CoursesComponent {
     console.log('export');
     this.crudService.get('/admin/clients/course/'+ id)
         .subscribe(async (data) => {
-          console.log(data);
-
           const clientsData = data.data;
 
           if(clientsData && clientsData.length){

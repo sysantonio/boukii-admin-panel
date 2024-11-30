@@ -1238,10 +1238,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           .subscribe((result) => {
 
             this.crudService.create('/vouchers-logs', { voucher_id: result.data.id, booking_id: bookingId, amount: element.bonus.reducePrice })
-              .subscribe((vresult) => {
-                console.log(vresult);
-
-              })
+              .subscribe((vresult) => { })
           })
       });
     }

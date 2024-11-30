@@ -786,9 +786,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
     this.crudService.post('/admin/bookings/checkbooking', checkAval)
       .subscribe((response) => {
-
-        console.log(response);
-
         if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
           this.courseDates.forEach(item => {
             paxes = paxes + parseInt(item.paxes);
@@ -1288,7 +1285,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
             this.crudService.post('/admin/bookings/payments/' + this.bookingService.editData.id, basket)
               .subscribe((result: any) => {
-                console.log((result));
                 if (this.defaults.payment_method_id === 2) {
 
                   window.open(result.data, "_self");
@@ -1323,9 +1319,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
       }
 
       this.crudService.post('/admin/bookings/mail/' + this.bookingService.editData.id, {})
-        .subscribe((data) => {
-          console.log(data);
-        })
+        .subscribe((data) => { })
     }, 1000);
 
   }
@@ -1351,10 +1345,7 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
           .subscribe((result) => {
 
             this.crudService.create('/vouchers-logs', { voucher_id: result.data.id, booking_id: bookingId, amount: element.bonus.reducePrice })
-              .subscribe((vresult) => {
-                console.log(vresult);
-
-              })
+              .subscribe((vresult) => { })
           })
       });
     }
@@ -1738,8 +1729,6 @@ export class BookingsCreateUpdateEditComponent implements OnInit {
 
     this.crudService.post('/availability', rq)
       .subscribe((data) => {
-        console.log(data);
-
         this.defaultsBookingUser.degree_id = level.id;
 
         //Antiguo filtro solo por el tipo si es flexible o no

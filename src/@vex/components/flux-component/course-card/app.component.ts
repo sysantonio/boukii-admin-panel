@@ -38,7 +38,6 @@ export class CourseDetailCardComponent implements OnChanges {
       }
       this.courseFormGroup.patchValue({ reserve_date })
     }
-    console.log(this.courseFormGroup.getRawValue())
   }
 
 

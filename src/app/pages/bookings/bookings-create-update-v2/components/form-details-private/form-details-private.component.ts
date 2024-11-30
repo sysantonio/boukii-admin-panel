@@ -354,7 +354,6 @@ export class FormDetailsPrivateComponent implements OnInit {
     if (startHour && duration) {
       const endHour = this.utilService.calculateEndHour(startHour, duration);
       courseDateGroup.get('endHour').setValue(endHour, { emitEvent: false });
-      console.log(endHour);
     }
   }
 

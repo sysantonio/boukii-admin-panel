@@ -95,7 +95,6 @@ export class CourseDetailNewComponent implements OnInit {
                   .subscribe((bookingUser) => {
                     this.detailData.users = [];
                     this.detailData.users = bookingUser.data;
-                    console.log(this.detailData)
                     this.courseFormGroup = this.fb.group({
                       id: [this.detailData.id, Validators.required], //Solo listado
                       user: [this.detailData.user, Validators.required], //Solo listado

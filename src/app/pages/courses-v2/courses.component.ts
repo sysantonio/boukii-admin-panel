@@ -96,7 +96,6 @@ export class CoursesComponent {
                 .subscribe((bookingUser) => {
                   this.detailData.users = [];
                   this.detailData.users = bookingUser.data;
-                  console.log(this.detailData)
                   this.courseFormGroup = this.fb.group({
                     id: [this.detailData.id, Validators.required], //Solo listado
                     user: [this.detailData.user ? this.detailData.user.username + " (" + this.detailData.user.first_name + " " + this.detailData.user.last_name + ")" : "", Validators.required], //Solo listado
@@ -293,13 +292,9 @@ export class CoursesComponent {
   }
 
   exportQR(id: any) {
-    console.log('export');
     this.crudService.get('/admin/clients/course/' + id)
       .subscribe(async (data) => {
-        console.log(data);
-
         const clientsData = data.data;
-
         if (clientsData && clientsData.length) {
           const doc = new jsPDF();
           const pageWidth = doc.internal.pageSize.getWidth();

@@ -1882,8 +1882,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
-      console.log(data);
-
     } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -1908,7 +1906,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
-      console.log(data);
     } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
 
       if (this.periodeUnique) {
@@ -1945,7 +1942,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         settings: JSON.stringify(this.defaults.settings),
         unique: this.periodeUnique
       };
-      console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
       this.getDatesBetween(this.defaults.date_start_res, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
       data = {
@@ -1983,7 +1979,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
     this.crudService.create('/admin/courses', data)
       .subscribe((res) => {
-        console.log(res);
         this.dialogRef.close();
       })
 
@@ -2041,8 +2036,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
-      console.log(data);
-
     } else if (this.defaults.course_type === 1 && !this.defaults.is_flexible) {
       this.defaults.date_start_res = this.defaults.date_start;
       this.defaults.date_end_res = this.defaults.date_end;
@@ -2070,7 +2063,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
-      console.log(data);
     } else if (this.defaults.course_type === 2  && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -2102,7 +2094,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         settings: JSON.stringify(this.defaults.settings),
         unique: this.periodeUnique
       };
-      console.log(data);
     } else if (this.defaults.course_type === 2 && !this.defaults.is_flexible) {
       this.getDatesBetween(this.defaults.course_dates[0].date, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
       let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
@@ -2145,7 +2136,6 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
     this.crudService.update('/admin/courses', data, this.id)
       .subscribe((res) => {
-        console.log(res);
         this.dialogRef.close();
       })
   }

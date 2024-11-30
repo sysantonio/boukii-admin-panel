@@ -1029,8 +1029,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     console.log('export');
     this.crudService.get('/admin/clients/course/' + id)
       .subscribe(async (data) => {
-        console.log(data);
-
         const clientsData = data.data;
 
         if (clientsData && clientsData.length) {
@@ -1302,9 +1300,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
         });
       });
-
-      console.log(data);
-
     } else if (item.course_type === 1 && !item.is_flexible) {
       data = {
         course_type: item.course_type,
@@ -1355,7 +1350,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
         });
       });
-      console.log(data);
     } else if (item.course_type === 2 && item.is_flexible) {
       data = {
         course_type: item.course_type,
@@ -1390,7 +1384,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         hour_min: item.hour_min,
         hour_max: item.hour_max,
       };
-      console.log(data);
     } else if (item.course_type === 2 && !item.is_flexible) {
 
       data = {
@@ -1430,7 +1423,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.crudService.create('/admin/courses', data)
       .subscribe((res) => {
-        console.log(res);
          this.getData(this.pageIndex, this.pageSize);
       })
   }
