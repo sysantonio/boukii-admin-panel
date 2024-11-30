@@ -507,9 +507,10 @@
   "create_general_blockage": "Êtes-vous sûr de vouloir créer un blocage pour TOUS les moniteurs ?",
   "general_blockage": "Blocage général",
   "no_monitor_choose": "Pas de moniteur",
-  "match_error_sport": "Ce moniteur ne peut pas enseigner de cours sur : ",
+  "match_error_sport": "Ce moniteur ne peut pas enseigner de cours sur: ",
   "match_error": "Ce moniteur n'a pas les exigences nécessaires pour enseigner ce cours",
-  "timeline.assign_unmatch": "Voulez-vous quand même attribuer le cours à ce moniteur ?",
+  "monitor_match_keep_error": "L'écran sélectionné ne répond pas aux exigences. Voulez-vous quand même sélectionner cet écran ?",
+  "timeline.assign_unmatch": "Voulez-vous quand même attribuer le cours à ce moniteur ?",
   "timeline.degree_match": "Le moniteur n'a pas le niveau recommandé pour ce cours",
   "timeline.language_match": "Le moniteur n'a pas la langue des participants au cours",
   "timeline.sport_match": "Le moniteur n'a pas le sport du cours",
@@ -648,8 +649,5 @@
   "emails.bookingCreate.footer2": "Pour plus d'informations, contactez : ",
   "emails.bookingCreate.footer3": "Conditions générales de vente",
   "snackbar.password_updated_error": "Le lien de réinitialisation du mot de passe a expiré, veuillez en générer un nouveau et réessayer.",
-  "link_send":"Lien envoyé"
-
-
-
+  "link_send": "Lien envoyé"
 }

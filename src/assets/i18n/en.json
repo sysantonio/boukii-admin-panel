@@ -512,6 +512,7 @@
   "no_monitor_choose": "No monitor",
   "match_error_sport": "This monitor cannot teach courses on: ",
   "match_error": "This monitor does not have the necessary requirements to teach this course",
+  "monitor_match_keep_error": "The selected monitor does not meet the requirements. Do you still want to select this monitor?",
   "timeline.assign_unmatch": "Do you want to assign the course to this monitor anyway?",
   "timeline.degree_match": "The instructor does not have the recommended level for this course",
   "timeline.language_match": "The monitor does not comply with the language of the course participants",

@@ -3443,7 +3443,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
               panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
               data: {
-                message: this.translateService.instant('El monitor seleccionado no cumple los requisitos. ¿Quieres igualmente seleccionar ese monitor?'),
+                message: this.translateService.instant('monitor_match_keep_error'),
                 title: this.translateService.instant('match_error')
               }
             });

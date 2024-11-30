@@ -510,6 +510,7 @@
   "no_monitor_choose": "Nessun monitor",
   "match_error_sport": "Questo monitor non può insegnare corsi su: ",
   "match_error": "Questo monitor non ha i requisiti necessari per insegnare questo corso",
+  "monitor_match_keep_error": "Il monitor selezionato non soddisfa i requisiti. Vuoi comunque selezionare questo monitor?",
   "timeline.assign_unmatch": "Vuoi comunque assegnare il corso a questo monitor?",
   "timeline.degree_match": "L'istruttore non ha il livello consigliato per questo corso",
   "timeline.language_match": "Il monitor non è conforme alla lingua dei partecipanti al corso",
