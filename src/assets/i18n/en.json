@@ -12,6 +12,8 @@
   "duracion":"Duration",
   "Modo Claro": "Light Mode",
   "Modo Oscuro": "Dark Mode",
+  "filter_data":"Filter Data",
+  "filter_columns":"Filter Columns",
   "france": "French",
   "english": "English",
   "germany": "German",

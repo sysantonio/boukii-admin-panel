@@ -169,7 +169,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(private dialog: MatDialog, public router: Router, private crudService: ApiCrudService,
     private excelExportService: ExcelExportService, private routeActive: ActivatedRoute,
-    private cdr: ChangeDetectorRef, private translateService: TranslateService, private snackbar: MatSnackBar) {
+    private cdr: ChangeDetectorRef, public translateService: TranslateService, private snackbar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.schoolId = this.user.schools[0].id;
   }
@@ -416,7 +416,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       pageSize,
       'desc',
       'id',
-       this.searchCtrl.value + filter + '&school_id=' + this.user.schools[0].id + this.search +
+      this.searchCtrl.value + filter + '&school_id=' + this.user.schools[0].id + this.search +
       (this.filterField !== null ? '&' + this.filterColumn + '=' + this.filterField : ''),
       '',
       null,
@@ -490,7 +490,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     this.dataSource.sort = this.sort;
 
     // Llama a getData con la primera página. Asegúrate de que este valor coincida con cómo tu API espera la primera página.
-     this.getData(this.pageIndex, this.pageSize); // Si tu API espera que la primera página sea 1 en lugar de 0.
+    this.getData(this.pageIndex, this.pageSize); // Si tu API espera que la primera página sea 1 en lugar de 0.
 
     // ... otros inicializadores
   }
@@ -515,7 +515,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-         this.getData(this.pageIndex, this.pageSize);
+        this.getData(this.pageIndex, this.pageSize);
 
       }
     });
@@ -541,7 +541,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-         this.getData(this.pageIndex, this.pageSize);
+        this.getData(this.pageIndex, this.pageSize);
       }
     });
   }
@@ -562,7 +562,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       if (data) {
         this.crudService.delete(this.deleteEntity, item.id)
           .subscribe(() => {
-             this.getData(this.pageIndex, this.pageSize);
+            this.getData(this.pageIndex, this.pageSize);
           })
       }
     });
@@ -622,7 +622,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
 
           this.crudService.update('/courses', {
-            active: false}, item.id)
+            active: false
+          }, item.id)
             .subscribe(() => {
               this.getData(this.pageIndex, this.pageSize);
             })
@@ -1423,7 +1424,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.crudService.create('/admin/courses', data)
       .subscribe((res) => {
-         this.getData(this.pageIndex, this.pageSize);
+        this.getData(this.pageIndex, this.pageSize);
       })
   }
 }
