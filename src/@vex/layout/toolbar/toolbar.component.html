@@ -89,7 +89,7 @@
 
     <mat-slide-toggle [(ngModel)]="layoutService.isDarkMode"
       (toggleChange)="layoutService.toggleDarkMode()">
-      {{layoutService.isDarkMode?'Modo Oscuro':'Modo Claro' | translate}}
+      {{(layoutService.isDarkMode?'Modo Oscuro':'Modo Claro') | translate}}
     </mat-slide-toggle>
 
     <div class="px-1">
