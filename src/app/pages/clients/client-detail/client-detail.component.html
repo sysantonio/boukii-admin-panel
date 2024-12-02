@@ -28,7 +28,8 @@
         [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/avatar.png'" />
 
       <div class="max-w-full flex-auto sm:ltr:ml-6 sm:rtl:mr-6">
-        <div class="h-16 items-end" style="display: flex;">
+        <div class="h-16 items-end"
+          style="display: flex;flex-direction: column;align-items: flex-start;">
           <p @fadeInRight class="headline text-white"
             style="font-size: 12px;">{{getLanguage(defaults.language1_id)}} ·
             {{getCountry(defaults.country)}} ·
@@ -36,20 +37,22 @@
 
           <h1 @fadeInRight class="headline text-white">{{defaults.first_name}}
             {{defaults.last_name}}</h1>
-          <vex-icon src="chat">
-          </vex-icon>
-          <vex-icon
-            src="mail"
-            href="mailto:{{defaults.email}}"
-            style="cursor:pointer"
-            title="{{defaults.email}}">
-          </vex-icon>
-          <vex-icon
-            src="phone"
-            href="tel:{{defaults.phone}}"
-            style="cursor:pointer"
-            title="{{defaults.phone}}">
-          </vex-icon>
+          <div style="display: flex;">
+            <vex-icon src="chat">
+            </vex-icon>
+            <vex-icon
+              src="mail"
+              href="mailto:{{defaults.email}}"
+              style="cursor:pointer"
+              title="{{defaults.email}}">
+            </vex-icon>
+            <vex-icon
+              src="phone"
+              href="tel:{{defaults.phone}}"
+              style="cursor:pointer"
+              title="{{defaults.phone}}">
+            </vex-icon>
+          </div>
         </div>
       </div>
     </div>

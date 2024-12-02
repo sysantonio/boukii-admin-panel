@@ -233,7 +233,6 @@ export class ClientDetailComponent {
         email: ['', [Validators.required, Validators.email]],
         username: [''],
         password: [''],
-
       });
 
       this.formPersonalInfo = this.fb.group({
@@ -283,6 +282,7 @@ export class ClientDetailComponent {
         tap((data) => {
 
           this.defaults = data.data;
+
           this.evaluations = data.data.evaluations;
           this.evaluationFullfiled = [];
           this.evaluations.forEach(ev => {
@@ -325,7 +325,7 @@ export class ClientDetailComponent {
               this.getClientUtilisateurs();
             }
 
-            if(data.data.user) {
+            if (data.data.user) {
               this.defaultsUser = data.data.user;
             }
 
@@ -371,6 +371,7 @@ export class ClientDetailComponent {
 
             this.loading = false;
           });
+
         }))
   }
 

@@ -51,9 +51,13 @@
               style="width: 60%;display:inline-block;text-align: left; color: white;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;">
-                <span>{{detailData.created_at | date: 'dd/MM/YYYY'}}</span><span
-                  style="margin-left: 10px;font-style: italic;">{{detailData.created_at
-                  | date: 'HH:mm'}}h</span>
+                <span style="color: white;">
+                  {{detailData.created_at | date: 'dd/MM/YYYY'}}
+                </span>
+                <span
+                  style="margin-left: 10px;font-style: italic;color: white;">
+                  {{detailData.created_at | date: 'HH:mm'}}h
+                </span>
               </span>
             </div>
             <!-- <div style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;">
@@ -244,7 +248,8 @@
             </ng-container>
 
             <div style="width:100%; margin-top:20px;">
-              <button class="btn-primary-accent" style="width: 100%;" *ngIf="checkClientStatus(detailData.clients_schools)"
+              <button class="btn-primary-accent" style="width: 100%;"
+                *ngIf="checkClientStatus(detailData.clients_schools)"
                 (click)="createBooking();">{{'add_booking' | translate
                 }}</button>
             </div>
