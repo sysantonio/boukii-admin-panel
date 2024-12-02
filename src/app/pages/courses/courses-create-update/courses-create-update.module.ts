@@ -39,6 +39,7 @@ import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
+import {EditorComponent, TINYMCE_SCRIPT_SRC} from '@tinymce/tinymce-angular';
 
 @NgModule({
     imports: [
@@ -84,10 +85,14 @@ import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flu
         FluxModalModule,
         FluxDisponibilidadModule,
         MatProgressSpinnerModule,
-        QuillEditorComponent
+        QuillEditorComponent,
+        EditorComponent
     ],
   declarations: [CoursesCreateUpdateComponent],
-  exports: [CoursesCreateUpdateComponent]
+  exports: [CoursesCreateUpdateComponent],
+  providers: [
+  { provide: TINYMCE_SCRIPT_SRC, useValue: 'https://cdn.tiny.cloud/1/92j1b1q8rbbkzvkmwssqy6205th59l0ubwpchntve4cfa0dc/tinymce/7/tinymce.min.js' }
+]
 })
 export class CoursesCreateUpdateModule {
 }
