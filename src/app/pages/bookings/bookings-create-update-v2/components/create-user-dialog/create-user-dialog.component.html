@@ -5,9 +5,7 @@
   <mat-icon
     fontSet="material-icons-outlined"
     mat-dialog-close
-    class="closeButton"
-    >close</mat-icon
-  >
+    class="closeButton">close</mat-icon>
 </div>
 
 <mat-dialog-content>
@@ -29,13 +27,12 @@
           <mat-label>{{ "birth_date" | translate }}</mat-label>
           <input
             matInput
+            required
             [matDatepicker]="picker"
-            formControlName="birthDate"
-          />
+            formControlName="birthDate" />
           <mat-datepicker-toggle
             matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+            [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -60,8 +57,7 @@
     mat-flat-button
     type="button"
     (click)="handleConfirm()"
-    [disabled]="!isFormValid()"
-  >
+    [disabled]="!isFormValid()">
     {{ "confirm" | translate }}
   </button>
 </div>

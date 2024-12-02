@@ -143,7 +143,8 @@
                 <input matInput [matDatepicker]="pickerFrom"
                   placeholder="{{'birth_date' | translate }}"
                   formControlName="fromDate" [max]="minDate"
-                  [(ngModel)]="defaults.birth_date">
+                  [(ngModel)]="defaults.birth_date"
+                  required>
                 <mat-datepicker-toggle matSuffix
                   [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom
@@ -303,12 +304,12 @@
                 <!-- Otros contenedores según tu descripción -->
 
                 <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef> {{'name' | translate
+                  <mat-header-cell *matHeaderCellDef> {{'sport' | translate
                     }}</mat-header-cell>
                   <mat-cell *matCellDef="let element">
                     <mat-form-field appearance="outline" class="flex-auto"
                       style="margin: 2% 0 0 0;">
-                      <mat-label>{{'name' | translate }}</mat-label>
+                      <mat-label>{{'sport' | translate }}</mat-label>
                       <input matInput [value]="element.name" type="text"
                         [readonly]="true">
                     </mat-form-field>
