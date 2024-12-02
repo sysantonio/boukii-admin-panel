@@ -74,24 +74,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
   filteredToHours = [];
 
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: 'auto',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
-    toolbarPosition: 'top',
-    outline: true,
-  }
-
   summary = ``;
   description = ``;
 
@@ -161,6 +143,16 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       price: ''
     }
   ];
+  modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }], // Títulos
+      ['bold', 'italic', 'underline'], // Formato de texto
+      [{ list: 'ordered' }, { list: 'bullet' }], // Listas
+      ['link', 'image'], // Enlaces e imágenes (sin video)
+      [{ align: [] }], // Alineación
+      ['clean'] // Limpiar formato
+    ]
+  };
   isAngularHtmlEditing = false;
   defaults: any = {
     unique: false,
