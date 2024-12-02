@@ -148,11 +148,13 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       [{ header: [1, 2, 3, false] }], // Títulos
       ['bold', 'italic', 'underline'], // Formato de texto
       [{ list: 'ordered' }, { list: 'bullet' }], // Listas
-      ['link', 'image'], // Enlaces e imágenes (sin video)
+      ['link', 'image'], // Enlaces e imágenes
+      [{ color: [] }, { background: [] }], // Selector de colores y fondo
       [{ align: [] }], // Alineación
       ['clean'] // Limpiar formato
     ]
   };
+
   isAngularHtmlEditing = false;
   defaults: any = {
     unique: false,
