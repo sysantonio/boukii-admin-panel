@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-date-time-dialog',
@@ -17,7 +18,7 @@ export class DateTimeDialogComponent implements OnInit {
   selectedDuration: any;
   selectedDate: Date;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public TranslateService: TranslateService) { }
 
   ngOnInit(): void {
     this.generateDurations();
@@ -65,8 +66,8 @@ export class DateTimeDialogComponent implements OnInit {
   myHolidayFilter = (d: Date): boolean => {
     if (d !== null) {
 
-      const time=d.getTime();
-      return !this.data.holidays.find(x=>x.getTime()==time);
+      const time = d.getTime();
+      return !this.data.holidays.find(x => x.getTime() == time);
     }
   }
 }

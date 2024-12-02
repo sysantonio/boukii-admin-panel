@@ -26,7 +26,7 @@
 
       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 5% 0 0 0">
         <mat-form-field appearance="outline" class="flex-auto">
-          <input id="date" matInput [matDatepicker]="picker" formControlName="date" placeholder="Fecha" [(ngModel)]="selectedDate" [min]="today">
+          <input id="date" matInput [matDatepicker]="picker" formControlName="date" placeholder="{{'date' | translate}}" [(ngModel)]="selectedDate" [min]="today">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [startAt]="today"></mat-datepicker>
         </mat-form-field>
