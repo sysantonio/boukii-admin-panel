@@ -42,7 +42,7 @@
           <mat-label>{{ "langs" | translate }} </mat-label>
           <mat-select multiple formControlName="lenguages">
             <mat-option *ngFor="let language of languages" [value]="language">
-              {{ language.name }}
+              {{ language.name | translate }}
             </mat-option>
           </mat-select>
         </mat-form-field>

@@ -1755,7 +1755,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
         const level = this.levels.find((l) => l.id === sport.degree_id);
         this.levelForm.patchValue(level);
-        if(level) {
+        if (level) {
           this.defaultsBookingUser.degree_id = level.id;
         }
         this.backToList();

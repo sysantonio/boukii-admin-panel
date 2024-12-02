@@ -4,7 +4,8 @@
     <label for="date">{{'date' | translate}}</label>
 
     <mat-form-field appearance="outline">
-      <input id="date" matInput [matDatepicker]="picker" placeholder="{{'date' | translate}}"
+      <input id="date" matInput [matDatepicker]="picker"
+        placeholder="{{'date' | translate}}"
         [(ngModel)]="selectedDate" [matDatepickerFilter]="myHolidayFilter"
         [min]="data.minDate" [max]="data.maxDate">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -29,7 +30,7 @@
   <div class="flex-auto">
     <label for="hour">{{'hour' | translate}}</label>
     <mat-form-field appearance="outline" style="width: 100%;">
-      <input id="hour" type="text" placeholder="Hora" matInput
+      <input id="hour" type="text" placeholder="{{'hour' | translate}}" matInput
         [matAutocomplete]="auto" [(ngModel)]="selectedHour">
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let hour of hours" [value]="hour">

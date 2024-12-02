@@ -338,6 +338,7 @@ export class ClientDetailComponent {
             });
 
             this.languagesControl.setValue(langs);
+            console.log(this.languages)
 
             if (!onChangeUser) {
 
@@ -357,7 +358,6 @@ export class ClientDetailComponent {
                 map((value: any) => typeof value === 'string' ? value : value?.annotation),
                 map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
               );
-
               this.filteredLanguages = this.languagesControl.valueChanges.pipe(
                 startWith(''),
                 map(language => (language ? this._filterLanguages(language) : this.languages.slice()))

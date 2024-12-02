@@ -1842,7 +1842,7 @@
                         *ngFor="let language of filteredLanguages | async"
                         [value]="language"
                         (onSelectionChange)="toggleSelectionLanguages($event, language)">
-                        {{language.name}}
+                        {{language.name | translate}}
                       </mat-option>
                     </mat-select>
                     <mat-icon class="mr-2" matPrefix>message-text"></mat-icon>
