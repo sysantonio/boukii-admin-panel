@@ -74,14 +74,14 @@
 
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field appearance="outline">
-              <mat-label>Hora Inicio</mat-label>
+              <mat-label>{{'start_hour' | translate}}</mat-label>
               <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Hora Fin</mat-label>
+              <mat-label>{{'end_hour' | translate}}</mat-label>
               <mat-select [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
               </mat-select>
@@ -139,14 +139,14 @@
 
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field appearance="outline">
-              <mat-label>Hora Inicio</mat-label>
+              <mat-label>{{'start_hour' | translate}}</mat-label>
               <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Hora Fin</mat-label>
+              <mat-label>{{'end_hour' | translate}}</mat-label>
               <mat-select [disabled]="defaults.start_time === null" [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
               </mat-select>
@@ -206,14 +206,14 @@
 
           <ng-container *ngIf="!form.get('full_day').value">
             <mat-form-field appearance="outline">
-              <mat-label>Hora Inicio</mat-label>
+              <mat-label>{{'start_hour' | translate}}</mat-label>
               <mat-select (selectionChange)="onStartTimeChange()" [(value)]="defaults.start_time">
                 <mat-option *ngFor="let time of times" [value]="time" (onSelectionChange)="defaults.start_time = time">{{ time }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Hora Fin</mat-label>
+              <mat-label>{{'end_hour' | translate}}</mat-label>
               <mat-select [disabled]="defaults.start_time === null" [(value)]="defaults.end_time">
                 <mat-option *ngFor="let time of filteredTimes" [value]="time" (onSelectionChange)="defaults.end_time = time">{{ time }}</mat-option>
               </mat-select>
