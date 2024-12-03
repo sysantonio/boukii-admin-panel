@@ -717,7 +717,7 @@
                 svgIcon="mat:edit" (click)="detailBooking()"></mat-icon>
             </div>
           </div>
-          <div class="holder-client" style="margin-top: 10px">
+          <div class="holder-client" style="margin: 10px 0">
             <div class="col-left">
               <img *ngIf="taskDetail.type == 'collective'"
                 src="{{taskDetail.sport.icon_collective}}" width="60"
@@ -750,11 +750,10 @@
                 {{taskDetail.degree.name}}
               </div>
             </div>
-
           </div>
           <ng-container *ngIf="taskDetail.type == 'collective'">
 
-            <div class="title-status" style="background-color: white; ">
+            <div class="title-status">
               <span class="col-left">
                 <b>{{ 'dates' | translate}}:</b>
               </span>
@@ -1125,7 +1124,7 @@
 
     <vex-page-layout-content class="-mt-6 fullwidth box-detail-timeline"
       *ngIf="showBlock && blockDetail">
-      <mat-card style="padding: 0 3%;">
+      <mat-card style="border-radius: 10px;">
         <mat-card-header style="display:block">
           <div style="width: 100%;float: left;">
             <mat-icon class="cursor-pointer" svgIcon="mat:close"
@@ -1146,21 +1145,25 @@
           <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
               <p
-                style="float: left;width: 80%;text-align: left;"><b>{{blockDetail.date_format}}</b></p>
+                style="float: left;width: 80%;text-align: left;color: white;"><b>{{blockDetail.date_format}}</b></p>
             </div>
           </div>
           <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-              <p style="float: left;width: 80%;text-align: left;"><b>{{'from' |
+              <p
+                style="float: left;width: 80%;text-align: left;color: white;"><b>{{'from'
+                  |
                   translate}}</b></p>
-              <p style="float: left;width: 20%;text-align: right;"><b>{{'to' |
+              <p
+                style="float: left;width: 20%;text-align: right;color: white;"><b>{{'to'
+                  |
                   translate}}</b></p>
             </div>
             <div style="width: 100%;">
               <p
-                style="float: left;width: 50%;text-align: left;"><b>{{blockDetail.hour_start}}</b></p>
+                style="float: left;width: 50%;text-align: left;color: white;"><b>{{blockDetail.hour_start}}</b></p>
               <p
-                style="float: left;width: 50%;text-align: right;"><b>{{blockDetail.hour_end}}</b></p>
+                style="float: left;width: 50%;text-align: right;color: white;"><b>{{blockDetail.hour_end}}</b></p>
             </div>
           </div>
           <mat-divider
@@ -1168,7 +1171,8 @@
 
           <div style="width:100%; margin-top:5%;float:left">
             <div style="width: 100%;">
-              <p style="float: left;width: 100%;text-align: left;"><b>
+              <p
+                style="float: left;width: 100%;text-align: left;color: white;"><b>
                   <ng-container
                     *ngIf="blockDetail.type=='block_personal'">{{'no_working_day'
                     | translate}}</ng-container>
@@ -1182,7 +1186,7 @@
             </div>
             <div style="width: 100%;">
               <p
-                style="float: left;width: 50%;text-align: left;">{{blockDetail.name}}</p>
+                style="float: left;width: 50%;text-align: left;color: white;">{{blockDetail.name}}</p>
             </div>
           </div>
           <mat-divider
