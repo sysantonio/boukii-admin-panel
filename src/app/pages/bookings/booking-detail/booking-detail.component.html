@@ -911,7 +911,8 @@
               <div class="title-actividad">
                 <b class="title">{{ "summary" | translate }}</b>
               </div>
-              <div class="list-box">
+              <div class="list-box"
+                style="display: flex;flex-direction: column;">
                 <div *ngIf="booking.status !== 2">
                   <div class="col-left">{{ "base_price" | translate }}</div>
                   <div class="col-right">
@@ -950,24 +951,24 @@
 
                 <ng-container
                   *ngFor="let item of bookingsToCreate; let i = index">
-                  <span
+                  <div
                     *ngIf="item.courseDates[0].course.course_type == 1 && getCourseExtraForfaitPriceByCourse(item.courseDates[0])"
                     style="width: 100%; float:left">
-                    <p style="float:left">
+                    <div style="float:left">
                       Forfaits - {{'course' | translate}} {{
                       item.courseDates[0].course.name }}
-                    </p>
-                    <p style="float:right">
+                    </div>
+                    <div style="float:right">
                       +{{
                       getCourseExtraForfaitPriceByCourse(item.courseDates[0])
                       }}
                       {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
-                    </p>
-                  </span>
-                  <span
+                    </div>
+                  </div>
+                  <div
                     *ngIf="item.courseDates[0].course.course_type == 2 &&  getCourseExtraForfaitPriceByDateHour(item.courseDates[0])"
                     style="width: 100%; float:left">
-                    <p style="float:left">
+                    <div style="float:left">
                       Forfait
                       {{
                       item.courseDates[0].date
@@ -975,19 +976,19 @@
                       }}
                       - {{ item.courseDates[0].hour_start.slice(0, -3) }} -
                       {{ item.courseDates[0].hour_end.slice(0, -3) }}
-                    </p>
-                    <p style="float:right">
+                    </div>
+                    <div style="float:right">
                       +{{
                       getCourseExtraForfaitPriceByDateHour(
                       item.courseDates[0]
                       )
                       }}
                       {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
-                    </p>
-                  </span>
-                  <span *ngIf="item.courseDates[0].course.course_type == 3 "
+                    </div>
+                  </div>
+                  <div *ngIf="item.courseDates[0].course.course_type == 3 "
                     style="width: 100%; float:left">
-                    <p style="float:left">
+                    <div style="float:left">
                       Extra
                       {{
                       item.courseDates[0].date
@@ -995,22 +996,18 @@
                       }}
                       - {{ item.courseDates[0].hour_start.slice(0, -3) }} -
                       {{ item.courseDates[0].hour_end.slice(0, -3) }}
-                    </p>
-                    <p style="float:right">
+                    </div>
+                    <div style="float:right">
                       +{{
                       getCourseExtraForfaitPriceByDateHour(
                       item.courseDates[0]
                       )
                       }}
                       {{getCourse(item?.courseDates[0]?.course_id)?.currency}}
-                    </p>
-                  </span>
+                    </div>
+                  </div>
                 </ng-container>
-
-                <div class="mat-divider"
-                  style="border-top-color: #A4A3A3;width: 100%;"></div>
-
-                <div style="margin-bottom: 10px;">
+                <div style="border-top: 1px solid #A4A3A3;">
                   <div class="col-left"><b>Subtotal</b></div>
                   <div class="col-right">
                     {{ geBasePriceAndExtraPrice() }}
