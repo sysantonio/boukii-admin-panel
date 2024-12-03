@@ -194,7 +194,8 @@
           <mat-form-field appearance="outline">
             <mat-label>{{'station' | translate }}</mat-label>
 
-            <input type="text" placeholder="{{'Selecciona una opción' | translate}}" matInput
+            <input type="text"
+              placeholder="{{'Selecciona una opción' | translate}}" matInput
               [formControl]="myControlStations" [matAutocomplete]="autoStation"
               formControlName="station">
 
@@ -270,13 +271,15 @@
 
           <mat-form-field appearance="outline">
             <input type="text" id="description" formControlName="description"
-              placeholder="La description" [value]="defaults.description"
+              placeholder="{{'courses.errors.desc' | translate}}"
+              [value]="defaults.description"
               matInput [(ngModel)]="defaults.description">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>{{'station' | translate }}</mat-label>
 
-            <input type="text" placeholder="{{'Selecciona una opción' | translate}}" matInput
+            <input type="text"
+              placeholder="{{'Selecciona una opción' | translate}}" matInput
               [formControl]="myControlStations" [matAutocomplete]="autoStation"
               formControlName="station">
 
@@ -299,7 +302,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="flex justify-end">
-  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button mat-dialog-close>{{'cancel' | translate}}</button>
   <button (click)="save()" class="save" color="primary" mat-raised-button>
     {{'save' | translate }}
   </button>

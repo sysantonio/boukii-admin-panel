@@ -82,7 +82,7 @@
         </mat-form-field>
 
         <div class="flex items-center justify-end gap-2">
-          <button mat-button type="button" (click)="cancel()">Cancel</button> <!-- Added (click) event here -->
+          <button mat-button type="button" (click)="cancel()">{{'cancel' | translate}}</button> <!-- Added (click) event here -->
           <button color="primary" mat-raised-button type="button" (click)="save()">{{'save' | translate }}</button>
         </div>
       </div>
