@@ -12,6 +12,17 @@
     return a + b * Math.pow(Math.E, c * fontSize)
   }
 */
+.ql-editor {
+  font-family: DM Sans, serif;
+}
+.ql-toolbar.ql-snow {
+  font-family: DM Sans, serif !important;
+}
+
+.ql-container {
+  font-family: DM Sans, serif !important;
+}
+
 
 .display-4 {
   @include mat.typography-level($config, headline-1);
