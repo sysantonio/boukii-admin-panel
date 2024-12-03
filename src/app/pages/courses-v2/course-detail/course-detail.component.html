@@ -171,9 +171,9 @@
 
                   <div class="flex-auto">
 
-                    <label for="dateFrom">{{'courses.date_reservable' |
-                      translate}}</label>
+      
                     <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
 
                       <input matInput id="dateFrom"
                         [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
@@ -182,9 +182,9 @@
                   </div>
                   <div class="flex-auto">
 
-                    <label for="dateTo">{{'courses.date_reservable_to' |
-                      translate}}</label>
+
                     <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{'courses.date_reservable_to' | translate}}</mat-label>
 
                       <input matInput id="dateTo"
                         [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
@@ -195,8 +195,8 @@
 
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                   <div class="flex-auto" style="width: 50%; float:left">
-                    <label for="duration">{{'duration' | translate}}</label>
                     <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{'duration' | translate}}</mat-label>
 
                       <input id="duration" matInput required type="text"
                         placeholder="{{'duration' | translate}}"
@@ -205,8 +205,6 @@
                     </mat-form-field>
                   </div>
                   <div class="flex-auto" style="width: 50%; float:left">
-                    <label for="participants">{{'max_pax' | translate}}</label>
-
                     <mat-form-field appearance="outline" style="width: 100%">
                       <mat-label>{{'max_pax' | translate}}</mat-label>
                       <input id="participants" matInput required type="number"
@@ -627,7 +625,7 @@
                   style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
                   <mat-card-subtitle style="width:100%;">
                     <div
-                      style="width: 60%;display:inline-block;text-align: left; color: white;">
+                      style="width: 60%;display:inline-block;text-align: left; color: #868686;">
                       <b>{{ 'register' | translate}}:</b>
                       <span style="margin-left: 10px;font-weight: normal;">
                         <span>01/08/2024</span><span

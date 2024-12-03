@@ -620,21 +620,21 @@
             style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
             <mat-card-subtitle style="width:100%;">
               <div
-                style="width: 60%;display:inline-block;text-align: left; color: white;">
+                style="width: 60%;display:inline-block;text-align: left; color:#868686;">
                 <b>{{ 'register' | translate}}:</b>
-                <span style="margin-left: 10px;font-weight: normal;"
+                <span style="margin-left: 10px;font-weight: normal;color:white"
                   *ngIf="taskDetail.created_at">
-                  <span>{{taskDetail.created_at | date: 'dd/MM/YYYY'}}</span>
+                  <span style="color:white">{{taskDetail.created_at | date: 'dd/MM/YYYY'}}</span>
                   <span
-                    style="margin-left: 10px;font-style: italic;">{{taskDetail.created_at
+                    style="margin-left: 10px;font-style: italic;color:white">{{taskDetail.created_at
                     | date: 'HH:mm'}}h</span>
                 </span>
               </div>
               <div
-                style="width: 40%;display:inline-block;text-align: right;color: white;font-weight: normal;"
+                style="width: 40%;display:inline-block;text-align: right;color:#868686;font-weight: normal;"
                 *ngIf="taskDetail.user">
                 {{ taskDetail.user?.username }} <span
-                  style="margin-left: 10px;">({{ taskDetail.user?.first_name +
+                  style="margin-left: 10px;color:white">({{ taskDetail.user?.first_name +
                   ' ' + taskDetail.user.last_name}})</span>
               </div>
             </mat-card-subtitle>

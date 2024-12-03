@@ -459,14 +459,12 @@
 
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto" style="width: 50%;">
-
-                <label for="dateFromPrivate"
-                  *ngIf="defaults.is_flexible">{{'courses.date_reservable' |
-                  translate}} <span style="color:red">(*)</span></label>
-                <label for="dateFromPrivate"
-                  *ngIf="!defaults.is_flexible">{{'from' | translate}} <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-label
+                    *ngIf="defaults.is_flexible">{{'courses.date_reservable'
+                    | translate}}</mat-label>
+                  <mat-label *ngIf="!defaults.is_flexible">{{'from' |
+                    translate}}</mat-label>
 
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerFrom"
@@ -491,12 +489,12 @@
               </div>
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="dateToPrivate"
-                  *ngIf="defaults.is_flexible">{{'courses.date_reservable_to' |
-                  translate}} <span style="color:red">(*)</span></label>
-                <label for="dateToPrivate" *ngIf="!defaults.is_flexible">{{'to'
-                  | translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-label
+                    *ngIf="defaults.is_flexible">{{'courses.date_reservable_to'
+                    | translate}}</mat-label>
+                  <mat-label *ngIf="!defaults.is_flexible">{{'to' |
+                    translate}}</mat-label>
 
                   <input matInput id="dateToPrivate" [matDatepicker]="pickerTo"
                     formControlName="toDate"
@@ -527,10 +525,10 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="durationPrivate">{{'courses.dur_min' | translate}}
-                  <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
+                  <mat-label>{{'courses.dur_min' | translate}}</mat-label>
+
                   <input type="text" id="durationPrivate"
                     formControlName="duration"
                     placeholder="{{'courses.dur_min' | translate}}" matInput
@@ -545,9 +543,6 @@
                 </mat-form-field>
               </div>
               <div class="flex-auto" style="width: 50%;">
-
-                <label for="participants">{{'max_pax' | translate}} <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
                   <mat-label>{{'max_pax' | translate}}</mat-label>
@@ -1443,13 +1438,13 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
-                <label for="dateFromPrivate"
-                  *ngIf="defaults.is_flexible">{{'courses.date_reservable' |
-                  translate}} <span style="color:red">(*)</span></label>
-                <label for="dateFromPrivate"
-                  *ngIf="!defaults.is_flexible">{{'courses.date_reservable' |
-                  translate}} <span style="color:red">(*)</span></label>
+
                 <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-label
+                  *ngIf="defaults.is_flexible">{{'courses.date_reservable'
+                  | translate}}</mat-label>
+                <mat-label *ngIf="!defaults.is_flexible">{{'from' |
+                  translate}}</mat-label>
 
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerDateFrom" formControlName="fromDate"
@@ -1468,14 +1463,12 @@
               </div>
               <div class="flex-auto">
 
-                <label for="dateToPrivate"
-                  *ngIf="defaults.is_flexible">{{'courses.date_reservable_to' |
-                  translate}} <span style="color:red">(*)</span></label>
-                <label for="dateToPrivate"
-                  *ngIf="!defaults.is_flexible">{{'courses.date_reservable_to' |
-                  translate}} <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
-
+                  <mat-label
+                  *ngIf="defaults.is_flexible">{{'courses.date_reservable_to'
+                  | translate}}</mat-label>
+                <mat-label *ngIf="!defaults.is_flexible">{{'to' |
+                  translate}}</mat-label>
                   <input matInput id="dateToPrivate"
                     [matDatepicker]="pickerDateTo" formControlName="toDate"
                     [matDatepickerFilter]="myHolidayFilter"
@@ -1499,10 +1492,10 @@
 
               <div class="flex-auto">
 
-                <label for="participants">{{'max_pax' | translate}}. <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
+                  <mat-label>{{'max_pax' | translate}}</mat-label>
+
                   <input id="participants" formControlName="participants"
                     matInput required type="number"
                     [(ngModel)]="defaults.max_participants">

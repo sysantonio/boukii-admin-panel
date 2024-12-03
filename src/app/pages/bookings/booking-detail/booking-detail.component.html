@@ -744,33 +744,33 @@
                   style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
                   <mat-card-subtitle style="width:100%;">
                     <div
-                      style="color: white;">
+                      style="color:#868686;">
                       <b>{{ 'register' | translate}}:</b>
                       <span
-                        style="margin-left: 5px;font-weight: normal;color: white;">
-                        <span style="color: white;">
+                        style="margin-left: 5px;font-weight: normal;">
+                        <span style="color:white;">
                           {{booking.created_at | date: 'dd/MM/YYYY'}}
                         </span>
                         <span
-                          style="margin-left: 5px;font-style: italic;color: white;">
+                          style="margin-left: 5px;font-style: italic;color:white;">
                           {{booking.created_at | date: 'HH:mm'}}h
                         </span>
                       </span>
                     </div>
                     <div *ngIf="booking.user"
-                      style="color: white;font-weight: normal;">
+                      style="color:#868686;font-weight: normal;">
                       <b> {{ "by" | translate }}: </b>
-                      <span style="margin-left: 5px;color: white;">
+                      <span style="margin-left: 5px;color:white;">
                         {{ booking.user.username }} ({{
                         booking.user.first_name + ' ' + booking.user.last_name
                         }})</span>
                     </div>
-                    <div style="color: white;font-weight: normal;">
+                    <div style="color:#868686;font-weight: normal;">
                       <b> {{ 'from' | translate }}: </b>
-                      <span style="margin-left: 5px;color: white;"
+                      <span style="margin-left: 5px;color:white;"
                         *ngIf="booking.source == 'web'">{{'page_created' |
                         translate}}</span>
-                      <span style="margin-left: 5px;color: white;"
+                      <span style="margin-left: 5px;color:white;"
                         *ngIf="booking.source == 'admin'">{{'api_created' |
                         translate}}</span>
                     </div>

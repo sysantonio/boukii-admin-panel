@@ -814,15 +814,15 @@
             style="width:100%; margin-top:5%;float:left"
             *ngIf="showDetail === bookI">
             <div style="width: 100%;">
-              <p style="float: left;width: 80%;text-align: left;">
+              <p style="float: left;width: 80%;text-align: left;color:#868686">
                 <b>{{'register' | translate}}</b>
               </p>
-              <p style="float: left;width: 20%;text-align: right;">
+              <p style="float: left;width: 20%;text-align: right;color:#868686">
                 <b>{{'status' | translate}}</b>
               </p>
             </div>
             <div style="width: 100%;">
-              <p style="float: left;width: 60%;text-align: left;">
+              <p style="float: left;width: 60%;text-align: left;color:white">
                 <b>{{ minDate | date: 'dd/MM/YYYY'}}</b>
                 {{ minDate | date: 'HH:mm'}}
               </p>
@@ -1449,15 +1449,15 @@
                   class="text-border"></mat-divider>
                 <div
                   style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
-                  <p style="font-size: 12px;">
+                  <p style="font-size: 12px;color:#868686">
                     <strong>{{'register' | translate}}</strong>:{{ minDate |
                     date: 'dd/MM/YYYY'}}
                     {{ minDate | date: 'HH:mm'}}
                   </p>
-                  <p style="font-size: 12px;">
+                  <p style="font-size: 12px;color:#868686">
                     <strong>{{'from' | translate}}:</strong>: Admin
                   </p>
-                  <p style="font-size: 12px;">
+                  <p style="font-size: 12px;color:#868686">
                     <strong>{{'by' | translate}}</strong>: {{user.first_name}}
                     {{user.last_name}}
                   </p>

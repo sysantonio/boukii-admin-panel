@@ -538,10 +538,9 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto" style="width: 50%;">
 
-                <label for="durationPrivate">{{'courses.dur_min' | translate}}
-                  <span style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
+                  <mat-label>{{'courses.dur_min' | translate}}</mat-label>
                   <input type="text" id="durationPrivate"
                     formControlName="duration"
                     placeholder="{{'courses.dur_min' | translate}}" matInput
@@ -556,9 +555,6 @@
                 </mat-form-field>
               </div>
               <div class="flex-auto" style="width: 50%;">
-
-                <label for="participants">{{'max_pax' | translate}} <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
                   <mat-label>{{'max_pax' | translate}}</mat-label>
@@ -577,11 +573,10 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"
               *ngIf="!defaults.is_flexible">
               <div class="flex-auto">
-
-                <label for="fromHour">{{'start_hour' | translate}} <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
+                  <mat-label>{{'start_hour' | translate}}</mat-label>
+
                   <input type="text" id="fromHour" formControlName="fromHour"
                     placeholder="{{'start_hour' | translate}}" matInput
                     [matAutocomplete]="autoHourFrom"
@@ -600,10 +595,10 @@
               </div>
               <div class="flex-auto">
 
-                <label for="maxDuration">{{'end_hour' | translate}} <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
+                  <mat-label>{{'end_hour' | translate}}</mat-label>
+
                   <input type="text" id="toHour" formControlName="maxDuration"
                     placeholder="{{'end_hour' | translate}}" matInput
                     [matAutocomplete]="autoHourTo"
@@ -1520,10 +1515,10 @@
 
               <div class="flex-auto">
 
-                <label for="participants">{{'max_pax' | translate}}. <span
-                    style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" class="flex-auto"
                   style="width: 100%">
+                  <mat-label>{{'max_pax' | translate}}</mat-label>
+
                   <input id="participants" formControlName="participants"
                     matInput required type="number"
                     [(ngModel)]="defaults.max_participants">
