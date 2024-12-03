@@ -35,7 +35,7 @@
 
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close type="button">{{'cancel' | translate}}</button>
-    <button *ngIf="isCreateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">Confirmer</button>
+    <button *ngIf="isCreateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">{{'confirm' | translate}}</button>
     <button *ngIf="isUpdateMode()" [disabled]="form.invalid" color="primary" mat-flat-button type="submit" (click)="save()">Update</button>
   </mat-dialog-actions>
 </form>
