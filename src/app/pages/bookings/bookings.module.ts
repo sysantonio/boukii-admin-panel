@@ -21,7 +21,6 @@ import { BookingsRoutingModule } from './bookings-routing.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { BookingDetailComponent } from './booking-detail/booking-detail.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { IconComponent } from 'src/@vex/components/icon/app.component';

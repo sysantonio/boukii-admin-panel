@@ -24,10 +24,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { TranslateModule } from '@ngx-translate/core';
+import { CalendarEditComponent } from './calendar-edit/calendar-edit.component';
 
 @NgModule({
-  declarations: [CalendarComponent],
+  declarations: [CalendarComponent,],
   imports: [
+    CalendarEditComponent,
     CommonModule,
     LayoutModule,
     PageLayoutModule,
@@ -38,6 +40,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatIconModule,
     ChartModule,
     WidgetQuickLineChartModule,
+    TranslateModule,
     WidgetQuickValueCenterModule,
     WidgetQuickValueStartModule,
     WidgetLargeGoalChartModule,

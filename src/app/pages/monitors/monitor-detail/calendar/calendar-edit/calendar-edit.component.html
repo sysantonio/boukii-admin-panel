@@ -55,7 +55,7 @@
             }}</mat-checkbox>
 
           <mat-form-field appearance="outline">
-            <mat-label>Start Date</mat-label>
+            <mat-label>{{"courses.date_start" | translate }}</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerNonAvailable"
@@ -69,7 +69,7 @@
 
           <mat-form-field appearance="outline"
             *ngIf="form.get('range_dates').value && !event.block_general">
-            <mat-label>End Date</mat-label>
+            <mat-label>{{'courses.date_end' | translate}}</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
@@ -107,7 +107,7 @@
 
           <mat-form-field appearance="outline">
             <input type="text" id="description" formControlName="description"
-              placeholder="Añade una descripción" matInput
+              placeholder="{{'courses.errors.desc' | translate}}" matInput
               [value]="defaults.description" [(ngModel)]="defaults.description">
           </mat-form-field>
         </div>
@@ -134,7 +134,7 @@
             }}</mat-checkbox>
 
           <mat-form-field appearance="outline">
-            <mat-label>Start Date</mat-label>
+            <mat-label>{{"courses.date_start" | translate }}</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerPayedBlock"
@@ -148,7 +148,7 @@
 
           <mat-form-field appearance="outline"
             *ngIf="form.get('range_dates').value && !event.block_general">
-            <mat-label>End Date</mat-label>
+            <mat-label>{{'courses.date_end' | translate}}</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
@@ -187,14 +187,14 @@
 
           <mat-form-field appearance="outline">
             <input type="text" id="description" formControlName="description"
-              placeholder="La description" matInput
+              placeholder="{{'courses.errors.desc' | translate}}" matInput
               [value]="defaults.description" [(ngModel)]="defaults.description">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{'station' | translate }}</mat-label>
 
-            <input type="text" placeholder="Selecciona una opción" matInput
+            <input type="text" placeholder="{{'Selecciona una opción' | translate}}" matInput
               [formControl]="myControlStations" [matAutocomplete]="autoStation"
               formControlName="station">
 
@@ -217,7 +217,7 @@
             }}</mat-checkbox>
 
           <mat-form-field appearance="outline">
-            <mat-label>Start Date</mat-label>
+            <mat-label>{{"courses.date_start" | translate }}</mat-label>
             <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerNonPayedBlock"
@@ -231,7 +231,7 @@
 
           <mat-form-field appearance="outline"
             *ngIf="form.get('range_dates').value && !event.block_general">
-            <mat-label>End Date</mat-label>
+            <mat-label>{{'courses.date_end' | translate}}</mat-label>
             <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
@@ -276,7 +276,7 @@
           <mat-form-field appearance="outline">
             <mat-label>{{'station' | translate }}</mat-label>
 
-            <input type="text" placeholder="Selecciona una opción" matInput
+            <input type="text" placeholder="{{'Selecciona una opción' | translate}}" matInput
               [formControl]="myControlStations" [matAutocomplete]="autoStation"
               formControlName="station">
 

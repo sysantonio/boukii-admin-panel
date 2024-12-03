@@ -6,7 +6,6 @@ import {
   MatDialogModule,
   MatDialogRef
 } from '@angular/material/dialog';
-import { CalendarEvent } from 'angular-calendar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -19,9 +18,8 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { CommonModule } from '@angular/common';
 import { Observable, map, startWith } from 'rxjs';
 import * as moment from 'moment';
-import { BookingsCreateUpdateModalComponent } from 'src/app/pages/bookings/bookings-create-update-modal/bookings-create-update-modal.component';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {DateAdapter} from '@angular/material/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DateAdapter } from '@angular/material/core';
 import {
   BookingsCreateUpdateComponent
 } from '../../../../bookings/bookings-create-update/bookings-create-update.component';
@@ -75,7 +73,7 @@ export class CalendarEditComponent implements OnInit {
   filteredTimes: any = [];
   blockages: any = [];
   stations: any = [];
-  user:any;
+  user: any;
   loading = true;
   constructor(
     private dialogRef: MatDialogRef<CalendarEditComponent>,
@@ -107,8 +105,8 @@ export class CalendarEditComponent implements OnInit {
       description: null,
       station: null,
       blockage: null,
-      full_day:false,
-      range_dates:false
+      full_day: false,
+      range_dates: false
     });
 
 
@@ -140,19 +138,19 @@ export class CalendarEditComponent implements OnInit {
     this.defaults.start_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
     if (this.defaults.end_date && moment(this.defaults.end_date).isAfter(this.defaults.start_date)) {
       this.defaults.end_date = moment(this.defaults.end_date).format('YYYY-MM-DD');
-  } else {
+    } else {
       this.defaults.end_date = this.defaults.start_date;
     }
-    if(this.form.get('full_day').value){
+    if (this.form.get('full_day').value) {
       this.defaults.full_day = this.form.get('full_day').value;
     }
-    else{
+    else {
       this.defaults.full_day = false;
     }
-    if(this.form.get('range_dates').value){
+    if (this.form.get('range_dates').value) {
       this.defaults.range_dates = this.form.get('range_dates').value;
     }
-    else{
+    else {
       this.defaults.range_dates = false;
     }
 
@@ -183,15 +181,15 @@ export class CalendarEditComponent implements OnInit {
 
 
   getBlockages() {
-    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&default=1&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&default=1&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         this.blockages = data.data;
 
-        if(this.event && this.event.start) {
+        if (this.event && this.event.start) {
           this.defaults.start_date = this.event.start;
           this.defaults.end_date = this.event.end;
-          this.defaults.start_time = this.event.start_time.substring(0, this.event.start_time.length-3);;
-          this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
+          this.defaults.start_time = this.event.start_time.substring(0, this.event.start_time.length - 3);;
+          this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length - 3);;
           this.defaults.color = this.event.color;
           this.defaults.full_day = this.event.allDay;
           this.defaults.user_nwd_subtype_id = this.event.user_nwd_subtype_id;
@@ -207,21 +205,21 @@ export class CalendarEditComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.station_id)
+          this.crudService.get('/stations/' + element.station_id)
             .subscribe((data) => {
               this.stations.push(data.data);
               this.filteredStations = this.myControlStations.valueChanges
-              .pipe(
-                startWith(''),
-                map(value => this._filterStations(value))
-              );
+                .pipe(
+                  startWith(''),
+                  map(value => this._filterStations(value))
+                );
 
               this.myControlStations.valueChanges.subscribe(value => {
                 this.form.get('station').setValue(value);
-            });
+              });
             })
         });
       })
@@ -235,7 +233,7 @@ export class CalendarEditComponent implements OnInit {
     if (event.index === 3) {
       this.openCreateBooking();
     } else {
-      if(this.event && this.event.date_param) {
+      if (this.event && this.event.date_param) {
         this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
         //this.defaults.end_date = this.event.end;
         this.defaults.start_time = this.event.hour_start;

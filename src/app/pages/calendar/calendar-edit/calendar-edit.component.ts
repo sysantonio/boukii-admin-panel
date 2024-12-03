@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-calendar-edit',
@@ -22,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatButtonModule
+    MatButtonModule, TranslateModule
   ]
 })
 export class CalendarEditComponent implements OnInit {
@@ -35,8 +36,8 @@ export class CalendarEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<CalendarEditComponent>,
     @Inject(MAT_DIALOG_DATA) public event: CalendarEvent<any>,
-    private fb: UntypedFormBuilder
-  ) {}
+    private fb: UntypedFormBuilder,
+  ) { }
 
   ngOnInit() {
     this.form.patchValue(this.event);

@@ -138,7 +138,7 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'country' | translate }}</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
+                <input type="text" placeholder="{{'Selecciona una opción' | translate}}" matInput [formControl]="myControlCountries" [matAutocomplete]="autoCountry" formControlName="country">
                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFnCountry">
                   <mat-option *ngFor="let country of filteredCountries | async" [value]="country" (onSelectionChange)="defaults.country = country.id">
                     {{country.name}}
@@ -148,7 +148,7 @@
 
               <mat-form-field appearance="outline" class="vex-flex-form-field flex-auto">
                 <mat-label>{{'province' | translate }}</mat-label>
-                <input type="text" placeholder="Selecciona una opción" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
+                <input type="text" placeholder="{{'Selecciona una opción' | translate}}" matInput [formControl]="myControlProvinces" [matAutocomplete]="autoProvince" formControlName="province">
                 <mat-autocomplete #autoProvince="matAutocomplete" [displayWith]="displayFnProvince">
                   <mat-option *ngFor="let province of filteredProvinces | async" [value]="province" (onSelectionChange)="defaults.province = province.id">
                     {{province.name}}
