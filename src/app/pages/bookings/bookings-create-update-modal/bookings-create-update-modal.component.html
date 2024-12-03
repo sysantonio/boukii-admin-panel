@@ -1314,7 +1314,7 @@
                             [value]="forfait"
                             (change)="setForfait($event, forfait, item, bI)"
                             [checked]="item?.forfait?.id === forfait.id">
-                            <span>                                  {{forfait.product}} - {{ forfait.name }}
+                            <span> {{forfait.product}} - {{ forfait.name }}
                             </span>
                           </mat-checkbox>
                         </li>
@@ -1653,7 +1653,8 @@
               <mat-divider
                 class="text-border"
                 style="margin: 10px 0 10px 0"></mat-divider>
-              <div class="square-buttons-container">
+              <div class="square-buttons-container"
+                style="padding: 0 10px; gap: 10px;">
                 <button
                   mat-raised-button
                   color="accent"
@@ -1684,7 +1685,8 @@
                 style="margin: 10px 0 10px 0"></mat-divider>
               <div
                 class="square-buttons-container"
-                *ngIf="selectedButton==='1'">
+                *ngIf="selectedButton==='1'"
+                style="padding: 0 10px; gap: 10px;">
                 <button
                   mat-raised-button
                   color="accent"

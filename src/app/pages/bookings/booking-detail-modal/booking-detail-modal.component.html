@@ -698,7 +698,8 @@
             <ng-container *ngIf="!booking.paid && booking.status !== 2">
               <mat-divider class="text-border"
                 style="margin: 10px 0 10px 0"></mat-divider>
-              <div class="square-buttons-container">
+              <div class="square-buttons-container"
+                style="padding: 0 10px; gap: 10px;">
                 <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedButton='1';selectedSubButton='0';"
                   [class.selected]="selectedButton==='1'">{{'payment_direct' |
@@ -711,6 +712,7 @@
               <mat-divider class="text-border"
                 style="margin: 10px 0 10px 0"></mat-divider>
               <div class="square-buttons-container"
+                style="padding: 0 10px; gap: 10px;"
                 *ngIf="selectedButton==='1'">
                 <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedSubButton='1';defaults.payment_method_id = 1"
