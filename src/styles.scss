@@ -770,7 +770,9 @@ button[color="primary"] {
     color: white !important;
   }
 }
-mat-calendar-header {
+
+mat-calendar-header,
+button[color="accent"] {
   span {
     color: black !important;
   }

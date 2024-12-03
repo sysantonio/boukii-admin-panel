@@ -211,7 +211,7 @@
                               <div  style="float: left;width: 16%;margin: 0 0 0 2%;" *ngIf="groupLevel.active">
                                 <div style="width:100%;border-radius: 0;height: 100px;padding: 2%; color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
  ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);text-align: center;border-radius:10px" >
-                                  {{'groups' | translate}} {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
+                                  {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}} {{'groups' | translate}} 
                                 </div>
                                 <div style="width: 100%; margin-top: 10%;height: 60px">
                                   <button mat-button color="accent" style="width: 100%;border-radius: 5px;color:#fff;background: #ff3085;height: 100%" (click)="addSubGroup(groupLevel)">{{'add_subgroup' | translate }}</button>

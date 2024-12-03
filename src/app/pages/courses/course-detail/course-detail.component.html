@@ -148,7 +148,9 @@
                       | translate}}</b></p>
                 </div>
                 <div style="width: 100%;">
-                  <p class="ql-editor" style="float: left; width: 50%; text-align: left;" [innerHTML]="getDescription(defaults)">
+                  <p class="ql-editor"
+                    style="float: left; width: 50%; text-align: left;"
+                    [innerHTML]="getDescription(defaults)">
                   </p>
                   <p style="float: left;width: 50%;text-align: right;"
                     *ngIf="defaults.course_type === 2">{{'from' | translate}}
@@ -316,8 +318,8 @@
                                 <div
                                   style="width:100%;border-radius: 0;height: 100px;padding: 2%;  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
  ;background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);text-align: center;border-radius:10px">
+                                  {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}
                                   {{'groups' | translate}}
-                                  {{defaults?.course_dates[0]?.course_groups[groupIndex]?.course_subgroups.length}}g
                                 </div>
                                 <div
                                   style="width: 100%; margin-top: 10%;height: 60px">
