@@ -765,3 +765,13 @@ input::placeholder {
 .mat-mdc-menu-panel {
   background: none !important;
 }
+button[color="primary"] {
+  span {
+    color: white !important;
+  }
+}
+mat-calendar-header {
+  span {
+    color: black !important;
+  }
+}
