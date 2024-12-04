@@ -140,8 +140,7 @@ export class DashboardAnalyticsComponent implements OnInit {
       let uniqueBookingIds = Array.from(bookingIds);
 
       uniqueBookingIds.forEach(element => {
-        this.crudService.list('/bookings', 1, 10000, 'desc', 'id', '&id='+element,
-          '', null, null, ['clientMain', 'bookingUsers.course'])
+        this.crudService.get('/bookings/'+element, ['clientMain', 'bookingUsers.course'])
           .subscribe((bo) => {
             this.bookingList = this.bookingList.concat(bo.data);
           })
