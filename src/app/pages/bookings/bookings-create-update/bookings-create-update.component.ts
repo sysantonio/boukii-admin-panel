@@ -1848,7 +1848,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             });
         });
 
-        if (this.externalData && this.externalData.monitor.sports) {
+        if (this.externalData && this.externalData?.monitor?.sports) {
           this.sportData = this.sportData.filter(i =>
             this.externalData.monitor.sports.some(sport => sport.id === i.sport_id)
           ).map(i => {
@@ -1989,6 +1989,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.borderActive = -1;
       this.defaultsBookingUser.client_id = client.id;
 
+
       this.crudService.get('/admin/clients/' + client.id + '/utilizers')
         .subscribe((data: any) => {
           this.utilizers = data.data;
@@ -2005,6 +2006,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               if (!client.client_sports.length) {
                 this.snackbar.open(this.translateService.instant('snackbar.booking.user_no_sport'), 'OK', { duration: 6000 });
               }
+              this.clientsForm.patchValue(client);
               client.client_sports.forEach(sport => {
                 if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
                   const level = this.levels.find((l) => l.id === sport.degree_id);
