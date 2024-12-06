@@ -9,3 +9,28 @@
   justify-content: flex-end;
   gap: 10px;
 }
+.client-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre avatar y texto */
+}
+
+.client-item app-level-user {
+  flex-shrink: 0; /* Evita que el avatar cambie de tamaño */
+}
+
+.client-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.image {
+  img {
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}

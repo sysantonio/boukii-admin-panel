@@ -8,11 +8,14 @@
           [checked]="isChecked(item)"
           (change)="onCheckboxChange($event)"
         ></mat-checkbox>
-        <app-level-user mat-card-avatar
-                        [allLevels]="item.client_sports && item.client_sports.length ?
-                        utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels) : []"
-                        [selectLevel]="item.client_sports && item.client_sports.length ?
-                        item.client_sports[0]?.degree : null"
+        <div class="image" *ngIf="!item.client_sports || !item.client_sports.length">
+          <img
+            [src]="item.image !== null && item.image !== '' ? item.image : userAvatar" />
+        </div>
+        <app-level-user *ngIf="item.client_sports && item.client_sports.length "
+                        mat-card-avatar style="margin-right: 5px"
+                        [allLevels]="utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels)"
+                        [selectLevel]="item.client_sports[0]?.degree_id"
                         [size]="60"
                         [userImage]="item.image !== null && item.image !== '' ? item.image : userAvatar">
         </app-level-user>

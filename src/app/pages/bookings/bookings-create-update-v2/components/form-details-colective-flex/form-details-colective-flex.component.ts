@@ -25,6 +25,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
 
   posibleExtras;
   totalExtraPrice: number[] = [];
+  isCoursExtrasOld = true;
 
 
   constructor(protected utilsService: UtilsService,
@@ -37,12 +38,28 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
 
   ngOnInit(): void {
     this.posibleExtras = this.course.course_extras;
+
+    if (this.isCoursExtrasOld) {
+      this.posibleExtras = this.filterExtrasByName(this.posibleExtras);
+    }
+
     this.initializeForm();
 
     // Inicializa los precios a cero
     this.totalExtraPrice = new Array(this.course.course_dates.length).fill(0);
   }
 
+  private filterExtrasByName(extras: any[]): any[] {
+    const uniqueExtras: { [key: string]: any } = {};
+
+    return extras.filter(extra => {
+      if (!uniqueExtras[extra.name]) {
+        uniqueExtras[extra.name] = true; // Marca el nombre como procesado
+        return true; // Mantén este extra en el resultado
+      }
+      return false; // Descarta extras con nombres duplicados
+    });
+  }
 
   initializeForm() {
     // Obtener el FormArray existente

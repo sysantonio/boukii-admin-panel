@@ -86,7 +86,7 @@
         [schoolObs]="schoolObs"
         [total]="total">
       </booking-description-card>
-      <button *ngIf="selectedIndexForm != null"
+      <button *ngIf="forms.length"
         mat-button
         type="button"
         (click)="isDetail = true">

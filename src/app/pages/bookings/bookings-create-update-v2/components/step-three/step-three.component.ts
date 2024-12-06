@@ -101,7 +101,9 @@ export class StepThreeComponent implements OnInit {
       const maxUtilizerAge = this.getMaxUtilizerAge();
       this.levels = this.levels.filter(
         (level) =>
-          maxUtilizerAge >= level.age_min && maxUtilizerAge <= level.age_max && level.school_id == this.getUserSchoolId()
+          maxUtilizerAge >= level.age_min && maxUtilizerAge <= level.age_max
+          && level.school_id == this.getUserSchoolId()
+          && level.active
       );
 
       // Preseleccionar el nivel si existe en `initialData`

@@ -17,7 +17,22 @@
           [value]="filteredClient"
           (onSelectionChange)="setClient($event)"
         >
-          {{ filteredClient.first_name }} {{ filteredClient.last_name }}
+          <div class="client-item">
+            <div class="image" *ngIf="!filteredClient.client_sports || !filteredClient.client_sports.length">
+              <img
+                [src]="filteredClient.image !== null && filteredClient.image !== '' ? filteredClient.image : userAvatar" />
+            </div>
+            <app-level-user *ngIf="filteredClient.client_sports && filteredClient.client_sports.length "
+              mat-card-avatar style="margin-bottom: 0 !important;"
+              [allLevels]="utilsService.getSportLevels(filteredClient.client_sports[0].sport_id, allLevels)"
+              [selectLevel]="filteredClient.client_sports[0]?.degree_id"
+              [size]="40"
+              [userImage]="filteredClient.image !== null && filteredClient.image !== '' ? filteredClient.image : userAvatar">
+            </app-level-user>
+            <span class="client-details">
+        {{ filteredClient.first_name }} {{ filteredClient.last_name }}
+      </span>
+          </div>
         </mat-option>
       </mat-autocomplete>
       <mat-icon matPrefix svgIcon="mat:person"></mat-icon>

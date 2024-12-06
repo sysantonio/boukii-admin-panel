@@ -55,10 +55,15 @@ export class CustomHeader implements OnChanges, DoCheck {
     const year = this.dateAdapter.getYear(date);
     const month = this.dateAdapter.getMonth(date);
 
-    // Creamos una fecha del primer día del mes siguiente
-    const firstDayNextMonth = this.dateAdapter.createDate(year, month + 1, 1);
+    // Ajustar el año y el mes si el mes es diciembre
+    const nextMonth = month + 1;
+    const nextYear = nextMonth > 11 ? year + 1 : year;
+    const adjustedMonth = nextMonth > 11 ? 0 : nextMonth;
 
-    // Restamos un día para obtener el último día del mes actual
+    // Crear la fecha del primer día del mes siguiente
+    const firstDayNextMonth = this.dateAdapter.createDate(nextYear, adjustedMonth, 1);
+
+    // Restar un día para obtener el último día del mes actual
     return this.dateAdapter.addCalendarDays(firstDayNextMonth, -1);
   }
 

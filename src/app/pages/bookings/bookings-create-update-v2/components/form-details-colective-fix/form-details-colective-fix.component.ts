@@ -17,6 +17,7 @@ export class FormDetailsColectiveFixComponent implements OnInit {
   possibleExtras;
   selectedExtras = [];
   totalExtrasPrice: string = "0 CHF"; // Muestra el precio total de los extras
+  isCourseExtrasOld = true;
 
   constructor(private fb: FormBuilder) {}
 
@@ -24,8 +25,22 @@ export class FormDetailsColectiveFixComponent implements OnInit {
     this.initializeForm();
   }
 
+  private filterExtrasByName(extras: any[]): any[] {
+    const uniqueExtras: { [key: string]: any } = {};
+    return extras.filter(extra => {
+      if (!uniqueExtras[extra.name]) {
+        uniqueExtras[extra.name] = true; // Marca el nombre como procesado
+        return true; // Mantén este extra en el resultado
+      }
+      return false; // Descarta extras con nombres duplicados
+    });
+  }
+
   initializeForm() {
     this.possibleExtras = this.course.course_extras;
+    if (this.isCourseExtrasOld) {
+      this.possibleExtras = this.filterExtrasByName(this.possibleExtras);
+    }
     // Obtener el FormArray existente
     const existingCourseDatesArray = this.stepForm.get('course_dates') as FormArray;
     this.selectedExtras = this.initialData?.[0]?.extras || [];

@@ -7,6 +7,7 @@ import {
   ClientCreateUpdateModalComponent
 } from '../../../../clients/client-create-update-modal/client-create-update-modal.component';
 import {MatDialog} from '@angular/material/dialog';
+import {UtilsService} from '../../../../../../service/utils.service';
 
 @Component({
   selector: "booking-step-one",
@@ -15,6 +16,7 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class StepOneComponent implements OnInit {
   @Input() initialData: any;
+  @Input() allLevels: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
 
   stepOneForm: FormGroup;
@@ -23,8 +25,10 @@ export class StepOneComponent implements OnInit {
   selectedClient: any;
   mainClient: any;
   expandClients: any[];
+  userAvatar = "../../../../assets/img/avatar.png";
 
-  constructor(private fb: FormBuilder, private crudService: ApiCrudService, private dialog: MatDialog) {}
+  constructor(private fb: FormBuilder, private crudService: ApiCrudService, protected utilsService: UtilsService,
+              private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));

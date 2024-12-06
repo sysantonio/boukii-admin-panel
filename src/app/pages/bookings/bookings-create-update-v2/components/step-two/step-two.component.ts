@@ -23,7 +23,7 @@ export class StepTwoComponent implements OnInit {
 
   selectedUtilizers;
   utilizers;
-  userAvatar = "../../../../assets/img/booking-avatar.svg";
+  userAvatar = "../../../../assets/img/avatar.png";
 
   constructor(
     private fb: FormBuilder,

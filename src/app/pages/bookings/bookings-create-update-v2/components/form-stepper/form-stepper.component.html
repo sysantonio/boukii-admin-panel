@@ -3,6 +3,7 @@
   <div *ngIf="currentStep === 0">
     <booking-step-one
       [initialData]="stepperForm.get('step1')?.value"
+      [allLevels]="allLevels"
       (stepCompleted)="handleStepCompletion(1, $event)"
     >
     </booking-step-one>

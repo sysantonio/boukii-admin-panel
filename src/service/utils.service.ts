@@ -291,4 +291,14 @@ export class UtilsService {
     return results;
   }
 
+  getClientDegreeByClient(client: any, sport_id: number) {
+    if (client && client !== null && sport_id && sport_id !== null) {
+      const sportObject = client?.client_sports.find(
+        (obj) => obj.sport_id === sport_id && obj.school_id == this.getSchoolData().id
+      );
+
+      return sportObject?.degree_id;
+    }
+  }
+
 }

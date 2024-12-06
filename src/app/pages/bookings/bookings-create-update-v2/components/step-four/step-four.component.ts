@@ -126,7 +126,12 @@ export class StepFourComponent {
   }
 
   updateNextMonth() {
-    this.nextMonthDate = moment(this.selectedDate).add(1, "month").toDate();
+    // Calculamos la fecha del último día del próximo mes
+    this.nextMonthDate = moment(this.selectedDate)
+      .add(1, "month")
+      .endOf("month")
+      .toDate();
+
     if (this.secondCalendar) {
       this.secondCalendar.activeDate = this.nextMonthDate;
     }
@@ -134,24 +139,19 @@ export class StepFourComponent {
 
   filterCoursesCollective() {
     this.courses = this.courses.filter(course => {
-        if(!course.is_flexible) {
-          course.course_dates.some(d => {
-            const courseDateMoment = moment(d.date, "YYYY-MM-DD");
-            const currentTime = moment(); // Definir la hora actual aquí
+      if (!course.is_flexible) {
+        // Filtrar si todas las fechas son iguales o posteriores a hoy
+        const hasPastDate = course.course_dates.some(d => {
+          const courseDateMoment = moment(d.date, "YYYY-MM-DD");
+          return courseDateMoment.isBefore(moment(), "day");
+        });
 
-            // Comprobar si la fecha es hoy
-            if (courseDateMoment.isSame(moment(), "day")) {
-              const hourStart = moment(d.hour_start, "HH:mm");
-              return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
-            } else {
-              return this.selectedDateMoment.isSame(courseDateMoment, 'day');
-            }
-          })
-        } else {
-          return true;
-        }
+        return !hasPastDate; // Solo incluir cursos sin fechas pasadas
       }
-    );
+
+      // Los cursos flexibles siempre pasan el filtro
+      return true;
+    });
   }
 
   handleDateChange(event: any) {
@@ -229,7 +229,7 @@ export class StepFourComponent {
       course_type: this.courseTypeId,
       sport_id: sportLevel.sport_id,
       client_id: this.client.id,
-      degree_id: sportLevel.id,
+      /*degree_id: sportLevel.id,*/
       get_lower_degrees: false,
       school_id: this.user.schools[0].id,
     };
