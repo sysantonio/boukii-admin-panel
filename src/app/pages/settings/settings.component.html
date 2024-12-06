@@ -53,7 +53,7 @@
                       <mat-form-field appearance="outline" style="width: 100%">
 
                         <input matInput id="dateFrom"
-                          [matDatepicker]="pickerFrom"
+                          [matDatepicker]="pickerFrom" readonly
                           formControlName="fromDate" [min]="today"
                           [(ngModel)]="selectedFrom" [value]="selectedFrom">
                         <mat-datepicker-toggle matSuffix
@@ -70,7 +70,7 @@
 
                         <input matInput id="dateTo" [matDatepicker]="pickerTo"
                           formControlName="toDate"
-                          [disabled]="selectedFrom === null"
+                          [disabled]="selectedFrom === null" readonly
                           [min]="selectedFrom" [(ngModel)]="selectedTo"
                           [value]="selectedTo">
                         <mat-datepicker-toggle matSuffix
@@ -134,7 +134,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 100%">
                           <input matInput [matDatepicker]="picker" [min]="today"
-                            id="holiday-{{i}}"
+                            id="holiday-{{i}}" readonly
                             (dateChange)="onDateSelect($event, i)"
                             [value]="holiday">
                           <mat-datepicker-toggle matSuffix

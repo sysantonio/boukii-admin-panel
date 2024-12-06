@@ -242,7 +242,7 @@
               [min]="minDate"
               [(ngModel)]="selectedDatePrivate"
               (dateChange)="emitDateChange($event)"
-              (dateInput)="emitDateChange($event, true)" />
+              (dateInput)="emitDateChange($event, true)"readonly />
             <mat-datepicker-toggle
               matSuffix
               [for]="pickerDateFrom"></mat-datepicker-toggle>
@@ -407,7 +407,7 @@
                       [matDatepicker]="pickerDateFrom"
                       [matDatepickerFilter]="inUseDatesFilter"
                       (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
-                      [min]="minDate"
+                      [min]="minDate"readonly
                       [max]="getMaxDate()" />
                     <mat-datepicker-toggle
                       matSuffix

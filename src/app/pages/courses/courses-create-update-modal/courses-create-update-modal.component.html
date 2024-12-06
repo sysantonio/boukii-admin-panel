@@ -468,7 +468,7 @@
 
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerFrom"
-                    [matDatepickerFilter]="myHolidayFilter"
+                    [matDatepickerFilter]="myHolidayFilter" readonly
                     formControlName="fromDate" [min]="minDate" [max]="maxDate"
                     [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix
@@ -500,7 +500,7 @@
                     formControlName="toDate"
                     [matDatepickerFilter]="myHolidayFilter"
                     [min]="courseInfoPriveFormGroup.value.fromDate"
-                    [max]="maxDate"
+                    [max]="maxDate" readonly
                     [(ngModel)]="defaults.date_end_res"
                     [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix
@@ -641,7 +641,7 @@
 
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerFromUnique"
-                    formControlName="fromDateUnique"
+                    formControlName="fromDateUnique" readonly
                     [matDatepickerFilter]="myHolidayFilter" [min]="minDate"
                     [max]="maxDate" [(ngModel)]="defaults.date_start">
                   <mat-datepicker-toggle matSuffix
@@ -666,7 +666,7 @@
                     formControlName="toDateUnique"
                     [matDatepickerFilter]="myHolidayFilter"
                     [min]="courseInfoPriveFormGroup?.value?.fromDateUnique"
-                    [max]="maxDate" [(ngModel)]="defaults.date_end"
+                    [max]="maxDate" [(ngModel)]="defaults.date_end" readonly
                     [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerToUnique"></mat-datepicker-toggle>
@@ -1448,8 +1448,8 @@
 
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerDateFrom" formControlName="fromDate"
-                    [min]="minDate" [matDatepickerFilter]="myHolidayFilter"
-                    [max]="maxDate" [(ngModel)]="defaults.date_start_res">
+                    [min]="minDate" [matDatepickerFilter]="myHolidayFilter" readonly
+                    [max]="maxDate" [(ngModel)]="defaults.date_start_res"> 
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerDateFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerDateFrom
@@ -1473,7 +1473,7 @@
                     [matDatepicker]="pickerDateTo" formControlName="toDate"
                     [matDatepickerFilter]="myHolidayFilter"
                     [min]="courseConfigForm.value.fromDate" [max]="maxDate"
-                    [(ngModel)]="defaults.date_end_res"
+                    [(ngModel)]="defaults.date_end_res" readonly
                     [disabled]="courseConfigForm.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerDateTo"></mat-datepicker-toggle>

@@ -181,8 +181,8 @@
         <input
           matInput
           [matDatepicker]="date_desde"
-          [min]="minDate"
-          [max]="maxDate" />
+          [min]="minDate" readonly
+          [max]="maxDate" /> 
         <mat-datepicker-toggle matSuffix
           [for]="date_desde"></mat-datepicker-toggle>
         <mat-datepicker #date_desde [startAt]="nowDate"></mat-datepicker>
@@ -193,7 +193,7 @@
         <input
           matInput
           [matDatepicker]="date_hasta"
-          [min]="minDate"
+          [min]="minDate" readonly
           [max]="maxDate" />
         <mat-datepicker-toggle matSuffix
           [for]="date_hasta"></mat-datepicker-toggle>

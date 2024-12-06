@@ -14,7 +14,7 @@
         <div class="row1">
           <mat-form-field appearance="outline">
             <mat-label>{{ "date" | translate }}</mat-label>
-            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="inUseDatesFilter" formControlName="date" />
+            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="inUseDatesFilter" formControlName="date"readonly />
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker [startAt]="minDate" [dateClass]="utilService.dateClass('green', this.course, minDate)"></mat-datepicker>
           </mat-form-field>

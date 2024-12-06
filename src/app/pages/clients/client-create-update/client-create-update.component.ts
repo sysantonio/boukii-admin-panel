@@ -15,7 +15,7 @@ import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
 import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { ApiCrudService } from 'src/service/crud.service';
-import {DateAdapter} from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'vex-client-create-update',
@@ -76,12 +76,12 @@ export class ClientCreateUpdateComponent implements OnInit {
     province: null,
     country: null,
     image: null,
-    language1_id:null,
-    language2_id:null,
-    language3_id:null,
-    language4_id:null,
-    language5_id:null,
-    language6_id:null,
+    language1_id: null,
+    language2_id: null,
+    language3_id: null,
+    language4_id: null,
+    language5_id: null,
+    language6_id: null,
     user_id: null,
     station_id: null
   }
@@ -109,7 +109,7 @@ export class ClientCreateUpdateComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder, private cdr: ChangeDetectorRef, private translateService: TranslateService,
     private crudService: ApiCrudService, private router: Router, private snackbar: MatSnackBar,
-              private dateAdapter: DateAdapter<Date>) {
+    private dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.today = new Date();
@@ -308,7 +308,7 @@ export class ClientCreateUpdateComponent implements OnInit {
         this.selectedLanguages.push({ id: language.id, name: language.name, code: language.code });
       }
     } else {
-      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.admin.langs'), 'OK', { duration: 3000 });
     }
   }
 
@@ -317,10 +317,10 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   getStations() {
-    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((station) => {
         station.data.forEach(element => {
-          this.crudService.get('/stations/'+element.station_id)
+          this.crudService.get('/stations/' + element.station_id)
             .subscribe((data) => {
               this.stations.push(data.data);
               this.loading = false;
@@ -331,7 +331,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -349,19 +349,19 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
 
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id)
-          .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data.filter(level => {
-              const age = this.calculateAge(this.defaults.birth_date);
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + element.sport_id)
+            .subscribe((data) => {
+              this.schoolSports[idx].degrees = data.data.filter(level => {
+                const age = this.calculateAge(this.defaults.birth_date);
 
-              return age >= level.age_min && age <= level.age_max;
+                return age >= level.age_min && age <= level.age_max;
+              });
             });
-          });
         });
       })
   }
@@ -371,7 +371,7 @@ export class ClientCreateUpdateComponent implements OnInit {
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
-            if(element.id === sport.sport_id) {
+            if (element.id === sport.sport_id) {
               sport.name = element.name;
             }
           });
@@ -405,10 +405,10 @@ export class ClientCreateUpdateComponent implements OnInit {
     this.crudService.create('/users', this.defaultsUser)
       .subscribe((user) => {
         this.defaults.user_id = user.data.id;
-
+        console.log(this.defaults)
         this.crudService.create('/clients', this.defaults)
           .subscribe((client) => {
-            this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', {duration: 3000});
+            this.snackbar.open(this.translateService.instant('snackbar.client.create'), 'OK', { duration: 3000 });
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
@@ -416,11 +416,11 @@ export class ClientCreateUpdateComponent implements OnInit {
               .subscribe((obs) => {
                 console.log('client observation created');
               })
-            this.crudService.create('/clients-schools', {client_id: client.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate()})
+            this.crudService.create('/clients-schools', { client_id: client.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
               .subscribe((clientSchool) => {
                 this.sportsData.data.forEach(element => {
 
-                  this.crudService.create('/client-sports', {client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id})
+                  this.crudService.create('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
                     .subscribe(() => {
                       console.log('client sport created');
                     })
@@ -435,7 +435,7 @@ export class ClientCreateUpdateComponent implements OnInit {
       })
   }
 
-  update() {}
+  update() { }
 
   setLanguages() {
     if (this.selectedLanguages.length >= 1) {
@@ -464,8 +464,8 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
   goToStep3(stepper: MatStepper) {
-    if(this.selectedLanguages.length === 0) {
-      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', {duration: 3000});
+    if (this.selectedLanguages.length === 0) {
+      this.snackbar.open(this.translateService.instant('snackbar.client.mandatory_language'), 'OK', { duration: 3000 });
       return;
     }
 

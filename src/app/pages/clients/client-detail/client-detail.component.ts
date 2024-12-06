@@ -752,6 +752,12 @@ export class ClientDetailComponent {
   setActive(event) {
     this.active = event.checked;
   }
+  formatDate = (date: Date): string => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
 
   save() {
     this.setLanguages();
@@ -779,6 +785,7 @@ export class ClientDetailComponent {
         this.defaults.user_id = user.data.id;
 
         // Actualizar el cliente
+        this.defaults.birth_date = this.formatDate(this.defaults.birth_date)
         this.crudService.update('/clients', this.defaults, this.id)
           .subscribe((client) => {
             this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', { duration: 3000 });

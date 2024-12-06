@@ -159,7 +159,7 @@
                 <input matInput [matDatepicker]="pickerFrom"
                   placeholder="{{'birth_date' | translate }}"
                   formControlName="fromDate" [max]="minDate"
-                  [(ngModel)]="defaults.birth_date"
+                  [(ngModel)]="defaults.birth_date" readonly
                   required>
                 <mat-datepicker-toggle matSuffix
                   [for]="pickerFrom"></mat-datepicker-toggle>
@@ -382,7 +382,7 @@
                       style="margin: 2% 0 0 0;">
                       <input matInput [matDatepicker]="pickerFromChild"
                         placeholder="{{'birth_date' | translate }}"
-                        [(ngModel)]="element.date" [max]="minDateChild"
+                        [(ngModel)]="element.date" [max]="minDateChild" readonly
                         formControlName="childAge">
                       <mat-datepicker-toggle matSuffix
                         [for]="pickerFromChild"></mat-datepicker-toggle>

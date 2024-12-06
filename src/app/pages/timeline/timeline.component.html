@@ -47,7 +47,7 @@
 
             <mat-form-field appearance="outline" class="flex-auto"
               style="max-height: 56px;">
-              <input matInput [matDatepicker]="pickerFrom"
+              <input matInput [matDatepicker]="pickerFrom" readonly
                 placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
                 (ngModelChange)="onDateChange()">
               <mat-datepicker-toggle matSuffix [for]="pickerFrom">

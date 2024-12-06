@@ -128,7 +128,7 @@
             matInput
             [matDatepicker]="date_reservable"
             [min]="minDate"
-            [max]="maxDate"
+            [max]="maxDate" readonly
             formControlName="reserve_from" />
           <mat-datepicker-toggle matSuffix
             [for]="date_reservable"></mat-datepicker-toggle>
@@ -142,7 +142,7 @@
             matInput
             [matDatepicker]="date_reservable_to"
             [min]="minDate"
-            [max]="maxDate"
+            [max]="maxDate" readonly
             formControlName="reserve_to" />
           <mat-datepicker-toggle
             matSuffix
@@ -192,7 +192,7 @@
                 matInput
                 [matDatepicker]="date_reservable"
                 [min]="minDate"
-                [max]="maxDate"
+                [max]="maxDate" readonly
                 [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date" />
               <mat-datepicker-toggle
                 matSuffix
@@ -334,7 +334,7 @@
                   matInput
                   [matDatepicker]="date_inicio"
                   [min]="minDate"
-                  [max]="maxDate"
+                  [max]="maxDate" readonly
                   [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date" />
                 <mat-datepicker-toggle
                   matSuffix
@@ -351,7 +351,7 @@
                   matInput
                   [matDatepicker]="date_fin"
                   [min]="minDate"
-                  [max]="maxDate"
+                  [max]="maxDate" readonly
                   [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date_end" />
                 <mat-datepicker-toggle
                   matSuffix

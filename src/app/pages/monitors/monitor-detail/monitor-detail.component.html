@@ -838,7 +838,7 @@
               <button (click)="goToNext()">&gt;</button>
 
               <mat-form-field appearance="outline" class="flex-auto">
-                <input matInput [matDatepicker]="pickerFrom"
+                <input matInput [matDatepicker]="pickerFrom" readonly
                   placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
                   (dateChange)="onDateChange($event)">
                 <mat-datepicker-toggle matSuffix
@@ -1391,7 +1391,8 @@
                   <p
                     style="float: left;width: 80%;text-align: left;color: white;"><b>{{'from'
                       | translate }}</b></p>
-                  <p style="float: left;width: 20%;text-align: right;color: white;"><b>{{'to'
+                  <p
+                    style="float: left;width: 20%;text-align: right;color: white;"><b>{{'to'
                       | translate }}</b></p>
                 </div>
                 <div style="width: 100%;">
@@ -1406,7 +1407,8 @@
 
               <div style="width:100%; margin-top:5%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 100%;text-align: left;color: white;">
+                  <p
+                    style="float: left;width: 100%;text-align: left;color: white;">
                     <b>
                       <ng-container
                         *ngIf="blockDetailTimeline.type=='block_personal'">{{'no_working_day'
@@ -1688,7 +1690,8 @@
                     class="vex-flex-form-field flex-auto" style="width: 50%">
                     <mat-label>{{'station' | translate }}</mat-label>
 
-                    <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                    <input type="text"
+                      placeholder="{{'Selecciona una opción' | translate}}"
                       matInput [formControl]="myControlStations"
                       [matAutocomplete]="autoStation" formControlName="station">
 
@@ -1734,7 +1737,7 @@
 
                   <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput [matDatepicker]="pickerFrom"
-                      placeholder="{{'birth_date' | translate }}"
+                      placeholder="{{'birth_date' | translate }}" readonly
                       formControlName="fromDate" [max]="minDate"
                       [(ngModel)]="defaults.birth_date"
                       required>
@@ -1790,7 +1793,8 @@
                   <mat-form-field appearance="outline"
                     class="vex-flex-form-field flex-auto">
                     <mat-label>{{'country' | translate }}</mat-label>
-                    <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                    <input type="text"
+                      placeholder="{{'Selecciona una opción' | translate}}"
                       matInput [formControl]="myControlCountries"
                       [matAutocomplete]="autoCountry" formControlName="country">
                     <mat-autocomplete #autoCountry="matAutocomplete"
@@ -1810,7 +1814,8 @@
                   <mat-form-field appearance="outline"
                     class="vex-flex-form-field flex-auto">
                     <mat-label>{{'province' | translate }}</mat-label>
-                    <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                    <input type="text"
+                      placeholder="{{'Selecciona una opción' | translate}}"
                       matInput [formControl]="myControlProvinces"
                       [matAutocomplete]="autoProvince"
                       formControlName="province">
@@ -1911,7 +1916,8 @@
                   <mat-form-field appearance="outline"
                     class="vex-flex-form-field flex-auto">
                     <mat-label>{{'country' | translate }}</mat-label>
-                    <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                    <input type="text"
+                      placeholder="{{'Selecciona una opción' | translate}}"
                       matInput [formControl]="myControlWorkCountries"
                       [matAutocomplete]="autoCountryWork"
                       formControlName="countryWork">
@@ -1965,6 +1971,7 @@
                         <mat-form-field appearance="outline" class="flex-auto"
                           style="margin: 2% 0 0 0;">
                           <input matInput [matDatepicker]="pickerFromChild"
+                            readonly
                             placeholder="{{'birth_date' | translate }}"
                             [(ngModel)]="element.date" [max]="minDateChild"
                             formControlName="childAge">
@@ -3212,7 +3219,8 @@
                   <p
                     style="float: left;width: 80%;text-align: left;color: white;"><b>{{'from'
                       | translate }}</b></p>
-                  <p style="float: left;width: 20%;text-align: right;color: white;"><b>{{'to'
+                  <p
+                    style="float: left;width: 20%;text-align: right;color: white;"><b>{{'to'
                       | translate }}</b></p>
                 </div>
                 <div style="width: 100%;">
@@ -3227,7 +3235,8 @@
 
               <div style="width:100%; margin-top:5%;float:left">
                 <div style="width: 100%;">
-                  <p style="float: left;width: 100%;text-align: left;color: white;"><b>
+                  <p
+                    style="float: left;width: 100%;text-align: left;color: white;"><b>
                       <ng-container
                         *ngIf="blockDetailTimeline.type=='block_personal'">{{'no_working_day'
                         | translate }}</ng-container>

@@ -17,7 +17,7 @@
               [(ngModel)]="defaults.start_date"
               [value]="defaults.start_date"
               [matDatepicker]="startDatepickerAvailable"
-              formControlName="startAvailable"
+              formControlName="startAvailable" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="startDatepickerAvailable"
@@ -59,7 +59,7 @@
             <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerNonAvailable"
-              formControlName="startNonAvailable"
+              formControlName="startNonAvailable" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="startDatepickerNonAvailable"
@@ -73,7 +73,7 @@
             <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
-              formControlName="endNonAvailable"
+              formControlName="endNonAvailable" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="endDatepickerNonAvailable"
@@ -138,7 +138,7 @@
             <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerPayedBlock"
-              formControlName="startPayedBlock"
+              formControlName="startPayedBlock" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="startDatepickerPayedBlock"
@@ -152,7 +152,7 @@
             <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
-              formControlName="endNonAvailable"
+              formControlName="endNonAvailable" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="endDatepickerNonAvailable"
@@ -222,7 +222,7 @@
             <input
               [(ngModel)]="defaults.start_date"
               [matDatepicker]="startDatepickerNonPayedBlock"
-              formControlName="startNonPayedBlock"
+              formControlName="startNonPayedBlock" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="startDatepickerNonPayedBlock"
@@ -236,7 +236,7 @@
             <input
               [(ngModel)]="defaults.end_date"
               [matDatepicker]="endDatepickerNonAvailable"
-              formControlName="endNonAvailable"
+              formControlName="endNonAvailable" readonly
               matInput />
             <mat-datepicker-toggle
               [for]="endDatepickerNonAvailable"
