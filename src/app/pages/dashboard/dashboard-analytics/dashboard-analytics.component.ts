@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { defaultChartOptions } from 'src/@vex/utils/default-chart-options';
@@ -20,43 +21,43 @@ export class DashboardAnalyticsComponent implements OnInit {
     },
 
     {
-      label: 'type',
+      label: this.TranslateService.instant('type'),
       property: 'type',
       type: 'booking_users_image'
     },
-    { label: 'course', property: 'booking_users', type: 'booking_users'},
-    { label: 'client', property: 'client_main', type: 'client' },
+    { label: this.TranslateService.instant('course'), property: 'booking_users', type: 'booking_users' },
+    { label: this.TranslateService.instant('client'), property: 'client_main', type: 'client' },
 
   ];
 
   userSessionsSeries: ApexAxisChartSeries = [
     {
-      name: 'Users',
+      name: this.TranslateService.instant('users'),
       data: [10, 50, 26, 50, 38, 60, 50, 25, 61, 80, 40, 60]
     },
     {
-      name: 'Sessions',
+      name: this.TranslateService.instant('Sessions'),
       data: [5, 21, 42, 70, 41, 20, 35, 50, 10, 15, 30, 50]
     }
   ];
 
   salesSeries: ApexAxisChartSeries = [
     {
-      name: 'Sales',
+      name: this.TranslateService.instant('Sales'),
       data: [28, 40, 36, 0, 52, 38, 60, 55, 99, 54, 38, 87]
     }
   ];
 
   pageViewsSeries: ApexAxisChartSeries = [
     {
-      name: 'Page Views',
+      name: this.TranslateService.instant('Page Views'),
       data: [405, 800, 200, 600, 105, 788, 600, 204]
     }
   ];
 
   uniqueUsersSeries: ApexAxisChartSeries = [
     {
-      name: 'Unique Users',
+      name: this.TranslateService.instant('Unique Users'),
       data: [356, 806, 600, 754, 432, 854, 555, 1004]
     }
   ];
@@ -78,9 +79,8 @@ export class DashboardAnalyticsComponent implements OnInit {
   bookingList = [];
 
   date = moment();
-  constructor(private crudService: ApiCrudService) {
+  constructor(private crudService: ApiCrudService, private TranslateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
   }
 
   ngOnInit(): void {
@@ -99,25 +99,25 @@ export class DashboardAnalyticsComponent implements OnInit {
   }
 
   getBlockages() {
-    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         this.blockages = data.data.length;
       })
   }
 
   getCourses() {
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+this.date.format('YYYY-MM-DD') + '&course_type=1')
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('YYYY-MM-DD') + '&course_type=1')
       .subscribe((data) => {
         this.dispoCol = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
-      }, 0);
+        }, 0);
 
       })
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id+'&date_start='+this.date.format('YYYY-MM-DD') + '&course_type=2')
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('YYYY-MM-DD') + '&course_type=2')
       .subscribe((data) => {
         this.dispoPrivate = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
-      }, 0);
+        }, 0);
 
       })
   }
@@ -125,27 +125,27 @@ export class DashboardAnalyticsComponent implements OnInit {
   getBookings() {
     this.bookingList = [];
     this.crudService.list('/booking-users', 1, 10000, 'desc', 'id',
-      '&school_id='+this.user.schools[0].id + '&date='+this.date.format('YYYY-MM-DD'), '', null, null, ['client'])
+      '&school_id=' + this.user.schools[0].id + '&date=' + this.date.format('YYYY-MM-DD'), '', null, null, ['client'])
       .subscribe((data) => {
         this.bookings = data.data.length;
 
-      let bookingIds = new Set();
-      data.data.forEach(item => {
+        let bookingIds = new Set();
+        data.data.forEach(item => {
           if (item.booking_id !== undefined && item.booking_id !== null) {
-              bookingIds.add(item.booking_id);
+            bookingIds.add(item.booking_id);
           }
-      });
+        });
 
-      // Si necesitas el resultado como un array
-      let uniqueBookingIds = Array.from(bookingIds);
+        // Si necesitas el resultado como un array
+        let uniqueBookingIds = Array.from(bookingIds);
 
-      uniqueBookingIds.forEach(element => {
-        this.crudService.get('/bookings/'+element, ['clientMain', 'bookingUsers.course'])
-          .subscribe((bo) => {
-            this.bookingList = this.bookingList.concat(bo.data);
-          })
-      });
-    })
+        uniqueBookingIds.forEach(element => {
+          this.crudService.get('/bookings/' + element, ['clientMain', 'bookingUsers.course'])
+            .subscribe((bo) => {
+              this.bookingList = this.bookingList.concat(bo.data);
+            })
+        });
+      })
   }
 
   getPaidBookings() {

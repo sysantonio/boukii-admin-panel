@@ -204,6 +204,7 @@
   "remaining_balance": "Importo residuo",
   "applied": "Applicato",
   "users": "Utenti",
+  "user": "Utente",
   "general_data": "Dati generali",
   "personal_data": "Informazione personale",
   "family_data": "Informazioni sulla famiglia",
@@ -684,8 +685,12 @@
   "Slovak": "Slovak",
   "Slovenian": "Slovenian",
   "Swedish": "Swedish",
-  "Selecciona un grupo":"Seleziona un gruppo",
-  "Selecciona una opción": "Seleziona un'opzione"
-  ,"Meteo": "Meteo"
-
+  "Selecciona un grupo": "Seleziona un gruppo",
+  "Selecciona una opción": "Seleziona un'opzione",
+  "Meteo": "Meteo",
+  "Session": "Sessione",
+  "Analytics": "Analisi",
+  "Sessions": "Sessioni",
+  "Sales": "Vendite",
+  "Page Views": "Visualizzazioni di pagina"
 }

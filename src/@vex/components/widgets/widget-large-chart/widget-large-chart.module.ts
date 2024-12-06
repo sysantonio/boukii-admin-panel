@@ -4,6 +4,7 @@ import { WidgetLargeChartComponent } from './widget-large-chart.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ChartModule } from '../../chart/chart.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -12,7 +13,7 @@ import { ChartModule } from '../../chart/chart.module';
     CommonModule,
     MatIconModule,
     MatButtonModule,
-
+    TranslateModule,
     ChartModule
   ],
   exports: [WidgetLargeChartComponent]

@@ -8,7 +8,7 @@ import { createDateArray } from '../../../utils/create-date-array';
   templateUrl: './widget-large-chart.component.html',
   styleUrls: ['./widget-large-chart.component.scss']
 })
-export class WidgetLargeChartComponent implements OnInit {
+export class WidgetLargeChartComponent {
 
   @Input() series: ApexNonAxisChartSeries | ApexAxisChartSeries;
   @Input() options: ApexOptions = defaultChartOptions({
@@ -59,10 +59,5 @@ export class WidgetLargeChartComponent implements OnInit {
       }
     }
   });
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }

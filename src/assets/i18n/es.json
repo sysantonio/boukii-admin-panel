@@ -209,6 +209,7 @@
   "remaining_balance": "Cantidad restante",
   "applied": "Aplicado",
   "users": "Usuarios",
+  "user": "Usuario",
   "general_data": "Datos generales",
   "personal_data": "Datos personales",
   "family_data": "Información familiar",
@@ -708,4 +709,9 @@
   "Selecciona un grupo": "Selecciona un grupo",
   "Selecciona una opción": "Selecciona una opción"
   ,"Meteo": "Meteo"
+  ,"Session": "Sesión"
+  ,"Sessions": "Sesión"
+  ,"Sales": "Ventas"
+  ,"Page Views": "Vistas de página"
+  ,"Analytics": "Analítica"
 }
