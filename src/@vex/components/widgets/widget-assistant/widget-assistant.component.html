@@ -13,19 +13,16 @@
         aria-hidden="true" style="cursor: pointer;" (click)="picker.open()"></i>
       {{ getLocale(date) }}</p>
     <span class="body-2">{{'work_day' | translate }}</span>
-
     <div class="mt-4 items-center">
-      <span class="body-2" style="width: 100%">Meteo</span>
-
+      <span class="body-2" style="width: 100%">{{"Meteo" | translate}}</span>
     </div>
     <div class="mt-4 items-center">
       <ng-container *ngFor="let item of weather; let i = index">
-
         <div *ngIf="weather.length <= 6 || i % 2 === 0"
           style="float: left; width: 15%;">
           <span style="float: left; width: 100%;"> {{ item.time }}</span>
           <img [src]="'../../../../assets/icons/weather/' + item.icon + '.png'"
-            style="float: left; width: 60%;">
+            style="float: left; width: 60%; background-color: #222222; border-radius: 25%;">
           <span style="float: left; width: 100%;margin: 0 0 0 8px;"> {{
             item.temperature }}º</span>
         </div>
