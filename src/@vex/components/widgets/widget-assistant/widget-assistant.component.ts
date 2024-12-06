@@ -12,9 +12,9 @@ export class WidgetAssistantComponent implements OnInit {
 
   user: any;
   today = new Date();
-  @Input() date;
+  @Input() date: any;
   @Output() dateEvent = new EventEmitter<any>();
-  weather;
+  weather: any;
   constructor(public translateService: TranslateService, private crudService: ApiCrudService) { }
 
   ngOnInit() {
@@ -23,7 +23,7 @@ export class WidgetAssistantComponent implements OnInit {
     this.getWeather();
   }
 
-  getLocale(date) {
+  getLocale(date: any) {
     return moment(date).locale(this.translateService.currentLang).format('ll');
   }
 
