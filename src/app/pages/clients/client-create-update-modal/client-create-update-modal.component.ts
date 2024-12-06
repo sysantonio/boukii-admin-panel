@@ -295,7 +295,6 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     // Detectar cambios manualmente para asegurarse de que Angular reconozca los cambios
     this.cdr.detectChanges();
 
-    console.log(this.selectedSports);
   }
 
   getSelectedSportsNames(): string {

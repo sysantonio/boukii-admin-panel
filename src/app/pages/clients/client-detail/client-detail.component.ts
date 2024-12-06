@@ -338,7 +338,6 @@ export class ClientDetailComponent {
             });
 
             this.languagesControl.setValue(langs);
-            console.log(this.languages)
 
             if (!onChangeUser) {
 
