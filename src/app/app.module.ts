@@ -18,7 +18,7 @@ import { ComponentsCustomModule } from './components/components-custom.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -42,7 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         MatDialogModule,
         ComponentsCustomModule
     ],
-    providers: [AuthService, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+    providers: [AuthService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
