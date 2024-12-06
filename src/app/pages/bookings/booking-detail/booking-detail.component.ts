@@ -3124,9 +3124,9 @@ export class BookingDetailComponent implements OnInit {
           this.finalPrice - +this.booking.paid_total - this.priceRefund - this.priceNoRefund
       } else if (this.booking.status !== 1) {
         this.bookingPendingPrice =
-          this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
+          this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew - this.priceRefund - this.priceNoRefund;
       } else {
-        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices;
+        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew;
       }
     } else {
       this.bookingPendingPrice = 0;

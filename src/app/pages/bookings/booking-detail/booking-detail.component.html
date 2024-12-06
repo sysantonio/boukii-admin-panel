@@ -1168,7 +1168,7 @@
                 </div>
 
                 <div
-                  *ngIf="bookingPendingPrice < 0 && !booking.paid && (booking.status === 1 ||  booking.status === 3)">
+                  *ngIf="bookingPendingPrice > 0 && !booking.paid && (booking.status === 1 ||  booking.status === 3)">
                   <div class="col-left">
                     <span style="color:#FB9B1B">{{ "pending_payment" | translate
                       | uppercase }}</span>
