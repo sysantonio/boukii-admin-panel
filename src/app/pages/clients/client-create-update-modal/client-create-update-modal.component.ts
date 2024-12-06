@@ -361,6 +361,12 @@ export class ClientCreateUpdateModalComponent implements OnInit {
       this.update();
     }
   }
+  formatDate = (date: Date): string => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
 
   create() {
 
@@ -373,6 +379,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     this.crudService.create('/users', this.defaultsUser)
       .subscribe((user) => {
         this.defaults.user_id = user.data.id;
+        this.defaults.birth_date = this.formatDate(this.defaults.birth_date)
 
         this.crudService.create('/clients', this.defaults)
           .subscribe((client) => {
