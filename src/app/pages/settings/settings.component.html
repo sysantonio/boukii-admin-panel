@@ -215,7 +215,8 @@
                     <mat-form-field appearance="outline"
                       class="vex-flex-form-field flex-auto">
                       <mat-label>{{'country' | translate }}</mat-label>
-                      <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                      <input type="text"
+                        placeholder="{{'Selecciona una opción' | translate}}"
                         matInput [formControl]="myControlCountries"
                         [matAutocomplete]="autoCountry"
                         formControlName="contact_country">
@@ -233,7 +234,8 @@
                     <mat-form-field appearance="outline"
                       class="vex-flex-form-field flex-auto">
                       <mat-label>{{'province' | translate }}</mat-label>
-                      <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                      <input type="text"
+                        placeholder="{{'Selecciona una opción' | translate}}"
                         matInput [formControl]="myControlProvinces"
                         [matAutocomplete]="autoProvince"
                         formControlName="contact_province">
@@ -807,7 +809,7 @@
                   <mat-form-field appearance="outline" class="flex-auto">
                     <input matInput placeholder="Percentaje" type="number"
                       [value]="3" (blur)="updateBoukiiCareValue($event)">
-                    <span matTextSuffix>%</span>
+                    <span matTextSuffix>CHF</span>
                   </mat-form-field>
                 </div>
               </div>
@@ -1388,7 +1390,8 @@
                   <mat-tab-group [selectedIndex]="selectedIndex"
                     (selectedTabChange)="onTabChange($event)">
                     <mat-tab label="{{'france' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
+                      <mat-form-field appearance="outline" class="block w-full"
+                        style="margin-top: 10px;">
                         <mat-label>{{'subject' | translate}}</mat-label>
                         <input matInput type="text" [(ngModel)]="subjectFr"
                           [value]="subjectFr" />
@@ -1412,7 +1415,8 @@
 
                     </mat-tab>
                     <mat-tab label="{{'english' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
+                      <mat-form-field appearance="outline" class="block w-full"
+                        style="margin-top: 10px;">
                         <mat-label>{{'subject' | translate}}</mat-label>
                         <input matInput type="text" [(ngModel)]="subjectEn"
                           [value]="subjectEn" />
@@ -1434,7 +1438,8 @@
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'spanish' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
+                      <mat-form-field appearance="outline" class="block w-full"
+                        style="margin-top: 10px;">
                         <mat-label>{{'subject' | translate}}</mat-label>
                         <input matInput type="text" [(ngModel)]="subjectEs"
                           [value]="subjectEs" />
@@ -1456,7 +1461,8 @@
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'germany' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
+                      <mat-form-field appearance="outline" class="block w-full"
+                        style="margin-top: 10px;">
                         <mat-label>{{'subject' | translate}}</mat-label>
                         <input matInput type="text" [(ngModel)]="subjectDe"
                           [value]="subjectDe" />
@@ -1478,7 +1484,8 @@
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'italian' | translate }}">
-                      <mat-form-field appearance="outline" class="block w-full">
+                      <mat-form-field appearance="outline" class="block w-full"
+                        style="margin-top: 10px;">
                         <mat-label>{{'subject' | translate}}</mat-label>
                         <input matInput type="text" [(ngModel)]="subjectIt"
                           [value]="subjectIt" />
