@@ -7,7 +7,7 @@
       <input id="dateFrom" matInput [matDatepicker]="picker"
         [(ngModel)]="selectedDateFrom" [matDatepickerFilter]="myHolidayFilter"
         [min]="data.minDate" [max]="data.maxDate"
-        readonly>
+        (click)="picker.open()" readonly>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker [startAt]="today"></mat-datepicker>
     </mat-form-field>
@@ -20,7 +20,7 @@
       <input id="DateTo" matInput [matDatepicker]="pickerTo"
         [(ngModel)]="selectedDateTo" [matDatepickerFilter]="myHolidayFilter"
         [min]="selectedDateFrom" [max]="data.maxDate"
-        readonly>
+        (click)="pickerTo.open()" readonly>
       <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
       <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
     </mat-form-field>

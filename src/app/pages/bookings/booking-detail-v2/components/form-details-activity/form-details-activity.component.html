@@ -10,7 +10,7 @@
             <mat-label>{{ "date" | translate }}</mat-label>
             <input matInput [matDatepicker]="picker"
               [matDatepickerFilter]="inUseDatesFilter" readonly
-              formControlName="date" />
+              formControlName="date"  (click)="picker.open()" />
             <mat-datepicker-toggle matIconSuffix
               [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker [startAt]="minDate"

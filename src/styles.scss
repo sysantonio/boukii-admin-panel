@@ -662,7 +662,9 @@ body.dark-mode {
 .ae-font .ae-picker-label {
   background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #1d1d1d) !important;
 }
-
+.mat-calendar-table-header th > span {
+  color: #1d1d1d !important;
+}
 .mat-mdc-outlined-button .mat-mdc-button-ripple,
 .mat-mdc-outlined-button .mdc-button__ripple {
   background-color: var(--color-grey5);

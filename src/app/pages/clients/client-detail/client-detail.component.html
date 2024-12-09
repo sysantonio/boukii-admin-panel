@@ -1100,7 +1100,7 @@
                     placeholder="{{'birth_date' | translate }}"
                     formControlName="fromDate" [max]="minDate"
                     [(ngModel)]="defaults.birth_date"
-                    readonly
+                    readonly (click)="pickerFrom.open()"
                     required>
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerFrom"></mat-datepicker-toggle>

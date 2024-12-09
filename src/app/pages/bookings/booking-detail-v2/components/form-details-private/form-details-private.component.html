@@ -21,7 +21,7 @@
             <mat-label>{{ "date" | translate }}</mat-label>
             <input matInput [matDatepicker]="picker"
               [matDatepickerFilter]="inUseDatesFilter" formControlName="date"
-              readonly />
+              readonly (click)="picker.open()"/>
             <mat-datepicker-toggle matIconSuffix
               [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker [startAt]="minDate"

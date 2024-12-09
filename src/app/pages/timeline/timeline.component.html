@@ -49,7 +49,7 @@
               style="max-height: 56px;">
               <input matInput [matDatepicker]="pickerFrom" readonly
                 placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
-                (ngModelChange)="onDateChange()">
+                (ngModelChange)="onDateChange()" (click)="pickerFrom.open()">
               <mat-datepicker-toggle matSuffix [for]="pickerFrom">
                 <mat-icon matDatepickerToggleIcon>
                   <img src="assets/img/icons/icon-calendar-grey.png">
@@ -628,7 +628,8 @@
                 <b>{{ 'register' | translate}}:</b>
                 <span style="margin-left: 10px;font-weight: normal;color:white"
                   *ngIf="taskDetail.created_at">
-                  <span style="color:white">{{taskDetail.created_at | date: 'dd/MM/YYYY'}}</span>
+                  <span style="color:white">{{taskDetail.created_at | date:
+                    'dd/MM/YYYY'}}</span>
                   <span
                     style="margin-left: 10px;font-style: italic;color:white">{{taskDetail.created_at
                     | date: 'HH:mm'}}h</span>
@@ -638,7 +639,8 @@
                 style="width: 40%;display:inline-block;text-align: right;color:#868686;font-weight: normal;"
                 *ngIf="taskDetail.user">
                 {{ taskDetail.user?.username }} <span
-                  style="margin-left: 10px;color:white">({{ taskDetail.user?.first_name +
+                  style="margin-left: 10px;color:white">({{
+                  taskDetail.user?.first_name +
                   ' ' + taskDetail.user.last_name}})</span>
               </div>
             </mat-card-subtitle>
@@ -1111,7 +1113,8 @@
                         <span style="float:left;cursor:pointer"
                           (click)="detailBooking(client.booking_id)"><img
                             src="../assets/img/icons/reservas-2.svg" /></span>
-                        <span style="float:right; text-align: right;line-height: 32px;"
+                        <span
+                          style="float:right; text-align: right;line-height: 32px;"
                           [style.color]="taskDetail?.paid ? '#66E055' : '#DFDB32'">
                           {{(client.booking?.paid ? 'payed' : 'no_paid') |
                           translate }}</span>

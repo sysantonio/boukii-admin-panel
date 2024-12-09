@@ -29,7 +29,7 @@
                     </span>
                     <br>
                     <span style="
-                      color: #var(--color-dark1);
+                      color: var(--color-dark1);
                       font-size: 12px;
                       font-weight: 400;
                       line-height: 16px;
@@ -51,7 +51,7 @@
                     </span>
                     <br>
                     <span style="
-                      color: #var(--color-dark1);
+                      color: var(--color-dark1);
                       font-size: 12px;
                       font-weight: 400;
                       line-height: 16px;
@@ -86,7 +86,7 @@
                   style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">
                   <div style="width: 100%;">
                     <p style="
-                    color: #var(--color-dark1);
+                    color: var(--color-dark1);
                     font-size: 12px;
                     font-weight: 600;
                     line-height: 16px;
@@ -181,7 +181,7 @@
         <input
           matInput
           [matDatepicker]="date_desde"
-          [min]="minDate" readonly
+          [min]="minDate" readonly (click)="date_desde.open()"
           [max]="maxDate" /> 
         <mat-datepicker-toggle matSuffix
           [for]="date_desde"></mat-datepicker-toggle>
@@ -193,7 +193,7 @@
         <input
           matInput
           [matDatepicker]="date_hasta"
-          [min]="minDate" readonly
+          [min]="minDate" readonly (click)="date_hasta.open()"
           [max]="maxDate" />
         <mat-datepicker-toggle matSuffix
           [for]="date_hasta"></mat-datepicker-toggle>

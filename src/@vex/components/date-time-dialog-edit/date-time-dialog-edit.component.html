@@ -7,7 +7,7 @@
       <input id="date" matInput [matDatepicker]="picker"
         placeholder="{{'date' | translate}}"
         [(ngModel)]="selectedDate" [matDatepickerFilter]="myHolidayFilter"
-        readonly
+        readonly (click)="picker.open()"
         [min]="data.minDate" [max]="data.maxDate">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker [startAt]="today"></mat-datepicker>

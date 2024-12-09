@@ -250,8 +250,8 @@
               [matDatepicker]="pickerDateFrom"
               formControlName="fromDate"
               [min]="minDate"
-              [readonly]="externalData?.date"
-              [(ngModel)]="externalData?.date || selectedDatePrivate"
+              [(ngModel)]="externalData.date"
+              (click)="pickerDateFrom.open()"
               (dateChange)="emitDateChange($event)"
               (dateInput)="emitDateChange($event, true)" readonly />
             <mat-datepicker-toggle
@@ -423,6 +423,7 @@
                       [min]="minDate"
                       [max]="getMaxDate()"
                       [readonly]="externalData?.date"
+                      (click)="pickerDateFrom.open()"
                       [value]="externalData?.date ? externalData?.date : getDateFromSelectedDates().date"
                       [matDatepickerFilter]="inUseDatesFilter" readonly />
                     <mat-datepicker-toggle
@@ -485,11 +486,14 @@
                     class="flex-auto"
                     title="First select the duration to calculate how many paxes can book this course">
                     <mat-label>{{'add_participant' |translate}}</mat-label>
-                    <mat-select [disabled]="!courseDate.duration || getCourse(courseDate.course_id).max_participants == 1 ||
+                    <mat-select
+                      [disabled]="!courseDate.duration || getCourse(courseDate.course_id).max_participants == 1 ||
     (personsSelectedMultiple[courseDate.course_date_id] && personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start] &&
-    (personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start].length + 1 >= getCourse(courseDate.course_id).max_participants))" multiple>
-                      <mat-option *ngFor="let person of personsToBook" [value]="person"
-                                  (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
+    (personsSelectedMultiple[courseDate.course_date_id][courseDate.hour_start].length + 1 >= getCourse(courseDate.course_id).max_participants))"
+                      multiple>
+                      <mat-option *ngFor="let person of personsToBook"
+                        [value]="person"
+                        (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
                         {{ person?.first_name }} {{ person?.last_name }}
                       </mat-option>
                     </mat-select>
@@ -798,7 +802,7 @@
           </span>
 
           <span
-            style="display: inline-block;vertical-align:top;text-align: right;float:right;">
+            style="display: inline-block;vertical-align:top;text-align: right;">
             <!--<mat-icon
               svgIcon="mat:close"
               (click)="deleteBooking(bookI)"
@@ -925,11 +929,15 @@
                   </div>
                   <div class="c-r">
                     <div class="course-title"
-                         style="font-size: 1em;">{{getClientName(item.courseDates[0].client_id)}}</div>
+                      style="font-size: 1em;">{{getClientName(item.courseDates[0].client_id)}}</div>
                     <div class="course-label">
-                      {{ getLanguage(getClient(item.courseDates[0].client_id).language1_id) }} · {{
-                        getCountry(getClient(item.courseDates[0].client_id).country) }} ·
-                      {{calculateAge(getClient(item.courseDates[0].client_id).birth_date) }} &ensp;{{'years' |
+                      {{
+                      getLanguage(getClient(item.courseDates[0].client_id).language1_id)
+                      }} · {{
+                      getCountry(getClient(item.courseDates[0].client_id).country)
+                      }} ·
+                      {{calculateAge(getClient(item.courseDates[0].client_id).birth_date)
+                      }} &ensp;{{'years' |
                       translate}}
                     </div>
                     <div style="display: flex;">
@@ -952,48 +960,48 @@
               </div>
             </ng-container>
             <ng-container *ngIf="item.people">
-            <div *ngFor="let people of item.people">
-              <div class="holder-participante">
-                <div class="col-left">
-                  <div class="c-l">
-                    <!--<img
+              <div *ngFor="let people of item.people">
+                <div class="holder-participante">
+                  <div class="col-left">
+                    <div class="c-l">
+                      <!--<img
                       [src]="getClientAvatar(people.id)"
                       style="height:100%;border-radius: 100%;width: 35px;height: 35px;"
                     />-->
-                    <app-level-user
-                      [allLevels]="getDegreesBySportId(item.course? item.course.sport_id : item.courseDates[0].course.sport_id)"
-                      [selectLevel]="getClientDegree(people.id, item.course? item.course.sport_id : item.courseDates[0].course.sport_id)"
-                      [size]="60"
-                      [userImage]="getClientAvatar(people.id)"></app-level-user>
-                  </div>
-                  <div class="c-r">
-                    <div class="course-title"
-                      style="font-size: 1em;">{{getClientName(people.id)}}</div>
-                    <div class="course-label">
-                      {{ getLanguage(people.language1_id) }} · {{
-                      getCountry(people.country) }} ·
-                      {{calculateAge(people.birth_date) }} &ensp;{{'years' |
-                      translate}}
+                      <app-level-user
+                        [allLevels]="getDegreesBySportId(item.course? item.course.sport_id : item.courseDates[0].course.sport_id)"
+                        [selectLevel]="getClientDegree(people.id, item.course? item.course.sport_id : item.courseDates[0].course.sport_id)"
+                        [size]="60"
+                        [userImage]="getClientAvatar(people.id)"></app-level-user>
                     </div>
-                    <div style="display: flex;">
-                      <vex-icon src="chat">
-                      </vex-icon>
-                      <vex-icon
-                        src="mail"
-                        href="mailto:{{getClient(people.id)?.email}}"
-                        style="cursor:pointer"
-                        title="{{getClient(people.id)?.email}}">
-                      </vex-icon>
-                      <vex-icon
-                        src="phone"
-                        href="tel:{{getClient(people.id)?.phone}}"
-                        title="{{getClient(people.id)?.phone}}">
-                      </vex-icon>
+                    <div class="c-r">
+                      <div class="course-title"
+                        style="font-size: 1em;">{{getClientName(people.id)}}</div>
+                      <div class="course-label">
+                        {{ getLanguage(people.language1_id) }} · {{
+                        getCountry(people.country) }} ·
+                        {{calculateAge(people.birth_date) }} &ensp;{{'years' |
+                        translate}}
+                      </div>
+                      <div style="display: flex;">
+                        <vex-icon src="chat">
+                        </vex-icon>
+                        <vex-icon
+                          src="mail"
+                          href="mailto:{{getClient(people.id)?.email}}"
+                          style="cursor:pointer"
+                          title="{{getClient(people.id)?.email}}">
+                        </vex-icon>
+                        <vex-icon
+                          src="phone"
+                          href="tel:{{getClient(people.id)?.phone}}"
+                          title="{{getClient(people.id)?.phone}}">
+                        </vex-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
             </ng-container>
           </div>

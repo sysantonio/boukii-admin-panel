@@ -253,7 +253,7 @@
                 formControlName="fromDate"
                 [min]="minDate"
                 [(ngModel)]="selectedDatePrivate"
-                (dateChange)="emitDateChange($event)"
+                (dateChange)="emitDateChange($event)" (click)="pickerDateFrom.open()"
                 (dateInput)="emitDateChange($event, true)"readonly />
               <mat-datepicker-toggle
                 matSuffix
@@ -427,7 +427,7 @@
                         [value]="externalData && externalData.date ? externalData.date: ''"
                         (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
                         [min]="minDate"readonly
-                        [max]="getMaxDate()"
+                        [max]="getMaxDate()" (click)="pickerDateFrom.open()"
                         [disabled]="externalData && externalData.onlyPrivate" />
                       <mat-datepicker-toggle
                         matSuffix

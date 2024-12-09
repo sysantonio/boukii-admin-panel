@@ -31,7 +31,8 @@
         <mat-form-field appearance="outline" class="flex-auto">
           <input id="date" matInput [matDatepicker]="picker"
             formControlName="date" placeholder="{{'date' | translate}}"
-            [(ngModel)]="selectedDate" [min]="today" readonly>
+            [(ngModel)]="selectedDate" [min]="today" readonly
+            (click)="picker.open()">
           <mat-datepicker-toggle matSuffix
             [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [startAt]="today"></mat-datepicker>

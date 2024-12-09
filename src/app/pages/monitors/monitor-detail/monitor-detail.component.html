@@ -840,7 +840,7 @@
               <mat-form-field appearance="outline" class="flex-auto">
                 <input matInput [matDatepicker]="pickerFrom" readonly
                   placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
-                  (dateChange)="onDateChange($event)">
+                  (dateChange)="onDateChange($event)"  (click)="pickerFrom.open()">
                 <mat-datepicker-toggle matSuffix
                   [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom></mat-datepicker>
@@ -1740,7 +1740,7 @@
                       placeholder="{{'birth_date' | translate }}" readonly
                       formControlName="fromDate" [max]="minDate"
                       [(ngModel)]="defaults.birth_date"
-                      required>
+                      required (click)="pickerFrom.open()">
                     <mat-datepicker-toggle matSuffix
                       [for]="pickerFrom"></mat-datepicker-toggle>
                     <mat-datepicker #pickerFrom
@@ -1971,7 +1971,7 @@
                         <mat-form-field appearance="outline" class="flex-auto"
                           style="margin: 2% 0 0 0;">
                           <input matInput [matDatepicker]="pickerFromChild"
-                            readonly
+                            readonly (click)="pickerFromChild.open()"
                             placeholder="{{'birth_date' | translate }}"
                             [(ngModel)]="element.date" [max]="minDateChild"
                             formControlName="childAge">

@@ -41,7 +41,7 @@
         <mat-form-field appearance="outline">
           <input id="date" matInput [matDatepicker]="pickerFrom"
             placeholder="{{'from' | translate}}" [(ngModel)]="selectedDateFrom"
-            [min]="today" readonly>
+            [min]="today" readonly (click)="pickerFrom.open()">
           <mat-datepicker-toggle matSuffix
             [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
@@ -50,7 +50,7 @@
         <mat-form-field appearance="outline" style="margin: 0 0 0 8%;">
           <input id="date" matInput [matDatepicker]="pickerTo"
             placeholder="{{'to' | translate}}" [(ngModel)]="selectedDateTo"
-            readonly
+            readonly (click)="pickerTo.open()"
             [disabled]="selectedDateFrom === null" [min]="selectedDateFrom">
           <mat-datepicker-toggle matSuffix
             [for]="pickerTo"></mat-datepicker-toggle>

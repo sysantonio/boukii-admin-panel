@@ -169,7 +169,8 @@
               <label for="dateFrom">{{'from' | translate}}</label>
               <input matInput id="dateFromSales"
                 [matDatepicker]="pickerFromSales" (dateChange)="filterData()"
-                [(ngModel)]="selectedFrom" [value]="selectedFrom" readonly>
+                [(ngModel)]="selectedFrom" [value]="selectedFrom" readonly
+                (click)="pickerFromSales.open()">
               <mat-datepicker-toggle matSuffix
                 [for]="pickerFromSales"></mat-datepicker-toggle>
               <mat-datepicker #pickerFromSales
@@ -178,7 +179,8 @@
               <label for="dateTo">{{'to' | translate}}</label>
               <input matInput id="dateToSales" [matDatepicker]="pickerToSales"
                 (dateChange)="filterData()" [min]="selectedFrom"
-                [(ngModel)]="selectedTo" [value]="selectedTo" readonly>
+                [(ngModel)]="selectedTo" [value]="selectedTo" readonly
+                (click)="pickerToSales.open()">
               <mat-datepicker-toggle matSuffix
                 [for]="pickerToSales"></mat-datepicker-toggle>
               <mat-datepicker #pickerToSales
@@ -255,7 +257,7 @@
               <label for="dateFrom">{{'from' | translate}}</label>
               <input matInput id="dateFrom" [matDatepicker]="pickerFrom"
                 (dateChange)="filterData()" [(ngModel)]="selectedFrom"
-                [value]="selectedFrom" readonly>
+                [value]="selectedFrom" readonly (click)="pickerFrom.open()">
               <mat-datepicker-toggle matSuffix
                 [for]="pickerFrom"></mat-datepicker-toggle>
               <mat-datepicker #pickerFrom
@@ -263,6 +265,7 @@
               <label for="dateTo">{{'to' | translate}}</label>
               <input matInput id="dateTo" [matDatepicker]="pickerTo"
                 (dateChange)="filterData()" [min]="selectedFrom"
+                (click)="pickerTo.open()"
                 [(ngModel)]="selectedTo" [value]="selectedTo" readonly>
               <mat-datepicker-toggle matSuffix
                 [for]="pickerTo"></mat-datepicker-toggle>

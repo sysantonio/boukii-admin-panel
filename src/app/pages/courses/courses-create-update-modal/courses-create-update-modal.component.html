@@ -467,7 +467,7 @@
                     translate}}</mat-label>
 
                   <input matInput id="dateFromPrivate"
-                    [matDatepicker]="pickerFrom"
+                    [matDatepicker]="pickerFrom" (click)="pickerFrom.open()"
                     [matDatepickerFilter]="myHolidayFilter" readonly
                     formControlName="fromDate" [min]="minDate" [max]="maxDate"
                     [(ngModel)]="defaults.date_start_res">
@@ -500,7 +500,7 @@
                     formControlName="toDate"
                     [matDatepickerFilter]="myHolidayFilter"
                     [min]="courseInfoPriveFormGroup.value.fromDate"
-                    [max]="maxDate" readonly
+                    [max]="maxDate" readonly (click)="pickerTo.open()"
                     [(ngModel)]="defaults.date_end_res"
                     [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix
@@ -638,12 +638,12 @@
                   *ngIf="defaults.is_flexible">{{'from' | translate}} <span
                     style="color:red">(*)</span></label>
                 <mat-form-field appearance="outline" style="width: 100%">
-
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerFromUnique"
                     formControlName="fromDateUnique" readonly
                     [matDatepickerFilter]="myHolidayFilter" [min]="minDate"
-                    [max]="maxDate" [(ngModel)]="defaults.date_start">
+                    [max]="maxDate" [(ngModel)]="defaults.date_start"
+                    (click)="pickerFromUnique.open()">
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerFromUnique"></mat-datepicker-toggle>
                   <mat-datepicker #pickerFromUnique
@@ -667,6 +667,7 @@
                     [matDatepickerFilter]="myHolidayFilter"
                     [min]="courseInfoPriveFormGroup?.value?.fromDateUnique"
                     [max]="maxDate" [(ngModel)]="defaults.date_end" readonly
+                    (click)="pickerToUnique.open()"
                     [disabled]="courseInfoPriveFormGroup.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerToUnique"></mat-datepicker-toggle>
@@ -1438,18 +1439,18 @@
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
               <div class="flex-auto">
 
-
                 <mat-form-field appearance="outline" style="width: 100%">
                   <mat-label
-                  *ngIf="defaults.is_flexible">{{'courses.date_reservable'
-                  | translate}}</mat-label>
-                <mat-label *ngIf="!defaults.is_flexible">{{'from' |
-                  translate}}</mat-label>
+                    *ngIf="defaults.is_flexible">{{'courses.date_reservable'
+                    | translate}}</mat-label>
+                  <mat-label *ngIf="!defaults.is_flexible">{{'from' |
+                    translate}}</mat-label>
 
                   <input matInput id="dateFromPrivate"
                     [matDatepicker]="pickerDateFrom" formControlName="fromDate"
-                    [min]="minDate" [matDatepickerFilter]="myHolidayFilter" readonly
-                    [max]="maxDate" [(ngModel)]="defaults.date_start_res"> 
+                    [min]="minDate" [matDatepickerFilter]="myHolidayFilter"
+                    readonly (click)="pickerDateFrom.open()"
+                    [max]="maxDate" [(ngModel)]="defaults.date_start_res">
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerDateFrom"></mat-datepicker-toggle>
                   <mat-datepicker #pickerDateFrom
@@ -1465,15 +1466,16 @@
 
                 <mat-form-field appearance="outline" style="width: 100%">
                   <mat-label
-                  *ngIf="defaults.is_flexible">{{'courses.date_reservable_to'
-                  | translate}}</mat-label>
-                <mat-label *ngIf="!defaults.is_flexible">{{'to' |
-                  translate}}</mat-label>
+                    *ngIf="defaults.is_flexible">{{'courses.date_reservable_to'
+                    | translate}}</mat-label>
+                  <mat-label *ngIf="!defaults.is_flexible">{{'to' |
+                    translate}}</mat-label>
                   <input matInput id="dateToPrivate"
                     [matDatepicker]="pickerDateTo" formControlName="toDate"
                     [matDatepickerFilter]="myHolidayFilter"
                     [min]="courseConfigForm.value.fromDate" [max]="maxDate"
                     [(ngModel)]="defaults.date_end_res" readonly
+                    (click)="pickerDateTo.open()"
                     [disabled]="courseConfigForm.value.fromDate === null">
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerDateTo"></mat-datepicker-toggle>
