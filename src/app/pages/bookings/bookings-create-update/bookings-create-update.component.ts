@@ -848,6 +848,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           data.notes = this.defaults.notes;
           data.notes_school = this.defaults.notes_school;
           data.paxes = paxes;
+          data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
           data.courseDates = [];
 
           if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
@@ -942,6 +943,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             this.courseDates.forEach(item => {
               data = {};
+              data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
               data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
               data.price_cancellation_insurance = 0;
               data.has_boukii_care = this.defaults.has_boukii_care;
@@ -1047,6 +1049,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             this.courseDates.forEach(item => {
               data = {};
+              data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
               data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
               data.price_cancellation_insurance = 0;
               data.has_boukii_care = this.defaults.has_boukii_care;
@@ -1161,6 +1164,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
         });
     }
 
+  }
+
+  generateUniqueGroupId(existingBookings: any[]): number {
+    let groupId: number;
+    const existingGroupIds = existingBookings.map(booking => booking.group_id);
+
+    do {
+      groupId = Math.floor(Math.random() * 1000000) + 1; // Genera un número entre 1 y 1,000,000
+    } while (existingGroupIds.includes(groupId));
+
+    return groupId;
   }
 
   generateUniqueId(): string {
@@ -1392,10 +1406,18 @@ export class BookingsCreateUpdateComponent implements OnInit {
           }
 
           if (item.course.course_type === 2) {
+            const matchingBooking = this.bookingsToCreate.find((b) =>
+              b.courseDates.some((cd) =>
+                cd.course_date_id === item.course_date_id && cd.hour_start === item.hour_start
+              )
+            );
+
+            const groupId = matchingBooking?.group_id || null; // Obtén el group_id correspondiente
             rqs.push({
               school_id: item.school_id,
               booking_id: booking.data.id,
               client_id: item.client_id,
+              group_id: groupId,
               course_id: item.course_id,
               course_date_id: item.course_date_id,
               monitor_id: item.monitor_id,
@@ -1414,6 +1436,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               bookingC.people.forEach(person => {
                 rqs.push({
                   school_id: item.school_id,
+                  group_id: groupId,
                   booking_id: booking.data.id,
                   client_id: person.id,
                   course_id: item.course_id,
@@ -1433,9 +1456,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
             }
           }
           if (item.course.course_type === 3) {
+            const matchingBooking = this.bookingsToCreate.find((b) =>
+              b.courseDates.some((cd) =>
+                cd.course_date_id === item.course_date_id && cd.hour_start === item.hour_start
+              )
+            );
+
+            const groupId = matchingBooking?.group_id || null; // Obtén el group_id correspondiente
             rqs.push({
               school_id: item.school_id,
               booking_id: booking.data.id,
+              group_id: groupId,
               client_id: item.client_id,
               course_id: item.course_id,
               course_date_id: item.course_date_id,

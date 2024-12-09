@@ -78,6 +78,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   dateDetail: any;
   monitorDetail: any;
   subgroupDetail: any;
+  groupDetail:any;
   taskDetail: any;
   showBlock: boolean = false;
   idBlock: any;
@@ -712,6 +713,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
         return {
           booking_id: booking?.booking?.id,
+          group_id:booking?.group_id,
           booking_color: booking_color,
           date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
@@ -1003,41 +1005,42 @@ export class TimelineComponent implements OnInit, OnDestroy {
         };
       });
 
-    // Separating tasks with monitor_id = null and grouping by date
     const noMonitorTasks = plannerTasks.filter(task => task.monitor_id === null);
     const groupedByDate = noMonitorTasks.reduce((group, task) => {
-      (group[task.date] = group[task.date] || []).push(task);
+      // Agrupar por fecha
+      if (!group[task.date]) {
+        group[task.date] = [];
+      }
+      group[task.date].push(task);
       return group;
     }, {});
 
-    //Store ids that will be deleted
+// Store ids that will be deleted
     let groupedTaskIds = new Set();
 
-    // Process each group to adjust overlapping tasks
+// Process each group to adjust overlapping tasks
     Object.keys(groupedByDate).forEach(date => {
       const tasksForDate = groupedByDate[date];
 
-      // Group tasks by course_id, hour_start, and hour_end if course_id is not null
-      const groupedByCourseTime = tasksForDate.reduce((group, task) => {
-        if (task.course_id != null) {
-          const key = `${task.course_id}-${task.hour_start}-${task.hour_end}`;
-          if (!group[key]) {
-            group[key] = {
-              ...task, // Take the first task's details
-              grouped_tasks: [] // Initialize the array for grouped tasks
-            };
-          }
-          group[key].grouped_tasks.push(task);
-          groupedTaskIds.add(task.booking_id);
-        } else {
-          // If course_id is null, keep the task as an individual task
-          (group["__singleTasks__"] = group["__singleTasks__"] || []).push(task);
+      // Group tasks by group_id if it exists, otherwise by course_id, hour_start, and hour_end
+      const groupedByGroupIdAndTime = tasksForDate.reduce((group, task) => {
+        const key = task.group_id
+          ? `${task.group_id}-${task.date}` // Agrupar por group_id y fecha si existe group_id
+          : `${task.course_id || 'no_course'}-${task.hour_start}-${task.hour_end}`; // Agrupar por course_id, hora de inicio y hora de fin
+
+        if (!group[key]) {
+          group[key] = {
+            ...task, // Toma los detalles del primer task en el grupo
+            grouped_tasks: [] // Inicializa el array para tareas agrupadas
+          };
         }
+        group[key].grouped_tasks.push(task);
+        groupedTaskIds.add(task.booking_id);
         return group;
       }, {});
 
-      // Flatten the grouped tasks into an array
-      const flattenedTasks = [].concat(...Object.values(groupedByCourseTime));
+      // Procesar los grupos creados
+      const flattenedTasks = Object.values(groupedByGroupIdAndTime).flatMap((group:any) => group.grouped_tasks);
 
       // Sort flattened tasks by start time
       flattenedTasks.sort((a, b) => {
@@ -1053,7 +1056,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         let placed = false;
         for (let group of overlappingGroups) {
           // Check if the task overlaps with the group
-          if (group.some(t => !(this.parseTime(t.hour_end) <= this.parseTime(task.hour_start) || this.parseTime(t.hour_start) >= this.parseTime(task.hour_end)))) {
+          if (group.some(t => !(this.parseTime(t.hour_end) <= this.parseTime(task.hour_start) || this.parseTime(t.hour_start) >= this.parseTime(t.hour_end)))) {
             // If it overlaps, add to the group and set placed to true
             group.push(task);
             placed = true;
@@ -1091,15 +1094,16 @@ export class TimelineComponent implements OnInit, OnDestroy {
       groupedByDate[date] = overlappingGroups.flat();
     });
 
-    // Remove the original tasks that were grouped -> NOT THE ONES THAT ALREADY HAVE MONITOR
+// Remove the original tasks that were grouped -> NOT THE ONES THAT ALREADY HAVE MONITOR
     const filteredPlannerTasks = plannerTasks.filter(task =>
       !groupedTaskIds.has(task.booking_id) ||
       (groupedTaskIds.has(task.booking_id) && task.monitor_id)
     );
 
-    // Combine adjusted tasks with the rest
+// Combine adjusted tasks with the rest
     this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
     this.loading = false;
+
   }
 
   hexToRgbA(hex: string, transparency = 1) {
@@ -1171,6 +1175,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           this.groupedTasks = task.grouped_tasks;
           this.idGroupedTasks = task.booking_id;
         }
+        this.groupDetail = task.group_id;
         this.idDetail = task.booking_id;
         this.hourDetail = task.hour_start;
         this.dateDetail = task.date;

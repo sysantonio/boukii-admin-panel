@@ -365,7 +365,7 @@ export class BookingDetailComponent implements OnInit {
 
               this.bookingUsers = [...this.booking.booking_users];
               this.getUniqueBookingUsers();
-
+              debugger;
               // Agrupación de booking_users
               const groupedByCourseOrClientId = this.booking.booking_users.reduce(
                 (accumulator, currentValue) => {
@@ -617,18 +617,29 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getUniqueBookingUsers() {
+    debugger;
     const clientIds = new Set();
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
+    const uniqueGroupIds = new Set();
     this.bookingUsersUnique = [];
 
     this.bookingUsersUnique = this.bookingUsers.filter(item => {
-      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
-        (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
-        clientIds.add(item.client_id);
-        uniqueDates.add(item.date);
-        uniqueMonitors.add(item.monitor_id);
-        return true;
+      if (item.group_id) {
+        // Filtrar por group_id si existe
+        if (!uniqueGroupIds.has(item.group_id)) {
+          uniqueGroupIds.add(item.group_id);
+          return true;
+        }
+      } else {
+        // Lógica original si no hay group_id
+        if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
+          (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
+          clientIds.add(item.client_id);
+          uniqueDates.add(item.date);
+          uniqueMonitors.add(item.monitor_id);
+          return true;
+        }
       }
       return false;
     });
@@ -3602,11 +3613,23 @@ export class BookingDetailComponent implements OnInit {
     return ret;
   }
 
-  getBookingUsersByCourseDateAndHour(dateId, hour_start, hour_end, monitor_id) {
-    return this.bookingUsers.filter(
-      (b) => b.course_date_id === dateId && b.hour_start == hour_start && b.hour_end === hour_end && b.monitor_id == monitor_id
-    );
+  getBookingUsersByCourseDateAndHour(dateId, hour_start, hour_end, monitor_id, group_id = null) {
+    return this.bookingUsers.filter((b) => {
+      if (group_id) {
+        // Filtrar por group_id si se proporciona
+        return b.group_id === group_id;
+      } else {
+        // Filtrar por la lógica actual si no se pasa un group_id
+        return (
+          b.course_date_id === dateId &&
+          b.hour_start == hour_start &&
+          b.hour_end === hour_end &&
+          b.monitor_id == monitor_id
+        );
+      }
+    });
   }
+
 
   getBookingUsersByCourse(courseId) {
     return this.bookingUsers.filter(
