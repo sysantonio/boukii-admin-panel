@@ -365,7 +365,6 @@ export class BookingDetailComponent implements OnInit {
 
               this.bookingUsers = [...this.booking.booking_users];
               this.getUniqueBookingUsers();
-              debugger;
               // Agrupación de booking_users
               const groupedByCourseOrClientId = this.booking.booking_users.reduce(
                 (accumulator, currentValue) => {
@@ -617,7 +616,6 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getUniqueBookingUsers() {
-    debugger;
     const clientIds = new Set();
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
@@ -803,7 +801,6 @@ export class BookingDetailComponent implements OnInit {
       this.defaults.payment_method_id === 2 ||
       this.defaults.payment_method_id === 3
     ) {
-      debugger;
       this.loading = true;
       const observables = [];
 
