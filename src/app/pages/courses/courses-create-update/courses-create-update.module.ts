@@ -27,7 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { QuillConfigModule, QuillEditorComponent, QuillModule } from 'ngx-quill';
+import { QuillEditorComponent } from 'ngx-quill';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -39,7 +39,7 @@ import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
-import { EditorComponent, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 
 @NgModule({
   imports: [
@@ -85,13 +85,15 @@ import { EditorComponent, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     FluxModalModule,
     FluxDisponibilidadModule,
     MatProgressSpinnerModule,
-    QuillEditorComponent,
-    EditorComponent
+    QuillEditorComponent
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent],
   providers: [
-    { provide: TINYMCE_SCRIPT_SRC, useValue: 'https://cdn.tiny.cloud/1/92j1b1q8rbbkzvkmwssqy6205th59l0ubwpchntve4cfa0dc/tinymce/7/tinymce.min.js' }
+    {
+      provide: TINYMCE_SCRIPT_SRC,
+      useValue: 'https://cdn.tiny.cloud/1/92j1b1q8rbbkzvkmwssqy6205th59l0ubwpchntve4cfa0dc/tinymce/7/tinymce.min.js'
+    }
   ]
 })
 export class CoursesCreateUpdateModule {
