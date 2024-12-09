@@ -2115,7 +2115,7 @@ export class BookingDetailComponent implements OnInit {
             })
             .subscribe(() => {
               this.crudService
-                .update("/bookings", { status: 2 }, this.booking.id)
+                .update("/bookings", { status: 2, price_total: 0 }, this.booking.id)
                 .subscribe(() => {
                   this.crudService
                     .create("/payments", {
@@ -2155,7 +2155,7 @@ export class BookingDetailComponent implements OnInit {
               this.crudService
                 .update(
                   "/bookings",
-                  { paid_total: this.booking.price_total },
+                  { paid_total: this.booking.price_total, price_total: 0 },
                   this.booking.id
                 )
                 .subscribe(() => {
