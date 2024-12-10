@@ -228,8 +228,8 @@ export class ClientDetailComponent {
       console.log('All data loaded', results);
       this.formInfoAccount = this.fb.group({
         image: [''],
-        name: ['', Validators.required],
-        surname: ['', Validators.required],
+        first_name: ['', Validators.required],
+        last_name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         username: [''],
         password: [''],
@@ -751,10 +751,20 @@ export class ClientDetailComponent {
   setActive(event) {
     this.active = event.checked;
   }
-  formatDate = (date: Date): string => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+
+  formatDate = (date: Date | string): string => {
+    // Convertir a objeto Date si es un string
+    const validDate = typeof date === 'string' ? new Date(date) : date;
+
+    // Verificar si el objeto Date es válido
+    if (isNaN(validDate.getTime())) {
+      throw new Error('Invalid date format');
+    }
+
+    const day = validDate.getDate().toString().padStart(2, '0');
+    const month = (validDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = validDate.getFullYear();
+
     return `${year}-${month}-${day}`;
   };
 
@@ -990,8 +1000,8 @@ export class ClientDetailComponent {
 
             const client = {
               email: this.defaults.email,
-              first_name: data.data.name,
-              last_name: data.data.surname,
+              first_name: data.data.first_name,
+              last_name: data.data.last_name,
               birth_date: moment(data.data.fromDate).format('YYYY-MM-DD'),
               phone: this.defaults.phone,
               telephone: this.defaults.telephone,
