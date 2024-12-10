@@ -278,7 +278,7 @@
                   class="task-wrapper cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id &&
                                 hourDetail == task.hour_start && dateDetail == task.date
-                                 && monitorDetail == task.monitor_id && groupDetail == task.group_id) || (idGroupedTasks == task.booking_id
+                                 && monitorDetail == task.monitor_id ) || (idGroupedTasks == task.booking_id
                                   && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                 (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
                                 : task.type === 'activity' ? 'task-selected-activity' : '') : '',
@@ -348,7 +348,7 @@
                   (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)"
                   class="task-wrapper-week cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start
-                                && dateDetail == task.date && monitorDetail == task.monitor_id && groupDetail == task.group_id)
+                                && dateDetail == task.date && monitorDetail == task.monitor_id )
                                 || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                  (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
                                 : task.type === 'activity' ? 'task-selected-activity' : '') : '',
@@ -520,7 +520,7 @@
                   (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)"
                   [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start
-                                && dateDetail == task.date && monitorDetail == task.monitor_id && groupDetail == task.group_id)
+                                && dateDetail == task.date && monitorDetail == task.monitor_id )
                                 || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
                                  (task.type === 'collective' ? 'task-selected-collective' : task.type === 'private' ? 'task-selected-private'
                                 : task.type === 'activity' ? 'task-selected-activity' : '') : '',
