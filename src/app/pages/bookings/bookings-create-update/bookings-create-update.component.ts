@@ -1288,7 +1288,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     this.bookingsToCreate.forEach((element, idx) => {
       element.courseDates.forEach(cs => {
-        cs.group_id = element.group_id;
+        if(cs.course.course_type != 1) {
+          cs.group_id = element.group_id;
+        }
         courseDates.push(cs);
         if (element.forfait) {
           bookingExtras.push({
