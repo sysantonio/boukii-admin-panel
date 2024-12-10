@@ -250,7 +250,8 @@
               [matDatepicker]="pickerDateFrom"
               formControlName="fromDate"
               [min]="minDate"
-              [(ngModel)]="externalData.date"
+              [readonly]="externalData?.date"
+              [(ngModel)]="externalData?.date || selectedDatePrivate"
               (click)="pickerDateFrom.open()"
               (dateChange)="emitDateChange($event)"
               (dateInput)="emitDateChange($event, true)" readonly />
