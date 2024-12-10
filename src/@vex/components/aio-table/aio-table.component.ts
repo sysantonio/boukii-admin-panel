@@ -159,9 +159,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   finishedCourse = false;
   allCourse = true;
 
-  activeBooking = false;
+  activeBooking = true;
   finishedBooking = false;
   allBookings = false;
+  cancelledBookings = false;
 
   activeMonitor = true;
   inactiveMonitor = false;
@@ -246,6 +247,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   filterData(all: boolean = false, pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
     let filter = '';
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
 
     if (!all) {
       if (this.entity.includes('booking')) {
@@ -299,6 +302,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         // Filtrar por todas las reservas
         if (this.allBookings) {
           filter = filter + '&all=1';
+        }
+        if (this.cancelledBookings) {
+          filter = filter + '&status=2';
         }
 
       }
@@ -428,7 +434,12 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.data = response.data;
         this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
         this.dataSource.data = response.data;
+        this.dataSource.connect();
         this.totalRecords = response.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = pageIndex-1;
+          this.paginator.pageSize = pageSize;
+        }
         this.loading = false;
       });
   }
@@ -619,8 +630,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
             })
 
         } else if (this.entity.includes('courses')) {
-          const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
-
           this.crudService.update('/courses', {
             active: false
           }, item.id)
