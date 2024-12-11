@@ -70,48 +70,27 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   data$: Observable<any[]> = this.subject$.asObservable();
   data: any[];
 
-  @Input()
-  columns: TableColumn<any>[] = [];
-  @Input()
-  entity: string;
-  @Input()
-  deleteEntity: string;
-  @Input()
-  updatePage: string = 'update';
-  @Input()
-  title: string;
-  @Input()
-  sectionIcon: string;
-  @Input()
-  route: string;
-  @Input()
-  withHeader: boolean = true;
-  @Input()
-  canDelete: boolean = false;
-  @Input()
-  canDeactivate: boolean = false;
-  @Input()
-  canDuplicate: boolean = false;
-  @Input()
-  createOnModal: boolean = false;
-  @Input()
-  widthModal?: string = '90vw';
-  @Input()
-  heigthModal?: string = '90vh';
-  @Input()
-  createComponent: any;
-  @Input()
-  showDetail: boolean = false;
-  @Input()
-  filterField: any = null;
-  @Input()
-  filterColumn: any = null;
-  @Input()
-  with: any = '';
-  @Input()
-  search: any = '';
-  @Output()
-  showDetailEvent = new EventEmitter<any>();
+  @Input() columns: TableColumn<any>[] = [];
+  @Input() entity: string;
+  @Input() deleteEntity: string;
+  @Input() updatePage: string = 'update';
+  @Input() title: string;
+  @Input() sectionIcon: string;
+  @Input() route: string;
+  @Input() withHeader: boolean = true;
+  @Input() canDelete: boolean = false;
+  @Input() canDeactivate: boolean = false;
+  @Input() canDuplicate: boolean = false;
+  @Input() createOnModal: boolean = false;
+  @Input() widthModal?: string = '90vw';
+  @Input() heigthModal?: string = '90vh';
+  @Input() createComponent: any;
+  @Input() showDetail: boolean = false;
+  @Input() filterField: any = null;
+  @Input() filterColumn: any = null;
+  @Input() with: any = '';
+  @Input() search: any = '';
+  @Output() showDetailEvent = new EventEmitter<any>();
   pageIndex = 1;
   pageSize = 10;
   filter = '';
@@ -207,11 +186,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     this.getLanguages();
     this.getDegrees();
     this.getSports();
-    /*    this.getMonitors();
-        this.getClients();
-
-
-        */
+    /*this.getMonitors();
+    this.getClients();*/
   }
 
   // Detecta cambios en las propiedades de entrada
@@ -245,17 +221,16 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   }
 
+  Sort: Sort = { active: 'id', direction: 'desc' }
+
   filterData(all: boolean = false, pageIndex: number = this.pageIndex, pageSize: number = this.pageSize) {
     let filter = '';
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-
     if (!all) {
       if (this.entity.includes('booking')) {
-
         // Filtrar por tipo de curso (colectivo, privado, actividad)
         const courseTypes = [];
-
         // Filtrar por tipo de curso (colectivo, privado, actividad)
         if (this.courseColective && !this.coursePrivate && !this.courseActivity) {
           filter = filter + '&course_type=1';
@@ -264,19 +239,11 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (!this.courseColective && !this.coursePrivate && this.courseActivity) {
           filter = filter + '&course_type=3';
         } else {
-          if (this.courseColective) {
-            courseTypes.push(1); // Colectivo
-          }
-          if (this.coursePrivate) {
-            courseTypes.push(2); // Privado
-          }
-          if (this.courseActivity) {
-            courseTypes.push(3); // Actividad
-          }
+          if (this.courseColective) courseTypes.push(1);
+          if (this.coursePrivate) courseTypes.push(2);
+          if (this.courseActivity) courseTypes.push(3);
           // Añadir los tipos de curso al filtro si existen
-          if (courseTypes.length > 0) {
-            filter = filter + '&course_types[]=' + courseTypes.join('&course_types[]=');
-          }
+          if (courseTypes.length > 0) filter = filter + '&course_types[]=' + courseTypes.join('&course_types[]=');
         }
         // Filtrar por estado de pago
         if (this.bookingPayed && !this.bookingNoPayed) {
@@ -284,7 +251,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (!this.bookingPayed && this.bookingNoPayed) {
           filter = filter + '&paid=0';
         }
-
         // Filtrar por tipo de reserva (individual o múltiple)
         if (this.reservationTypeSingle && !this.reservationTypeMultiple) {
           filter = filter + '&isMultiple=0';
@@ -398,8 +364,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     }
-
-
     this.filter = filter;
     this.getFilteredData(pageIndex, pageSize, filter);
   }
@@ -413,15 +377,15 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
    * We are simulating this request here.
    */
   getFilteredData(pageIndex: number, pageSize: number, filter: any) {
-    this.loading = true;
+    //this.loading = true;
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
     this.crudService.list(
       this.entity,
       pageIndex,
       pageSize,
-      'desc',
-      'id',
+      this.Sort.direction,
+      this.Sort.active,
       this.searchCtrl.value + filter + '&school_id=' + this.user.schools[0].id + this.search +
       (this.filterField !== null ? '&' + this.filterColumn + '=' + this.filterField : ''),
       '',
@@ -432,7 +396,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;
         this.data = response.data;
-        this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
+        //this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
         this.dataSource.data = response.data;
         this.dataSource.connect();
         this.totalRecords = response.total;
@@ -443,9 +407,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.loading = false;
       });
   }
-
-
-
   /**
    * Example on how to get data and pass it to the table - usually you would want a dedicated service with a HTTP request for this
    * We are simulating this request here.
@@ -483,17 +444,19 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   sortData(sort: Sort) {
-    const data = this.dataSource.data.slice();
-
-    if (!sort.active || sort.direction === '') {
-      this.dataSource.data = data;
-    } else {
-      this.dataSource.data = data.sort((a, b) => {
-        const aValue = (a as any)[sort.active];
-        const bValue = (b as any)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
+    console.log(sort)
+    this.Sort = sort
+    this.filterData(false, this.pageIndex, this.pageSize)
+    // const data = this.dataSource.data.slice();
+    // if (!sort.active || sort.direction === '') {
+    //   this.dataSource.data = data;
+    // } else {
+    //   this.dataSource.data = data.sort((a, b) => {
+    //     const aValue = (a as any)[sort.active];
+    //     const bValue = (b as any)[sort.active];
+    //     return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+    //   });
+    // }
   }
 
   ngAfterViewInit() {
