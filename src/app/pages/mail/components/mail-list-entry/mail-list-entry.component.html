@@ -31,12 +31,12 @@
 
   <div class="truncate w-full">
     <div class="flex items-end">
-      <p [ngClass]="{ 'font-semibold text-black': !mail?.read }"
+      <p [ngClass]="{ 'font-semibold': !mail?.read }"
          class="flex-auto text-base leading-normal text-secondary">{{ mail?.from?.name }}</p>
-      <p [ngClass]="{ 'font-semibold text-black': !mail?.read }"
+      <p [ngClass]="{ 'font-semibold': !mail?.read }"
          class="flex-none text-xs leading-normal text-secondary">{{ mail?.date | relativeDateTime }}</p>
     </div>
-    <p [ngClass]="{ 'font-semibold text-black': !mail?.read }"
+    <p [ngClass]="{ 'font-semibold': !mail?.read }"
        class="text-sm leading-normal truncate text-secondary">{{ mail?.subject }}</p>
     <div class="flex items-start">
       <p class="text-xs text-secondary leading-tight truncate mt-1">{{ mail?.title | stripHtml }}</p>

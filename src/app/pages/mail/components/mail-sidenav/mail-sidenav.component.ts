@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MailSidenavLink } from '../../interfaces/mail-sidenav-link.interface';
 import { MatDrawer } from '@angular/material/sidenav';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { LayoutService } from 'src/@vex/services/layout.service';
+import { MailComponent } from '../../containers/mail.component';
 
 @Component({
   selector: 'vex-mail-sidenav',
@@ -14,10 +15,17 @@ import { LayoutService } from 'src/@vex/services/layout.service';
     fadeInUp400ms
   ]
 })
-export class MailSidenavComponent implements OnInit {
+export class MailSidenavComponent {
 
   @Input() drawer: MatDrawer;
 
+  constructor(private layoutService: LayoutService, public MailComponent: MailComponent) { }
+
+  compose: MailSidenavLink = {
+    label: 'compose',
+    route: [],
+    icon: 'mat:all_inbox'
+  }
   links: MailSidenavLink[] = [
     /*{
       label: 'Inbox',
@@ -29,11 +37,11 @@ export class MailSidenavComponent implements OnInit {
       route: ['./general'],
       icon: 'mat:all_inbox'
     },
-/*    {
-      label: 'automatic_mails',
-      route: ['./auto'],
-      icon: 'mat:all_inbox'
-    },*/
+    /*    {
+          label: 'automatic_mails',
+          route: ['./auto'],
+          icon: 'mat:all_inbox'
+        },*/
     /*{
       label: 'Starred',
       route: ['./starred'],
@@ -68,11 +76,6 @@ export class MailSidenavComponent implements OnInit {
       icon: 'mat:lock'
     }*/
   ];
-
-  constructor(private layoutService: LayoutService) { }
-
-  ngOnInit(): void {
-  }
 
   closeDrawer() {
     if (this.layoutService.isLtLg()) {
