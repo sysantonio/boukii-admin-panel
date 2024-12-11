@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MailRoutingModule } from './mail-routing.module';
 import { MailComponent } from './containers/mail.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -20,7 +19,6 @@ import { MailAttachmentComponent } from './components/mail-attachment/mail-attac
 import { MailComposeComponent } from './components/mail-compose/mail-compose.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
-import { QuillModule } from 'ngx-quill';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ScrollbarModule } from 'src/@vex/components/scrollbar/scrollbar.module';
@@ -32,12 +30,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {BreadcrumbsModule} from '../../../@vex/components/breadcrumbs/breadcrumbs.module';
-import {SecondaryToolbarModule} from '../../../@vex/components/secondary-toolbar/secondary-toolbar.module';
+import { BreadcrumbsModule } from '../../../@vex/components/breadcrumbs/breadcrumbs.module';
+import { SecondaryToolbarModule } from '../../../@vex/components/secondary-toolbar/secondary-toolbar.module';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
 @NgModule({
-  declarations: [MailComponent, MailListComponent, MailListEntryComponent, MailViewComponent, MailViewEmptyComponent, MailSidenavComponent, MailSidenavLinkComponent, MailLabelComponent, MailAttachmentComponent, MailComposeComponent],
+    declarations: [MailComponent, MailListComponent, MailListEntryComponent, MailViewComponent, MailViewEmptyComponent, MailSidenavComponent, MailSidenavLinkComponent, MailLabelComponent, MailAttachmentComponent, MailComposeComponent],
     imports: [
         CommonModule,
         FormsModule,
@@ -53,29 +52,13 @@ import {SecondaryToolbarModule} from '../../../@vex/components/secondary-toolbar
         MatMenuModule,
         StripHtmlModule,
         MatDialogModule,
-        MatInputModule,
+        MatInputModule, AngularEditorModule,
         MatRadioModule,
         MatTabsModule,
         MatSelectModule,
         TranslateModule,
         MatDatepickerModule,
         MatProgressSpinnerModule,
-        QuillModule.forRoot({
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'],
-                    ['blockquote', 'code-block'],
-
-                    [{list: 'ordered'}, {list: 'bullet'}],
-
-                    [{header: [1, 2, 3, 4, 5, 6, false]}],
-
-                    ['clean'],
-
-                    ['link', 'image']
-                ]
-            }
-        }),
         MatTooltipModule,
         ReactiveFormsModule,
         BreadcrumbsModule,

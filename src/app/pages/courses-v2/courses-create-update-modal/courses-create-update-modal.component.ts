@@ -21,10 +21,7 @@ import { DateAdapter } from '@angular/material/core';
 @Component({
   selector: 'vex-courses-create-modal-update',
   templateUrl: './courses-create-update-modal.component.html',
-  styleUrls: ['./courses-create-update-modal.component.scss',
-    '../../../../../node_modules/quill/dist/quill.snow.css',
-    '../../../../@vex/styles/partials/plugins/quill/_quill.scss'
-  ],
+  styleUrls: ['./courses-create-update-modal.component.scss'],
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class CoursesCreateUpdateModalComponent implements OnInit {

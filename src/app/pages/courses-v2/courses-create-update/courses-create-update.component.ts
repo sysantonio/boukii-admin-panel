@@ -7,15 +7,11 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
-  styleUrls: ['./courses-create-update.component.scss',
-    '../../../../../node_modules/quill/dist/quill.snow.css',
-    '../../../../@vex/styles/partials/plugins/quill/_quill.scss'
-  ],
+  styleUrls: ['./courses-create-update.component.scss',],
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class CoursesCreateUpdateComponent implements OnInit {
@@ -55,26 +51,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   ndays: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
   PeriodoFecha: number = 0
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    //height: '56px',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
-    toolbarPosition: 'bottom',
-    outline: true,
-    toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
-  }
-  editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
-  editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
 
   minDate = new Date(2000, 1, 1);
   nowDate = new Date()
