@@ -72,18 +72,18 @@
             matInput required type="text">
         </mat-form-field>
         <div style="margin: 10px 0;">
-          <quill-editor style="display: block !important;" id="summary"
+          <angular-editor style="display: block !important;" id="summary"
             style="width: 100%"
             [placeholder]="'courses.summary' | translate"
             formControlName="summary">
-          </quill-editor>
+          </angular-editor >
         </div>
         <div style="margin: 20px 0;">
-          <quill-editor style="display: block !important;" id="description"
+          <angular-editor style="display: block !important;" id="description"
             style="width: 100%"
             [placeholder]="'courses.desc' | translate"
             formControlName="description">
-          </quill-editor>
+          </angular-editor >
         </div>
         <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
           <mat-form-field appearance="outline"
@@ -682,18 +682,18 @@
                 matInput required type="text">
             </mat-form-field>
             <div style="margin: 10px 0;">
-              <quill-editor style="display: block !important;" id="summary"
+              <angular-editor  style="display: block !important;" id="summary"
                 style="width: 100%"
                 [placeholder]="'courses.summary' | translate"
                 [formControlName]="'summary_'+item.Code">
-              </quill-editor>
+              </angular-editor >
             </div>
             <div style="margin: 20px 0;">
-              <quill-editor style="display: block !important;" id="description"
+              <angular-editor  style="display: block !important;" id="description"
                 style="width: 100%"
                 [placeholder]="'courses.desc' | translate"
                 [formControlName]="'description_'+item.Code">
-              </quill-editor>
+              </angular-editor >
             </div>
           </ng-template>
         </mat-expansion-panel>

@@ -27,7 +27,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { QuillEditorComponent } from 'ngx-quill';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -85,7 +84,6 @@ import { TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     FluxModalModule,
     FluxDisponibilidadModule,
     MatProgressSpinnerModule,
-    QuillEditorComponent
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent],

@@ -40,8 +40,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { QuillModule } from 'ngx-quill';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 @NgModule({
     declarations: [SettingsComponent],
     imports: [
@@ -86,22 +86,7 @@ import { ComponentsCustomModule } from '../../components/components-custom.modul
         TranslateModule,
         MatButtonModule,
         MatTooltipModule,
-        QuillModule.forRoot({
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'],
-                    ['blockquote', 'code-block'],
-
-                    [{ list: 'ordered' }, { list: 'bullet' }],
-
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-                    ['clean'],
-
-                    ['link', 'image']
-                ]
-            }
-        }),
+        AngularEditorModule,
         ComponentsCustomModule,
     ]
 })

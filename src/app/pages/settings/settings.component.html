@@ -137,7 +137,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 100%">
                           <input matInput [matDatepicker]="picker" [min]="today"
-                            id="holiday-{{i}}" readonly  (click)="picker.open()"
+                            id="holiday-{{i}}" readonly (click)="picker.open()"
                             (dateChange)="onDateSelect($event, i)"
                             [value]="holiday">
                           <mat-datepicker-toggle matSuffix
@@ -1402,18 +1402,16 @@
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="titleFr"></quill-editor>
+                          [(ngModel)]="titleFr"></angular-editor>
                       </div>
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'message' | translate }}</p>
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="bodyFr"></quill-editor>
+                          [(ngModel)]="bodyFr"></angular-editor>
                       </div>
 
                     </mat-tab>
@@ -1427,17 +1425,15 @@
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="titleEn"></quill-editor>
+                          [(ngModel)]="titleEn"></angular-editor>
                       </div>
 
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="bodyEn"></quill-editor>
+                          [(ngModel)]="bodyEn"></angular-editor>
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'spanish' | translate }}">
@@ -1450,17 +1446,15 @@
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="titleEs"></quill-editor>
+                          [(ngModel)]="titleEs"></angular-editor>
                       </div>
 
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="bodyEs"></quill-editor>
+                          [(ngModel)]="bodyEs"></angular-editor>
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'germany' | translate }}">
@@ -1473,17 +1467,15 @@
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="titleDe"></quill-editor>
+                          [(ngModel)]="titleDe"></angular-editor>
                       </div>
 
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="bodyDe"></quill-editor>
+                          [(ngModel)]="bodyDe"></angular-editor>
                       </div>
                     </mat-tab>
                     <mat-tab label="{{'italian' | translate }}">
@@ -1496,17 +1488,15 @@
 
                       <div class="vex-mail-compose-editor flex flex-col">
                         <p>{{ 'title' | translate }}</p>
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="titleIt"></quill-editor>
+                          [(ngModel)]="titleIt"></angular-editor>
                       </div>
 
                       <div class="vex-mail-compose-editor flex flex-col">
-                        <quill-editor
-                          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+                        <angular-editor
                           class="flex-auto flex flex-col"
-                          [(ngModel)]="bodyIt"></quill-editor>
+                          [(ngModel)]="bodyIt"></angular-editor>
                       </div>
 
                     </mat-tab>
