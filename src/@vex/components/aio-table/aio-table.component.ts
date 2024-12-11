@@ -371,7 +371,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
    * We are simulating this request here.
    */
   getFilteredData(pageIndex: number, pageSize: number, filter: any) {
-    this.loading = true;
+    //this.loading = true;
     // Asegúrate de que pageIndex y pageSize se pasan correctamente.
     // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
     this.crudService.list(
@@ -390,7 +390,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;
         this.data = response.data;
-        this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
+        //this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
         this.dataSource.data = response.data;
         this.totalRecords = response.total;
         this.loading = false;
