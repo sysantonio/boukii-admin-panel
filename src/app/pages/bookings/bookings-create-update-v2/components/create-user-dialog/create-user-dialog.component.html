@@ -25,9 +25,8 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ "birth_date" | translate }}</mat-label>
-          <input
-            matInput
-            required
+          <input matInput
+            required readonly (click)="picker.open()"
             [matDatepicker]="picker"
             formControlName="birthDate" />
           <mat-datepicker-toggle

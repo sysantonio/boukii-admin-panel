@@ -1021,7 +1021,7 @@
                 style="margin: 3% 0 0 0;">
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'name_client' | translate }}</mat-label>
-                  <input formControlName="name" matInput required type="text"
+                  <input formControlName="first_name" matInput required type="text"
                     [(ngModel)]="defaults.first_name">
                   <mat-icon class="mr-2" matPrefix
                     svgIcon="logo:task"></mat-icon>
@@ -1029,7 +1029,7 @@
 
                 <mat-form-field appearance="outline" class="flex-auto">
                   <mat-label>{{'surname' | translate }}</mat-label>
-                  <input formControlName="surname" matInput required type="text"
+                  <input formControlName="last_name" matInput required type="text"
                     [(ngModel)]="defaults.last_name">
                   <mat-icon class="mr-2" matPrefix
                     svgIcon="logo:task"></mat-icon>
@@ -1100,6 +1100,7 @@
                     placeholder="{{'birth_date' | translate }}"
                     formControlName="fromDate" [max]="minDate"
                     [(ngModel)]="defaults.birth_date"
+                    readonly (click)="pickerFrom.open()"
                     required>
                   <mat-datepicker-toggle matSuffix
                     [for]="pickerFrom"></mat-datepicker-toggle>
@@ -1149,7 +1150,8 @@
                 <mat-form-field appearance="outline"
                   class="vex-flex-form-field flex-auto">
                   <mat-label>{{'country' | translate }}</mat-label>
-                  <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                  <input type="text"
+                    placeholder="{{'Selecciona una opción' | translate}}"
                     matInput [formControl]="myControlCountries"
                     [matAutocomplete]="autoCountry">
                   <mat-autocomplete #autoCountry="matAutocomplete"
@@ -1168,7 +1170,8 @@
                 <mat-form-field appearance="outline"
                   class="vex-flex-form-field flex-auto">
                   <mat-label>{{'province' | translate }}</mat-label>
-                  <input type="text" placeholder="{{'Selecciona una opción' | translate}}"
+                  <input type="text"
+                    placeholder="{{'Selecciona una opción' | translate}}"
                     matInput [formControl]="myControlProvinces"
                     [matAutocomplete]="autoProvince">
                   <mat-autocomplete #autoProvince="matAutocomplete"

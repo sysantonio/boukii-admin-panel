@@ -249,7 +249,8 @@
                     item?.courseDates[0].course_date_id,
                     item?.courseDates[0].hour_start,
                     item?.courseDates[0].hour_end,
-                    item?.courseDates[0].monitor_id
+                    item?.courseDates[0].monitor_id,
+                    item?.courseDates[0].group_id
                   )
                 ">
                 <mat-card-header
@@ -1168,7 +1169,7 @@
                 </div>
 
                 <div
-                  *ngIf="bookingPendingPrice < 0 && !booking.paid && (booking.status === 1 ||  booking.status === 3)">
+                  *ngIf="bookingPendingPrice > 0 && !booking.paid && (booking.status === 1 ||  booking.status === 3)">
                   <div class="col-left">
                     <span style="color:#FB9B1B">{{ "pending_payment" | translate
                       | uppercase }}</span>

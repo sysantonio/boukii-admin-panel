@@ -2,30 +2,33 @@
   <div formArrayName="course_dates">
     <div
       *ngFor="let dateGroup of courseDates.controls; let i = index"
-      [formGroupName]="i"
-    >
+      [formGroupName]="i">
       <mat-card-header class="card__header">
         <mat-card-title> {{ "date" | translate }} {{ i + 1 }} </mat-card-title>
         <ng-container *ngIf="i > 0">
-          <mat-icon fontSet="material-icons-outlined" (click)="removeDate(i)">delete</mat-icon>
+          <mat-icon fontSet="material-icons-outlined"
+            (click)="removeDate(i)">delete</mat-icon>
         </ng-container>
       </mat-card-header>
       <mat-card-content class="card__content wrapper">
         <div class="row1">
           <mat-form-field appearance="outline">
             <mat-label>{{ "date" | translate }}</mat-label>
-            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="inUseDatesFilter" formControlName="date" />
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker [startAt]="minDate" [dateClass]="utilService.dateClass('green', this.course, minDate)"></mat-datepicker>
+            <input matInput [matDatepicker]="picker" (click)="picker.open()"
+              [matDatepickerFilter]="inUseDatesFilter" formControlName="date"
+              readonly />
+            <mat-datepicker-toggle matIconSuffix
+              [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker [startAt]="minDate"
+              [dateClass]="utilService.dateClass('green', this.course, minDate)"></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ "hour" | translate }}</mat-label>
             <mat-select formControlName="startHour">
               <mat-option *ngFor="let hour of possibleHours"
-                          [value]="hour"
-                          [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course)"
-              >
+                [value]="hour"
+                [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course)">
                 {{ hour }}
               </mat-option>
             </mat-select>
@@ -37,10 +40,10 @@
               matInput
               *ngIf="!course.is_flexible"
               formControlName="duration"
-              readonly
-            />
+              readonly />
             <mat-select *ngIf="course.is_flexible" formControlName="duration">
-              <mat-option *ngFor="let duration of possibleDurations" [value]="duration">
+              <mat-option *ngFor="let duration of possibleDurations"
+                [value]="duration">
                 {{ duration }}
               </mat-option>
             </mat-select>
@@ -50,24 +53,32 @@
           <mat-form-field appearance="outline">
             <mat-label>{{ "monitor" | translate }}</mat-label>
             <mat-select formControlName="monitor">
-              <mat-option *ngFor="let monitor of possibleMonitors[i]" [value]="monitor">
+              <mat-option *ngFor="let monitor of possibleMonitors[i]"
+                [value]="monitor">
                 {{ monitor.first_name }} {{ monitor.last_name }}
               </mat-option>
             </mat-select>
-            <mat-icon matPrefix fontSet="material-icons-outlined">school</mat-icon>
+            <mat-icon matPrefix
+              fontSet="material-icons-outlined">school</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ "select_monitor" | translate }}</mat-label>
             <mat-select formControlName="changeMonitorOption">
-              <mat-select-trigger *ngIf="dateGroup.get('changeMonitorOption').value">
-                <mat-icon matPrefix [class]="dateGroup.get('changeMonitorOption').value.class" fontSet="material-icons-outlined">
+              <mat-select-trigger
+                *ngIf="dateGroup.get('changeMonitorOption').value">
+                <mat-icon matPrefix
+                  [class]="dateGroup.get('changeMonitorOption').value.class"
+                  fontSet="material-icons-outlined">
                   {{ dateGroup.get('changeMonitorOption').value.icon }}
                 </mat-icon>
-                {{ dateGroup.get('changeMonitorOption').value.description | translate }}
+                {{ dateGroup.get('changeMonitorOption').value.description |
+                translate }}
               </mat-select-trigger>
-              <mat-option *ngFor="let option of possibleChangeMonitorSelection" [value]="option">
-                <mat-icon [class]="option.class" fontSet="material-icons-outlined">{{ option.icon }}</mat-icon>
+              <mat-option *ngFor="let option of possibleChangeMonitorSelection"
+                [value]="option">
+                <mat-icon [class]="option.class"
+                  fontSet="material-icons-outlined">{{ option.icon }}</mat-icon>
                 {{ option.description | translate }}
               </mat-option>
             </mat-select>
@@ -75,31 +86,39 @@
         </div>
 
         <ng-container [formArrayName]="'utilizers'">
-          <div class="row3"  *ngFor="let utilizerGroup of getUtilizersArray(i).controls; let u = index"
-               [formGroupName]="u">
+          <div class="row3"
+            *ngFor="let utilizerGroup of getUtilizersArray(i).controls; let u = index"
+            [formGroupName]="u">
             <!-- Datos del utilizador -->
             <div>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ "participant" | translate }} {{ u + 1 }}</mat-label>
-              <input matInput disabled [value]="utilizerGroup.get('first_name').value + ' ' + utilizerGroup.get('last_name').value" />
-              <mat-icon class="disabled-icon" matPrefix fontSet="material-icons-outlined">people</mat-icon>
-            </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ "participant" | translate }} {{ u + 1
+                  }}</mat-label>
+                <input matInput disabled
+                  [value]="utilizerGroup.get('first_name').value + ' ' + utilizerGroup.get('last_name').value" />
+                <mat-icon class="disabled-icon" matPrefix
+                  fontSet="material-icons-outlined">people</mat-icon>
+              </mat-form-field>
             </div>
             <!-- Selección de extras -->
             <div class="extra-field-wrapper">
               <mat-form-field appearance="outline" class="extras-field">
                 <mat-label>{{ "extras" | translate }}</mat-label>
-                <mat-select formControlName="extras" multiple [disabled]="!this.possibleExtras || !this.possibleExtras.length">
-                  <mat-option *ngFor="let extra of possibleExtras" [value]="extra">
-                    {{ extra.description }} - {{ extra.price | currency: course.currency}}
+                <mat-select formControlName="extras" multiple
+                  [disabled]="!this.possibleExtras || !this.possibleExtras.length">
+                  <mat-option *ngFor="let extra of possibleExtras"
+                    [value]="extra">
+                    {{ extra.description }} - {{ extra.price | currency:
+                    course.currency}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
 
               <!-- Precio de los extras -->
               <span class="extras-price">
-                  {{ utilizerGroup.get('totalExtraPrice').value | currency: course.currency }}
-                </span>
+                {{ utilizerGroup.get('totalExtraPrice').value | currency:
+                course.currency }}
+              </span>
             </div>
           </div>
         </ng-container>

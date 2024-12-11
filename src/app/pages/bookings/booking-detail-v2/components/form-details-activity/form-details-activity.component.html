@@ -9,11 +9,12 @@
           <mat-form-field appearance="outline">
             <mat-label>{{ "date" | translate }}</mat-label>
             <input matInput [matDatepicker]="picker"
-                   [matDatepickerFilter]="inUseDatesFilter"
-                   formControlName="date" />
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              [matDatepickerFilter]="inUseDatesFilter" readonly
+              formControlName="date"  (click)="picker.open()" />
+            <mat-datepicker-toggle matIconSuffix
+              [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker [startAt]="minDate"
-                            [dateClass]="utilService.dateClass('blue', course, minDate)">
+              [dateClass]="utilService.dateClass('blue', course, minDate)">
             </mat-datepicker>
           </mat-form-field>
 
@@ -21,8 +22,8 @@
             <mat-label>{{ "hour" | translate }}</mat-label>
             <mat-select formControlName="startHour">
               <mat-option *ngFor="let hour of possibleHours"
-                          [value]="hour"
-                          [disabled]="utilService.calculateAvailableHours(stepForm.get('course_dates').get('0.date').value, hour, course)">
+                [value]="hour"
+                [disabled]="utilService.calculateAvailableHours(stepForm.get('course_dates').get('0.date').value, hour, course)">
                 {{ hour }}
               </mat-option>
             </mat-select>
@@ -38,24 +39,35 @@
           <mat-form-field appearance="outline">
             <mat-label>{{ "monitor" | translate }}</mat-label>
             <mat-select formControlName="monitor">
-              <mat-option *ngFor="let monitor of possibleMonitors" [value]="monitor">
+              <mat-option *ngFor="let monitor of possibleMonitors"
+                [value]="monitor">
                 {{ monitor.first_name }} {{ monitor.last_name }}
               </mat-option>
             </mat-select>
-            <mat-icon matPrefix fontSet="material-icons-outlined">school</mat-icon>
+            <mat-icon matPrefix
+              fontSet="material-icons-outlined">school</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ "select_monitor" | translate }}</mat-label>
             <mat-select formControlName="changeMonitorOption">
-              <mat-select-trigger *ngIf="stepForm.get('course_dates').get('0.changeMonitorOption').value">
-                <mat-icon matPrefix [class]="stepForm.get('course_dates').get('0.changeMonitorOption').value.class" fontSet="material-icons-outlined">
-                  {{ stepForm.get('course_dates').get('0.changeMonitorOption').value.icon }}
+              <mat-select-trigger
+                *ngIf="stepForm.get('course_dates').get('0.changeMonitorOption').value">
+                <mat-icon matPrefix
+                  [class]="stepForm.get('course_dates').get('0.changeMonitorOption').value.class"
+                  fontSet="material-icons-outlined">
+                  {{
+                  stepForm.get('course_dates').get('0.changeMonitorOption').value.icon
+                  }}
                 </mat-icon>
-                {{ stepForm.get('course_dates').get('0.changeMonitorOption').value.description | translate }}
+                {{
+                stepForm.get('course_dates').get('0.changeMonitorOption').value.description
+                | translate }}
               </mat-select-trigger>
-              <mat-option *ngFor="let option of possibleChangeMonitorSelection" [value]="option">
-                <mat-icon [class]="option.class" fontSet="material-icons-outlined">{{ option.icon }}</mat-icon>
+              <mat-option *ngFor="let option of possibleChangeMonitorSelection"
+                [value]="option">
+                <mat-icon [class]="option.class"
+                  fontSet="material-icons-outlined">{{ option.icon }}</mat-icon>
                 {{ option.description | translate }}
               </mat-option>
             </mat-select>
@@ -64,19 +76,23 @@
 
         <!-- Participantes y Grupos -->
         <ng-container formArrayName="groups">
-          <div *ngFor="let group of getUtilizersArray(0).controls; let i = index" [formGroupName]="i" class="group">
+          <div
+            *ngFor="let group of getUtilizersArray(0).controls; let i = index"
+            [formGroupName]="i" class="group">
             <!-- Selector de Nombre del Grupo -->
             <mat-form-field appearance="outline">
               <mat-label>{{ 'group_name' | translate }}</mat-label>
-              <mat-select formControlName="groupName" (selectionChange)="onGroupChange(i)">
-                <mat-option *ngFor="let groupOption of course.settings.groups" [value]="groupOption.groupName">
+              <mat-select formControlName="groupName"
+                (selectionChange)="onGroupChange(i)">
+                <mat-option *ngFor="let groupOption of course.settings.groups"
+                  [value]="groupOption.groupName">
                   {{ groupOption.groupName }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
 
             <!-- Paxes -->
-           <!-- <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
               <mat-label>{{ 'number_of_paxes' | translate }}</mat-label>
               <input type="number" matInput formControlName="paxes" [min]="group.paxMin" [max]="group.paxMax" (change)="updateGroupPrice(i)">
             </mat-form-field>
@@ -96,11 +112,13 @@
 
             <!-- Precio total del grupo -->
             <div>
-              <span>{{ 'total_price' | translate }}: {{ calculateTotalPrice(i) | currency }}</span>
+              <span>{{ 'total_price' | translate }}: {{ calculateTotalPrice(i) |
+                currency }}</span>
             </div>
 
             <!-- Botón para eliminar grupo -->
-            <button mat-button color="warn" *ngIf="getUtilizersArray(0).length > 1" (click)="removeGroup(i)">
+            <button mat-button color="warn"
+              *ngIf="getUtilizersArray(0).length > 1" (click)="removeGroup(i)">
               {{ 'remove_group' | translate }}
             </button>
           </div>

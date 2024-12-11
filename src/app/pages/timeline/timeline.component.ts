@@ -714,6 +714,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           booking_id: booking?.booking?.id,
           booking_color: booking_color,
           date: moment(booking.date).format('YYYY-MM-DD'),
+          group_id:booking?.group_id,
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('DD/MM/YYYY'),
           created_at: booking.booking.created_at,
@@ -1020,7 +1021,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
       // Group tasks by course_id, hour_start, and hour_end if course_id is not null
       const groupedByCourseTime = tasksForDate.reduce((group, task) => {
         if (task.course_id != null) {
-          const key = `${task.course_id}-${task.hour_start}-${task.hour_end}`;
+          if(task.course.course_type == 1) {
+            var key = `${task.course_id}-${task.hour_start}-${task.hour_end}`;
+          } else {
+            key = `${task.course_id}-${task.hour_start}-${task.hour_end}-${task.group_id}`;
+          }
+
           if (!group[key]) {
             group[key] = {
               ...task, // Take the first task's details

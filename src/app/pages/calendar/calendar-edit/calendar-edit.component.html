@@ -14,8 +14,8 @@
         <mat-label>{{"courses.date_start" | translate }}</mat-label>
         <input
           [matDatepicker]="startDatepicker"
-          formControlName="start"
-          matInput />
+          formControlName="start" (click)="startDatepicker.open()"
+          matInput readonly />
         <mat-datepicker-toggle
           [for]="startDatepicker"
           matSuffix></mat-datepicker-toggle>
@@ -24,7 +24,10 @@
 
       <mat-form-field appearance="outline">
         <mat-label>{{'courses.date_end' | translate}}</mat-label>
-        <input [matDatepicker]="endDatepicker" formControlName="end" matInput />
+        <input [matDatepicker]="endDatepicker"
+          formControlName="end" (click)="endDatepicker.open()"
+          matInput
+          readonly />
         <mat-datepicker-toggle
           [for]="endDatepicker"
           matSuffix></mat-datepicker-toggle>

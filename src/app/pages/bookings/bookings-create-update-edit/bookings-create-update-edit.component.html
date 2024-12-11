@@ -239,10 +239,10 @@
               id="dateFromPrivate"
               [matDatepicker]="pickerDateFrom"
               formControlName="fromDate"
-              [min]="minDate"
+              [min]="minDate" (click)="pickerDateFrom.open()"
               [(ngModel)]="selectedDatePrivate"
               (dateChange)="emitDateChange($event)"
-              (dateInput)="emitDateChange($event, true)" />
+              (dateInput)="emitDateChange($event, true)" readonly />
             <mat-datepicker-toggle
               matSuffix
               [for]="pickerDateFrom"></mat-datepicker-toggle>
@@ -407,7 +407,7 @@
                       [matDatepicker]="pickerDateFrom"
                       [matDatepickerFilter]="inUseDatesFilter"
                       (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
-                      [min]="minDate"
+                      [min]="minDate" readonly (click)="pickerDateFrom.open()"
                       [max]="getMaxDate()" />
                     <mat-datepicker-toggle
                       matSuffix
@@ -1837,7 +1837,8 @@
                               [value]="forfait"
                               (change)="setForfait($event, forfait, item, null)"
                               [checked]="item?.forfait?.id === forfait.id">
-                              <span style="color: #868686;">                                  {{forfait.product}} - {{ forfait.name }}
+                              <span style="color: #868686;"> {{forfait.product}}
+                                - {{ forfait.name }}
                               </span>
                             </mat-checkbox>
                           </li>
@@ -1930,7 +1931,8 @@
                                     [value]="forfait"
                                     (change)="setForfait($event, forfait, item, people)"
                                     [checked]="people?.forfait?.id === forfait.id">
-                                    <span style="color: #868686;">                                  {{forfait.product}} - {{ forfait.name }}
+                                    <span style="color: #868686;">
+                                      {{forfait.product}} - {{ forfait.name }}
                                     </span>
                                   </mat-checkbox>
                                 </li>
@@ -2027,7 +2029,7 @@
                                 [value]="forfait"
                                 (change)="setForfait($event, forfait, item, null)"
                                 [checked]="item?.forfait?.id === forfait.id">
-                                <span>                                  {{forfait.product}} - {{ forfait.name }}
+                                <span> {{forfait.product}} - {{ forfait.name }}
                                 </span>
                               </mat-checkbox>
                             </li>

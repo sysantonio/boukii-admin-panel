@@ -26,8 +26,10 @@
       <div class="block w-full">
         <mat-label>{{'mails.who' | translate }}</mat-label><br>
         <mat-radio-group [(ngModel)]="emailSend">
-          <mat-checkbox [(ngModel)]="sendClients">{{'clients' | translate}}</mat-checkbox>
-          <mat-checkbox [(ngModel)]="sendMonitors">{{'settings.monitors' | translate}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="sendClients">{{'clients' |
+            translate}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="sendMonitors">{{'settings.monitors' |
+            translate}}</mat-checkbox>
         </mat-radio-group>
         <!--<input cdkFocusInitial matInput type="text"/>
 
@@ -37,14 +39,21 @@
       <div class="block w-full">
 
         <mat-form-field appearance="outline">
-          <input id="date" matInput [matDatepicker]="pickerFrom" placeholder="{{'from' | translate}}" [(ngModel)]="selectedDateFrom" [min]="today">
-          <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+          <input id="date" matInput [matDatepicker]="pickerFrom"
+            placeholder="{{'from' | translate}}" [(ngModel)]="selectedDateFrom"
+            [min]="today" readonly (click)="pickerFrom.open()">
+          <mat-datepicker-toggle matSuffix
+            [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom [startAt]="today"></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline" style="margin: 0 0 0 8%;">
-          <input id="date" matInput [matDatepicker]="pickerTo" placeholder="{{'to' | translate}}" [(ngModel)]="selectedDateTo" [disabled]="selectedDateFrom === null" [min]="selectedDateFrom">
-          <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+          <input id="date" matInput [matDatepicker]="pickerTo"
+            placeholder="{{'to' | translate}}" [(ngModel)]="selectedDateTo"
+            readonly (click)="pickerTo.open()"
+            [disabled]="selectedDateFrom === null" [min]="selectedDateFrom">
+          <mat-datepicker-toggle matSuffix
+            [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo [startAt]="today"></mat-datepicker>
         </mat-form-field>
       </div>
@@ -59,34 +68,50 @@
           <input matInput type="text"/>
         </mat-form-field>
       </div>-->
-      <div class="block w-full" style="margin: 0 0 10% 0;"  *ngIf="emailType === 2" >
+      <div class="block w-full" style="margin: 0 0 10% 0;"
+        *ngIf="emailType === 2">
 
-        <button (click)="searchCourses()" color="primary" mat-flat-button type="button" style="float:right"[disabled]="selectedDateTo === null">
+        <button (click)="searchCourses()" color="primary" mat-flat-button
+          type="button" style="float:right"
+          [disabled]="selectedDateTo === null">
           <span>{{'mails.search' | translate}}</span>
         </button>
 
       </div>
       <mat-spinner *ngIf="loadingCourses" style="margin:0 auto"></mat-spinner>
-      <div class="block w-full" style="margin: 0 0 5% 0;width: 100%; float:left" *ngIf="emailType === 2" >
-        <mat-checkbox (change)="selectAll($event)" *ngIf="paginatedCourses.length > 0">{{'choose_all' | translate }}</mat-checkbox>
-        <div style="cursor:pointer" *ngFor="let item of paginatedCourses" (click)="addToCourses(item.id)">
-          <div style="float: left; width: 100%; margin-bottom: 2%;" [ngClass]="{'selected-item': isSelected(item.id)}">
+      <div class="block w-full" style="margin: 0 0 5% 0;width: 100%; float:left"
+        *ngIf="emailType === 2">
+        <mat-checkbox (change)="selectAll($event)"
+          *ngIf="paginatedCourses.length > 0">{{'choose_all' | translate
+          }}</mat-checkbox>
+        <div style="cursor:pointer" *ngFor="let item of paginatedCourses"
+          (click)="addToCourses(item.id)">
+          <div style="float: left; width: 100%; margin-bottom: 2%;"
+            [ngClass]="{'selected-item': isSelected(item.id)}">
             <div style="float: left;width: 100%;padding: 3%;">
               <div style="float: left; width: 20%;">
-                <img [src]="'https://api.boukii.com/storage/icons/collectif_'+ item.sport.name.toLowerCase()+'2x.png'" width="100" height="100">
+                <img
+                  [src]="'https://api.boukii.com/storage/icons/collectif_'+ item.sport.name.toLowerCase()+'2x.png'"
+                  width="100" height="100">
               </div>
               <div style="float: left; width: 75%;margin:6% 0 0 2%">
                 <p><strong>{{item.name}}</strong></p>
-                <p> {{item.course_type === 1 ? 'colective' : 'private' | translate}} {{ item.sport.name}}</p>
+                <p> {{item.course_type === 1 ? 'colective' : 'private' |
+                  translate}} {{ item.sport.name}}</p>
                 <p>{{item.station.name}}</p>
               </div>
             </div>
           </div>
         </div>
-        <button *ngIf="paginatedCourses.length > 0" (click)="nextPage()" color="primary" mat-flat-button type="button" style="float:right;margin: 2% 0 0 0;" [disabled]="currentPage * pageSize >= courses.length">
+        <button *ngIf="paginatedCourses.length > 0" (click)="nextPage()"
+          color="primary" mat-flat-button type="button"
+          style="float:right;margin: 2% 0 0 0;"
+          [disabled]="currentPage * pageSize >= courses.length">
           <span>{{'next' | translate}}</span>
         </button>
-        <button *ngIf="paginatedCourses.length > 0" (click)="previousPage()" color="primary" mat-flat-button type="button" style="float:left;margin: 2% 0 0 0;" [disabled]="currentPage === 1">
+        <button *ngIf="paginatedCourses.length > 0" (click)="previousPage()"
+          color="primary" mat-flat-button type="button"
+          style="float:left;margin: 2% 0 0 0;" [disabled]="currentPage === 1">
           <span>{{'before' | translate}}</span>
         </button>
       </div>
@@ -95,14 +120,17 @@
 
         <mat-form-field appearance="outline" class="block w-full">
           <mat-label>{{'subject' | translate}}</mat-label>
-          <input matInput type="text" [(ngModel)]="generalSubjet" [value]="generalSubjet"/>
+          <input matInput type="text" [(ngModel)]="generalSubjet"
+            [value]="generalSubjet" />
         </mat-form-field>
       </div>
 
       <div class="vex-mail-compose-editor flex flex-col">
         <p>{{ 'message' | translate }}</p>
-        <quill-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                      class="flex-auto flex flex-col" [(ngModel)]="generalBody"></quill-editor>
+        <quill-editor
+          [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
+          class="flex-auto flex flex-col"
+          [(ngModel)]="generalBody"></quill-editor>
       </div>
 
       <!--<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
@@ -129,7 +157,8 @@
     </mat-dialog-content>
 
     <mat-dialog-actions>
-      <button color="warn" mat-dialog-close mat-icon-button matTooltip="Discard Draft" type="button">
+      <button color="warn" mat-dialog-close mat-icon-button
+        matTooltip="Discard Draft" type="button">
         <mat-icon svgIcon="mat:delete"></mat-icon>
       </button>
 
@@ -139,14 +168,15 @@
         <mat-icon svgIcon="mat:attach_file"></mat-icon>
       </button>-->
 
-      <button (click)="sendMail()" color="primary" mat-flat-button type="button">
+      <button (click)="sendMail()" color="primary" mat-flat-button
+        type="button">
         <span>{{'send' | translate}}</span>
         <mat-icon class="ml-2 icon-sm" svgIcon="mat:send"></mat-icon>
       </button>
     </mat-dialog-actions>
 
   </mat-tab>
- <!-- <mat-tab label="Automático">
+  <!-- <mat-tab label="Automático">
     <mat-dialog-content>
       <div class="block w-full">
         <mat-form-field appearance="outline" style="width: 100%">

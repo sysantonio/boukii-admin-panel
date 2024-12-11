@@ -24,10 +24,10 @@
           <span style="float:left; width: 100%; font-size:16px">{{
             'table.filter.booking' | translate}}</span>
           <mat-checkbox color="primary" [checked]="reservationTypeSingle"
-            (change)="reservationTypeSingle = !reservationTypeSingle; filterData()">{{'table.filter.single'
+            (change)="reservationTypeSingle = !reservationTypeSingle; filterData(false, 1)">{{'table.filter.single'
             | translate}}</mat-checkbox>
           <mat-checkbox color="primary" [checked]="reservationTypeMultiple"
-            (change)="reservationTypeMultiple = !reservationTypeMultiple; filterData()">{{'table.filter.multiple'
+            (change)="reservationTypeMultiple = !reservationTypeMultiple; filterData(false, 1)">{{'table.filter.multiple'
             | translate}}</mat-checkbox>
         </div>
 
@@ -35,7 +35,7 @@
           <span style="float:left; width: 100%; font-size:16px">{{
             'table.filter.booking' | translate}}</span>
           <mat-checkbox color="primary" [checked]="trashed"
-            (change)="trashed = !trashed; filterData()">{{'table.filter.trashed'
+            (change)="trashed = !trashed; filterData(false, 1)">{{'table.filter.trashed'
             | translate}}</mat-checkbox>
         </div>
 
@@ -44,15 +44,15 @@
           <span style="float:left; width: 100%; font-size:16px">{{
             'table.filter.course' | translate}}</span>
           <mat-checkbox color="primary" [checked]="courseColective"
-            (change)="courseColective = !courseColective; filterData()"><span
+            (change)="courseColective = !courseColective; filterData(false, 1)"><span
               style="color:#fac710">{{'course_colective' | translate
               }}</span></mat-checkbox>
           <mat-checkbox color="primary" [checked]="coursePrivate"
-            (change)="coursePrivate = !coursePrivate;filterData()"><span
+            (change)="coursePrivate = !coursePrivate;filterData(false, 1)"><span
               style="color:#2fca45">{{'course_private' | translate
               }}</span></mat-checkbox>
           <mat-checkbox color="primary" [checked]="courseActivity"
-            (change)="courseActivity = !courseActivity;filterData()"><span
+            (change)="courseActivity = !courseActivity;filterData(false, 1)"><span
               style="color:#00BEFFFF">{{'activity' | translate
               }}</span></mat-checkbox>
         </div>
@@ -61,9 +61,9 @@
           <span style="float:left; width: 100%; font-size:16px">{{
             'table.filter.booking' | translate}}</span>
           <mat-checkbox color="primary" [checked]="bookingPayed"
-            (change)="bookingPayed = !bookingPayed; filterData()">Paye</mat-checkbox>
+            (change)="bookingPayed = !bookingPayed; filterData(false, 1)">Paye</mat-checkbox>
           <mat-checkbox color="primary" [checked]="bookingNoPayed"
-            (change)="bookingNoPayed = !bookingNoPayed;filterData()">Non
+            (change)="bookingNoPayed = !bookingNoPayed;filterData(false, 1)">Non
             Paye</mat-checkbox>
         </div>
 
@@ -75,7 +75,7 @@
             class="flex-auto">
 
             <mat-select [formControl]="sportsControl" multiple
-              (selectionChange)="filterData()">
+              (selectionChange)="filterData(false, 1)">
 
               <mat-select-trigger>
                 <div
@@ -139,7 +139,7 @@
           </div>
           <div>
             <button class="ml-4 flex-none" mat-button type="button"
-              (click)="gift = 1; filterData()">
+              (click)="gift = 1; filterData(false, 1)">
               <span
                 [ngStyle]="{'color': gift ? '#fe3085' : 'var(--color-dark1)'}">{{'gift_vouchers'
                 | translate}}</span>
@@ -185,28 +185,29 @@
         <ng-container *ngIf="entity.includes('courses')">
           <div>
             <button class="ml-4 flex-none" mat-button type="button"
-              (click)="activeCourse = true;inActiveCourse=false;finishedCourse = false; allCourse = false;filterData()">
+              (click)="activeCourse = true;inActiveCourse=false;finishedCourse = false; allCourse = false;filterData(false, 1)">
               <span
                 [ngStyle]="{'color': activeCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'active'
                 | translate}}</span>
             </button>
           </div>
-          <!--<div *ngIf="entity.includes('courses')">
-          <button class="ml-4 flex-none" mat-button type="button" (click)="inActiveCourse = true;activeCourse=false;finishedCourse = false; allCourse = false;filterData()">
-            <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'inactive' | translate}}</span>
-          </button>
-        </div>-->
+
           <div>
             <button class="ml-4 flex-none" mat-button type="button"
-              (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData()">
+              (click)="finishedCourse = true;activeCourse=false;inActiveCourse = false; allCourse = false;filterData(false, 1)">
               <span
                 [style.color]="finishedCourse ? '#fe3085' : 'var(--color-dark1)'">{{'finished'
                 | translate}}</span>
             </button>
           </div>
+          <!--<div *ngIf="entity.includes('courses')">
+<button class="ml-4 flex-none" mat-button type="button" (click)="inActiveCourse = true;activeCourse=false;finishedCourse = false; allCourse = false;filterData(false, 1)">
+  <span [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'inactive' | translate}}</span>
+</button>
+</div>-->
           <div>
             <button class="ml-4 flex-none" mat-button type="button"
-              (click)="finishedCourse = false;activeCourse=false;inActiveCourse = true; allCourse = false;filterData()">
+              (click)="finishedCourse = false;activeCourse=false;inActiveCourse = true; allCourse = false;filterData(false, 1)">
               <span
                 [ngStyle]="{'color': inActiveCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'current'
                 | translate}}</span>
@@ -214,7 +215,7 @@
           </div>
           <div>
             <button class="ml-4 flex-none" mat-button type="button"
-              (click)="allCourse = true;activeCourse=false;inActiveCourse = false; finishedCourse = false; filterData(true)">
+              (click)="allCourse = true;activeCourse=false;inActiveCourse = false; finishedCourse = false; filterData(true, 1)">
               <span
                 [ngStyle]="{'color': allCourse ? '#fe3085' : 'var(--color-dark1)'}">{{'all'
                 |
@@ -225,7 +226,7 @@
         <div
           *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="activeBooking = true; finishedBooking=false; allBookings=false;finishedBooking=false;filterData()">
+            (click)="activeBooking = true;cancelledBookings=false; finishedBooking=false; allBookings=false;finishedBooking=false;filterData(false, 1)">
             <span
               [ngStyle]="{'color': activeBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'active'
               | translate}}</span>
@@ -235,7 +236,7 @@
         <div
           *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="finishedBooking = true; activeBooking=false; allBookings=false; filterData()">
+            (click)="finishedBooking = true;cancelledBookings=false; activeBooking=false; allBookings=false; filterData(false, 1)">
             <span
               [ngStyle]="{'color': finishedBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'finished'
               | translate}}</span>
@@ -244,16 +245,16 @@
         <div
           *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="finishedBooking = false; activeBooking=false; allBookings=false; filterData()">
+            (click)="finishedBooking = false; cancelledBookings=true; activeBooking=false; allBookings=false; filterData(false, 1)">
             <span
-              [ngStyle]="{'color': !allBookings && !finishedBooking && !activeBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'current'
+              [ngStyle]="{'color': !allBookings && !finishedBooking && !activeBooking && cancelledBookings ? '#fe3085' : 'var(--color-dark1)'}">{{'cancelled'
               | translate}}</span>
           </button>
         </div>
         <div
           *ngIf="entity.includes('bookings') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData()">
+            (click)="allBookings = true; activeBooking=false; finishedBooking=false; filterData(false, 1)">
             <span
               [ngStyle]="{'color': allBookings && !finishedBooking ? '#fe3085' : 'var(--color-dark1)'}">{{'all'
               | translate}}</span>
@@ -263,7 +264,7 @@
         <div
           *ngIf="entity.includes('monitor') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="activeMonitor = true; inactiveMonitor=false; allMonitors=false; filterData()">
+            (click)="activeMonitor = true; inactiveMonitor=false; allMonitors=false; filterData(false, 1)">
             <span
               [ngStyle]="{'color': activeMonitor ? '#fe3085' : 'var(--color-dark1)'}">{{'active'
               | translate}}</span>
@@ -272,7 +273,7 @@
         <div
           *ngIf="entity.includes('monitor') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData()">
+            (click)="inactiveMonitor = true; activeMonitor=false; allMonitors=false; filterData(false, 1)">
             <span
               [ngStyle]="{'color': inactiveMonitor ? '#fe3085' : 'var(--color-dark1)'}">{{'inactive'
               | translate}}</span>
@@ -281,7 +282,7 @@
         <div
           *ngIf="entity.includes('monitor') && !entity.includes('statistics')">
           <button class="ml-4 flex-none" mat-button type="button"
-            (click)="allMonitors = true; activeMonitor=false; inactiveMonitor=false; filterData()">
+            (click)="allMonitors = true; activeMonitor=false; inactiveMonitor=false; filterData(false, 1)">
             <span
               [ngStyle]="{'color': allMonitors ? '#fe3085' : 'var(--color-dark1)'}">{{'all'
               |

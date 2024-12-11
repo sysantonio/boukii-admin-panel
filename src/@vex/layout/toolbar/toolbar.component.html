@@ -39,6 +39,12 @@
       <mat-icon svgIcon="mat:assignment_turned_in"></mat-icon>
       <span>{{'add_booking' | translate }}</span>
     </button>
+
+    <button mat-menu-item
+      (click)="goToReservationPage('https://booking.boukii.com/'+slug)">
+      <mat-icon svgIcon="mat:assignment_turned_in"></mat-icon>
+      <span>{{'go_reserve_page' | translate }}</span>
+    </button>
   </mat-menu>
 
   <mat-menu #documentMenu="matMenu">

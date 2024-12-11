@@ -365,7 +365,6 @@ export class BookingDetailComponent implements OnInit {
 
               this.bookingUsers = [...this.booking.booking_users];
               this.getUniqueBookingUsers();
-
               // Agrupación de booking_users
               const groupedByCourseOrClientId = this.booking.booking_users.reduce(
                 (accumulator, currentValue) => {
@@ -620,15 +619,25 @@ export class BookingDetailComponent implements OnInit {
     const clientIds = new Set();
     const uniqueDates = new Set();
     const uniqueMonitors = new Set();
+    const uniqueGroupIds = new Set();
     this.bookingUsersUnique = [];
 
     this.bookingUsersUnique = this.bookingUsers.filter(item => {
-      if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
-        (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
-        clientIds.add(item.client_id);
-        uniqueDates.add(item.date);
-        uniqueMonitors.add(item.monitor_id);
-        return true;
+      if (item.group_id) {
+        // Filtrar por group_id si existe
+        if (!uniqueGroupIds.has(item.group_id)) {
+          uniqueGroupIds.add(item.group_id);
+          return true;
+        }
+      } else {
+        // Lógica original si no hay group_id
+        if ((!clientIds.has(item.client_id) && !uniqueDates.has(item.date)) ||
+          (item.course.course_type != 1 && !uniqueMonitors.has(item.monitor_id))) {
+          clientIds.add(item.client_id);
+          uniqueDates.add(item.date);
+          uniqueMonitors.add(item.monitor_id);
+          return true;
+        }
       }
       return false;
     });
@@ -792,7 +801,6 @@ export class BookingDetailComponent implements OnInit {
       this.defaults.payment_method_id === 2 ||
       this.defaults.payment_method_id === 3
     ) {
-      debugger;
       this.loading = true;
       const observables = [];
 
@@ -2115,7 +2123,7 @@ export class BookingDetailComponent implements OnInit {
             })
             .subscribe(() => {
               this.crudService
-                .update("/bookings", { status: 2 }, this.booking.id)
+                .update("/bookings", { status: 2, price_total: 0 }, this.booking.id)
                 .subscribe(() => {
                   this.crudService
                     .create("/payments", {
@@ -2155,7 +2163,7 @@ export class BookingDetailComponent implements OnInit {
               this.crudService
                 .update(
                   "/bookings",
-                  { paid_total: this.booking.price_total },
+                  { paid_total: this.booking.price_total, price_total: 0 },
                   this.booking.id
                 )
                 .subscribe(() => {
@@ -3124,9 +3132,9 @@ export class BookingDetailComponent implements OnInit {
           this.finalPrice - +this.booking.paid_total - this.priceRefund - this.priceNoRefund
       } else if (this.booking.status !== 1) {
         this.bookingPendingPrice =
-          this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices - this.priceRefund - this.priceNoRefund;
+          this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew - this.priceRefund - this.priceNoRefund;
       } else {
-        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - this.bonusPrices;
+        this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew;
       }
     } else {
       this.bookingPendingPrice = 0;
@@ -3602,11 +3610,23 @@ export class BookingDetailComponent implements OnInit {
     return ret;
   }
 
-  getBookingUsersByCourseDateAndHour(dateId, hour_start, hour_end, monitor_id) {
-    return this.bookingUsers.filter(
-      (b) => b.course_date_id === dateId && b.hour_start == hour_start && b.hour_end === hour_end && b.monitor_id == monitor_id
-    );
+  getBookingUsersByCourseDateAndHour(dateId, hour_start, hour_end, monitor_id, group_id = null) {
+    return this.bookingUsers.filter((b) => {
+      if (group_id) {
+        // Filtrar por group_id si se proporciona
+        return b.group_id === group_id;
+      } else {
+        // Filtrar por la lógica actual si no se pasa un group_id
+        return (
+          b.course_date_id === dateId &&
+          b.hour_start == hour_start &&
+          b.hour_end === hour_end &&
+          b.monitor_id == monitor_id
+        );
+      }
+    });
   }
+
 
   getBookingUsersByCourse(courseId) {
     return this.bookingUsers.filter(

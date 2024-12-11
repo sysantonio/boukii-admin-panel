@@ -726,8 +726,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     this.crudService.post('/admin/bookings/checkbooking', checkAval)
       .subscribe((response) => {
 
-        console.log(response);
-
         if (this.courseTypeId === 2 && this.selectedItem.is_flexible) {
           this.courseDates.forEach(item => {
             paxes = paxes + parseInt(item.paxes);
@@ -1183,7 +1181,6 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
             this.crudService.post('/admin/bookings/payments/' + booking.data.id, basket)
               .subscribe((result: any) => {
-                console.log((result));
                 if (this.defaults.payment_method_id === 2) {
 
                   window.open(result.data, "_self");
@@ -1215,9 +1212,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
           }
 
           this.crudService.post('/admin/bookings/mail/' + booking.data.id, {})
-            .subscribe((data) => {
-              console.log(data);
-            })
+            .subscribe((data) => {           })
         }, 1000);
       })
 

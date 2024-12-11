@@ -848,6 +848,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           data.notes = this.defaults.notes;
           data.notes_school = this.defaults.notes_school;
           data.paxes = paxes;
+          data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
           data.courseDates = [];
 
           if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
@@ -942,6 +943,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             this.courseDates.forEach(item => {
               data = {};
+              data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
               data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
               data.price_cancellation_insurance = 0;
               data.has_boukii_care = this.defaults.has_boukii_care;
@@ -1047,6 +1049,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
             this.courseDates.forEach(item => {
               data = {};
+              data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
               data.has_cancellation_insurance = this.defaults.has_cancellation_insurance;
               data.price_cancellation_insurance = 0;
               data.has_boukii_care = this.defaults.has_boukii_care;
@@ -1163,6 +1166,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
   }
 
+  generateUniqueGroupId(existingBookings: any[]): number {
+    let groupId: number;
+    const existingGroupIds = existingBookings.map(booking => booking.group_id);
+
+    do {
+      groupId = Math.floor(Math.random() * 1000000) + 1; // Genera un número entre 1 y 1,000,000
+    } while (existingGroupIds.includes(groupId));
+
+    return groupId;
+  }
+
   generateUniqueId(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0;
@@ -1274,6 +1288,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     this.bookingsToCreate.forEach((element, idx) => {
       element.courseDates.forEach(cs => {
+        if(cs.course.course_type != 1) {
+          cs.group_id = element.group_id;
+        }
         courseDates.push(cs);
         if (element.forfait) {
           bookingExtras.push({
@@ -1396,6 +1413,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               school_id: item.school_id,
               booking_id: booking.data.id,
               client_id: item.client_id,
+              group_id: item.group_id,
               course_id: item.course_id,
               course_date_id: item.course_date_id,
               monitor_id: item.monitor_id,
@@ -1414,6 +1432,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               bookingC.people.forEach(person => {
                 rqs.push({
                   school_id: item.school_id,
+                  group_id: item.group_id,
                   booking_id: booking.data.id,
                   client_id: person.id,
                   course_id: item.course_id,
@@ -1433,9 +1452,17 @@ export class BookingsCreateUpdateComponent implements OnInit {
             }
           }
           if (item.course.course_type === 3) {
+            const matchingBooking = this.bookingsToCreate.find((b) =>
+              b.courseDates.some((cd) =>
+                cd.course_date_id === item.course_date_id && cd.hour_start === item.hour_start
+              )
+            );
+
+            const groupId = matchingBooking?.group_id || null; // Obtén el group_id correspondiente
             rqs.push({
               school_id: item.school_id,
               booking_id: booking.data.id,
+              group_id: item.group_id,
               client_id: item.client_id,
               course_id: item.course_id,
               course_date_id: item.course_date_id,
@@ -2564,19 +2591,21 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration && duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if (duration.includes('h')) {
+    } else if (duration && duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
-    } else {
+    } else if(duration){
       const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
+    } else {
+      return hour;
     }
   }
 
@@ -3265,7 +3294,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const index = personsSelected.findIndex((p) => p.id === value.id);
 
     if (checked) {
-      if (personsSelected.length >= this.getCourse(courseDate.course_id).max_participants) {
+      if (personsSelected.length + 1 >= this.getCourse(courseDate.course_id).max_participants) {
         this.snackbar.open(
           this.translateService.instant('pax_limit_reached') + (personsSelected.length + 1),
           'OK',

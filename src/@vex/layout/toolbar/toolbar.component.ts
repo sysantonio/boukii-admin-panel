@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddTaskComponent } from './add-task/add-task.component';
 import moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'vex-toolbar',
   templateUrl: './toolbar.component.html',
@@ -34,7 +35,9 @@ export class ToolbarComponent {
   userVisible$: Observable<boolean> = this.configService.config$.pipe(map(config => config.toolbar.user.visible));
   megaMenuOpen$: Observable<boolean> = of(false);
 
-  constructor(public layoutService: LayoutService,
+  slug: string = ""
+  constructor(
+    public layoutService: LayoutService,
     private configService: ConfigService,
     private navigationService: NavigationService,
     private popoverService: PopoverService,
@@ -42,7 +45,7 @@ export class ToolbarComponent {
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
     private translateService: TranslateService) {
-
+    this.slug = JSON.parse(localStorage.getItem('boukiiUser')).schools[0].slug;
     switch (translateService.getDefaultLang()) {
       case 'es':
         this.flag = 'flag:spain';
@@ -79,15 +82,11 @@ export class ToolbarComponent {
       this.translateService.use(lang);
       this.translateService.currentLang = lang;
       sessionStorage.setItem('lang', lang);
-      // Ajusta el locale de la aplicación
       moment.locale(this.setLocale(lang));
     } else {
-
       this.translateService.setDefaultLang(lang);
       this.translateService.currentLang = lang;
       sessionStorage.setItem('lang', lang);
-
-      // Configura el locale de moment.js
       moment.locale(this.setLocale(lang));
     }
   }
@@ -154,13 +153,13 @@ export class ToolbarComponent {
   }
 
   addTask() {
-    const dialog = this.dialog.open(AddTaskComponent, {
-    });
-
+    const dialog = this.dialog.open(AddTaskComponent, {});
     dialog.afterClosed().subscribe((data) => {
-      if (data) {
-        this.snackbar.open(this.translateService.instant('task_created'), 'OK', { duration: 3000 })
-      }
+      if (data) this.snackbar.open(this.translateService.instant('task_created'), 'OK', { duration: 3000 })
     })
+  }
+
+  goToReservationPage(router: string) {
+    window.location.href = router;
   }
 }
