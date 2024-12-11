@@ -657,7 +657,12 @@ body.dark-mode {
   border: none !important;
   background: none !important;
 }
-
+.mat-mdc-button .mdc-button__label,
+.mat-mdc-unelevated-button .mdc-button__label,
+.mat-mdc-raised-button .mdc-button__label,
+.mat-mdc-outlined-button .mdc-button__label {
+  color: white;
+}
 .angular-editor-toolbar,
 .ae-font .ae-picker-label {
   background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #1d1d1d) !important;
@@ -735,7 +740,7 @@ span {
 .mat-mdc-row,
 .mat-mdc-footer-row,
 .mat-mdc-table .mat-mdc-header-cell,
-.mat-mdc-option .mdc-list-item__primary-text{
+.mat-mdc-option .mdc-list-item__primary-text {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
 
@@ -749,7 +754,9 @@ span {
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-mdc-menu-content,
-.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text,
+.cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above)
+  div.mat-mdc-autocomplete-panel {
   background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
