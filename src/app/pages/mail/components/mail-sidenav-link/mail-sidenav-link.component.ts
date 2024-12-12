@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MailSidenavLink } from '../../interfaces/mail-sidenav-link.interface';
 
 @Component({
@@ -6,13 +6,8 @@ import { MailSidenavLink } from '../../interfaces/mail-sidenav-link.interface';
   templateUrl: './mail-sidenav-link.component.html',
   styleUrls: ['./mail-sidenav-link.component.scss']
 })
-export class MailSidenavLinkComponent implements OnInit {
+export class MailSidenavLinkComponent {
 
   @Input() link: MailSidenavLink;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -5,16 +5,13 @@ import moment from 'moment';
 import { dropdownAnimation } from 'src/@vex/animations/dropdown.animation';
 import { ApiCrudService } from 'src/service/crud.service';
 import { SchoolService } from 'src/service/school.service';
-import {TranslateService} from '@ngx-translate/core';
-import {DateAdapter} from '@angular/material/core';
+import { TranslateService } from '@ngx-translate/core';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'vex-mail-compose',
   templateUrl: './mail-compose.component.html',
-  styleUrls: [
-    '../../../../../../node_modules/quill/dist/quill.snow.css',
-    './mail-compose.component.scss'
-  ],
+  styleUrls: ['./mail-compose.component.scss'],
   animations: [
     dropdownAnimation
   ],
@@ -61,8 +58,8 @@ export class MailComposeComponent implements OnInit {
   user: any;
 
   constructor(private cd: ChangeDetectorRef, private crudService: ApiCrudService, private schoolService: SchoolService,
-              private dialogRef: MatDialogRef<MailComposeComponent>, private snackbar: MatSnackBar,
-              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) { }
+    private dialogRef: MatDialogRef<MailComposeComponent>, private snackbar: MatSnackBar,
+    private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) { }
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
@@ -71,7 +68,7 @@ export class MailComposeComponent implements OnInit {
     this.schoolService.getSchoolData(this.user)
       .subscribe((data) => {
         this.school = data.data;
-        this.crudService.list('/mails', 1, 1000, 'desc', 'id', '&school_id='+this.school.id)
+        this.crudService.list('/mails', 1, 1000, 'desc', 'id', '&school_id=' + this.school.id)
           .subscribe((mails) => {
             this.currentMails = mails.data;
 
@@ -178,7 +175,7 @@ export class MailComposeComponent implements OnInit {
         body: this.bodyFr,
         title: this.titleFr,
         school_id: this.school.id,
-        lang:'fr'
+        lang: 'fr'
       }],
       [{
         type: this.mailType,
@@ -186,7 +183,7 @@ export class MailComposeComponent implements OnInit {
         body: this.bodyEn,
         title: this.titleEn,
         school_id: this.school.id,
-        lang:'en'
+        lang: 'en'
       }],
       [{
         type: this.mailType,
@@ -194,7 +191,7 @@ export class MailComposeComponent implements OnInit {
         body: this.bodyEs,
         title: this.titleEs,
         school_id: this.school.id,
-        lang:'es'
+        lang: 'es'
       }],
       [{
         type: this.mailType,
@@ -202,7 +199,7 @@ export class MailComposeComponent implements OnInit {
         body: this.bodyDe,
         title: this.titleIt,
         school_id: this.school.id,
-        lang:'de'
+        lang: 'de'
       }],
       [{
         type: this.mailType,
@@ -210,11 +207,11 @@ export class MailComposeComponent implements OnInit {
         body: this.bodyIt,
         title: this.titleDe,
         school_id: this.school.id,
-        lang:'it'
+        lang: 'it'
       }]
     ];
 
-    for (let i = 0; i<5; i++) {
+    for (let i = 0; i < 5; i++) {
 
       const existMail = this.currentMails.find((c) => c.lang === data[i][0].lang && c.type === data[i][0].type);
 
@@ -234,22 +231,22 @@ export class MailComposeComponent implements OnInit {
 
             if (i === 4) {
 
-              this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', { duration: 3000 });
               this.dialogRef.close();
             }
 
           })
       } else {
         this.crudService.post('/mails', data[i][0])
-        .subscribe((res) => {
+          .subscribe((res) => {
 
-          if (i === 4) {
+            if (i === 4) {
 
-            this.snackbar.open('Se ha configurado el email por defecto', 'OK', {duration: 3000});
-            this.dialogRef.close();
-          }
+              this.snackbar.open('Se ha configurado el email por defecto', 'OK', { duration: 3000 });
+              this.dialogRef.close();
+            }
 
-        })
+          })
       }
 
     }
@@ -307,8 +304,8 @@ export class MailComposeComponent implements OnInit {
 
   searchCourses() {
     this.loadingCourses = true;
-    this.crudService.list('/admin/courses', 1, 1000, 'desc', 'id', '&school_id='+this.school.id + '&start_date='+ moment(this.selectedDateFrom).format('YYYY-MM-DD') + '&end_date='+moment(this.selectedDateTo).format('YYYY-MM-DD'))
-      .subscribe((data) =>{
+    this.crudService.list('/admin/courses', 1, 1000, 'desc', 'id', '&school_id=' + this.school.id + '&start_date=' + moment(this.selectedDateFrom).format('YYYY-MM-DD') + '&end_date=' + moment(this.selectedDateTo).format('YYYY-MM-DD'))
+      .subscribe((data) => {
         this.courses = data.data;
         this.loadingCourses = false;
       })

@@ -19,15 +19,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from 'src/@vex/components/date-time-dialog-edit/date-time-dialog-edit.component';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { DateAdapter } from '@angular/material/core';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'vex-courses-create-update',
   templateUrl: './courses-create-update.component.html',
-  styleUrls: ['./courses-create-update.component.scss',
-    '../../../../../node_modules/quill/dist/quill.snow.css',
-    '../../../../@vex/styles/partials/plugins/quill/_quill.scss'
-  ],
+  styleUrls: ['./courses-create-update.component.scss'],
   animations: [fadeInUp400ms, stagger20ms]
 })
 export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
@@ -143,17 +139,6 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       price: ''
     }
   ];
-  modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }], // Títulos
-      ['bold', 'italic', 'underline'], // Formato de texto
-      [{ list: 'ordered' }, { list: 'bullet' }], // Listas
-      ['link', 'image'], // Enlaces e imágenes
-      [{ color: [] }, { background: [] }], // Selector de colores y fondo
-      [{ align: [] }], // Alineación
-      ['clean'] // Limpiar formato
-    ]
-  };
 
   isAngularHtmlEditing = false;
   defaults: any = {

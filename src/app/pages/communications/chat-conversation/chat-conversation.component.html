@@ -1,5 +1,6 @@
 <div class="relative h-full flex flex-col overflow-hidden">
-  <div class="px-6 bg-foreground border-b h-16 flex-none flex items-center">
+  <div class="px-6 bg-foreground border-b h-16 flex-none flex items-center"
+    style="background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);">
     <button
       (click)="openDrawer()"
       class="md:hidden sm:-ml-4 mr-2"
@@ -71,12 +72,12 @@
             </button>
           </div>
 
-          <div
+          <div style="color: black;"
             class="px-4 py-3 rounded-xl bg-gray-200 dark:bg-gray-800 inline-flex self-start max-w-[350px]">
             I finished the design you requested. It's attached. Let me know if
             you have any changes. 🤗
           </div>
-          <div
+          <div style="color: black;"
             class="px-4 py-3 rounded-xl rounded-bl-none bg-gray-200 dark:bg-gray-800 inline-flex self-start max-w-[350px]">
             There's been a lot of great progress with the project so far. 🙌
           </div>
@@ -86,12 +87,12 @@
         </div>
       </div>
 
-      <div
-        class="px-4 py-3 rounded-xl bg-primary-600 text-white inline-flex self-end max-w-[350px]">
+      <div style="color: black;"
+        class="px-4 py-3 rounded-xl bg-gray-200 text-white inline-flex self-end max-w-[350px]">
         Wow, how did you do this so fast?! 👀
       </div>
-      <div
-        class="px-4 py-3 rounded-xl rounded-br-none bg-primary-600 text-white inline-flex self-end max-w-[350px]">
+      <div style="color: black;"
+        class="px-4 py-3 rounded-xl rounded-br-none bg-gray-200 text-white inline-flex self-end max-w-[350px]">
         Thanks a lot! I'll have a look and update the page. 👍
       </div>
       <div class="self-end flex items-center gap-2">
@@ -106,22 +107,24 @@
             class="px-4 py-3 rounded-xl bg-gray-200 dark:bg-gray-800 inline-flex items-center self-start max-w-[350px] gap-3 cursor-pointer">
             <div
               class="flex-none h-10 w-10 rounded-xl bg-foreground flex items-center justify-center">
-              <mat-icon
+              <mat-icon style="color: black;"
                 class="text-primary-600"
                 svgIcon="mat:folder_zip"></mat-icon>
             </div>
 
             <div class="flex-1 truncate">
-              <div class="text-sm font-medium truncate">
+              <div class="text-sm font-medium truncate" style="color: black;">
                 Marketing Files.zip
               </div>
-              <div class="text-xs text-gray-500 truncate">6.9 MB</div>
+              <div class="text-xs text-gray-500 truncate"
+                style="color: black;">6.9 MB</div>
             </div>
 
-            <mat-icon class="flex-none" svgIcon="mat:download"></mat-icon>
+            <mat-icon class="flex-none" style="color: black;"
+              svgIcon="mat:download"></mat-icon>
           </div>
 
-          <div
+          <div style="color: black;"
             class="px-4 py-3 rounded-xl rounded-bl-none bg-gray-200 dark:bg-gray-800 inline-flex self-start max-w-[350px]">
             Here's the full compilation in a zip file. Let me know if you need
             anything else. 🤗
@@ -143,7 +146,10 @@
     </div>
   </vex-scrollbar>
 
-  <div class="flex-none bg-foreground border-t">
+  <div class="flex-none bg-foreground border-t"
+    style="position: absolute;
+  bottom: 65px;
+  width: 100%;">
     <div class="relative h-16 flex items-center justify-between">
       <button
         [matMenuTriggerFor]="addMenuButton"

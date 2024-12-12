@@ -60,7 +60,6 @@
               "lodash.memoize",
               "lodash.throttle",
               "luxon",
-              "quill",
               "raf",
               "rgbcolor",
               "qrcode",

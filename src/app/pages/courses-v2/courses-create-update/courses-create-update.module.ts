@@ -27,7 +27,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateModule } from '@ngx-translate/core';
@@ -38,53 +37,52 @@ import { FluxLayoutModule } from 'src/@vex/components/flux-component/flux-layout
 import { CoursesDetailCardModule } from '../../../../@vex/components/flux-component/course-card/app.module';
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
-import {QuillEditorComponent} from 'ngx-quill';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
-    imports: [
-        FormsModule,
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatRadioModule,
-        MatSelectModule,
-        MatMenuModule,
-        MatDividerModule,
-        MatAutocompleteModule,
-        WidgetClientsGroupModule,
-        WidgetClientsSportsModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatNativeDateModule,
-        MatDatepickerModule,
-        MatListModule,
-        NgxMatDatetimePickerModule,
-        NgxMatTimepickerModule,
-        MatStepperModule,
-        MatSlideToggleModule,
-        BreadcrumbsModule,
-        SecondaryToolbarModule,
-        MatDialogModule,
-        MatTableModule,
-        MatSortModule,
-        MatChipsModule,
-        MatCheckboxModule,
-        AngularEditorModule,
-        MatProgressSpinnerModule,
-        MatTabsModule,
-        TranslateModule,
-        FluxToolbarModule,
-        FluxUploadImgModule,
-        MatExpansionModule,
-        FluxLayoutModule,
-        CoursesDetailCardModule,
-        FluxModalModule,
-        FluxDisponibilidadModule,
-        QuillEditorComponent
-    ],
+  imports: [
+    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatAutocompleteModule,
+    WidgetClientsGroupModule,
+    WidgetClientsSportsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatListModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    MatStepperModule,
+    MatSlideToggleModule,
+    BreadcrumbsModule,
+    SecondaryToolbarModule,
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatChipsModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    TranslateModule,
+    FluxToolbarModule,
+    FluxUploadImgModule,
+    MatExpansionModule,
+    FluxLayoutModule,
+    CoursesDetailCardModule,
+    FluxModalModule,
+    FluxDisponibilidadModule,
+    AngularEditorModule
+  ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]
 })

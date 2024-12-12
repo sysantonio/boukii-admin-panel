@@ -38,7 +38,8 @@
   flex: 0 0 30%; /* No crecerá, no se reducirá y se establece en un ancho base de 30% */
   padding-right: 16px; /* Agregar un pequeño espacio entre las columnas */
   height: 100%; /* Establece una altura del 100% */
-
+  background-color: white;
+  border-radius: 5%;
 }
 
 .list-column {

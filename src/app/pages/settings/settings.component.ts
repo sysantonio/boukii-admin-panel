@@ -23,13 +23,12 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
 import { ConfigService } from 'src/@vex/config/config.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
 import { SchoolService } from 'src/service/school.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DateAdapter } from '@angular/material/core';
-import { th } from 'date-fns/locale';
 import { dropdownAnimation } from '../../../@vex/animations/dropdown.animation';
 import { PreviewModalComponent } from '../../components/preview-modal/preview-modal.component';
 import { LayoutService } from 'src/@vex/services/layout.service';
@@ -37,9 +36,7 @@ import { LayoutService } from 'src/@vex/services/layout.service';
 @Component({
   selector: 'vex-settings',
   templateUrl: './settings.component.html',
-  styleUrls: [
-    '../../../../node_modules/quill/dist/quill.snow.css',
-    './settings.component.scss'],
+  styleUrls: ['./settings.component.scss'],
   animations: [
     dropdownAnimation,
     stagger20ms

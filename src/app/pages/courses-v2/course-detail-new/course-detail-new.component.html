@@ -107,7 +107,7 @@
                     style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
                     <div style="width: 100%;">
                       <p> {{'EXTRAS' | translate }}
-                          <img src="assets/icons/icon/edit2.png" alt
+                        <img src="assets/icons/icon/edit2.png" alt
                           (click)="goTo('courses/update/'+id,{step:4})"
                           class="editbutton icon24">
                       </p>
@@ -182,7 +182,7 @@
           matInput
           [matDatepicker]="date_desde"
           [min]="minDate" readonly (click)="date_desde.open()"
-          [max]="maxDate" /> 
+          [max]="maxDate" />
         <mat-datepicker-toggle matSuffix
           [for]="date_desde"></mat-datepicker-toggle>
         <mat-datepicker #date_desde [startAt]="nowDate"></mat-datepicker>
