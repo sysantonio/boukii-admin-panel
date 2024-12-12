@@ -33,6 +33,13 @@
     </div>
   </form>
 
+  <mat-card class="info-message">
+    <mat-card-content>
+      <mat-icon color="secondary" style="margin-right: 8px;">info</mat-icon>
+      <span>{{ "Seleccionando más de un participante solo tendrás acceso a cursos privados" | translate }}</span>
+    </mat-card-content>
+  </mat-card>
+
   <div class="stepButtonsWrapper">
     <button mat-button type="button" (click)="handlePrevStep()">
       <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>

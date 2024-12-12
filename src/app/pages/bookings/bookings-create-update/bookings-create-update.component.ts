@@ -848,7 +848,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           data.notes = this.defaults.notes;
           data.notes_school = this.defaults.notes_school;
           data.paxes = paxes;
-          data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
+          //data.group_id = this.generateUniqueGroupId(this.bookingsToCreate);
           data.courseDates = [];
 
           if (this.courseTypeId === 1 && !this.selectedItem.is_flexible) {
