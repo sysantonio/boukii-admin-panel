@@ -17,53 +17,54 @@ import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widg
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AnalyticsComponent } from './analytics.component';
-import { AnalyticsRoutingModule } from './analytics-routing.module';import {MatTabsModule} from '@angular/material/tabs';
-import {TranslateModule} from '@ngx-translate/core';
-import {MatCardModule} from '@angular/material/card';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatOptionModule} from '@angular/material/core';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
+import { AnalyticsRoutingModule } from './analytics-routing.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [AnalyticsComponent],
-    imports: [
-        CommonModule,
-        LayoutModule,
-        PageLayoutModule,
-        BreadcrumbsModule,
-        RouterModule,
-        AnalyticsRoutingModule,
-        SecondaryToolbarModule,
-        MatIconModule,
-        ChartModule,
-        WidgetQuickLineChartModule,
-        WidgetQuickValueCenterModule,
-        WidgetQuickValueStartModule,
-        WidgetLargeGoalChartModule,
-        WidgetAssistantModule,
-        WidgetLargeChartModule,
-        WidgetTableModule,
-        //LanguageCreateUpdateModule,
-        MatDialogModule,
-        ComponentsModule,
-        MatTabsModule,
-        TranslateModule,
-        MatCardModule,
-        MatDividerModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatButtonModule
-    ]
+  imports: [
+    CommonModule,
+    LayoutModule,
+    PageLayoutModule,
+    BreadcrumbsModule,
+    RouterModule,
+    AnalyticsRoutingModule,
+    SecondaryToolbarModule,
+    MatIconModule,
+    ChartModule,
+    WidgetQuickLineChartModule,
+    WidgetQuickValueCenterModule,
+    WidgetQuickValueStartModule,
+    WidgetLargeGoalChartModule,
+    WidgetAssistantModule,
+    WidgetLargeChartModule,
+    WidgetTableModule,
+    //LanguageCreateUpdateModule,
+    MatDialogModule,
+    ComponentsModule,
+    MatTabsModule,
+    TranslateModule,
+    MatCardModule,
+    MatDividerModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatButtonModule
+  ]
 })
 export class AnalyticsModule {
 }

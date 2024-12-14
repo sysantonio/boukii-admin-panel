@@ -160,6 +160,6 @@ export class ToolbarComponent {
   }
 
   goToReservationPage(router: string) {
-    window.location.href = router;
+    window.open(router, "_blank");
   }
 }
