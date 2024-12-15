@@ -1,5 +1,6 @@
 .vex-user-menu {
   @apply bg-foreground shadow-lg border border-divider rounded py-2;
+  background-color: var(--color-grey5);
 }
 
 .vex-user-menu-item {
@@ -25,6 +26,4 @@
 }
 
 .vex-user-menu-item__dropdown-icon {
-
 }
-
