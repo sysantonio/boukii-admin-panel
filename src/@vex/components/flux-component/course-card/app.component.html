@@ -145,7 +145,8 @@
             <div *ngIf="courseFormGroup.controls['online'].value"
                 style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                 <div
-                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">ONLINE</div>
+                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">{{'payment_online'
+                    | translate}}</div>
             </div>
         </div>
     </div>
@@ -171,8 +172,18 @@
                 line-height: 16px;
                 word-wrap: break-word"
                 [class]="courseFormGroup.controls['course_type'].value?'':'emptyText'">
-                {{courseFormGroup.controls['course_type'].value===1?'course_colective':courseFormGroup.controls['course_type'].value===2?'course_private':courseFormGroup.controls['course_type'].value===3?'activity':''
-                | translate}}
+                <ng-container
+                    *ngIf="courseFormGroup.controls['course_type'].value===1">
+                    {{'course_colective' | translate}}
+                </ng-container>
+                <ng-container
+                    *ngIf="courseFormGroup.controls['course_type'].value===2">
+                    {{'course_private' | translate}}
+                </ng-container>
+                <ng-container
+                    *ngIf="courseFormGroup.controls['course_type'].value===3">
+                    {{'activity' | translate}}
+                </ng-container>
             </p>
         </div>
         <div *ngIf="courseFormGroup.controls['id'] && !detail"
@@ -200,7 +211,7 @@
                 [class]="courseFormGroup.controls['img'].value?'':'emptyImg1'"
                 style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
             <div style="width: 100%;">
-                <p> {{"courses.summary" | translate}} </p>
+                <p> {{"summary" | translate}} </p>
                 <p style="color:var(--color-dark1);"
                     [class]="courseFormGroup.controls['summary'].value?'':'emptyText'"
                     [innerHTML]="courseFormGroup.controls['summary'].value">

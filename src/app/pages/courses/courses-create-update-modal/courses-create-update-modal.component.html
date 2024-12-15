@@ -11,7 +11,8 @@
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
-            Online <mat-slide-toggle [(ngModel)]="defaults.online"
+            {{'payment_online' | translate}} <mat-slide-toggle
+              [(ngModel)]="defaults.online"
               color="primary"></mat-slide-toggle>
           </div>
           <div style="float:right">
@@ -323,7 +324,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 0">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.short_description"
@@ -352,7 +353,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 1">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.short_description"
@@ -373,7 +374,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 2">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.short_description"
@@ -394,7 +395,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 3">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.short_description"
@@ -415,7 +416,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 4">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.short_description"
@@ -1022,7 +1023,8 @@
         </div>
         <div style="float: left;width: 50%;">
           <div style="float:right">
-            Online <mat-slide-toggle [(ngModel)]="defaults.online"
+            {{'payment_online' | translate}} <mat-slide-toggle
+              [(ngModel)]="defaults.online"
               color="primary"></mat-slide-toggle>
           </div>
           <div style="float:right">
@@ -1298,7 +1300,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 0">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.fr.short_description"
@@ -1327,7 +1329,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 1">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.en.short_description"
@@ -1348,7 +1350,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 2">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.de.short_description"
@@ -1369,7 +1371,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 3">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.es.short_description"
@@ -1390,7 +1392,7 @@
                   <div class="flex-auto" style="width: 100%"
                     *ngIf="selectedTabDescIndex === 4">
                     <label for="summary"
-                      style="font-size: 18px">{{'courses.summary' | translate}}
+                      style="font-size: 18px">{{'summary' | translate}}
                       <span style="color:red">(*)</span></label>
                     <angular-editor placeholder="{{'enter_text' | translate}}"
                       [(ngModel)]="defaults.translations.it.short_description"

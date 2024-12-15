@@ -54,7 +54,7 @@
                     <div style="float: right;margin: 0;">
                       <mat-slide-toggle [checked]="defaults?.online"
                         [disabled]="true">
-                        Online
+                        {{'payment_online' | translate}}
                       </mat-slide-toggle>
                     </div>
                     <div style="float: right;margin: 0 25px 0 0;">
@@ -171,9 +171,9 @@
 
                   <div class="flex-auto">
 
-      
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+                      <mat-label>{{'courses.date_reservable' |
+                        translate}}</mat-label>
 
                       <input matInput id="dateFrom"
                         [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
@@ -182,9 +182,9 @@
                   </div>
                   <div class="flex-auto">
 
-
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <mat-label>{{'courses.date_reservable_to' | translate}}</mat-label>
+                      <mat-label>{{'courses.date_reservable_to' |
+                        translate}}</mat-label>
 
                       <input matInput id="dateTo"
                         [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
@@ -237,7 +237,7 @@
                   </div>
                   <div style="float: right;margin: 0;">
                     <mat-slide-toggle [checked]="true">
-                      Online
+                      {{'payment_online' | translate}}
                     </mat-slide-toggle>
                   </div>
                   <div style="float: right;margin: 0 25px 0 0;">
