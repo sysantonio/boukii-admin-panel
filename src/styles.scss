@@ -658,10 +658,10 @@ body.dark-mode {
 }
 .mat-mdc-button .mdc-button__label,
 .mat-mdc-unelevated-button .mdc-button__label,
-.mat-mdc-raised-button .mdc-button__label,
-.mat-mdc-outlined-button .mdc-button__label {
+.mat-mdc-raised-button .mdc-button__label {
   color: white;
 }
+
 .angular-editor-toolbar,
 .ae-font .ae-picker-label {
   background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #1d1d1d) !important;
@@ -669,10 +669,10 @@ body.dark-mode {
 .mat-calendar-table-header th > span {
   color: #1d1d1d !important;
 }
-.mat-mdc-outlined-button .mat-mdc-button-ripple,
-.mat-mdc-outlined-button .mdc-button__ripple {
-  background-color: var(--color-grey5);
-  border: 1px solidvar(--color-dark1);
+.mat-mdc-outlined-button,
+.mat-mdc-outlined-button:hover {
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #1d1d1d) !important;
+  color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
 
 .mat-mdc-table,

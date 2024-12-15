@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { debounceTime, map, Observable, startWith } from "rxjs";
 import { ApiResponse } from "src/app/interface/api-response";
 import { ApiCrudService } from "src/service/crud.service";
@@ -18,7 +18,7 @@ export class CreateUserDialogComponent implements OnInit {
     private langService: LangService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<any>
-  ) {}
+  ) { }
   user;
   expandClients: any[];
   stepForm: FormGroup;

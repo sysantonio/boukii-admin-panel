@@ -9,10 +9,10 @@ import { BookingDescriptionCardDate } from "./components/booking-description-car
 import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
 import moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {BookingService} from '../../../../service/bookings.service';
-import {ApiCrudService} from '../../../../service/crud.service';
-import {Router} from '@angular/router';
-import {th} from 'date-fns/locale';
+import { BookingService } from '../../../../service/bookings.service';
+import { ApiCrudService } from '../../../../service/crud.service';
+import { Router } from '@angular/router';
+import { th } from 'date-fns/locale';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -48,9 +48,9 @@ export class BookingsCreateUpdateV2Component {
   paymentMethod: number = 1; // Valor por defecto
   selectedPaymentOption: string = '';
   paymentOptions: any[] = [
-    {type: 'Tarjeta', value: 4},
-    {type: 'Efectivo', value: 1},
-    {type: 'Boukii Pay', value: 2}
+    { type: 'Tarjeta', value: 4 },
+    { type: 'Efectivo', value: 1 },
+    { type: 'Boukii Pay', value: 2 }
   ]; // Opciones de pago para "Pago directo"
 
   constructor(
@@ -147,7 +147,7 @@ export class BookingsCreateUpdateV2Component {
   getDegrees() {
     const user = JSON.parse(localStorage.getItem("boukiiUser"))
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
-      '&school_id='+user.schools[0].id + '&active=1')
+      '&school_id=' + user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data;
       })
@@ -191,7 +191,7 @@ export class BookingsCreateUpdateV2Component {
     this.forms.splice(index, 1); // Elimina el formulario del array
     this.normalizedDates.splice(index, 1); // Elimina el formulario del array
     this.deleteModal = false;
-    if(this.forms.length == 0){
+    if (this.forms.length == 0) {
       this.currentStep = 0;
       this.isDetail = false;
       this.selectedForm = this.fb.group({
@@ -522,9 +522,9 @@ export class BookingsCreateUpdateV2Component {
     let bookingData = this.bookingService.getBookingData();
     bookingData.cart = this.bookingService.setCart(this.normalizedDates, bookingData);
     bookingData.payment_method_id = this.paymentMethod;
-    if(this.selectedPaymentOption == 'Boukii Pay') {
+    if (this.selectedPaymentOption == 'Boukii Pay') {
       bookingData.payment_method_id = 2;
-    } else if(this.selectedPaymentOption == 'Tarjeta') {
+    } else if (this.selectedPaymentOption == 'Tarjeta') {
       bookingData.payment_method_id = 4;
     }
     const user = JSON.parse(localStorage.getItem("boukiiUser"))
@@ -532,10 +532,10 @@ export class BookingsCreateUpdateV2Component {
     bookingData.user_id = user.id;
     this.crudService.post('/admin/bookings', bookingData)
       .subscribe((result: any) => {
-        if(bookingData.payment_method_id == 2 || bookingData.payment_method_id == 3) {
-          this.crudService.post('/admin/bookings/payments/'+result.data.id, result.data.basket)
+        if (bookingData.payment_method_id == 2 || bookingData.payment_method_id == 3) {
+          this.crudService.post('/admin/bookings/payments/' + result.data.id, result.data.basket)
             .subscribe((result: any) => {
-              if(bookingData.payment_method_id == 2) {
+              if (bookingData.payment_method_id == 2) {
                 window.open(result.data, "_self");
               } else {
                 this.router.navigate(['/bookings/update/' + result.data.id]);

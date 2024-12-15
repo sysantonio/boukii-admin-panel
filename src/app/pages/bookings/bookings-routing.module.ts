@@ -6,7 +6,7 @@ import { BookingsCreateUpdateComponent } from "./bookings-create-update/bookings
 import { BookingDetailComponent } from "./booking-detail/booking-detail.component";
 import { BookingsCreateUpdateEditComponent } from "./bookings-create-update-edit/bookings-create-update-edit.component";
 import { BookingsCreateUpdateV2Component } from "./bookings-create-update-v2/bookings-create-update-v2.component";
-import {BookingDetailV2Component} from './booking-detail-v2/booking-detail-v2.component';
+import { BookingDetailV2Component } from './booking-detail-v2/booking-detail-v2.component';
 
 const routes: VexRoutes = [
   {
@@ -57,4 +57,4 @@ const routes: VexRoutes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class BookingsRoutingModule {}
+export class BookingsRoutingModule { }

@@ -8,21 +8,21 @@
         aria-label="Number"
         matInput
         [matAutocomplete]="auto"
-        formControlName="client"
-      />
+        formControlName="client" />
 
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option
           *ngFor="let filteredClient of filteredOptions | async"
           [value]="filteredClient"
-          (onSelectionChange)="setClient($event)"
-        >
+          (onSelectionChange)="setClient($event)">
           <div class="client-item">
-            <div class="image" *ngIf="!filteredClient.client_sports || !filteredClient.client_sports.length">
+            <div class="image"
+              *ngIf="!filteredClient.client_sports || !filteredClient.client_sports.length">
               <img
                 [src]="filteredClient.image !== null && filteredClient.image !== '' ? filteredClient.image : userAvatar" />
             </div>
-            <app-level-user *ngIf="filteredClient.client_sports && filteredClient.client_sports.length "
+            <app-level-user
+              *ngIf="filteredClient.client_sports && filteredClient.client_sports.length "
               mat-card-avatar style="margin-bottom: 0 !important;"
               [allLevels]="utilsService.getSportLevels(filteredClient.client_sports[0].sport_id, allLevels)"
               [selectLevel]="filteredClient.client_sports[0]?.degree_id"
@@ -30,8 +30,8 @@
               [userImage]="filteredClient.image !== null && filteredClient.image !== '' ? filteredClient.image : userAvatar">
             </app-level-user>
             <span class="client-details">
-        {{ filteredClient.first_name }} {{ filteredClient.last_name }}
-      </span>
+              {{ filteredClient.first_name }} {{ filteredClient.last_name }}
+            </span>
           </div>
         </mat-option>
       </mat-autocomplete>
@@ -39,17 +39,18 @@
     </mat-form-field>
 
     <div class="stepOneButtonsWrapper">
-      <button mat-stroked-button type="button" (click)="addClient()">
+      <button mat-stroked-button type="button"
+        (click)="addClient()">
         <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
-        {{ "new_client" | translate }}
+        {{ "create_new_client" | translate }}
       </button>
 
       <button
         mat-flat-button
         type="button"
+        color="primary"
         (click)="completeStep()"
-        [disabled]="!isFormValid()"
-      >
+        [disabled]="!isFormValid()">
         {{ "confirm" | translate }}
       </button>
     </div>
