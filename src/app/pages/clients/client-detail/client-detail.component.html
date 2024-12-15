@@ -1256,12 +1256,9 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-                <!-- Añadir niños con modal -->
                 <mat-table #sportsCurrentTable [dataSource]="sportsCurrentData">
                   <caption style="width: 100%;float: left;text-align: left;">
                     {{'current_sport' | translate }}</caption>
-
-                  <!-- Otros contenedores según tu descripción -->
 
                   <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef> {{'sport' | translate
@@ -1327,13 +1324,10 @@
 
               <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-                <!-- Añadir niños con modal -->
                 <mat-table #sportsTable [dataSource]="sportsData"
                   *ngIf="this.sportsData.data.length > 0">
                   <caption style="width: 100px"> {{'sports' | translate
                     }}</caption>
-
-                  <!-- Otros contenedores según tu descripción -->
 
                   <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef> {{'name' | translate

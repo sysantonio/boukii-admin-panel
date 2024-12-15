@@ -685,14 +685,15 @@
   "Slovak": "Slovak",
   "Slovenian": "Slovenian",
   "Swedish": "Swedish",
-  "Selecciona un grupo":"Sélectionnez un groupe",
-  "Selecciona una opción": "Sélectionnez une option"
-  ,"Meteo": "Météo"
-  ,"Session": "Session"
-  ,"Analytics": "Analytique"
-  ,"Sessions": "Sessions"
-  ,"Sales": "Ventes"
-  ,"Page Views": "Vues de page"
-  ,"go_reserve_page":"Aller à la page de réservation"
-
+  "Selecciona un grupo": "Sélectionnez un groupe",
+  "Selecciona una opción": "Sélectionnez une option",
+  "Meteo": "Météo",
+  "Session": "Session",
+  "Analytics": "Analytique",
+  "Sessions": "Sessions",
+  "Sales": "Ventes",
+  "Page Views": "Vues de page",
+  "go_reserve_page": "Aller à la page de réservation",
+  "Course": "Cours",
+  "bookings_page.description.date": "Date et heure"
 }
