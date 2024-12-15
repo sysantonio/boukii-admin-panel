@@ -27,39 +27,14 @@ const childrenRoutes: VexRoutes = [
         loadChildren: () => import('./pages/timeline/timeline.module').then(m => m.TimelineModule),
         canActivate: [AuthGuard],
       },
-/*      {
-        path: 'calendar',
-        loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarMonitorModule),
-        canActivate: [AuthGuard],
-      },*/
+      /*      {
+              path: 'calendar',
+              loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarMonitorModule),
+              canActivate: [AuthGuard],
+            },*/
       {
         path: 'bookings',
         loadChildren: () => import('./pages/bookings/bookings.module').then(m => m.BookingsModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'bookings/create',
-        loadChildren: () => import('./pages/bookings/bookings-create-update/bookings-create-update.module').then(m => m.BookingsCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'bookings/create-v2',
-        loadChildren: () => import('./pages/bookings/bookings-create-update-v2/bookings-create-update-v2.module').then(m => m.BookingsCreateUpdateV2Module),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'bookings/update/:id',
-        loadChildren: () => import('./pages/bookings/booking-detail/booking-detail.module').then(m => m.BookingDetailModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'bookings/update-v2/:id',
-        loadChildren: () => import('./pages/bookings/booking-detail-v2/booking-detail-v2.module').then(m => m.BookingDetailV2Module),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'bookings/edit/:id',
-        loadChildren: () => import('./pages/bookings/bookings-create-update-edit/bookings-create-update-edit.module').then(m => m.BookingsCreateUpdateEditModule),
         canActivate: [AuthGuard],
       },
       {
@@ -73,38 +48,8 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'courses/create',
-        loadChildren: () => import('./pages/courses/courses-create-update/courses-create-update.module').then(m => m.CoursesCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'courses/create-v2',
-        loadChildren: () => import('./pages/courses-v2/courses-create-update/courses-create-update.module').then(m => m.CoursesCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'courses/update/:id',
-        loadChildren: () => import('./pages/courses/courses-create-update/courses-create-update.module').then(m => m.CoursesCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'courses/detail/:id',
-        loadChildren: () => import('./pages/courses/courses-create-update/courses-create-update.module').then(m => m.CoursesCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
         path: 'vouchers',
         loadChildren: () => import('./pages/bonuses/bonuses.module').then(m => m.BonusesModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'vouchers/create',
-        loadChildren: () => import('./pages/bonuses/bonuses-create-update/bonuses-create-update.module').then(m => m.BonusesCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'vouchers/update/:id',
-        loadChildren: () => import('./pages/bonuses/bonuses-create-update/bonuses-create-update.module').then(m => m.BonusesCreateUpdateModule),
         canActivate: [AuthGuard],
       },
       {
@@ -123,43 +68,13 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'monitors/create',
-        loadChildren: () => import('./pages/monitors/monitors-create-update/monitors-create-update.module').then(m => m.MonitorsCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'monitors/update/:id',
-        loadChildren: () => import('./pages/monitors/monitors-create-update/monitors-create-update.module').then(m => m.MonitorsCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
         path: 'clients',
         loadChildren: () => import('./pages/clients/clients.module').then(m => m.ClientsModule),
         canActivate: [AuthGuard],
       },
       {
-        path: 'clients/create',
-        loadChildren: () => import('./pages/clients/client-create-update/client-create-update.module').then(m => m.ClientsCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'clients/update/:id',
-        loadChildren: () => import('./pages/clients/client-create-update/client-create-update.module').then(m => m.ClientsCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
         path: 'admins',
         loadChildren: () => import('./pages/admins/admins.module').then(m => m.AdminsModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'admins/create',
-        loadChildren: () => import('./pages/admins/admin-create-update/admin-create-update.module').then(m => m.AdminCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'admins/update/:id',
-        loadChildren: () => import('./pages/admins/admin-create-update/admin-create-update.module').then(m => m.AdminCreateUpdateModule),
         canActivate: [AuthGuard],
       },
       {
@@ -180,16 +95,6 @@ const childrenRoutes: VexRoutes = [
       {
         path: 'discount-codes',
         loadChildren: () => import('./pages/discounts/discounts.module').then(m => m.DiscountsModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'discount-codes/create',
-        loadChildren: () => import('./pages/discounts/discounts-create-update/discounts-create-update.module').then(m => m.DiscountsCreateUpdateModule),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'discount-codes/update/:id',
-        loadChildren: () => import('./pages/discounts/discounts-create-update/discounts-create-update.module').then(m => m.DiscountsCreateUpdateModule),
         canActivate: [AuthGuard],
       },
     ]

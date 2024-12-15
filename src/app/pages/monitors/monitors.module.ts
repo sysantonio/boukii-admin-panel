@@ -25,6 +25,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
+import { MonitorsCreateUpdateModule } from './monitors-create-update/monitors-create-update.module';
 
 @NgModule({
   declarations: [MonitorsComponent],
@@ -52,7 +53,9 @@ import { IconComponent } from 'src/@vex/components/icon/app.component';
     MatDividerModule,
     MatCardModule,
     MatSlideToggleModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    MonitorDetailModule,
+    MonitorsCreateUpdateModule
   ]
 })
 export class MonitorsModule {

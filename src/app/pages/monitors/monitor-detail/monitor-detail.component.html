@@ -840,7 +840,8 @@
               <mat-form-field appearance="outline" class="flex-auto">
                 <input matInput [matDatepicker]="pickerFrom" readonly
                   placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
-                  (dateChange)="onDateChange($event)"  (click)="pickerFrom.open()">
+                  (dateChange)="onDateChange($event)"
+                  (click)="pickerFrom.open()">
                 <mat-datepicker-toggle matSuffix
                   [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom></mat-datepicker>

@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BonusesComponent } from './bonuses.component';
 import { BonusesRoutingModule } from './bonuses-routing.module';
 import { BonusesCreateUpdateComponent } from './bonuses-create-update/bonuses-create-update.component';
+import { BonusesCreateUpdateModule } from './bonuses-create-update/bonuses-create-update.module';
 
 @NgModule({
   declarations: [BonusesComponent],
@@ -41,7 +42,8 @@ import { BonusesCreateUpdateComponent } from './bonuses-create-update/bonuses-cr
     WidgetTableModule,
     //LanguageCreateUpdateModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+    BonusesCreateUpdateModule
   ]
 })
 export class BonusesModule {

@@ -20,6 +20,7 @@ import { AdminsComponent } from './admins.component';
 import { AdminsRoutingModule } from './admins-routing.module';
 import { AdminCreateUpdateComponent } from './admin-create-update/admin-create-update.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { AdminCreateUpdateModule } from './admin-create-update/admin-create-update.module';
 @NgModule({
   declarations: [AdminsComponent],
   imports: [
@@ -41,7 +42,8 @@ import { TranslateModule } from '@ngx-translate/core';
     WidgetTableModule,
     MatDialogModule,
     ComponentsModule,
-    TranslateModule
+    TranslateModule,
+    AdminCreateUpdateModule
   ]
 })
 export class AdminsModule {

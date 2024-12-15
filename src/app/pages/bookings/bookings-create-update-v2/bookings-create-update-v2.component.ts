@@ -2,17 +2,10 @@ import { Component, ChangeDetectorRef } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BookingDialogComponent } from "./components/booking-dialog/booking-dialog.component";
-import { MOCK_MONITORS } from "./mocks/monitor";
-import { MOCK_USER1, MOCK_USER2 } from "./mocks/user";
-import { MOCK_POSIBLE_EXTRAS } from "./mocks/course";
-import { BookingDescriptionCardDate } from "./components/booking-description-card/booking-description-card.component";
-import { changeMonitorOptions } from "src/app/static-data/changeMonitorOptions";
-import moment from 'moment';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BookingService } from '../../../../service/bookings.service';
 import { ApiCrudService } from '../../../../service/crud.service';
 import { Router } from '@angular/router';
-import { th } from 'date-fns/locale';
 
 @Component({
   selector: "bookings-create-update-v2",

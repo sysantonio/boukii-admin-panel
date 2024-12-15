@@ -143,7 +143,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         });
         this.loading = false
         this.Confirm(0)
-
       } else {
         this.crudService.get('/admin/courses/' + this.id,
           ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])

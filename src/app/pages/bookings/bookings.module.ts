@@ -24,10 +24,16 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
-import {DateUniqueByPipe} from '../../pipes/date-unique-by.pipe';
+import { DateUniqueByPipe } from '../../pipes/date-unique-by.pipe';
+import { BookingsCreateUpdateV2Module } from './bookings-create-update-v2/bookings-create-update-v2.module';
+import { BookingDetailV2Module } from './booking-detail-v2/booking-detail-v2.module';
+import { BookingDetailModule } from './booking-detail/booking-detail.module';
+import { BookingDetailModalModule } from './booking-detail-modal/booking-detail-modal.module';
+import { BookingsCreateUpdateModule } from './bookings-create-update/bookings-create-update.module';
+import { BookingsCreateUpdateEditModule } from './bookings-create-update-edit/bookings-create-update-edit.module';
 
 @NgModule({
-  declarations: [BookingsComponent,DateUniqueByPipe],
+  declarations: [BookingsComponent, DateUniqueByPipe],
   imports: [
     CommonModule,
     LayoutModule,
@@ -53,11 +59,15 @@ import {DateUniqueByPipe} from '../../pipes/date-unique-by.pipe';
     MatSlideToggleModule,
     TranslateModule,
     ComponentsCustomModule,
-    IconComponent
+    IconComponent,
+    BookingsCreateUpdateV2Module,
+    BookingDetailV2Module,
+    BookingDetailModule,
+    BookingDetailModalModule,
+    BookingsCreateUpdateModule,
+    BookingsCreateUpdateEditModule
   ],
-  exports: [
-    DateUniqueByPipe
-  ]
+  exports: [DateUniqueByPipe]
 })
 export class BookingsModule {
 }

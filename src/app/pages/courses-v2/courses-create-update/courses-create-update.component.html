@@ -8,6 +8,7 @@
 
 <vex-flux-toolbad [Modal]="ModalProgress" [Flux]="ModalFlux"
   (Check)="ModalFlux=$event;Confirm(0)"></vex-flux-toolbad>
+  
 <vex-flux-layout>
   <mat-spinner loading *ngIf="loading" style="margin:0 auto"></mat-spinner>
   <div body *ngIf="!loading">
@@ -76,14 +77,14 @@
             style="width: 100%"
             [placeholder]="'courses.summary' | translate"
             formControlName="summary">
-          </angular-editor >
+          </angular-editor>
         </div>
         <div style="margin: 20px 0;">
           <angular-editor style="display: block !important;" id="description"
             style="width: 100%"
             [placeholder]="'courses.desc' | translate"
             formControlName="description">
-          </angular-editor >
+          </angular-editor>
         </div>
         <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
           <mat-form-field appearance="outline"
@@ -682,18 +683,19 @@
                 matInput required type="text">
             </mat-form-field>
             <div style="margin: 10px 0;">
-              <angular-editor  style="display: block !important;" id="summary"
+              <angular-editor style="display: block !important;" id="summary"
                 style="width: 100%"
                 [placeholder]="'courses.summary' | translate"
                 [formControlName]="'summary_'+item.Code">
-              </angular-editor >
+              </angular-editor>
             </div>
             <div style="margin: 20px 0;">
-              <angular-editor  style="display: block !important;" id="description"
+              <angular-editor style="display: block !important;"
+                id="description"
                 style="width: 100%"
                 [placeholder]="'courses.desc' | translate"
                 [formControlName]="'description_'+item.Code">
-              </angular-editor >
+              </angular-editor>
             </div>
           </ng-template>
         </mat-expansion-panel>
@@ -764,7 +766,8 @@
       <input matInput required type="number" formControlName="iva">
     </mat-form-field>
     <div style="width: 100%">
-      <mat-slide-toggle [checked]="true"> {{'active' | translate}} </mat-slide-toggle>
+      <mat-slide-toggle [checked]="true"> {{'active' | translate}}
+      </mat-slide-toggle>
     </div>
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
@@ -829,7 +832,7 @@
         font-weight: 600;
         line-height: 18px;
         word-wrap: break-word">
-         {{'active' | translate}}
+          {{'active' | translate}}
         </span>
         <br>
         <span style="

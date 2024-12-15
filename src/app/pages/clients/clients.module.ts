@@ -59,7 +59,10 @@ import { IconComponent } from 'src/@vex/components/icon/app.component';
     AddClientUserModalModule,
     ClientsCreateUpdateModalModule,
     TranslateModule,
-    ComponentsCustomModule
+    ComponentsCustomModule,
+    ClientDetailModule,
+    ClientsCreateUpdateModule,
+    ClientsCreateUpdateModalModule
   ]
 })
 export class ClientsModule {
