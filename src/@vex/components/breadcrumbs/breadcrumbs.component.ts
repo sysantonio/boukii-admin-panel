@@ -10,7 +10,7 @@ import { trackByValue } from '../../utils/track-by';
           <ng-container *ngIf="crumb.title">
             <h2 class="title">{{crumb.text | translate}}</h2>
           </ng-container>
-          <ng-container *ngIf="crumb.subtitle">
+          <ng-container *ngIf="crumb.subtitle && crumb.text">
             <h3 class="subtitle">{{crumb.text | translate}}</h3>
           </ng-container>
           <ng-container *ngIf="crumb.icon">
@@ -25,7 +25,7 @@ import { trackByValue } from '../../utils/track-by';
         <ng-container *ngIf="crumb.title">
           <h2 class="title">{{crumb.text | translate}}</h2>
         </ng-container>
-        <ng-container *ngIf="crumb.subtitle">
+        <ng-container *ngIf="crumb.subtitle && crumb.text">
           <h3 class="subtitle">{{crumb.text | translate}}</h3>
         </ng-container>
         <ng-container *ngIf="crumb.icon">

@@ -1126,7 +1126,7 @@ export class MonitorDetailComponent {
               active_school: this.defaultsUser.active
             }
             this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel[0].id)
-            .subscribe((a) => {})
+              .subscribe((a) => { })
             // revisar a partir de aqui
             this.sportsData.data.forEach(element => {
               this.crudService.create('/monitor-sports-degrees', { is_default: true, monitor_id: monitor.data.id, sport_id: element.sport_id, school_id: this.user.schools[0].id, degree_id: element.level.id, salary_level: element.salary_id })
@@ -1136,7 +1136,7 @@ export class MonitorDetailComponent {
                     if (e.data.sport_id === auLevel.sport_id) {
 
                       this.crudService.create('/monitor-sport-authorized-degrees', { monitor_sport_id: e.data.id, degree_id: auLevel.id })
-                        .subscribe((d) => {                   })
+                        .subscribe((d) => { })
                     }
                   });
                 })

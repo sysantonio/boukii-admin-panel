@@ -104,7 +104,7 @@
          font-weight: 500;
          line-height: 20px;
          word-wrap: break-word">
-            {{"Curso #" +
+            {{"Course" | translate }} {{"#" +
             ("00000"+courseFormGroup.controls['id'].value).slice(-5) |
             translate}}
             <img src="assets/icons/icon/edit.png"
@@ -122,8 +122,8 @@
         font-weight: 400;
         line-height: 16px;
         word-wrap: break-word">
-            {{"Registrado: "| translate}}
-            <span style="font-weight: 600;">
+            {{"register"| translate}}:
+            <span style="font-weight: 600; color: white;">
                 {{ DateISO(courseFormGroup.controls['created_at'].value)}}
             </span>
         </p>
@@ -139,12 +139,14 @@
             <div *ngIf="courseFormGroup.controls['active'].value"
                 style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                 <div
-                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">ACTIVO</div>
+                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">{{'active'
+                    | translate}}</div>
             </div>
             <div *ngIf="courseFormGroup.controls['online'].value"
                 style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                 <div
-                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">ONLINE</div>
+                    style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">{{'payment_online'
+                    | translate}}</div>
             </div>
         </div>
     </div>
@@ -170,8 +172,18 @@
                 line-height: 16px;
                 word-wrap: break-word"
                 [class]="courseFormGroup.controls['course_type'].value?'':'emptyText'">
-                {{courseFormGroup.controls['course_type'].value===1?'Curso colectivo flex':courseFormGroup.controls['course_type'].value===2?'Curso privado flex':courseFormGroup.controls['course_type'].value===3?'Actividad':''
-                | translate}}
+                <ng-container
+                    *ngIf="courseFormGroup.controls['course_type'].value===1">
+                    {{'course_colective' | translate}}
+                </ng-container>
+                <ng-container
+                    *ngIf="courseFormGroup.controls['course_type'].value===2">
+                    {{'course_private' | translate}}
+                </ng-container>
+                <ng-container
+                    *ngIf="courseFormGroup.controls['course_type'].value===3">
+                    {{'activity' | translate}}
+                </ng-container>
             </p>
         </div>
         <div *ngIf="courseFormGroup.controls['id'] && !detail"
@@ -199,7 +211,7 @@
                 [class]="courseFormGroup.controls['img'].value?'':'emptyImg1'"
                 style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
             <div style="width: 100%;">
-                <p> {{'RESUMEN' | translate }} </p>
+                <p> {{"summary" | translate}} </p>
                 <p style="color:var(--color-dark1);"
                     [class]="courseFormGroup.controls['summary'].value?'':'emptyText'"
                     [innerHTML]="courseFormGroup.controls['summary'].value">
@@ -212,7 +224,7 @@
             </div>
         </div>
         <div style="width: 100%">
-            <p> {{'DESCRIPCIÓN' | translate }} </p>
+            <p> {{'courses.desc' | translate }} </p>
             <p
                 [class]="courseFormGroup.controls['description'].value?'':'emptyText'"
                 style="color:var(--color-dark1);"
@@ -220,22 +232,23 @@
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
-            <p> {{'PRECIO POR FECHA' | translate }} </p>
+            <p> {{'price_per_date' | translate }} </p>
             <p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
                 style="color:var(--color-dark1); font-weight: 400;">
                 {{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);">
-            <p> {{'PARTICIPANTES MAX.' | translate }} </p>
-            <p style="color:var(--color-dark1); font-weight: 400;font-size: 12px;"
+            <p> {{'max_pax' | translate }} </p>
+            <p
+                style="color:var(--color-dark1); font-weight: 400;font-size: 12px;"
                 [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
                 {{courseFormGroup.controls['participants'].value}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);"
             *ngIf="courseFormGroup.controls['course_type'].value>1">
-            <p> {{'EDAD MIN.' | translate }} </p>
+            <p> {{'courses.min_age' | translate }} </p>
             <p style="color:var(--color-dark1);font-size: 12px;"
                 [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'">
                 {{courseFormGroup.controls['age_min'].value}}
@@ -243,7 +256,7 @@
         </div>
         <div style="width: calc(50% - 10px);"
             *ngIf="courseFormGroup.controls['course_type'].value>1">
-            <p> {{'EDAD MAX.' | translate }} </p>
+            <p> {{'courses.max_age' | translate }} </p>
             <p style="color:var(--color-dark1); font-size: 12px;"
                 [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'">
                 {{courseFormGroup.controls['age_max'].value}}
@@ -253,14 +266,14 @@
     <div class="cardgroup" style="gap: 10px;">
         <div style="display: flex;width: 100%;column-gap: 10px;">
             <div style="width: 100%">
-                <p> {{'RESERVABLE DESDE' | translate }} </p>
+                <p> {{'courses.date_reservable' | translate }} </p>
                 <p style="color:var(--color-dark1); font-size: 12px;"
                     [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
                     {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
                 </p>
             </div>
             <div style="width: 100%">
-                <p> {{'RESERVABLE HASTA' | translate }} </p>
+                <p> {{'courses.date_reservable_to' | translate }} </p>
                 <p style="color:var(--color-dark1);font-size: 12px;"
                     [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
                     {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
@@ -268,7 +281,7 @@
             </div>
             <div style="width: 100%"
                 *ngIf="courseFormGroup.controls['course_type'].value>1">
-                <p> {{'DUR. MIN.' | translate }} </p>
+                <p> {{'courses.dur_min' | translate }} </p>
                 <p style="color:var(--color-dark1);font-size: 12px;"
                     [class]="courseFormGroup.controls['duration_min'].value?'':'emptyText'">
                     {{courseFormGroup.controls['duration_min'].value}}
@@ -286,7 +299,7 @@
             <div style="display: flex;">
                 <img src="assets/icons/icon/calendar.png" class="icon24">
                 <p>
-                    {{'FECHA Y HORA' |
+                    {{'bookings_page.description.date' |
                     translate }}
                 </p>
             </div>
@@ -296,7 +309,8 @@
             <p
                 *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
                 style="font-size: 14px;text-align-last: justify;">
-                <span style="color:var(--color-dark1);">{{DateISO(item.date)}}</span>
+                <span
+                    style="color:var(--color-dark1);">{{DateISO(item.date)}}</span>
                 <span style="color:var(--color-dark1);"
                     *ngIf="courseFormGroup.controls['course_type'].value>1 && item.date_end">-{{DateISO(item.date_end)}}
                 </span>

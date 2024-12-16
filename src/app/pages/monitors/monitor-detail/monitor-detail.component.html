@@ -840,7 +840,8 @@
               <mat-form-field appearance="outline" class="flex-auto">
                 <input matInput [matDatepicker]="pickerFrom" readonly
                   placeholder="{{'date' | translate }}" [(ngModel)]="searchDate"
-                  (dateChange)="onDateChange($event)"  (click)="pickerFrom.open()">
+                  (dateChange)="onDateChange($event)"
+                  (click)="pickerFrom.open()">
                 <mat-datepicker-toggle matSuffix
                   [for]="pickerFrom"></mat-datepicker-toggle>
                 <mat-datepicker #pickerFrom></mat-datepicker>
@@ -1945,11 +1946,8 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
-                  <!-- Añadir niños con modal -->
                   <mat-table #childrenTable [dataSource]="childrenData"
                     *ngIf="formWorkInfo.value.children > 0">
-
-                    <!-- Otros contenedores según tu descripción -->
 
                     <ng-container matColumnDef="name">
                       <mat-header-cell *matHeaderCellDef> {{'name_client' |
@@ -2052,7 +2050,6 @@
                     [dataSource]="sportsCurrentData">
                     <caption style="width: 100%;float: left;text-align: left;">
                       {{'current_sport' | translate }}</caption>
-                    <!-- Otros contenedores según tu descripción -->
                     <ng-container matColumnDef="delete">
                       <mat-header-cell *matHeaderCellDef class="delete-column"
                         style="width: 6% !important;float: left;">{{'delete_title'
@@ -2180,7 +2177,6 @@
                     <caption style="width: 100px"> {{'sports' | translate
                       }}</caption>
 
-                    <!-- Otros contenedores según tu descripción -->
                     <ng-container matColumnDef="name">
                       <mat-header-cell *matHeaderCellDef
                         style="width: 33%;float: left;"> {{'sport' | translate

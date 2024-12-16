@@ -1,19 +1,16 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTable, _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, forkJoin, map, startWith } from 'rxjs';
+import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
-import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
-import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { ApiCrudService } from 'src/service/crud.service';
 
 @Component({
@@ -486,7 +483,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
             }
 
             this.crudService.create('/monitors-schools', schoolRel)
-            .subscribe((a) => { })
+              .subscribe((a) => { })
 
             this.crudService.create('/monitors-schools', { monitor_id: monitor.data.id, school_id: this.user.schools[0].id })
               .subscribe((monitorSchool) => {
@@ -501,7 +498,7 @@ export class MonitorsCreateUpdateComponent implements OnInit {
                         if (e.data.sport_id === auLevel.sport_id) {
 
                           this.crudService.create('/monitor-sport-authorized-degrees', { monitor_sport_id: e.data.id, degree_id: auLevel.id })
-                          .subscribe((d) => {                         })
+                            .subscribe((d) => { })
                         }
                       });
                     })

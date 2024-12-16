@@ -79,6 +79,7 @@
   "years": "Años",
   "new_monitor": "Nuevo monitor",
   "new_client": "Nuevo cliente",
+  "create_new_client": "Crear nuevo cliente",
   "current_sport": "Deportes asociados",
   "new_sports": "Deportes disponibles",
   "save": "Guardar",
@@ -257,7 +258,7 @@
   "bookings_page.crumbs.details": "detalles",
   "bookings_page.crumbs.observations": "observaciones",
   "bookings_page.description.utilizers": "participantes",
-  "bookings_page.description.date": "fecha y hora",
+  "bookings_page.description.date": "Fecha y hora",
   "bookings_page.description.monitor": "monitor",
   "bookings_page.description.total": "Total",
   "bookings_page.buttons.save&CreateBooking": "Guardar y hacer nueva reserva",
@@ -707,12 +708,13 @@
   "Slovenian": "Slovenian",
   "Swedish": "Swedish",
   "Selecciona un grupo": "Selecciona un grupo",
-  "Selecciona una opción": "Selecciona una opción"
-  ,"Meteo": "Meteo"
-  ,"Session": "Sesión"
-  ,"Sessions": "Sesiones"
-  ,"Sales": "Ventas"
-  ,"Page Views": "Vistas de página"
-  ,"Analytics": "Analítica"
-  ,"go_reserve_page":"Ir a página de reserva"
+  "Selecciona una opción": "Selecciona una opción",
+  "Meteo": "Meteo",
+  "Session": "Sesión",
+  "Sessions": "Sesiones",
+  "Sales": "Ventas",
+  "Page Views": "Vistas de página",
+  "Analytics": "Analítica",
+  "go_reserve_page": "Ir a página de reserva",
+  "Course": "Curso"
 }

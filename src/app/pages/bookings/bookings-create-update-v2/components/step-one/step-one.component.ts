@@ -6,8 +6,8 @@ import { ApiResponse } from "src/app/interface/api-response";
 import {
   ClientCreateUpdateModalComponent
 } from '../../../../clients/client-create-update-modal/client-create-update-modal.component';
-import {MatDialog} from '@angular/material/dialog';
-import {UtilsService} from '../../../../../../service/utils.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UtilsService } from '../../../../../../service/utils.service';
 
 @Component({
   selector: "booking-step-one",
@@ -28,7 +28,7 @@ export class StepOneComponent implements OnInit {
   userAvatar = "../../../../assets/img/avatar.png";
 
   constructor(private fb: FormBuilder, private crudService: ApiCrudService, protected utilsService: UtilsService,
-              private dialog: MatDialog) {}
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));

@@ -29,7 +29,7 @@ import { FormControl, UntypedFormControl } from '@angular/forms';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
-import moment, { duration } from 'moment';
+import moment from 'moment';
 import { ConfirmModalComponent } from 'src/app/pages/monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -54,7 +54,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
       useValue: {
         appearance: 'fill'
       } as MatFormFieldDefaultOptions
-    }
+    },
   ]
 })
 export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
@@ -162,6 +162,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     this.excelExportService.exportAsExcelFile(this.dataSource.data, 'YourTableData');
 
   }
+
 
   ngOnInit() {
     this.searchCtrl.valueChanges
@@ -401,7 +402,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.dataSource.connect();
         this.totalRecords = response.total;
         if (this.paginator) {
-          this.paginator.pageIndex = pageIndex-1;
+          this.paginator.pageIndex = pageIndex - 1;
           this.paginator.pageSize = pageSize;
         }
         this.loading = false;

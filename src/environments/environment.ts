@@ -7,7 +7,7 @@ export const environment = {
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   baseUrl: 'https://api.boukii.com/api',
- firebaseConfig: {
+  firebaseConfig: {
     apiKey: "AIzaSyAVqgEm3-_sMPLqxySQpyHKEfLtQ1_7pHI",
     authDomain: "boukii-test.firebaseapp.com",
     projectId: "boukii-test",

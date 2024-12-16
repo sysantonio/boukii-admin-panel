@@ -79,6 +79,7 @@
   "years": "Ans",
   "new_monitor": "Nouveau moniteur",
   "new_client": "Nouveau client",
+  "create_new_client": "Créer un nouveau client",
   "current_sport": "Sports associés",
   "new_sports": "Sports disponibles",
   "save": "sauvegarder",
@@ -204,7 +205,7 @@
   "remaining_balance": "Montant restant",
   "applied": "Appliqué",
   "users": "Utilisateurs",
-  "users": "Utilisateur",
+  "user": "Utilisateur",
   "general_data": "Données générales",
   "personal_data": "Informations personnelles",
   "family_data": "Information familiale",
@@ -684,14 +685,15 @@
   "Slovak": "Slovak",
   "Slovenian": "Slovenian",
   "Swedish": "Swedish",
-  "Selecciona un grupo":"Sélectionnez un groupe",
-  "Selecciona una opción": "Sélectionnez une option"
-  ,"Meteo": "Météo"
-  ,"Session": "Session"
-  ,"Analytics": "Analytique"
-  ,"Sessions": "Sessions"
-  ,"Sales": "Ventes"
-  ,"Page Views": "Vues de page"
-  ,"go_reserve_page":"Aller à la page de réservation"
-
+  "Selecciona un grupo": "Sélectionnez un groupe",
+  "Selecciona una opción": "Sélectionnez une option",
+  "Meteo": "Météo",
+  "Session": "Session",
+  "Analytics": "Analytique",
+  "Sessions": "Sessions",
+  "Sales": "Ventes",
+  "Page Views": "Vues de page",
+  "go_reserve_page": "Aller à la page de réservation",
+  "Course": "Cours",
+  "bookings_page.description.date": "Date et heure"
 }

@@ -15,7 +15,7 @@ const routes: VexRoutes = [
     }
   },
   {
-    path: 'create-v2',
+    path: 'create',
     component: CoursesCreateUpdateComponent,
     data: {
       toolbarShadowEnabled: true

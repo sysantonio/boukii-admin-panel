@@ -1,33 +1,33 @@
-import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import Plotly from 'plotly.js-dist-min';
-import {MatTabChangeEvent} from '@angular/material/tabs';
-import {MonitorsCreateUpdateComponent} from '../monitors/monitors-create-update/monitors-create-update.component';
-import {TableColumn} from '../../../@vex/interfaces/table-column.interface';
-import {Router} from '@angular/router';
-import {ApiCrudService} from '../../../service/crud.service';
-import {Observable} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MonitorsCreateUpdateComponent } from '../monitors/monitors-create-update/monitors-create-update.component';
+import { TableColumn } from '../../../@vex/interfaces/table-column.interface';
+import { Router } from '@angular/router';
+import { ApiCrudService } from '../../../service/crud.service';
+import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment/moment';
-import {MOCK_COUNTRIES} from '../../static-data/countries-data';
-import {MOCK_PROVINCES} from '../../static-data/province-data';
+import { MOCK_COUNTRIES } from '../../static-data/countries-data';
+import { MOCK_PROVINCES } from '../../static-data/province-data';
 
 @Component({
   selector: 'vex-analytics',
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss']
 })
-export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
+export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
   courseTypeHoursData = [
-    {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
-    {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
-    {name: this.translateService.instant('activity'), value: 0, max_value:0, color: '#ff33b8'}
+    { name: this.translateService.instant('course_colective'), value: 0, max_value: 0, color: '#ff5733' },
+    { name: this.translateService.instant('course_private'), value: 0, max_value: 0, color: '#33c7ff' },
+    { name: this.translateService.instant('activity'), value: 0, max_value: 0, color: '#ff33b8' }
   ];
   allSports: any[] = []; // Array para almacenar todos los deportes
 
   countries = MOCK_COUNTRIES;
   provinces = MOCK_PROVINCES;
   filter = '';
-  monitor= null;
+  monitor = null;
   imageAvatar = '../../../assets/img/avatar.png';
   user: any;
   icon = '../../../assets/img/icons/monitores.svg';
@@ -50,49 +50,49 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
   private resizePending = false;
 
   columns: TableColumn<any>[] = [
-    {label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium']},
-    {label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium']},
-    {label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true},
-    {label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'base_price', property: 'hour_price', type: 'price', visible: true},
-    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
-    {label: 'total', property: 'total_cost', type: 'price', visible: true},
+    { label: 'monitor', property: 'monitor', type: 'monitor', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true },
+    { label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'base_price', property: 'hour_price', type: 'price', visible: true },
+    { label: 'total_hours', property: 'total_hours', type: 'text', visible: true },
+    { label: 'total', property: 'total_cost', type: 'price', visible: true },
   ];
 
   columnsSales: TableColumn<any>[] = [
-    {label: 'type', property: 'icon', type: 'booking_users_image', visible: true},
-    {label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'sold', property: 'booked_places', type: 'text', visible: true},
-    {label: 'cash', property: 'cash', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'online', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'admin', property: 'admin', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'vouchers', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'gift_vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium']},
+    { label: 'type', property: 'icon', type: 'booking_users_image', visible: true },
+    { label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sold', property: 'booked_places', type: 'text', visible: true },
+    { label: 'cash', property: 'cash', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'online', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'admin', property: 'admin', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'vouchers', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'gift_vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium'] },
     //{label: 'discount_code', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
-    {label: 'total', property: 'total_cost', type: 'price', visible: true},
+    { label: 'total', property: 'total_cost', type: 'price', visible: true },
   ];
 
   columnsDetail: TableColumn<any>[] = [
-    {label: 'date', property: 'date', type: 'date', visible: true, cssClasses: ['font-medium']},
-    {label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium']},
-    {label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true},
-    {label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium']},
-    {label: 'base_price', property: 'hour_price', type: 'price', visible: true},
-    {label: 'total_hours', property: 'total_hours', type: 'text', visible: true},
-    {label: 'total', property: 'total_cost', type: 'price', visible: true},
+    { label: 'date', property: 'date', type: 'date', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sport', property: 'sport', type: 'sport', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_collective', property: 'hours_collective', type: 'text', visible: true },
+    { label: 'hours_private', property: 'hours_private', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_activities', property: 'hours_activities', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'hours_nwd_payed', property: 'hours_nwd_payed', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'base_price', property: 'hour_price', type: 'price', visible: true },
+    { label: 'total_hours', property: 'total_hours', type: 'text', visible: true },
+    { label: 'total', property: 'total_cost', type: 'price', visible: true },
 
   ];
 
   constructor(private crudService: ApiCrudService, private router: Router, public translateService: TranslateService,
-              private cdr: ChangeDetectorRef) {
+    private cdr: ChangeDetectorRef) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
   }
 
@@ -100,7 +100,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     let voucherText = {
       'title': this.translateService.instant('gift_vouchers'),
       'subtitle': this.translateService.instant('sales'),
-      'price': '0 CHF' ,
+      'price': '0 CHF',
       'subprice': this.translateService.instant('occupation'),
     }
     this.setPlotly('#E91E63', voucherText, 'voucher', 0, 0);
@@ -124,7 +124,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
 
   getSchoolSports() {
     return this.crudService.list('/school-sports', 1, 10000, 'desc', 'id',
-      '&school_id='+this.user.schools[0].id, '', null, null, ['sport']);
+      '&school_id=' + this.user.schools[0].id, '', null, null, ['sport']);
   }
 
   updateTotalHours() {
@@ -149,32 +149,32 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
 
   getBookingsTotal(type): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type+this.filter);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type + this.filter);
   }
 
   getBookingsByDate(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/dates', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
   }
 
   getBookingsByDateSport(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/sports', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
   }
 
   getActiveMonitors(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/monitors/active', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
   }
 
   getTotalHours(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/monitors/hours', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
   }
 
   getTotalHoursBySport(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/monitors/sports', 1, 10000,
-      'desc', 'id', '&school_id=' + this.user.schools[0].id+this.filter);
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
   }
 
   showDetailEvent(event: any) {
@@ -182,12 +182,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     this.selectedId = event.item.id;
     this.getMonitor().subscribe(res => {
       this.monitor = res.data;
-      this.filter += '&monitor_id='+this.selectedId;
+      this.filter += '&monitor_id=' + this.selectedId;
       let settings = JSON.parse(this.user.schools[0].settings);
       this.courseTypeHoursData = [
-        {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
-        {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
-        {name: this.translateService.instant('activity'), value: 0, max_value:0, color: '#ff33b8'}
+        { name: this.translateService.instant('course_colective'), value: 0, max_value: 0, color: '#ff5733' },
+        { name: this.translateService.instant('course_private'), value: 0, max_value: 0, color: '#33c7ff' },
+        { name: this.translateService.instant('activity'), value: 0, max_value: 0, color: '#ff33b8' }
       ];
       this.reloadData(true);
     })
@@ -195,7 +195,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -235,25 +235,25 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     let filter = '';
 
     if (this.selectedFrom) {
-      filter = filter + '&start_date='+moment(this.selectedFrom).format('YYYY-MM-DD');
+      filter = filter + '&start_date=' + moment(this.selectedFrom).format('YYYY-MM-DD');
     }
     if (this.selectedTo) {
-      filter = filter + '&end_date='+moment(this.selectedTo).format('YYYY-MM-DD');
+      filter = filter + '&end_date=' + moment(this.selectedTo).format('YYYY-MM-DD');
     }
     if (this.selectedSport) {
-      filter = filter + '&sport_id='+this.selectedSport;
+      filter = filter + '&sport_id=' + this.selectedSport;
     }
 
     if (this.selectedId) {
-      filter = filter + '&monitor_id='+this.selectedId;
+      filter = filter + '&monitor_id=' + this.selectedId;
     }
 
     this.filter = filter;
     this.totalPriceSell = 0;
     this.courseTypeHoursData = [
-      {name: this.translateService.instant('course_colective'), value: 0, max_value:0, color: '#ff5733'},
-      {name:  this.translateService.instant('course_private'), value: 0, max_value:0, color: '#33c7ff'},
-      {name: this.translateService.instant('activity'), value: 0, max_value:0, color: '#ff33b8'}
+      { name: this.translateService.instant('course_colective'), value: 0, max_value: 0, color: '#ff5733' },
+      { name: this.translateService.instant('course_private'), value: 0, max_value: 0, color: '#33c7ff' },
+      { name: this.translateService.instant('activity'), value: 0, max_value: 0, color: '#ff33b8' }
     ];
     this.getBookingsTotal(1).subscribe(res => {
       const collectiveText = {
@@ -264,7 +264,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       };
       this.updateCourseValue(0, res.data.total_reservations_hours,
         res.data.total_hours);
-      if(!monitors) {
+      if (!monitors) {
         this.setPlotly('#FA9917', collectiveText, 'collective',
           res.data.total_reservations_places, res.data.total_available_places);
       }
@@ -282,7 +282,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       };
       this.updateCourseValue(1, res.data.total_reservations_hours,
         res.data.total_hours);
-      if(!monitors) {
+      if (!monitors) {
         this.setPlotly('#2AC940', collectiveText, 'prive',
           res.data.total_reservations_places, res.data.total_places);
 
@@ -300,7 +300,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       };
       this.updateCourseValue(2, res.data.total_reservations_hours,
         res.data.total_hours);
-      if(!monitors) {
+      if (!monitors) {
         this.setPlotly('#9747FF', collectiveText, 'activity',
           res.data.total_reservations_places, res.data.total_places);
       }
@@ -314,12 +314,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     });
     let plotActiveMonitors = 'activeMonitors';
     let plotTotalHours = 'totalHours';
-    if(monitors) {
+    if (monitors) {
       plotActiveMonitors = 'activeMonitorsFiltered';
       plotTotalHours = 'totalHoursFiltered';
     }
 
-    if(!this.showDetail && this.tabActive != 'sells') {
+    if (!this.showDetail && this.tabActive != 'sells') {
       this.getActiveMonitors().subscribe(res => {
         let collectiveText = {
           'title': this.translateService.instant('monitors'),
@@ -333,7 +333,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         }
       });
     }
-    if(this.tabActive == 'sells') {
+    if (this.tabActive == 'sells') {
       this.loadSellData();
     }
     this.getTotalHours().subscribe(res => {
@@ -405,7 +405,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     let voucherText = {
       'title': this.translateService.instant('gift_vouchers'),
       'subtitle': this.translateService.instant('sales'),
-      'price': '0 CHF' ,
+      'price': '0 CHF',
       'subprice': this.translateService.instant('occupation'),
     }
     this.setPlotly('#E91E63', voucherText, 'voucherSales', 0, 0);
@@ -421,7 +421,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       })
 
 
-    } else if(event.index === 0) {
+    } else if (event.index === 0) {
       this.tabActive = 'general';
       this.filter = '';
       this.showDetail = false;
@@ -429,7 +429,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       this.getBookingsByDate().subscribe(res => {
         this.setUserSessionAnalytics(false, res.data);
       })
-    } else if(event.index === 1) {
+    } else if (event.index === 1) {
       this.filter = '';
       this.tabActive = 'sells';
       this.showDetail = false;
@@ -475,7 +475,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
   setPlotly(color, text, id, value, maxValue) {
 
     // Calcular el porcentaje
-    let percent:any = (value /  maxValue) * 100;
+    let percent: any = (value / maxValue) * 100;
 
     if (isNaN(percent)) {
       percent = 0;
@@ -483,9 +483,9 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
 
     const data = [
       {
-        domain: {x: [0, 1], y: [0, 1]},
+        domain: { x: [0, 1], y: [0, 1] },
         value: percent,  // Valor del medidor
-        title: {text: "Medidor Semi Circular"},
+        title: { text: "Medidor Semi Circular" },
         type: "indicator",
         mode: "gauge",
         gauge: {
@@ -522,8 +522,8 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     /* *** layout *** */
 
     const layout = {
-      height:  window.innerWidth > 1440 ? 250 : 350,
-      margin: {t: 20, b: 10, l: window.innerWidth > 1440 ? 65 : 50, r: window.innerWidth > 1339 ? 50 : 50},  // Aumentamos el margen superior (t) para dar espacio al texto
+      height: window.innerWidth > 1440 ? 250 : 350,
+      margin: { t: 20, b: 10, l: window.innerWidth > 1440 ? 65 : 50, r: window.innerWidth > 1339 ? 50 : 50 },  // Aumentamos el margen superior (t) para dar espacio al texto
       paper_bgcolor: "rgba(0,0,0,0)",  // Fondo del gráfico transparente
       plot_bgcolor: "rgba(0,0,0,0)",   // Fondo del área del gráfico transparente
       annotations: [{
@@ -542,80 +542,80 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
         xanchor: 'center',
         yanchor: 'middle',
         align: 'center',
-        pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
+        pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
       },
-        {
-          text: text.title,
-          font: {
-            family: "Dinamit, sans-serif",
-            weight: 700,
-            size: 17,
-            color: color
-          },
-          showarrow: false,
-          x: -.13,
-          y: .96,  // Ajustamos el valor de y para que el texto esté más arriba
-          xref: 'paper',
-          yref: 'paper',
-          xanchor: 'left',
-          yanchor: 'bottom',
-          align: 'left',
-          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
+      {
+        text: text.title,
+        font: {
+          family: "Dinamit, sans-serif",
+          weight: 700,
+          size: 17,
+          color: color
         },
-        {
-          text: text.subtitle,
-          font: {
-            family: "Dinamit, sans-serif",
-            weight: 400,
-            size: 10,
-            color: '#87888C'
-          },
-          showarrow: false,
-          x: -.13,
-          y: .94,
-          xref: 'paper',
-          yref: 'paper',
-          xanchor: 'left',
-          yanchor: 'top',
-          align: 'left',
-          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
+        showarrow: false,
+        x: -.13,
+        y: .96,  // Ajustamos el valor de y para que el texto esté más arriba
+        xref: 'paper',
+        yref: 'paper',
+        xanchor: 'left',
+        yanchor: 'bottom',
+        align: 'left',
+        pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+      },
+      {
+        text: text.subtitle,
+        font: {
+          family: "Dinamit, sans-serif",
+          weight: 400,
+          size: 10,
+          color: '#87888C'
         },
-        {
-          text: text.price,
-          font: {
-            family: "Dinamit, sans-serif",
-            weight: 700,
-            size: 20,
-            color: '#424242'
-          },
-          showarrow: false,
-          x: -.13,
-          y: .865,  // Ajustamos el valor de y para que el texto esté más arriba
-          xref: 'paper',
-          yref: 'paper',
-          xanchor: 'left',
-          yanchor: 'top',
-          align: 'left',
-          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
+        showarrow: false,
+        x: -.13,
+        y: .94,
+        xref: 'paper',
+        yref: 'paper',
+        xanchor: 'left',
+        yanchor: 'top',
+        align: 'left',
+        pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+      },
+      {
+        text: text.price,
+        font: {
+          family: "Dinamit, sans-serif",
+          weight: 700,
+          size: 20,
+          color: '#424242'
         },
-        {
-          text: text.subprice,
-          font: {
-            family: "Dinamit, sans-serif",
-            size: 11,
-            weight: 400,
-            color: '#87888C'
-          },
-          showarrow: false,
-          x: -.13,
-          y: .76,
-          xref: 'paper',
-          yref: 'paper',
-          xanchor: 'left',
-          yanchor: 'top',
-          align: 'left',
-          pad: {t: 10, r: 10, b: 10, l: 10}  // Espacio alrededor del texto
-        }
+        showarrow: false,
+        x: -.13,
+        y: .865,  // Ajustamos el valor de y para que el texto esté más arriba
+        xref: 'paper',
+        yref: 'paper',
+        xanchor: 'left',
+        yanchor: 'top',
+        align: 'left',
+        pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+      },
+      {
+        text: text.subprice,
+        font: {
+          family: "Dinamit, sans-serif",
+          size: 11,
+          weight: 400,
+          color: '#87888C'
+        },
+        showarrow: false,
+        x: -.13,
+        y: .76,
+        xref: 'paper',
+        yref: 'paper',
+        xanchor: 'left',
+        yanchor: 'top',
+        align: 'left',
+        pad: { t: 10, r: 10, b: 10, l: 10 }  // Espacio alrededor del texto
+      }
       ],
 
     };
@@ -628,7 +628,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
 
     Plotly.newPlot(id, data, layout, config);
 
-    window.onresize = function() {
+    window.onresize = function () {
       Plotly.Plots.resize(document.getElementById(id));
     };
   }
@@ -659,15 +659,15 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       y: courseType1,
       mode: 'lines+markers',
       name: this.translateService.instant('course_colective'),
-      line: {color: '#FAC710'}
+      line: { color: '#FAC710' }
     };
 
     const trace2 = {
       x: dates,
       y: courseType2,
       mode: 'lines+markers',
-      name:  this.translateService.instant('course_private'),
-      line: {color: '#8FD14F'}
+      name: this.translateService.instant('course_private'),
+      line: { color: '#8FD14F' }
     };
 
     const trace3 = {
@@ -675,20 +675,20 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       y: courseType3,
       mode: 'lines+markers',
       name: this.translateService.instant('activity'),
-      line: {color: '#00beff'}
+      line: { color: '#00beff' }
     };
 
     const chartData = [trace1, trace2, trace3];
 
     const layout = {
-      title:  this.translateService.instant('hours_by_type'),
+      title: this.translateService.instant('hours_by_type'),
       xaxis: {
-        title:  this.translateService.instant('dates'),
+        title: this.translateService.instant('dates'),
         type: 'date',
         tickformat: '%Y-%m', // Formato para mostrar solo el año y el mes
       },
       yaxis: {
-        title:  this.translateService.instant('total'),
+        title: this.translateService.instant('total'),
       },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
@@ -696,11 +696,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
       height: 250
     };
 
-    if(this.tabActive == 'monitors') {
+    if (this.tabActive == 'monitors') {
       Plotly.newPlot('user-session-analytics4', chartData, layout);
-    } else if(this.tabActive == 'general') {
+    } else if (this.tabActive == 'general') {
       Plotly.newPlot('user-session-analytics', chartData, layout);
-    } else if(this.tabActive == 'sells') {
+    } else if (this.tabActive == 'sells') {
       Plotly.newPlot('user-session-analytics-sales', chartData, layout);
     }
   }
@@ -739,12 +739,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked  {
     const layout = {
       title: this.translateService.instant(id),
       xaxis: {
-        title:  this.translateService.instant('date'),
+        title: this.translateService.instant('date'),
         type: 'date',
         tickformat: '%Y-%m', // Formato para mostrar solo el año y el mes
       },
       yaxis: {
-        title:  this.translateService.instant('total'),
+        title: this.translateService.instant('total'),
       },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',

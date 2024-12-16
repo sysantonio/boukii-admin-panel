@@ -79,6 +79,7 @@
   "years": "Anni",
   "new_monitor": "Nuovo monitor",
   "new_client": "Nuovo cliente",
+  "create_new_client": "Crea nuovo cliente",
   "current_sport": "Sport associati",
   "new_sports": "Sport disponibili",
   "save": "Mantenere",
@@ -692,7 +693,8 @@
   "Analytics": "Analisi",
   "Sessions": "Sessioni",
   "Sales": "Vendite",
-  "Page Views": "Visualizzazioni di pagina"
-  ,"go_reserve_page":"Vai alla pagina di prenotazione"
-
+  "Page Views": "Visualizzazioni di pagina",
+  "go_reserve_page": "Vai alla pagina di prenotazione",
+  "Course": "Corso",
+  "bookings_page.description.date": "Data e ora"
 }

@@ -42,7 +42,7 @@ export class MonitorsComponent {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
 
 
-    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.sports = sport.data;
       })
@@ -72,14 +72,14 @@ export class MonitorsComponent {
 
         element.monitor_sport_authorized_degrees = element.monitor_sport_authorized_degrees.reverse();
 
-        this.crudService.get('/sports/'+element.sport_id)
+        this.crudService.get('/sports/' + element.sport_id)
           .subscribe((sport) => {
             element.name = sport.data.name;
             element.icon_selected = sport.data.icon_selected;
             element.icon_unselected = sport.data.icon_unselected;
           });
 
-        this.crudService.get('/degrees/'+element.degree_id)
+        this.crudService.get('/degrees/' + element.degree_id)
           .subscribe((level) => {
             element.level = level.data;
 
@@ -109,16 +109,16 @@ export class MonitorsComponent {
 
 
     const highestInCurrent = data.reduce((prev, current) =>
-      (prev.degree.degree_order > current.degree.degree_order ) ? prev : current
+      (prev.degree.degree_order > current.degree.degree_order) ? prev : current
     );
-    if (!highestDegree || highestInCurrent.degree.degree_order  > highestDegree.degree.degree_order ) {
+    if (!highestDegree || highestInCurrent.degree.degree_order > highestDegree.degree.degree_order) {
       highestDegree = highestInCurrent;
     }
 
 
 
     if (highestDegree) {
-      return  highestDegree.degree;
+      return highestDegree.degree;
     }
 
     return null;
@@ -130,7 +130,7 @@ export class MonitorsComponent {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();

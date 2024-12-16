@@ -33,8 +33,6 @@
    <!-- Mat Table para los contenedores seleccionados -->
     <mat-table #objectiveTable [dataSource]="selectedObjective" *ngIf="selectedObjective.data.length > 0">
 
-      <!-- Otros contenedores según tu descripción -->
-
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>
           <div class="header-content">
