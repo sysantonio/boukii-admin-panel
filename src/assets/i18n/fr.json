@@ -695,5 +695,14 @@
   "Page Views": "Vues de page",
   "go_reserve_page": "Aller à la page de réservation",
   "Course": "Cours",
-  "bookings_page.description.date": "Date et heure"
+  "bookings_page.description.date": "Date et heure",
+  "errors": {
+    "required": "Ce champ est requis",
+    "minlength": "Doit contenir au moins {{requiredLength}} caractères",
+    "maxlength": "Doit contenir au maximum {{requiredLength}} caractères",
+    "pattern": "Format invalide",
+    "email": "Doit être une adresse e-mail valide",
+    "min": "La valeur doit être au moins {{min}}",
+    "max": "La valeur doit être au maximum {{max}}"
+  }
 }

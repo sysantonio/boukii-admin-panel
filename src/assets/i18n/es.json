@@ -716,5 +716,14 @@
   "Page Views": "Vistas de página",
   "Analytics": "Analítica",
   "go_reserve_page": "Ir a página de reserva",
-  "Course": "Curso"
+  "Course": "Curso",
+  "errors": {
+    "required": "Este campo es obligatorio",
+    "minlength": "Debe tener al menos {{requiredLength}} caracteres",
+    "maxlength": "Debe tener un máximo de {{requiredLength}} caracteres",
+    "pattern": "El formato no es válido",
+    "email": "Debe ser una dirección de correo válida",
+    "min": "El valor debe ser al menos {{min}}",
+    "max": "El valor debe ser como máximo {{max}}"
+  }
 }

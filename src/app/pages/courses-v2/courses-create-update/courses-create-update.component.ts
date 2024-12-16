@@ -99,48 +99,45 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.sportData = sports;
       this.stations = stations;
       this.monitors = monitors;
+      this.courseFormGroup = this.fb.group({
+        sport_id: [this.sportData[0].sport_id, Validators.required],
+        course_type: [null, Validators.required],
+        course_name: ["", Validators.required],
+        summary: ["", Validators.required],
+        description: ["", Validators.required],
+        course_name_es: ["", Validators.required],
+        summary_es: ["", Validators.required],
+        description_es: ["", Validators.required],
+        course_name_fr: ["", Validators.required],
+        summary_fr: ["", Validators.required],
+        description_fr: ["", Validators.required],
+        course_name_en: ["", Validators.required],
+        summary_en: ["", Validators.required],
+        description_en: ["", Validators.required],
+        course_name_de: ["", Validators.required],
+        summary_de: ["", Validators.required],
+        description_de: ["", Validators.required],
+        course_name_it: ["", Validators.required],
+        summary_it: ["", Validators.required],
+        description_it: ["", Validators.required],
+        price: [null, [Validators.required, Validators.min(1)]],
+        participants: [null, [Validators.required, Validators.min(1)]],
+        img: ["", Validators.required],
+        icon: ["", Validators.required],
+        age_max: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
+        age_min: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
+        reserve_from: [null, Validators.required],
+        reserve_to: [null, Validators.required],
+        duration_min: [null, Validators.required], //2
+        //Datos en forma de array
+        reserve_date: [[], Validators.required],
+        discount: [[], Validators.required],
+        extras: [[], Validators.required],
+        levelGrop: [[], Validators.required],
+        categoryPart: [[], Validators.required],
+        settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
+      });
       if (this.mode === "create") {
-        this.courseFormGroup = this.fb.group({
-          sport_id: [this.sportData[0].sport_id, Validators.required],
-          course_type: [null, Validators.required],
-          course_name: ["", Validators.required],
-          summary: ["", Validators.required],
-          description: ["", Validators.required],
-          course_name_es: ["", Validators.required],
-          summary_es: ["", Validators.required],
-          description_es: ["", Validators.required],
-          course_name_fr: ["", Validators.required],
-          summary_fr: ["", Validators.required],
-          description_fr: ["", Validators.required],
-          course_name_en: ["", Validators.required],
-          summary_en: ["", Validators.required],
-          description_en: ["", Validators.required],
-          course_name_de: ["", Validators.required],
-          summary_de: ["", Validators.required],
-          description_de: ["", Validators.required],
-          course_name_it: ["", Validators.required],
-          summary_it: ["", Validators.required],
-          description_it: ["", Validators.required],
-          price: [null, Validators.required],
-          participants: [null, Validators.required],
-          img: ["", Validators.required],
-          icon: ["", Validators.required],
-
-          age_max: [null, Validators.required], //2
-          age_min: [null, Validators.required], //2
-
-          reserve_from: [null, Validators.required],
-          reserve_to: [null, Validators.required],
-          duration_min: [null, Validators.required], //2
-
-          //Datos en forma de array
-          reserve_date: [[], Validators.required],
-          discount: [[], Validators.required],
-          extras: [[], Validators.required],
-          levelGrop: [[], Validators.required],
-          categoryPart: [[], Validators.required],
-          settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
-        });
         this.loading = false
         this.Confirm(0)
       } else {
@@ -174,46 +171,27 @@ export class CoursesCreateUpdateComponent implements OnInit {
                       .subscribe((bookingUser) => {
                         this.detailData.users = [];
                         this.detailData.users = bookingUser.data;
-                        this.courseFormGroup = this.fb.group({
-                          sport_id: [this.detailData.sport_id, Validators.required],
-                          course_type: [this.detailData.course_type, Validators.required],
-                          course_name: [this.detailData.name, Validators.required],
-                          summary: [this.detailData.short_description, Validators.required],
-                          description: [this.detailData.description, Validators.required],
-                          course_name_es: ["", Validators.required],
-                          summary_es: ["", Validators.required],
-                          description_es: ["", Validators.required],
-                          course_name_fr: ["", Validators.required],
-                          summary_fr: ["", Validators.required],
-                          description_fr: ["", Validators.required],
-                          course_name_en: ["", Validators.required],
-                          summary_en: ["", Validators.required],
-                          description_en: ["", Validators.required],
-                          course_name_de: ["", Validators.required],
-                          summary_de: ["", Validators.required],
-                          description_de: ["", Validators.required],
-                          course_name_it: ["", Validators.required],
-                          summary_it: ["", Validators.required],
-                          description_it: ["", Validators.required],
-                          price: [this.detailData.price, Validators.required],
-                          participants: [this.detailData.max_participants, Validators.required],
-                          img: [this.detailData.image, Validators.required],
-                          icon: [this.detailData.sport.icon_unselected, Validators.required],
-                          age_max: [this.detailData.age_max, Validators.required],
-                          age_min: [this.detailData.age_min, Validators.required],
-                          reserve_from: [this.detailData.date_start, Validators.required],
-                          reserve_to: [this.detailData.date_end, Validators.required],
-                          duration_min: [this.detailData.duration, Validators.required],
-                          reserve_date: [this.detailData.course_dates, Validators.required],
-                          discount: [[], Validators.required],
-                          extras: [[], Validators.required],
-                          levelGrop: [this.detailData.degrees, Validators.required],
-                          categoryPart: [[], Validators.required],
-                          settings: [JSON.parse(this.detailData.settings), Validators.required],
-                        });
+                        this.courseFormGroup.patchValue({
+                          sport_id: this.detailData.sport_id,
+                          course_type: this.detailData.course_type,
+                          course_name: this.detailData.name,
+                          summary: this.detailData.short_description,
+                          description: this.detailData.description,
+                          price: this.detailData.price,
+                          participants: this.detailData.max_participants,
+                          img: this.detailData.image,
+                          icon: this.detailData.sport.icon_unselected,
+                          age_max: this.detailData.age_max,
+                          age_min: this.detailData.age_min,
+                          reserve_from: this.detailData.date_start,
+                          reserve_to: this.detailData.date_end,
+                          duration_min: this.detailData.duration,
+                          reserve_date: this.detailData.course_dates,
+                          levelGrop: this.detailData.degrees,
+                          settings: JSON.parse(this.detailData.settings),
+                        })
                         this.getDegrees()
                         this.Confirm(0)
-
                         this.loading = false
                       })
                   })
@@ -294,10 +272,28 @@ export class CoursesCreateUpdateComponent implements OnInit {
       })
       this.getDegrees();
     } else if (this.ModalFlux === 2) {
-      if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
-        this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
-      if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })
-      this.getDegrees();
+      if (
+        this.courseFormGroup.controls["course_name"].status === 'VALID' &&
+        this.courseFormGroup.controls["summary"].status === 'VALID' &&
+        this.courseFormGroup.controls["description"].status === 'VALID' &&
+        this.courseFormGroup.controls["price"].status === 'VALID' &&
+        this.courseFormGroup.controls["participants"].status === 'VALID' &&
+        (
+          this.courseFormGroup.controls['course_type'].value > 1 &&
+          this.courseFormGroup.controls["age_min"].status === 'VALID' &&
+          this.courseFormGroup.controls["age_max"].status === 'VALID' ||
+          this.courseFormGroup.controls['course_type'].value === 1
+        )
+      ) {
+
+        if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
+          this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
+        if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })
+        this.getDegrees();
+      } else {
+        this.courseFormGroup.markAllAsTouched()
+        this.ModalFlux -= add
+      }
     } else if (this.ModalFlux === 3) {
       if (this.courseFormGroup.controls["categoryPart"].value.length === 0) {
         this.courseFormGroup.patchValue({
@@ -306,7 +302,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
             age_min: this.courseFormGroup.controls["age_min"].value || 0,
             age_max: this.courseFormGroup.controls["age_max"].value || 99,
             num_min: this.courseFormGroup.controls["participants"].value || 0,
-            num_max: this.courseFormGroup.controls["participants"].value || 0,
+            num_max: this.courseFormGroup.controls["participants"].value || 99,
           }]
         })
       }

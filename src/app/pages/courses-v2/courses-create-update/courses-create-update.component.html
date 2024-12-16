@@ -8,7 +8,7 @@
 
 <vex-flux-toolbad [Modal]="ModalProgress" [Flux]="ModalFlux"
   (Check)="ModalFlux=$event;Confirm(0)"></vex-flux-toolbad>
-  
+
 <vex-flux-layout>
   <mat-spinner loading *ngIf="loading" style="margin:0 auto"></mat-spinner>
   <div body *ngIf="!loading">
@@ -67,53 +67,55 @@
         <vex-flux-upload-img
           (upload)="this.courseFormGroup.patchValue({img:$event})"
           style="margin-top: 10px;"></vex-flux-upload-img>
-        <mat-form-field appearance="outline" style="width: 100%">
-          <mat-label>{{'courses.coursename' | translate}}</mat-label>
-          <input id="courseName" formControlName="course_name"
-            matInput required type="text">
-        </mat-form-field>
-        <div style="margin: 10px 0;">
-          <angular-editor style="display: block !important;" id="summary"
-            style="width: 100%"
-            [placeholder]="'courses.summary' | translate"
-            formControlName="summary">
-          </angular-editor>
-        </div>
-        <div style="margin: 20px 0;">
-          <angular-editor style="display: block !important;" id="description"
-            style="width: 100%"
-            [placeholder]="'courses.desc' | translate"
-            formControlName="description">
-          </angular-editor>
-        </div>
+        <app-form-input
+          control="course_name"
+          name="courses.coursename"
+          [required]="true"
+          [form]="courseFormGroup">
+        </app-form-input>
+        <app-form-editor
+          control="summary"
+          name="courses.summary"
+          [required]="true"
+          [form]="courseFormGroup">
+        </app-form-editor>
+        <app-form-editor
+          control="description"
+          name="courses.desc"
+          [required]="true"
+          [form]="courseFormGroup">
+        </app-form-editor>
         <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
-          <mat-form-field appearance="outline"
-            style="width: calc(50% - 10px);">
-            <mat-label>{{'price_per_date' | translate}}</mat-label>
-            <input id="price" formControlName="price"
-              matInput required type="number">
-            <span matTextSuffix>CHF</span>
-          </mat-form-field>
-          <mat-form-field appearance="outline"
-            style="width: calc(50% - 10px);">
-            <mat-label>{{'N° max. participantes por grupo' |
-              translate}}</mat-label>
-            <input id="participants" formControlName="participants"
-              matInput required type="number">
-          </mat-form-field>
+          <app-form-input style="width: calc(50% - 10px);"
+            control="price"
+            name="price_per_date"
+            [required]="true"
+            type="number"
+            Suffix="CHF"
+            [form]="courseFormGroup">
+          </app-form-input>
+          <app-form-input style="width: calc(50% - 10px);"
+            control="participants"
+            name="N° max. participantes por grupo"
+            [required]="true"
+            type="number"
+            [form]="courseFormGroup">
+          </app-form-input>
           <ng-container *ngIf="courseFormGroup.controls['course_type'].value>1">
-            <mat-form-field appearance="outline"
-              style="width: calc(50% - 10px);">
-              <mat-label>{{'courses.min_age' | translate}}</mat-label>
-              <input id="age_min" formControlName="age_min"
-                matInput required type="number">
-            </mat-form-field>
-            <mat-form-field appearance="outline"
-              style="width: calc(50% - 10px);">
-              <mat-label>{{'courses.max_age' | translate}}</mat-label>
-              <input id="age_max" formControlName="age_max"
-                matInput required type="number">
-            </mat-form-field>
+            <app-form-input style="width: calc(50% - 10px);"
+              control="age_min"
+              name="courses.min_age"
+              [required]="true"
+              type="number"
+              [form]="courseFormGroup">
+            </app-form-input>
+            <app-form-input style="width: calc(50% - 10px);"
+              control="age_max"
+              name="courses.max_age"
+              [required]="true"
+              type="number"
+              [form]="courseFormGroup">
+            </app-form-input>
           </ng-container>
         </div>
       </div>
@@ -178,7 +180,7 @@
         <div
           *ngFor="let item of courseFormGroup.controls['reserve_date'].value, index as i">
           <div
-            style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+            style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
             <span>
               {{'Fecha '+ (i+1)| translate}}
             </span>
@@ -246,14 +248,16 @@
         </div>
         <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
           <button
-            style="border: 1px solid #222222; border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
+            style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
             type="button"
             (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: '08:00', Duracion: 1 })"
             class="client-button">
             {{'Añadir fecha' | translate }}
           </button>
         </div>
-        <div style="background-color: #E9E9E9;height: 20px;width: 100%;"> </div>
+        <div
+          style="background-color: var(--color-grey4);height: 20px;width: 100%;">
+        </div>
         <div>
           <div style="margin: 20px;">
             <span>
@@ -442,11 +446,11 @@
           style="width: 100%; height: 100%; padding: 10px; background: #D2EFFF; border-radius: 8px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
           <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
           <div *ngIf="mode==='update'"
-            style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+            style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
             Edita los niveles aquí.
           </div>
           <div *ngIf="mode==='create'"
-            style="flex: 1 1 0; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+            style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word;color: black;">
             Elije
             los niveles aquí. Podrás asignar los monitores en un segundo
             momento.
@@ -500,14 +504,14 @@
             <ng-container
               *ngFor="let item of [].constructor(courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as i">
               <div
-                style="background-color: #EFF2F5; display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
+                style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
                 {{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
                 <img src="assets/icons/icon/delete.png" alt class="icon20"
                   (click)="addLevelSubgroup(i,-1)"
                   style="cursor: pointer; font-size: 20px;align-content: space-evenly;">
               </div>
               <div
-                style="width: 100%;margin-top: -10px;padding: 10px; background-color: #EFF2F5;"
+                style="width: 100%;margin-top: -10px;padding: 10px; background-color: var(--color-grey4);"
                 *ngIf="mode==='update'">
                 <vex-flux-disponibilidad
                   [courseFormGroup]="courseFormGroup"></vex-flux-disponibilidad>
@@ -545,7 +549,7 @@
         <div
           *ngFor="let item of courseFormGroup.controls['categoryPart'].value, index as i">
           <div
-            style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+            style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
             <span>
               {{'CATEGORIA PARTICIPANTE  '+ (i+1)| translate}}
             </span>
@@ -611,13 +615,13 @@
       <section class="flex"
         style="flex-wrap: wrap;gap: 16px;justify-content: space-around;">
         <div
-          style="color: black; font-size: 12px; font-weight: 400; line-height: 16px; margin-bottom: 20px;width: 100%;">
+          style="font-size: 12px; font-weight: 400; line-height: 16px; margin-bottom: 20px;width: 100%;">
           Seleccionar los extras que pueden ser añadidos haciendo la reserva:
         </div>
         <ng-container
           *ngFor="let ite of courseFormGroup.controls['course_type'].value===3&&courseFormGroup.controls['categoryPart'].value.length>0?courseFormGroup.controls['categoryPart'].value.length:[1];index as i">
           <div *ngIf="courseFormGroup.controls['course_type'].value===3"
-            style="width: 100%;background-color: #EFF2F5;height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
+            style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
             <span>
               {{courseFormGroup.controls['categoryPart'].value[i]?courseFormGroup.controls['categoryPart'].value[i].name:"EXTRAS"}}
             </span>
@@ -631,7 +635,7 @@
             <div
               style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
               <div
-                style="align-self: stretch; color: #222222; font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
+                style="align-self: stretch; font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
                 {{item.product}}
               </div>
               <div
@@ -640,7 +644,7 @@
               </div>
             </div>
             <div
-              style="flex: 1 1 0; text-align: right; color: #222222; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+              style="flex: 1 1 0; text-align: right; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
               {{item.price}} CHF/Día
             </div>
           </div>
@@ -664,8 +668,7 @@
       <mat-accordion>
         <mat-expansion-panel *ngFor="let item of Translate">
           <mat-expansion-panel-header
-            style="background-color: #eff2f5; border-top: 1px #C7D0D3 solid;
-          color: #222222;
+            style="background-color: var(--color-grey4); border-top: 1px #C7D0D3 solid;
           font-size: 14px;
           font-family: Montserrat;
           font-weight: 400;
@@ -795,7 +798,6 @@
   <div body style="display: flex; gap: 20px; flex-wrap: wrap;">
     <div
       style="width: 100;
-        color: black;
     font-size: 14px;
     font-weight: 400;
     line-height: 18px;
@@ -806,7 +808,6 @@
     <div style="width: 100%">
       <mat-slide-toggle [checked]="true">
         <span style="
-        color: #222222;
         font-size: 14px;
         font-weight: 600;
         line-height: 18px;
@@ -827,7 +828,6 @@
     <div style="width: 100%">
       <mat-slide-toggle [checked]="true">
         <span style="
-        color: #222222;
         font-size: 14px;
         font-weight: 600;
         line-height: 18px;

@@ -697,5 +697,14 @@
   "Page Views": "Seitenaufrufe",
   "go_reserve_page": "Zur Buchungsseite gehen",
   "Course": "Kurs",
-  "bookings_page.description.date": "Datum und Uhrzeit"
+  "bookings_page.description.date": "Datum und Uhrzeit",
+  "errors": {
+    "required": "Dieses Feld ist erforderlich",
+    "minlength": "Muss mindestens {{requiredLength}} Zeichen enthalten",
+    "maxlength": "Darf maximal {{requiredLength}} Zeichen enthalten",
+    "pattern": "Ungültiges Format",
+    "email": "Muss eine gültige E-Mail-Adresse sein",
+    "min": "Der Wert muss mindestens {{min}} sein",
+    "max": "Der Wert darf höchstens {{max}} sein"
+  }
 }

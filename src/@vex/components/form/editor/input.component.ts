@@ -1,0 +1,33 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+
+@Component({
+  selector: 'app-form-editor',
+  templateUrl: './input.component.html',
+  styleUrls: ['./input.component.css']
+})
+export class ComponenteInputComponent {
+  @Input() control!: string
+  @Input() name!: string
+  @Input() type: "number" | "text" | "date" | "tel" | "email" = "text"
+  @Input() form!: FormGroup
+  @Input() required: boolean = false
+  @Output() input = new EventEmitter()
+
+  get c(): { [key: string]: AbstractControl } { return this.form.controls; }
+
+  constructor(private TranslateService: TranslateService) { }
+  getErrorMessage(controlName: string): string {
+    const control = this.c[controlName];
+    if (control.errors) {
+      for (const errorKey in control.errors) {
+        if (control.errors.hasOwnProperty(errorKey)) {
+          const params = control.errors[errorKey];
+          return this.TranslateService.instant(`errors.${errorKey}`, params);
+        }
+      }
+    }
+    return '';
+  }
+}

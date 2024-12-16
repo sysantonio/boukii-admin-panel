@@ -38,6 +38,8 @@ import { CoursesDetailCardModule } from '../../../../@vex/components/flux-compon
 import { FluxModalModule } from 'src/@vex/components/flux-component/flux-modal/app.module';
 import { FluxDisponibilidadModule } from 'src/@vex/components/flux-component/flux-disponibilidad/app.module';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ComponenteInputModule } from "../../../../@vex/components/form/input/app.module";
+import { ComponenteEditorModule } from 'src/@vex/components/form/editor/app.module';
 
 @NgModule({
   imports: [
@@ -81,7 +83,9 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     CoursesDetailCardModule,
     FluxModalModule,
     FluxDisponibilidadModule,
-    AngularEditorModule
+    AngularEditorModule,
+    ComponenteInputModule,
+    ComponenteEditorModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

@@ -597,8 +597,7 @@ body.dark-mode {
     [data-indeterminate="true"]
   )
   ~ .mdc-checkbox__background {
-  background-color: white !important;
-  border-radius: 3px;
+  border-radius: 5px;
 }
 .mdc-checkbox
   .mdc-checkbox__native-control:enabled
@@ -650,26 +649,37 @@ body.dark-mode {
 .mat-mdc-select-panel-above div.mat-mdc-select-panel {
   background-color: var(--color-grey5);
 }
+angular-editor {
+  .angular-editor-textarea {
+    margin: 0 !important;
+    border-top: 0 !important;
+    border-radius: 0px 0 10px 10px !important;
+    height: 6em !important;
+  }
+  .angular-editor-toolbar {
+    border-radius: 10px 10px 0 0 !important;
+  }
 
-.angular-editor-textarea {
-  margin: 0 !important;
-  border-top: 0 !important;
-}
-.angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button,
-.ae-font .ae-picker-options {
-  border: none !important;
-  background: none !important;
-}
-.mat-mdc-button .mdc-button__label,
-.mat-mdc-unelevated-button .mdc-button__label,
-.mat-mdc-raised-button .mdc-button__label {
-  color: white;
+  .angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button,
+  .ae-font .ae-picker-options {
+    border: none !important;
+    background: none !important;
+  }
+  .mat-mdc-button .mdc-button__label,
+  .mat-mdc-unelevated-button .mdc-button__label,
+  .mat-mdc-raised-button .mdc-button__label {
+    color: white;
+  }
+
+  .angular-editor-toolbar,
+  .ae-font .ae-picker-label,
+  .ae-font .ae-picker-options .ae-picker-item {
+    background-color: var(--is-light-theme, #ffffff)
+      var(--is-dark-theme, #1d1d1d) !important;
+    color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
+  }
 }
 
-.angular-editor-toolbar,
-.ae-font .ae-picker-label {
-  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #1d1d1d) !important;
-}
 .mat-calendar-table-header th > span {
   color: #1d1d1d !important;
 }
@@ -684,7 +694,9 @@ button.mat-stroked-button {
 }
 
 .mat-mdc-table,
-.mat-mdc-paginator {
+.mat-mdc-paginator,
+.mat-expansion-panel-body,
+.mat-expansion-panel {
   background-color: var(--color-grey5) !important;
 }
 .mat-mdc-card {
@@ -759,6 +771,14 @@ span {
   .mdc-notched-outline__trailing {
   border-color: #dee6ea !important;
 }
+.mat-mdc-radio-button
+  .mdc-radio
+  .mdc-radio__native-control:enabled:not(:checked)
+  + .mdc-radio__background
+  .mdc-radio__outer-circle {
+  border-color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
+}
+
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-mdc-menu-content,
 .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text,
@@ -794,4 +814,8 @@ button[color="accent"] {
   span {
     color: black !important;
   }
+}
+.mat-mdc-radio-button .mdc-form-field,
+.mdc-form-field > label {
+  width: 100%;
 }

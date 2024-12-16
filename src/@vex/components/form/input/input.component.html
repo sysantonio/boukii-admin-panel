@@ -1,0 +1,17 @@
+<mat-form-field appearance="outline" [formGroup]="form">
+    <mat-label>{{name | translate}}</mat-label>
+    <span matPrefix *ngIf="Prefix">{{Prefix}}</span>
+    <input
+        matInput
+        [id]="control"
+        [placeholder]="name | translate"
+        [formControlName]="control"
+        class="form-control"
+        [type]="type"
+        [required]="required"
+        (input)="input.emit()">
+    <span matTextSuffix *ngIf="Suffix">{{Suffix}}</span>
+    <mat-error *ngIf="c[control].touched && c[control].errors">
+        {{ getErrorMessage(control) }}
+    </mat-error>
+</mat-form-field>
