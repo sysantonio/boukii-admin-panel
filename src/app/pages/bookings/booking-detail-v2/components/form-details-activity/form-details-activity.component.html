@@ -50,7 +50,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>{{ "select_monitor" | translate }}</mat-label>
-            <mat-select formControlName="changeMonitorOption">
+            <mat-select formControlName="changeMonitorOption" [disabled]="!stepForm.get('course_dates').get('0.monitor').value">
               <mat-select-trigger
                 *ngIf="stepForm.get('course_dates').get('0.changeMonitorOption').value">
                 <mat-icon matPrefix

@@ -64,7 +64,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>{{ "select_monitor" | translate }}</mat-label>
-            <mat-select formControlName="changeMonitorOption">
+            <mat-select formControlName="changeMonitorOption" [disabled]="!dateGroup.get('monitor').value">
               <mat-select-trigger
                 *ngIf="dateGroup.get('changeMonitorOption').value">
                 <mat-icon matPrefix
@@ -75,6 +75,7 @@
                 {{ dateGroup.get('changeMonitorOption').value.description |
                 translate }}
               </mat-select-trigger>
+              <mat-option [value]="null">{{ "no_monitor" | translate }}</mat-option>
               <mat-option *ngFor="let option of possibleChangeMonitorSelection"
                 [value]="option">
                 <mat-icon [class]="option.class"

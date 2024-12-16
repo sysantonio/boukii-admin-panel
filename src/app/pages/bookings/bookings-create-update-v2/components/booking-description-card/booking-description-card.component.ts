@@ -26,6 +26,7 @@ export class BookingDescriptionCard {
   @Output() deleteActivity = new EventEmitter();
 
   @Input() utilizers: any;
+  @Input() allLevels: any;
   @Input() sport: any;
   @Input() sportLevel: any;
   @Input() course: any;

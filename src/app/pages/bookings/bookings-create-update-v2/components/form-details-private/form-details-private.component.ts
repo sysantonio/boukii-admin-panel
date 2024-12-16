@@ -67,6 +67,25 @@ export class FormDetailsPrivateComponent implements OnInit {
     this.setupExtrasValueChanges();
     this.possibleHours = this.utilService.generateCourseHours(this.course.hour_min, this.course.hour_max, this.course.minDuration, '5min');
     this.possibleDurations = this.utilService.generateCourseDurations(this.course.hour_min, this.course.hour_max, this.course);
+    this.courseDates.controls.forEach((dateGroup, index) => {
+      const monitorControl = dateGroup.get('monitor');
+      const changeMonitorControl = dateGroup.get('changeMonitorOption');
+
+      // Observar los cambios en el campo monitor de cada grupo
+      monitorControl.valueChanges.subscribe((monitorValue) => {
+        if (monitorValue) {
+          changeMonitorControl.enable();
+        } else {
+          changeMonitorControl.disable();
+        }
+      });
+
+      // Inicialmente deshabilitar si no hay un monitor seleccionado
+      if (!monitorControl.value) {
+        changeMonitorControl.disable();
+      }
+    });
+
   }
 
   getSeason() {

@@ -14,6 +14,7 @@ import moment from "moment";
 import { ApiCrudService } from "src/service/crud.service";
 import { CustomHeader } from "../calendar/custom-header/custom-header.component";
 import { CalendarService } from "../../../../../../service/calendar.service";
+import {UtilsService} from '../../../../../../service/utils.service';
 
 @Component({
   selector: "booking-step-four",
@@ -33,6 +34,7 @@ export class StepFourComponent {
   stepForm: FormGroup;
   selectedDate;
   nextMonthDate: Date;
+  selectedSubGroup: any;
   selectedCourse;
   courseTypeId: number = 1;
   selectedIndex: number = 1;
@@ -44,6 +46,8 @@ export class StepFourComponent {
   isLoading = true;
   selectedDateMoment;
   showTwoMonths: boolean = true;
+  selectedSubGroups = []; // Array para almacenar los subgrupos filtrados
+
 
   tabs = [
     { label: "course_colective", courseTypeId: 1, class: "yellow" },
@@ -54,7 +58,8 @@ export class StepFourComponent {
   constructor(
     private fb: FormBuilder,
     private crudService: ApiCrudService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    protected utilsService: UtilsService
   ) {
     this.selectedCourse = this.initialData?.selectedCourse;
     this.selectedDate = this.initialData?.selectedDate;
@@ -72,6 +77,7 @@ export class StepFourComponent {
     this.stepForm = this.fb.group({
       date: [this.selectedDate || this.minDate, Validators.required],
       course: [this.selectedCourse, Validators.required],
+      selectedSubGroup: [null], // Campo para el subgrupo seleccionado
     });
     this.getCourses(this.sportLevel);
     this.calendarService.monthChanged$.subscribe((newDate: Date) => {
@@ -80,6 +86,29 @@ export class StepFourComponent {
       this.autoSelectFirstDayIfCurrentMonth();
       this.getCourses(this.sportLevel);
     });
+  }
+
+  handleCourseSelection(course: any): void {
+    if (course.course_type === 1) {
+      // Filtrar los subgrupos que coinciden con el `degree` seleccionado
+      let group = course.course_dates[0].course_groups.filter(
+        (group) => group.degree_id === this.sportLevel.id
+      );
+      this.selectedSubGroups = group[0].course_subgroups.filter(
+        (subgroup) => subgroup.booking_users.length < subgroup.max_participants
+      );
+    } else {
+      this.selectedSubGroups = []; // Si no es colectivo, limpiar los subgrupos
+    }
+
+    // Guardar el curso seleccionado
+    this.selectedCourse = course;
+    this.stepForm.get('course').setValue(course);
+  }
+
+  selectSubGroup(group: any): void {
+    this.selectedSubGroup = group;
+    this.stepForm.get('selectedSubGroup').setValue(group);
   }
 
   updateTabs(): void {

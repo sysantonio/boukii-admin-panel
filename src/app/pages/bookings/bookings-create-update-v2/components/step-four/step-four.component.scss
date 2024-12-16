@@ -118,6 +118,7 @@
   }
 
   .courseTitle {
+    width: 100%;
     font-family: var(--font-dm);
     font-size: 14px;
     font-weight: 600;
@@ -151,6 +152,7 @@
   }
 
   .coursePrice {
+    float: right;
     margin-left: auto;
     font-family: var(--font-dm);
     font-size: 14px;
@@ -211,4 +213,39 @@
       border-color: var(--color-primary-red);
     }
   }
+}
+
+.subGroups-container {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-grey3);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.subGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border: 1px solid var(--color-grey2);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.subGroup:hover {
+  background-color: var(--color-grey4);
+}
+
+.subGroupTitle {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.subGroupPrice {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--color-dark2);
 }

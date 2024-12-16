@@ -4,6 +4,7 @@ import { MOCK_COUNTRIES } from "src/app/static-data/countries-data";
 import {Observable, of, tap} from 'rxjs';
 import {ApiCrudService} from './crud.service';
 import {MatCalendarCellCssClasses} from '@angular/material/datepicker';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +14,7 @@ export class UtilsService {
   season: any = [];
   holidays: any = [];
 
-  constructor(private crudService: ApiCrudService) {}
+  constructor(private crudService: ApiCrudService, private translateService: TranslateService) {}
 
   calculateYears(birthDateString: string) {
     const fechaActual = moment();
@@ -62,6 +63,36 @@ export class UtilsService {
   // Método adicional para obtener las vacaciones
   getHolidays(): any[] {
     return this.holidays;
+  }
+
+  getAvailableWeekDays(settings: any): string | null {
+    if (settings !== null) {
+      const data = typeof settings === 'string' ? JSON.parse(settings) : settings;
+
+      const dayTranslations = {
+        monday: this.translateService.instant('Lundi'), // Traducción para Monday
+        tuesday: this.translateService.instant('Mardi'), // Traducción para Tuesday
+        wednesday: this.translateService.instant('Mercredi'), // Traducción para Wednesday
+        thursday: this.translateService.instant('Jeudi'), // Traducción para Thursday
+        friday: this.translateService.instant('Vendredi'), // Traducción para Friday
+        saturday: this.translateService.instant('Samedi'), // Traducción para Saturday
+        sunday: this.translateService.instant('Diamanche'), // Traducción para Sunday
+      };
+
+      let ret = null;
+
+      if (data !== null) {
+        Object.keys(data.weekDays).forEach((day) => {
+          if (data.weekDays[day] && dayTranslations[day]) {
+            ret = ret === null ? dayTranslations[day] : `${ret} - ${dayTranslations[day]}`;
+          }
+        });
+      }
+
+      return ret;
+    }
+
+    return null;
   }
 
 

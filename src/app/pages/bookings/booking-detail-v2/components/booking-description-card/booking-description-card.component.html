@@ -12,7 +12,9 @@
     <ng-container *ngIf="course">
       <div class="flex flex-col">
         <h4 class="courseTitle">{{ course.name }}</h4>
-        <span class="courseSubtitle"> {{ course.description }} </span>
+        <span class="courseSubtitle">
+          {{course.typeString | translate}} {{course.is_flexible ? 'Flex' : 'Fix' | translate}} {{course.sport.name}}
+        </span>
       </div>
     </ng-container>
     <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail && status != 2"

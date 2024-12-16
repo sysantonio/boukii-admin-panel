@@ -23,8 +23,14 @@
         formControlName="sportLevel"
         [matAutocomplete]="autoLevel" />
       <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-        <mat-option *ngFor="let level of filteredLevels | async" [value]="level">
+        <mat-option
+          *ngFor="let level of filteredLevels | async"
+          [value]="level"
+          [ngStyle]="{'background': level?.color, 'color': 'white'}"
+          class="custom-option">
+          <span style="color: white !important;">
           {{ level.league }} - {{ level.name }}
+          </span>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
