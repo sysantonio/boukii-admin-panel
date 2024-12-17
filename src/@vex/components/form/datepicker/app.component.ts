@@ -3,16 +3,18 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-form-editor',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.css']
+  selector: 'app-form-datepicker',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
-export class ComponenteInputComponent {
+export class ComponenteComponent {
   @Input() control!: string
   @Input() name!: string
-  @Input() type: "number" | "text" | "date" | "tel" | "email" = "text"
   @Input() form!: FormGroup
   @Input() required: boolean = false
+  @Input() startAt: Date = new Date()
+  @Input() min!: Date
+  @Input() max!: Date
   @Output() input = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
@@ -30,4 +32,5 @@ export class ComponenteInputComponent {
     }
     return '';
   }
+
 }

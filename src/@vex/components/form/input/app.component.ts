@@ -4,13 +4,13 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-input',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.css']
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class ComponenteInputComponent {
   @Input() control!: string
   @Input() name!: string
-  @Input() type: "number" | "text" | "date" | "tel" | "email" = "text"
+  @Input() type: "number" | "text" | "tel" | "email" = "text"
   @Input() form!: FormGroup
   @Input() required: boolean = false
   @Input() Suffix: string = ""

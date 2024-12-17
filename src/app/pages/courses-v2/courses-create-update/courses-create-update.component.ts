@@ -264,6 +264,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   });
 
   Confirm(add: number) {
+    this.courseFormGroup.markAsUntouched()
     this.ModalFlux += add
     if (this.ModalFlux === 1) {
       if (!this.courseFormGroup.controls["course_type"].value) this.courseFormGroup.patchValue({ course_type: 1 })
@@ -285,7 +286,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseFormGroup.controls['course_type'].value === 1
         )
       ) {
-
         if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
           this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
         if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })

@@ -5,14 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SecondaryToolbarModule } from '../../secondary-toolbar/secondary-toolbar.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { ComponenteInputComponent } from './app.component';
+import { ComponenteComponent } from './app.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
-  declarations: [ComponenteInputComponent],
+  declarations: [ComponenteComponent],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -22,8 +22,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     TranslateModule,
     MatFormFieldModule,
     MatInputModule,
-    AngularEditorModule
+    MatDatepickerModule
   ],
-  exports: [ComponenteInputComponent]
+  exports: [ComponenteComponent]
 })
-export class ComponenteEditorModule { }
+export class ComponenteDatePickerModule { }

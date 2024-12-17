@@ -126,35 +126,24 @@
       </span>
       <div [formGroup]="courseFormGroup"
         style="margin: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
-        <mat-form-field
-          appearance="outline">
-          <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="date_reservable"
-            [min]="minDate" (click)="date_reservable.open()"
-            [max]="maxDate" readonly
-            formControlName="reserve_from" />
-          <mat-datepicker-toggle matSuffix
-            [for]="date_reservable"></mat-datepicker-toggle>
-          <mat-datepicker #date_reservable [startAt]="nowDate"></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field
-          appearance="outline">
-          <mat-label>{{'courses.date_reservable_to' |
-            translate}}</mat-label>
-          <input
-            matInput
-            [matDatepicker]="date_reservable_to"
-            [min]="minDate" (click)="date_reservable_to.open()"
-            [max]="maxDate" readonly
-            formControlName="reserve_to" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="date_reservable_to"></mat-datepicker-toggle>
-          <mat-datepicker #date_reservable_to
-            [startAt]="nowDate"></mat-datepicker>
-        </mat-form-field>
+        <app-form-datepicker
+          style="width: 100%;"
+          control="reserve_from"
+          name="courses.date_reservable"
+          [required]="true"
+          [form]="courseFormGroup"
+          [max]="maxDate"
+          [min]="minDate">
+        </app-form-datepicker>
+        <app-form-datepicker
+          style="width: 100%;"
+          control="reserve_to"
+          name="courses.date_reservable_to"
+          [required]="true"
+          [form]="courseFormGroup"
+          [max]="maxDate"
+          [min]="minDate">
+        </app-form-datepicker>
         <mat-form-field appearance="outline"
           *ngIf="courseFormGroup.controls['course_type'].value>1">
           <mat-label>{{'courses.dur_min' | translate}}</mat-label>
@@ -163,6 +152,7 @@
             placeholder="{{'hour' | translate}}"
             aria-label="Number"
             matInput
+            required
             [matAutocomplete]="auto"
             formControlName="duration_min" />
           <mat-autocomplete #auto="matAutocomplete"
@@ -190,22 +180,15 @@
           </div>
           <div
             style="margin: 20px 20px 0px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
-            <mat-form-field
-              appearance="outline">
-              <mat-label>{{'courses.date' | translate}}</mat-label>
-              <input
-                matInput
-                [matDatepicker]="date_reservable"
-                [min]="minDate" (click)="date_reservable.open()"
-                [max]="maxDate" readonly
-                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date" />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="date_reservable"></mat-datepicker-toggle>
-              <mat-datepicker
-                #date_reservable
-                [startAt]="minDate"></mat-datepicker>
-            </mat-form-field>
+            <app-form-datepicker
+              name="date"
+              [required]="true"
+              [form]="courseFormGroup"
+              [max]="maxDate"
+              [required]="true"
+              [min]="minDate"
+              (input)="courseFormGroup.controls['reserve_date'].value[i].date=$event.value">
+            </app-form-datepicker>
             <mat-form-field appearance="outline">
               <mat-label>{{'hour' | translate}}</mat-label>
               <input
@@ -226,10 +209,10 @@
               <mat-icon matSuffix svgIcon="mat:keyboard_arrow_down"></mat-icon>
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>{{'Duración' | translate}}</mat-label>
+              <mat-label>{{'duration' | translate}}</mat-label>
               <input
                 type="text"
-                placeholder="{{'Duración' | translate}}"
+                placeholder="{{'duration' | translate}}"
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
@@ -261,7 +244,7 @@
         <div>
           <div style="margin: 20px;">
             <span>
-              {{'Descuentos según cantidad de fechas reservadas' | translate}}
+              {{'courses.reduction_title' | translate}}
             </span>
           </div>
           <div style="margin: 0 20px;"
@@ -272,7 +255,7 @@
               <input
                 [(ngModel)]="courseFormGroup.controls['discount'].value[i].day"
                 type="text"
-                placeholder="{{'N. fechas reservadas' | translate}}"
+                placeholder="{{'courses.date_reservable' | translate}}"
                 matInput
                 [matAutocomplete]="auto" />
               <mat-autocomplete #auto="matAutocomplete"
@@ -287,7 +270,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline"
               style="width: calc(49% - 20px);margin-left:1%;">
-              <mat-label>{{'Reducción % (0-100)' | translate}}</mat-label>
+              <mat-label>{{'reduction' | translate}} % (0-100)</mat-label>
               <input
                 [(ngModel)]="courseFormGroup.controls['discount'].value[i].reduccion"
                 matInput required type="number">
@@ -714,7 +697,7 @@
         type="button"
         class="client-button">
         <mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
-        {{mode==='create'?'Atrás':'Cancelar' | translate }}
+        {{mode==='create'?'back':'cancel' | translate }}
       </button>
       <button
         (click)="Confirm(1);"
@@ -723,7 +706,7 @@
         mat-raised-button
         type="button"
         class="client-button">
-        {{mode==='create'?'Confirmar':'Guardar' | translate }}
+        {{mode==='create'?'confirm':'save' | translate }}
       </button>
     </div>
   </div>
@@ -779,7 +762,7 @@
       (click)="extrasModal=false"
       type="button"
       class="client-button">
-      {{'Cancelar' | translate }}
+      {{'cancel' | translate }}
     </button>
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;"
@@ -852,7 +835,7 @@
       (click)="confirmModal=false"
       type="button"
       class="client-button">
-      {{'Cancelar' | translate }}
+      {{'cancel' | translate }}
     </button>
     <button
       style="margin-top: 0px !important;height: 38px; width: 200px;"

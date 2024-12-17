@@ -1,0 +1,31 @@
+<mat-form-field
+    appearance="outline"
+    [formGroup]="form">
+    <mat-label>{{name | translate}}</mat-label>
+    <input
+        *ngIf="control"
+        matInput
+        [matDatepicker]="datepicker"
+        [min]="min" (click)="datepicker.open()"
+        (dateInput)="input.emit()"
+        [max]="max" readonly
+        [formControlName]="control" />
+    <input
+        *ngIf="!control"
+        matInput
+        [matDatepicker]="datepicker"
+        [min]="min" (click)="datepicker.open()"
+        (dateInput)="input.emit($event)"
+        [max]="max" readonly />
+    <mat-datepicker-toggle
+        matSuffix
+        [for]="datepicker"></mat-datepicker-toggle>
+    <mat-datepicker
+        #datepicker
+        [startAt]="startAt"></mat-datepicker>
+    <ng-container *ngIf="control">
+        <mat-error *ngIf="c[control].touched && c[control].errors">
+            {{ getErrorMessage(control) }}
+        </mat-error>
+    </ng-container>
+</mat-form-field>
