@@ -235,7 +235,7 @@
             type="button"
             (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: '08:00', Duracion: 1 })"
             class="client-button">
-            {{'Añadir fecha' | translate }}
+            {{'add_date' | translate }}
           </button>
         </div>
         <div
@@ -362,7 +362,7 @@
               type="button"
               class="client-button">
               <mat-icon>add</mat-icon>
-              {{'Añadir fecha' | translate }}
+              {{'add_date' | translate }}
             </button>
           </div>
           <div
@@ -606,7 +606,7 @@
           <div *ngIf="courseFormGroup.controls['course_type'].value===3"
             style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
             <span>
-              {{courseFormGroup.controls['categoryPart'].value[i]?courseFormGroup.controls['categoryPart'].value[i].name:"EXTRAS"}}
+              {{(courseFormGroup.controls['categoryPart'].value[i]?courseFormGroup.controls['categoryPart'].value[i].name:"extras") | translate}}
             </span>
           </div>
           <div
@@ -628,7 +628,7 @@
             </div>
             <div
               style="flex: 1 1 0; text-align: right; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-              {{item.price}} CHF/Día
+              {{item.price}} CHF/{{'day' | translate}}
             </div>
           </div>
           <div
@@ -640,8 +640,8 @@
                 style="height: 30px;min-width: 30px;border-radius: 15px; cursor: pointer; font-size: 30px;align-content: space-evenly;">add</mat-icon>
             </div>
             <div
-              style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">Crear
-              extra</div>
+              style="width: 259px; text-align: center; color: #E91E63; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+              {{'create_extras' | translate}}</div>
           </div>
         </ng-container>
       </section>
@@ -697,7 +697,7 @@
         type="button"
         class="client-button">
         <mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
-        {{mode==='create'?'back':'cancel' | translate }}
+        {{ (mode === 'create' ? 'back' : 'cancel') | translate }}
       </button>
       <button
         (click)="Confirm(1);"
@@ -706,7 +706,7 @@
         mat-raised-button
         type="button"
         class="client-button">
-        {{mode==='create'?'confirm':'save' | translate }}
+        {{ (mode==='create'?'confirm':'save') | translate }}
       </button>
     </div>
   </div>
@@ -727,28 +727,28 @@
 </vex-flux-layout>
 
 <vex-flux-modal *ngIf="extrasModal" (Close)="extrasModal=false"
-  [width]="670" title="Crear extra">
+  [width]="670" title="{{'create_extras' | translate}}">
   <div body style="display: flex; column-gap: 20px; flex-wrap: wrap;"
     [formGroup]="extrasFormGroup">
     <mat-form-field appearance="outline"
       style="width: calc(50% - 10px);margin-top: 10px;">
-      <mat-label>{{'Producto' | translate}}</mat-label>
+      <mat-label>{{'product' | translate}}</mat-label>
       <input matInput required type="text"
         formControlName="product">
     </mat-form-field>
     <mat-form-field appearance="outline"
       style="width: calc(50% - 10px);margin-top: 10px;">
-      <mat-label>{{'Nombre' | translate}}</mat-label>
+      <mat-label>{{'name' | translate}}</mat-label>
       <input matInput required type="text" formControlName="name">
     </mat-form-field>
     <mat-form-field appearance="outline"
       style="width: calc(50% - 10px)">
-      <mat-label>{{'Precio por día' | translate}}</mat-label>
+      <mat-label>{{'price_per_day' | translate}}</mat-label>
       <input matInput required type="number" formControlName="price">
     </mat-form-field>
     <mat-form-field appearance="outline"
       style="width: calc(50% - 10px)">
-      <mat-label>{{'IVA' | translate}}</mat-label>
+      <mat-label>{{'tva' | translate}}</mat-label>
       <input matInput required type="number" formControlName="iva">
     </mat-form-field>
     <div style="width: 100%">
@@ -771,13 +771,13 @@
       (click)="extrasModal=false;extras.push(extrasFormGroup.getRawValue());extrasFormGroup.reset()"
       type="button"
       class="client-button">
-      {{'Crear extras' | translate }}
+      {{'create_extras' | translate }}
     </button>
   </div>
 </vex-flux-modal>
 
 <vex-flux-modal *ngIf="confirmModal" (Close)="confirmModal=false"
-  [width]="670" title="Casi estás!">
+  [width]="670" title="{{'almost_done' | translate}}">
   <div body style="display: flex; gap: 20px; flex-wrap: wrap;">
     <div
       style="width: 100;
@@ -785,8 +785,8 @@
     font-weight: 400;
     line-height: 18px;
     word-wrap: break-word">
-      {{mode==='create'?"El curso ha sido creado!":""}} Confirma estas
-      opciones:
+      {{(mode==='create'?"course_created":"") | translate}}
+      {{'confirm_option' | translate}}:
     </div>
     <div style="width: 100%">
       <mat-slide-toggle [checked]="true">
@@ -795,7 +795,7 @@
         font-weight: 600;
         line-height: 18px;
         word-wrap: break-word">
-          {{"Visible en la página de reservas" | translate}}
+          {{"visible_reserve_page" | translate}}
         </span>
         <br>
         <span style="
@@ -804,7 +804,7 @@
         font-weight: 400;
         line-height: 16px;
         word-wrap: break-word">
-          {{"El curso serà visible y online desde ahora" | translate}}
+          {{"course_visible_online_now" | translate}}
         </span>
       </mat-slide-toggle>
     </div>
@@ -824,7 +824,7 @@
         font-weight: 400;
         line-height: 16px;
         word-wrap: break-word">
-          {{"El curso es activo y reservable" | translate}}
+          {{"course_active_reservable" | translate}}
         </span>
       </mat-slide-toggle>
     </div>
@@ -844,8 +844,8 @@
       (click)="confirmModal=false"
       type="button"
       class="client-button">
-      {{mode==='create'?'Finalizar creación curso':'Finalizar edición curso' |
-      translate }}
+      {{(mode==='create'?'end_create_course':'end_update_course')
+      | translate }}
     </button>
   </div>
 </vex-flux-modal>

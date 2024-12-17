@@ -706,5 +706,18 @@
     "email": "Muss eine gültige E-Mail-Adresse sein",
     "min": "Der Wert muss mindestens {{min}} sein",
     "max": "Der Wert darf höchstens {{max}} sein"
-  }
+  },
+  "end_create_course": "Kurserstellung abschließen",
+  "end_update_course": "Kursbearbeitung abschließen",
+  "course_active_reservable": "Der Kurs ist aktiv und buchbar",
+  "course_visible_online_now": "Der Kurs wird ab jetzt sichtbar und online sein",
+  "visible_reserve_page": "Sichtbar auf der Buchungsseite",
+  "course_created": "Der Kurs wurde erstellt!",
+  "confirm_option": "Bestätigen Sie diese Optionen",
+  "almost_done": "Du bist fast da!",
+  "create_extras": "Extras erstellen",
+  "add_extra": "Extra hinzufügen",
+  "add_activity": "Aktivität hinzufügen",
+  "end_reserve_pay": "Buchung abschließen und bezahlen",
+  "to_pay": "Zu zahlen"
 }

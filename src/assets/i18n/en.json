@@ -706,5 +706,18 @@
     "email": "Must be a valid email address",
     "min": "The value must be at least {{min}}",
     "max": "The value must be at most {{max}}"
-  }
+  },
+  "end_create_course": "Finish course creation",
+  "end_update_course": "Finish course editing",
+  "course_active_reservable": "The course is active and bookable",
+  "course_visible_online_now": "The course will be visible and online from now",
+  "visible_reserve_page": "Visible on the booking page",
+  "course_created": "The course has been created!",
+  "confirm_option": "Confirm these options",
+  "almost_done": "You're almost there!",
+  "create_extras": "Create extras",
+  "add_extra": "Add extra",
+  "add_activity": "Add activity",
+  "end_reserve_pay": "Complete reservation and pay",
+  "to_pay": "To pay"
 }

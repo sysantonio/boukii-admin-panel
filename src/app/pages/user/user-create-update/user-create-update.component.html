@@ -16,7 +16,7 @@
 
       <div class="px-6 py-4 flex flex-col" [formGroup]="userForm">
         <mat-form-field appearance="outline">
-          <mat-label>Nombre</mat-label>
+          <mat-label>{{'name' | translate}}</mat-label>
           <input matInput formControlName="name" required>
           <mat-hint class="mat-small" *ngIf="userForm.get('name').invalid && userForm.get('name').touched">
             Este campo es obligatorio

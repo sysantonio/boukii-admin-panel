@@ -157,7 +157,7 @@
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
-    {{ "A pagar" | translate }}
+    {{ "to_pay" | translate }}
     <ng-container>
       <span class="totalPrice">
         {{ bookingData.price_total - calculateTotalVoucherPrice() }}
@@ -172,12 +172,12 @@
   mat-raised-button
   type="button"
   class="client-button" (click)="payClick.emit()">
-  {{ "Finalizar reserva y pagar" | translate }}
+  {{ "end_reserve_pay" | translate }}
 </button>
 <button *ngIf="!hideBotton"
   style="height: 38px; width: 400px;border-radius: 3px;margin-top: 16px;"
   mat-raised-button
   type="button"
   class="client-button" (click)="addClick.emit()">
-  {{ "Añadir actividad" | translate }}
+  {{ "add_activity" | translate }}
 </button>

@@ -725,5 +725,18 @@
     "email": "Debe ser una dirección de correo válida",
     "min": "El valor debe ser al menos {{min}}",
     "max": "El valor debe ser como máximo {{max}}"
-  }
+  },
+  "end_create_course": "Finalizar creación curso",
+  "end_update_course": "Finalizar edición curso",
+  "course_active_reservable": "El curso es activo y reservable",
+  "course_visible_online_now": "El curso será visible y online desde ahora",
+  "visible_reserve_page": "Visible en la página de reservas",
+  "course_created": "El curso ha sido creado!",
+  "confirm_option": "Confirma estas opciones",
+  "almost_done": "¡Casi estás!",
+  "create_extras": "Crear extras",
+  "add_extra": "Añadir extra",
+  "add_activity": "Añadir actividad",
+  "end_reserve_pay": "Finalizar reserva y pagar",
+  "to_pay": "A pagar"
 }
