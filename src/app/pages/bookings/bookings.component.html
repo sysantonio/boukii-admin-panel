@@ -50,12 +50,12 @@
         <div style="width: 100%;">
           <span style="display: inline-block;width: 80%; text-align: left;">
             <mat-card-title>{{'booking' | translate}}
-              #{{detailData.id}}</mat-card-title>
+              #{{detailData?.id}}</mat-card-title>
           </span>
           <span style="display: inline-block;width: 20%; text-align: right;">
             <img
               src="assets/img/icons/edit.svg"
-              (click)="goTo('/bookings/update/' + detailData.id)"
+              (click)="goTo('/bookings/update/' + detailData?.id)"
               class="btn-edit" />
             <img
               src="assets/img/icons/close.svg"
@@ -70,30 +70,30 @@
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 5px;font-weight: normal;">
                 <span style="color:white;">
-                  {{detailData.created_at | date: 'dd/MM/YYYY'}}
+                  {{detailData?.created_at | date: 'dd/MM/YYYY'}}
                 </span>
                 <span
                   style="margin-left: 5px;font-style: italic;color:white;">
-                  {{detailData.created_at | date: 'HH:mm'}}h
+                  {{detailData?.created_at | date: 'HH:mm'}}h
                 </span>
               </span>
             </div>
-            <div *ngIf="detailData.user"
+            <div *ngIf="detailData?.user"
               style="color:white;font-weight: normal;">
               <b> {{ "by" | translate }}: </b>
               <span style="margin-left: 5px;color:white;">
-                {{ detailData.user.username }} ({{
-                detailData.user.first_name +
-                ' ' + detailData.user.last_name
+                {{ detailData?.user.username }} ({{
+                detailData?.user.first_name +
+                ' ' + detailData?.user.last_name
                 }})</span>
             </div>
             <div style="color:#868686;font-weight: normal;">
               <b> {{ 'from' | translate }}: </b>
               <span style="margin-left: 5px;color:white;"
-                *ngIf="detailData.source == 'web'">{{'page_created' |
+                *ngIf="detailData?.source == 'web'">{{'page_created' |
                 translate}}</span>
               <span style="margin-left: 5px;color:white;"
-                *ngIf="detailData.source == 'admin'">
+                *ngIf="detailData?.source == 'admin'">
                 {{'api_created' | translate}}
               </span>
             </div>
@@ -112,28 +112,28 @@
           </span>
           <span
             style="color:rgba(146, 26, 0, 1);background-color: #F7BB99;"
-            *ngIf="detailData.status === 2">
+            *ngIf="detailData?.status === 2">
             {{'cancelled' | translate | uppercase }}
           </span>
           <span
             style="color:rgba(83, 65, 0, 1);background-color:#F7E399;"
-            *ngIf="detailData.status === 3">
+            *ngIf="detailData?.status === 3">
             {{'partial_cancelled' | translate | uppercase }}
           </span>
           <span class="col-right">
             <span
               style="color:#00C32B;background-color: #B2EFAD;"
-              *ngIf="detailData.status === 1 && detailData.paid">
+              *ngIf="detailData?.status === 1 && detailData?.paid">
               {{'payed' | translate | uppercase }}
             </span>
             <span
               style="color:#FF0000;background-color: #F7BB99;"
-              *ngIf="detailData.status === 1 && !detailData.paid && detailData.payment_method_id != 3">
+              *ngIf="detailData?.status === 1 && !detailData?.paid && detailData?.payment_method_id != 3">
               {{'no_payed' | translate | uppercase }}
             </span>
             <span
               style="color:#FA9917;background-color: #F7E399;"
-              *ngIf="detailData.status === 1 && !detailData.paid && detailData.payment_method_id == 3">
+              *ngIf="detailData?.status === 1 && !detailData?.paid && detailData?.payment_method_id == 3">
               {{'link_send' | translate | uppercase }}
             </span>
           </span>
@@ -144,13 +144,13 @@
           <div class="title-client">{{'client' | translate}}</div>
           <div class="holder-client">
             <div class="col-left">
-              <!--<img [src]="detailData.client_main?.image !== null ? detailData.client_main?.image : imageAvatar" width="60" height="60" style="border-radius: 100%">-->
+              <!--<img [src]="detailData?.client_main?.image !== null ? detailData?.client_main?.image : imageAvatar" width="60" height="60" style="border-radius: 100%">-->
               <app-level-user
-                *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                [allLevels]="detailData.degrees_sport"
+                *ngIf="detailData?.degrees_sport && detailData?.degrees_sport.length"
+                [allLevels]="detailData?.degrees_sport"
                 [selectLevel]="getClientDegree(detailData?.client_main_id)"
                 [size]="60"
-                [userImage]="detailData.client_main?.image !== null && detailData.client_main?.image !== '' ? detailData.client_main?.image : imageAvatar"></app-level-user>
+                [userImage]="detailData?.client_main?.image !== null && detailData?.client_main?.image !== '' ? detailData?.client_main?.image : imageAvatar"></app-level-user>
             </div>
             <div class="col-right">
               <div class="client-name">
@@ -208,7 +208,7 @@
               </b>
             </div>
             <div class="col-right">
-              <b>{{bUsers.price}} {{ detailData.currency }}</b>
+              <b>{{bUsers.price}} {{ detailData?.currency }}</b>
             </div>
           </div>
 
@@ -254,7 +254,7 @@
                       <ng-container *ngIf="bUsers?.course?.course_type !== 1">
                         <!-- Para course_type distinto de 1 -->
                         <ng-container
-                          *ngFor="let item of detailData.bookingusers">
+                          *ngFor="let item of detailData?.bookingusers">
                           <div
                             *ngIf="item.client_id == bUsers.client_id && item.date == bUsers.date">
                             <span class="date-course">
@@ -307,8 +307,8 @@
                     <div class="col-left">
                       <div class="c-l">
                         <app-level-user
-                          *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                          [allLevels]="detailData.degrees_sport"
+                          *ngIf="detailData?.degrees_sport && detailData?.degrees_sport.length"
+                          [allLevels]="detailData?.degrees_sport"
                           [selectLevel]="getClientDegree(bUsers.client)"
                           [size]="60"
                           [userImage]="bUsers?.client?.image !== null && bUsers?.client?.image !== '' ? bUsers?.client?.image : imageAvatar"></app-level-user>
@@ -367,9 +367,9 @@
                     <div class="col-left">
                       <div class="c-l" *ngIf="bUsers?.monitor">
                         <app-level-user
-                          *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
-                          [allLevels]="detailData.degrees_sport"
-                          [selectLevel]="getHighestAuthorizedDegree(bUsers?.monitor, bUsers?.course?.sport_id).degree_id"
+                          *ngIf="detailData?.degrees_sport && detailData?.degrees_sport.length"
+                          [allLevels]="detailData?.degrees_sport"
+                          [selectLevel]="getHighestAuthorizedDegree(bUsers?.monitor, bUsers?.course?.sport_id)?.degree_id || null"
                           [size]="60"
                           [userImage]="bUsers?.monitor?.image !== null && bUsers?.monitor?.image !== '' ? bUsers?.monitor?.image : imageAvatar"></app-level-user>
                       </div>
@@ -481,7 +481,7 @@
             <b class="title">{{ 'ispaid' | translate }}:</b>
           </div>
           <div class="col-right">
-            <b>{{detailData.paid_total}} {{ detailData.currency }}</b>
+            <b>{{detailData?.paid_total}} {{ detailData?.currency }}</b>
           </div>
         </div>
         <div class="subtitle-sub">{{ 'options' | translate }}</div>
@@ -494,8 +494,8 @@
               {{ 'op_rem_abr' | translate }}
             </div>
             <div class="col-right">
-              {{detailData.price_cancellation_insurance}}
-              {{detailData.currency}}
+              {{detailData?.price_cancellation_insurance}}
+              {{detailData?.currency}}
             </div>
           </div>
 
@@ -507,7 +507,7 @@
               Boukii Care
             </div>
             <div class="col-right">
-              {{detailData.price_boukii_care}} {{detailData.currency}}
+              {{detailData?.price_boukii_care}} {{detailData?.currency}}
             </div>
           </div>
 
@@ -521,7 +521,7 @@
               </div>
             </div>
             <div class="col-right">
-              {{getExtrasPrice()}} {{detailData.currency}}
+              {{getExtrasPrice()}} {{detailData?.currency}}
             </div>
           </div>
         </div>
@@ -531,13 +531,13 @@
             {{'bonus' | translate}}
           </div>
           <div class="col-right">
-            -{{getBonusPrice()}} {{detailData.currency}}
+            -{{getBonusPrice()}} {{detailData?.currency}}
           </div>
         </div>
-        <div class="list-holder" *ngIf="detailData.payment_method != 6">
+        <div class="list-holder" *ngIf="detailData?.payment_method != 6">
           <div><!--class="col-left"-->
             <div class="col-l">
-              {{ getPaymentMethod(detailData.payment_method) | translate }}
+              {{ getPaymentMethod(detailData?.payment_method) | translate }}
             </div>
             <!--   TODO: revisar metodo de pago cuando hay varios pagos y que estado poner?? -->
             <!--            <div class="col-r">
@@ -614,7 +614,7 @@
           <div class="col-right">
             <ul>
               <li class="total">
-                {{detailData?.price_total}} {{detailData.currency}}
+                {{detailData?.price_total}} {{detailData?.currency}}
               </li>
             </ul>
           </div>
