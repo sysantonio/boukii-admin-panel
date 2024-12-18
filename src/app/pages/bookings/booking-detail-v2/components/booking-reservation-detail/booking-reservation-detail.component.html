@@ -159,7 +159,7 @@
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
-    <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "A pagar" | translate }}</span>
+    <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "to_pay" | translate }}</span>
     <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() <= 0">{{ "A devolver" | translate }}</span>
     <ng-container>
       <span class="totalPrice" *ngIf="bookingData.price_total - calculateTotalVoucherPrice() != 0">

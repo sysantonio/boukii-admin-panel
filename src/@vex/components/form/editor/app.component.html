@@ -1,0 +1,12 @@
+<div style="margin: 10px 0;" [formGroup]="form">
+    <angular-editor style="display: block !important;"
+        style="width: 100%" [required]="required"
+        [id]="control"
+        (input)="input.emit()"
+        placeholder="{{name | translate}}"
+        [formControlName]="control">
+    </angular-editor>
+    <mat-error *ngIf="c[control].touched && c[control].errors">
+        {{ getErrorMessage(control) | translate }}
+    </mat-error>
+</div>

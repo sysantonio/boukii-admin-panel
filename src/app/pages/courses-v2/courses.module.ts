@@ -29,6 +29,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CoursesCreateUpdateModalModule } from './courses-create-update-modal/courses-create-update-modal.module';
 import { CourseDetailNewModule } from './course-detail-new/course-detail-new.module';
 import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/course-card/app.module';
+import { ComponenteInputModule } from 'src/@vex/components/form/input/app.module';
+import { ComponenteEditorModule } from 'src/@vex/components/form/editor/app.module';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -61,7 +63,9 @@ import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/cour
     MatCardModule,
     CourseUserTransferModalModule,
     TranslateModule,
-    CoursesDetailCardModule
+    CoursesDetailCardModule,
+    ComponenteInputModule,
+    ComponenteEditorModule
   ]
 })
 export class CoursesModule { }

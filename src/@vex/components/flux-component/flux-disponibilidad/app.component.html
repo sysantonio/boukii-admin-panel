@@ -29,7 +29,7 @@
                 background-color: white;">
                     <div class="flexicon">
                         <img src="assets/icons/icon/monitor.png" class="icon24">
-                        MONITOR
+                        {{'monitor' | translate}}
                     </div>
                 </td>
                 <td *ngFor="let item of [].constructor(30); index as i"
@@ -150,7 +150,7 @@
         <div style="width: 50%;">
             <div class="flexicon" style="margin-bottom: 16px;">
                 <img src="assets/icons/icon/alumno.png" class="icon24">
-                NIVEL
+                {{'level' | translate}}
             </div>
             <vex-course-detail-nivel [checkbox]="true"
                 [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
@@ -163,7 +163,7 @@
             mat-stroked-button
             type="button" (click)="cambiarModal=false"
             class="client-button">
-            {{'Cancelar' | translate }}
+            {{'cancel' | translate }}
         </button>
         <button
             style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
@@ -171,7 +171,7 @@
             mat-raised-button
             type="button" (click)="cambiarModal=false"
             class="client-button">
-            {{'Guardar' | translate }}
+            {{'save' | translate }}
         </button>
     </div>
 </vex-flux-modal>

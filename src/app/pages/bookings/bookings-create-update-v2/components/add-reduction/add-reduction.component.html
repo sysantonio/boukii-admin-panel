@@ -57,10 +57,10 @@
 
   <mat-dialog-actions align="end">
     <button mat-raised-button [mat-dialog-close]="false"
-      style="border-radius: 3px;">{{'Cancelar' |
+      style="border-radius: 3px;">{{'cancel' |
       translate}}</button>
     <button color="primary" mat-flat-button style="margin-left: 20px;"
       [mat-dialog-close]="{type: type, discount: discount}"
-      [disabled]="form.invalid">{{'Confirmar' | translate}}</button>
+      [disabled]="form.invalid">{{'confirm' | translate}}</button>
   </mat-dialog-actions>
 </form>
