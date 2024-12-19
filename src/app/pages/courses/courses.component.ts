@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import jsPDF from 'jspdf';
 import * as QRCode from 'qrcode';
+import {saveAs} from 'file-saver';
 
 
 @Component({
@@ -190,8 +191,6 @@ export class CoursesComponent {
     }
 
     this.detailData.booking_users.forEach(element => {
-      console.log('Element:', element); // Verifica los datos de cada elemento
-      console.log('Comparing degree_id:', element.degree_id, 'with levelId:', levelId);
 
       if (element.course_subgroup.degree.id === levelId && !bookingDifferentUsers.has(element.client_id) && element.status == 1) {
         bookingDifferentUsers.add(element.client_id);
@@ -199,7 +198,6 @@ export class CoursesComponent {
       }
     });
 
-    console.log('Total students for level', levelId, ':', ret);
     return ret;
   }
 
@@ -283,9 +281,17 @@ export class CoursesComponent {
       b: parseInt(rgb[3], 16)
     } : null;
   }
-
+  export(id:any) {
+    this.crudService.getFile('/admin/courses/'+ id + '/export/' + this.translateService.currentLang)
+      .subscribe(async (data) => {
+        const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(blob, `course_details_${id}.xlsx`);
+      }, error => {
+        console.error('Error al descargar el archivo:', error);
+      });
+  }
   exportQR(id:any) {
-    console.log('export');
+
     this.crudService.get('/admin/clients/course/'+ id)
         .subscribe(async (data) => {
           const clientsData = data.data;

@@ -23,6 +23,13 @@ export class ApiCrudService extends ApiService {
     this.user = user;
   }
 
+  getFile(url: string) {
+    return this.http.get(this.baseUrl + url, {
+      headers: this.getHeaders(),
+      responseType: 'blob', // Esto indica que la respuesta es un archivo
+    });
+  }
+
   get(url: string, relations: any[] = []) {
     // Construir la parte de la URL para las relaciones
     let relationsParams = '';
