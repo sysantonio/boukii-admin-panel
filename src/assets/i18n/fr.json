@@ -718,4 +718,7 @@
   "add_activity": "Ajouter une activité",
   "end_reserve_pay": "Finaliser la réservation et payer",
   "to_pay": "À payer"
+  ,"choose_level_pop":"Choisissez les niveaux ici. Vous pourrez attribuer les moniteurs ultérieurement."
+  ,"edit_level_here":"Modifiez les niveaux ici."
+
 }

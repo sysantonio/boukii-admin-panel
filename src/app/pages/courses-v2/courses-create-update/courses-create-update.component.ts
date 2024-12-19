@@ -7,6 +7,7 @@ import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
+import moment from 'moment';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -99,11 +100,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.sportData = sports;
       this.stations = stations;
       this.monitors = monitors;
+      const settings = JSON.parse(this.user.schools[0].settings);
       this.courseFormGroup = this.fb.group({
         sport_id: [this.sportData[0].sport_id, Validators.required],
+        is_flexible: [false,],
         course_type: [null, Validators.required],
-        course_name: ["", Validators.required],
-        summary: ["", Validators.required],
+        name: ["", Validators.required],
+        short_description: ["", Validators.required],
         description: ["", Validators.required],
         course_name_es: ["", Validators.required],
         summary_es: ["", Validators.required],
@@ -121,17 +124,33 @@ export class CoursesCreateUpdateComponent implements OnInit {
         summary_it: ["", Validators.required],
         description_it: ["", Validators.required],
         price: [null, [Validators.required, Validators.min(1)]],
-        participants: [null, [Validators.required, Validators.min(1)]],
-        img: ["", Validators.required],
+        currency: [settings?.taxes?.currency || 'CHF'],
+        max_participants: [null, [Validators.required, Validators.min(1)]],
+        image: ["", Validators.required],
         icon: ["", Validators.required],
         age_max: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
         age_min: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
-        reserve_from: [null, Validators.required],
-        reserve_to: [null, Validators.required],
-        duration_min: [null, Validators.required], //2
+        date_start: [null, Validators.required],
+        date_end: [null, Validators.required],
+        date_start_res: [null],
+        date_end_res: [null],
+        duration: [null, Validators.required], //2
+        confirm_attendance: [false],
+        active: [true],
+        online: [true],
+        options: [null],
+        translations: [null],
+        school_id: [null],
+        station_id: [null],
+        course_dates: [null],
         //Datos en forma de array
         reserve_date: [[], Validators.required],
-        discount: [[], Validators.required],
+        discounts: [[], Validators.required], //1 flex
+        unique: [null], //2 flex
+        hour_min: [null], //2
+        hour_max: [null], //2
+        price_range: [null], //3
+
         extras: [[], Validators.required],
         levelGrop: [[], Validators.required],
         categoryPart: [[], Validators.required],
@@ -174,18 +193,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
                         this.courseFormGroup.patchValue({
                           sport_id: this.detailData.sport_id,
                           course_type: this.detailData.course_type,
-                          course_name: this.detailData.name,
-                          summary: this.detailData.short_description,
+                          name: this.detailData.name,
+                          short_description: this.detailData.short_description,
                           description: this.detailData.description,
                           price: this.detailData.price,
-                          participants: this.detailData.max_participants,
-                          img: this.detailData.image,
+                          currency: this.detailData.currency,
+                          max_participants: this.detailData.max_participants,
+                          image: this.detailData.image,
                           icon: this.detailData.sport.icon_unselected,
                           age_max: this.detailData.age_max,
                           age_min: this.detailData.age_min,
-                          reserve_from: this.detailData.date_start,
-                          reserve_to: this.detailData.date_end,
-                          duration_min: this.detailData.duration,
+                          date_start: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
+                          date_end: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
+                          date_start_res: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
+                          date_end_res: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
+                          duration: this.detailData.duration,
                           reserve_date: this.detailData.course_dates,
                           levelGrop: this.detailData.degrees,
                           settings: JSON.parse(this.detailData.settings),
@@ -254,9 +276,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
   );
   getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.courseFormGroup.controls['sport_id'].value).subscribe((data) => {
     this.levels = []
-    data.data.forEach(element => element.active ? this.levels.push(element) : null);
+    data.data.forEach((element: any) => element.active ? this.levels.push(element) : null);
     const levelGrop = []
-    this.levels.forEach(level => {
+    this.levels.forEach((level: any) => {
       levelGrop.push({ ...level, id: level.id, age_min: 0, age_max: 0, PartMax: 0, Subgrupo: 0, active: false })
       level.active = false
     })
@@ -274,11 +296,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.getDegrees();
     } else if (this.ModalFlux === 2) {
       if (
-        this.courseFormGroup.controls["course_name"].status === 'VALID' &&
-        this.courseFormGroup.controls["summary"].status === 'VALID' &&
+        this.courseFormGroup.controls["name"].status === 'VALID' &&
+        this.courseFormGroup.controls["short_description"].status === 'VALID' &&
         this.courseFormGroup.controls["description"].status === 'VALID' &&
         this.courseFormGroup.controls["price"].status === 'VALID' &&
-        this.courseFormGroup.controls["participants"].status === 'VALID' &&
+        this.courseFormGroup.controls["max_participants"].status === 'VALID' &&
         (
           this.courseFormGroup.controls['course_type'].value > 1 &&
           this.courseFormGroup.controls["age_min"].status === 'VALID' &&
@@ -295,16 +317,25 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.ModalFlux -= add
       }
     } else if (this.ModalFlux === 3) {
-      if (this.courseFormGroup.controls["categoryPart"].value.length === 0) {
-        this.courseFormGroup.patchValue({
-          categoryPart: [{
-            name: "",
-            age_min: this.courseFormGroup.controls["age_min"].value || 0,
-            age_max: this.courseFormGroup.controls["age_max"].value || 99,
-            num_min: this.courseFormGroup.controls["participants"].value || 0,
-            num_max: this.courseFormGroup.controls["participants"].value || 99,
-          }]
-        })
+
+      if (
+        this.courseFormGroup.controls["date_start"].status === 'VALID' &&
+        this.courseFormGroup.controls["date_end"].status === 'VALID'
+      ) {
+        if (this.courseFormGroup.controls["categoryPart"].value.length === 0) {
+          this.courseFormGroup.patchValue({
+            categoryPart: [{
+              name: "",
+              age_min: this.courseFormGroup.controls["age_min"].value || 0,
+              age_max: this.courseFormGroup.controls["age_max"].value || 99,
+              num_min: this.courseFormGroup.controls["max_participants"].value || 0,
+              num_max: this.courseFormGroup.controls["max_participants"].value || 99,
+            }]
+          })
+        }
+      } else {
+        this.courseFormGroup.markAllAsTouched()
+        this.ModalFlux -= add
       }
     }
     else if (this.ModalFlux === 4) {
@@ -340,7 +371,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     levelGrop[i].active = event.target.checked
     levelGrop[i].age_min = this.courseFormGroup.controls['age_min'].value || 0
     levelGrop[i].age_max = this.courseFormGroup.controls['age_max'].value || 99
-    levelGrop[i].PartMax = this.courseFormGroup.controls['participants'].value || 0
+    levelGrop[i].PartMax = this.courseFormGroup.controls['max_participants'].value || 0
     this.courseFormGroup.patchValue({ levelGrop })
   }
   addLevelSubgroup = (i: number, add: number) => {
@@ -358,5 +389,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
     settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
     this.courseFormGroup.patchValue({ settings })
   }
-
+  createCourse() {
+    this.crudService.create('/admin/courses', this.courseFormGroup.getRawValue()).subscribe(() => { },)
+    //this.crudService.update('/admin/courses', this.courseFormGroup.getRawValue(), this.id).subscribe(() => { },)
+  }
 }

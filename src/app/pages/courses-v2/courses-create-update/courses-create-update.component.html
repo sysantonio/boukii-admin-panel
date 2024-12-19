@@ -38,43 +38,48 @@
       *ngIf="ModalFlux===1"
       [formGroup]="courseFormGroup">
       <mat-tab-group class="tabsWrapper"
-        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event+1})"
+        (selectedIndexChange)="courseFormGroup.patchValue({course_type:$event+1});
+        $event==2?courseFormGroup.patchValue({is_flexible:true}):null"
         [selectedIndex]="courseFormGroup.controls['course_type'].value-1||0">
         <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #E5962A;"
               class="icon16">circle</mat-icon>
-            Curso Colectivo
+            {{"course_colectiva" | translate}}
           </ng-template>
         </mat-tab>
         <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #2FAA41;"
               class="icon16">circle</mat-icon>
-            Curso Privado
+            {{"course_private" | translate}}
           </ng-template>
         </mat-tab>
         <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #0AB0BC;"
               class="icon16">circle</mat-icon>
-            Actividad
+            {{"activity" | translate}}
           </ng-template>
         </mat-tab>
       </mat-tab-group>
       <div style="padding: 20px 20px 0;">
-        <mat-checkbox> {{'Fechas flexibles' | translate }} </mat-checkbox>
+        <mat-checkbox
+          formControlName="is_flexible"
+          [disabled]="courseFormGroup.controls['course_type'].value===3">
+          {{'flexidates' | translate }}
+        </mat-checkbox>
         <vex-flux-upload-img
-          (upload)="this.courseFormGroup.patchValue({img:$event})"
+          (upload)="this.courseFormGroup.patchValue({image:$event})"
           style="margin-top: 10px;"></vex-flux-upload-img>
         <app-form-input
-          control="course_name"
+          control="name"
           name="courses.coursename"
           [required]="true"
           [form]="courseFormGroup">
         </app-form-input>
         <app-form-editor
-          control="summary"
+          control="short_description"
           name="courses.summary"
           [required]="true"
           [form]="courseFormGroup">
@@ -95,7 +100,7 @@
             [form]="courseFormGroup">
           </app-form-input>
           <app-form-input style="width: calc(50% - 10px);"
-            control="participants"
+            control="max_participants"
             name="N° max. participantes por grupo"
             [required]="true"
             type="number"
@@ -122,13 +127,13 @@
     </div>
     <div class="flex flex-col" *ngIf="ModalFlux===2">
       <span style="margin: 20px;">
-        {{'Fechas de reservas' | translate}}
+        {{'dates' | translate}}
       </span>
       <div [formGroup]="courseFormGroup"
         style="margin: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
         <app-form-datepicker
           style="width: 100%;"
-          control="reserve_from"
+          control="date_start"
           name="courses.date_reservable"
           [required]="true"
           [form]="courseFormGroup"
@@ -137,7 +142,7 @@
         </app-form-datepicker>
         <app-form-datepicker
           style="width: 100%;"
-          control="reserve_to"
+          control="date_end"
           name="courses.date_reservable_to"
           [required]="true"
           [form]="courseFormGroup"
@@ -154,7 +159,7 @@
             matInput
             required
             [matAutocomplete]="auto"
-            formControlName="duration_min" />
+            formControlName="duration" />
           <mat-autocomplete #auto="matAutocomplete"
             [displayWith]="displayFn">
             <mat-option
@@ -231,7 +236,7 @@
         </div>
         <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
           <button
-            style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 110px;"
+            style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
             type="button"
             (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: '08:00', Duracion: 1 })"
             class="client-button">
@@ -303,12 +308,12 @@
           [selectedIndex]="courseFormGroup.controls['reserve_date'].value.length>1?1:0">
           <mat-tab>
             <ng-template mat-tab-label>
-              Un periodo
+              {{"courses.uniperiod" | translate}}
             </ng-template>
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
-              Multiples periodos
+              {{"courses.multiperiod" | translate}}
             </ng-template>
           </mat-tab>
         </mat-tab-group>
@@ -430,13 +435,11 @@
           <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
           <div *ngIf="mode==='update'"
             style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-            Edita los niveles aquí.
+            {{"edit_level_here" | translate}}
           </div>
           <div *ngIf="mode==='create'"
             style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word;color: black;">
-            Elije
-            los niveles aquí. Podrás asignar los monitores en un segundo
-            momento.
+            {{"choose_level_pop" | translate}}
           </div>
         </div>
         <div class="level"
@@ -579,8 +582,8 @@
             name: '',
             age_min: this.courseFormGroup.controls['age_min'].value || 0,
             age_max: this.courseFormGroup.controls['age_max'].value || 99,
-            num_min: this.courseFormGroup.controls['participants'].value || 0,
-            num_max: this.courseFormGroup.controls['participants'].value || 0,
+            num_min: this.courseFormGroup.controls['max_participants'].value || 0,
+            num_max: this.courseFormGroup.controls['max_participants'].value || 0,
           })"
             style="margin-top: 0px !important;height: 38px;"
             color="primary"
@@ -606,7 +609,8 @@
           <div *ngIf="courseFormGroup.controls['course_type'].value===3"
             style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
             <span>
-              {{(courseFormGroup.controls['categoryPart'].value[i]?courseFormGroup.controls['categoryPart'].value[i].name:"extras") | translate}}
+              {{(courseFormGroup.controls['categoryPart'].value[i]?courseFormGroup.controls['categoryPart'].value[i].name:"extras")
+              | translate}}
             </span>
           </div>
           <div
@@ -758,7 +762,7 @@
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
       color="primary"
-      mat-stroked-button
+      mat-button
       (click)="extrasModal=false"
       type="button"
       class="client-button">
@@ -831,17 +835,17 @@
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
       color="primary"
-      mat-stroked-button
+      mat-button
       (click)="confirmModal=false"
       type="button"
       class="client-button">
       {{'cancel' | translate }}
     </button>
     <button
-      style="margin-top: 0px !important;height: 38px; width: 200px;"
+      style="margin-top: 0px !important;height: 38px; width: 225px;"
       color="primary"
       mat-raised-button
-      (click)="confirmModal=false"
+      (click)="confirmModal=false;createCourse()"
       type="button"
       class="client-button">
       {{(mode==='create'?'end_create_course':'end_update_course')

@@ -720,4 +720,7 @@
   "add_activity": "Aktivität hinzufügen",
   "end_reserve_pay": "Buchung abschließen und bezahlen",
   "to_pay": "Zu zahlen"
+  ,"choose_level_pop":"Wählen Sie hier die Stufen aus. Sie können die Monitore später zuweisen."
+  ,"edit_level_here":"Bearbeiten Sie die Stufen hier."
+
 }

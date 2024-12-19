@@ -759,7 +759,8 @@ span {
 .mat-mdc-row,
 .mat-mdc-footer-row,
 .mat-mdc-table .mat-mdc-header-cell,
-.mat-mdc-option .mdc-list-item__primary-text {
+.mat-mdc-option .mdc-list-item__primary-text,
+.mat-expansion-panel-header-title {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
 }
 

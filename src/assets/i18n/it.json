@@ -718,5 +718,7 @@
   "add_extra": "Aggiungi extra",
   "add_activity": "Aggiungi attività",
   "end_reserve_pay": "Finalizza la prenotazione e paga",
-  "to_pay": "Da pagare"
+  "to_pay": "Da pagare",
+  "choose_level_pop": "Scegli i livelli qui. Potrai assegnare i monitor in un secondo momento.",
+  "edit_level_here": "Modifica i livelli qui."
 }
