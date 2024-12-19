@@ -310,7 +310,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       ) {
         if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
           this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
-        if (this.courseFormGroup.controls["discount"].value.length === 0) this.courseFormGroup.patchValue({ discount: [{ day: 2, reduccion: 10 }] })
+        if (this.courseFormGroup.controls["discounts"].value.length === 0) this.courseFormGroup.patchValue({ discounts: [{ day: 2, reduccion: 10 }] })
         this.getDegrees();
       } else {
         this.courseFormGroup.markAllAsTouched()
@@ -341,21 +341,21 @@ export class CoursesCreateUpdateComponent implements OnInit {
     else if (this.ModalFlux === 4) {
       if (!this.courseFormGroup.controls["course_name_es"].value) {
         this.courseFormGroup.patchValue({
-          course_name_es: this.courseFormGroup.controls["course_name"].value,
-          summary_es: this.courseFormGroup.controls["course_name"].value,
-          description_es: this.courseFormGroup.controls["course_name"].value,
-          course_name_fr: this.courseFormGroup.controls["course_name"].value,
-          summary_fr: this.courseFormGroup.controls["course_name"].value,
-          description_fr: this.courseFormGroup.controls["course_name"].value,
-          course_name_en: this.courseFormGroup.controls["course_name"].value,
-          summary_en: this.courseFormGroup.controls["course_name"].value,
-          description_en: this.courseFormGroup.controls["course_name"].value,
-          course_name_de: this.courseFormGroup.controls["course_name"].value,
-          summary_de: this.courseFormGroup.controls["course_name"].value,
-          description_de: this.courseFormGroup.controls["course_name"].value,
-          course_name_it: this.courseFormGroup.controls["course_name"].value,
-          summary_it: this.courseFormGroup.controls["course_name"].value,
-          description_it: this.courseFormGroup.controls["course_name"].value,
+          course_name_es: this.courseFormGroup.controls["name"].value,
+          summary_es: this.courseFormGroup.controls["short_description"].value,
+          description_es: this.courseFormGroup.controls["description"].value,
+          course_name_fr: this.courseFormGroup.controls["name"].value,
+          summary_fr: this.courseFormGroup.controls["short_description"].value,
+          description_fr: this.courseFormGroup.controls["description"].value,
+          course_name_en: this.courseFormGroup.controls["name"].value,
+          summary_en: this.courseFormGroup.controls["short_description"].value,
+          description_en: this.courseFormGroup.controls["description"].value,
+          course_name_de: this.courseFormGroup.controls["name"].value,
+          summary_de: this.courseFormGroup.controls["short_description"].value,
+          description_de: this.courseFormGroup.controls["description"].value,
+          course_name_it: this.courseFormGroup.controls["name"].value,
+          summary_it: this.courseFormGroup.controls["short_description"].value,
+          description_it: this.courseFormGroup.controls["description"].value,
         })
       }
     }

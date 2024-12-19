@@ -15,7 +15,8 @@
                             <img src="assets/icons/icon/monitor.png" alt>
                         </div>
                         <div
-                            style="width: 91px; height: 24px; color: var(--color-dark1); font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word;    align-content: center;">{{'monitor' | translate}}</div>
+                            style="width: 91px; height: 24px; color: var(--color-dark1); font-size: 12px; font-family: DM Sans; font-weight: 600; line-height: 16px; word-wrap: break-word;    align-content: center;">{{'monitor'
+                            | translate}}</div>
                     </div>
                     <div
                         style="align-self: stretch; height: 70px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
@@ -161,8 +162,8 @@
             [style.minWidth]="courseFormGroup.controls['id']?'':'calc(100% - 60px)'">
             <p
                 style="font-weight: 600; line-height: 18px; min-height: 12px;color: var(--color-dark1);font-size: 14px;"
-                [class]="courseFormGroup.controls['course_name'].value?'':'emptyText'">
-                {{courseFormGroup.controls['course_name'].value}}
+                [class]="courseFormGroup.controls['name'].value?'':'emptyText'">
+                {{courseFormGroup.controls['name'].value}}
             </p>
             <p
                 style="line-height: 18px; min-height: 12px;margin-top: 5px;
@@ -206,15 +207,15 @@
     <div class="cardgroup">
         <div style="width: 100%;display: flex;">
             <img
-                [src]="courseFormGroup.controls['img'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+                [src]="courseFormGroup.controls['image'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
                 class="Img1"
-                [class]="courseFormGroup.controls['img'].value?'':'emptyImg1'"
+                [class]="courseFormGroup.controls['image'].value?'':'emptyImg1'"
                 style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
             <div style="width: 100%;">
                 <p> {{"summary" | translate}} </p>
                 <p style="color:var(--color-dark1);"
-                    [class]="courseFormGroup.controls['summary'].value?'':'emptyText'"
-                    [innerHTML]="courseFormGroup.controls['summary'].value">
+                    [class]="courseFormGroup.controls['short_description'].value?'':'emptyText'"
+                    [innerHTML]="courseFormGroup.controls['short_description'].value">
                 </p>
             </div>
             <div>
@@ -242,8 +243,8 @@
             <p> {{'max_pax' | translate }} </p>
             <p
                 style="color:var(--color-dark1); font-weight: 400;font-size: 12px;"
-                [class]="courseFormGroup.controls['participants'].value?'':'emptyText'">
-                {{courseFormGroup.controls['participants'].value}}
+                [class]="courseFormGroup.controls['max_participants'].value?'':'emptyText'">
+                {{courseFormGroup.controls['max_participants'].value}}
             </p>
         </div>
         <div style="width: calc(50% - 10px);"
@@ -268,23 +269,23 @@
             <div style="width: 100%">
                 <p> {{'courses.date_reservable' | translate }} </p>
                 <p style="color:var(--color-dark1); font-size: 12px;"
-                    [class]="courseFormGroup.controls['reserve_from'].value?'':'emptyText'">
-                    {{DateISO(courseFormGroup.controls['reserve_from'].value)}}
+                    [class]="courseFormGroup.controls['date_start'].value?'':'emptyText'">
+                    {{DateISO(courseFormGroup.controls['date_start'].value)}}
                 </p>
             </div>
             <div style="width: 100%">
                 <p> {{'courses.date_reservable_to' | translate }} </p>
                 <p style="color:var(--color-dark1);font-size: 12px;"
-                    [class]="courseFormGroup.controls['reserve_to'].value?'':'emptyText'">
-                    {{DateISO(courseFormGroup.controls['reserve_to'].value)}}
+                    [class]="courseFormGroup.controls['date_end'].value?'':'emptyText'">
+                    {{DateISO(courseFormGroup.controls['date_end'].value)}}
                 </p>
             </div>
             <div style="width: 100%"
                 *ngIf="courseFormGroup.controls['course_type'].value>1">
                 <p> {{'courses.dur_min' | translate }} </p>
                 <p style="color:var(--color-dark1);font-size: 12px;"
-                    [class]="courseFormGroup.controls['duration_min'].value?'':'emptyText'">
-                    {{courseFormGroup.controls['duration_min'].value}}
+                    [class]="courseFormGroup.controls['duration'].value?'':'emptyText'">
+                    {{courseFormGroup.controls['duration'].value}}
                 </p>
             </div>
             <div>
@@ -330,7 +331,7 @@
             </p>
         </div>
         <div style="width: 100%; color:var(--color-dark1);font-weight: 400;"
-            *ngFor="let item of courseFormGroup.controls['discount'].value">
+            *ngFor="let item of courseFormGroup.controls['discounts'].value">
             · Reducción {{item.reduccion}}% reservando
             {{item.day}} fechas
         </div>
@@ -451,7 +452,7 @@
                      line-height: 18px;
                      word-wrap: break-word;
                      margin-left: auto;">
-                        {{item.price || 0}} CHF/día
+                        {{item.price || 0}} CHF/{{"day" | translate}}
                     </span>
                 </div>
             </ng-container>

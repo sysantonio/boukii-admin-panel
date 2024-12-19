@@ -253,12 +253,12 @@
             </span>
           </div>
           <div style="margin: 0 20px;"
-            *ngFor="let item of courseFormGroup.controls['discount'].value, index as i">
+            *ngFor="let item of courseFormGroup.controls['discounts'].value, index as i">
             <mat-form-field appearance="outline"
               style="width: calc(49% - 20px);margin-right: 1%;">
               <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
               <input
-                [(ngModel)]="courseFormGroup.controls['discount'].value[i].day"
+                [(ngModel)]="courseFormGroup.controls['discounts'].value[i].day"
                 type="text"
                 placeholder="{{'courses.date_reservable' | translate}}"
                 matInput
@@ -277,7 +277,7 @@
               style="width: calc(49% - 20px);margin-left:1%;">
               <mat-label>{{'reduction' | translate}} % (0-100)</mat-label>
               <input
-                [(ngModel)]="courseFormGroup.controls['discount'].value[i].reduccion"
+                [(ngModel)]="courseFormGroup.controls['discounts'].value[i].reduccion"
                 matInput required type="number">
               <span matTextSuffix>%</span>
             </mat-form-field>
@@ -286,11 +286,11 @@
               style="margin-left: 16px"
               [style.color]="i===0?'gray':'black'"
               [style.cursor]="i===0?'':'pointer'"
-              (click)="i>0?courseFormGroup.controls['discount'].value.splice(i,1):''">delete</mat-icon>
+              (click)="i>0?courseFormGroup.controls['discounts'].value.splice(i,1):''">delete</mat-icon>
           </div>
           <div style="margin: 0 20px;">
             <button
-              (click)="courseFormGroup.controls['discount'].value.push({ day: 2, reduccion: 10 })"
+              (click)="courseFormGroup.controls['discounts'].value.push({ day: 2, reduccion: 10 })"
               style="margin-top: 0px !important;height: 38px;"
               color="primary"
               mat-button
