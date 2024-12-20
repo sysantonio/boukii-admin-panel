@@ -53,8 +53,8 @@ export class AddClientUserModalComponent implements OnInit {
         );
 
         this.form = this.fb.group({
-          name: [null, Validators.required],
-          surname: [null, Validators.required],
+          first_name: [null, Validators.required],
+          last_name: [null, Validators.required],
           fromDate: [null, Validators.required]
         })
       })
