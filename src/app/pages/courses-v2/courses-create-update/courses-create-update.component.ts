@@ -76,7 +76,32 @@ export class CoursesCreateUpdateComponent implements OnInit {
   translateExpandedIndex: number = 0
   user: any;
   id: any = null;
-
+  default_course_dates: { date: string, hour_start: string, hour_end: string, Duracion: string, date_end: Date, Semana: any[], groups: any[] } =
+    {
+      date: this.nowDate.toUTCString(),
+      hour_start: this.hours[32],
+      Duracion: this.hours[4],
+      date_end: this.nowDate,
+      hour_end: this.hours[36],
+      Semana: [],
+      groups: [
+        //ejemplo
+        {
+          active: true,
+          age_max: 99,
+          age_min: 5,
+          auto: null,
+          course_date_id: null,
+          course_id: null,
+          degree_id: 5333,
+          observations: null,
+          recommended_age: null,
+          subgroups: [{ degree_id: 5333, monitor_id: null, max_participants: 132 }],
+          teachers_max: null,
+          teachers_min: 5333
+        }
+      ]
+    }
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute,
     private schoolService: SchoolService,) {
@@ -139,13 +164,40 @@ export class CoursesCreateUpdateComponent implements OnInit {
         active: [true],
         online: [true],
         options: [null],
-        translations: [null],
+        translations: [
+          JSON.stringify({
+            es: {
+              name: '',
+              short_description: '',
+              description: ''
+            },
+            en: {
+              name: '',
+              short_description: '',
+              description: ''
+            },
+            fr: {
+              name: '',
+              short_description: '',
+              description: ''
+            },
+            it: {
+              name: '',
+              short_description: '',
+              description: ''
+            },
+            de: {
+              name: '',
+              short_description: '',
+              description: ''
+            },
+          })
+        ],
         school_id: [null],
         station_id: [null],
-        course_dates: [null],
         //Datos en forma de array
-        reserve_date: [[], Validators.required],
-        discounts: [[], Validators.required], //1 flex
+        course_dates: [[], Validators.required],
+        discounts: [null, Validators.required], //1 flex
         unique: [null], //2 flex
         hour_min: [null], //2
         hour_max: [null], //2
@@ -154,7 +206,22 @@ export class CoursesCreateUpdateComponent implements OnInit {
         extras: [[], Validators.required],
         levelGrop: [[], Validators.required],
         categoryPart: [[], Validators.required],
-        settings: [{ "weekDays": { "monday": false, "tuesday": false, "wednesday": false, "thursday": false, "friday": false, "saturday": false, "sunday": false }, "periods": [], "groups": [] }, Validators.required],
+        settings: [
+          JSON.stringify({
+            weekDays:
+            {
+              monday: false,
+              tuesday: false,
+              wednesday: false,
+              thursday: false,
+              friday: false,
+              saturday: false,
+              sunday: false
+            },
+            periods: [],
+            groups: []
+          })
+          , Validators.required],
       });
       if (this.mode === "create") {
         this.loading = false
@@ -170,10 +237,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 data.data.forEach(element => {
                   if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
                 });
-                this.detailData.degrees.forEach(level => {
+                this.detailData.degrees.forEach((level: any) => {
                   level.active = false;
-                  this.detailData.course_dates.forEach(cs => {
-                    cs.course_groups.forEach(group => {
+                  this.detailData.course_dates.forEach((cs: any) => {
+                    cs.course_groups.forEach((group: any) => {
                       if (group.degree_id === level.id) {
                         level.active = true;
                         level.old = true;
@@ -208,9 +275,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
                           date_start_res: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
                           date_end_res: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
                           duration: this.detailData.duration,
-                          reserve_date: this.detailData.course_dates,
+                          course_dates: this.detailData.course_dates,
                           levelGrop: this.detailData.degrees,
-                          settings: JSON.parse(this.detailData.settings),
+                          settings: JSON.stringify(this.detailData.settings),
+                          discounts: JSON.stringify(this.detailData.discounts),
+                          translations: JSON.stringify(this.detailData.translations),
                         })
                         this.getDegrees()
                         this.Confirm(0)
@@ -308,8 +377,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courseFormGroup.controls['course_type'].value === 1
         )
       ) {
-        if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
-          this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate.toUTCString(), hour_start: this.hours[32], Duracion: this.hours[4], date_end: this.nowDate, hour_end: this.hours[36], Semana: [] }] })
+        if (this.courseFormGroup.controls["course_dates"].value.length === 0)
+          this.courseFormGroup.patchValue({ course_dates: [this.default_course_dates] })
         if (this.courseFormGroup.controls["discounts"].value.length === 0) this.courseFormGroup.patchValue({ discounts: [{ day: 2, reduccion: 10 }] })
         this.getDegrees();
       } else {
@@ -339,24 +408,29 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
     }
     else if (this.ModalFlux === 4) {
-      if (!this.courseFormGroup.controls["course_name_es"].value) {
-        this.courseFormGroup.patchValue({
-          course_name_es: this.courseFormGroup.controls["name"].value,
-          summary_es: this.courseFormGroup.controls["short_description"].value,
-          description_es: this.courseFormGroup.controls["description"].value,
-          course_name_fr: this.courseFormGroup.controls["name"].value,
-          summary_fr: this.courseFormGroup.controls["short_description"].value,
-          description_fr: this.courseFormGroup.controls["description"].value,
-          course_name_en: this.courseFormGroup.controls["name"].value,
-          summary_en: this.courseFormGroup.controls["short_description"].value,
-          description_en: this.courseFormGroup.controls["description"].value,
-          course_name_de: this.courseFormGroup.controls["name"].value,
-          summary_de: this.courseFormGroup.controls["short_description"].value,
-          description_de: this.courseFormGroup.controls["description"].value,
-          course_name_it: this.courseFormGroup.controls["name"].value,
-          summary_it: this.courseFormGroup.controls["short_description"].value,
-          description_it: this.courseFormGroup.controls["description"].value,
-        })
+      if (this.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active)) {
+        if (!this.courseFormGroup.controls["course_name_es"].value) {
+          this.courseFormGroup.patchValue({
+            course_name_es: this.courseFormGroup.controls["name"].value,
+            summary_es: this.courseFormGroup.controls["short_description"].value,
+            description_es: this.courseFormGroup.controls["description"].value,
+            course_name_fr: this.courseFormGroup.controls["name"].value,
+            summary_fr: this.courseFormGroup.controls["short_description"].value,
+            description_fr: this.courseFormGroup.controls["description"].value,
+            course_name_en: this.courseFormGroup.controls["name"].value,
+            summary_en: this.courseFormGroup.controls["short_description"].value,
+            description_en: this.courseFormGroup.controls["description"].value,
+            course_name_de: this.courseFormGroup.controls["name"].value,
+            summary_de: this.courseFormGroup.controls["short_description"].value,
+            description_de: this.courseFormGroup.controls["description"].value,
+            course_name_it: this.courseFormGroup.controls["name"].value,
+            summary_it: this.courseFormGroup.controls["short_description"].value,
+            description_it: this.courseFormGroup.controls["description"].value,
+          })
+        }
+      } else {
+
+        this.ModalFlux -= add
       }
     }
     else if (this.ModalFlux === 6) {
@@ -365,7 +439,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
-  find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
+  find = (array: any[], key: string, value: string | boolean) => array.find((a: any) => a[key] === value)
   selectLevel = (event: any, i: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].active = event.target.checked
@@ -384,10 +458,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     if (event.checked || !extras.find((a: any) => a.id === item.id)) this.courseFormGroup.patchValue({ extras: [...extras, item] })
     else this.courseFormGroup.patchValue({ extras: extras.filter((a: any) => a.id !== item.id) })
   }
-  selectAllweek = (event: any) => {
-    const settings = this.courseFormGroup.controls['settings'].value
-    settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
-    this.courseFormGroup.patchValue({ settings })
+  selectWeek = (day: string, event: any) => {
+    const settings = JSON.parse(this.courseFormGroup.controls['settings'].value)
+    if (day === "0") settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
+    else settings.weekDays.day = event.checked
+    this.courseFormGroup.patchValue({ settings: JSON.stringify(settings) })
   }
   createCourse() {
     this.crudService.create('/admin/courses', this.courseFormGroup.getRawValue()).subscribe(() => { },)

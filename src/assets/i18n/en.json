@@ -722,6 +722,8 @@
   "to_pay": "To pay",
   "choose_level_pop": "Choose the levels here. You can assign the monitors at a later time.",
   "edit_level_here": "Edit the levels here.",
+  "choose_atlest_level":"Choose at least one level.",
+
   "details": "Details",
   "legend": "Legend",
   "assigned": "Assigned",

@@ -173,14 +173,14 @@
       </div>
       <ng-container *ngIf="courseFormGroup.controls['course_type'].value===1">
         <div
-          *ngFor="let item of courseFormGroup.controls['reserve_date'].value, index as i">
+          *ngFor="let item of courseFormGroup.controls['course_dates'].value, index as i">
           <div
             style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
             <span>
               {{'Fecha '+ (i+1)| translate}}
             </span>
             <mat-icon *ngIf="i!==0"
-              (click)="courseFormGroup.controls['reserve_date'].value.splice(i,1)"
+              (click)="courseFormGroup.controls['course_dates'].value.splice(i,1)"
               style="cursor: pointer;float: inline-end;">delete</mat-icon>
           </div>
           <div
@@ -192,7 +192,7 @@
               [max]="maxDate"
               [required]="true"
               [min]="minDate"
-              (input)="courseFormGroup.controls['reserve_date'].value[i].date=$event.value">
+              (input)="courseFormGroup.controls['course_dates'].value[i].date=$event.value">
             </app-form-datepicker>
             <mat-form-field appearance="outline">
               <mat-label>{{'hour' | translate}}</mat-label>
@@ -202,7 +202,7 @@
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
-                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].hour_start" />
+                [(ngModel)]="courseFormGroup.controls['course_dates'].value[i].hour_start" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -221,7 +221,7 @@
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
-                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].Duracion" />
+                [(ngModel)]="courseFormGroup.controls['course_dates'].value[i].Duracion" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -238,7 +238,7 @@
           <button
             style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
             type="button"
-            (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: hours[32], Duracion: hours[4] })"
+            (click)="courseFormGroup.controls['course_dates'].value.push(default_course_dates)"
             class="client-button">
             {{'add_date' | translate }}
           </button>
@@ -303,8 +303,8 @@
       </ng-container>
       <ng-container *ngIf="courseFormGroup.controls['course_type'].value>1">
         <mat-tab-group class="tabsWrapper" style="margin: 20px 20px 0;"
-          (selectedIndexChange)="PeriodoFecha=$event;$event===0?courseFormGroup.patchValue({reserve_date:[courseFormGroup.controls['reserve_date'].value[0]]}):''"
-          [selectedIndex]="courseFormGroup.controls['reserve_date'].value.length>1?1:0">
+          (selectedIndexChange)="PeriodoFecha=$event;$event===0?courseFormGroup.patchValue({course_dates:[courseFormGroup.controls['course_dates'].value[0]]}):''"
+          [selectedIndex]="courseFormGroup.controls['course_dates'].value.length>1?1:0">
           <mat-tab>
             <ng-template mat-tab-label>
               {{"courses.uniperiod" | translate}}
@@ -318,7 +318,7 @@
         </mat-tab-group>
         <div style=" display: flex; flex-direction: column;padding: 10px;">
           <div style="display: flex;column-gap: 20px;"
-            *ngFor="let item of courseFormGroup.controls['reserve_date'].value;index as i">
+            *ngFor="let item of courseFormGroup.controls['course_dates'].value;index as i">
             <ng-container *ngIf="PeriodoFecha>0 || i===0">
               <mat-form-field
                 appearance="outline">
@@ -329,7 +329,7 @@
                   [matDatepicker]="date_inicio"
                   [min]="minDate" (click)="date_inicio.open()"
                   [max]="maxDate" readonly
-                  [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date" />
+                  [(ngModel)]="courseFormGroup.controls['course_dates'].value[i].date" />
                 <mat-datepicker-toggle
                   matSuffix
                   [for]="date_inicio"></mat-datepicker-toggle>
@@ -346,7 +346,7 @@
                   [matDatepicker]="date_fin"
                   [min]="minDate" (click)="date_fin.open()"
                   [max]="maxDate" readonly
-                  [(ngModel)]="courseFormGroup.controls['reserve_date'].value[i].date_end" />
+                  [(ngModel)]="courseFormGroup.controls['course_dates'].value[i].date_end" />
                 <mat-datepicker-toggle
                   matSuffix
                   [for]="date_fin"></mat-datepicker-toggle>
@@ -358,8 +358,7 @@
           </div>
           <div *ngIf="PeriodoFecha>0">
             <button
-              (click)="courseFormGroup.controls['reserve_date'].value.push({ date: nowDate, hour_start: hours[32],
-              Duracion: hours[4], date_end: nowDate, hour_end: hours[36], Semana: [] })"
+              (click)="courseFormGroup.controls['course_dates'].value.push(default_course_dates)"
               style="margin-top: 0px !important;height: 38px; width: 200px;"
               mat-button
               type="button"
@@ -372,12 +371,12 @@
             style="display: flex; flex-wrap: wrap;gap: 16px;margin-bottom: 20px;">
             <mat-checkbox
               style="width: calc(25% - 16px);"
-              (change)="selectAllweek($event)">
+              (change)="selectWeek('0',$event)">
               {{"full_day" | translate}}
             </mat-checkbox>
             <mat-checkbox *ngFor="let item of weekSelect"
               style="width: calc(25% - 16px);"
-              [(ngModel)]="courseFormGroup.controls['settings'].value.weekDays[item]">
+              (change)="selectWeek(item,$event)">
               {{item | translate}}
             </mat-checkbox>
           </div>
@@ -390,7 +389,7 @@
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
-                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[0].hour_start" />
+                [(ngModel)]="courseFormGroup.controls['course_dates'].value[0].hour_start" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -410,7 +409,7 @@
                 aria-label="Number"
                 matInput
                 [matAutocomplete]="auto"
-                [(ngModel)]="courseFormGroup.controls['reserve_date'].value[0].hour_end" />
+                [(ngModel)]="courseFormGroup.controls['course_dates'].value[0].hour_end" />
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
@@ -431,13 +430,20 @@
         <div class="level"
           style="width: 100%; height: 100%; padding: 10px; background: #D2EFFF; border-radius: 8px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
           <mat-icon style="color: #006fcb;" class="icon24">info</mat-icon>
-          <div *ngIf="mode==='update'"
-            style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-            {{"edit_level_here" | translate}}
-          </div>
-          <div *ngIf="mode==='create'"
-            style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word;color: black;">
-            {{"choose_level_pop" | translate}}
+          <div>
+            <span *ngIf="mode==='update'"
+              style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word;color: black;">
+              {{"edit_level_here" | translate}}
+            </span>
+            <span *ngIf="mode==='create'"
+              style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word;color: black;">
+              {{"choose_level_pop" | translate}}
+            </span>
+            <span
+              *ngIf="!find(courseFormGroup.controls['levelGrop'].value,'active',true)"
+              style="flex: 1 1 0; font-size: 14px; font-weight: 700; line-height: 18px; word-wrap: break-word;color: red;">
+              {{"choose_atlest_level" | translate}}!
+            </span>
           </div>
         </div>
         <div class="level"

@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import moment from 'moment/moment';
 import { CoursesService } from '../../../../service/courses.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
@@ -130,7 +129,7 @@ export class CourseDetailNewComponent implements OnInit {
                       reserve_from: [this.detailData.date_start, Validators.required],
                       reserve_to: [this.detailData.date_end, Validators.required],
                       duration_min: [this.detailData.duration, Validators.required],
-                      reserve_date: [this.detailData.course_dates, Validators.required],
+                      course_dates: [this.detailData.course_dates, Validators.required],
                       discount: [[], Validators.required],
                       extras: [[], Validators.required],
                       levelGrop: [this.detailData.degrees, Validators.required],

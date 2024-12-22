@@ -305,7 +305,7 @@
         </div>
 
         <div style="width: 100%;"
-            *ngIf="courseFormGroup.controls['reserve_date'].value.length>0">
+            *ngIf="courseFormGroup.controls['course_dates'].value.length>0">
             <div style="display: flex;">
                 <img src="assets/icons/icon/calendar.png" class="icon24">
                 <p>
@@ -313,11 +313,11 @@
                     translate }}
                 </p>
             </div>
-            <p *ngIf="!courseFormGroup.controls['reserve_date'].value"
+            <p *ngIf="!courseFormGroup.controls['course_dates'].value"
                 class="emptyText">
             </p>
             <p
-                *ngFor="let item of courseFormGroup.controls['reserve_date'].value"
+                *ngFor="let item of courseFormGroup.controls['course_dates'].value"
                 style="font-size: 14px;text-align-last: justify;">
                 <span
                     style="color:var(--color-dark1);">{{DateISO(item.date)}}</span>
@@ -354,7 +354,7 @@
                 style="width: 100%; color:var(--color-dark1);font-weight: 400;"
                 *ngFor="let item of week">
                 <ng-container
-                    *ngIf="courseFormGroup.controls['settings'].value.weekDays[item]">
+                    *ngIf="JSONParse(courseFormGroup.controls['settings'].value).weekDays[item]">
                     {{item | translate}}
                 </ng-container>
             </ng-container>

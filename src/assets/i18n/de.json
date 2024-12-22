@@ -722,6 +722,7 @@
   "to_pay": "Zu zahlen",
   "choose_level_pop": "Wählen Sie hier die Stufen aus. Sie können die Monitore später zuweisen.",
   "edit_level_here": "Bearbeiten Sie die Stufen hier.",
+  "choose_atlest_level":"Wähle mindestens eine Stufe aus.",
   "details": "Details",
   "legend": "Legende",
   "assigned": "Zugewiesen",
