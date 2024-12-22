@@ -29,7 +29,7 @@
             <img [src]="item.icon_unselected"
               *ngIf="courseFormGroup.controls['sport_id'].value!==item.sport_id"
               class="sport_icon noselected">
-            {{item.name}}
+            {{item.name | translate}}
           </div>
         </mat-radio-button>
       </mat-radio-group>
@@ -101,7 +101,7 @@
           </app-form-input>
           <app-form-input style="width: calc(50% - 10px);"
             control="max_participants"
-            name="N° max. participantes por grupo"
+            name="max_pax"
             [required]="true"
             type="number"
             [form]="courseFormGroup">

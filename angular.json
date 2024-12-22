@@ -64,7 +64,8 @@
               "rgbcolor",
               "qrcode",
               "moment",
-              "plotly.js-dist-min"
+              "plotly.js-dist-min",
+              "file-saver"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

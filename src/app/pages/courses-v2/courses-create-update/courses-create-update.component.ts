@@ -21,12 +21,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   ModalFlux: number = +this.activatedRoute.snapshot.queryParamMap['params'].step || 0
   ModalProgress: { Name: string, Modal: number }[] = [
-    { Name: "DEPORTE", Modal: 0 },
-    { Name: "DETALLES", Modal: 1 },
-    { Name: "FECHAS", Modal: 2 },
-    { Name: "NIVELES", Modal: 3 },
-    { Name: "EXTRAS", Modal: 4 },
-    { Name: "IDIOMAS", Modal: 5 },
+    { Name: "sport", Modal: 0 },
+    { Name: "details", Modal: 1 },
+    { Name: "dates", Modal: 2 },
+    { Name: "levels", Modal: 3 },
+    { Name: "extras", Modal: 4 },
+    { Name: "langs", Modal: 5 },
   ]
   Translate: { Code: string, Name: string }[] = [
     { Code: "es", Name: "ESPAÑOL" },
