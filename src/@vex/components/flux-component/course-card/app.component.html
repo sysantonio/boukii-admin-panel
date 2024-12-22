@@ -318,7 +318,7 @@
             </p>
             <p
                 *ngFor="let item of courseFormGroup.controls['course_dates'].value"
-                style="font-size: 14px;text-align-last: justify;">
+                style="font-size: 14px;text-align-last: justify;    display: flex            ;                    justify-content: space-between;">
                 <span
                     style="color:var(--color-dark1);">{{DateISO(item.date)}}</span>
                 <span style="color:var(--color-dark1);"
