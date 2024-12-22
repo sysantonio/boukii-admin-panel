@@ -34,20 +34,20 @@ flex-direction: column;">
                     <img src="assets/icons/icon/people.png"
                         class="icon16">
                     <span> {{item.Subgrupo || 0}}g · {{item.PartMax ||
-                        courseFormGroup.controls['participants'].value || 0}}p
+                        courseFormGroup.controls['max_participants'].value ||
+                        0}}p
                     </span>
                     <div style="margin: auto;"></div>
                     <ng-container>
                         <img src="assets/icons/icon/calendar.png"
                             class="icon16">
                         <span>
-                            {{DateDiff(courseFormGroup.controls['reserve_from'].value,courseFormGroup.controls['reserve_to'].value)
-                            || 0}}
-                            días
+                            {{DateDiff(courseFormGroup.controls['date_start'].value,courseFormGroup.controls['date_end'].value)
+                            || 0}} {{'days' | translate}}
                         </span>
                         <span
-                            *ngIf="courseFormGroup.controls['duration_min'].value">
-                            {{courseFormGroup.controls['duration_min'].value ||
+                            *ngIf="courseFormGroup.controls['duration'].value">
+                            {{courseFormGroup.controls['duration'].value ||
                             0}}
                         </span>
                     </ng-container>
@@ -92,7 +92,7 @@ flex-direction: column;">
                                     font-style: normal;
                                     font-weight: 400;
                                     line-height: 16px;">
-                            0/6
+                            0/{{item.Subgrupo}}
                         </span>
                     </div>
 

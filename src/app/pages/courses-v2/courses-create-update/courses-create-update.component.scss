@@ -26,6 +26,11 @@ button {
   }
 }
 
+::ng-deep .mat-expansion-panel-body {
+  background-color: var(--is-light-theme, white)
+    var(--is-dark-theme, var(--color-grey5)) !important;
+}
+
 .tabsWrapper {
   ::ng-deep {
     .mat-mdc-tab {

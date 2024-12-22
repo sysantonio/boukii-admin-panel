@@ -238,7 +238,7 @@
           <button
             style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
             type="button"
-            (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: '08:00', Duracion: 1 })"
+            (click)="courseFormGroup.controls['reserve_date'].value.push({ date:  nowDate, hour_start: hours[32], Duracion: hours[4] })"
             class="client-button">
             {{'add_date' | translate }}
           </button>
@@ -292,7 +292,6 @@
             <button
               (click)="courseFormGroup.controls['discounts'].value.push({ day: 2, reduccion: 10 })"
               style="margin-top: 0px !important;height: 38px;"
-              color="primary"
               mat-button
               type="button"
               class="client-button">
@@ -359,10 +358,9 @@
           </div>
           <div *ngIf="PeriodoFecha>0">
             <button
-              (click)="courseFormGroup.controls['reserve_date'].value.push({ date: nowDate, hour_start: '08:00',
-              Duracion: '01:00', date_end: nowDate, hour_end: '09:00', Semana: [] })"
+              (click)="courseFormGroup.controls['reserve_date'].value.push({ date: nowDate, hour_start: hours[32],
+              Duracion: hours[4], date_end: nowDate, hour_end: hours[36], Semana: [] })"
               style="margin-top: 0px !important;height: 38px; width: 200px;"
-              color="primary"
               mat-button
               type="button"
               class="client-button">
@@ -375,7 +373,7 @@
             <mat-checkbox
               style="width: calc(25% - 16px);"
               (change)="selectAllweek($event)">
-              {{"Cada día" | translate}}
+              {{"full_day" | translate}}
             </mat-checkbox>
             <mat-checkbox *ngFor="let item of weekSelect"
               style="width: calc(25% - 16px);"
@@ -451,6 +449,7 @@
                 [style.backgroundColor]="courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
                 [style.color]="level.color"
                 [style.border]="'1px solid '+level.color"
+                [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].active"
                 (click)="selectLevel($event,i) ">
                 {{level.annotation}} {{level.level}}
               </mat-checkbox>
@@ -467,7 +466,7 @@
                     [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].age_max">
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                  <mat-label>{{'Participante máxima' | translate}}</mat-label>
+                  <mat-label>{{'max_pax' | translate}}</mat-label>
                   <input matInput type="number"
                     [(ngModel)]="courseFormGroup.controls['levelGrop'].value[i].PartMax">
                 </mat-form-field>
@@ -586,7 +585,6 @@
             num_max: this.courseFormGroup.controls['max_participants'].value || 0,
           })"
             style="margin-top: 0px !important;height: 38px;"
-            color="primary"
             mat-button
             type="button"
             class="client-button">
@@ -696,7 +694,6 @@
         *ngIf="ModalFlux>0"
         (click)="ModalFlux=ModalFlux-1"
         style="margin-top: 0px !important;height: 38px; width: 128px;"
-        color="primary"
         mat-button
         type="button"
         class="client-button">
@@ -761,7 +758,6 @@
     </div>
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-      color="primary"
       mat-button
       (click)="extrasModal=false"
       type="button"
@@ -834,7 +830,6 @@
     </div>
     <button
       style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-      color="primary"
       mat-button
       (click)="confirmModal=false"
       type="button"

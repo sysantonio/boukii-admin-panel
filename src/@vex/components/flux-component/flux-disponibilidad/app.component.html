@@ -68,7 +68,7 @@
                 line-height: 16px;background-color: white;">
                     <div class="flexicon">
                         <img src="assets/icons/icon/alumno.png" class="icon24">
-                        ALUMNOS
+                        {{"students" | translate}}
                         <img src="assets/icons/icon/exc.png" class="icon24"
                             style="cursor: pointer; margin-left: auto;margin-right: 10px;"
                             (click)="cambiarModal=true">
@@ -116,7 +116,7 @@
             gap: 16px;">
                 <div class="flexicon">
                     <img src="assets/icons/icon/alumno.png" class="icon24">
-                    ALUMNOS
+                    {{"students" | translate}}
                 </div>
                 <mat-checkbox style="display: flex;"
                     *ngFor="let item of [1,2,3,4]">
@@ -159,8 +159,7 @@
     <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
         <button
             style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-            color="primary"
-            mat-stroked-button
+            mat-button
             type="button" (click)="cambiarModal=false"
             class="client-button">
             {{'cancel' | translate }}

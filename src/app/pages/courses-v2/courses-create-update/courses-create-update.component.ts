@@ -29,11 +29,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     { Name: "langs", Modal: 5 },
   ]
   Translate: { Code: string, Name: string }[] = [
-    { Code: "es", Name: "ESPAÑOL" },
-    { Code: "en", Name: "INGLES" },
-    { Code: "fr", Name: "FRANCÉS" },
-    { Code: "de", Name: "ALEMAN" },
-    { Code: "it", Name: "ITALIANO" },
+    { Code: "es", Name: "Spanish" },
+    { Code: "en", Name: "English" },
+    { Code: "fr", Name: "France" },
+    { Code: "de", Name: "German" },
+    { Code: "it", Name: "Italian" },
   ]
   hours: string[] = [
     '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
@@ -53,8 +53,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
   weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
   PeriodoFecha: number = 0
 
-  minDate = new Date(2000, 1, 1);
   nowDate = new Date()
+  minDate = this.nowDate;
   maxDate = new Date(2099, 12, 31);
 
   courseFormGroup: UntypedFormGroup; //El bueno
@@ -130,10 +130,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
         icon: ["", Validators.required],
         age_max: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
         age_min: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
-        date_start: [null, Validators.required],
-        date_end: [null, Validators.required],
-        date_start_res: [null],
-        date_end_res: [null],
+        date_start: [this.nowDate, Validators.required],
+        date_end: [this.nowDate, Validators.required],
+        date_start_res: [this.nowDate],
+        date_end_res: [this.nowDate],
         duration: [null, Validators.required], //2
         confirm_attendance: [false],
         active: [true],
@@ -309,7 +309,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         )
       ) {
         if (this.courseFormGroup.controls["reserve_date"].value.length === 0)
-          this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate, hour_start: "08:00", Duracion: "01:00", date_end: this.nowDate, hour_end: "09:00", Semana: [] }] })
+          this.courseFormGroup.patchValue({ reserve_date: [{ date: this.nowDate.toUTCString(), hour_start: this.hours[32], Duracion: this.hours[4], date_end: this.nowDate, hour_end: this.hours[36], Semana: [] }] })
         if (this.courseFormGroup.controls["discounts"].value.length === 0) this.courseFormGroup.patchValue({ discounts: [{ day: 2, reduccion: 10 }] })
         this.getDegrees();
       } else {
@@ -393,4 +393,5 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.crudService.create('/admin/courses', this.courseFormGroup.getRawValue()).subscribe(() => { },)
     //this.crudService.update('/admin/courses', this.courseFormGroup.getRawValue(), this.id).subscribe(() => { },)
   }
+
 }

@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ComponenteComponent {
   @Input() control!: string
+  @Input() value: Date = new Date()
   @Input() name!: string
   @Input() form!: FormGroup
   @Input() required: boolean = false

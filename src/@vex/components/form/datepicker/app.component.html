@@ -15,7 +15,8 @@
         matInput
         [matDatepicker]="datepicker"
         [min]="min" (click)="datepicker.open()"
-        (dateInput)="input.emit($event)"
+        (dateInput)="value=$event.value;input.emit($event)"
+        [value]="value"
         [max]="max" readonly />
     <mat-datepicker-toggle
         matSuffix
