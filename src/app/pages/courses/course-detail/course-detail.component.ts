@@ -155,7 +155,7 @@ export class CourseDetailComponent implements OnInit {
   ];
 
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
-    private snackbar: MatSnackBar, private translateService: TranslateService, private sanitizer: DomSanitizer) {
+              private snackbar: MatSnackBar, private translateService: TranslateService, private sanitizer: DomSanitizer) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
     this.id = this.activatedRoute.snapshot.params.id;
@@ -224,11 +224,11 @@ export class CourseDetailComponent implements OnInit {
 
         this.crudService.list('/booking-users', 1, 10000, 'desc', 'id',
           '&course_id='+this.defaults.id, null, null, null, ['client'])
-            .subscribe((result) => {
-              this.courseUsers = result.data;
-              this.loading = false;
+          .subscribe((result) => {
+            this.courseUsers = result.data;
+            this.loading = false;
 
-            })
+          })
 
       })
   }
@@ -731,36 +731,36 @@ export class CourseDetailComponent implements OnInit {
 
   disableActive(level: any) {
     let hasBookings = false;
-      const groupsToDelete = [];
-      this.defaults.course_dates.forEach(element => {
-        element.course_groups.forEach(group => {
-          if (group.degree_id === level.id) {
-            groupsToDelete.push(group.id)
-          }
-        });
-      });
-
-      groupsToDelete.forEach(element => {
-        if (!hasBookings) {
-          this.defaults.course_dates.forEach(cs => {
-            cs.course_groups.forEach(gs => {
-              if (gs.degree_id === level.id) {
-
-                if (groupsToDelete.find((g) => g === gs.id)) {
-                  gs.course_subgroups.forEach(sgs => {
-                    if (sgs.booking_users && sgs.booking_users.length > 0) {
-                      hasBookings = true;
-                    }
-                  });
-                }
-              }
-            });
-          });
+    const groupsToDelete = [];
+    this.defaults.course_dates.forEach(element => {
+      element.course_groups.forEach(group => {
+        if (group.degree_id === level.id) {
+          groupsToDelete.push(group.id)
         }
-
       });
+    });
 
-      return hasBookings;
+    groupsToDelete.forEach(element => {
+      if (!hasBookings) {
+        this.defaults.course_dates.forEach(cs => {
+          cs.course_groups.forEach(gs => {
+            if (gs.degree_id === level.id) {
+
+              if (groupsToDelete.find((g) => g === gs.id)) {
+                gs.course_subgroups.forEach(sgs => {
+                  if (sgs.booking_users && sgs.booking_users.length > 0) {
+                    hasBookings = true;
+                  }
+                });
+              }
+            }
+          });
+        });
+      }
+
+    });
+
+    return hasBookings;
   }
 
   addSubGroup(level: any) {
@@ -836,63 +836,75 @@ export class CourseDetailComponent implements OnInit {
     if(!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
-            courseDate.course_groups.forEach(group => {
-              if (group.degree_id === level.id) {
-                  ret = group.course_subgroups[subGroupIndex]?.monitor;
-              }
-            });
-          }
-        });
-
-        } else {
-          this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
+        if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+          courseDate.course_groups.forEach(group => {
             if (group.degree_id === level.id) {
-              ret = group.course_subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.course_subgroups[subGroupIndex]?.monitor?.last_name;
+              ret = group.course_subgroups[subGroupIndex]?.monitor;
             }
+          });
+        }
+      });
 
+    } else {
+      this.defaults.course_dates[daySelectedIndex].course_groups.forEach(group => {
+        if (group.degree_id === level.id) {
+          ret = group.course_subgroups[subGroupIndex]?.monitor?.first_name + ' ' + group.course_subgroups[subGroupIndex]?.monitor?.last_name;
+        }
+
+      });
+    }
+
+
+    return ret === "undefined undefined" ? null : ret;
+  }
+
+  calculateMonitorLevel(level: any) {
+    let ret = 0;
+    this.defaults.course_dates.forEach(courseDate => {
+      courseDate.course_groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          ret = this.levels.find((l) => l.id === group.teachers_min);
+        }
+      });
+    });
+    return ret;
+  }
+
+  calculateSubGroupPaxes(level: any) {
+    let ret = 0;
+
+    this.defaults.course_dates.forEach(element => {
+      element.course_groups.forEach(group => {
+        if (level.id === group.degree_id) {
+          group.course_subgroups.forEach(subgroup => {
+
+            ret = ret + subgroup.max_participants;
           });
         }
 
-
-      return ret === "undefined undefined" ? null : ret;
-    }
-
-    calculateMonitorLevel(level: any) {
-      let ret = 0;
-      this.defaults.course_dates.forEach(courseDate => {
-        courseDate.course_groups.forEach(group => {
-          if (level.id === group.degree_id) {
-            ret = this.levels.find((l) => l.id === group.teachers_min);
-          }
-        });
       });
-      return ret;
-    }
+    });
 
-    calculateSubGroupPaxes(level: any) {
-      let ret = 0;
-
-      this.defaults.course_dates.forEach(element => {
-        element.course_groups.forEach(group => {
-          if (level.id === group.degree_id) {
-            group.course_subgroups.forEach(subgroup => {
-
-              ret = ret + subgroup.max_participants;
-            });
-          }
-
-        });
-      });
-
-      return ret;
-    }
+    return ret;
+  }
 
   setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
 
-    if (event.isUserInput) {
-      if (daySelectedIndex === 0) {
-        let monitorSet = false;
+    if(!monitor) {
+      this.defaults.course_dates.forEach(courseDate => {
+
+        courseDate.course_groups.forEach(group => {
+          if(group.degree_id === level.id ) {
+
+            group.course_subgroups[subGroupSelectedIndex].monitor_id = null;
+            group.course_subgroups[subGroupSelectedIndex].monitor = null;
+          }
+        });
+      });
+    } else {
+      if (event.isUserInput) {
+        if (daySelectedIndex === 0) {
+          let monitorSet = false;
 
           if (!level.old) {
             this.defaults.course_dates.forEach(courseDate => {
@@ -931,8 +943,8 @@ export class CourseDetailComponent implements OnInit {
                 })
             });
           }
-      } else {
-        let monitorSet = false;
+        } else {
+          let monitorSet = false;
 
           if (!level.old) {
             this.defaults.course_dates.forEach(courseDate => {
@@ -956,8 +968,10 @@ export class CourseDetailComponent implements OnInit {
 
             });
           }
+        }
       }
     }
+
   }
 
   setSubGroupPax(event: any, level: any) {
@@ -1116,7 +1130,7 @@ export class CourseDetailComponent implements OnInit {
       const m = today.getMonth() - birthDate.getMonth();
 
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age--;
+        age--;
       }
 
       return age;
