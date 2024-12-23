@@ -48,8 +48,9 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
   }
 
   create() {
+    let user = JSON.parse(localStorage.getItem('boukiiUser'));
     const data = this.form.value;
-    data.school_id = 1;
+    data.school_id = user.schools[0].id;
     this.crudService.create('/school-salary-levels', data)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_created'), 'OK', {duration: 3000})
@@ -58,8 +59,9 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
   }
 
   update() {
+    let user = JSON.parse(localStorage.getItem('boukiiUser'));
     const data = this.form.value;
-    data.school_id = 1;
+    data.school_id = user.schools[0].id;
     this.crudService.update('/school-salary-levels', data, this.defaults.id)
       .subscribe((data) => {
         this.snackbar.open(this.translateService.instant('snackbar.monitor.salary_updated'), 'OK', {duration: 3000})
