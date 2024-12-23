@@ -45,7 +45,7 @@
           <ng-template mat-tab-label>
             <mat-icon style="color: #E5962A;"
               class="icon16">circle</mat-icon>
-            {{"course_colectiva" | translate}}
+            {{"course_colective" | translate}}
           </ng-template>
         </mat-tab>
         <mat-tab [disabled]="mode==='update'">
@@ -138,7 +138,8 @@
           [required]="true"
           [form]="courseFormGroup"
           [max]="maxDate"
-          [min]="minDate">
+          [min]="minDate"
+          (input)="courseFormGroup.patchValue({date_start_res:$event.value})">
         </app-form-datepicker>
         <app-form-datepicker
           style="width: 100%;"
@@ -147,7 +148,8 @@
           [required]="true"
           [form]="courseFormGroup"
           [max]="maxDate"
-          [min]="minDate">
+          [min]="minDate || courseFormGroup.controls['date_start'].value"
+          (input)="courseFormGroup.patchValue({date_end_res:$event.value})">
         </app-form-datepicker>
         <mat-form-field appearance="outline"
           *ngIf="courseFormGroup.controls['course_type'].value>1">
@@ -654,8 +656,7 @@
         </ng-container>
       </section>
     </div>
-    <div class="flex flex-col" *ngIf="ModalFlux===5"
-      [formGroup]="courseFormGroup">
+    <div class="flex flex-col" *ngIf="ModalFlux===5">
       <mat-accordion>
         <mat-expansion-panel *ngFor="let item of Translate">
           <mat-expansion-panel-header
@@ -669,28 +670,21 @@
             <mat-panel-title> {{item.Name | translate}} </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <mat-form-field appearance="outline"
-              style="width: 100%;margin-top: 10px;">
-              <mat-label>{{'courses.coursename' | translate}}</mat-label>
-              <input id="courseName"
-                [formControlName]="'course_name_'+item.Code"
-                matInput required type="text">
-            </mat-form-field>
-            <div style="margin: 10px 0;">
-              <angular-editor style="display: block !important;" id="summary"
-                style="width: 100%"
-                [placeholder]="'courses.summary' | translate"
-                [formControlName]="'summary_'+item.Code">
-              </angular-editor>
-            </div>
-            <div style="margin: 20px 0;">
-              <angular-editor style="display: block !important;"
-                id="description"
-                style="width: 100%"
-                [placeholder]="'courses.desc' | translate"
-                [formControlName]="'description_'+item.Code">
-              </angular-editor>
-            </div>
+            <app-form-input style="width: 100%;margin-top: 20px;"
+              name="courses.coursename"
+              [required]="true"
+              (input)="courseFormGroup.controls['translations'].value[item.Code].name = $event.value">
+            </app-form-input>
+            <app-form-editor style="margin: 10px 0;"
+              name="courses.summary"
+              [required]="true"
+              (input)="courseFormGroup.controls['translations'].value[item.Code].short_description = $event.value">
+            </app-form-editor>
+            <app-form-editor style="margin: 10px 0;"
+              name="courses.desc"
+              [required]="true"
+              (input)="courseFormGroup.controls['translations'].value[item.Code].description = $event.value">
+            </app-form-editor>
           </ng-template>
         </mat-expansion-panel>
       </mat-accordion>
@@ -846,7 +840,7 @@
       style="margin-top: 0px !important;height: 38px; width: 225px;"
       color="primary"
       mat-raised-button
-      (click)="confirmModal=false;createCourse()"
+      (click)="confirmModal=false;endCourse()"
       type="button"
       class="client-button">
       {{(mode==='create'?'end_create_course':'end_update_course')

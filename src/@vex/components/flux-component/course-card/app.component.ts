@@ -16,7 +16,7 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
 
-  week: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",]
+  week: any[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
   DateISO = (value: string) => value ? new Date(value).toISOString().split("T")[0].replace("-", ".").replace("-", ".") : ''
@@ -29,15 +29,13 @@ export class CourseDetailCardComponent implements OnChanges {
           course_dates[course_dates.length - 1]["hour_end"] === value["hour_end"] &&
           course_dates[course_dates.length - 1]["hour_start"] === value["hour_start"] &&
           new Date(value["date"]).getTime() - new Date(course_dates[course_dates.length - 1]["date_end"]).getTime() === 86400000
-        ) {
-          course_dates[course_dates.length - 1].date_end = value.date
-        } else {
+        ) { } else {
           course_dates.push(value)
-          course_dates[course_dates.length - 1].date_end = value.date
         }
+        course_dates[course_dates.length - 1].date_end = value.date
+
       }
       this.courseFormGroup.patchValue({ course_dates })
     }
   }
-  JSONParse = (v: string) => JSON.parse(v)
 }

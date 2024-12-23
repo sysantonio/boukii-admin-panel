@@ -342,7 +342,7 @@
         <div style="width: 100%; color:var(--color-dark1);font-weight: 400;"
             *ngFor="let item of courseFormGroup.controls['discounts'].value">
             · {{"reduction" | translate}} {{item.reduccion}}%
-            {{"booking" | translate}} {{item.day}} {{"days"}}
+            {{"booking" | translate}} {{item.day}} {{"days" | translate}}
         </div>
         <div *ngIf="courseFormGroup.controls['settings'].value"
             style="color: var(--Dark-01, #222);
@@ -354,7 +354,7 @@
                 style="width: 100%; color:var(--color-dark1);font-weight: 400;"
                 *ngFor="let item of week">
                 <ng-container
-                    *ngIf="JSONParse(courseFormGroup.controls['settings'].value).weekDays[item]">
+                    *ngIf="courseFormGroup.controls['settings'].value.weekDays[item]">
                     {{item | translate}}
                 </ng-container>
             </ng-container>

@@ -1,6 +1,7 @@
-<div style="margin: 10px 0;" [formGroup]="form">
+<div style="margin: 10px 0;" [formGroup]="form" *ngIf="control">
     <angular-editor style="display: block !important;"
-        style="width: 100%" [required]="required"
+        *ngIf="control"
+        style="width: 100%"
         [id]="control"
         (input)="input.emit()"
         placeholder="{{name | translate}}{{required?'*':''}}"
@@ -9,4 +10,12 @@
     <mat-error *ngIf="c[control].touched && c[control].errors">
         {{ getErrorMessage(control) | translate }}
     </mat-error>
+</div>
+
+<div style="margin: 10px 0;" *ngIf="!control">
+    <angular-editor style="display: block !important;"
+        style="width: 100%"
+        (input)="input.emit()"
+        placeholder="{{name | translate}}{{required?'*':''}}">
+    </angular-editor>
 </div>

@@ -130,27 +130,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
         sport_id: [this.sportData[0].sport_id, Validators.required],
         is_flexible: [false,],
         course_type: [null, Validators.required],
-        name: ["", Validators.required],
-        short_description: ["", Validators.required],
-        description: ["", Validators.required],
-        course_name_es: ["", Validators.required],
-        summary_es: ["", Validators.required],
-        description_es: ["", Validators.required],
-        course_name_fr: ["", Validators.required],
-        summary_fr: ["", Validators.required],
-        description_fr: ["", Validators.required],
-        course_name_en: ["", Validators.required],
-        summary_en: ["", Validators.required],
-        description_en: ["", Validators.required],
-        course_name_de: ["", Validators.required],
-        summary_de: ["", Validators.required],
-        description_de: ["", Validators.required],
-        course_name_it: ["", Validators.required],
-        summary_it: ["", Validators.required],
-        description_it: ["", Validators.required],
-        price: [null, [Validators.required, Validators.min(1)]],
+        name: ["PROBANDO", Validators.required],
+        short_description: ["PROBANDO RESUMEN", Validators.required],
+        description: ["PROBANDO DESCRIPCION", Validators.required],
+        price: [100, [Validators.required, Validators.min(1)]],
         currency: [settings?.taxes?.currency || 'CHF'],
-        max_participants: [null, [Validators.required, Validators.min(1)]],
+        max_participants: [10, [Validators.required, Validators.min(1)]],
         image: ["", Validators.required],
         icon: ["", Validators.required],
         age_max: [null, [Validators.required, Validators.min(18), Validators.max(99)]],
@@ -165,7 +150,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         online: [true],
         options: [null],
         translations: [
-          JSON.stringify({
+          {
             es: {
               name: '',
               short_description: '',
@@ -191,13 +176,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
               short_description: '',
               description: ''
             },
-          })
+          }
         ],
         school_id: [null],
         station_id: [null],
         //Datos en forma de array
         course_dates: [[], Validators.required],
-        discounts: [null, Validators.required], //1 flex
+        discounts: [[{ day: 2, reduccion: 10 }], Validators.required], //1 flex
         unique: [null], //2 flex
         hour_min: [null], //2
         hour_max: [null], //2
@@ -207,9 +192,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
         levelGrop: [[], Validators.required],
         categoryPart: [[], Validators.required],
         settings: [
-          JSON.stringify({
-            weekDays:
-            {
+          {
+            weekDays: {
               monday: false,
               tuesday: false,
               wednesday: false,
@@ -220,8 +204,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
             },
             periods: [],
             groups: []
-          })
-          , Validators.required],
+          }
+        ],
       });
       if (this.mode === "create") {
         this.loading = false
@@ -379,7 +363,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
       ) {
         if (this.courseFormGroup.controls["course_dates"].value.length === 0)
           this.courseFormGroup.patchValue({ course_dates: [this.default_course_dates] })
-        if (this.courseFormGroup.controls["discounts"].value.length === 0) this.courseFormGroup.patchValue({ discounts: [{ day: 2, reduccion: 10 }] })
         this.getDegrees();
       } else {
         this.courseFormGroup.markAllAsTouched()
@@ -409,23 +392,36 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
     else if (this.ModalFlux === 4) {
       if (this.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active)) {
-        if (!this.courseFormGroup.controls["course_name_es"].value) {
+        if (!this.courseFormGroup.controls["translations"].value.es.name) {
           this.courseFormGroup.patchValue({
-            course_name_es: this.courseFormGroup.controls["name"].value,
-            summary_es: this.courseFormGroup.controls["short_description"].value,
-            description_es: this.courseFormGroup.controls["description"].value,
-            course_name_fr: this.courseFormGroup.controls["name"].value,
-            summary_fr: this.courseFormGroup.controls["short_description"].value,
-            description_fr: this.courseFormGroup.controls["description"].value,
-            course_name_en: this.courseFormGroup.controls["name"].value,
-            summary_en: this.courseFormGroup.controls["short_description"].value,
-            description_en: this.courseFormGroup.controls["description"].value,
-            course_name_de: this.courseFormGroup.controls["name"].value,
-            summary_de: this.courseFormGroup.controls["short_description"].value,
-            description_de: this.courseFormGroup.controls["description"].value,
-            course_name_it: this.courseFormGroup.controls["name"].value,
-            summary_it: this.courseFormGroup.controls["short_description"].value,
-            description_it: this.courseFormGroup.controls["description"].value,
+            translations:
+            {
+              es: {
+                name: this.courseFormGroup.controls["name"].value,
+                short_description: this.courseFormGroup.controls["short_description"].value,
+                description: this.courseFormGroup.controls["description"].value
+              },
+              en: {
+                name: this.courseFormGroup.controls["name"].value,
+                short_description: this.courseFormGroup.controls["short_description"].value,
+                description: this.courseFormGroup.controls["description"].value
+              },
+              fr: {
+                name: this.courseFormGroup.controls["name"].value,
+                short_description: this.courseFormGroup.controls["short_description"].value,
+                description: this.courseFormGroup.controls["description"].value
+              },
+              it: {
+                name: this.courseFormGroup.controls["name"].value,
+                short_description: this.courseFormGroup.controls["short_description"].value,
+                description: this.courseFormGroup.controls["description"].value
+              },
+              de: {
+                name: this.courseFormGroup.controls["name"].value,
+                short_description: this.courseFormGroup.controls["short_description"].value,
+                description: this.courseFormGroup.controls["description"].value
+              },
+            }
           })
         }
       } else {
@@ -440,6 +436,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   find = (array: any[], key: string, value: string | boolean) => array.find((a: any) => a[key] === value)
+
   selectLevel = (event: any, i: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].active = event.target.checked
@@ -459,14 +456,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
     else this.courseFormGroup.patchValue({ extras: extras.filter((a: any) => a.id !== item.id) })
   }
   selectWeek = (day: string, event: any) => {
-    const settings = JSON.parse(this.courseFormGroup.controls['settings'].value)
-    if (day === "0") settings.weekDays = { "monday": event.checked, "tuesday": event.checked, "wednesday": event.checked, "thursday": event.checked, "friday": event.checked, "saturday": event.checked, "sunday": event.checked }
-    else settings.weekDays.day = event.checked
-    this.courseFormGroup.patchValue({ settings: JSON.stringify(settings) })
+    const settings = this.courseFormGroup.controls['settings'].value
+    if (day === "0") settings.weekDays = { monday: event.checked, tuesday: event.checked, wednesday: event.checked, thursday: event.checked, friday: event.checked, saturday: event.checked, sunday: event.checked }
+    else settings.weekDays[day] = event.checked
+    this.courseFormGroup.patchValue({ settings: settings })
   }
-  createCourse() {
-    this.crudService.create('/admin/courses', this.courseFormGroup.getRawValue()).subscribe(() => { },)
-    //this.crudService.update('/admin/courses', this.courseFormGroup.getRawValue(), this.id).subscribe(() => { },)
+
+  endCourse() {
+    this.mode === "create" ?
+      this.crudService.create('/admin/courses', this.courseFormGroup.getRawValue()).subscribe(() => { })
+      :
+      this.crudService.update('/admin/courses', this.courseFormGroup.getRawValue(), this.id).subscribe(() => { })
   }
 
 }
