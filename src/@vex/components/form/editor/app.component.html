@@ -3,7 +3,7 @@
         style="width: 100%" [required]="required"
         [id]="control"
         (input)="input.emit()"
-        placeholder="{{name | translate}}"
+        placeholder="{{name | translate}}{{required?'*':''}}"
         [formControlName]="control">
     </angular-editor>
     <mat-error *ngIf="c[control].touched && c[control].errors">

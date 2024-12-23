@@ -17,17 +17,18 @@ export class ComponenteInputComponent {
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
-  constructor(private TranslateService: TranslateService) { }
+  constructor(private translateService: TranslateService,) {  }
   getErrorMessage(controlName: string): string {
     const control = this.c[controlName];
     if (control.errors) {
       for (const errorKey in control.errors) {
         if (control.errors.hasOwnProperty(errorKey)) {
           const params = control.errors[errorKey];
-          return this.TranslateService.instant(`errors.${errorKey}`, params);
+          return this.translateService.instant(`errors.${errorKey}`, params);
         }
       }
     }
     return '';
   }
+
 }

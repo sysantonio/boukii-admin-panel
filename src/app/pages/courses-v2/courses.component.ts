@@ -131,7 +131,7 @@ export class CoursesComponent {
                     reserve_from: [this.detailData.date_start, Validators.required],
                     reserve_to: [this.detailData.date_end, Validators.required],
                     duration_min: [this.detailData.duration, Validators.required],
-                    reserve_date: [this.detailData.course_dates, Validators.required],
+                    course_dates: [this.detailData.course_dates, Validators.required],
                     discount: [[], Validators.required],
                     extras: [[], Validators.required],
                     levelGrop: [this.detailData.degrees, Validators.required],

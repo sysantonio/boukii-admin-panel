@@ -14,11 +14,11 @@
   "Modo Oscuro": "Dark Mode",
   "filter_data": "Filter Data",
   "filter_columns": "Filter Columns",
-  "france": "French",
-  "english": "English",
-  "germany": "German",
-  "spanish": "Spanish",
-  "italian": "Italian",
+  "france": "french",
+  "english": "english",
+  "germany": "german",
+  "spanish": "spanish",
+  "italian": "italian",
   "expand_all": "Expand all",
   "collapse_all": "Collapse all",
   "mandatory": "This field is required",
@@ -719,8 +719,18 @@
   "add_extra": "Add extra",
   "add_activity": "Add activity",
   "end_reserve_pay": "Complete reservation and pay",
-  "to_pay": "To pay"
-  ,"choose_level_pop":"Choose the levels here. You can assign the monitors at a later time."
-  ,"edit_level_here":"Edit the levels here."
+  "to_pay": "To pay",
+  "choose_level_pop": "Choose the levels here. You can assign the monitors at a later time.",
+  "edit_level_here": "Edit the levels here.",
+  "choose_atlest_level":"Choose at least one level.",
 
+  "details": "Details",
+  "legend": "Legend",
+  "assigned": "Assigned",
+  "modified": "Modified",
+  "without_monitor": "Without monitor",
+  "present_course_day": "Present on the course day",
+  "student_changed": "Student changed course/level/group",
+  "not_presented": "Not presented",
+  "upcoming_day": "Upcoming day"
 }

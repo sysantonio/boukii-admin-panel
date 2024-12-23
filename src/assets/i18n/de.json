@@ -14,11 +14,11 @@
   "Modo Oscuro": "Dunkler Modus",
   "filter_data": "Daten filtern",
   "filter_columns": "Spalten filtern",
-  "france": "Französisch",
-  "english": "Englisch",
-  "germany": "Deutsch",
-  "spanish": "Spanisch",
-  "italian": "Italienisch",
+  "france": "französisch",
+  "english": "englisch",
+  "germany": "deutsch",
+  "spanish": "spanisch",
+  "italian": "italienisch",
   "expand_all": "Alle erweitern",
   "collapse_all": "Alles einklappen",
   "mandatory": "Dieses Feld ist erforderlich",
@@ -719,8 +719,17 @@
   "add_extra": "Extra hinzufügen",
   "add_activity": "Aktivität hinzufügen",
   "end_reserve_pay": "Buchung abschließen und bezahlen",
-  "to_pay": "Zu zahlen"
-  ,"choose_level_pop":"Wählen Sie hier die Stufen aus. Sie können die Monitore später zuweisen."
-  ,"edit_level_here":"Bearbeiten Sie die Stufen hier."
-
+  "to_pay": "Zu zahlen",
+  "choose_level_pop": "Wählen Sie hier die Stufen aus. Sie können die Monitore später zuweisen.",
+  "edit_level_here": "Bearbeiten Sie die Stufen hier.",
+  "choose_atlest_level":"Wähle mindestens eine Stufe aus.",
+  "details": "Details",
+  "legend": "Legende",
+  "assigned": "Zugewiesen",
+  "modified": "Geändert",
+  "without_monitor": "Ohne Betreuer",
+  "present_course_day": "Am Kurstag anwesend",
+  "student_changed": "Schüler in Kurs/Niveau/Gruppe gewechselt",
+  "not_presented": "Nicht erschienen",
+  "upcoming_day": "Kommender Tag"
 }

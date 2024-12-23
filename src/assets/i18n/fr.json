@@ -14,10 +14,10 @@
   "Modo Oscuro": "Mode Sombre",
   "filter_data": "Filtrer les données",
   "filter_columns": "Filtrer les colonnes",
-  "france": "Français",
-  "english": "Anglais",
-  "germany": "Allemand",
-  "spanish": "Espagnol",
+  "france": "français",
+  "english": "anglais",
+  "germany": "allemand",
+  "spanish": "espagnol",
   "italian": "italien",
   "expand_all": "Développer tout",
   "collapse_all": "Tout réduire",
@@ -717,8 +717,18 @@
   "add_extra": "Ajouter un extra",
   "add_activity": "Ajouter une activité",
   "end_reserve_pay": "Finaliser la réservation et payer",
-  "to_pay": "À payer"
-  ,"choose_level_pop":"Choisissez les niveaux ici. Vous pourrez attribuer les moniteurs ultérieurement."
-  ,"edit_level_here":"Modifiez les niveaux ici."
+  "to_pay": "À payer",
+  "choose_level_pop": "Choisissez les niveaux ici. Vous pourrez attribuer les moniteurs ultérieurement.",
+  "edit_level_here": "Modifiez les niveaux ici.",
+  "choose_atlest_level":"Choisissez au moins un niveau.",
 
+  "details": "Détails",
+  "legend": "Légende",
+  "assigned": "Assigné",
+  "modified": "Modifié",
+  "without_monitor": "Sans moniteur",
+  "present_course_day": "Présent le jour du cours",
+  "student_changed": "Élève changé de cours/niveau/groupe",
+  "not_presented": "Non présenté",
+  "upcoming_day": "Jour à venir"
 }
