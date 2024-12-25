@@ -14,7 +14,9 @@
 
 <div style="margin: 10px 0;" *ngIf="!control">
     <angular-editor style="display: block !important;"
+        [ngModel]="value"
         style="width: 100%"
+        [id]="name"
         (input)="input.emit()"
         placeholder="{{name | translate}}{{required?'*':''}}">
     </angular-editor>

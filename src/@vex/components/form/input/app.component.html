@@ -25,7 +25,9 @@
         [placeholder]="name | translate"
         class="form-control"
         [type]="type"
+        [(ngModel)]="value"
         [required]="required"
         (input)="input.emit()">
+
     <span matTextSuffix *ngIf="Suffix">{{Suffix}}</span>
 </mat-form-field>

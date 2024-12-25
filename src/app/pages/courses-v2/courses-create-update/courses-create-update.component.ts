@@ -183,7 +183,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         //Datos en forma de array
         course_dates: [[], Validators.required],
         discounts: [[{ day: 2, reduccion: 10 }], Validators.required], //1 flex
-        unique: [null], //2 flex
+        unique: [true], //2 flex
         hour_min: [null], //2
         hour_max: [null], //2
         price_range: [null], //3
@@ -261,9 +261,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
                           duration: this.detailData.duration,
                           course_dates: this.detailData.course_dates,
                           levelGrop: this.detailData.degrees,
-                          settings: JSON.stringify(this.detailData.settings),
-                          discounts: JSON.stringify(this.detailData.discounts),
-                          translations: JSON.stringify(this.detailData.translations),
+                          settings: this.detailData.settings,
+                          discounts: this.detailData.discounts,
+                          translations: this.detailData.translations,
                         })
                         this.getDegrees()
                         this.Confirm(0)
@@ -392,6 +392,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
     else if (this.ModalFlux === 4) {
       if (this.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active)) {
+        console.log(this.courseFormGroup.controls["translations"].value.es.name)
         if (!this.courseFormGroup.controls["translations"].value.es.name) {
           this.courseFormGroup.patchValue({
             translations:
@@ -463,10 +464,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   endCourse() {
+    const courseFormGroup = this.courseFormGroup.getRawValue()
+    courseFormGroup.translations = JSON.stringify(this.courseFormGroup.controls['translations'].value)
+    courseFormGroup.settings = JSON.stringify(this.courseFormGroup.controls['settings'].value)
+    courseFormGroup.discounts = JSON.stringify(this.courseFormGroup.controls['discounts'].value)
+
+    if (!courseFormGroup.options) delete courseFormGroup.options;
+
     this.mode === "create" ?
-      this.crudService.create('/admin/courses', this.courseFormGroup.getRawValue()).subscribe(() => { })
+      this.crudService.create('/admin/courses', courseFormGroup).subscribe(() => { })
       :
-      this.crudService.update('/admin/courses', this.courseFormGroup.getRawValue(), this.id).subscribe(() => { })
+      this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe(() => { })
   }
 
 }

@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ComponenteInputComponent {
   @Input() control!: string
+  @Input() value!: string  
   @Input() name!: string
   @Input() type: "number" | "text" | "tel" | "email" = "text"
   @Input() form!: FormGroup

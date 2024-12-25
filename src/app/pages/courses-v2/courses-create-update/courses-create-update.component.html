@@ -673,16 +673,19 @@
             <app-form-input style="width: 100%;margin-top: 20px;"
               name="courses.coursename"
               [required]="true"
+              [value]="courseFormGroup.controls['translations'].value[item.Code].name"
               (input)="courseFormGroup.controls['translations'].value[item.Code].name = $event.value">
             </app-form-input>
             <app-form-editor style="margin: 10px 0;"
               name="courses.summary"
               [required]="true"
+              [value]="courseFormGroup.controls['translations'].value[item.Code].short_description"
               (input)="courseFormGroup.controls['translations'].value[item.Code].short_description = $event.value">
             </app-form-editor>
             <app-form-editor style="margin: 10px 0;"
               name="courses.desc"
               [required]="true"
+              [value]="courseFormGroup.controls['translations'].value[item.Code].description"
               (input)="courseFormGroup.controls['translations'].value[item.Code].description = $event.value">
             </app-form-editor>
           </ng-template>
