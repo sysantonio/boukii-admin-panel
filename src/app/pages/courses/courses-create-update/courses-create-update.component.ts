@@ -2243,6 +2243,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
   }
 
   update() {
+    debugger;
     if (this.defaults.course_type === 2) {
       this.checkStep3PrivateNoFlex();
       this.setDebut(this.defaults.hour_min);
@@ -2341,8 +2342,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.description,
         price: 0,
         currency: this.defaults.currency,
-        date_start: lowestDate,
-        date_end: highestDate,
+        date_start: this.defaults.date_start,
+        date_end: this.defaults.date_end,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
@@ -2383,8 +2384,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         currency: this.defaults.currency,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start: lowestDateP,
-        date_end: highestDateP,
+        date_start: this.defaults.date_start,
+        date_end: this.defaults.date_end,
         active: this.defaults.active,
         online: this.defaults.online,
         options: this.defaults.options,
@@ -2416,8 +2417,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.description,
         price: 0,
         currency: this.defaults.currency,
-        date_start: lowestDate,
-        date_end: highestDate,
+        date_start: this.defaults.date_start,
+        date_end: this.defaults.date_end,
         date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
