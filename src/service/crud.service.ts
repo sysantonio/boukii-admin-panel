@@ -1,5 +1,5 @@
 
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
@@ -45,11 +45,11 @@ export class ApiCrudService extends ApiService {
 
   getAll(url: string) {
     return this.http.get<ApiResponse>(this.baseUrl + url + '/all',
-      { headers: this.getHeaders()});
+      { headers: this.getHeaders() });
   }
 
   list(model: string, numPage: number = 1, perPage: number = 10, order: string = 'desc', orderColumn: string = 'id',
-       search: string = '', exclude: string = '', user: any = null, filter: string = '', relations: any = []): Observable < ApiResponse > {
+    search: string = '', exclude: string = '', user: any = null, filter: string = '', relations: any = []): Observable<ApiResponse> {
 
 
     let relationsParams = '';
@@ -66,23 +66,23 @@ export class ApiCrudService extends ApiService {
   }
 
 
-  login(model: string, data: any): Observable < ApiResponse > {
-    return this.http.post<ApiResponse>(this.baseUrl + model, data, {headers: this.getHeadersLogin()});
+  login(model: string, data: any): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.baseUrl + model, data, { headers: this.getHeadersLogin() });
   }
 
-  recoverPassword(model: string, data: any): Observable < ApiResponse > {
-    return this.http.put<ApiResponse>(this.baseUrl + model, data, {headers: this.getHeadersLogin()});
+  recoverPassword(model: string, data: any): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.baseUrl + model, data, { headers: this.getHeadersLogin() });
   }
 
-  create(model: string, data: any): Observable < ApiResponse > {
+  create(model: string, data: any): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.baseUrl + model, data, { headers: this.getHeaders() });
   }
 
-  post(model: string, data: any): Observable < ApiResponse > {
+  post(model: string, data: any): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.baseUrl + model, data, { headers: this.getHeaders() });
   }
 
-  update(model: string, data: any, id: any): Observable < ApiResponse > {
+  update(model: string, data: any, id: any): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(this.baseUrl + model + '/' + id, data, { headers: this.getHeaders() });
   }
 
@@ -90,24 +90,24 @@ export class ApiCrudService extends ApiService {
     return this.http.post(`${this.baseUrl}${entity}/${id}/restore`, {});
   }
 
-  massiveUpdate(model: string, data: any): Observable < ApiResponse > {
+  massiveUpdate(model: string, data: any): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(this.baseUrl + model + '/multiple', data, { headers: this.getHeaders() });
   }
 
-  delete(model: string, id: number): Observable < ApiResponse > {
+  delete(model: string, id: number): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(this.baseUrl + model + '/' + id, { headers: this.getHeaders() });
   }
 
-  getById(model: string, id: any): Observable < ApiResponse > {
+  getById(model: string, id: any): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.baseUrl + model + '/' + id, { headers: this.getHeaders() });
   }
 
   translateText(text: string, targetLanguage: string): Observable<any> {
-      const params = {
-        'text' : text,
-        'target_lang': targetLanguage
-      }
-    return this.http.post( this.baseUrl + '/translate', params, { headers: this.getHeaders() });
+    const params = {
+      'text': text,
+      'target_lang': targetLanguage
+    }
+    return this.http.post(this.baseUrl + '/translate', params, { headers: this.getHeaders() });
   }
 
 }

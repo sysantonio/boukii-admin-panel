@@ -5,7 +5,7 @@ import { map, forkJoin, mergeMap } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
 import moment from 'moment';
 
@@ -103,8 +103,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       ]
     }
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute,
-    private schoolService: SchoolService,) {
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private schoolService: SchoolService,) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
     this.ModalFlux = +this.activatedRoute.snapshot.queryParamMap['params'].step || 0
@@ -392,7 +391,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
     else if (this.ModalFlux === 4) {
       if (this.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active)) {
-        console.log(this.courseFormGroup.controls["translations"].value.es.name)
         if (!this.courseFormGroup.controls["translations"].value.es.name) {
           this.courseFormGroup.patchValue({
             translations:
@@ -472,9 +470,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
     if (!courseFormGroup.options) delete courseFormGroup.options;
 
     this.mode === "create" ?
-      this.crudService.create('/admin/courses', courseFormGroup).subscribe(() => { })
+      this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
+        console.log(data)
+        if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
+      })
       :
-      this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe(() => { })
+      this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe((data) => {
+        if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
+      })
   }
 
 }

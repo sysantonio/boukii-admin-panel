@@ -9,7 +9,7 @@
         [value]="date.value" [min]="today">
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <p class="caption m-0 opacity-50"><i class="fa fa-calendar"
+    <p class="caption m-0"><i class="fa fa-calendar"
         aria-hidden="true" style="cursor: pointer;" (click)="picker.open()"></i>
       {{ getLocale(date) }}</p>
     <span class="body-2">{{'work_day' | translate }}</span>
