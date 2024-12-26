@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ComponenteInputComponent {
   @Input() control!: string
   @Input() name!: string
+  @Input() value!: string
   @Input() type: "number" | "text" | "date" | "tel" | "email" = "text"
   @Input() form!: FormGroup
   @Input() required: boolean = false
@@ -17,7 +18,7 @@ export class ComponenteInputComponent {
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
-  constructor(private translateService: TranslateService,) {  }
+  constructor(private translateService: TranslateService,) { }
   getErrorMessage(controlName: string): string {
     const control = this.c[controlName];
     if (control.errors) {

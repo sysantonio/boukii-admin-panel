@@ -65,7 +65,9 @@
               "qrcode",
               "moment",
               "plotly.js-dist-min",
-              "file-saver"
+              "file-saver",
+              "lodash/debounce.js",
+              "lodash/throttle.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

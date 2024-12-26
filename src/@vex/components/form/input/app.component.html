@@ -1,4 +1,5 @@
-<mat-form-field appearance="outline" [formGroup]="form">
+<mat-form-field appearance="outline" [formGroup]="form" *ngIf="control"
+    style="margin: 10px 0;">
     <mat-label>{{name | translate}}</mat-label>
     <span matPrefix *ngIf="Prefix">{{Prefix}}</span>
     <input
@@ -14,4 +15,19 @@
     <mat-error *ngIf="c[control].touched && c[control].errors">
         {{ getErrorMessage(control) }}
     </mat-error>
+</mat-form-field>
+
+<mat-form-field appearance="outline" *ngIf="!control" style="margin: 10px 0;">
+    <mat-label>{{name | translate}}</mat-label>
+    <span matPrefix *ngIf="Prefix">{{Prefix}}</span>
+    <input
+        matInput
+        [placeholder]="name | translate"
+        class="form-control"
+        [type]="type"
+        [(ngModel)]="value"
+        [required]="required"
+        (input)="input.emit()">
+
+    <span matTextSuffix *ngIf="Suffix">{{Suffix}}</span>
 </mat-form-field>
