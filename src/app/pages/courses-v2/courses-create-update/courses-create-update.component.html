@@ -165,7 +165,7 @@
           <mat-autocomplete #auto="matAutocomplete"
             [displayWith]="displayFn">
             <mat-option
-              *ngFor="let hour of hours"
+              *ngFor="let hour of duration"
               [value]="hour">
               {{hour}}
             </mat-option>
@@ -227,7 +227,7 @@
               <mat-autocomplete #auto="matAutocomplete"
                 [displayWith]="displayFn">
                 <mat-option
-                  *ngFor="let hour of hours"
+                  *ngFor="let hour of duration"
                   [value]="hour">
                   {{hour}}
                 </mat-option>
@@ -378,6 +378,7 @@
             </mat-checkbox>
             <mat-checkbox *ngFor="let item of weekSelect"
               style="width: calc(25% - 16px);"
+              [(ngModel)]="courseFormGroup.controls['settings'].value.weekDays[item]"
               (change)="selectWeek(item,$event)">
               {{item | translate}}
             </mat-checkbox>
@@ -528,7 +529,9 @@
               <th mat-header-cell *matHeaderCellDef> {{col}} </th>
               <td mat-cell *matCellDef="let row">
                 <mat-form-field appearance="outline" class="flex-auto">
-                  <input class="flex-auto" matInput style="margin-top:3%">
+                  <input class="flex-auto" matInput style="margin-top:3%"
+                    [value]="courseFormGroup.controls['price'].value">
+
                   <span matTextSuffix>CHF</span>
                 </mat-form-field>
               </td>
@@ -840,7 +843,7 @@
       {{'cancel' | translate }}
     </button>
     <button
-      style="margin-top: 0px !important;height: 38px; width: 225px;"
+      style="margin-top: 0px !important;height: 38px; width: 260px;"
       color="primary"
       mat-raised-button
       (click)="confirmModal=false;endCourse()"

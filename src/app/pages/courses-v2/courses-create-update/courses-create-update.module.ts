@@ -87,7 +87,8 @@ import { ComponenteDatePickerModule } from 'src/@vex/components/form/datepicker/
     AngularEditorModule,
     ComponenteInputModule,
     ComponenteEditorModule,
-    ComponenteDatePickerModule
+    ComponenteDatePickerModule,
+    FormsModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]
