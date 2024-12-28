@@ -754,4 +754,6 @@
   "upcoming_day": "Día a venir"
       ,"select_extra":"Seleccionar los extras que pueden ser añadidos haciendo la reserva"
   ,"Category_participant":"Categoría participante"
+  ,"No_durations_found":"No se encontraron duraciones"
+
 }

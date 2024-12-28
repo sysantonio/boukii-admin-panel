@@ -732,5 +732,7 @@
   "not_presented": "Non présenté",
   "upcoming_day": "Jour à venir"
         ,"select_extra":"Sélectionnez les extras qui peuvent être ajoutés lors de la réservation "
-  ,"Category_participant":"Catégorie de participant"
+  ,"Category_participant":"Catégorie de participant" 
+   ,"No_durations_found":"Aucune durée trouvée"
+
 }

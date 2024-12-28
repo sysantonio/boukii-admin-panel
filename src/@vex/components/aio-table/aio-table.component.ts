@@ -61,11 +61,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
   layoutCtrl = new UntypedFormControl('boxed');
-
-  /**
-   * Simulating a service with HTTP that returns Observables
-   * You probably want to remove this and do all requests in a service with HTTP
-   */
   subject$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   data$: Observable<any[]> = this.subject$.asObservable();
   data: any[];
@@ -158,11 +153,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
-  exportTableToExcel(): void {
-    this.excelExportService.exportAsExcelFile(this.dataSource.data, 'YourTableData');
-
-  }
-
+  exportTableToExcel = () => this.excelExportService.exportAsExcelFile(this.dataSource.data, 'YourTableData');
 
   ngOnInit() {
     this.searchCtrl.valueChanges
@@ -170,19 +161,13 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         debounceTime(500), // Espera 300 ms tras cada cambio
         distinctUntilChanged() // Solo dispara si el valor realmente cambia
       )
-      .subscribe((searchValue) => {
+      .subscribe(() => {
         this.pageIndex = 1;
         this.getFilteredData(this.pageIndex, this.pageSize, this.filter);
       });
     this.routeActive.queryParams.subscribe(params => {
-      this.gift = +params['isGift'] || 0; // Valor por defecto
-      if (this.entity.includes('vouchers')) {
-        if (this.gift) {
-          this.filter += '&is_gift=1';
-        } else {
-          this.filter += '&is_gift=0';
-        }
-      }
+      this.gift = +params['isGift'] || 0;
+      if (this.entity.includes('vouchers')) this.filter += this.gift ? '&is_gift=1' : '&is_gift=0';
     });
     this.getLanguages();
     this.getDegrees();
@@ -193,18 +178,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   // Detecta cambios en las propiedades de entrada
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['search']) {
-      this.getFilteredData(1, 99999, this.filter);
-    }
+    if (changes['search']) this.getFilteredData(1, 99999, this.filter);
   }
 
-  getLanguages() {
-    this.crudService.list('/languages', 1, 1000)
-      .subscribe((data) => {
-        this.languages = data.data.reverse();
-
-      })
-  }
+  getLanguages = () => this.crudService.list('/languages', 1, 1000).subscribe((data) => this.languages = data.data.reverse())
 
   onButtonGroupClick($event) {
     let clickedElement = $event.target || $event.srcElement;
@@ -213,9 +190,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
       let isCertainButtonAlreadyActive = clickedElement.parentElement.querySelector(".active");
       // if a Button already has Class: .active
-      if (isCertainButtonAlreadyActive) {
-        isCertainButtonAlreadyActive.classList.remove("active");
-      }
+      if (isCertainButtonAlreadyActive) isCertainButtonAlreadyActive.classList.remove("active");
 
       clickedElement.className += " active";
     }
@@ -247,32 +222,17 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
           if (courseTypes.length > 0) filter = filter + '&course_types[]=' + courseTypes.join('&course_types[]=');
         }
         // Filtrar por estado de pago
-        if (this.bookingPayed && !this.bookingNoPayed) {
-          filter = filter + '&paid=1';
-        } else if (!this.bookingPayed && this.bookingNoPayed) {
-          filter = filter + '&paid=0';
-        }
+        if (this.bookingPayed && !this.bookingNoPayed) filter = filter + '&paid=1';
+        else if (!this.bookingPayed && this.bookingNoPayed) filter = filter + '&paid=0';
+
         // Filtrar por tipo de reserva (individual o múltiple)
-        if (this.reservationTypeSingle && !this.reservationTypeMultiple) {
-          filter = filter + '&isMultiple=0';
-        } else if (!this.reservationTypeSingle && this.reservationTypeMultiple) {
-          filter = filter + '&isMultiple=1';
-        }
+        if (this.reservationTypeSingle && !this.reservationTypeMultiple) filter = filter + '&isMultiple=0';
+        else if (!this.reservationTypeSingle && this.reservationTypeMultiple) filter = filter + '&isMultiple=1';
 
         // Filtrar por estado de finalización
-        if (this.finishedBooking) {
-          filter = filter + '&finished=0';
-        } else {
-          filter = filter + '&finished=1';
-        }
-
-        // Filtrar por todas las reservas
-        if (this.allBookings) {
-          filter = filter + '&all=1';
-        }
-        if (this.cancelledBookings) {
-          filter = filter + '&status=2';
-        }
+        filter = this.finishedBooking ? filter + '&finished=0' : filter + '&finished=1';
+        if (this.allBookings) filter = filter + '&all=1';
+        if (this.cancelledBookings) filter = filter + '&status=2';
 
       }
 
@@ -937,7 +897,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
 
-  getPaymentMethod(id: number) {
+  getPaymentMethod(id: number): string {
     switch (id) {
       case 1:
         return 'CASH';
@@ -951,43 +911,29 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         return 'payment_no_payment';
       case 6:
         return 'bonus';
-
       default:
         return 'payment_no_payment'
     }
   }
 
   calculateFormattedDuration(hourStart: string, hourEnd: string): string {
-    // Parsea las horas de inicio y fin
-    let start = moment(hourStart.replace(': 00', ''), "HH:mm");
-    let end = moment(hourEnd.replace(': 00', ''), "HH:mm");
-
-    // Calcula la duración
-    let duration = moment.duration(end.diff(start));
-
-    // Formatea la duración
+    const start = moment(hourStart.replace(': 00', ''), "HH:mm");
+    const end = moment(hourEnd.replace(': 00', ''), "HH:mm");
+    const duration = moment.duration(end.diff(start));
     let formattedDuration = "";
-    if (duration.hours() > 0) {
-      formattedDuration += duration.hours() + "h ";
-    }
-    if (duration.minutes() > 0) {
-      formattedDuration += duration.minutes() + "m";
-    }
-
+    if (duration.hours() > 0) formattedDuration += duration.hours() + "h ";
+    if (duration.minutes() > 0) formattedDuration += duration.minutes() + "m";
     return formattedDuration.trim();
   }
 
-  countActives(dates: any) {
-    return dates.filter((objeto: any) => objeto.active === 1 || objeto.active === true).length;
-  }
+  countActives = (dates: any): number => dates.filter((objeto: any) => objeto.active === 1 || objeto.active === true).length;
 
-  findFirstActive(dates: any) {
-    if (dates) {
+  findFirstActive(dates: any[]) {
+    if (dates.length > 0) {
       let min = dates.find((objeto: any) => objeto.active === 1 || objeto.active === true);
-      let max = dates.slice().reverse().find(objeto => objeto.active === 1 || objeto.active === true);
+      let max = dates.slice().reverse().find((objeto: any) => objeto.active === 1 || objeto.active === true);
       return { min: min.date, max: max.date }
-    } else
-      return { min: "-", max: "-" }
+    } else return { min: null, max: null }
   }
 
   /* EXPORT QR */
@@ -1105,37 +1051,33 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       })
   }
 
-  getActiveSchool(row: any) {
-    const school = row.find((s) => s.school_id === this.schoolId);
+  getActiveSchool(row: any): boolean {
+    const school = row.find((s: any) => s.school_id === this.schoolId);
     return school?.active_school;
   }
 
   /* END EXPORT QR */
   @Output() searchChange = new EventEmitter<unknown>();
 
-  encontrarPrimeraCombinacionConValores(data: any, course: any) {
-    if (data !== null) {
+  encontrarPrimeraCombinacionConValores(data: any) {
+    if (data) {
       for (const intervalo of data) {
-        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
         if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
           return intervalo;
         }
       }
-      return null; // Devuelve null si no encuentra ninguna combinación válida
-    }
-
+    } return null
   }
 
   encontrarPrimeraClaveConValor(obj: any): any {
-    if (obj !== null) {
+    if (obj) {
       for (const clave of Object.keys(obj)) {
         if (obj[clave] !== null && clave !== 'intervalo') {
           return obj[clave];
         }
       }
-      return null;
     }
-
+    return null;
   }
 
   findHighestDegreeIdElement(data: any) {
@@ -1195,7 +1137,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       const minutes = shortest.minutes();
       return `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'min' : ''}`.trim();
     } else {
-      return "No durations found";
+      return "No_durations_found";
     }
   }
 

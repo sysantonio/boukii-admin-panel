@@ -196,7 +196,7 @@
                       <mat-label>{{'duration' | translate}}</mat-label>
                       <input id="duration" matInput required type="text"
                              placeholder="{{'duration' | translate}}"
-                             [value]="defaults.duration ? defaults.duration : getShortestDuration(defaults?.course_dates)"
+                             [value]="defaults.duration ? defaults.duration : (getShortestDuration(defaults?.course_dates) | translate)"
                              [readonly]="true">
                     </mat-form-field>
                   </div>

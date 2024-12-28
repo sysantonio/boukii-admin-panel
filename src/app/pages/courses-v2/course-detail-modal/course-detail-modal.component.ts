@@ -1369,7 +1369,7 @@ export class CourseDetailModalComponent implements OnInit {
       const minutes = shortest.minutes();
       return `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'min' : ''}`.trim();
     } else {
-      return "No durations found";
+      return "No_durations_found";
     }
   }
 

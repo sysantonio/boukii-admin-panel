@@ -638,7 +638,7 @@
               <strong
                 *ngIf="data[i].is_flexible && (data[i].course_type === 2 || data[i].course_type === 3) && data[i].price_range !== null">{{'from'
                 | translate }} {{
-                encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(data[i].price_range,data[i]))
+                encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(data[i].price_range))
                 }} {{data[i].currency}}</strong>
               <strong
                 *ngIf="data[i].is_flexible && data[i].course_type === 2 && data[i].price_range === null">
@@ -951,7 +951,7 @@
               mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row;let i = index"
               [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] ?
-              row[column.property] : getShortestDuration(data[i]?.course_dates)
+              row[column.property] : (getShortestDuration(data[i]?.course_dates) | translate)
               }}</td>
           </ng-container>
         </ng-container>
