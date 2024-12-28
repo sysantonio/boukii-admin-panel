@@ -17,7 +17,6 @@ import moment from 'moment';
 })
 export class CoursesCreateUpdateComponent implements OnInit {
   dataSource: any;
-  displayedColumns = ['intervalo', ...Array.from({ length: 6 }, (_, i) => `${i + 1}`)];
 
   ModalFlux: number = +this.activatedRoute.snapshot.queryParamMap['params'].step || 0
   ModalProgress: { Name: string, Modal: number }[] = [
@@ -95,7 +94,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
       Semana: [],
       groups: []
     }
-
+  default_activity_groups: { "groupName": string, "ageMin": number, "ageMax": number, "optionName": string, "price": number } =
+    {
+      "groupName": "",
+      "ageMin": 18,
+      "ageMax": 99,
+      "optionName": "",
+      "price": 0
+    }
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private schoolService: SchoolService,) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.id = this.activatedRoute.snapshot.params.id;
@@ -140,7 +146,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         confirm_attendance: [false],
         active: [true],
         online: [true],
-        options: [null],
+        options: [true],
         translations: [
           {
             es: {
@@ -178,11 +184,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
         unique: [true], //2 flex
         hour_min: [this.hours[0]], //2
         hour_max: [this.hours[4]], //2
-        price_range: [null], //3
-
+        price_range: [[]], //2
         extras: [[], Validators.required],
         levelGrop: [[], Validators.required],
-        categoryPart: [[], Validators.required],
         settings: [
           {
             weekDays: {
@@ -195,7 +199,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
               sunday: false
             },
             periods: [],
-            groups: []
+            groups: [
+              this.default_activity_groups
+            ]
           }
         ],
       });
@@ -365,60 +371,71 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.courseFormGroup.controls["date_start"].status === 'VALID' &&
         this.courseFormGroup.controls["date_end"].status === 'VALID'
       ) {
-        if (this.courseFormGroup.controls["categoryPart"].value.length === 0) {
-          this.courseFormGroup.patchValue({
-            categoryPart: [{
-              name: "",
-              age_min: this.courseFormGroup.controls["age_min"].value || 0,
-              age_max: this.courseFormGroup.controls["age_max"].value || 99,
-              num_min: this.courseFormGroup.controls["max_participants"].value || 0,
-              num_max: this.courseFormGroup.controls["max_participants"].value || 99,
-            }]
-          })
-        }
+
+
       } else {
         this.courseFormGroup.markAllAsTouched()
         this.ModalFlux -= add
       }
+      if (this.courseFormGroup.controls['course_type'].value === 2) {
+        this.courseFormGroup.patchValue({
+          price_range: this.generarIntervalos(
+            this.courseFormGroup.controls["max_participants"].value,
+            this.duration.length,
+            this.duration
+          )
+        })
+        console.log(this.courseFormGroup.controls["price_range"].value)
+      }
     }
     else if (this.ModalFlux === 4) {
-      if (this.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active) || this.courseFormGroup.controls['course_type'].value === 2) {
-        if (!this.courseFormGroup.controls["translations"].value.es.name) {
-          this.courseFormGroup.patchValue({
-            translations:
-            {
-              es: {
-                name: this.courseFormGroup.controls["name"].value,
-                short_description: this.courseFormGroup.controls["short_description"].value,
-                description: this.courseFormGroup.controls["description"].value
-              },
-              en: {
-                name: this.courseFormGroup.controls["name"].value,
-                short_description: this.courseFormGroup.controls["short_description"].value,
-                description: this.courseFormGroup.controls["description"].value
-              },
-              fr: {
-                name: this.courseFormGroup.controls["name"].value,
-                short_description: this.courseFormGroup.controls["short_description"].value,
-                description: this.courseFormGroup.controls["description"].value
-              },
-              it: {
-                name: this.courseFormGroup.controls["name"].value,
-                short_description: this.courseFormGroup.controls["short_description"].value,
-                description: this.courseFormGroup.controls["description"].value
-              },
-              de: {
-                name: this.courseFormGroup.controls["name"].value,
-                short_description: this.courseFormGroup.controls["short_description"].value,
-                description: this.courseFormGroup.controls["description"].value
-              },
-            }
-          })
+      if (this.courseFormGroup.controls['course_type'].value === 1) {
+        if (this.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active)) {
+          if (!this.courseFormGroup.controls["translations"].value.es.name) {
+            this.courseFormGroup.patchValue({
+              translations:
+              {
+                es: {
+                  name: this.courseFormGroup.controls["name"].value,
+                  short_description: this.courseFormGroup.controls["short_description"].value,
+                  description: this.courseFormGroup.controls["description"].value
+                },
+                en: {
+                  name: this.courseFormGroup.controls["name"].value,
+                  short_description: this.courseFormGroup.controls["short_description"].value,
+                  description: this.courseFormGroup.controls["description"].value
+                },
+                fr: {
+                  name: this.courseFormGroup.controls["name"].value,
+                  short_description: this.courseFormGroup.controls["short_description"].value,
+                  description: this.courseFormGroup.controls["description"].value
+                },
+                it: {
+                  name: this.courseFormGroup.controls["name"].value,
+                  short_description: this.courseFormGroup.controls["short_description"].value,
+                  description: this.courseFormGroup.controls["description"].value
+                },
+                de: {
+                  name: this.courseFormGroup.controls["name"].value,
+                  short_description: this.courseFormGroup.controls["short_description"].value,
+                  description: this.courseFormGroup.controls["description"].value
+                },
+              }
+            })
+          }
+        } else {
+
+          this.ModalFlux -= add
         }
+      } else if (this.courseFormGroup.controls['course_type'].value === 2) {
+
+      } else if (this.courseFormGroup.controls['course_type'].value === 3) {
+
       } else {
 
         this.ModalFlux -= add
       }
+
     }
     else if (this.ModalFlux === 6) {
       this.ModalFlux--
@@ -477,5 +494,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
       })
   }
-
+  getNumberArray = (num: number): any[] => ['intervalo', ...Array.from({ length: num }, (_, i) => `${i + 1}`)];;
+  generarIntervalos = (personas: number, intervalo: number, duracion: string[]): any[] => {
+    const resultado = [];
+    for (let i = 0; i < intervalo; i++) {
+      const obj = { intervalo: duracion[i] };
+      for (let j = 1; j <= personas; j++) {
+        obj[j] = this.courseFormGroup.controls['price'].value;
+      }
+      resultado.push(obj);
+    }
+    return resultado;
+  }
 }

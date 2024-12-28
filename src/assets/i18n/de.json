@@ -732,4 +732,6 @@
   "student_changed": "Schüler in Kurs/Niveau/Gruppe gewechselt",
   "not_presented": "Nicht erschienen",
   "upcoming_day": "Kommender Tag"
+  ,"select_extra":"Wählen Sie die Extras aus, die bei der Buchung hinzugefügt werden können"
+  ,"Category_participant":"Teilnehmerkategorie"
 }

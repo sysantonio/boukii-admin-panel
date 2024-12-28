@@ -978,14 +978,16 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   countActives(dates: any) {
-    return dates.filter(objeto => objeto.active === 1 || objeto.active === true).length;
+    return dates.filter((objeto: any) => objeto.active === 1 || objeto.active === true).length;
   }
 
   findFirstActive(dates: any) {
-    let min = dates.find(objeto => objeto.active === 1 || objeto.active === true);
-    let max = dates.slice().reverse().find(objeto => objeto.active === 1 || objeto.active === true);
-
-    return { min: min.date, max: max.date }
+    if (dates) {
+      let min = dates.find((objeto: any) => objeto.active === 1 || objeto.active === true);
+      let max = dates.slice().reverse().find(objeto => objeto.active === 1 || objeto.active === true);
+      return { min: min.date, max: max.date }
+    } else
+      return { min: "-", max: "-" }
   }
 
   /* EXPORT QR */

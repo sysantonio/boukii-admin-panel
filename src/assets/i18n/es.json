@@ -752,4 +752,6 @@
   "student_changed": "Alumno cambiado de curso/nivel/grupo",
   "not_presented": "No presentado",
   "upcoming_day": "Día a venir"
+      ,"select_extra":"Seleccionar los extras que pueden ser añadidos haciendo la reserva"
+  ,"Category_participant":"Categoría participante"
 }

@@ -721,8 +721,7 @@
   "to_pay": "Da pagare",
   "choose_level_pop": "Scegli i livelli qui. Potrai assegnare i monitor in un secondo momento.",
   "edit_level_here": "Modifica i livelli qui.",
-  "choose_atlest_level":"Scegli almeno un livello.",
-
+  "choose_atlest_level": "Scegli almeno un livello.",
   "details": "Dettagli",
   "legend": "Legenda",
   "assigned": "Assegnato",
@@ -731,5 +730,7 @@
   "present_course_day": "Presente il giorno del corso",
   "student_changed": "Studente cambiato di corso/livello/gruppo",
   "not_presented": "Non presentato",
-  "upcoming_day": "Giorno a venire"
+  "upcoming_day": "Giorno a venire",
+  "select_extra": "Seleziona gli extra che possono essere aggiunti durante la prenotazione ",
+  "Category_participant": "Categoria partecipante"
 }
