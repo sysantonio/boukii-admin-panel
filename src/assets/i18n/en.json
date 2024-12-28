@@ -736,4 +736,6 @@
     ,"select_extra":"Select the extras that can be added while making the reservation"
   ,"Category_participant":"Participant category"
   ,"No_durations_found":"No durations found"
+  ,  "general_mails": "General emails"
+
 }

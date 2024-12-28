@@ -732,7 +732,7 @@
   "not_presented": "Non presentato",
   "upcoming_day": "Giorno a venire",
   "select_extra": "Seleziona gli extra che possono essere aggiunti durante la prenotazione ",
-  "Category_participant": "Categoria partecipante"
-  ,"No_durations_found":"Nessuna durata trovata"
-
+  "Category_participant": "Categoria partecipante",
+  "No_durations_found": "Nessuna durata trovata",
+  "general_mails": "Email generali"
 }

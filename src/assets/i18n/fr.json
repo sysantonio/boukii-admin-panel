@@ -24,7 +24,7 @@
   "mandatory": "Ce champ est obligatoire",
   "name": "Nom",
   "name_client": "Prénom",
-  "logout": "sortir",
+  "logout": "Sortir",
   "surname": "Nom de famille",
   "mobile": "Mobile",
   "cp": "Code postal",
@@ -734,5 +734,6 @@
         ,"select_extra":"Sélectionnez les extras qui peuvent être ajoutés lors de la réservation "
   ,"Category_participant":"Catégorie de participant" 
    ,"No_durations_found":"Aucune durée trouvée"
+   ,  "general_mails": "Mails généraux"
 
 }
