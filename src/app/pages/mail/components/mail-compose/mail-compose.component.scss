@@ -1,4 +1,9 @@
-$border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Input Border
+$border-color: rgba(
+  82,
+  63,
+  105,
+  0.12
+); // Equal to Material Design Outline Input Border
 
 .vex-mail-compose-editor {
   min-height: 250px;
@@ -27,6 +32,6 @@ $border-color: rgba(82, 63, 105, 0.12); // Equal to Material Design Outline Inpu
 }
 
 .selected-item {
-  border: 1px solid #E01D5F;
-  background-color: #f0f0f4;
+  border: 2px solid #e01d5f;
+  background-color: var(--color-grey3);
 }

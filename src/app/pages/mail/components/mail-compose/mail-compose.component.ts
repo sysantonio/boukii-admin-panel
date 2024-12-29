@@ -26,8 +26,8 @@ export class MailComposeComponent implements OnInit {
   dropdownOpen = false;
   emailType: number = 1;
   emailSend: number = 1;
-  selectedDateFrom: any = null;
-  selectedDateTo: any = null;
+  selectedDateFrom: Date = new Date();
+  selectedDateTo: Date = new Date();
   courses: any = [];
   mailType: any = 'booking_confirm';
   subjectFr: any = '';
@@ -105,6 +105,7 @@ export class MailComposeComponent implements OnInit {
 
   get paginatedCourses() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
+    console.log(this.courses.slice(startIndex, startIndex + this.pageSize))
     return this.courses.slice(startIndex, startIndex + this.pageSize);
   }
 
