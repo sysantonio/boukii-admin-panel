@@ -510,7 +510,8 @@
 						<ng-container *ngFor="let item of [].constructor(courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as i">
 							<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
 								{{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
-								<img (click)="addLevelSubgroup(i,-1)"
+								<img *ngIf="i!==0"
+									(click)="addLevelSubgroup(i,-1)"
 									src="assets/icons/icon/delete.png"
 									alt
 									class="icon20"
@@ -772,69 +773,6 @@
 		card2>
 	</vex-course-detail-card>
 </vex-flux-layout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <vex-flux-modal *ngIf="extrasModal"
 	[width]="670"
 	(Close)="extrasModal=false"
@@ -904,74 +842,12 @@
 		</button>
 	</div>
 </vex-flux-modal>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <vex-flux-modal *ngIf="confirmModal"
 	[width]="670"
 	(Close)="confirmModal=false"
 	title="{{'almost_done' | translate}}">
-	<div body
+	<div [formGroup]="courseFormGroup"
+		body
 		style="display: flex; gap: 20px; flex-wrap: wrap;">
 		<div style="width: 100;
     font-size: 14px;
@@ -982,7 +858,7 @@
       {{'confirm_option' | translate}}:
 		</div>
 		<div style="width: 100%">
-			<mat-slide-toggle [checked]="true">
+			<mat-slide-toggle formControlName="online">
 				<span style="
         font-size: 14px;
         font-weight: 600;
@@ -1002,7 +878,7 @@
 			</mat-slide-toggle>
 		</div>
 		<div style="width: 100%">
-			<mat-slide-toggle [checked]="true">
+			<mat-slide-toggle formControlName="active">
 				<span style="
         font-size: 14px;
         font-weight: 600;

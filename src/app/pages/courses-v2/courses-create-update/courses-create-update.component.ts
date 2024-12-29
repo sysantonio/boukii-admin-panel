@@ -176,7 +176,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
             },
           }
         ],
-        school_id: [null],
+        school_id: [this.user.schools[0].id],
         station_id: [null],
         //Datos en forma de array
         course_dates: [[], Validators.required],
@@ -453,6 +453,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     levelGrop[i].PartMax = this.courseFormGroup.controls['max_participants'].value || 0
     this.courseFormGroup.patchValue({ levelGrop })
     this.addLevelSubgroup(i, 1)
+    console.log(this.courseFormGroup.controls['levelGrop'].value)
   }
   addLevelSubgroup = (i: number, add: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
@@ -477,8 +478,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
     courseFormGroup.settings = JSON.stringify(this.courseFormGroup.controls['settings'].value)
     courseFormGroup.discounts = JSON.stringify(this.courseFormGroup.controls['discounts'].value)
     for (const level of courseFormGroup.levelGrop) {
-      if (courseFormGroup.levelGrop.active) {
-        courseFormGroup.course_dates.groups.push(level)
+      for (const course of courseFormGroup.course_dates) {
+        if (level.active) {
+          const group = { ...level, degree_id: level.id, subgroups: [] }
+          for (const subgroup of [].constructor(level.Subgrupo)) group.subgroups.push({ degree_id: level.id, max_participants: level.PartMax })
+          course.groups.push(group)
+        }
       }
     }
 
@@ -486,7 +491,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     this.mode === "create" ?
       this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
-        console.log(data)
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
       })
       :
@@ -494,6 +498,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
       })
   }
+
   getNumberArray = (num: number): any[] => ['intervalo', ...Array.from({ length: num }, (_, i) => `${i + 1}`)];;
   generarIntervalos = (personas: number, intervalo: number, duracion: string[]): any[] => {
     const resultado = [];
