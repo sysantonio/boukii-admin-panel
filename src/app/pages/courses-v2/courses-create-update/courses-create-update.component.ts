@@ -113,20 +113,20 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
     this.extras = [...extras.food, ...extras.forfait, ...extras.transport]
     this.mode = this.id ? 'update' : 'create';
+    const settings = JSON.parse(this.user.schools[0].settings);
     forkJoin({
-      sportTypes: this.getSportsType(),
+      //sportTypes: this.getSportsType(),
       sports: this.getSports(),
       stations: this.getStations(),
-      monitors: this.getMonitors()
-    }).subscribe(({ sportTypes, sports, stations, monitors }) => {
-      this.sportTypeData = sportTypes;
+      //monitors: this.getMonitors()
+    }).subscribe(({ sports, stations }) => {
+      //this.sportTypeData = sportTypes;
       this.sportData = sports;
       this.stations = stations;
-      this.monitors = monitors;
-      const settings = JSON.parse(this.user.schools[0].settings);
+      //this.monitors = monitors;
       this.courseFormGroup = this.fb.group({
         sport_id: [this.sportData[0].sport_id, Validators.required],
-        is_flexible: [false,],
+        is_flexible: [false],
         course_type: [null, Validators.required],
         name: ["PROBANDO", Validators.required],
         short_description: ["PROBANDO RESUMEN", Validators.required],
@@ -177,7 +177,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
           }
         ],
         school_id: [this.user.schools[0].id],
-        station_id: [null],
+        station_id: [this.stations[0].id],
         //Datos en forma de array
         course_dates: [[], Validators.required],
         discounts: [[{ day: 2, reduccion: 10 }], Validators.required], //1 flex
@@ -302,7 +302,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     return ret;
   }
-  displayFn = (value: any): string => value
   getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
   getMonitors = () => this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(map(data => data.data));
   getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
@@ -448,13 +447,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
   selectLevel = (event: any, i: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].active = event.target.checked
-    levelGrop[i].age_min = this.courseFormGroup.controls['age_min'].value || 0
-    levelGrop[i].age_max = this.courseFormGroup.controls['age_max'].value || 99
-    levelGrop[i].PartMax = this.courseFormGroup.controls['max_participants'].value || 0
-    this.courseFormGroup.patchValue({ levelGrop })
-    this.addLevelSubgroup(i, 1)
-    console.log(this.courseFormGroup.controls['levelGrop'].value)
+    if (event.target.checked) {
+      levelGrop[i].age_min = this.courseFormGroup.controls['age_min'].value
+      levelGrop[i].age_max = this.courseFormGroup.controls['age_max'].value
+      levelGrop[i].PartMax = this.courseFormGroup.controls['max_participants'].value
+      levelGrop[i].Subgrupo = 1
+      this.courseFormGroup.patchValue({ levelGrop })
+    }
   }
+
   addLevelSubgroup = (i: number, add: number) => {
     const levelGrop = this.courseFormGroup.controls['levelGrop'].value
     levelGrop[i].Subgrupo = levelGrop[i].Subgrupo + add
@@ -511,4 +512,5 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
     return resultado;
   }
+
 }

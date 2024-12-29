@@ -1,33 +1,49 @@
-<mat-form-field appearance="outline" [formGroup]="form" *ngIf="control"
-    style="margin: 10px 0;">
-    <mat-label>{{name | translate}}</mat-label>
-    <span matPrefix *ngIf="Prefix">{{Prefix}}</span>
-    <input
-        matInput
-        [id]="control"
-        [placeholder]="name | translate"
-        [formControlName]="control"
-        class="form-control"
-        [type]="type"
-        [required]="required"
-        (input)="input.emit()">
-    <span matTextSuffix *ngIf="Suffix">{{Suffix}}</span>
-    <mat-error *ngIf="c[control].touched && c[control].errors">
-        {{ getErrorMessage(control) }}
-    </mat-error>
+<mat-form-field *ngIf="control"
+	[formGroup]="form"
+	appearance="outline"
+	style="margin: 10px 0;">
+	<mat-label>
+		{{name | translate}}
+	</mat-label>
+	<span *ngIf="Prefix"
+		matPrefix>
+		{{Prefix}}
+	</span>
+	<input [id]="control"
+		[placeholder]="name | translate"
+		[formControlName]="control"
+		[type]="type"
+		[required]="required"
+		(input)="do.emit($event)"
+		matInput
+		class="form-control">
+	<span *ngIf="Suffix"
+		matTextSuffix>
+		{{Suffix}}
+	</span>
+	<mat-error *ngIf="c[control].touched && c[control].errors">
+		{{ getErrorMessage(control) }}
+	</mat-error>
 </mat-form-field>
-
-<mat-form-field appearance="outline" *ngIf="!control" style="margin: 10px 0;">
-    <mat-label>{{name | translate}}</mat-label>
-    <span matPrefix *ngIf="Prefix">{{Prefix}}</span>
-    <input
-        matInput
-        [placeholder]="name | translate"
-        class="form-control"
-        [type]="type"
-        [(ngModel)]="value"
-        [required]="required"
-        (input)="input.emit()">
-
-    <span matTextSuffix *ngIf="Suffix">{{Suffix}}</span>
+<mat-form-field *ngIf="!control"
+	appearance="outline"
+	style="margin: 10px 0;">
+	<mat-label>
+		{{name | translate}}
+	</mat-label>
+	<span *ngIf="Prefix"
+		matPrefix>
+		{{Prefix}}
+	</span>
+	<input [placeholder]="name | translate"
+		[type]="type"
+		[(ngModel)]="value"
+		[required]="required"
+		(input)="do.emit($event)"
+		matInput
+		class="form-control">
+	<span *ngIf="Suffix"
+		matTextSuffix>
+		{{Suffix}}
+	</span>
 </mat-form-field>

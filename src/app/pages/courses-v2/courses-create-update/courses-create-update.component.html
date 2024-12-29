@@ -84,6 +84,14 @@
 					control="name"
 					name="courses.coursename">
 				</app-form-input>
+				<app-form-select [required]="true"
+					[table]="stations"
+					[form]="courseFormGroup"
+					label="station"
+					control="station_id"
+					id="id"
+					name="name">
+				</app-form-select>
 				<app-form-editor [required]="true"
 					[form]="courseFormGroup"
 					control="short_description"
@@ -135,47 +143,34 @@
 				{{'dates' | translate}}
 			</span>
 			<div [formGroup]="courseFormGroup"
-				style="margin: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
+				style="padding: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
 				<app-form-datepicker [required]="true"
 					[form]="courseFormGroup"
 					[max]="maxDate"
 					[min]="minDate"
-					(input)="courseFormGroup.patchValue({date_start_res:$event.value})"
-					style="width: 100%;"
+					(do)="courseFormGroup.patchValue({date_start:$event.value,date_start_res:$event.value});
+					courseFormGroup.controls['date_end'].value<$event.value?courseFormGroup.patchValue({date_end:$event.value,date_end_res:$event.value}):null"
 					control="date_start"
+					style="min-width: 0;width: 100%;"
 					name="courses.date_reservable">
 				</app-form-datepicker>
 				<app-form-datepicker [required]="true"
 					[form]="courseFormGroup"
 					[max]="maxDate"
-					[min]="minDate || courseFormGroup.controls['date_start'].value"
-					(input)="courseFormGroup.patchValue({date_end_res:$event.value})"
-					style="width: 100%;"
+					[min]="courseFormGroup.controls['date_start'].value"
+					(do)="courseFormGroup.patchValue({date_end:$event.value,date_end_res:$event.value})"
 					control="date_end"
+					style="min-width: 0;width: 100%;"
 					name="courses.date_reservable_to">
 				</app-form-datepicker>
-				<mat-form-field *ngIf="courseFormGroup.controls['course_type'].value>1"
-					appearance="outline">
-					<mat-label>
-						{{'courses.dur_min' | translate}}
-					</mat-label>
-					<input [matAutocomplete]="auto"
-						type="text"
-						placeholder="{{'hour' | translate}}"
-						aria-label="Number"
-						matInput
-						required
-						formControlName="duration">
-					<mat-autocomplete #auto="matAutocomplete"
-						[displayWith]="displayFn">
-						<mat-option *ngFor="let hour of duration"
-							[value]="hour">
-							{{hour}}
-						</mat-option>
-					</mat-autocomplete>
-					<mat-icon matSuffix
-						svgIcon="mat:keyboard_arrow_down"></mat-icon>
-				</mat-form-field>
+				<app-form-select *ngIf="courseFormGroup.controls['course_type'].value>1"
+					[required]="true"
+					[table]="duration"
+					[form]="courseFormGroup"
+					label="courses.dur_min"
+					style="min-width: 0;width: 100%;"
+					control="duration">
+				</app-form-select>
 			</div>
 			<ng-container *ngIf="courseFormGroup.controls['course_type'].value===1">
 				<div *ngFor="let item of courseFormGroup.controls['course_dates'].value, index as i">
@@ -189,55 +184,30 @@
 							delete
 						</mat-icon>
 					</div>
-					<div style="margin: 20px 20px 0px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
+					<div style="padding: 20px 20px 0px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
 						<app-form-datepicker [required]="true"
 							[form]="courseFormGroup"
 							[max]="maxDate"
 							[required]="true"
 							[min]="minDate"
-							(input)="courseFormGroup.controls['course_dates'].value[i].date=$event.value"
+							(do)="courseFormGroup.controls['course_dates'].value[i].date=$event.value"
+							style="min-width: 0;width: 100%;"
 							name="date">
 						</app-form-datepicker>
-						<mat-form-field appearance="outline">
-							<mat-label>
-								{{'hour' | translate}}
-							</mat-label>
-							<input [matAutocomplete]="auto"
-								[(ngModel)]="courseFormGroup.controls['course_dates'].value[i].hour_start"
-								type="text"
-								placeholder="{{'hour' | translate}}"
-								aria-label="Number"
-								matInput>
-							<mat-autocomplete #auto="matAutocomplete"
-								[displayWith]="displayFn">
-								<mat-option *ngFor="let hour of hours"
-									[value]="hour">
-									{{hour}}
-								</mat-option>
-							</mat-autocomplete>
-							<mat-icon matSuffix
-								svgIcon="mat:keyboard_arrow_down"></mat-icon>
-						</mat-form-field>
-						<mat-form-field appearance="outline">
-							<mat-label>
-								{{'duration' | translate}}
-							</mat-label>
-							<input [matAutocomplete]="auto"
-								[(ngModel)]="courseFormGroup.controls['course_dates'].value[i].Duracion"
-								type="text"
-								placeholder="{{'duration' | translate}}"
-								aria-label="Number"
-								matInput>
-							<mat-autocomplete #auto="matAutocomplete"
-								[displayWith]="displayFn">
-								<mat-option *ngFor="let hour of duration"
-									[value]="hour">
-									{{hour}}
-								</mat-option>
-							</mat-autocomplete>
-							<mat-icon matSuffix
-								svgIcon="mat:keyboard_arrow_down"></mat-icon>
-						</mat-form-field>
+						<app-form-select [value]="courseFormGroup.controls['course_dates'].value[i].hour_start"
+							[required]="true"
+							[table]="hours"
+							(do)="courseFormGroup.controls['course_dates'].value[i].hour_start=$event.option.value"
+							style="min-width: 0;width: 100%;"
+							label="hour">
+						</app-form-select>
+						<app-form-select [value]="courseFormGroup.controls['course_dates'].value[i].Duracion"
+							[required]="true"
+							[table]="duration"
+							(do)="courseFormGroup.controls['course_dates'].value[i].Duracion=$event.option.value"
+							style="min-width: 0;width: 100%;"
+							label="duration">
+						</app-form-select>
 					</div>
 				</div>
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
@@ -256,38 +226,24 @@
 						</span>
 					</div>
 					<div *ngFor="let item of courseFormGroup.controls['discounts'].value, index as i"
-						style="margin: 0 20px;">
-						<mat-form-field appearance="outline"
-							style="width: calc(49% - 20px);margin-right: 1%;">
-							<mat-label>
-								{{'courses.date_reservable' | translate}}
-							</mat-label>
-							<input [(ngModel)]="courseFormGroup.controls['discounts'].value[i].day"
-								[matAutocomplete]="auto"
-								type="text"
-								placeholder="{{'courses.date_reservable' | translate}}"
-								matInput>
-							<mat-autocomplete #auto="matAutocomplete"
-								[displayWith]="displayFn">
-								<mat-option *ngFor="let day of ndays"
-									[value]="day">
-									{{day}}
-								</mat-option>
-							</mat-autocomplete>
-							<mat-icon matSuffix
-								svgIcon="mat:keyboard_arrow_down"></mat-icon>
-						</mat-form-field>
-						<mat-form-field appearance="outline"
-							style="width: calc(49% - 20px);margin-left:1%;">
-							<mat-label>
-								{{'reduction' | translate}} % (0-100)
-							</mat-label>
-							<input [(ngModel)]="courseFormGroup.controls['discounts'].value[i].reduccion"
-								matInput
-								required
-								type="number">
-							<span matTextSuffix>%</span>
-						</mat-form-field>
+						style="padding: 0 20px;display: flex;flex-wrap: nowrap;gap: 20px;">
+						<app-form-select [value]="courseFormGroup.controls['discounts'].value[i].day"
+							[required]="true"
+							[table]="ndays"
+							(do)="courseFormGroup.controls['discounts'].value[i].day=$event.option.value"
+							style="min-width: 0;width: 100%;"
+							label="courses.date_reservable">
+						</app-form-select>
+						<app-form-input [required]="true"
+							[required]="true"
+							[value]="courseFormGroup.controls['discounts'].value[i].reduccion"
+							(do)="courseFormGroup.controls['discounts'].value[i].reduccion=$event.target.value;"
+							style="width: calc(50% - 10px);"
+							name="reduction"
+							type="number"
+							Suffix="%"
+							style="min-width: 0;width: 100%;">
+						</app-form-input>
 						<mat-icon [style.color]="i===0?'gray':'black'"
 							[style.cursor]="i===0?'':'pointer'"
 							(click)="i>0?courseFormGroup.controls['discounts'].value.splice(i,1):''"
@@ -387,46 +343,18 @@
 						</mat-checkbox>
 					</div>
 					<div style="display: flex;column-gap: 20px;">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								{{'hour' | translate}}
-							</mat-label>
-							<input [matAutocomplete]="auto"
-								[(ngModel)]="courseFormGroup.controls['course_dates'].value[0].hour_start"
-								type="text"
-								placeholder="{{'hour' | translate}}"
-								aria-label="Number"
-								matInput>
-							<mat-autocomplete #auto="matAutocomplete"
-								[displayWith]="displayFn">
-								<mat-option *ngFor="let hour of hours"
-									[value]="hour">
-									{{hour}}
-								</mat-option>
-							</mat-autocomplete>
-							<mat-icon matSuffix
-								svgIcon="mat:keyboard_arrow_down"></mat-icon>
-						</mat-form-field>
-						<mat-form-field appearance="outline">
-							<mat-label>
-								{{'hour' | translate}}
-							</mat-label>
-							<input [matAutocomplete]="auto"
-								[(ngModel)]="courseFormGroup.controls['course_dates'].value[0].hour_end"
-								type="text"
-								placeholder="{{'hour' | translate}}"
-								aria-label="Number"
-								matInput>
-							<mat-autocomplete #auto="matAutocomplete"
-								[displayWith]="displayFn">
-								<mat-option *ngFor="let hour of hours"
-									[value]="hour">
-									{{hour}}
-								</mat-option>
-							</mat-autocomplete>
-							<mat-icon matSuffix
-								svgIcon="mat:keyboard_arrow_down"></mat-icon>
-						</mat-form-field>
+						<app-form-select [value]="courseFormGroup.controls['course_dates'].value[0].hour_start"
+							[required]="true"
+							[table]="hours"
+							(do)="courseFormGroup.controls['course_dates'].value[0].hour_start=$event.option.value"
+							label="hour">
+						</app-form-select>
+						<app-form-select [value]="courseFormGroup.controls['course_dates'].value[0].hour_end"
+							[required]="true"
+							[table]="hours"
+							(do)="courseFormGroup.controls['course_dates'].value[0].hour_end=$event.option.value"
+							label="hour">
+						</app-form-select>
 					</div>
 				</div>
 			</ng-container>
@@ -495,14 +423,14 @@
 								<mat-icon (click)="addLevelSubgroup(i,1)"
 									color="primary"
 									style="color: white;
-                  height: 30px;
-                  min-width: 30px;
-                  border-radius: 15px;
-                  cursor: pointer;
-                  font-size: 30px;
-                  margin: auto;
-                  align-content: space-evenly;
-                  background-color: #E91E63;">
+											height: 30px;
+											min-width: 30px;
+											border-radius: 15px;
+											cursor: pointer;
+											font-size: 30px;
+											margin: auto;
+											align-content: space-evenly;
+											background-color: #E91E63;">
 									add
 								</mat-icon>
 							</ng-container>
@@ -720,19 +648,19 @@
 					<ng-template matExpansionPanelContent>
 						<app-form-input [required]="true"
 							[value]="courseFormGroup.controls['translations'].value[item.Code].name"
-							(input)="courseFormGroup.controls['translations'].value[item.Code].name = $event.value"
+							(do)="courseFormGroup.controls['translations'].value[item.Code].name = $event.target.value"
 							style="width: 100%;margin-top: 20px;"
 							name="courses.coursename">
 						</app-form-input>
 						<app-form-editor [required]="true"
 							[value]="courseFormGroup.controls['translations'].value[item.Code].short_description"
-							(input)="courseFormGroup.controls['translations'].value[item.Code].short_description = $event.value"
+							(do)="courseFormGroup.controls['translations'].value[item.Code].short_description = $event.target.textContent"
 							style="margin: 10px 0;"
 							name="courses.summary">
 						</app-form-editor>
 						<app-form-editor [required]="true"
 							[value]="courseFormGroup.controls['translations'].value[item.Code].description"
-							(input)="courseFormGroup.controls['translations'].value[item.Code].description = $event.value"
+							(do)="courseFormGroup.controls['translations'].value[item.Code].description = $event.target.textContent"
 							style="margin: 10px 0;"
 							name="courses.desc">
 						</app-form-editor>

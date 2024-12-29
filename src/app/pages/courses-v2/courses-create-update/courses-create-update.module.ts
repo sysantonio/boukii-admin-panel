@@ -41,6 +41,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ComponenteInputModule } from "../../../../@vex/components/form/input/app.module";
 import { ComponenteEditorModule } from 'src/@vex/components/form/editor/app.module';
 import { ComponenteDatePickerModule } from 'src/@vex/components/form/datepicker/app.module';
+import { ComponenteSelectModule } from 'src/@vex/components/form/select/app.module';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import { ComponenteDatePickerModule } from 'src/@vex/components/form/datepicker/
     ComponenteInputModule,
     ComponenteEditorModule,
     ComponenteDatePickerModule,
-    FormsModule
+    FormsModule,
+    ComponenteSelectModule
   ],
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]

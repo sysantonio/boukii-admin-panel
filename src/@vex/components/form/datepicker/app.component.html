@@ -1,39 +1,42 @@
-<mat-form-field style="margin: 10px 0;"
-    appearance="outline" *ngIf="control"
-    [formGroup]="form">
-    <mat-label>{{name | translate}}</mat-label>
-    <input
-        matInput
-        [matDatepicker]="datepicker"
-        [min]="min" (click)="datepicker.open()"
-        (dateInput)="input.emit()"
-        [max]="max" readonly
-        [formControlName]="control" />
-    <mat-datepicker-toggle
-        matSuffix
-        [for]="datepicker"></mat-datepicker-toggle>
-    <mat-datepicker
-        #datepicker
-        [startAt]="startAt"></mat-datepicker>
-    <mat-error *ngIf="c[control].touched && c[control].errors">
-        {{ getErrorMessage(control) }}
-    </mat-error>
+<mat-form-field *ngIf="control"
+	[formGroup]="form"
+	style="margin: 10px 0;"
+	appearance="outline">
+	<mat-label>
+		{{name | translate}}
+	</mat-label>
+	<input [matDatepicker]="datepicker"
+		[min]="min"
+		[max]="max"
+		[formControlName]="control"
+		(click)="datepicker.open()"
+		(dateInput)="do.emit($event)"
+		matInput
+		readonly>
+	<mat-datepicker-toggle [for]="datepicker"
+		matSuffix></mat-datepicker-toggle>
+	<mat-datepicker #datepicker
+		[startAt]="startAt"></mat-datepicker>
+	<mat-error *ngIf="c[control].touched && c[control].errors">
+		{{ getErrorMessage(control) }}
+	</mat-error>
 </mat-form-field>
-
-<mat-form-field style="margin: 10px 0;"
-    appearance="outline" *ngIf="!control">
-    <mat-label>{{name | translate}}</mat-label>
-    <input
-        matInput
-        [matDatepicker]="datepicker"
-        [min]="min" (click)="datepicker.open()"
-        (dateInput)="value=$event.value;input.emit($event)"
-        [value]="value"
-        [max]="max" readonly />
-    <mat-datepicker-toggle
-        matSuffix
-        [for]="datepicker"></mat-datepicker-toggle>
-    <mat-datepicker
-        #datepicker
-        [startAt]="startAt"></mat-datepicker>
+<mat-form-field *ngIf="!control"
+	style="margin: 10px 0;"
+	appearance="outline">
+	<mat-label>
+		{{name | translate}}
+	</mat-label>
+	<input [matDatepicker]="datepicker"
+		[min]="min"
+		[value]="value"
+		[max]="max"
+		(click)="datepicker.open()"
+		(dateInput)="value=$event.value;do.emit($event)"
+		matInput
+		readonly>
+	<mat-datepicker-toggle [for]="datepicker"
+		matSuffix></mat-datepicker-toggle>
+	<mat-datepicker #datepicker
+		[startAt]="startAt"></mat-datepicker>
 </mat-form-field>

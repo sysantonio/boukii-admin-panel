@@ -1,23 +1,21 @@
-<div style="margin: 10px 0;" [formGroup]="form" *ngIf="control">
-    <angular-editor style="display: block !important;"
-        *ngIf="control"
-        style="width: 100%"
-        [id]="control"
-        (input)="input.emit()"
-        placeholder="{{name | translate}}{{required?'*':''}}"
-        [formControlName]="control">
-    </angular-editor>
-    <mat-error *ngIf="c[control].touched && c[control].errors">
-        {{ getErrorMessage(control) | translate }}
-    </mat-error>
+<div *ngIf="control"
+	[formGroup]="form"
+	style="margin: 10px 0;">
+	<angular-editor *ngIf="control"
+		[formControlName]="control"
+		(input)="do.emit($event)"
+		style="display: block !important;width: 100%"
+		placeholder="{{name | translate}}{{required?'*':''}}">
+	</angular-editor>
+	<mat-error *ngIf="c[control].touched && c[control].errors">
+		{{ getErrorMessage(control) | translate }}
+	</mat-error>
 </div>
-
-<div style="margin: 10px 0;" *ngIf="!control">
-    <angular-editor style="display: block !important;"
-        [ngModel]="value"
-        style="width: 100%"
-        [id]="name"
-        (input)="input.emit()"
-        placeholder="{{name | translate}}{{required?'*':''}}">
-    </angular-editor>
+<div *ngIf="!control"
+	style="margin: 10px 0;">
+	<angular-editor [ngModel]="value"
+		(input)="do.emit($event)"
+		style="display: block !important;width: 100%"
+		placeholder="{{name | translate}}{{required?'*':''}}">
+	</angular-editor>
 </div>

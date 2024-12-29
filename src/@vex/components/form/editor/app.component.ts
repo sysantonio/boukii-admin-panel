@@ -14,7 +14,7 @@ export class ComponenteInputComponent {
   @Input() type: "number" | "text" | "date" | "tel" | "email" = "text"
   @Input() form!: FormGroup
   @Input() required: boolean = false
-  @Output() input = new EventEmitter()
+  @Output() do = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 

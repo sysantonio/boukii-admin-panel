@@ -16,7 +16,7 @@ export class ComponenteComponent {
   @Input() startAt: Date = new Date()
   @Input() min!: Date
   @Input() max!: Date
-  @Output() input = new EventEmitter()
+  @Output() do = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 

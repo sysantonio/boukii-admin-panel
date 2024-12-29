@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ComponenteInputComponent {
   @Input() control!: string
-  @Input() value!: string  
+  @Input() value!: string
   @Input() name!: string
   @Input() type: "number" | "text" | "tel" | "email" = "text"
   @Input() form!: FormGroup
@@ -17,7 +17,7 @@ export class ComponenteInputComponent {
   @Input() Suffix: string = ""
   @Input() Prefix: string = ""
 
-  @Output() input = new EventEmitter()
+  @Output() do = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
@@ -34,5 +34,4 @@ export class ComponenteInputComponent {
     }
     return '';
   }
-
 }
