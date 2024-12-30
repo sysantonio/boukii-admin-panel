@@ -3614,7 +3614,9 @@ export class BookingDetailComponent implements OnInit {
     return this.bookingUsers.filter((b) => {
       if (group_id) {
         // Filtrar por group_id si se proporciona
-        return b.group_id === group_id;
+        return  (
+          b.course_date_id === dateId && b.group_id === group_id
+        );
       } else {
         // Filtrar por la lógica actual si no se pasa un group_id
         return (
