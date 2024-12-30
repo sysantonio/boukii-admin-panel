@@ -35,9 +35,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-unmatch-monitor.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
+import { EditDateComponent } from './edit-date/edit-date.component';
 
 @NgModule({
-  declarations: [TimelineComponent],
+  declarations: [TimelineComponent, EditDateComponent],
   imports: [
     CommonModule,
     FormsModule,

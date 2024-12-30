@@ -24,6 +24,8 @@ import { FormControl } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { BookingDetailComponent } from '../bookings/booking-detail/booking-detail.component';
+import {UpdateCourseModalComponent} from '../bookings/booking-detail/update-course/update-course.component';
+import {EditDateComponent} from './edit-date/edit-date.component';
 
 moment.locale('fr');
 
@@ -2306,6 +2308,36 @@ export class TimelineComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         this.snackbar.open(this.translateService.instant('snackbar.booking.create'), 'OK', { duration: 3000 });
+      }
+    });
+  }
+
+  editBooking(bookingId = null) {
+    let id = bookingId !== null ? bookingId : this.taskDetail.booking_id;
+
+    const dialogRef = this.dialog.open(EditDateComponent, {
+      width: "60vw",
+      maxWidth: "100vw",
+      panelClass: "full-screen-dialog",
+      data: this.taskDetail
+    });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      if (data) {
+        this.hideDetail();
+        this.hideGrouped();
+        this.loadBookings(this.currentDate);
+        /*          const bookingLog = {
+                    booking_id: this.id,
+                    action: 'update booking',
+                    description: 'update booking',
+                    user_id: this.user.id,
+                    before_change: 'confirmed',
+                    school_id: this.user.schools[0].id
+                  }
+
+                  this.crudService.post('/booking-logs', bookingLog).subscribe(() => {});*/
+
       }
     });
   }
