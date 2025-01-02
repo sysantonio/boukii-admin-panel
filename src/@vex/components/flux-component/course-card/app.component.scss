@@ -13,7 +13,8 @@
   cursor: pointer;
 }
 .cardp {
-  background-color: var(--color-grey5);
+  background-color: var(--is-light-theme, white)
+    var(--is-dark-theme, var(--color-grey5));
   .emptyText {
     background-color: #dee6ea;
     border-radius: 10px;
