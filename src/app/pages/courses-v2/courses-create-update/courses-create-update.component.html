@@ -8,6 +8,7 @@
 </vex-secondary-toolbar>
 <vex-flux-toolbad [Modal]="ModalProgress"
 	[Flux]="ModalFlux"
+	[create]="mode!=='create'"
 	(Check)="ModalFlux=$event;Confirm(0)"></vex-flux-toolbad>
 <vex-flux-layout>
 	<mat-spinner *ngIf="loading"
@@ -213,8 +214,7 @@
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
 					<button (click)="courseFormGroup.controls['course_dates'].value.push(default_course_dates)"
 						style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
-						type="button"
-						class="client-button">
+						type="button">
 						{{'add_date' | translate }}
 					</button>
 				</div>
@@ -226,7 +226,7 @@
 						</span>
 					</div>
 					<div *ngFor="let item of courseFormGroup.controls['discounts'].value, index as i"
-						style="padding: 0 20px;display: flex;flex-wrap: nowrap;gap: 20px;">
+						style="padding: 0 20px;display: flex;flex-wrap: nowrap;gap: 20px; align-items: center;">
 						<app-form-select [value]="courseFormGroup.controls['discounts'].value[i].day"
 							[required]="true"
 							[table]="ndays"
@@ -246,7 +246,7 @@
 						</app-form-input>
 						<mat-icon [style.color]="i===0?'gray':'black'"
 							[style.cursor]="i===0?'':'pointer'"
-							(click)="i>0?courseFormGroup.controls['discounts'].value.splice(i,1):''"
+							(click)="courseFormGroup.controls['discounts'].value.splice(i,1)"
 							class="icon24"
 							style="margin-left: 16px">
 							delete
@@ -256,8 +256,7 @@
 						<button (click)="courseFormGroup.controls['discounts'].value.push({ day: 2, reduccion: 10 })"
 							style="margin-top: 0px !important;height: 38px;"
 							mat-button
-							type="button"
-							class="client-button">
+							type="button">
 							<mat-icon>add</mat-icon>
 							{{'Añadir descuento por fecha' | translate }}
 						</button>
@@ -324,8 +323,7 @@
 						<button (click)="courseFormGroup.controls['course_dates'].value.push(default_course_dates)"
 							style="margin-top: 0px !important;height: 38px; width: 200px;"
 							mat-button
-							type="button"
-							class="client-button">
+							type="button">
 							<mat-icon>add</mat-icon>
 							{{'add_date' | translate }}
 						</button>
@@ -578,8 +576,7 @@
 					<button (click)="courseFormGroup.controls['settings'].value.groups.push(default_activity_groups)"
 						style="margin-top: 0px !important;height: 38px;"
 						mat-button
-						type="button"
-						class="client-button">
+						type="button">
 						<mat-icon>add</mat-icon>
 						{{'Añadir categoria' | translate }}
 					</button>
@@ -673,17 +670,15 @@
 				(click)="ModalFlux=ModalFlux-1"
 				style="margin-top: 0px !important;height: 38px; width: 128px;"
 				mat-button
-				type="button"
-				class="client-button">
+				type="button">
 				<mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
 				{{ (mode === 'create' ? 'back' : 'cancel') | translate }}
 			</button>
-			<button (click)="Confirm(1);"
+			<button (click)="mode==='create'?Confirm(1):endCourse();"
 				style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 				color="primary"
 				mat-raised-button
-				type="button"
-				class="client-button">
+				type="button">
 				{{ (mode==='create'?'confirm':'save') | translate }}
 			</button>
 		</div>
@@ -737,6 +732,7 @@
 				required
 				type="number"
 				formControlName="price">
+			<span matSuffix>€</span>
 		</mat-form-field>
 		<mat-form-field appearance="outline"
 			style="width: calc(50% - 10px)">
@@ -747,6 +743,7 @@
 				required
 				type="number"
 				formControlName="iva">
+			<span matSuffix>%</span>
 		</mat-form-field>
 		<div style="width: 100%">
 			<mat-slide-toggle [checked]="true">
@@ -756,16 +753,14 @@
 		<button (click)="extrasModal=false"
 			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 			mat-button
-			type="button"
-			class="client-button">
+			type="button">
 			{{'cancel' | translate }}
 		</button>
 		<button (click)="extrasModal=false;extras.push(extrasFormGroup.getRawValue());extrasFormGroup.reset()"
 			style="margin-top: 0px !important;height: 38px; width: 128px;"
 			color="primary"
 			mat-raised-button
-			type="button"
-			class="client-button">
+			type="button">
 			{{'create_extras' | translate }}
 		</button>
 	</div>
@@ -828,16 +823,14 @@
 		<button (click)="confirmModal=false"
 			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 			mat-button
-			type="button"
-			class="client-button">
+			type="button">
 			{{'cancel' | translate }}
 		</button>
 		<button (click)="confirmModal=false;endCourse()"
 			style="margin-top: 0px !important;height: 38px; width: 260px;"
 			color="primary"
 			mat-raised-button
-			type="button"
-			class="client-button">
+			type="button">
 			{{(mode==='create'?'end_create_course':'end_update_course')
       | translate }}
 		</button>

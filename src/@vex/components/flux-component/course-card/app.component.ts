@@ -17,6 +17,7 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() edit = new EventEmitter<number>()
 
   week: any[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
   DateISO = (value: string) => value ? new Date(value).toISOString().split("T")[0].replace("-", ".").replace("-", ".") : ''

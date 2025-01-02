@@ -38,6 +38,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     //'00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
     //'02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45',
     //'04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45',
+
     //'06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45',
     '08:00', '08:15', '08:30', '08:45', '09:00', '09:15', '09:30', '09:45',
     '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45',
@@ -50,12 +51,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
     //'22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45',
   ];
   duration: string[] = [
-    //'00:00',
-    '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
-    '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45',
-    '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45',
-    '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45',
-  ];
+    '15min', '30min', '45min', '1h', '1h 15min', '1h 30min', '1h 45min',
+    '2h', '2h 15min', '2h 30min', '2h 45min', '3h', '3h 15min', '3h 30min', '3h 45min',
+    '4h', '4h 15min', '4h 30min', '4h 45min', '5h', '5h 15min', '5h 30min', '5h 45min',
+    '6h', '6h 15min', '6h 30min', '6h 45min', '7h', '7h 15min', '7h 30min', '7h 45min'
+  ]
+    ;
 
   ndays: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
@@ -180,7 +181,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         station_id: [this.stations[0].id],
         //Datos en forma de array
         course_dates: [[], Validators.required],
-        discounts: [[{ day: 2, reduccion: 10 }], Validators.required], //1 flex
+        discounts: [[], Validators.required], //1 flex
         unique: [true], //2 flex
         hour_min: [this.hours[0]], //2
         hour_max: [this.hours[4]], //2
@@ -199,15 +200,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
               sunday: false
             },
             periods: [],
-            groups: [
-              this.default_activity_groups
-            ]
+            groups: [this.default_activity_groups]
           }
         ],
       });
       if (this.mode === "create") {
-        this.loading = false
         this.Confirm(0)
+        this.loading = false
       } else {
         this.crudService.get('/admin/courses/' + this.id,
           ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
@@ -216,7 +215,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
             this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id=' + this.detailData.sport_id)
               .subscribe((data) => {
                 this.detailData.degrees = [];
-                data.data.forEach(element => {
+                data.data.forEach((element: any) => {
                   if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
                 });
                 this.detailData.degrees.forEach((level: any) => {
@@ -232,41 +231,39 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 });
                 this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
                   .subscribe((st) => {
-                    st.data.forEach(element => {
+                    st.data.forEach((element: any) => {
                       if (element.id === this.detailData.station_id) this.detailData.station = element
                     });
-                    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
-                      .subscribe((bookingUser) => {
-                        this.detailData.users = [];
-                        this.detailData.users = bookingUser.data;
-                        this.courseFormGroup.patchValue({
-                          sport_id: this.detailData.sport_id,
-                          course_type: this.detailData.course_type,
-                          name: this.detailData.name,
-                          short_description: this.detailData.short_description,
-                          description: this.detailData.description,
-                          price: this.detailData.price,
-                          currency: this.detailData.currency,
-                          max_participants: this.detailData.max_participants,
-                          image: this.detailData.image,
-                          icon: this.detailData.sport.icon_unselected,
-                          age_max: this.detailData.age_max,
-                          age_min: this.detailData.age_min,
-                          date_start: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
-                          date_end: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
-                          date_start_res: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
-                          date_end_res: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
-                          duration: this.detailData.duration,
-                          course_dates: this.detailData.course_dates,
-                          levelGrop: this.detailData.degrees,
-                          settings: this.detailData.settings,
-                          discounts: this.detailData.discounts,
-                          translations: this.detailData.translations,
-                        })
-                        this.getDegrees()
-                        this.Confirm(0)
-                        this.loading = false
-                      })
+                    //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
+                    //  .subscribe((bookingUser: any) => {                    this.detailData.users = bookingUser.data;
+                    //  })
+                    this.courseFormGroup.patchValue({
+                      sport_id: this.detailData.sport_id,
+                      course_type: this.detailData.course_type,
+                      name: this.detailData.name,
+                      short_description: this.detailData.short_description,
+                      description: this.detailData.description,
+                      price: this.detailData.price,
+                      currency: this.detailData.currency,
+                      max_participants: this.detailData.max_participants,
+                      image: this.detailData.image,
+                      icon: this.detailData.sport.icon_unselected,
+                      age_max: this.detailData.age_max,
+                      age_min: this.detailData.age_min,
+                      date_start: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
+                      date_end: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
+                      date_start_res: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
+                      date_end_res: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
+                      duration: this.detailData.duration,
+                      course_dates: this.detailData.course_dates,
+                      levelGrop: this.detailData.degrees,
+                      settings: this.detailData.settings,
+                      discounts: this.detailData.discounts,
+                      translations: this.detailData.translations,
+                    })
+                    this.getDegrees()
+                    this.Confirm(0)
+                    setTimeout(() => this.loading = false, 0);
                   })
               });
           })
@@ -279,10 +276,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         iva: ["", Validators.required],
         status: ["", Validators.required],
       })
-      this.schoolService.getSchoolData()
-        .subscribe((data) => {
-          this.schoolData = data.data;
-        })
+      this.schoolService.getSchoolData().subscribe((data) => { this.schoolData = data.data })
     });
   }
 
@@ -377,14 +371,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.ModalFlux -= add
       }
       if (this.courseFormGroup.controls['course_type'].value === 2) {
-        this.courseFormGroup.patchValue({
-          price_range: this.generarIntervalos(
-            this.courseFormGroup.controls["max_participants"].value,
-            this.duration.length,
-            this.duration
-          )
-        })
-        console.log(this.courseFormGroup.controls["price_range"].value)
+        let Range = this.generarIntervalos(
+          this.courseFormGroup.controls["max_participants"].value,
+          this.duration.length,
+          this.duration
+        )
+        const settings = JSON.parse(this.user.schools[0].settings);
+        for (const range in settings.prices_range.prices) Range[range] = { ...Range[range], ...settings.prices_range.prices[range] }
+        this.courseFormGroup.patchValue({ price_range: Range })
       }
     }
     else if (this.ModalFlux === 4) {
@@ -476,13 +470,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
   endCourse() {
     const courseFormGroup = this.courseFormGroup.getRawValue()
     courseFormGroup.translations = JSON.stringify(this.courseFormGroup.controls['translations'].value)
-    courseFormGroup.settings = JSON.stringify(this.courseFormGroup.controls['settings'].value)
+    courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courseFormGroup.controls['settings'].value)
     courseFormGroup.discounts = JSON.stringify(this.courseFormGroup.controls['discounts'].value)
     for (const level of courseFormGroup.levelGrop) {
       for (const course of courseFormGroup.course_dates) {
         if (level.active) {
           const group = { ...level, degree_id: level.id, subgroups: [] }
-          for (const subgroup of [].constructor(level.Subgrupo)) group.subgroups.push({ degree_id: level.id, max_participants: level.PartMax })
+          for (const subgroup of [].constructor(level.Subgrupo))
+            group.subgroups.push({ degree_id: level.id, max_participants: level.PartMax })
           course.groups.push(group)
         }
       }
@@ -505,9 +500,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const resultado = [];
     for (let i = 0; i < intervalo; i++) {
       const obj = { intervalo: duracion[i] };
-      for (let j = 1; j <= personas; j++) {
-        obj[j] = this.courseFormGroup.controls['price'].value;
-      }
+      for (let j = 1; j <= personas; j++) obj[j] = 0
       resultado.push(obj);
     }
     return resultado;

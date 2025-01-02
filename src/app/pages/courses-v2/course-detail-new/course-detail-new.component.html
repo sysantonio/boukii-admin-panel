@@ -1,234 +1,250 @@
 <vex-secondary-toolbar current>
-  <vex-breadcrumbs [crumbs]="[
+	<vex-breadcrumbs [crumbs]="[
     {icon:'cursos'},
     {text:'courses.title', title: true, link: '/courses'},
     {text: ('Curso #'+('00000'+id).slice(-5)), subtitle: true}
-  ]" class="flex"></vex-breadcrumbs>
+  ]"
+		class="flex"></vex-breadcrumbs>
 </vex-secondary-toolbar>
 
 <div class="flex flex-col sm:flex-row gap-4"
-  style="width: 100%; float: left;">
-  <div class="card flex-auto">
-    <mat-tab-group class="tabsWrapper">
-      <mat-tab label="{{'course' | translate}}">
-        <mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
-        <mat-card *ngIf="!loading">
-          <mat-card-content style="display: flex;padding: 0;">
-            <div class="contents" style="border: 1px solid #dee6ea;"
-              [style.width]="count(courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'">
-              <div style="border-bottom: 1px solid #dee6ea;">
-                <div style="width: calc(50% - 10px);">
-                  <mat-slide-toggle [checked]="true">
-                    <span style="
+	style="width: 100%; float: left;">
+	<div class="card flex-auto">
+		<mat-tab-group class="tabsWrapper">
+			<mat-tab label="{{'course' | translate}}">
+				<mat-spinner *ngIf="loading"
+					style="margin: 0 auto"></mat-spinner>
+				<mat-card *ngIf="!loading">
+					<mat-card-content style="display: flex;padding: 0;">
+						<div [style.width]="count(courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'"
+							class="contents"
+							style="border: 1px solid #dee6ea;">
+							<div style="border-bottom: 1px solid #dee6ea;">
+								<div style="width: calc(50% - 10px);">
+									<mat-slide-toggle [checked]="courseFormGroup.controls['online'].value"
+										disabled>
+										<span style="
                       color: #222222;
                       font-size: 14px;
                       font-weight: 600;
                       line-height: 18px;
                       word-wrap: break-word">
-                      {{"Visible en la página de reservas" | translate}}
-                    </span>
-                    <br>
-                    <span style="
+											{{"Visible en la página de reservas" | translate}}
+										</span>
+										<br>
+										<span style="
                       color: var(--color-dark1);
                       font-size: 12px;
                       font-weight: 400;
                       line-height: 16px;
                       word-wrap: break-word">
-                      {{"El curso serà visible y online desde ahora" |
+											{{"El curso serà visible y online desde ahora" |
                       translate}}
-                    </span>
-                  </mat-slide-toggle>
-                </div>
-                <div style="width: calc(50% - 10px)">
-                  <mat-slide-toggle [checked]="true">
-                    <span style="
+										</span>
+									</mat-slide-toggle>
+								</div>
+								<div style="width: calc(50% - 10px)">
+									<mat-slide-toggle [checked]="courseFormGroup.controls['active'].value"
+										disabled>
+										<span style="
                       color: #222222;
                       font-size: 14px;
                       font-weight: 600;
                       line-height: 18px;
                       word-wrap: break-word">
-                      {{'active' | translate}}
-                    </span>
-                    <br>
-                    <span style="
+											{{'active' | translate}}
+										</span>
+										<br>
+										<span style="
                       color: var(--color-dark1);
                       font-size: 12px;
                       font-weight: 400;
                       line-height: 16px;
                       word-wrap: break-word">
-                      {{"El curso es activo y reservable" | translate}}
-                    </span>
-                  </mat-slide-toggle>
-                </div>
-                <div>
-                  <button
-                    style="margin-top: 0px !important;height: 38px; width: 140px;margin-left: auto;"
-                    color="primary"
-                    mat-stroked-button
-                    type="button" (click)="sendEmailModal=true"
-                    class="client-button">
-                    <mat-icon>mail</mat-icon>
-                    {{'Mandar mail' | translate }}
-                  </button>
-                </div>
-              </div>
-              <div style="padding: 0;border: none;">
-                <vex-course-detail-card style="width: 100%"
-                  [courseFormGroup]="courseFormGroup" [detail]="true"
-                  (edit)="goTo('courses/update/'+id,{step:$event})">
-                </vex-course-detail-card>
-              </div>
-            </div>
-            <div class="contents">
-              <div
-                *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
-                <div
-                  style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">
-                  <div style="width: 100%;">
-                    <p style="
+											{{"El curso es activo y reservable" | translate}}
+										</span>
+									</mat-slide-toggle>
+								</div>
+								<div>
+									<button (click)="sendEmailModal=true"
+										style="margin-top: 0px !important;height: 38px; width: 140px;margin-left: auto; color: black;"
+										mat-stroked-button
+										type="button"
+										class="client-button">
+										<mat-icon>mail</mat-icon>
+										{{'Mandar mail' | translate }}
+									</button>
+								</div>
+							</div>
+							<div style="padding: 0;border: none;">
+								<vex-course-detail-card [courseFormGroup]="courseFormGroup"
+									[detail]="true"
+									(edit)="goTo('courses/update/'+id,{step:$event})"
+									style="width: 100%">
+								</vex-course-detail-card>
+							</div>
+						</div>
+						<div class="contents">
+							<div *ngIf="count(courseFormGroup.controls['levelGrop'].value,'active')">
+								<div style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;align-content: flex-start;">
+									<div style="width: 100%;">
+										<p style="
                     color: var(--color-dark1);
                     font-size: 12px;
                     font-weight: 600;
                     line-height: 16px;
-                    word-wrap: break-word"> {{'GRUPOS' | translate }}
-                      <img src="assets/icons/icon/edit2.png" alt
-                        (click)="goTo('courses/update/'+id,{step:3})"
-                        class="editbutton icon24">
-                    </p>
-                  </div>
-                  <vex-course-detail-nivel style="width: 100%;"
-                    [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
-                </div>
-              </div>
-              <div
-                *ngIf="!count(courseFormGroup.controls['levelGrop'].value,'active')">
-                <div class="cardgroup">
-                  <div
-                    style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
-                    <div style="width: 100%;">
-                      <p> {{'extras' | translate }}
-                        <img src="assets/icons/icon/edit2.png" alt
-                          (click)="goTo('courses/update/'+id,{step:4})"
-                          class="editbutton icon24">
-                      </p>
-                    </div>
-                    <ng-container
-                      *ngFor="let item of courseFormGroup.controls['extras'].value">
-                      <div style="width: 100%; display: flex;">
-                        <span style="
-                            color: #222222;
-                             font-size: 14px;
-                             font-weight: 600;
-                             line-height: 18px;
-                             word-wrap: break-word">
-                          {{item.name.slice(0,20)}}
-                        </span>
-                        <span style="
-                            color: #222222;
-                             font-size: 14px;
-                             font-weight: 300;
-                             line-height: 18px;
-                             word-wrap: break-word;
-                             margin-left: auto;">
-                          {{item.price || 0}} CHF/día
-                        </span>
-                      </div>
-                    </ng-container>
-                    <ng-container
-                      *ngIf="courseFormGroup.controls['extras'].value.length===0">
-                      <div>
-                        <button
-                          style="margin-top: 0px !important;"
-                          color="primary"
-                          mat-button
-                          type="button"
-                          class="client-button">
-                          <mat-icon>add</mat-icon>
-                          {{'add_extra' | translate }}
-                        </button>
-                      </div>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-tab>
-      <mat-tab label="{{'bookings' | translate}}">
-      </mat-tab>
-      <mat-tab label="{{'menu.stats' | translate}}">
-      </mat-tab>
-    </mat-tab-group>
-  </div>
+                    word-wrap: break-word">
+											{{'GRUPOS' | translate }}
+											<img (click)="goTo('courses/update/'+id,{step:3})"
+												src="assets/icons/icon/edit2.png"
+												alt
+												class="editbutton icon24">
+										</p>
+									</div>
+									<vex-course-detail-nivel [courseFormGroup]="courseFormGroup"
+										style="width: 100%;"></vex-course-detail-nivel>
+								</div>
+							</div>
+							<div *ngIf="!count(courseFormGroup.controls['levelGrop'].value,'active')">
+								<div class="cardgroup">
+									<div style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+										<div style="width: 100%;">
+											<p>
+												{{'extras' | translate }}
+												<img (click)="goTo('courses/update/'+id,{step:4})"
+													src="assets/icons/icon/edit2.png"
+													alt
+													class="editbutton icon24">
+											</p>
+										</div>
+										<ng-container *ngIf="courseFormGroup.controls['extras'].value">
+											<div *ngFor="let item of courseFormGroup.controls['extras'].value"
+												style="width: 100%; display: flex;">
+												<span style="
+															color: #222222;
+															font-size: 14px;
+															font-weight: 600;
+															line-height: 18px;
+															word-wrap: break-word">
+													{{item.name.slice(0,20)}}
+												</span>
+												<span style="
+																color: #222222;
+																font-size: 14px;
+																font-weight: 300;
+																line-height: 18px;
+																word-wrap: break-word;
+																margin-left: auto;">
+													{{item.price || 0}} CHF/día
+												</span>
+											</div>
+										</ng-container>
+										<ng-container *ngIf="courseFormGroup.controls['extras'].value.length===0">
+											<div>
+												<button style="margin-top: 0px !important;"
+													mat-button
+													type="button"
+													class="client-button">
+													<mat-icon>add</mat-icon>
+													{{'add_extra' | translate }}
+												</button>
+											</div>
+										</ng-container>
+									</div>
+								</div>
+							</div>
+						</div>
+					</mat-card-content>
+				</mat-card>
+			</mat-tab>
+			<mat-tab label="{{'bookings' | translate}}"></mat-tab>
+			<mat-tab label="{{'menu.stats' | translate}}"></mat-tab>
+		</mat-tab-group>
+	</div>
 </div>
-<vex-flux-modal *ngIf="sendEmailModal" title="Mandar mail"
-  (Close)="sendEmailModal=false">
-  <div body class="contents" style="width: 100%;padding: 0;">
-    <div>
-      <span style="width: 100%;">
-        A quien se envia
-      </span>
-      <mat-checkbox style="width: calc(50% - 10px);"> {{'Clientes' | translate
+<vex-flux-modal *ngIf="sendEmailModal"
+	(Close)="sendEmailModal=false"
+	title="Mandar mail">
+	<div body
+		class="contents"
+		style="width: 100%;padding: 0;">
+		<div>
+			<span style="width: 100%;">A quien se envia</span>
+			<mat-checkbox style="width: calc(50% - 10px);">
+				{{'Clientes' | translate
         }}
-      </mat-checkbox>
-      <mat-checkbox style="width: calc(50% - 10px);"> {{'Profesores' | translate
+			</mat-checkbox>
+			<mat-checkbox style="width: calc(50% - 10px);">
+				{{'Profesores' | translate
         }}
-      </mat-checkbox>
-      <mat-form-field
-        appearance="outline" style="width: calc(50% - 10px);">
-        <mat-label>{{'Desde' | translate}}</mat-label>
-        <input
-          matInput
-          [matDatepicker]="date_desde"
-          [min]="minDate" readonly (click)="date_desde.open()"
-          [max]="maxDate" />
-        <mat-datepicker-toggle matSuffix
-          [for]="date_desde"></mat-datepicker-toggle>
-        <mat-datepicker #date_desde [startAt]="nowDate"></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field
-        appearance="outline" style="width: calc(50% - 10px);">
-        <mat-label>{{'Hasta' | translate}}</mat-label>
-        <input
-          matInput
-          [matDatepicker]="date_hasta"
-          [min]="minDate" readonly (click)="date_hasta.open()"
-          [max]="maxDate" />
-        <mat-datepicker-toggle matSuffix
-          [for]="date_hasta"></mat-datepicker-toggle>
-        <mat-datepicker #date_hasta [startAt]="nowDate"></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="outline"
-        style="width: 100%;">
-        <mat-label>{{'Asunto' | translate}}</mat-label>
-        <input matInput required type="text">
-      </mat-form-field>
-      <div>
-        <angular-editor style="width: 100%"
-          [placeholder]="'Mensaje' | translate"
-          [config]="editor2Config">
-        </angular-editor>
-      </div>
-    </div>
-  </div>
-  <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
-    <button
-      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-      color="primary"
-      mat-stroked-button
-      type="button" (click)="sendEmailModal=false"
-      class="client-button">
-      {{'cancel' | translate }}
-    </button>
-    <button
-      style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
-      color="primary"
-      mat-raised-button
-      type="button" (click)="sendEmailModal=false"
-      class="client-button">
-      {{'Enviar' | translate }}
-    </button>
-  </div>
+			</mat-checkbox>
+			<mat-form-field appearance="outline"
+				style="width: calc(50% - 10px);">
+				<mat-label>
+					{{'Desde' | translate}}
+				</mat-label>
+				<input [matDatepicker]="date_desde"
+					[min]="minDate"
+					[max]="maxDate"
+					(click)="date_desde.open()"
+					matInput
+					readonly>
+				<mat-datepicker-toggle [for]="date_desde"
+					matSuffix></mat-datepicker-toggle>
+				<mat-datepicker #date_desde
+					[startAt]="nowDate"></mat-datepicker>
+			</mat-form-field>
+			<mat-form-field appearance="outline"
+				style="width: calc(50% - 10px);">
+				<mat-label>
+					{{'Hasta' | translate}}
+				</mat-label>
+				<input [matDatepicker]="date_hasta"
+					[min]="minDate"
+					[max]="maxDate"
+					(click)="date_hasta.open()"
+					matInput
+					readonly>
+				<mat-datepicker-toggle [for]="date_hasta"
+					matSuffix></mat-datepicker-toggle>
+				<mat-datepicker #date_hasta
+					[startAt]="nowDate"></mat-datepicker>
+			</mat-form-field>
+			<mat-form-field appearance="outline"
+				style="width: 100%;">
+				<mat-label>
+					{{'Asunto' | translate}}
+				</mat-label>
+				<input matInput
+					required
+					type="text">
+			</mat-form-field>
+			<div>
+				<angular-editor [placeholder]="'Mensaje' | translate"
+					[config]="editor2Config"
+					style="width: 100%">
+				</angular-editor>
+			</div>
+		</div>
+	</div>
+	<div footer
+		style="display: flex;width: 100%;padding: 20px 20px 0;">
+		<button (click)="sendEmailModal=false"
+			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+			color="primary"
+			mat-stroked-button
+			type="button"
+			class="client-button">
+			{{'cancel' | translate }}
+		</button>
+		<button (click)="sendEmailModal=false"
+			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+			color="primary"
+			mat-raised-button
+			type="button"
+			class="client-button">
+			{{'Enviar' | translate }}
+		</button>
+	</div>
 
 </vex-flux-modal>

@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { CoursesService } from '../../../../service/courses.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import moment from 'moment';
 
 @Component({
   selector: 'vex-course-detail-new',
@@ -102,38 +103,29 @@ export class CourseDetailNewComponent implements OnInit {
                       online: [this.detailData.online, Validators.required], //Solo listado
                       sport_id: [this.detailData.sport_id, Validators.required],
                       course_type: [this.detailData.course_type, Validators.required],
-                      course_name: [this.detailData.name, Validators.required],
-                      summary: [this.detailData.short_description, Validators.required],
+                      name: [this.detailData.name, Validators.required],
+                      short_description: [this.detailData.short_description, Validators.required],
                       description: [this.detailData.description, Validators.required],
-                      course_name_es: ["", Validators.required],
-                      summary_es: ["", Validators.required],
-                      description_es: ["", Validators.required],
-                      course_name_fr: ["", Validators.required],
-                      summary_fr: ["", Validators.required],
-                      description_fr: ["", Validators.required],
-                      course_name_en: ["", Validators.required],
-                      summary_en: ["", Validators.required],
-                      description_en: ["", Validators.required],
-                      course_name_de: ["", Validators.required],
-                      summary_de: ["", Validators.required],
-                      description_de: ["", Validators.required],
-                      course_name_it: ["", Validators.required],
-                      summary_it: ["", Validators.required],
-                      description_it: ["", Validators.required],
                       price: [this.detailData.price, Validators.required],
-                      participants: [this.detailData.max_participants, Validators.required],
-                      img: [this.detailData.image, Validators.required],
+                      max_participants: [this.detailData.max_participants, Validators.required],
+                      image: [this.detailData.image, Validators.required],
                       icon: [this.detailData.sport.icon_unselected, Validators.required],
                       age_max: [this.detailData.age_max, Validators.required],
                       age_min: [this.detailData.age_min, Validators.required],
                       reserve_from: [this.detailData.date_start, Validators.required],
                       reserve_to: [this.detailData.date_end, Validators.required],
-                      duration_min: [this.detailData.duration, Validators.required],
+                      date_start: [moment(this.detailData.date_start_res).format('YYYY-MM-DD')],
+                      date_end: [moment(this.detailData.date_end_res).format('YYYY-MM-DD')],
+                      date_start_res: [moment(this.detailData.date_start_res).format('YYYY-MM-DD')],
+                      date_end_res: [moment(this.detailData.date_end_res).format('YYYY-MM-DD')],
+                      duration: [this.detailData.duration, Validators.required],
                       course_dates: [this.detailData.course_dates, Validators.required],
                       discount: [[], Validators.required],
                       extras: [[], Validators.required],
                       levelGrop: [this.detailData.degrees, Validators.required],
                       settings: [JSON.parse(this.detailData.settings), Validators.required],
+                      discounts: [this.detailData.discounts],
+                      translations: [this.detailData.translations],
                     });
                     setTimeout(() => this.loading = false, 0);
                   })

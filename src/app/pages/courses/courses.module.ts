@@ -22,7 +22,6 @@ import { CoursesCreateUpdateModule } from './courses-create-update/courses-creat
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { CoursesDetailModule } from './course-detail/course-detail.module';
-import { CourseUserTransferComponent } from './course-user-transfer/course-user-transfer.component';
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
 import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
 import { TranslateModule } from '@ngx-translate/core';

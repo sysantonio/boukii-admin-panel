@@ -22,7 +22,6 @@ import { CoursesCreateUpdateModule } from './courses-create-update/courses-creat
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
-import { CoursesDetailModule } from './course-detail/course-detail.module';
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
 import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
 import { TranslateModule } from '@ngx-translate/core';
@@ -53,7 +52,6 @@ import { ComponenteSelectModule } from 'src/@vex/components/form/select/app.modu
     WidgetLargeChartModule,
     WidgetTableModule,
     CoursesCreateUpdateModule,
-    CoursesDetailModule,
     CourseDetailNewModule,
     CoursesDetailModalModule,
     CoursesCreateUpdateModalModule,
