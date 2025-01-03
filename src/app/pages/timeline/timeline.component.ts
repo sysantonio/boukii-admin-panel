@@ -1643,7 +1643,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       maxWidth: '100vw',
       panelClass: 'full-screen-dialog',
-      data: { message: this.translateService.instant('move_task'), title: this.translateService.instant('confirm_move') }
+      data: { message: this.translateService.instant('accept_task'), title: this.translateService.instant('confirm_accept') }
     });
 
     dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
