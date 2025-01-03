@@ -513,6 +513,8 @@
   "some_monitors_overlap": "Alcuni monitorati non hanno applicato il cambiamento",
   "move_task": "Sei sicuro di voler spostare questa attività?",
   "confirm_move": "Conferma spostamento",
+  "accept_task": "Sei sicuro di voler accettare questa attività?",
+  "confirm_accept": "Conferma accettazione",
   "create_general_blockage": "Sei sicuro di voler creare un blocco per TUTTI i monitor?",
   "general_blockage": "Blocco generale",
   "no_monitor_choose": "Nessun monitor",

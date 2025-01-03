@@ -713,6 +713,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         }
 
         return {
+          id: booking?.id,
           booking_id: booking?.booking?.id,
           booking_color: booking_color,
           date: moment(booking.date).format('YYYY-MM-DD'),
@@ -741,6 +742,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           subgroup_number: booking.subgroup_number,
           total_subgroups: booking.total_subgroups,
           course: booking.course,
+          accepted: booking.accepted,
           paid: booking?.booking?.paid,
           user: booking?.booking?.user,
           ...dateTotalAndIndex
@@ -1635,6 +1637,29 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.editedMonitor = null;
     this.showEditMonitor = true;
     this.checkAvailableMonitors();
+  }
+
+  acceptBooking() {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      maxWidth: '100vw',
+      panelClass: 'full-screen-dialog',
+      data: { message: this.translateService.instant('move_task'), title: this.translateService.instant('confirm_move') }
+    });
+
+    dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
+      if (userConfirmed) {
+          this.crudService.update('/booking-users', {accepted:true}, this.taskDetail.id)
+          .subscribe(() => {
+            dialogRef.close(true)
+            this.editedMonitor = null;
+            this.showEditMonitor = false;
+            this.hideDetail();
+            this.loadBookings(this.currentDate);
+          });
+      } else {
+
+      }
+    });
   }
 
   searchMonitorMatch(id: any) {

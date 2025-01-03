@@ -535,6 +535,8 @@
   "some_monitors_overlap": "A algunos monitores no se le ha aplicado el cambio",
   "move_task": "¿Estás seguro de que quieres mover esta tarea?",
   "confirm_move": "Confirmar movimiento",
+  "accept_task": "¿Estás seguro de que deseas aceptar esta tarea?",
+  "confirm_accept": "Confirmar aceptación",
   "create_general_blockage": "¿Estás seguro de que deseas crear un bloqueo para TODOS los monitores?",
   "general_blockage": "Bloqueo general",
   "no_monitor_choose": "Sin monitor",

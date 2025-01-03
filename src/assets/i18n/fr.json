@@ -513,6 +513,8 @@
   "some_monitors_overlap": "Certains moniteurs ne se servent pas du changement",
   "move_task": "Êtes-vous sûr de vouloir déplacer cette tâche ?",
   "confirm_move": "Confirmer le déplacement",
+  "accept_task": "Êtes-vous sûr de vouloir accepter cette tâche ?",
+  "confirm_accept": "Confirmer l'acceptation",
   "create_general_blockage": "Êtes-vous sûr de vouloir créer un blocage pour TOUS les moniteurs ?",
   "general_blockage": "Blocage général",
   "no_monitor_choose": "Pas de moniteur",
@@ -732,7 +734,7 @@
   "not_presented": "Non présenté",
   "upcoming_day": "Jour à venir"
         ,"select_extra":"Sélectionnez les extras qui peuvent être ajoutés lors de la réservation "
-  ,"Category_participant":"Catégorie de participant" 
+  ,"Category_participant":"Catégorie de participant"
    ,"No_durations_found":"Aucune durée trouvée"
    ,  "general_mails": "Mails généraux"
 

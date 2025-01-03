@@ -515,6 +515,8 @@
   "some_monitors_overlap": "Einige Monitore haben den Wechsel nicht durchgeführt",
   "move_task": "Sind Sie sicher, dass Sie diese Aufgabe verschieben möchten?",
   "confirm_move": "Verschiebung bestätigen",
+  "accept_task": "Sind Sie sicher, dass Sie diese Aufgabe annehmen möchten?",
+  "confirm_accept": "Akzeptieren bestätigen",
   "create_general_blockage": "Sind Sie sicher, dass Sie eine Blockierung für ALLE Monitore erstellen möchten?",
   "general_blockage": "Allgemeine Blockierung",
   "no_monitor_choose": "Kein Monitor",

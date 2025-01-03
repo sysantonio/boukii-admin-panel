@@ -514,6 +514,8 @@
   "some_dates_overlap": "On the following dates the monitor was busy: ",
   "some_monitors_overlap": "A algunos monitores no se le ha aplicado el cambio",
   "move_task": "Are you sure you want to move this task?",
+  "accept_task": "Are you sure you want to accept this task?",
+  "confirm_accept": "Confirm accept",
   "confirm_move": "Confirm move",
   "create_general_blockage": "Are you sure you want to create a blockage for ALL monitors?",
   "general_blockage": "General blockage",

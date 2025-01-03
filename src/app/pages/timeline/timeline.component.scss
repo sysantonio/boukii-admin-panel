@@ -5,6 +5,18 @@
 .timeline-with-detail {
   width: calc(100% - 450px) !important;
 }
+.warning-icon-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; /* Asegúrate de que el ícono esté por encima del contenido */
+}
+
+.warning-icon {
+  font-size: 24px; /* Ajusta el tamaño del ícono según sea necesario */
+}
+
 .box-detail-timeline {
   width: 450px;
   position: fixed;
