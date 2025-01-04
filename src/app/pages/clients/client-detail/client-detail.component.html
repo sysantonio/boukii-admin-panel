@@ -1568,7 +1568,7 @@
                   [title]="'bookings'" [route]="'bookings'"
                   (showDetailEvent)="showDetailEvent($event)" [filterField]="id"
                   [filterColumn]="'client_id'"
-                  [with]="['booking','course.courseGroups.courseSubgroups', 'clientMain']"
+                  [with]="['booking.clientMain','course.courseGroups.courseSubgroups', 'client']"
                   [showDetail]="showDetail">
                 </vex-aio-table>
               </vex-page-layout-content>
