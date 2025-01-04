@@ -18,6 +18,7 @@ export class CoursesService {
       is_flexible: [false],
       created_at: [null],
       user: [null],
+      booking_users: [[]],
       course_type: [null, Validators.required],
       name: ["PROBANDO", Validators.required],
       short_description: ["PROBANDO RESUMEN", Validators.required],

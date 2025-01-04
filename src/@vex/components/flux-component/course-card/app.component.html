@@ -177,7 +177,7 @@ line-height: 18px;
 text-align: right;
 color: var(--color-dark1);
 ">
-				{{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
+				{{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?('&nbsp;'+courseFormGroup.controls['currency'].value):''}}
 			</p>
 		</div>
 		<img *ngIf="detail"
@@ -225,7 +225,7 @@ color: var(--color-dark1);
 			</p>
 			<p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
 				style="color:var(--color-dark1); font-weight: 400;">
-				{{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?'&nbsp;CHF':''}}
+				{{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?('&nbsp;'+courseFormGroup.controls['currency'].value):''}}
 			</p>
 		</div>
 		<div style="width: calc(50% - 10px);">
@@ -314,21 +314,15 @@ translate }}
 				<p *ngFor="let item of courseFormGroup.controls['course_dates'].value"
 					style="font-size: 14px;text-align-last: justify;display: flex;justify-content: space-between;">
 					<span style="color:var(--color-dark1);">
-						{{DateISO(item.date)}}
+						{{!item.date_end||item.date==item.date_end?DateISO(item.date):(DateISO(item.date)+'-'+DateISO(item.date_end))}}
 					</span>
-					<span *ngIf="courseFormGroup.controls['course_type'].value>1 && item.date_end"
-						style="color:var(--color-dark1);">
-						-{{DateISO(item.date_end)}}
+					<span>
+						{{courseFormGroup.controls['course_type'].value>1?
+item.hour_start:
+item.hour_start+'-'+item.hour_end}}
 					</span>
-					<span>{{item.hour_start}}</span>
-					<span *ngIf="courseFormGroup.controls['course_type'].value>1">-{{item.hour_end}}</span>
-					<span *ngIf="item.Duracion && courseFormGroup.controls['price'].value>0">
-						{{courseFormGroup.controls['price'].value * item.Duracion || 0}}&nbsp;CHF
-					</span>
-					<span *ngIf="!item.Duracion && courseFormGroup.controls['price'].value>0"
-						style="color:var(--color-dark1);">
-						{{(courseFormGroup.controls['price'].value *
-(item.hour_end.split(":")[0]+item.hour_end.split(":")[1]/60-item.hour_start.split(":")[0]+item.hour_start.split(":")[1]/60)).toFixed(2)}}CHF
+					<span>
+						{{courseFormGroup.controls['price'].value}}&nbsp;{{courseFormGroup.controls['currency'].value}}
 					</span>
 				</p>
 			</ng-container>
@@ -341,11 +335,7 @@ translate }}
 			</div>
 		</ng-container>
 		<div *ngIf="courseFormGroup.controls['settings'].value"
-			style="color: var(--Dark-01, #222);
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: 16px;">
+			style="color: var(--Dark-01, #222); font-size: 12px;font-style: normal;font-weight: 400;line-height: 16px;">
 			<ng-container *ngFor="let item of week; index as i"
 				style="width: 100%; color:var(--color-dark1);font-weight: 400;">
 				<ng-container *ngIf="courseFormGroup.controls['settings'].value.weekDays[+i]">
@@ -445,21 +435,21 @@ color: var(--color-dark1);
 				<div *ngFor="let item of courseFormGroup.controls['extras'].value"
 					style="width: 100%; display: flex;">
 					<span style="
-								color: var(--color-dark1);
-								font-size: 14px;
-								font-weight: 600;
-								line-height: 18px;
-								word-wrap: break-word">
+color: var(--color-dark1);
+font-size: 14px;
+font-weight: 600;
+line-height: 18px;
+word-wrap: break-word">
 						{{item.name.slice(0,20)}}
 					</span>
 					<span style="
-									color: var(--color-dark1);
-									font-size: 14px;
-									font-weight: 300;
-									line-height: 18px;
-									word-wrap: break-word;
-									margin-left: auto;">
-						{{item.price || 0}} CHF/{{"day" | translate}}
+color: var(--color-dark1);
+font-size: 14px;
+font-weight: 300;
+line-height: 18px;
+word-wrap: break-word;
+margin-left: auto;">
+						{{item.price || 0}}&nbsp;{{courseFormGroup.controls['currency'].value}}/{{"day" | translate}}
 					</span>
 				</div>
 			</ng-container>
