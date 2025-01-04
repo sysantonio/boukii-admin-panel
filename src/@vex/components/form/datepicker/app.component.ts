@@ -14,7 +14,7 @@ export class ComponenteComponent {
   @Input() form!: FormGroup
   @Input() required: boolean = false
   @Input() startAt: Date = new Date()
-  @Input() min: Date = new Date()
+  @Input() min: Date = new Date(2000, 1, 1)
   @Input() max: Date = new Date(2099, 12, 31);
   @Output() do = new EventEmitter()
 

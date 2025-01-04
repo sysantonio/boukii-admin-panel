@@ -225,7 +225,6 @@ export class ClientDetailComponent {
     };
 
     return forkJoin(requestsInitial).pipe(tap((results) => {
-      console.log('All data loaded', results);
       this.formInfoAccount = this.fb.group({
         image: [''],
         first_name: ['', Validators.required],
@@ -320,14 +319,9 @@ export class ClientDetailComponent {
           };
 
           forkJoin(requestsClient).subscribe((results) => {
-            console.log('All data loaded', results);
-            if (!onChangeUser) {
-              this.getClientUtilisateurs();
-            }
+            if (!onChangeUser) this.getClientUtilisateurs();
 
-            if (data.data.user) {
-              this.defaultsUser = data.data.user;
-            }
+            if (data.data.user) this.defaultsUser = data.data.user;
 
             const langs = [];
             this.languages.forEach(element => {
@@ -771,7 +765,6 @@ export class ClientDetailComponent {
   save() {
     this.setLanguages();
 
-    // Eliminar la imagen si no se ha cambiado
     if (this.currentImage === this.defaults.image) {
       delete this.defaults.image;
       delete this.defaultsUser.image;
@@ -779,54 +772,26 @@ export class ClientDetailComponent {
       this.defaultsUser.image = this.imagePreviewUrl;
       this.defaults.image = this.imagePreviewUrl;
     }
-
-    // Verificar si el password es vacío y eliminarlo del objeto defaults
-    if (this.defaultsUser.password === '') {
-      delete this.defaultsUser.password;
-    }
-
-    // Asignar el email del usuario
+    if (this.defaultsUser.password === '') delete this.defaultsUser.password;
     this.defaultsUser.email = this.defaults.email;
-
-    // Actualizar el usuario
     this.crudService.update('/users', this.defaultsUser, this.defaultsUser.id)
       .subscribe((user) => {
         this.defaults.user_id = user.data.id;
-
-        // Actualizar el cliente
         this.defaults.birth_date = this.formatDate(this.defaults.birth_date)
         this.crudService.update('/clients', this.defaults, this.id)
           .subscribe((client) => {
             this.snackbar.open(this.translateService.instant('snackbar.client.update'), 'OK', { duration: 3000 });
-
-            // Preparar las observaciones del cliente
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
-
-            // Si existe la observación, actualizamos, si no, creamos una nueva
-            if (this.defaultsObservations.id) {
-              this.crudService.update('/client-observations', this.defaultsObservations, this.defaultsObservations.id)
-                .subscribe(() => {
-                  console.log('client observation updated');
-                })
-            } else {
-              this.crudService.create('/client-observations', this.defaultsObservations)
-                .subscribe(() => {
-                  console.log('client observation created');
-                })
-            }
-
-            // Crear o actualizar deportes del cliente
+            if (this.defaultsObservations.id) this.crudService.update('/client-observations', this.defaultsObservations, this.defaultsObservations.id).subscribe(() => { })
+            else this.crudService.create('/client-observations', this.defaultsObservations).subscribe(() => { })
             this.sportsData.data.forEach(element => {
               this.crudService.create('/client-sports', {
                 client_id: client.data.id,
                 sport_id: element.sport_id,
                 degree_id: element.level.id,
                 school_id: this.user.schools[0].id
-              })
-                .subscribe(() => {
-                  console.log('client sport created');
-                })
+              }).subscribe(() => { })
             });
 
             // Actualizar deportes actuales del cliente
@@ -836,10 +801,7 @@ export class ClientDetailComponent {
                 sport_id: element.sport_id,
                 degree_id: element.level.id,
                 school_id: this.user.schools[0].id
-              }, element.id)
-                .subscribe(() => {
-                  console.log('client sport updated');
-                })
+              }, element.id).subscribe(() => { })
             });
 
             // Verificar el valor de 'active' y manejar el 'accepted_at'
@@ -850,9 +812,7 @@ export class ClientDetailComponent {
                 // Si ya existe, actualizar el 'accepted_at'
                 if (existingSchool.accepted_at === null) {
                   this.crudService.update('/clients-schools', { accepted_at: moment().toDate() }, existingSchool.id)
-                    .subscribe(() => {
-                      console.log('School accepted_at updated');
-                    });
+                    .subscribe(() => {                    });
                 }
               } else {
                 // Si no existe, crear la relación
@@ -861,18 +821,14 @@ export class ClientDetailComponent {
                   school_id: this.user.schools[0].id,
                   accepted_at: moment().toDate()
                 })
-                  .subscribe(() => {
-                    console.log('New client-school association created');
-                  });
+                  .subscribe(() => {                  });
               }
             } else {  // Si 'active' es false
               // Buscar si existe la relación y actualizar 'accepted_at' a null
               const existingSchool = this.clientSchool.find(element => element.school_id === this.user.schools[0].id);
               if (existingSchool) {
                 this.crudService.update('/clients-schools', { accepted_at: null }, existingSchool.id)
-                  .subscribe(() => {
-                    console.log('School accepted_at set to null');
-                  });
+                  .subscribe(() => {                  });
               }
             }
 

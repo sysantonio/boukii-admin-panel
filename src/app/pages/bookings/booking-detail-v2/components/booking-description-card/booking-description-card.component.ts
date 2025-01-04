@@ -130,7 +130,6 @@ export class BookingDescriptionCard {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Aquí manejas los datos actualizados que provienen del modal
-        console.log('Datos actualizados:', result);
         this.dates = result.course_dates;
         this.total = this.dates[0].price
         result.total = this.total;
@@ -159,7 +158,6 @@ export class BookingDescriptionCard {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Aquí manejas los datos actualizados que provienen del modal
-        console.log('Datos actualizados:', result);
         this.dates = result.course_dates;
         this.total = this.dates.reduce((acc, date) =>
           acc + parseFloat(date.price), 0).toFixed(2);
@@ -188,7 +186,6 @@ export class BookingDescriptionCard {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Aquí manejas los datos actualizados que provienen del modal
-        console.log('Datos actualizados:', result);
         this.dates = result.course_dates;
         this.total = this.dates.reduce((acc, date) =>
           acc + parseFloat(date.price), 0).toFixed(2);
@@ -215,7 +212,6 @@ export class BookingDescriptionCard {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Aquí manejas los datos actualizados que provienen del modal
-        console.log('Datos actualizados:', result);
         this.schoolObs = result.schoolObs;
         this.clientObs = result.clientObs;
         this.editActivity.emit(result);

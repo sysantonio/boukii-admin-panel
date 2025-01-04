@@ -1,7 +1,7 @@
 <div *ngIf="courseFormGroup"
 	class="cardp">
 	<ng-container *ngIf="!onlyExtras">
-		<div *ngIf="mode==='update' && step===3"
+		<div *ngIf="mode==='update' && step===3 && courseFormGroup.controls['course_type'].value===1"
 			class="cardgroup">
 			<div style="width: 100%; height: 100%;background: white; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: inline-flex">
 				<div style="align-self: stretch; color: #222222; font-size: 14px; font-family: DM Sans; font-weight: 600; line-height: 18px; word-wrap: break-word">
@@ -79,7 +79,7 @@
 				</div>
 			</div>
 		</div>
-		<div *ngIf="courseFormGroup.controls['id'].value && !detail"
+		<div *ngIf="mode==='create' && courseFormGroup.controls['id'].value && !detail"
 			class="cardgroup"
 			style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
 			<p style="display: flex;flex-wrap: nowrap; color: white; font-size: 16px; font-family: Dinamit; font-weight: 500; line-height: 20px; word-wrap: break-word">

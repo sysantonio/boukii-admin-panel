@@ -37,7 +37,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   PeriodoFecha: number = 0
   extrasFormGroup: UntypedFormGroup; //crear extras nuevas
-
+  nowDate: Date = new Date()
   sportData: any = [];
   sportDataList: any = [];
   sportTypeData: any = [];
@@ -218,8 +218,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.courses.courseFormGroup.controls["date_start"].status === 'VALID' &&
         this.courses.courseFormGroup.controls["date_end"].status === 'VALID'
       ) {
-
-
       } else {
         this.courses.courseFormGroup.markAllAsTouched()
         this.ModalFlux -= add
@@ -271,15 +269,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
             })
           }
         } else {
-
           this.ModalFlux -= add
         }
       } else if (this.courses.courseFormGroup.controls['course_type'].value === 2) {
 
-      } else if (this.courses.courseFormGroup.controls['course_type'].value === 3) {
-
       } else {
-        this.ModalFlux -= add
+        const groups = this.courses.courseFormGroup.controls['settings'].value.groups;
+        if (groups.every((group: any) => group.groupName && group.ageMin > 0 && group.ageMax > 0 && group.price > 0)) {
+        } else {
+          this.courses.courseFormGroup.controls['settings'].markAllAsTouched()
+          this.ModalFlux -= add
+        }
       }
     }
     else if (this.ModalFlux === 6) {

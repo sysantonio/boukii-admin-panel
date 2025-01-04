@@ -18,8 +18,7 @@ export class ComponenteInputComponent {
   @Input() Prefix: string = ""
   @Input() max: number = 99
   @Input() min: number = 0
-  
-
+  @Input() errors: string = ""
   @Output() do = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }

@@ -50,4 +50,7 @@
 		matTextSuffix>
 		{{Suffix | translate}}
 	</span>
+	<mat-error *ngIf="errors">
+		{{ errors | translate}}
+	</mat-error>
 </mat-form-field>

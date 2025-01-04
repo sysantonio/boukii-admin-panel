@@ -152,6 +152,7 @@
 				style="padding: 0 20px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
 				<app-form-datepicker [required]="true"
 					[form]="courses.courseFormGroup"
+					[min]="mode==='create'?nowDate:detailData.date_start"
 					(do)="courses.courseFormGroup.patchValue({date_start:$event.value,date_start_res:$event.value});
 					courses.courseFormGroup.controls['date_end'].value<$event.value?courses.courseFormGroup.patchValue({date_end:$event.value,date_end_res:$event.value}):null"
 					control="date_start"
@@ -295,6 +296,7 @@
 						<div *ngIf="PeriodoFecha>0 || i===0"
 							style="display: flex;column-gap: 20px;">
 							<app-form-datepicker [required]="true"
+								[min]="mode==='create'?nowDate:detailData.date_start"
 								[value]="courses.courseFormGroup.controls['course_dates'].value[i].date"
 								(do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value;
 								courses.courseFormGroup.controls['course_dates'].value[i].date_end<$event.value?courses.courseFormGroup.controls['course_dates'].value[i].date_end=$event.value:null"
@@ -507,6 +509,8 @@
 					</div>
 					<div style="margin: 20px 20px 0px; display: flex; flex-wrap: wrap; column-gap: 20px;">
 						<app-form-input [value]="courses.courseFormGroup.controls['settings'].value.groups[i].groupName"
+							[required]="true"
+							[errors]="!courses.courseFormGroup.controls['settings'].value.groups[i].groupName?'errors.required':''"
 							(do)="courses.courseFormGroup.controls['settings'].value.groups[i].groupName=$event.target.value;"
 							name="category_name"
 							style="width: 100%;"
@@ -514,6 +518,8 @@
 						</app-form-input>
 						<app-form-input [value]="courses.courseFormGroup.controls['settings'].value.groups[i].ageMin"
 							[max]="courses.courseFormGroup.controls['settings'].value.groups[i].ageMax"
+							[required]="true"
+							[errors]="!courses.courseFormGroup.controls['settings'].value.groups[i].ageMin===null?'errors.required':''"
 							(do)="courses.courseFormGroup.controls['settings'].value.groups[i].ageMin=$event.target.value;"
 							name="courses.min_age"
 							style="width: calc(50% - 10px);"
@@ -522,6 +528,8 @@
 						</app-form-input>
 						<app-form-input [value]="courses.courseFormGroup.controls['settings'].value.groups[i].ageMax"
 							[min]="courses.courseFormGroup.controls['settings'].value.groups[i].ageMin"
+							[required]="true"
+							[errors]="!courses.courseFormGroup.controls['settings'].value.groups[i].ageMax===null?'errors.required':''"
 							(do)="courses.courseFormGroup.controls['settings'].value.groups[i].ageMax=$event.target.value;"
 							name="courses.max_age"
 							style="width: calc(50% - 10px);"
@@ -530,6 +538,8 @@
 						</app-form-input>
 						<app-form-input [value]="courses.courseFormGroup.controls['settings'].value.groups[i].price"
 							[Suffix]="courses.courseFormGroup.controls['currency'].value"
+							[required]="true"
+							[errors]="courses.courseFormGroup.controls['settings'].value.groups[i].price===null?'errors.required':''"
 							(do)="courses.courseFormGroup.controls['settings'].value.groups[i].price=$event.target.value;"
 							name="price"
 							style="width: calc(50% - 10px);"
@@ -650,7 +660,7 @@
 				<mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
 				{{ (mode === 'create' ? 'back' : 'cancel') | translate }}
 			</button>
-			<button (click)="mode==='create'?Confirm(1):endCourse();"
+			<button (click)="Confirm(1);"
 				style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 				color="primary"
 				mat-raised-button

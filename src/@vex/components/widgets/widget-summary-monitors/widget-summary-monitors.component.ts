@@ -86,7 +86,6 @@ export class WidgetSummaryMonitorsComponent implements OnInit {
   filterStatus(status: string) {
       this.selectedStatus = status;
       // Aquí va el resto de tu lógica para filtrar según el estado.
-      console.log('Filtrando por:', status);
   }
 
   ngOnInit() {

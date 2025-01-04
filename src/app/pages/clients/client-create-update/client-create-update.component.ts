@@ -418,18 +418,11 @@ export class ClientCreateUpdateComponent implements OnInit {
 
             this.defaultsObservations.client_id = client.data.id;
             this.defaultsObservations.school_id = this.user.schools[0].id;
-            this.crudService.create('/client-observations', this.defaultsObservations)
-              .subscribe((obs) => {
-                console.log('client observation created');
-              })
+            this.crudService.create('/client-observations', this.defaultsObservations).subscribe((obs) => { })
             this.crudService.create('/clients-schools', { client_id: client.data.id, school_id: this.user.schools[0].id, accepted_at: moment().toDate() })
               .subscribe((clientSchool) => {
                 this.sportsData.data.forEach(element => {
-
-                  this.crudService.create('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
-                    .subscribe(() => {
-                      console.log('client sport created');
-                    })
+                  this.crudService.create('/client-sports', { client_id: client.data.id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id }).subscribe(() => { })
                 });
 
                 setTimeout(() => {

@@ -405,7 +405,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   sortData(sort: Sort) {
-    console.log(sort)
     this.Sort = sort
     this.filterData(false, this.pageIndex, this.pageSize)
     // const data = this.dataSource.data.slice();
@@ -948,7 +947,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   exportQR(id: any) {
-    console.log('export');
     this.crudService.get('/admin/clients/course/' + id)
       .subscribe(async (data) => {
         const clientsData = data.data;

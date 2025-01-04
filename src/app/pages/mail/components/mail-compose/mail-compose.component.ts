@@ -105,7 +105,6 @@ export class MailComposeComponent implements OnInit {
 
   get paginatedCourses() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
-    console.log(this.courses.slice(startIndex, startIndex + this.pageSize))
     return this.courses.slice(startIndex, startIndex + this.pageSize);
   }
 

@@ -397,7 +397,6 @@ export class MonitorDetailComponent {
           );
 
           this.getSchoolSportDegrees().subscribe((results) => {
-            console.log('All data loaded', results);
             //this.getMonitorSportsDegree();
             this.getSports();
 
@@ -1731,7 +1730,6 @@ export class MonitorDetailComponent {
         };
       })
     ];
-    console.log('Combined Tasks Calendar:', tasksCalendar);
     this.calculateTaskPositions(tasksCalendar);
   }
 
@@ -1813,7 +1811,6 @@ export class MonitorDetailComponent {
 
     this.plannerTasks = plannerTasks;
 
-    console.log('Planner Tasks:', this.plannerTasks);
   }
 
   hexToRgbA(hex: string, transparency = 1) {
@@ -2259,7 +2256,6 @@ export class MonitorDetailComponent {
     const updateFirstBlock = () => {
       this.crudService.update('/monitor-nwds', firstBlockData, this.blockDetailTimeline.block_id).subscribe(
         response => {
-          //console.log('First block updated:', response);
           this.hideEditBlock();
           this.hideBlockTimeline();
           this.loadBookings(this.currentDate);
@@ -2275,7 +2271,6 @@ export class MonitorDetailComponent {
 
       this.crudService.post('/monitor-nwds', secondBlockData).subscribe(
         secondResponse => {
-          //console.log('Second block created:', secondResponse);
           updateFirstBlock();
         },
         error => {
@@ -2294,7 +2289,6 @@ export class MonitorDetailComponent {
     if (isConfirmed) {
       this.crudService.delete('/monitor-nwds', this.blockDetailTimeline.block_id).subscribe(
         response => {
-          //console.log('Response:', response);
           this.hideEditBlock();
           this.hideBlockTimeline();
           this.loadBookings(this.currentDate);

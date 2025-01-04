@@ -209,13 +209,13 @@ export class SettingsComponent implements OnInit {
     /*this.mockLevelData.forEach(element => {
       this.crudService.create('/degrees', element)
 
-      .subscribe(() => console.log('ok'))
+      .subscribe(() => {})
     });*/
     /*this.crudService.list('/degrees', 1, 10000)
       .subscribe((data) => {
         data.data.forEach(element => {
           this.crudService.delete('/degrees', element.id)
-          .subscribe(() => console.log('ok'))
+          .subscribe(() =>{})
         });
       })*/
     this.generateHours();
@@ -411,9 +411,7 @@ export class SettingsComponent implements OnInit {
       data: data
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    dialogRef.afterClosed().subscribe(result => { });
   }
 
   getEmailContent() {
@@ -670,7 +668,6 @@ export class SettingsComponent implements OnInit {
       holidays = this.holidays;
     } else {
       this.holidaysSelected.forEach(element => {
-        //console.log(moment(element).format('YYYY-MM-DD'));
         holidays.push(moment(element).format('YYYY-MM-DD'));
       });
     }

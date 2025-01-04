@@ -458,7 +458,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
             let level = this.levels.find((l) => l.id === sport.degree_id);
             this.levelForm.patchValue(level);
-            if(!level) {
+            if (!level) {
               level = this.levels[0];
             }
             this.defaultsBookingUser.degree_id = level.id;
@@ -1149,13 +1149,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
                         this.bookingsToCreate.push(extraData);
                       });*/
           }
-          console.log('Response before un shift:', this.bookingsToCreate);
-          if (this.courseTypeId !== 2 && this.courseTypeId !== 3) {
-            this.bookingsToCreate.unshift(data);
-          }
-          console.log('Response after un shift:', this.bookingsToCreate);
+          if (this.courseTypeId !== 2 && this.courseTypeId !== 3) this.bookingsToCreate.unshift(data);
           this.showDetail = this.bookingsToCreate.length - 1;
-
           this.selectedItem = null;
           this.selectedCourseDateItem = null;
           this.selectedSubGroupItem = null;
@@ -1292,7 +1287,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     this.bookingsToCreate.forEach((element, idx) => {
       element.courseDates.forEach(cs => {
-        if(cs.course.course_type != 1) {
+        if (cs.course.course_type != 1) {
           cs.group_id = element.group_id;
         }
         courseDates.push(cs);
@@ -1357,13 +1352,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
         color: this.color
       }
     });
-
     const clientsWithoutSelectedSport = [];
     this.bookingsToCreate.forEach(element => {
       const client = this.allClients.find((c) => c.id === element.courseDates[0].client_id);
       const bookSport = client?.client_sports?.find((c) => c.sport_id === element.courseDates[0].course.sport_id);
       if (!bookSport || bookSport === null) {
-
         clientsWithoutSelectedSport.push({
           client_id: element.courseDates[0].client_id,
           sport_id: element.courseDates[0].course.sport_id,
@@ -1373,17 +1366,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
       }
     });
 
-    clientsWithoutSelectedSport.forEach(element => {
-      this.crudService.create('/client-sports', element)
-        .subscribe(() => {
-          console.log('Client sport created');
-        })
-    });
-
-
+    clientsWithoutSelectedSport.forEach(element => this.crudService.create('/client-sports', element).subscribe(() => { }));
     this.crudService.create('/bookings', data)
       .subscribe((booking) => {
-        console.log('booking, created', booking);
         this.processBonus(booking.data.id);
         let rqs = [];
 
@@ -1513,10 +1498,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     this.crudService.create('/course-extras', courseExtra)
                       .subscribe((responseCourseExtra) => {
                         bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                        this.crudService.create('/booking-user-extras', bookingUserExtra)
-                          .subscribe((bookExtra) => {
-                            console.log("b.extra created", bookExtra, idx);
-                          })
+                        this.crudService.create('/booking-user-extras', bookingUserExtra).subscribe((bookExtra) => { })
                       })
                   })
                 } else {
@@ -1529,10 +1511,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   this.crudService.create('/course-extras', courseExtra)
                     .subscribe((responseCourseExtra) => {
                       bookingUserExtra.course_extra_id = responseCourseExtra.data.id;
-                      this.crudService.create('/booking-user-extras', bookingUserExtra)
-                        .subscribe((bookExtra) => {
-                          console.log("b.extra created", bookExtra, idx);
-                        })
+                      this.crudService.create('/booking-user-extras', bookingUserExtra).subscribe((bookExtra) => { })
                     })
                 }
               }
@@ -1987,7 +1966,6 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
           this.crudService.create('/client-sports', { client_id: this.defaultsBookingUser.client_id, sport_id: element.sport_id, degree_id: element.level.id, school_id: this.user.schools[0].id })
             .subscribe(() => {
-              console.log('client sport created');
               this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
                 .subscribe((cl) => {
                   this.clients = cl.data;
@@ -2610,7 +2588,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
-    } else if(duration){
+    } else if (duration) {
       const minutes = duration.split(' ')[0].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(minutes, 'm').format('HH:mm');
