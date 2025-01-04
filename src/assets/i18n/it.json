@@ -747,5 +747,6 @@
   "category_name": "Nome categoria",
   "add_category": "Aggiungi categoria",
   "add_discount_by_date": "Aggiungi sconto per data",
-  "send_mail": "Inviare mail"
+  "send_mail": "Inviare mail",
+  "no_extra_assigned": "Nessun extra assegnato"
 }

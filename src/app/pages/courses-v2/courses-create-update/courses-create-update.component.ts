@@ -113,15 +113,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
                     st.data.forEach((element: any) => {
                       if (element.id === this.detailData.station_id) this.detailData.station = element
                     });
-                    this.courses.courseFormGroup.patchValue(this.detailData)
-                    this.courses.courseFormGroup.patchValue({
-                      icon: this.detailData.sport.icon_unselected,
-                      //date_start: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
-                      //date_end: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
-                      //date_start_res: moment(this.detailData.date_start_res).format('YYYY-MM-DD'),
-                      //date_end_res: moment(this.detailData.date_end_res).format('YYYY-MM-DD'),
-                      levelGrop: this.detailData.degrees,
-                    })
+                    this.courses.settcourseFormGroup(this.detailData)
                     this.getDegrees()
                     this.Confirm(0)
                     setTimeout(() => this.loading = false, 0);

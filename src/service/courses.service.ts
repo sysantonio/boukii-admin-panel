@@ -4,12 +4,24 @@ import moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
+
 export class CoursesService {
   constructor(private translateService: TranslateService, private fb: UntypedFormBuilder) { }
   courseFormGroup: UntypedFormGroup;
+
+  settcourseFormGroup(data: any) {
+    this.resetcourseFormGroup()
+    this.courseFormGroup.patchValue({
+      ...data,
+      user: data.user ? data.user.username + " (" + data.user.first_name + " " + data.user.last_name + ")" : "",
+      translations: JSON.parse(data.translations),
+      icon: data.sport.icon_unselected,
+      levelGrop: data.degrees,
+      settings: JSON.parse(data.settings),
+      discounts: JSON.parse(data.discounts)
+    })
+  }
 
   resetcourseFormGroup() {
     const settings = JSON.parse(JSON.parse(localStorage.getItem('boukiiUser')).schools[0].settings);
@@ -42,31 +54,11 @@ export class CoursesService {
       options: [true],
       translations: [
         {
-          es: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          en: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          fr: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          it: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          de: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
+          es: { name: '', short_description: '', description: '' },
+          en: { name: '', short_description: '', description: '' },
+          fr: { name: '', short_description: '', description: '' },
+          it: { name: '', short_description: '', description: '' },
+          de: { name: '', short_description: '', description: '' },
         }
       ],
       school_id: [null],
@@ -81,21 +73,14 @@ export class CoursesService {
       levelGrop: [[], Validators.required],
       settings: [
         {
-          weekDays: {
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false
-          },
+          weekDays: { monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false },
           periods: [],
           groups: [{ ...this.default_activity_groups }]
         }
       ],
     });
   }
+
   nowDate = new Date()
   minDate = this.nowDate;
   maxDate = new Date(2099, 12, 31);
@@ -129,81 +114,57 @@ export class CoursesService {
       groups: []
     }
 
-  default_activity_groups: { "groupName": string, "ageMin": number, "ageMax": number, "optionName": string, "price": number, extras: any[] } =
-    {
-      "groupName": "",
-      "ageMin": 18,
-      "ageMax": 99,
-      "optionName": "",
-      "price": 0,
-      "extras": []
-    }
+  default_activity_groups: { groupName: string, ageMin: number, ageMax: number, optionName: string, price: number, extras: any[] } =
+    { groupName: "", ageMin: 18, ageMax: 99, optionName: "", price: 0, extras: [] }
 
 
   getCourseName(course: any) {
-    if (!course.translations) {
-      return course.name;
-    } else {
+    if (!course.translations) return course.name;
+    else {
       const translations = JSON.parse(course.translations);
       return translations[this.translateService.currentLang].name !== null && translations[this.translateService.currentLang].name !== '' ? translations[this.translateService.currentLang].name : course.name;
     }
   }
 
   getShortDescription(course: any) {
-
-    if (!course.translations) {
-      return course.short_description;
-    } else {
+    if (!course.translations) return course.short_description;
+    else {
       const translations = JSON.parse(course.translations);
       return translations[this.translateService.currentLang].short_description !== null && translations[this.translateService.currentLang].short_description !== '' ? translations[this.translateService.currentLang].short_description : course.short_description;
     }
   }
 
   getDescription(course: any) {
-
-    if (!course.translations) {
-      return course.description;
-    } else {
+    if (!course.translations) return course.description;
+    else {
       const translations = JSON.parse(course.translations);
       return translations[this.translateService.currentLang].description !== null && translations[this.translateService.currentLang].description !== '' ? translations[this.translateService.currentLang].description : course.description;
     }
   }
 
-  getShortestDuration(times) {
+  getShortestDuration(times: any) {
     let shortest = null;
-
-    times.forEach(time => {
+    times.forEach((time: any) => {
       const start = moment(time.hour_start, "HH:mm:ss");
       const end = moment(time.hour_end, "HH:mm:ss");
       const duration = moment.duration(end.diff(start));
-
-      if (shortest === null || duration < shortest) {
-        shortest = duration;
-      }
+      if (shortest === null || duration < shortest) shortest = duration;
     });
 
     if (shortest !== null) {
       const hours = shortest.hours();
       const minutes = shortest.minutes();
       return `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'min' : ''}`.trim();
-    } else {
-      return "No_durations_found";
-    }
+    } else return "No_durations_found";
   }
 
   getAgeRange(data: any[]): { age_min: number, age_max: number } {
     let age_min = Number.MAX_SAFE_INTEGER;
     let age_max = Number.MIN_SAFE_INTEGER;
-
     data.forEach(item => {
-      if (item.age_min < age_min) {
-        age_min = item.age_min;
-      }
-      if (item.age_max > age_max) {
-        age_max = item.age_max;
-      }
+      if (item.age_min < age_min) age_min = item.age_min;
+      if (item.age_max > age_max) age_max = item.age_max;
     });
-
     return { age_min, age_max };
   }
 
@@ -216,26 +177,17 @@ export class CoursesService {
   findFirstCombinationWithValues(data: any) {
     if (data !== null) {
       for (const intervalo of data) {
-        // Usamos Object.values para obtener los valores del objeto y Object.keys para excluir 'intervalo'
-        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) {
-          return intervalo;
-        }
-      }
-      return null; // Devuelve null si no encuentra ninguna combinación válida
+        if (Object.keys(intervalo).some(key => key !== 'intervalo' && intervalo[key] !== null)) return intervalo;
+      } return null;
     }
-
   }
 
   encontrarPrimeraClaveConValor(obj: any): string | null {
     if (obj !== null) {
       for (const clave of Object.keys(obj)) {
-        if (obj[clave] !== null && clave !== 'intervalo') {
-          return obj[clave];
-        }
-      }
-      return null;
+        if (obj[clave] !== null && clave !== 'intervalo') return obj[clave];
+      } return null;
     }
-
   }
 }
 

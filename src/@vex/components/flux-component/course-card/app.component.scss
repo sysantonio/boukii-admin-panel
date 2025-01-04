@@ -64,10 +64,51 @@ button {
 .editbutton {
   cursor: pointer;
   float: right;
+  filter: var(--is-dark-theme, invert(1));
 }
+
 .check {
   width: 24px;
   height: 24px;
   font-size: 24px;
   color: green;
+}
+.languaje {
+  > div {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    > div {
+      width: 100%;
+      display: flex;
+      gap: 20px;
+      > div {
+        height: 24px;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 18px;
+        word-wrap: break-word;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+    }
+  }
+}
+.extras {
+  > div {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    > div {
+      width: 100%;
+      display: flex;
+      > span {
+        padding: 0 15px;
+      }
+    }
+  }
 }

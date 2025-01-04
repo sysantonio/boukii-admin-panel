@@ -19,13 +19,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatButtonModule } from '@angular/material/button';
 import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component/course-nivel/app.module';
-
-
+import { ComponenteEditorModule } from "../../../../@vex/components/form/editor/app.module";
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+import { ComponentsModule } from 'src/@vex/components/components.module';
 
 @NgModule({
-  declarations: [
-    CourseDetailComponent
-  ],
+  declarations: [CourseDetailComponent],
   imports: [
     CommonModule,
     BreadcrumbsModule,
@@ -38,8 +37,10 @@ import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component
     MatFormFieldModule,
     MatInputModule,
     MatSlideToggleModule,
-    CoursesDetailCardModule,
-    MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule
+    CoursesDetailCardModule, ComponentsModule,
+    PageLayoutModule,
+    MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
+    ComponenteEditorModule,
   ]
 })
 export class CourseDetailModule { }

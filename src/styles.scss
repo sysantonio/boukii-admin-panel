@@ -684,15 +684,6 @@ angular-editor {
   color: #1d1d1d !important;
 }
 
-button.mat-stroked-button {
-  .mat-mdc-outlined-button,
-  .mat-mdc-outlined-button:hover {
-    background-color: var(--is-light-theme, #ffffff)
-      var(--is-dark-theme, #1d1d1d) !important;
-    color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea) !important;
-  }
-}
-
 .mat-mdc-table,
 .mat-mdc-paginator,
 .mat-expansion-panel-body,

@@ -92,14 +92,7 @@ export class CoursesComponent {
               this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
                 .subscribe((bookingUser: any) => {
                   this.detailData.users = bookingUser.data;
-                  this.courses.courseFormGroup.patchValue(this.detailData)
-                  this.courses.courseFormGroup.patchValue({
-                    user: this.detailData.user ? this.detailData.user.username + " (" + this.detailData.user.first_name + " " + this.detailData.user.last_name + ")" : "",
-                    settings: JSON.parse(this.detailData.settings),
-                    icon: this.detailData.sport.icon_unselected,
-                    discounts: JSON.parse(this.detailData.discounts),
-                    translations: JSON.parse(this.detailData.translations),
-                  });
+                  this.courses.settcourseFormGroup(this.detailData)
                   this.showDetail = true;
                 })
             })

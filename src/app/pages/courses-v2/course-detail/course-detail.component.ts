@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApiCrudService } from '../../../../service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateService } from '@ngx-translate/core';
 import { CoursesService } from '../../../../service/courses.service';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-import moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
+import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 
 @Component({
   selector: 'vex-course-detail',
@@ -29,42 +25,16 @@ export class CourseDetailComponent implements OnInit {
   ageRange: { age_min: number, age_max: number } = { age_min: 0, age_max: 0 };
   shortestDuration: string | null = null;
   sendEmailModal: boolean = false
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    //height: '56px',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    sanitize: false,  // Esta línea es clave para permitir HTML sin sanitizarlo.
-    toolbarPosition: 'bottom',
-    outline: true,
-    toolbarHiddenButtons: [['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'insertUnorderedList', 'insertOrderedList', 'heading']],
-  }
-  editor1Config: AngularEditorConfig = { ...this.editorConfig, height: '56px', }
-  editor2Config: AngularEditorConfig = { ...this.editorConfig, height: '112px', }
-  constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService,
-    private activatedRoute: ActivatedRoute, private router: Router,
-    private dialog: MatDialog, private courseService: CoursesService,
-    private snackbar: MatSnackBar, private translateService: TranslateService) {
+
+  constructor(private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, public courses: CoursesService, public TranslateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
     this.id = this.activatedRoute.snapshot.params.id;
-
   }
-  courseFormGroup!: UntypedFormGroup;
+
   detailData: any
-  ngOnInit(): void {
-    this.getCourseData();
-  }
 
-  getCourseData() {
+  ngOnInit(): void {
     this.crudService.get('/admin/courses/' + this.id,
       ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
       .subscribe((data: any) => {
@@ -95,38 +65,7 @@ export class CourseDetailComponent implements OnInit {
                   .subscribe((bookingUser) => {
                     this.detailData.users = [];
                     this.detailData.users = bookingUser.data;
-                    this.courseFormGroup = this.fb.group({
-                      id: [this.detailData.id, Validators.required], //Solo listado
-                      user: [this.detailData.user, Validators.required], //Solo listado
-                      created_at: [this.detailData.created_at, Validators.required], //Solo listado
-                      active: [this.detailData.active, Validators.required], //Solo listado
-                      online: [this.detailData.online, Validators.required], //Solo listado
-                      sport_id: [this.detailData.sport_id, Validators.required],
-                      course_type: [this.detailData.course_type, Validators.required],
-                      name: [this.detailData.name, Validators.required],
-                      short_description: [this.detailData.short_description, Validators.required],
-                      description: [this.detailData.description, Validators.required],
-                      price: [this.detailData.price, Validators.required],
-                      max_participants: [this.detailData.max_participants, Validators.required],
-                      image: [this.detailData.image, Validators.required],
-                      icon: [this.detailData.sport.icon_unselected, Validators.required],
-                      age_max: [this.detailData.age_max, Validators.required],
-                      age_min: [this.detailData.age_min, Validators.required],
-                      reserve_from: [this.detailData.date_start, Validators.required],
-                      reserve_to: [this.detailData.date_end, Validators.required],
-                      date_start: [moment(this.detailData.date_start_res).format('YYYY-MM-DD')],
-                      date_end: [moment(this.detailData.date_end_res).format('YYYY-MM-DD')],
-                      date_start_res: [moment(this.detailData.date_start_res).format('YYYY-MM-DD')],
-                      date_end_res: [moment(this.detailData.date_end_res).format('YYYY-MM-DD')],
-                      duration: [this.detailData.duration, Validators.required],
-                      course_dates: [this.detailData.course_dates, Validators.required],
-                      discount: [[], Validators.required],
-                      extras: [[], Validators.required],
-                      levelGrop: [this.detailData.degrees, Validators.required],
-                      settings: [JSON.parse(this.detailData.settings), Validators.required],
-                      discounts: [this.detailData.discounts],
-                      translations: [this.detailData.translations],
-                    });
+                    this.courses.settcourseFormGroup(this.detailData)
                     setTimeout(() => this.loading = false, 0);
                   })
               })
@@ -139,8 +78,9 @@ export class CourseDetailComponent implements OnInit {
   }
 
   parseDateToDay(date: string, fromFormat: string, toFormat: string): string {
-    return this.courseService.parseDateToDay(date, fromFormat, toFormat);
+    return this.courses.parseDateToDay(date, fromFormat, toFormat);
   }
+
   getSubGroups(levelId: any) {
     let ret = 0;
 
@@ -159,5 +99,23 @@ export class CourseDetailComponent implements OnInit {
   }
   DateDiff = (value1: string, value2: string): number => Math.round((new Date(value2).getTime() - new Date(value1).getTime()) / 1000 / 60 / 60 / 24)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
+
+  columns: TableColumn<any>[] = [
+    { label: 'Id', property: 'id', type: 'id', visible: true, cssClasses: ['font-medium'] },
+    { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
+    { label: 'course', property: 'booking_users', type: 'booking_users', visible: true },
+    { label: 'client', property: 'client_main', type: 'client', visible: true },
+    { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
+    { label: 'register', property: 'created_at', type: 'date', visible: true },
+    //{ label: 'Options', property: 'options', type: 'text', visible: true },
+    { label: 'op_rem_abr', property: 'has_cancellation_insurance', type: 'light', visible: true },
+    { label: 'B. Care', property: 'has_boukii_care', type: 'light', visible: true },
+    { label: 'price', property: 'price_total', type: 'price', visible: true },
+    { label: 'method_paiment', property: 'payment_method', type: 'payment_method', visible: true },
+    { label: 'bonus', property: 'bonus', type: 'light', visible: true },
+    { label: 'paid', property: 'paid', type: 'payment_status', visible: true },
+    { label: 'status', property: 'status', type: 'cancelation_status', visible: true },
+    { label: 'Actions', property: 'actions', type: 'button', visible: true }
+  ];
 
 }

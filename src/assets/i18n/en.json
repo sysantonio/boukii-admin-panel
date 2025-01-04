@@ -748,5 +748,6 @@
   "category_name": "Category Name",
   "add_category": "Add Category",
   "add_discount_by_date": "Add discount by date",
-  "send_mail": "Send mail"
+  "send_mail": "Send mail",
+  "no_extra_assigned": "No extra assigned"
 }

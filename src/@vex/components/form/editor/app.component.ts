@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -19,6 +20,7 @@ export class ComponenteInputComponent {
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
   constructor(private translateService: TranslateService,) { }
+
   getErrorMessage(controlName: string): string {
     const control = this.c[controlName];
     if (control.errors) {

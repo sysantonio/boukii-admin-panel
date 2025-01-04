@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import moment from 'moment';
-import {Observable, map, startWith, forkJoin} from 'rxjs';
+import { Observable, map, startWith, forkJoin } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'vex-course-detail',
@@ -98,7 +98,7 @@ export class CourseDetailComponent implements OnInit {
     degree_id: null,
     course_group_id: null,
     monitor_id: null,
-    max_participants:null,
+    max_participants: null,
   }
 
   loading: boolean = true;
@@ -155,7 +155,7 @@ export class CourseDetailComponent implements OnInit {
   ];
 
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
-              private snackbar: MatSnackBar, private translateService: TranslateService, private sanitizer: DomSanitizer) {
+    private snackbar: MatSnackBar, private translateService: TranslateService, private sanitizer: DomSanitizer) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
     this.id = this.activatedRoute.snapshot.params.id;
@@ -215,7 +215,7 @@ export class CourseDetailComponent implements OnInit {
     this.getClients();
     this.getMonitors();
 
-    this.crudService.get('/admin/courses/'+this.id)
+    this.crudService.get('/admin/courses/' + this.id)
       .subscribe((data) => {
         this.defaults = data.data;
         this.getStations();
@@ -223,7 +223,7 @@ export class CourseDetailComponent implements OnInit {
         this.getSeparatedDates(this.defaults.course_dates, true);
 
         this.crudService.list('/booking-users', 1, 10000, 'desc', 'id',
-          '&course_id='+this.defaults.id, null, null, null, ['client'])
+          '&course_id=' + this.defaults.id, null, null, null, ['client'])
           .subscribe((result) => {
             this.courseUsers = result.data;
             this.loading = false;
@@ -431,9 +431,9 @@ export class CourseDetailComponent implements OnInit {
   }
 
   private lightenColor(hexColor: string, percent: number): string {
-    let r:any = parseInt(hexColor.substring(1, 3), 16);
-    let g:any = parseInt(hexColor.substring(3, 5), 16);
-    let b:any = parseInt(hexColor.substring(5, 7), 16);
+    let r: any = parseInt(hexColor.substring(1, 3), 16);
+    let g: any = parseInt(hexColor.substring(3, 5), 16);
+    let b: any = parseInt(hexColor.substring(5, 7), 16);
 
     // Increase the lightness
     r = Math.round(r + (255 - r) * percent / 100);
@@ -445,11 +445,11 @@ export class CourseDetailComponent implements OnInit {
     g = g.toString(16).padStart(2, '0');
     b = b.toString(16).padStart(2, '0');
 
-    return '#'+r+g+b;
+    return '#' + r + g + b;
   }
 
   getStations() {
-    this.crudService.list('/stations', 1, 10000,  'desc', 'id', '&school_id=' + this.user.schools[0].id)
+    this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((st) => {
         st.data.forEach(element => {
           if (element.id === this.defaults.station_id) {
@@ -478,7 +478,7 @@ export class CourseDetailComponent implements OnInit {
     return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
   }
 
-  parseDateToDay(date:any, inFormat: string, format: string) {
+  parseDateToDay(date: any, inFormat: string, format: string) {
     return moment(date, inFormat).format(format);
   }
 
@@ -492,8 +492,10 @@ export class CourseDetailComponent implements OnInit {
       height: '800px',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
-      data: {degree: degree, group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor,
-        id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate}
+      data: {
+        degree: degree, group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor,
+        id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate
+      }
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
@@ -512,20 +514,20 @@ export class CourseDetailComponent implements OnInit {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
         panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-        data: {message: 'Do you want to remove this subgroup? This action will be permanetly', title: 'Delete subgroup'}
+        data: { message: 'Do you want to remove this subgroup? This action will be permanetly', title: 'Delete subgroup' }
       });
 
       dialogRef.afterClosed().subscribe((data: any) => {
         if (data) {
           this.crudService.delete('/course-subgroups', subgroup.id)
             .subscribe(() => {
-              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000});
+              this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', { duration: 3000 });
               this.getData();
             })
         }
       });
     } else {
-      this.snackbar.open(this.translateService.instant('snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
+      this.snackbar.open(this.translateService.instant('snackbar.course.subgroup_with_bookings'), 'OK', { duration: 3000 })
     }
 
   }
@@ -535,13 +537,13 @@ export class CourseDetailComponent implements OnInit {
 
   getDegrees() {
     this.groupedByColor = {};
-    this.colorKeys= [];
-    this.crudService.list('/degrees', 1, 10000,'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+ this.defaults.sport_id)
+    this.colorKeys = [];
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + this.defaults.sport_id)
       .subscribe((data) => {
 
         if (this.defaults.course_type === 1) {
           data.data.forEach(element => {
-            if(element.active) {
+            if (element.active) {
               this.levels.push(element);
 
             }
@@ -580,7 +582,7 @@ export class CourseDetailComponent implements OnInit {
   generateGroups(level: any) {
     let ret = {};
     this.levels.forEach(element => {
-      if (element.id === level.id){
+      if (element.id === level.id) {
         ret = {
           course_id: null,
           course_date_id: null,
@@ -615,7 +617,7 @@ export class CourseDetailComponent implements OnInit {
 
   activeGroup(event: any, level: any) {
 
-    if(event.source.checked) {
+    if (event.source.checked) {
       this.selectedItem = this.daysDatesLevels[0].dateString;
       this.selectedDate = this.defaults.course_dates[0]?.date;
       level.active = event.source.checked;
@@ -687,7 +689,7 @@ export class CourseDetailComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
           maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
           panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
-          data: {message: 'Do you want to remove this group? This action will be permanetly', title: 'Delete group'}
+          data: { message: 'Do you want to remove this group? This action will be permanetly', title: 'Delete group' }
         });
 
         dialogRef.afterClosed().subscribe((data: any) => {
@@ -695,7 +697,7 @@ export class CourseDetailComponent implements OnInit {
             groupsToDelete.forEach(element => {
               this.crudService.delete('/course-groups', element)
                 .subscribe(() => {
-                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', {duration: 3000})
+                  this.snackbar.open(this.translateService.instant('snackbar.course.deleted_group'), 'OK', { duration: 3000 })
 
                 })
             });
@@ -706,7 +708,7 @@ export class CourseDetailComponent implements OnInit {
           }
         });
       } else {
-        this.snackbar.open(this.translateService.instant('snackbar.course.subgroup_with_bookings'), 'OK', {duration: 3000})
+        this.snackbar.open(this.translateService.instant('snackbar.course.subgroup_with_bookings'), 'OK', { duration: 3000 })
       }
     }
 
@@ -833,10 +835,10 @@ export class CourseDetailComponent implements OnInit {
   getMonitorValue(level: any, subGroupIndex: number, daySelectedIndex: number) {
 
     let ret = '';
-    if(!level.old) {
+    if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
+        if (moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
           courseDate.course_groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.course_subgroups[subGroupIndex]?.monitor;
@@ -890,11 +892,11 @@ export class CourseDetailComponent implements OnInit {
 
   setSubGroupMonitor(event: any, monitor: any, level: any, subGroupSelectedIndex: number, daySelectedIndex: number) {
 
-    if(!monitor) {
+    if (!monitor) {
       this.defaults.course_dates.forEach(courseDate => {
 
         courseDate.course_groups.forEach(group => {
-          if(group.degree_id === level.id ) {
+          if (group.degree_id === level.id) {
 
             group.course_subgroups[subGroupSelectedIndex].monitor_id = null;
             group.course_subgroups[subGroupSelectedIndex].monitor = null;
@@ -910,12 +912,12 @@ export class CourseDetailComponent implements OnInit {
             this.defaults.course_dates.forEach(courseDate => {
               if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
-                this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date, 'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
                   .subscribe((result: any) => {
 
                     if (result.data.available) {
                       courseDate.course_groups.forEach(group => {
-                        if(group.degree_id === level.id && !monitorSet) {
+                        if (group.degree_id === level.id && !monitorSet) {
 
                           group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
                           group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
@@ -928,7 +930,7 @@ export class CourseDetailComponent implements OnInit {
             });
           } else {
             this.defaults.course_dates.forEach((courseDate, idx) => {
-              this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+              this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
                 .subscribe((result: any) => {
                   if (result.data.available) {
 
@@ -950,7 +952,7 @@ export class CourseDetailComponent implements OnInit {
             this.defaults.course_dates.forEach(courseDate => {
               if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
                 courseDate.course_groups.forEach(group => {
-                  if(group.degree_id === level.id && !monitorSet) {
+                  if (group.degree_id === level.id && !monitorSet) {
 
                     group.course_subgroups[subGroupSelectedIndex].monitor_id = monitor.id;
                     group.course_subgroups[subGroupSelectedIndex].monitor = monitor.first_name + ' ' + monitor.last_name;
@@ -976,7 +978,7 @@ export class CourseDetailComponent implements OnInit {
 
   setSubGroupPax(event: any, level: any) {
     if (+event.target.value > this.defaults.max_participants) {
-      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', {duration: 3000});
+      this.snackbar.open(this.translateService.instant('snackbar.course.capacity'), 'OK', { duration: 3000 });
     }
 
     level.max_participants = +event.target.value <= this.defaults.max_participants ? +event.target.value : this.defaults.max_participants;
@@ -985,7 +987,7 @@ export class CourseDetailComponent implements OnInit {
       element.course_groups.forEach(group => {
         if (level.id === group.degree_id) {
           group.course_subgroups.forEach(subGroup => {
-            subGroup.max_participants =level.max_participants;
+            subGroup.max_participants = level.max_participants;
           });
         }
       });
@@ -1109,7 +1111,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getClients() {
-    this.crudService.list('/clients/', 1, 100000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/clients/', 1, 100000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((data: any) => {
         this.clients = data.data;
 
@@ -1123,7 +1125,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   calculateAge(birthDateString) {
-    if(birthDateString && birthDateString !== null) {
+    if (birthDateString && birthDateString !== null) {
       const today = new Date();
       const birthDate = new Date(birthDateString);
       let age = today.getFullYear() - birthDate.getFullYear();
@@ -1181,7 +1183,7 @@ export class CourseDetailComponent implements OnInit {
           return acc;
         }, [0, 0]);
 
-        this.daysDatesLevels.push({date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
+        this.daysDatesLevels.push({ date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''), active: element.active });
         if (this.defaults.course_type === 2) {
 
           this.defaults.course_dates.push({
@@ -1199,9 +1201,11 @@ export class CourseDetailComponent implements OnInit {
           })
         }
       } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+        this.daysDatesLevels.push({
+          date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
           dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''),
-          active: element.active, id: element.id});
+          active: element.active, id: element.id
+        });
       }
 
     });
@@ -1210,7 +1214,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   getMonitors() {
-    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/monitors', 1, 10000, 'asc', 'first_name', '&school_id=' + this.user.schools[0].id)
       .subscribe((data) => {
         this.monitors = data.data;
 
@@ -1231,7 +1235,7 @@ export class CourseDetailComponent implements OnInit {
     let ret = [];
 
     this.courseUsers.forEach(courseUser => {
-      if(courseUser.course_group_id === subGroup.course_group_id
+      if (courseUser.course_group_id === subGroup.course_group_id
         && courseUser.course_subgroup_id === subGroup.id
         && courseUser.status === 1) {
         ret.push(courseUser);
@@ -1322,12 +1326,12 @@ export class CourseDetailComponent implements OnInit {
   }
 
   calculateHourEnd(hour: any, duration: any) {
-    if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
+    if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {
       const hours = duration.split(' ')[0].replace('h', '');
       const minutes = duration.split(' ')[1].replace('min', '').replace('m', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').add(minutes, 'm').format('HH:mm');
-    } else if(duration.includes('h')) {
+    } else if (duration.includes('h')) {
       const hours = duration.split(' ')[0].replace('h', '');
 
       return moment(hour, 'HH:mm').add(hours, 'h').format('HH:mm');
@@ -1353,8 +1357,8 @@ export class CourseDetailComponent implements OnInit {
     const data = {
       sportId: this.defaults.sport_id,
       minimumDegreeId: minDegree,
-      startTime: start.length  <=5 ? start : start.replace(':00', ''),
-      endTime: end.length  <=5 ? end : end.replace(':00', ''),
+      startTime: start.length <= 5 ? start : start.replace(':00', ''),
+      endTime: end.length <= 5 ? end : end.replace(':00', ''),
       date: this.daysDatesLevels[this.daySelectedIndex].date
     };
 
@@ -1409,7 +1413,7 @@ export class CourseDetailComponent implements OnInit {
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
         if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
-          ret = idx +1;
+          ret = idx + 1;
         }
       });
     }
@@ -1438,7 +1442,7 @@ export class CourseDetailComponent implements OnInit {
       this.detailData.course.course_dates.forEach((element, idx) => {
         const group = element.course_groups.find((g) => g.id === this.detailData.course_group_id);
 
-        if (group){
+        if (group) {
           group.course_subgroups.forEach((s, sindex) => {
             if (s.id === this.detailData.course_subgroup_id) {
               ret = sindex + 1;
@@ -1450,8 +1454,8 @@ export class CourseDetailComponent implements OnInit {
     return ret;
   }
 
-  getHoursMinutes(hour_start:string, hour_end:string) {
-    const parseTime = (time:string) => {
+  getHoursMinutes(hour_start: string, hour_end: string) {
+    const parseTime = (time: string) => {
       const [hours, minutes] = time.split(':').map(Number);
       return { hours, minutes };
     };
@@ -1470,12 +1474,12 @@ export class CourseDetailComponent implements OnInit {
     return `${durationHours}h${durationMinutes}m`;
   }
 
-  getDateFormatLong(date:string) {
+  getDateFormatLong(date: string) {
     return moment(date).format('dddd, D MMMM YYYY');
   }
 
-  getHourRangeFormat(hour_start:string,hour_end:string) {
-    return hour_start.substring(0, 5)+' - '+hour_end.substring(0, 5);
+  getHourRangeFormat(hour_start: string, hour_end: string) {
+    return hour_start.substring(0, 5) + ' - ' + hour_end.substring(0, 5);
   }
 
   getAllLevelsBySport() {
@@ -1559,7 +1563,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
 
-  getBirthYears(date:string) {
+  getBirthYears(date: string) {
     const birthDate = moment(date);
     return moment().diff(birthDate, 'years');
   }
