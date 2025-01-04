@@ -703,7 +703,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   checkIfCourseIdIsSame(data: any[]): boolean {
     if (data.length === 0) {
-      return true; // o false, según tu lógica de negocio
+      return false; // o false, según tu lógica de negocio
     }
 
     const firstCourseId = data[0].course.id;

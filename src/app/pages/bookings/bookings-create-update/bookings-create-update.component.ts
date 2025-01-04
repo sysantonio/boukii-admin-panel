@@ -456,9 +456,13 @@ export class BookingsCreateUpdateComponent implements OnInit {
       if (client.client_sports.length) {
         client.client_sports.forEach(sport => {
           if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
-            const level = this.levels.find((l) => l.id === sport.degree_id);
+            let level = this.levels.find((l) => l.id === sport.degree_id);
             this.levelForm.patchValue(level);
+            if(!level) {
+              level = this.levels[0];
+            }
             this.defaultsBookingUser.degree_id = level.id;
+
             hasSport = true;
             this.getCourses(level, this.monthAndYear);
           }
@@ -1808,7 +1812,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
         if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
           const level = this.levels.find((l) => l.id === sport.degree_id);
           this.levelForm.patchValue(level);
-          this.defaultsBookingUser.degree_id = level.id;
+          if (level) {
+            this.defaultsBookingUser.degree_id = level.id;
+          }
           hasSport = true;
           this.backToList();
           this.getCourses(level, this.monthAndYear);
@@ -1929,7 +1935,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
             if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
               const level = this.levels.find((l) => l.id === sport.degree_id);
               this.levelForm.patchValue(level);
-              this.defaultsBookingUser.degree_id = level.id;
+              if (level) {
+                this.defaultsBookingUser.degree_id = level.id;
+              }
               hasSport = true;
               if (this.courseTypeId) {
                 this.getCourses(level, this.monthAndYear);
@@ -1988,7 +1996,9 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     if (sport.sport_id === this.defaults.sport_id && sport.school_id === this.user.schools[0].id) {
                       const level = this.levels.find((l) => l.id === sport.degree_id);
                       this.levelForm.patchValue(level);
-                      this.defaultsBookingUser.degree_id = level.id;
+                      if (level) {
+                        this.defaultsBookingUser.degree_id = level.id;
+                      }
                       this.getCourses(level, this.monthAndYear);
                     }
                   });
