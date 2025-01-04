@@ -242,7 +242,7 @@ color: var(--color-dark1);
 			<p>
 				{{'courses.min_age' | translate }}
 			</p>
-			<p [class]="courseFormGroup.controls['age_min'].value?'':'emptyText'"
+			<p [class]="courseFormGroup.controls['age_min'].value>=0?'':'emptyText'"
 				style="color:var(--color-dark1);font-size: 12px;">
 				{{courseFormGroup.controls['age_min'].value}}
 			</p>
@@ -252,7 +252,7 @@ color: var(--color-dark1);
 			<p>
 				{{'courses.max_age' | translate }}
 			</p>
-			<p [class]="courseFormGroup.controls['age_max'].value?'':'emptyText'"
+			<p [class]="courseFormGroup.controls['age_max'].value>=0?'':'emptyText'"
 				style="color:var(--color-dark1); font-size: 12px;">
 				{{courseFormGroup.controls['age_max'].value}}
 			</p>
