@@ -25,7 +25,8 @@
 				formControlName="sport_id">
 				<mat-radio-button *ngFor="let item of sportData"
 					[value]="item.sport_id"
-					class="sport_checkbox">
+					class="sport_checkbox"
+					style="cursor: pointer;">
 					<div style="display: flex;align-items: center;">
 						<img *ngIf="courses.courseFormGroup.controls['sport_id'].value===item.sport_id"
 							[src]="item.icon_selected"
@@ -106,11 +107,11 @@
 				<div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
 					<app-form-input [required]="true"
 						[form]="courses.courseFormGroup"
+						[Suffix]="courses.courseFormGroup.controls['currency'].value"
 						style="width: calc(50% - 10px);"
 						control="price"
 						name="price_per_date"
-						type="number"
-						[Suffix]="courseFormGroup.controls['currency'].value">
+						type="number">
 					</app-form-input>
 					<app-form-input [required]="true"
 						[form]="courses.courseFormGroup"
@@ -166,7 +167,7 @@
 				</app-form-datepicker>
 				<app-form-select *ngIf="courses.courseFormGroup.controls['course_type'].value>1"
 					[required]="true"
-					[table]="duration"
+					[table]="courses.duration"
 					[form]="courses.courseFormGroup"
 					label="courses.dur_min"
 					style="min-width: 0;width: 100%;"
@@ -177,7 +178,7 @@
 				<div *ngFor="let item of courses.courseFormGroup.controls['course_dates'].value, index as i">
 					<div style="width: 100%;background-color: var(--color-grey4);height: 60px;border-top: 1px solid #C7D0D3;padding: 0 24px;align-content: space-evenly;">
 						<span>
-							{{'Fecha '+ (i+1)| translate}}
+							{{('date '| translate)+(i+1)}}
 						</span>
 						<mat-icon *ngIf="i!==0"
 							(click)="courses.courseFormGroup.controls['course_dates'].value.splice(i,1)"
@@ -190,29 +191,29 @@
 							[form]="courses.courseFormGroup"
 							[max]="maxDate"
 							[required]="true"
-							[min]="minDate"
+							[min]="courses.courseFormGroup.controls['date_start'].value"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value"
 							style="min-width: 0;width: 100%;"
 							name="date">
 						</app-form-datepicker>
 						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_start"
 							[required]="true"
-							[table]="hours"
+							[table]="courses.hours"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_start=$event.option.value"
 							style="min-width: 0;width: 100%;"
 							label="hour">
 						</app-form-select>
-						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].Duracion"
+						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
 							[required]="true"
-							[table]="duration"
-							(do)="courses.courseFormGroup.controls['course_dates'].value[i].Duracion=$event.option.value"
+							[table]="courses.duration"
+							(do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value"
 							style="min-width: 0;width: 100%;"
 							label="duration">
 						</app-form-select>
 					</div>
 				</div>
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
-					<button (click)="courses.courseFormGroup.controls['course_dates'].value.push(default_course_dates)"
+					<button (click)="courses.courseFormGroup.controls['course_dates'].value.push(courses.default_course_dates)"
 						style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
 						type="button">
 						{{'add_date' | translate }}
@@ -229,7 +230,7 @@
 						style="padding: 0 20px;display: flex;flex-wrap: nowrap;gap: 20px; align-items: center;">
 						<app-form-select [value]="courses.courseFormGroup.controls['discounts'].value[i].day"
 							[required]="true"
-							[table]="ndays"
+							[table]="courses.ndays"
 							(do)="courses.courseFormGroup.controls['discounts'].value[i].day=$event.option.value"
 							style="min-width: 0;width: 100%;"
 							label="courses.date_reservable">
@@ -244,11 +245,9 @@
 							Suffix="%"
 							style="min-width: 0;width: 100%;">
 						</app-form-input>
-						<mat-icon [style.color]="i===0?'gray':'black'"
-							[style.cursor]="i===0?'':'pointer'"
-							(click)="courses.courseFormGroup.controls['discounts'].value.splice(i,1)"
+						<mat-icon (click)="courses.courseFormGroup.controls['discounts'].value.splice(i,1)"
 							class="icon24"
-							style="margin-left: 16px">
+							style="margin-left: 16px;cursor: pointer; color: black;height: 50px;">
 							delete
 						</mat-icon>
 					</div>
@@ -285,8 +284,7 @@
 						<ng-container *ngIf="PeriodoFecha>0 || i===0">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									{{'courses.date_reservable' |
-                  translate}}
+									{{'courses.date_reservable' | translate}}
 								</mat-label>
 								<input [matDatepicker]="date_inicio"
 									[min]="minDate"
@@ -302,8 +300,7 @@
 							</mat-form-field>
 							<mat-form-field appearance="outline">
 								<mat-label>
-									{{'courses.date_reservable' |
-                  translate}}
+									{{'courses.date_reservable' | translate}}
 								</mat-label>
 								<input [matDatepicker]="date_fin"
 									[min]="minDate"
@@ -320,7 +317,7 @@
 						</ng-container>
 					</div>
 					<div *ngIf="PeriodoFecha>0">
-						<button (click)="courses.courseFormGroup.controls['course_dates'].value.push(default_course_dates)"
+						<button (click)="courses.courseFormGroup.controls['course_dates'].value.push(courses.default_course_dates)"
 							style="margin-top: 0px !important;height: 38px; width: 200px;"
 							mat-button
 							type="button">
@@ -333,7 +330,7 @@
 							style="width: calc(25% - 16px);">
 							{{"full_day" | translate}}
 						</mat-checkbox>
-						<mat-checkbox *ngFor="let item of weekSelect"
+						<mat-checkbox *ngFor="let item of courses.weekSelect"
 							[(ngModel)]="courses.courseFormGroup.controls['settings'].value.weekDays[item]"
 							(change)="selectWeek(item,$event)"
 							style="width: calc(25% - 16px);">
@@ -343,13 +340,13 @@
 					<div style="display: flex;column-gap: 20px;">
 						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[0].hour_start"
 							[required]="true"
-							[table]="hours"
+							[table]="courses.hours"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[0].hour_start=$event.option.value"
 							label="hour">
 						</app-form-select>
 						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[0].hour_end"
 							[required]="true"
-							[table]="hours"
+							[table]="courses.hours"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[0].hour_end=$event.option.value"
 							label="hour">
 						</app-form-select>
@@ -433,10 +430,10 @@
 								</mat-icon>
 							</ng-container>
 						</div>
-						<ng-container *ngFor="let item of [].constructor(courses.courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as i">
+						<ng-container *ngFor="let item of [].constructor(courses.courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as j">
 							<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
-								{{level.annotation}} {{level.level}} {{("00"+(i+1)).slice(-2)}}
-								<img *ngIf="i!==0"
+								{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
+								<img *ngIf="j!==0"
 									(click)="addLevelSubgroup(i,-1)"
 									src="assets/icons/icon/delete.png"
 									alt
@@ -455,7 +452,7 @@
 				<div class="table-container"
 					style="overflow: auto;max-height: 100vh;">
 					<table #scrollContainer
-						[dataSource]="duration"
+						[dataSource]="courses.duration"
 						mat-table
 						class="mat-elevation-z8">
 						<ng-container matColumnDef="intervalo">
@@ -482,7 +479,9 @@
 										class="flex-auto"
 										matInput
 										style="margin-top:3%">
-									<span matTextSuffix>{{courses.courseFormGroup.controls['currency'].value}}</span>
+									<span matTextSuffix>
+										{{courses.courseFormGroup.controls['currency'].value}}
+									</span>
 								</mat-form-field>
 							</td>
 						</ng-container>
@@ -552,28 +551,10 @@
 								matInput
 								type="text">
 						</mat-form-field>
-						<!-- <mat-form-field appearance="outline"
-							style="width: calc(50% - 10px);">
-							<mat-label>
-								{{'N. mín.' | translate}}
-							</mat-label>
-							<input [(ngModel)]="courses.courseFormGroup.controls['categoryPart'].value[i].num_min"
-								matInput
-								type="number">
-						</mat-form-field>
-						<mat-form-field appearance="outline"
-							style="width: calc(50% - 10px);">
-							<mat-label>
-								{{'N. máx' | translate}}
-							</mat-label>
-							<input [(ngModel)]="courses.courseFormGroup.controls['settings'].value.groups[i].num_max"
-								matInput
-								type="number">
-						</mat-form-field> -->
 					</div>
 				</div>
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
-					<button (click)="courses.courseFormGroup.controls['settings'].value.groups.push(default_activity_groups)"
+					<button (click)="courses.courseFormGroup.controls['settings'].value.groups.push(courses.default_activity_groups)"
 						style="margin-top: 0px !important;height: 38px;"
 						mat-button
 						type="button">
@@ -602,6 +583,7 @@
 					<div *ngFor="let item of extras"
 						style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px var(--color-dark1) solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
 						<mat-checkbox [value]="item.id"
+							[checked]="find(courses.courseFormGroup.controls['extras'].value,'id',item.id)"
 							(change)="selectExtra($event,item)">
 						</mat-checkbox>
 						<div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
@@ -703,53 +685,47 @@
 	<div [formGroup]="extrasFormGroup"
 		body
 		style="display: flex; column-gap: 20px; flex-wrap: wrap;">
-		<mat-form-field appearance="outline"
-			style="width: calc(50% - 10px);margin-top: 10px;">
-			<mat-label>
-				{{'product' | translate}}
-			</mat-label>
-			<input matInput
-				required
-				type="text"
-				formControlName="product">
-		</mat-form-field>
-		<mat-form-field appearance="outline"
-			style="width: calc(50% - 10px);margin-top: 10px;">
-			<mat-label>
-				{{'name' | translate}}
-			</mat-label>
-			<input matInput
-				required
-				type="text"
-				formControlName="name">
-		</mat-form-field>
-		<mat-form-field appearance="outline"
-			style="width: calc(50% - 10px)">
-			<mat-label>
-				{{'price_per_day' | translate}}
-			</mat-label>
-			<input matInput
-				required
-				type="number"
-				formControlName="price">
-			<span matSuffix>€</span>
-		</mat-form-field>
-		<mat-form-field appearance="outline"
-			style="width: calc(50% - 10px)">
-			<mat-label>
-				{{'tva' | translate}}
-			</mat-label>
-			<input matInput
-				required
-				type="number"
-				formControlName="iva">
-			<span matSuffix>%</span>
-		</mat-form-field>
+
+		<app-form-input [required]="true"
+			[form]="extrasFormGroup"
+			style="width: calc(50% - 10px);margin-top: 10px;"
+			control="product"
+			name="product"
+			type="text">
+		</app-form-input>
+
+		<app-form-input [required]="true"
+			[form]="extrasFormGroup"
+			style="width: calc(50% - 10px);margin-top: 10px;"
+			control="name"
+			name="name"
+			type="text">
+		</app-form-input>
+
+		<app-form-input [required]="true"
+			[form]="extrasFormGroup"
+			style="width: calc(50% - 10px);margin-top: 10px;"
+			control="price"
+			name="price_per_day"
+			Suffix="€"
+			type="number">
+		</app-form-input>
+
+		<app-form-input [required]="true"
+			[form]="extrasFormGroup"
+			style="width: calc(50% - 10px);margin-top: 10px;"
+			control="iva"
+			name="tva"
+			Suffix="%"
+			type="number">
+		</app-form-input>
+
 		<div style="width: 100%">
-			<mat-slide-toggle [checked]="true">
+			<mat-slide-toggle formControlName="status">
 				{{'active' | translate}}
 			</mat-slide-toggle>
 		</div>
+
 		<button (click)="extrasModal=false"
 			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 			mat-button
@@ -757,7 +733,7 @@
 			{{'cancel' | translate }}
 		</button>
 		<button (click)="extrasModal=false;extras.push(extrasFormGroup.getRawValue());extrasFormGroup.reset()"
-			style="margin-top: 0px !important;height: 38px; width: 128px;"
+			style="margin-top: 0px !important;height: 38px; width: 150px;"
 			color="primary"
 			mat-raised-button
 			type="button">

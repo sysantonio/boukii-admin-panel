@@ -12,28 +12,29 @@ export class CoursesService {
   courseFormGroup: UntypedFormGroup;
 
   resetcourseFormGroup() {
+    const settings = JSON.parse(JSON.parse(localStorage.getItem('boukiiUser')).schools[0].settings);
     this.courseFormGroup = this.fb.group({
       id: [null, Validators.required],
       sport_id: [null, Validators.required],
-      is_flexible: [false],
+      is_flexible: [false, Validators.required],
       created_at: [null],
       user: [null],
       booking_users: [[]],
       course_type: [null, Validators.required],
-      name: ["PROBANDO", Validators.required],
-      short_description: ["PROBANDO RESUMEN", Validators.required],
-      description: ["PROBANDO DESCRIPCION", Validators.required],
+      name: ["Name Test", Validators.required],
+      short_description: ["Short Description Test", Validators.required],
+      description: ["Description Test", Validators.required],
       price: [100, [Validators.required, Validators.min(1)]],
-      currency: ['CHF'],
+      currency: [settings?.taxes?.currency || 'CHF'],
       max_participants: [10, [Validators.required, Validators.min(1)]],
       image: ["", Validators.required],
       icon: ["", Validators.required],
       age_max: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
       age_min: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
-      date_start: [, Validators.required],
-      date_end: [, Validators.required],
-      date_start_res: [],
-      date_end_res: [],
+      date_start: [new Date(), Validators.required],
+      date_end: [new Date(), Validators.required],
+      date_start_res: [new Date()],
+      date_end_res: [new Date()],
       duration: [, Validators.required], //2
       confirm_attendance: [false],
       active: [true],
@@ -71,7 +72,7 @@ export class CoursesService {
       school_id: [null],
       station_id: [null],
       course_dates: [[], Validators.required],
-      discounts: [null, Validators.required],
+      discounts: [[], Validators.required],
       unique: [true],
       hour_min: [],
       hour_max: [],
@@ -90,11 +91,50 @@ export class CoursesService {
             sunday: false
           },
           periods: [],
-          groups: []
+          groups: [this.default_course_dates]
         }
       ],
     });
   }
+  nowDate = new Date()
+  minDate = this.nowDate;
+  maxDate = new Date(2099, 12, 31);
+  hours: string[] = [
+    '08:00', '08:15', '08:30', '08:45', '09:00', '09:15', '09:30', '09:45',
+    '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45',
+    '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45',
+    '14:00', '14:15', '14:30', '14:45', '15:00', '15:15', '15:30', '15:45',
+    '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45',
+    '18:00',
+  ];
+
+  duration: string[] = [
+    '15min', '30min', '45min', '1h', '1h 15min', '1h 30min', '1h 45min',
+    '2h', '2h 15min', '2h 30min', '2h 45min', '3h', '3h 15min', '3h 30min', '3h 45min',
+    '4h', '4h 15min', '4h 30min', '4h 45min', '5h', '5h 15min', '5h 30min', '5h 45min',
+    '6h', '6h 15min', '6h 30min', '6h 45min', '7h', '7h 15min', '7h 30min', '7h 45min'
+  ];
+
+  ndays: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+  weekSelect: string[] = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Diamanche"]
+
+  default_course_dates: { date: Date, hour_start: string, hour_end: string, duration: string, date_end: Date, groups: any[] } =
+    {
+      date: this.nowDate,
+      hour_start: this.hours[0],
+      duration: this.duration[0],
+      date_end: this.nowDate,
+      hour_end: this.hours[4],
+      groups: []
+    }
+  default_activity_groups: { "groupName": string, "ageMin": number, "ageMax": number, "optionName": string, "price": number } =
+    {
+      "groupName": "",
+      "ageMin": 18,
+      "ageMax": 99,
+      "optionName": "",
+      "price": 0
+    }
 
 
   getCourseName(course: any) {

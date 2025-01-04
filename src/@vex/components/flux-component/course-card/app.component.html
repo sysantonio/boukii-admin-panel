@@ -78,7 +78,7 @@
 			</div>
 		</div>
 	</div>
-	<div *ngIf="courseFormGroup.controls['id'] && !detail"
+	<div *ngIf="courseFormGroup.controls['id'].value && !detail"
 		class="cardgroup"
 		style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
 		<p style="display: flex;flex-wrap: nowrap;
@@ -168,7 +168,7 @@ word-wrap: break-word">
 				</ng-container>
 			</p>
 		</div>
-		<div *ngIf="courseFormGroup.controls['id'] && !detail"
+		<div *ngIf="courseFormGroup.controls['id'].value && !detail"
 			style="margin-left: auto;">
 			<p style="
 font-size: 14px;
