@@ -48,7 +48,7 @@ function createFakeMail(id: number): Mail {
     email: 'david.smith@example.org'
   };
 
-  const date: string = faker.date.recent(30).toISOString();
+  const date: string = faker.date.recent(30).toLocaleString();
   const subject: string = faker.lorem.sentence();
   const body: string = faker.fake(`<p>Hey ${to.name},</p><br/><p>${faker.lorem.paragraph()}</p><br/><p>${faker.lorem.paragraph()}</p><br/><p>Best,<br/>${from.name}</p>`);
 

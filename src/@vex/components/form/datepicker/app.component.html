@@ -1,5 +1,6 @@
 <mat-form-field *ngIf="control"
 	[formGroup]="form"
+	(click)="datepicker.open()"
 	style="margin: 10px 0;cursor: pointer;"
 	appearance="outline">
 	<mat-label>
@@ -9,7 +10,6 @@
 		[min]="min"
 		[max]="max"
 		[formControlName]="control"
-		(click)="datepicker.open()"
 		(dateInput)="do.emit($event)"
 		matInput
 		readonly>
@@ -22,6 +22,7 @@
 	</mat-error>
 </mat-form-field>
 <mat-form-field *ngIf="!control"
+	(click)="datepicker.open()"
 	style="margin: 10px 0;cursor: pointer;"
 	appearance="outline">
 	<mat-label>
@@ -31,7 +32,6 @@
 		[min]="min"
 		[value]="value"
 		[max]="max"
-		(click)="datepicker.open()"
 		(dateInput)="value=$event.value;do.emit($event)"
 		matInput
 		readonly>

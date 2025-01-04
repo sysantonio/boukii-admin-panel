@@ -734,7 +734,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       days = days + 1;
     });
 
-    return { minDate: minDate.toISOString(), maxDate: maxDate.toISOString(), days: days };
+    return { minDate: minDate.toLocaleString(), maxDate: maxDate.toLocaleString(), days: days };
   }
 
   getMinMaxHours(data: any[]): { minHour: string, maxHour: string } {

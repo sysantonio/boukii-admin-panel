@@ -16,6 +16,9 @@ export class ComponenteInputComponent {
   @Input() required: boolean = false
   @Input() Suffix: string = ""
   @Input() Prefix: string = ""
+  @Input() max: number = 99
+  @Input() min: number = 0
+  
 
   @Output() do = new EventEmitter()
 

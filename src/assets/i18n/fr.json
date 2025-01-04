@@ -36,6 +36,13 @@
   "langs": "Langues",
   "province": "Province",
   "week": "Semaine",
+  "monday": "Lundi",
+  "tuesday": "Mardi",
+  "wednesday": "Mercredi",
+  "thursday": "Jeudi",
+  "friday": "Vendredi",
+  "saturday": "Samedi",
+  "sunday": "Dimanche",
   "month": "Mois",
   "monitor": "Moniteur",
   "birth_date": "Date de naissance",
@@ -722,8 +729,7 @@
   "to_pay": "À payer",
   "choose_level_pop": "Choisissez les niveaux ici. Vous pourrez attribuer les moniteurs ultérieurement.",
   "edit_level_here": "Modifiez les niveaux ici.",
-  "choose_atlest_level":"Choisissez au moins un niveau.",
-
+  "choose_atlest_level": "Choisissez au moins un niveau.",
   "details": "Détails",
   "legend": "Légende",
   "assigned": "Assigné",
@@ -732,10 +738,13 @@
   "present_course_day": "Présent le jour du cours",
   "student_changed": "Élève changé de cours/niveau/groupe",
   "not_presented": "Non présenté",
-  "upcoming_day": "Jour à venir"
-        ,"select_extra":"Sélectionnez les extras qui peuvent être ajoutés lors de la réservation "
-  ,"Category_participant":"Catégorie de participant"
-   ,"No_durations_found":"Aucune durée trouvée"
-   ,  "general_mails": "Mails généraux"
-
+  "upcoming_day": "Jour à venir",
+  "select_extra": "Sélectionnez les extras qui peuvent être ajoutés lors de la réservation ",
+  "Category_participant": "Catégorie de participant",
+  "No_durations_found": "Aucune durée trouvée",
+  "general_mails": "Mails généraux",
+  "category_name": "Nom de catégorie",
+  "add_category": "Ajouter une catégorie",
+  "add_discount_by_date": "Ajouter une remise par date",
+  "send_mail": "Envoyer un mail"
 }

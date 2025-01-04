@@ -105,6 +105,13 @@
   "end_splite": "End of division",
   "bookings": "Bookings",
   "list": "List",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "sunday": "Sunday",
   "Lundi": "Monday",
   "Mardi": "Tuesday",
   "Mercredi": "Wednesday",
@@ -724,8 +731,7 @@
   "to_pay": "To pay",
   "choose_level_pop": "Choose the levels here. You can assign the monitors at a later time.",
   "edit_level_here": "Edit the levels here.",
-  "choose_atlest_level":"Choose at least one level.",
-
+  "choose_atlest_level": "Choose at least one level.",
   "details": "Details",
   "legend": "Legend",
   "assigned": "Assigned",
@@ -734,10 +740,13 @@
   "present_course_day": "Present on the course day",
   "student_changed": "Student changed course/level/group",
   "not_presented": "Not presented",
-  "upcoming_day": "Upcoming day"
-    ,"select_extra":"Select the extras that can be added while making the reservation"
-  ,"Category_participant":"Participant category"
-  ,"No_durations_found":"No durations found"
-  ,  "general_mails": "General emails"
-
+  "upcoming_day": "Upcoming day",
+  "select_extra": "Select the extras that can be added while making the reservation",
+  "Category_participant": "Participant category",
+  "No_durations_found": "No durations found",
+  "general_mails": "General emails",
+  "category_name": "Category Name",
+  "add_category": "Add Category",
+  "add_discount_by_date": "Add discount by date",
+  "send_mail": "Send mail"
 }

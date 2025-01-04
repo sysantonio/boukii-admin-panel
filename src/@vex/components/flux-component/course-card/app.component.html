@@ -81,16 +81,8 @@
 	<div *ngIf="courseFormGroup.controls['id'].value && !detail"
 		class="cardgroup"
 		style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
-		<p style="display: flex;flex-wrap: nowrap;
- color: white;
- font-size: 16px;
- font-family: Dinamit;
- font-weight: 500;
- line-height: 20px;
- word-wrap: break-word">
-			{{"Course" | translate }} {{"#" +
-("00000"+courseFormGroup.controls['id'].value).slice(-5) |
-translate}}
+		<p style="display: flex;flex-wrap: nowrap; color: white; font-size: 16px; font-family: Dinamit; font-weight: 500; line-height: 20px; word-wrap: break-word">
+			{{"Course" | translate }} {{"#" +("00000"+courseFormGroup.controls['id'].value).slice(-5) |translate}}
 			<img (click)="open.emit(courseFormGroup.controls['id'].value)"
 				src="assets/icons/icon/edit.png"
 				class="button icon24"
@@ -100,39 +92,27 @@ translate}}
 				class="button icon24">
 		</p>
 		<div style="width: 100%; height: 100%; border: 1px #C7D0D3 solid;margin: 4px 0;"></div>
-		<p style="
-color: white;
-font-size: 12px;
-font-weight: 400;
-line-height: 16px;
-word-wrap: break-word">
+		<p style="color: white;font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
 			{{"register"| translate}}:
 			<span style="font-weight: 600; color: white;">
 				{{ DateISO(courseFormGroup.controls['created_at'].value)}}
 			</span>
 		</p>
 		<p *ngIf="courseFormGroup.controls['user'].value"
-			style="
-color: white;
-font-size: 12px;
-font-weight: 400;
-line-height: 16px;
-word-wrap: break-word">
+			style="color: white;font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
 			{{courseFormGroup.controls['user'].value}}
 		</p>
 		<div style="display: flex; gap: 8px;">
 			<div *ngIf="courseFormGroup.controls['active'].value"
 				style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
 				<div style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">
-					{{'active'
-| translate}}
+					{{'active'| translate}}
 				</div>
 			</div>
 			<div *ngIf="courseFormGroup.controls['online'].value"
 				style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background: #B2EFAD; border-radius: 3px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
 				<div style="color: #075800; font-size: 12px; font-weight: 600; line-height: 16px; word-wrap: break-word">
-					{{'payment_online'
-| translate}}
+					{{'payment_online'| translate}}
 				</div>
 			</div>
 		</div>
@@ -151,12 +131,7 @@ word-wrap: break-word">
 				{{courseFormGroup.controls['name'].value}}
 			</p>
 			<p [class]="courseFormGroup.controls['course_type'].value?'':'emptyText'"
-				style="line-height: 18px; min-height: 12px;margin-top: 5px;
-color: var(--color-dark1);
-font-size: 12px;
-font-weight: 400;
-line-height: 16px;
-word-wrap: break-word">
+				style="line-height: 18px; min-height: 12px;margin-top: 5px;color: var(--color-dark1);font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
 				<ng-container *ngIf="courseFormGroup.controls['course_type'].value===1">
 					{{'course_colective' | translate}}
 				</ng-container>
@@ -170,13 +145,7 @@ word-wrap: break-word">
 		</div>
 		<div *ngIf="courseFormGroup.controls['id'].value && !detail"
 			style="margin-left: auto;">
-			<p style="
-font-size: 14px;
-font-weight: 600;
-line-height: 18px;
-text-align: right;
-color: var(--color-dark1);
-">
+			<p style="font-size: 14px;font-weight: 600;line-height: 18px;text-align: right;color: var(--color-dark1);">
 				{{courseFormGroup.controls['price'].value}}{{courseFormGroup.controls['price'].value?('&nbsp;'+courseFormGroup.controls['currency'].value):''}}
 			</p>
 		</div>
@@ -303,8 +272,7 @@ color: var(--color-dark1);
 				<img src="assets/icons/icon/calendar.png"
 					class="icon24">
 				<p>
-					{{'bookings_page.description.date' |
-translate }}
+					{{'bookings_page.description.date' |translate }}
 				</p>
 			</div>
 			<p *ngIf="!courseFormGroup.controls['course_dates'].value"
@@ -317,12 +285,10 @@ translate }}
 						{{!item.date_end||item.date==item.date_end?DateISO(item.date):(DateISO(item.date)+'-'+DateISO(item.date_end))}}
 					</span>
 					<span>
-						{{courseFormGroup.controls['course_type'].value>1?
-item.hour_start:
-item.hour_start+'-'+item.hour_end}}
+						{{item.hour_end?item.hour_start:item.hour_start+'-'+item.hour_end}}
 					</span>
 					<span>
-						{{courseFormGroup.controls['price'].value}}&nbsp;{{courseFormGroup.controls['currency'].value}}
+						{{courseFormGroup.controls['price'].value.toFixed(2)}}&nbsp;{{courseFormGroup.controls['currency'].value}}
 					</span>
 				</p>
 			</ng-container>
@@ -330,8 +296,7 @@ item.hour_start+'-'+item.hour_end}}
 		<ng-container *ngIf="courseFormGroup.controls['discounts'].value">
 			<div *ngFor="let item of courseFormGroup.controls['discounts'].value"
 				style="width: 100%; color:var(--color-dark1);font-weight: 400;">
-				· {{"reduction" | translate}} {{item.reduccion}}%
-{{"booking" | translate}} {{item.day}} {{"days" | translate}}
+				· {{"reduction" | translate}} {{item.reduccion}}%{{"booking" | translate}} {{item.day}} {{"days" | translate}}
 			</div>
 		</ng-container>
 		<div *ngIf="courseFormGroup.controls['settings'].value"
@@ -370,51 +335,51 @@ item.hour_start+'-'+item.hour_end}}
 				</p>
 			</div>
 			<div style="width: 100%; display: flex;gap: 20px;">
-				<p style="height: 24px;
-color: var(--color-dark1);
- font-size: 14px;
- font-weight: 600;
- line-height: 18px;
- word-wrap: break-word">
+				<p style="height: 24px;color: var(--color-dark1); font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
 					{{"France" | translate}}
 					<mat-icon class="check">check</mat-icon>
 				</p>
-				<p style="height: 24px;
-color: var(--color-dark1);
- font-size: 14px;
- font-weight: 600;
- line-height: 18px;
- word-wrap: break-word">
+				<p style="height: 24px;color: var(--color-dark1); font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
 					{{"English"| translate}}
 					<mat-icon class="check">check</mat-icon>
 				</p>
-				<p style="height: 24px;
-color: var(--color-dark1);
- font-size: 14px;
- font-weight: 600;
- line-height: 18px;
- word-wrap: break-word">
+				<p style="height: 24px;color: var(--color-dark1); font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
 					{{"German"| translate}}
 					<mat-icon class="check">check</mat-icon>
 				</p>
-				<p style="height: 24px;
-color: var(--color-dark1);
- font-size: 14px;
- font-weight: 600;
- line-height: 18px;
- word-wrap: break-word">
+				<p style="height: 24px;color: var(--color-dark1); font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
 					{{"Spanish"| translate}}
 					<mat-icon class="check">check</mat-icon>
 				</p>
-				<p style="height: 24px;
-color: var(--color-dark1);
- font-size: 14px;
- font-weight: 600;
- line-height: 18px;
- word-wrap: break-word">
+				<p style="height: 24px;color: var(--color-dark1); font-size: 14px; font-weight: 600; line-height: 18px; word-wrap: break-word">
 					{{"Italian"| translate}}
 					<mat-icon class="check">check</mat-icon>
 				</p>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="courseFormGroup.controls['course_type'].value===3 && courseFormGroup.controls['settings'].value.groups.length>0"
+		class="cardgroup">
+		<div *ngFor="let group of courseFormGroup.controls['settings'].value.groups; index as i"
+			style="width: 100%;display: flex;gap: 18px;flex-wrap: wrap;">
+			<div style="width: 100%;">
+				<p>
+					{{("extras" | translate)+' '+(i+1)+": "+group.groupName}}
+					<img *ngIf="detail"
+						(click)="edit.emit(4)"
+						src="assets/icons/icon/edit2.png"
+						alt
+						class="editbutton icon24">
+				</p>
+			</div>
+			<div *ngFor="let extra of group.extras"
+				style="width: 100%; display: flex;">
+				<span style="color: var(--color-dark1);font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
+					{{extra.name.slice(0,20)}}
+				</span>
+				<span style="color: var(--color-dark1);font-size: 14px;font-weight: 300;line-height: 18px;word-wrap: break-word;margin-left: auto;">
+					{{extra.price.toFixed(2)}}&nbsp;{{courseFormGroup.controls['currency'].value}}/{{"day" | translate}}
+				</span>
 			</div>
 		</div>
 	</div>
@@ -432,24 +397,13 @@ color: var(--color-dark1);
 				</p>
 			</div>
 			<ng-container *ngIf="courseFormGroup.controls['extras'].value">
-				<div *ngFor="let item of courseFormGroup.controls['extras'].value"
+				<div *ngFor="let extra of courseFormGroup.controls['extras'].value"
 					style="width: 100%; display: flex;">
-					<span style="
-color: var(--color-dark1);
-font-size: 14px;
-font-weight: 600;
-line-height: 18px;
-word-wrap: break-word">
-						{{item.name.slice(0,20)}}
+					<span style="color: var(--color-dark1);font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
+						{{extra.name.slice(0,20)}}
 					</span>
-					<span style="
-color: var(--color-dark1);
-font-size: 14px;
-font-weight: 300;
-line-height: 18px;
-word-wrap: break-word;
-margin-left: auto;">
-						{{item.price || 0}}&nbsp;{{courseFormGroup.controls['currency'].value}}/{{"day" | translate}}
+					<span style="color: var(--color-dark1);font-size: 14px;font-weight: 300;line-height: 18px;word-wrap: break-word;margin-left: auto;">
+						{{extra.price.toFixed(2)}}&nbsp;{{courseFormGroup.controls['currency'].value}}/{{"day" | translate}}
 					</span>
 				</div>
 			</ng-container>

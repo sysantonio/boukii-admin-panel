@@ -3047,10 +3047,10 @@ export class BookingsCreateUpdateComponent implements OnInit {
   /*  getDateFromSelectedDates() {
       let date = this.externalData?.date ? this.externalData?.date : this.selectedDatePrivate;
 
-      const formattedDate = new Date(date).toISOString().split('T')[0];
+      const formattedDate = new Date(date).toLocaleString().split('T')[0];
 
       return this.selectedItem.course_dates.find(i => {
-        const courseDate = new Date(i.date).toISOString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
+        const courseDate = new Date(i.date).toLocaleString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
         return courseDate === formattedDate; // Comparamos con la fecha en formato YYYY-MM-DD
       });
 
@@ -3066,7 +3066,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const targetMonth = targetDateUTC.getUTCMonth();
     const targetDay = targetDateUTC.getUTCDate();
 
-    const formattedDate = new Date(Date.UTC(targetYear, targetMonth, targetDay)).toISOString().split('T')[0];
+    const formattedDate = new Date(Date.UTC(targetYear, targetMonth, targetDay)).toLocaleString().split('T')[0];
 
     // Buscar una coincidencia exacta de la fecha
     const exactMatch = this.selectedItem.course_dates.find(i => {
@@ -3075,7 +3075,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       const courseMonth = courseDateUTC.getUTCMonth();
       const courseDay = courseDateUTC.getUTCDate();
 
-      const courseFormattedDate = new Date(Date.UTC(courseYear, courseMonth, courseDay)).toISOString().split('T')[0];
+      const courseFormattedDate = new Date(Date.UTC(courseYear, courseMonth, courseDay)).toLocaleString().split('T')[0];
       return courseFormattedDate === formattedDate;
     });
 

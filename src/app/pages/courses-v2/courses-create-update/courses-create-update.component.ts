@@ -36,11 +36,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   ]
 
   PeriodoFecha: number = 0
-
-  nowDate = new Date()
-  minDate = this.nowDate;
-  maxDate = new Date(2099, 12, 31);
-
   extrasFormGroup: UntypedFormGroup; //crear extras nuevas
 
   sportData: any = [];
@@ -219,13 +214,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courses.courseFormGroup.controls['course_type'].value === 1
         )
       ) {
-        if (this.courses.courseFormGroup.controls["course_dates"].value.length === 0)
-          this.courses.courseFormGroup.patchValue({ course_dates: [this.courses.default_course_dates] })
+
         this.getDegrees();
       } else {
         this.courses.courseFormGroup.markAllAsTouched()
         this.ModalFlux -= add
       }
+      if (this.courses.courseFormGroup.controls["course_dates"].value.length === 0 || this.courses.courseFormGroup.controls['course_type'].value === 1) this.courses.courseFormGroup.patchValue({ course_dates: [{ ...this.courses.default_course_dates }] })
     } else if (this.ModalFlux === 3) {
       if (
         this.courses.courseFormGroup.controls["date_start"].status === 'VALID' &&
@@ -323,10 +318,16 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.courses.courseFormGroup.patchValue({ levelGrop })
   }
 
-  selectExtra = (event: any, item: any) => {
-    const extras = this.courses.courseFormGroup.controls['extras'].value
-    if (event.checked || !extras.find((a: any) => a.id === item.id)) this.courses.courseFormGroup.patchValue({ extras: [...extras, item] })
-    else this.courses.courseFormGroup.patchValue({ extras: extras.filter((a: any) => a.id !== item.id) })
+  selectExtra = (event: any, item: any, i: number) => {
+    if (this.courses.courseFormGroup.controls['course_type'].value === 3) {
+      this.courses.courseFormGroup.controls['settings'].value.groups = JSON.parse(JSON.stringify(this.courses.courseFormGroup.controls['settings'].value.groups))
+      if (event.checked || !this.courses.courseFormGroup.controls['settings'].value.groups[i].extras.find((a: any) => a.id === item.id)) this.courses.courseFormGroup.controls['settings'].value.groups[i].extras.push(item)
+      else this.courses.courseFormGroup.controls['settings'].value.groups[i].extras = this.courses.courseFormGroup.controls['settings'].value.groups[i].extras.filter((a: any) => a.id !== item.id)
+    } else {
+      const extras = this.courses.courseFormGroup.controls['extras'].value
+      if (event.checked || !extras.find((a: any) => a.id === item.id)) this.courses.courseFormGroup.patchValue({ extras: [...extras, item] })
+      else this.courses.courseFormGroup.patchValue({ extras: extras.filter((a: any) => a.id !== item.id) })
+    }
   }
 
   selectWeek = (day: string, event: any) => {
@@ -369,8 +370,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       const obj = { intervalo: duracion[i] };
       for (let j = 1; j <= personas; j++) obj[j] = 0
       resultado.push(obj);
-    }
-    return resultado;
+    } return resultado;
   }
 
 }

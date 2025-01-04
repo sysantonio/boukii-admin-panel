@@ -724,7 +724,7 @@
   "to_pay": "Zu zahlen",
   "choose_level_pop": "Wählen Sie hier die Stufen aus. Sie können die Monitore später zuweisen.",
   "edit_level_here": "Bearbeiten Sie die Stufen hier.",
-  "choose_atlest_level":"Wähle mindestens eine Stufe aus.",
+  "choose_atlest_level": "Wähle mindestens eine Stufe aus.",
   "details": "Details",
   "legend": "Legende",
   "assigned": "Zugewiesen",
@@ -733,9 +733,20 @@
   "present_course_day": "Am Kurstag anwesend",
   "student_changed": "Schüler in Kurs/Niveau/Gruppe gewechselt",
   "not_presented": "Nicht erschienen",
-  "upcoming_day": "Kommender Tag"
-  ,"select_extra":"Wählen Sie die Extras aus, die bei der Buchung hinzugefügt werden können"
-  ,"Category_participant":"Teilnehmerkategorie"
-  ,"No_durations_found":"Keine Dauer gefunden"
-,  "general_mails": "Allgemeine E-Mails"
+  "upcoming_day": "Kommender Tag",
+  "select_extra": "Wählen Sie die Extras aus, die bei der Buchung hinzugefügt werden können",
+  "Category_participant": "Teilnehmerkategorie",
+  "No_durations_found": "Keine Dauer gefunden",
+  "general_mails": "Allgemeine E-Mails",
+  "monday": "Montag",
+  "tuesday": "Dienstag",
+  "wednesday": "Mittwoch",
+  "thursday": "Donnerstag",
+  "friday": "Freitag",
+  "saturday": "Samstag",
+  "sunday": "Sonntag",
+  "category_name": "Kategoriename",
+  "add_category": "Kategorie hinzufügen",
+  "add_discount_by_date": "Rabatt nach Datum hinzufügen",
+  "send_mail": "E-Mail senden"
 }

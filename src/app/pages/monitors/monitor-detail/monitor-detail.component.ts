@@ -1510,7 +1510,7 @@ export class MonitorDetailComponent {
         return taskDate >= startMonth && taskDate <= endMonth;
       });*/
     } else {
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = date.toLocaleString().split('T')[0];
       firstDate = moment(date).format('YYYY-MM-DD');
       lastDate = firstDate;
       this.searchBookings(firstDate, lastDate);

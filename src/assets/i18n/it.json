@@ -736,5 +736,16 @@
   "select_extra": "Seleziona gli extra che possono essere aggiunti durante la prenotazione ",
   "Category_participant": "Categoria partecipante",
   "No_durations_found": "Nessuna durata trovata",
-  "general_mails": "Email generali"
+  "general_mails": "Email generali",
+  "monday": "Lunedì",
+  "tuesday": "Martedì",
+  "wednesday": "Mercoledì",
+  "thursday": "Giovedì",
+  "friday": "Venerdì",
+  "saturday": "Sabato",
+  "sunday": "Domenica",
+  "category_name": "Nome categoria",
+  "add_category": "Aggiungi categoria",
+  "add_discount_by_date": "Aggiungi sconto per data",
+  "send_mail": "Inviare mail"
 }

@@ -26,11 +26,15 @@ button {
   }
 }
 
-::ng-deep .mat-expansion-panel-body {
-  background-color: var(--is-light-theme, white)
-    var(--is-dark-theme, var(--color-grey5)) !important;
+::ng-deep {
+  .mat-mdc-table {
+    background-color: var(--mat-table-background-color) !important;
+  }
+  .mat-expansion-panel-body {
+    background-color: var(--is-light-theme, white)
+      var(--is-dark-theme, var(--color-grey5)) !important;
+  }
 }
-
 .tabsWrapper {
   ::ng-deep {
     .mat-mdc-tab {
@@ -70,14 +74,6 @@ button {
 
 .level {
   ::ng-deep {
-    .mat-mdc-form-field-flex {
-      height: 15px;
-    }
-    .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-      .mat-mdc-form-field-infix {
-      padding-top: 11px;
-      padding-bottom: 11px;
-    }
     .mat-mdc-checkbox-checked {
       label {
         color: white !important;

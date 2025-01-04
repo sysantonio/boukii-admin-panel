@@ -112,6 +112,13 @@
   "Vendredi": "Viernes",
   "Samedi": "Sábado",
   "Diamanche": "Domingo",
+  "monday": "Lunes",
+  "tuesday": "Martes",
+  "wednesday": "Miércoles",
+  "thursday": "Jueves",
+  "friday": "Viernes",
+  "saturday": "Sábado",
+  "sunday": "Domingo",
   "register": "Registrado",
   "status": "Estado",
   "payed": "Pago efectuado",
@@ -743,8 +750,7 @@
   "to_pay": "A pagar",
   "choose_level_pop": "Elige los niveles aquí. Podrás asignar los monitores en un segundo momento.",
   "edit_level_here": "Edita los niveles aquí.",
-  "choose_atlest_level":"Elige al menos un nivel.",
-
+  "choose_atlest_level": "Elige al menos un nivel.",
   "details": "Detalles",
   "legend": "Leyenda",
   "assigned": "Asignado",
@@ -753,9 +759,12 @@
   "present_course_day": "Presente el día del curso",
   "student_changed": "Alumno cambiado de curso/nivel/grupo",
   "not_presented": "No presentado",
-  "upcoming_day": "Día a venir"
-      ,"select_extra":"Seleccionar los extras que pueden ser añadidos haciendo la reserva"
-  ,"Category_participant":"Categoría participante"
-  ,"No_durations_found":"No se encontraron duraciones"
-
+  "upcoming_day": "Día a venir",
+  "select_extra": "Seleccionar los extras que pueden ser añadidos haciendo la reserva",
+  "Category_participant": "Categoría participante",
+  "No_durations_found": "No se encontraron duraciones",
+  "category_name": "Nombre categoría",
+  "add_category": "Añadir categoría",
+  "add_discount_by_date": "Añadir descuento por fecha",
+  "send_mail": "Mandar mail"
 }

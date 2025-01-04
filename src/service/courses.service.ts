@@ -91,7 +91,7 @@ export class CoursesService {
             sunday: false
           },
           periods: [],
-          groups: [this.default_course_dates]
+          groups: [{ ...this.default_activity_groups }]
         }
       ],
     });
@@ -116,7 +116,8 @@ export class CoursesService {
   ];
 
   ndays: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
-  weekSelect: string[] = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Diamanche"]
+
+  weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
   default_course_dates: { date: Date, hour_start: string, hour_end: string, duration: string, date_end: Date, groups: any[] } =
     {
@@ -127,13 +128,15 @@ export class CoursesService {
       hour_end: this.hours[4],
       groups: []
     }
-  default_activity_groups: { "groupName": string, "ageMin": number, "ageMax": number, "optionName": string, "price": number } =
+
+  default_activity_groups: { "groupName": string, "ageMin": number, "ageMax": number, "optionName": string, "price": number, extras: any[] } =
     {
       "groupName": "",
       "ageMin": 18,
       "ageMax": 99,
       "optionName": "",
-      "price": 0
+      "price": 0,
+      "extras": []
     }
 
 
