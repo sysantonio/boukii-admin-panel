@@ -10,11 +10,11 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import moment from 'moment';
 
 @Component({
-  selector: 'vex-course-detail-new',
-  templateUrl: './course-detail-new.component.html',
-  styleUrls: ['./course-detail-new.component.scss']
+  selector: 'vex-course-detail',
+  templateUrl: './course-detail.component.html',
+  styleUrls: ['./course-detail.component.scss']
 })
-export class CourseDetailNewComponent implements OnInit {
+export class CourseDetailComponent implements OnInit {
   minDate = new Date(2000, 1, 1);
   nowDate = new Date()
   maxDate = new Date(2099, 12, 31);

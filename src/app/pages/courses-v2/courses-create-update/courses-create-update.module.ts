@@ -42,6 +42,7 @@ import { ComponenteInputModule } from "../../../../@vex/components/form/input/ap
 import { ComponenteEditorModule } from 'src/@vex/components/form/editor/app.module';
 import { ComponenteDatePickerModule } from 'src/@vex/components/form/datepicker/app.module';
 import { ComponenteSelectModule } from 'src/@vex/components/form/select/app.module';
+import { CoursesModule } from '../courses.module';
 
 @NgModule({
   imports: [
@@ -95,5 +96,4 @@ import { ComponenteSelectModule } from 'src/@vex/components/form/select/app.modu
   declarations: [CoursesCreateUpdateComponent],
   exports: [CoursesCreateUpdateComponent]
 })
-export class CoursesCreateUpdateModule {
-}
+export class CoursesCreateUpdateModule { }

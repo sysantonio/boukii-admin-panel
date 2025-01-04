@@ -6,13 +6,12 @@ import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
-import { CourseUserTransfer2Component } from '../course-user-transfer/course-user-transfer.component';
+import { CourseUserTransfer2Component } from '../../course-user-transfer/course-user-transfer.component';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmModalComponent } from '../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
+import { ConfirmModalComponent } from '../../../monitors/monitor-detail/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { CoursesCreateUpdateComponent } from '../courses-create-update/courses-create-update.component';
 import { CoursesCreateUpdateModalComponent } from '../courses-create-update-modal/courses-create-update-modal.component';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 

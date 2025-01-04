@@ -23,10 +23,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { CourseUserTransferModalModule } from './course-user-transfer/course-user-transfer.module';
-import { CoursesDetailModalModule } from './course-detail-modal/course-detail-modal.module';
+import { CoursesDetailModalModule } from './pendiente/course-detail-modal/course-detail-modal.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { CoursesCreateUpdateModalModule } from './courses-create-update-modal/courses-create-update-modal.module';
-import { CourseDetailNewModule } from './course-detail-new/course-detail-new.module';
+import { CoursesCreateUpdateModalModule } from './pendiente/courses-create-update-modal/courses-create-update-modal.module';
+import { CourseDetailModule } from './course-detail/course-detail.module';
 import { CoursesDetailCardModule } from 'src/@vex/components/flux-component/course-card/app.module';
 import { ComponenteInputModule } from 'src/@vex/components/form/input/app.module';
 import { ComponenteEditorModule } from 'src/@vex/components/form/editor/app.module';
@@ -52,7 +52,7 @@ import { ComponenteSelectModule } from 'src/@vex/components/form/select/app.modu
     WidgetLargeChartModule,
     WidgetTableModule,
     CoursesCreateUpdateModule,
-    CourseDetailNewModule,
+    CourseDetailModule,
     CoursesDetailModalModule,
     CoursesCreateUpdateModalModule,
     MatDialogModule,

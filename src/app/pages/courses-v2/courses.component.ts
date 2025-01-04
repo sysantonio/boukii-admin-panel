@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import jsPDF from 'jspdf';
 import * as QRCode from 'qrcode';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { CoursesService } from 'src/service/courses.service';
 
 
 @Component({
@@ -52,99 +52,12 @@ export class CoursesComponent {
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
-  courseFormGroup: UntypedFormGroup;
 
-  constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService, private snackbar: MatSnackBar, private fb: UntypedFormBuilder) {
+  constructor(private crudService: ApiCrudService, private router: Router, private translateService: TranslateService, private snackbar: MatSnackBar, public courses: CoursesService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.getMonitors();
-    this.resetcourseFormGroup()
+    this.courses.resetcourseFormGroup()
   }
-
-  resetcourseFormGroup() {
-    this.courseFormGroup = this.fb.group({
-      id: [null, Validators.required],
-      sport_id: [null, Validators.required],
-      is_flexible: [false],
-      created_at: [null],
-      user: [null],
-      course_type: [null, Validators.required],
-      name: ["PROBANDO", Validators.required],
-      short_description: ["PROBANDO RESUMEN", Validators.required],
-      description: ["PROBANDO DESCRIPCION", Validators.required],
-      price: [100, [Validators.required, Validators.min(1)]],
-      currency: ['CHF'],
-      max_participants: [10, [Validators.required, Validators.min(1)]],
-      image: ["", Validators.required],
-      icon: ["", Validators.required],
-      age_max: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
-      age_min: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
-      date_start: [, Validators.required],
-      date_end: [, Validators.required],
-      date_start_res: [],
-      date_end_res: [],
-      duration: [, Validators.required], //2
-      confirm_attendance: [false],
-      active: [true],
-      online: [true],
-      options: [true],
-      translations: [
-        {
-          es: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          en: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          fr: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          it: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-          de: {
-            name: '',
-            short_description: '',
-            description: ''
-          },
-        }
-      ],
-      school_id: [this.user.schools[0].id],
-      station_id: [],
-      course_dates: [[], Validators.required],
-      discounts: [null, Validators.required],
-      unique: [true],
-      hour_min: [],
-      hour_max: [],
-      price_range: [[]],
-      extras: [[], Validators.required],
-      levelGrop: [[], Validators.required],
-      settings: [
-        {
-          weekDays: {
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false
-          },
-          periods: [],
-          groups: []
-        }
-      ],
-    });
-  }
-
-
 
   showDetailEvent(event: any) {
     if (event.showDetail || (!event.showDetail && this.detailData !== null && this.detailData.id !== event.item.id)) {
@@ -179,8 +92,8 @@ export class CoursesComponent {
               this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
                 .subscribe((bookingUser: any) => {
                   this.detailData.users = bookingUser.data;
-                  this.courseFormGroup.patchValue(this.detailData)
-                  this.courseFormGroup.patchValue({
+                  this.courses.courseFormGroup.patchValue(this.detailData)
+                  this.courses.courseFormGroup.patchValue({
                     user: this.detailData.user ? this.detailData.user.username + " (" + this.detailData.user.first_name + " " + this.detailData.user.last_name + ")" : "",
                     settings: JSON.parse(this.detailData.settings),
                     icon: this.detailData.sport.icon_unselected,

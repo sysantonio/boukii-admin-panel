@@ -1,17 +1,100 @@
 
 import { Injectable } from '@angular/core';
-import { ApiCrudService } from './crud.service';
 import moment from 'moment';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
+  constructor(private translateService: TranslateService, private fb: UntypedFormBuilder) { }
+  courseFormGroup: UntypedFormGroup;
 
-
-  constructor(private translateService: TranslateService) {
+  resetcourseFormGroup() {
+    this.courseFormGroup = this.fb.group({
+      id: [null, Validators.required],
+      sport_id: [null, Validators.required],
+      is_flexible: [false],
+      created_at: [null],
+      user: [null],
+      course_type: [null, Validators.required],
+      name: ["PROBANDO", Validators.required],
+      short_description: ["PROBANDO RESUMEN", Validators.required],
+      description: ["PROBANDO DESCRIPCION", Validators.required],
+      price: [100, [Validators.required, Validators.min(1)]],
+      currency: ['CHF'],
+      max_participants: [10, [Validators.required, Validators.min(1)]],
+      image: ["", Validators.required],
+      icon: ["", Validators.required],
+      age_max: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
+      age_min: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
+      date_start: [, Validators.required],
+      date_end: [, Validators.required],
+      date_start_res: [],
+      date_end_res: [],
+      duration: [, Validators.required], //2
+      confirm_attendance: [false],
+      active: [true],
+      online: [true],
+      options: [true],
+      translations: [
+        {
+          es: {
+            name: '',
+            short_description: '',
+            description: ''
+          },
+          en: {
+            name: '',
+            short_description: '',
+            description: ''
+          },
+          fr: {
+            name: '',
+            short_description: '',
+            description: ''
+          },
+          it: {
+            name: '',
+            short_description: '',
+            description: ''
+          },
+          de: {
+            name: '',
+            short_description: '',
+            description: ''
+          },
+        }
+      ],
+      school_id: [null],
+      station_id: [null],
+      course_dates: [[], Validators.required],
+      discounts: [null, Validators.required],
+      unique: [true],
+      hour_min: [],
+      hour_max: [],
+      price_range: [[]],
+      extras: [[], Validators.required],
+      levelGrop: [[], Validators.required],
+      settings: [
+        {
+          weekDays: {
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false
+          },
+          periods: [],
+          groups: []
+        }
+      ],
+    });
   }
+
 
   getCourseName(course: any) {
     if (!course.translations) {
@@ -81,7 +164,7 @@ export class CoursesService {
   }
 
 
-  parseDateToDay(date:any, inFormat: string, format: string) {
+  parseDateToDay(date: any, inFormat: string, format: string) {
     return moment(date, inFormat).format(format);
   }
 

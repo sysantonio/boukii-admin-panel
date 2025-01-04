@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CourseDetailNewComponent } from './course-detail-new.component';
+import { CourseDetailComponent } from './course-detail.component';
 import { BreadcrumbsModule } from '../../../../@vex/components/breadcrumbs/breadcrumbs.module';
 import { SecondaryToolbarModule } from '../../../../@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -24,7 +24,7 @@ import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component
 
 @NgModule({
   declarations: [
-    CourseDetailNewComponent
+    CourseDetailComponent
   ],
   imports: [
     CommonModule,
@@ -42,4 +42,4 @@ import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component
     MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule
   ]
 })
-export class CourseDetailNewModule { }
+export class CourseDetailModule { }
