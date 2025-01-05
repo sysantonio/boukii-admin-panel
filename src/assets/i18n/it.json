@@ -748,5 +748,7 @@
   "add_category": "Aggiungi categoria",
   "add_discount_by_date": "Aggiungi sconto per data",
   "send_mail": "Inviare mail",
-  "no_extra_assigned": "Nessun extra assegnato"
+  "no_extra_assigned": "Nessun extra assegnato",
+  "text_nomonitorset": "Nessun monitor assegnato",
+  "no_user_reserved": "Nessun utente riservato"
 }

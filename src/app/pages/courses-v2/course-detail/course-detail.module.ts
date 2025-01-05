@@ -6,7 +6,7 @@ import { SecondaryToolbarModule } from '../../../../@vex/components/secondary-to
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -27,7 +27,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
   declarations: [CourseDetailComponent],
   imports: [
     CommonModule,
-    BreadcrumbsModule,
+    BreadcrumbsModule, ReactiveFormsModule,
     SecondaryToolbarModule,
     MatTabsModule,
     TranslateModule,
@@ -41,6 +41,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
     PageLayoutModule,
     MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
     ComponenteEditorModule,
+
   ]
 })
 export class CourseDetailModule { }

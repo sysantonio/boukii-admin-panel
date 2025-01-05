@@ -18,6 +18,8 @@ export class ComponenteInputComponent {
   @Input() Prefix: string = ""
   @Input() max: number = 99
   @Input() min: number = 0
+  @Input() margin: number = 10
+
   @Input() errors: string = ""
   @Output() do = new EventEmitter()
 

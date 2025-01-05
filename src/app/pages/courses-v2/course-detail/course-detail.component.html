@@ -20,10 +20,11 @@
 						<div [style.width]="count(courses.courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'"
 							class="contents"
 							style="border: 1px solid #dee6ea;">
-							<div style="border-bottom: 1px solid #dee6ea;">
+							<div [formGroup]="courses.courseFormGroup"
+								style="border-bottom: 1px solid #dee6ea;">
 								<div style="width: calc(50% - 10px);">
-									<mat-slide-toggle [checked]="courses.courseFormGroup.controls['online'].value"
-										disabled>
+									<mat-slide-toggle (click)="updateCourses()"
+										formControlName="online">
 										<span style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
 											{{"visible_reserve_page" | translate}}
 										</span>
@@ -34,8 +35,8 @@
 									</mat-slide-toggle>
 								</div>
 								<div style="width: calc(50% - 10px)">
-									<mat-slide-toggle [checked]="courses.courseFormGroup.controls['active'].value"
-										disabled>
+									<mat-slide-toggle (click)="updateCourses()"
+										formControlName="active">
 										<span style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
 											{{'active' | translate}}
 										</span>
@@ -73,6 +74,7 @@
 											<img (click)="goTo('courses/update/'+id,{step:3})"
 												src="assets/icons/icon/edit2.png"
 												alt
+												style="filter: var(--is-dark-theme,invert(1));"
 												class="editbutton icon24">
 										</p>
 									</div>

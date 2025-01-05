@@ -28,7 +28,10 @@ button {
 
 ::ng-deep {
   .mat-mdc-table {
-    background-color: var(--mat-table-background-color) !important;
+    background-color: var(
+      --is-light-theme,
+      var(--mat-table-background-color)
+    ) !important;
   }
   .mat-expansion-panel-body {
     background-color: var(--is-light-theme, white)

@@ -17,9 +17,11 @@ export class ComponenteSelectComponent {
   @Input() table!: any[]
   @Input() id!: string
   @Input() name!: string
+  @Input() name2!: string
+  
 
   @Output() do = new EventEmitter()
 
-  displayFn = (value: any): string => this.id && this.name ? this.table.find((a: any) => a[this.id] === value)[this.name] : value
+  displayFn = (value: any): string => this.id && this.name && this.name2 ? this.table.find((a: any) => a[this.id] === value)[this.name] + " " + this.table.find((a: any) => a[this.id] === value)[this.name2] : this.id && this.name ? this.table.find((a: any) => a[this.id] === value)[this.name] : value
 
 }

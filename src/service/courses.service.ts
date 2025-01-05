@@ -22,15 +22,18 @@ export class CoursesService {
       discounts: JSON.parse(data.discounts)
     })
   }
+  user: any = JSON.parse(localStorage.getItem('boukiiUser'))
 
   resetcourseFormGroup() {
+    console.log(this.user)
     const settings = JSON.parse(JSON.parse(localStorage.getItem('boukiiUser')).schools[0].settings);
     this.courseFormGroup = this.fb.group({
       id: [null, Validators.required],
       sport_id: [null, Validators.required],
       is_flexible: [false, Validators.required],
-      created_at: [null],
-      user: [null],
+      created_at: [new Date()],
+      user: [this.user.username + " (" + this.user.first_name + " " + this.user.last_name + ")"],
+      user_id: [this.user.id],
       booking_users: [[]],
       course_type: [null, Validators.required],
       name: ["Name Test", Validators.required],
@@ -61,9 +64,9 @@ export class CoursesService {
           de: { name: '', short_description: '', description: '' },
         }
       ],
-      school_id: [null],
+      school_id: [this.user.schools[0].id],
       station_id: [null],
-      course_dates: [[], Validators.required],
+      course_dates: [[{ ...this.default_course_dates }], Validators.required],
       discounts: [[], Validators.required],
       unique: [true],
       hour_min: [],
@@ -104,18 +107,19 @@ export class CoursesService {
 
   weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
-  default_course_dates: { date: Date, hour_start: string, hour_end: string, duration: string, date_end: Date, groups: any[] } =
+  default_course_dates: { date: Date, hour_start: string, hour_end: string, duration: string, date_end: Date, course_groups: any[], groups: any[] } =
     {
       date: this.nowDate,
       hour_start: this.hours[0],
       duration: this.duration[0],
       date_end: this.nowDate,
       hour_end: this.hours[4],
+      course_groups: [],
       groups: []
     }
 
   default_activity_groups: { groupName: string, ageMin: number, ageMax: number, optionName: string, price: number, extras: any[] } =
-    { groupName: "", ageMin: 18, ageMax: 99, optionName: "", price: 0, extras: [] }
+    { groupName: "", ageMin: 18, ageMax: 99, optionName: "", price: 1, extras: [] }
 
 
   getCourseName(course: any) {

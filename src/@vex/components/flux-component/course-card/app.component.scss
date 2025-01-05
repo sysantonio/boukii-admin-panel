@@ -32,6 +32,12 @@
     font-weight: 400;
     min-height: 8px;
   }
+  p.label {
+    font-size: 12px;
+    color: var(--color-grey1);
+    font-weight: 700;
+    min-height: 8px;
+  }
 }
 .sport_icon {
   border-radius: 3px;
@@ -107,7 +113,6 @@ button {
       width: 100%;
       display: flex;
       > span {
-        padding: 0 15px;
       }
     }
   }

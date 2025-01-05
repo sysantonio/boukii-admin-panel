@@ -43,8 +43,7 @@
 			[formGroup]="courses.courseFormGroup"
 			class="flex flex-col">
 			<mat-tab-group [selectedIndex]="courses.courseFormGroup.controls['course_type'].value-1||0"
-				(selectedIndexChange)="courses.courseFormGroup.patchValue({course_type:$event+1});
-        $event==2?courses.courseFormGroup.patchValue({is_flexible:true}):null"
+				(selectedIndexChange)="courses.courseFormGroup.patchValue({course_type:$event+1})"
 				class="tabsWrapper">
 				<mat-tab [disabled]="mode==='update'">
 					<ng-template mat-tab-label>
@@ -75,11 +74,11 @@
 				</mat-tab>
 			</mat-tab-group>
 			<div style="padding: 20px 20px 0;">
-				<mat-checkbox [disabled]="courses.courseFormGroup.controls['course_type'].value===3"
-					formControlName="is_flexible">
+				<mat-checkbox formControlName="is_flexible">
 					{{'flexidates' | translate }}
 				</mat-checkbox>
-				<vex-flux-upload-img (upload)="courses.courseFormGroup.patchValue({image:$event})"
+				<vex-flux-upload-img [imagePreviewUrl]="courses.courseFormGroup.controls['image'].value"
+					(upload)="courses.courseFormGroup.patchValue({image:$event})"
 					style="margin-top: 10px;"></vex-flux-upload-img>
 				<app-form-input [required]="true"
 					[form]="courses.courseFormGroup"
@@ -214,7 +213,7 @@
 					</div>
 				</div>
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
-					<button (click)="courses.courseFormGroup.controls['course_dates'].value.push(courses.default_course_dates)"
+					<button (click)="addCourseDate()"
 						style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
 						type="button">
 						{{'add_date' | translate }}
@@ -329,7 +328,7 @@
 						</div>
 					</ng-container>
 					<div *ngIf="PeriodoFecha>0">
-						<button (click)="courses.courseFormGroup.controls['course_dates'].value.push(courses.default_course_dates)"
+						<button (click)="addCourseDate()"
 							style="margin-top: 0px !important;height: 38px; width: 200px;"
 							mat-button
 							type="button">
@@ -361,7 +360,7 @@
 						class="icon24">
 						info
 					</mat-icon>
-					<div>
+					<div *ngIf="courses.courseFormGroup.controls['levelGrop'].value">
 						<span *ngIf="mode==='update'"
 							style="flex: 1 1 0; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word;color: black;">
 							{{"edit_level_here" | translate}}
@@ -378,7 +377,7 @@
 				</div>
 				<div class="level"
 					style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px; gap: 10px;">
-					<ng-container *ngFor="let level of levels;index as i">
+					<ng-container *ngFor="let level of detailData.degrees;index as i">
 						<div style="display: flex;gap: 16px;">
 							<mat-checkbox [style.backgroundColor]="courses.courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
 								[style.color]="level.color"
@@ -410,8 +409,8 @@
 								Suffix="years">
 							</app-form-input>
 							<app-form-input [required]="true"
-								[value]="courses.courseFormGroup.controls['levelGrop'].value[i].PartMax"
-								(do)="courses.courseFormGroup.controls['levelGrop'].value[i].PartMax=$event.target.value;"
+								[value]="courses.courseFormGroup.controls['levelGrop'].value[i].max_participants"
+								(do)="courses.courseFormGroup.controls['levelGrop'].value[i].max_participants=$event.target.value;"
 								name="max_pax"
 								style="width: calc(33.33% - 10px - 16px);"
 								type="number"
@@ -439,11 +438,13 @@
 									src="assets/icons/icon/delete.png"
 									alt
 									class="icon20"
-									style="cursor: pointer; font-size: 20px;align-content: space-evenly;">
+									style="cursor: pointer; font-size: 20px;align-content: space-evenly;filter: var(--is-dark-theme,invert(1));">
 							</div>
 							<div *ngIf="mode==='update'"
 								style="width: 100%;margin-top: -10px;padding: 10px; background-color: var(--color-grey4);">
-								<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup"></vex-flux-disponibilidad>
+								<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup"
+									[monitors]="monitors"
+									[level]="courses.courseFormGroup.controls['levelGrop'].value[i]"></vex-flux-disponibilidad>
 							</div>
 						</ng-container>
 					</ng-container>
@@ -452,9 +453,6 @@
 			<ng-container *ngIf="courses.courseFormGroup.controls['course_type'].value===2">
 				<div class="table-container"
 					style="overflow: auto;max-height: 100vh;">
-					<div>
-						{{"settings.prices.table" | translate}}
-					</div>
 					<table #scrollContainer
 						[dataSource]="courses.duration"
 						mat-table
@@ -476,12 +474,13 @@
 								{{col}}
 							</th>
 							<td *matCellDef="let row; index as rowi"
-								mat-cell>
+								mat-cell
+								style="max-width: 120px;padding: 0 5px;">
 								<app-form-input [value]="courses.courseFormGroup.controls['price_range'].value[+rowi][+col]"
 									[Suffix]="courses.courseFormGroup.controls['currency'].value"
+									[margin]="4"
 									(do)="courses.courseFormGroup.controls['price_range'].value[+rowi][+col]=$event.target.value;"
 									name="price"
-									style="width: 100px;"
 									type="number">
 								</app-form-input>
 							</td>
@@ -554,7 +553,7 @@
 					</div>
 				</div>
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
-					<button (click)="courses.courseFormGroup.controls['settings'].value.groups.push(courses.default_activity_groups)"
+					<button (click)="addCategory()"
 						style="margin-top: 0px !important;height: 38px;"
 						mat-button
 						type="button">
@@ -714,7 +713,7 @@
 		<app-form-input [required]="true"
 			[form]="extrasFormGroup"
 			style="width: calc(50% - 10px);margin-top: 10px;"
-			control="iva"
+			control="tva"
 			name="tva"
 			Suffix="%"
 			type="number">
@@ -730,7 +729,7 @@
 			type="button">
 			{{'cancel' | translate }}
 		</button>
-		<button (click)="extrasModal=false;extras.push(extrasFormGroup.getRawValue());extrasFormGroup.reset()"
+		<button (click)="createExtras()"
 			style="margin-top: 0px !important;height: 38px; width: 150px;"
 			color="primary"
 			mat-raised-button

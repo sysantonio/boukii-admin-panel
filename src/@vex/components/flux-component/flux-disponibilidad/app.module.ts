@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FluxModalModule } from '../flux-modal/app.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CoursesDetailCardNivelModule } from '../course-nivel/app.module';
+import { ComponenteSelectModule } from '../../form/select/app.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { CoursesDetailCardNivelModule } from '../course-nivel/app.module';
     SecondaryToolbarModule,
     TranslateModule, MatFormFieldModule, MatAutocompleteModule, MatSelectModule, MatFormFieldModule,
     MatFormFieldModule,
-    MatInputModule, FluxModalModule, MatCheckboxModule, CoursesDetailCardNivelModule, MatButtonModule
+    MatInputModule, FluxModalModule, MatCheckboxModule, CoursesDetailCardNivelModule, MatButtonModule,
+    ComponenteSelectModule
   ],
   exports: [FluxDisponibilidadComponent]
 })

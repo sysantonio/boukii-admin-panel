@@ -696,7 +696,7 @@
                                   <p style="margin: 0 0 0 10px;">
                                     {{subgroup.monitor_id !== null ?
                                     getMonitorName(subgroup.monitor_id) :
-                                    'No monitor asigned'}}
+                                    ("text_nomonitorset" | translate)}}
                                   </p>
                                   <p
                                     style="font-size:8px;margin: 0 0 0 10px;"
@@ -996,7 +996,7 @@
                 <div style="float: left; width: 70%;">
                   <p>
                     {{getMonitorName(item.courseDates[0].monitor_id) ||
-                    'no monitor asigned'}}
+                    ("text_nomonitorset" | translate)}}
                   </p>
                   <p
                     style="font-size:8px"
@@ -1264,7 +1264,7 @@
                       style="float: left;width: 100%;">{{
                       item?.courseDates[0]?.monitor_id !== null ?
                       getMonitorName(item?.courseDates[0]?.monitor_id) :
-                      'No monitor asigned'}}</span><br />
+                      ("text_nomonitorset" | translate)}}</span><br />
                     <span style="float: left;width: 100%;">{{
                       getLanguage(getMonitorLang(item?.courseDates[0]?.monitor_id))
                       }}

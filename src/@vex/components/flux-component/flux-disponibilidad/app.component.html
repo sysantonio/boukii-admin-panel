@@ -1,176 +1,204 @@
-<div
-    style="overflow-x: auto;overflow-y: hidden; height: 100%;background-color: #EFF2F5;">
-    <table>
-        <thead>
-            <tr style="  border-bottom: 1px solid #dee6ea; height: 38px;">
-                <td> </td>
-                <td
-                    (click)="selectDate=i"
-                    [style.backgroundColor]="selectDate===i?'white':''"
-                    [style.borderTop]="selectDate===i?'3px solid #E91E63':''"
-                    *ngFor="let item of [].constructor(30); index as i" style="
+<div style="overflow-x: auto;overflow-y: hidden; height: 100%;background-color: #EFF2F5;">
+	<table>
+		<thead>
+			<tr style="  border-bottom: 1px solid #dee6ea; height: 38px;">
+				<td></td>
+				<td *ngFor="let item of [].constructor(30); index as i"
+					[style.backgroundColor]="selectDate===i?'white':''"
+					[style.borderTop]="selectDate===i?'3px solid #E91E63':''"
+					(click)="selectDate=i"
+					style="
                 color: var(--color-dark1);
                 font-size: 12px;
                 font-family: DM Sans;
                 font-weight: 600;
                 line-height: 16px;
                 word-wrap: break-word">
-                    {{ISODate(i).split("T")[0]}}
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr style="height: 34px;">
-                <td style="color: var(--color-dark1);
+					{{ISODate(i) | date:'dd.MM.YYYY'}}
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="height: 34px;">
+				<td style="color: var(--color-dark1);
                 font-size: 12px;
                 font-style: normal;
                 font-weight: 600;
                 line-height: 16px;
                 background-color: white;">
-                    <div class="flexicon">
-                        <img src="assets/icons/icon/monitor.png" class="icon24">
-                        {{'monitor' | translate}}
-                    </div>
-                </td>
-                <td *ngFor="let item of [].constructor(30); index as i"
-                    [style.backgroundColor]="selectDate===i?'white':''"
-                    (click)="selectDate=i">
-                </td>
-            </tr>
-            <tr style="border-bottom: 3px solid #dee6ea;">
-                <td style="background-color: white;padding: 7px;">
-                    <mat-form-field appearance="outline" style="height: 40px;">
-                        <input
-                            type="text"
-                            aria-label="Number"
-                            matInput
-                            [matAutocomplete]="auto" value="Maria Gonzales" />
-                        <mat-autocomplete #auto="matAutocomplete"
-                            [displayWith]="displayFn">
-                            <mat-option
-                                *ngFor="let item of ['Maria Gonzales','Maria Gonzales','Maria Gonzales']"
-                                [value]="item">{{item}}</mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </td>
-                <td *ngFor="let item of [].constructor(30); index as i"
-                    [style.backgroundColor]="selectDate===i?'white':''"
-                    (click)="selectDate=i">
-                    <mat-icon [style.color]="ramdonColor()"
-                        class="icon10">circle</mat-icon>
-                </td>
-            </tr>
-            <tr style="height: 34px;">
-                <td style="color: var(--color-dark1);
+					<div class="flexicon">
+						<img src="assets/icons/icon/monitor.png"
+							class="icon24">
+						{{'monitor' | translate}}
+					</div>
+				</td>
+				<td *ngFor="let item of [].constructor(30); index as i"
+					[style.backgroundColor]="selectDate===i?'white':''"
+					(click)="selectDate=i">
+				</td>
+			</tr>
+			<tr style="border-bottom: 3px solid #dee6ea;">
+				<td style="background-color: white;padding: 7px;">
+					<app-form-select [table]="monitors"
+						name="first_name"
+						name2="last_name"
+						id="id">
+					</app-form-select>
+				</td>
+				<td *ngFor="let item of [].constructor(30); index as i"
+					[style.backgroundColor]="selectDate===i?'white':''"
+					(click)="selectDate=i">
+					<mat-icon class="icon10">circle</mat-icon>
+				</td>
+			</tr>
+			<tr style="height: 34px;">
+				<td style="color: var(--color-dark1);
                 font-size: 12px;
                 font-style: normal;
                 font-weight: 600;
                 line-height: 16px;background-color: white;">
-                    <div class="flexicon">
-                        <img src="assets/icons/icon/alumno.png" class="icon24">
-                        {{"students" | translate}}
-                        <img src="assets/icons/icon/exc.png" class="icon24"
-                            style="cursor: pointer; margin-left: auto;margin-right: 10px;"
-                            (click)="cambiarModal=true">
-                    </div>
-                </td>
-                <td *ngFor="let item of [].constructor(30); index as i"
-                    [style.backgroundColor]="selectDate===i?'white':''"
-                    (click)="selectDate=i">
-                </td>
-            </tr>
-            <tr
-                *ngFor="let item of ['Mathias Meier','Mathias Meier','Mathias Meier','Mathias Meier']">
-                <td style="background-color: white;text-align-last: start;">
-                    <div class="flexicon" style="color: var(--Dark-01, #222);
+					<div class="flexicon">
+						<img src="assets/icons/icon/alumno.png"
+							class="icon24">
+						{{"students" | translate}}
+						<img (click)="cambiarModal=true"
+							src="assets/icons/icon/exc.png"
+							class="icon24"
+							style="cursor: pointer; margin-left: auto;margin-right: 10px;">
+					</div>
+				</td>
+				<td *ngFor="let item of [].constructor(30); index as i"
+					[style.backgroundColor]="selectDate===i?'white':''"
+					(click)="selectDate=i">
+				</td>
+			</tr>
+			<tr *ngFor="let item of courseFormGroup.controls['booking_users'].value">
+				<td style="background-color: white;text-align-last: start;">
+					<div class="flexicon"
+						style="color: var(--Dark-01, #222);
                         font-size: 12px;
                         font-style: normal;
                         font-weight: 600;
                         line-height: 16px;">
-                        {{item}}
-                    </div>
-                    <span style="color:var(--color-dark1);
+						{{item}}
+					</div>
+					<span style="color:var(--color-dark1);
                     font-size: 12px;
                     font-style: normal;
                     font-weight: 400;
                     line-height: 16px;">
-                        FR · Switzerland · 47 Años
-                    </span>
-                </td>
-                <td *ngFor="let item of [].constructor(30); index as i"
-                    [style.backgroundColor]="selectDate===i?'white':''"
-                    (click)="selectDate=i">
-                    <mat-icon [style.color]="ramdonColor()"
-                        class="icon10">circle</mat-icon>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+						{{getLanguage(item.language1_id)}}
+                        · {{getCountry(item.country)}} ·
+                        {{calculateAge(item.birth_date)}} {{'years' | translate }}
+					</span>
+				</td>
+				<td *ngFor="let item of [].constructor(30); index as i"
+					[style.backgroundColor]="selectDate===i?'white':''"
+					(click)="selectDate=i">
+					<mat-icon class="icon10">circle</mat-icon>
+				</td>
+			</tr>
+			<tr *ngIf="courseFormGroup.controls['booking_users'].value.length===0">
+				<td style="background-color: white;text-align-last: start;">
+					<div class="flexicon"
+						style="color: var(--Dark-01, #222);
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 16px;">
+						{{"no_user_reserved" | translate}}
+					</div>
+				</td>
+				<td *ngFor="let item of [].constructor(30); index as i"
+					[style.backgroundColor]="selectDate===i?'white':''"
+					(click)="selectDate=i">
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
-<vex-flux-modal title="Cambiar nivel alumno" *ngIf="cambiarModal"
-    (Close)="cambiarModal=false">
-    <div body style="display: flex;flex-wrap: nowrap;">
-        <div style="width: 50%; display: flex;">
-            <div style="    display: flex;
+<vex-flux-modal *ngIf="cambiarModal"
+	(Close)="cambiarModal=false"
+	title="Cambiar nivel alumno">
+	<div body
+		style="display: flex;flex-wrap: nowrap;">
+		<div style="width: 50%; display: flex;">
+			<div style="    display: flex;
             flex-direction: column;
             gap: 16px;">
-                <div class="flexicon">
-                    <img src="assets/icons/icon/alumno.png" class="icon24">
-                    {{"students" | translate}}
-                </div>
-                <mat-checkbox style="display: flex;"
-                    *ngFor="let item of [1,2,3,4]">
-                    <div style="display: flex; gap: 20px;">
-                        <div>
-                            <img src="assets/icons/icon/avatar.png"
-                                style="height: 40px;height: 40px;">
-                        </div>
-                        <div>
-                            <span style="color: var(--Dark-01, #222);
-                            font-size: 12px;
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 16px;">
-                                Mathias Meier
-                            </span>
-                            <br>
-                            <span
-                                style="color: var(--color-dark1);
-                            font-size: 12px;
-                            font-style: normal;
-                            font-weight: 400;
-                            line-height: 16px;">
-                                FR · Switzerland · 47 Años
-                            </span>
-                        </div>
-                    </div>
-                </mat-checkbox>
-            </div>
-        </div>
-        <div style="width: 50%;">
-            <div class="flexicon" style="margin-bottom: 16px;">
-                <img src="assets/icons/icon/alumno.png" class="icon24">
-                {{'level' | translate}}
-            </div>
-            <vex-course-detail-nivel [checkbox]="true"
-                [courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
-        </div>
-    </div>
-    <div footer style="display: flex;width: 100%;padding: 20px 20px 0;">
-        <button
-            style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
-            mat-button
-            type="button" (click)="cambiarModal=false"
-            class="client-button">
-            {{'cancel' | translate }}
-        </button>
-        <button
-            style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
-            color="primary"
-            mat-raised-button
-            type="button" (click)="cambiarModal=false"
-            class="client-button">
-            {{'save' | translate }}
-        </button>
-    </div>
+				<div class="flexicon">
+					<img src="assets/icons/icon/alumno.png"
+						class="icon24">
+					{{"students" | translate}}
+				</div>
+				<mat-checkbox *ngFor="let item of courseFormGroup.controls['booking_users'].value"
+					style="display: flex;">
+					<div style="display: flex; gap: 20px;">
+						<div>
+							<img [src]="item.image"
+								style="height: 40px;height: 40px;">
+						</div>
+						<div>
+							<div class="flexicon"
+								style="color: var(--Dark-01, #222);
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: 16px;">
+								{{item}}
+							</div>
+							<span style="color:var(--color-dark1);
+                    font-size: 12px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 16px;">
+								{{getLanguage(item.language1_id)}}
+                        · {{getCountry(item.country)}} ·
+                        {{calculateAge(item.birth_date)}} {{'years' | translate }}
+							</span>
+						</div>
+					</div>
+				</mat-checkbox>
+				<div *ngIf="courseFormGroup.controls['booking_users'].value.length===0"
+					style="background-color: white;text-align-last: start;">
+					<div class="flexicon"
+						style="color: var(--Dark-01, #222);
+							font-size: 12px;
+							font-style: normal;
+							font-weight: 600;
+							line-height: 16px;">
+						{{"no_user_reserved" | translate}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="width: 50%;">
+			<div class="flexicon"
+				style="margin-bottom: 16px;">
+				<img src="assets/icons/icon/alumno.png"
+					class="icon24">
+				{{'level' | translate}}
+			</div>
+			<vex-course-detail-nivel [checkbox]="true"
+				[courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
+		</div>
+	</div>
+	<div footer
+		style="display: flex;width: 100%;padding: 20px 20px 0;">
+		<button (click)="cambiarModal=false"
+			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
+			mat-button
+			type="button"
+			class="client-button">
+			{{'cancel' | translate }}
+		</button>
+		<button (click)="cambiarModal=false"
+			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+			color="primary"
+			mat-raised-button
+			type="button"
+			class="client-button">
+			{{'save' | translate }}
+		</button>
+	</div>
 </vex-flux-modal>

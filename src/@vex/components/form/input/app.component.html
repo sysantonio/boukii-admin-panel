@@ -1,7 +1,7 @@
 <mat-form-field *ngIf="control"
 	[formGroup]="form"
-	appearance="outline"
-	style="margin: 10px 0;">
+	[style.margin]="margin+'px 0'"
+	appearance="outline">
 	<mat-label>
 		{{name | translate}}
 	</mat-label>
@@ -28,8 +28,8 @@
 	</mat-error>
 </mat-form-field>
 <mat-form-field *ngIf="!control"
-	appearance="outline"
-	style="margin: 10px 0;">
+	[style.margin]="margin+'px 0'"
+	appearance="outline">
 	<mat-label>
 		{{name | translate}}
 	</mat-label>

@@ -42,13 +42,13 @@ export class CourseDetailComponent implements OnInit {
         this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id=' + this.detailData.sport_id)
           .subscribe((data) => {
             this.detailData.degrees = [];
-            data.data.forEach(element => {
+            data.data.forEach((element: any) => {
               if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
             });
-            this.detailData.degrees.forEach(level => {
+            this.detailData.degrees.forEach((level: any) => {
               level.active = false;
-              this.detailData.course_dates.forEach(cs => {
-                cs.course_groups.forEach(group => {
+              this.detailData.course_dates.forEach((cs: any) => {
+                cs.course_groups.forEach((group: any) => {
                   if (group.degree_id === level.id) {
                     level.active = true;
                     level.old = true;
@@ -57,8 +57,8 @@ export class CourseDetailComponent implements OnInit {
               });
             });
             this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
-              .subscribe((st) => {
-                st.data.forEach(element => {
+              .subscribe((st: any) => {
+                st.data.forEach((element: any) => {
                   if (element.id === this.detailData.station_id) this.detailData.station = element
                 });
                 this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
@@ -71,6 +71,25 @@ export class CourseDetailComponent implements OnInit {
               })
           });
       })
+  }
+
+  updateCourses() {
+    const courseFormGroup = this.courses.courseFormGroup.getRawValue()
+    courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
+    courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
+    courseFormGroup.discounts = JSON.stringify(this.courses.courseFormGroup.controls['discounts'].value)
+    for (const level of courseFormGroup.levelGrop) {
+      for (const course of courseFormGroup.course_dates) {
+        if (level.active) {
+          const group = { ...level, degree_id: level.id, subgroups: [] }
+          for (const subgroup of [].constructor(level.Subgrupo))
+            group.subgroups.push({ degree_id: level.id, max_participants: level.max_participants })
+          course.groups.push(group)
+        }
+      }
+    }
+    if (!courseFormGroup.options) delete courseFormGroup.options;
+    this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe()
   }
 
   goTo(route: string, query: any = null) {

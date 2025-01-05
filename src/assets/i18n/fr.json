@@ -261,8 +261,8 @@
   "courses.max_age": "Âge maximum",
   "courses.summary": "résumé",
   "courses.desc": "Description",
-  "courses.date_reservable": "Date de réservation à partir de ",
-  "courses.date_reservable_to": "Date réservable jusqu'au ",
+  "courses.date_reservable": "Date réservation dès",
+  "courses.date_reservable_to": "Date réservable jusqu'au",
   "courses.dur_min": "Durée minimale",
   "courses.when": "Quand peut-on suivre le cours ?",
   "courses.uniperiod": "Une période",
@@ -747,5 +747,7 @@
   "add_category": "Ajouter une catégorie",
   "add_discount_by_date": "Ajouter une remise par date",
   "send_mail": "Envoyer un mail",
-  "no_extra_assigned": "Aucun extra attribué"
+  "no_extra_assigned": "Aucun extra attribué",
+  "text_nomonitorset": "Aucun moniteur assigné",
+  "no_user_reserved": "Aucun utilisateur réservé"
 }

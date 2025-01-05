@@ -749,5 +749,7 @@
   "add_category": "Add Category",
   "add_discount_by_date": "Add discount by date",
   "send_mail": "Send mail",
-  "no_extra_assigned": "No extra assigned"
+  "no_extra_assigned": "No extra assigned",
+  "text_nomonitorset": "No monitor assigned",
+  "no_user_reserved": "No user reserved"
 }

@@ -7,8 +7,8 @@ import { Component, EventEmitter, Input, Output, } from '@angular/core';
 })
 export class FluxUploadImgComponent {
   @Output() upload: any = new EventEmitter<any>();
+  @Input() imagePreviewUrl: any = ""
 
-  imagePreviewUrl: any
   onFileChanged(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     if (file) {

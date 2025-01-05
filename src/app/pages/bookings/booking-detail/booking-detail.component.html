@@ -462,7 +462,7 @@
                   <span style="float: left;width: 100%;">{{
                     item?.courseDates[0]?.monitor_id !== null
                     ? getMonitorName(item?.courseDates[0]?.monitor_id)
-                    : "No monitor asigned"
+                    : ("text_nomonitorset" | translate)
                     }}</span><br />
                   <span style="float: left;width: 100%;"
                     *ngIf="getMonitor(item?.courseDates[0]?.monitor_id)">{{
