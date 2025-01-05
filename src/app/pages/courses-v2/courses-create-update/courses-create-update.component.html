@@ -579,7 +579,7 @@
 							{{("extras" | translate)+' '+(i+1)+": "+group.groupName}}
 						</span>
 					</div>
-					<div *ngFor="let item of extras"
+					<div *ngFor="let item of extras; index as j"
 						style="width: calc(50% - 8px); height: 64px; padding: 12px; border-radius: 3px; border: 1px var(--color-dark1) solid; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
 						<mat-checkbox [value]="item.id"
 							[checked]="find(this.courses.courseFormGroup.controls['course_type'].value===3?courses.courseFormGroup.controls['settings'].value.groups[i].extras:courses.courseFormGroup.controls['extras'].value,'id',item.id)"
@@ -596,6 +596,11 @@
 						<div style="flex: 1 1 0; text-align: right; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
 							{{item.price.toFixed(2)}}&nbsp;{{courses.courseFormGroup.controls['currency'].value}}/{{'day' | translate}}
 						</div>
+						<mat-icon *ngIf="item.id.startsWith('aFOR-')"
+							(click)="extras.splice(j,1)"
+							style="cursor: pointer;float: inline-end;">
+							delete
+						</mat-icon>
 					</div>
 					<div (click)="extrasModal=!extrasModal"
 						style="width: calc(50% - 8px); height: 64px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 3px; border: 1px #E91E63 dotted; flex-direction: column; justify-content: space-between; align-items: center; display: inline-flex;cursor: pointer;">

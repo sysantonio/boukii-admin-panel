@@ -70,7 +70,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     forkJoin({
       sports: this.getSports(),
       stations: this.getStations(),
-      monitors: this.mode === "update" ? this.getMonitors() : null,
+      monitors: this.getMonitors(),
     }).subscribe(({ sports, stations, monitors }) => {
       this.sportData = sports;
       this.stations = stations;
@@ -85,10 +85,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
           hour_max: this.courses.hours[4],
         })
         this.Confirm(0)
-        this.loading = false
+        setTimeout(() => this.loading = false, 0);
       } else {
         this.monitors = monitors
-        console.log(this.monitors)
         this.crudService.get('/admin/courses/' + this.id,
           ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
           .subscribe((data: any) => {
@@ -98,7 +97,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 st.data.forEach((element: any) => {
                   if (element.id === this.detailData.station_id) this.detailData.station = element
                 });
-                this.extras.push(...this.detailData.extras)
+                //this.extras.push(...this.detailData.extras)
                 //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
                 //  .subscribe((bookingUser) => {
                 //    this.detailData.users = [];
@@ -124,7 +123,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   createExtras() {
     this.extrasModal = false;
-    this.extrasFormGroup.patchValue({ id: "FOR-" + this.extrasFormGroup.controls['name'].value + this.extrasFormGroup.controls['product'].value + this.extrasFormGroup.controls['price'].value })
+    this.extrasFormGroup.patchValue({ id: "aFOR-" + this.extrasFormGroup.controls['name'].value + this.extrasFormGroup.controls['product'].value + this.extrasFormGroup.controls['price'].value })
     this.extras.push(this.extrasFormGroup.getRawValue());
     this.extrasFormGroup = this.fb.group({
       id: ["", Validators.required],

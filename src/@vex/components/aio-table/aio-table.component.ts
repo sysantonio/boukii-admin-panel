@@ -375,28 +375,6 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   getData(pageIndex: number, pageSize: number) {
     this.loading = true;
     this.filterData(false, pageIndex, pageSize);
-    // Asegúrate de que pageIndex y pageSize se pasan correctamente.
-    // Puede que necesites ajustar pageIndex según cómo espera tu backend que se paginen los índices (base 0 o base 1).
-    /*    this.crudService.list(
-          this.entity,
-          pageIndex,
-          pageSize,
-          'desc',
-          'id',
-          this.filter + this.searchCtrl.value + '&school_id=' +this.user.schools[0].id
-          + this.search + ( this.filterField !== null ? '&'+this.filterColumn +'='+this.filterField : ''),
-          '',
-          null,
-          this.searchCtrl.value,
-          this.with)
-          .subscribe((response: any) => {
-            this.data = response.data;
-            this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
-            this.dataSource.data = response.data;
-            this.totalRecords = response.total; // Total de registros disponibles.
-
-            this.loading = false;
-          });*/
   }
 
   onPageChange(event: PageEvent) {
@@ -407,35 +385,19 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   sortData(sort: Sort) {
     this.Sort = sort
     this.filterData(false, this.pageIndex, this.pageSize)
-    // const data = this.dataSource.data.slice();
-    // if (!sort.active || sort.direction === '') {
-    //   this.dataSource.data = data;
-    // } else {
-    //   this.dataSource.data = data.sort((a, b) => {
-    //     const aValue = (a as any)[sort.active];
-    //     const bValue = (b as any)[sort.active];
-    //     return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-    //   });
-    // }
   }
 
   ngAfterViewInit() {
     this.dataSource = new MatTableDataSource();
     this.dataSource.sort = this.sort;
-
-    // Llama a getData con la primera página. Asegúrate de que este valor coincida con cómo tu API espera la primera página.
-    this.getData(this.pageIndex, this.pageSize); // Si tu API espera que la primera página sea 1 en lugar de 0.
-
-    // ... otros inicializadores
+    this.getData(this.pageIndex, this.pageSize);
   }
 
   create() {
     if (!this.createOnModal) {
       const route = '/' + this.route + '/create';
       this.router.navigate([route]);
-    } else {
-      this.createModal();
-    }
+    } else this.createModal();
   }
 
   createModal() {
@@ -448,20 +410,13 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
-      if (data) {
-        this.getData(this.pageIndex, this.pageSize);
-
-      }
+      if (data) this.getData(this.pageIndex, this.pageSize);
     });
   }
 
   update(row: any) {
-    if (!this.createOnModal) {
-      this.router.navigate(['/' + this.route + '/' + this.updatePage + '/' + row.id]);
-
-    } else {
-      this.updateModal(row);
-    }
+    if (!this.createOnModal) this.router.navigate(['/' + this.route + '/' + this.updatePage + '/' + row.id]);
+    else this.updateModal(row);
   }
 
   updateModal(row: any) {
@@ -474,9 +429,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
-      if (data) {
-        this.getData(this.pageIndex, this.pageSize);
-      }
+      if (data) this.getData(this.pageIndex, this.pageSize);
     });
   }
 
@@ -493,12 +446,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
-      if (data) {
-        this.crudService.delete(this.deleteEntity, item.id)
-          .subscribe(() => {
-            this.getData(this.pageIndex, this.pageSize);
-          })
-      }
+      if (data) this.crudService.delete(this.deleteEntity, item.id).subscribe(() => this.getData(this.pageIndex, this.pageSize))
     });
   }
 
@@ -513,13 +461,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        // Cambia delete por restore
-        this.crudService.restore(this.deleteEntity, item.id)
-          .subscribe(() => {
-            this.getData(this.pageIndex, this.pageSize); // Recargar datos después de restaurar
-          });
-      }
+      if (confirmed) this.crudService.restore(this.deleteEntity, item.id).subscribe(() => this.getData(this.pageIndex, this.pageSize));
     });
   }
 
@@ -535,15 +477,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       if (data) {
         if (this.entity.includes('monitor')) {
           const monitorSchool = item.monitors_schools.find((c) => c.school_id === this.user.schools[0].id);
-
           this.crudService.update('/monitors-schools', {
             monitor_id: monitorSchool.monitor_id,
             school_id: monitorSchool.school_id, active_school: !item.active
-          }, monitorSchool.id)
-            .subscribe(() => {
-              this.getData(this.pageIndex, this.pageSize);
-            })
-
+          }, monitorSchool.id).subscribe(() => this.getData(this.pageIndex, this.pageSize))
         } else if (this.entity.includes('clients')) {
           const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
 
@@ -615,18 +552,12 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   transformDates(dates: any) {
     let ret = "";
     if (dates) {
-
       dates.forEach((element, idx) => {
-        if (idx < 2) {
-          ret = ret + '<b>' + element + '</b>' + '<br>';
-        } else if (idx === 2) {
-          ret = ret + element + '-';
-        } else {
-          ret = ret + element;
-        }
+        if (idx < 2) ret = ret + '<b>' + element + '</b>' + '<br>';
+        else if (idx === 2) ret = ret + element + '-';
+        else ret = ret + element;
       });
     }
-
     return ret;
   }
 
@@ -653,42 +584,29 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
 
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
       return age;
-    } else {
-      return 0;
-    }
-
+    } return 0;
   }
 
   calculateMaxBookings(data: any) {
     let ret = 0;
-
     if (data.is_flexible && data.course_type === 1) {
-      data.course_dates.forEach(courseDate => {
-        courseDate.course_groups.forEach(group => {
-          group.course_subgroups.forEach(sb => {
+      data.course_dates.forEach((courseDate: any) => {
+        courseDate.course_groups.forEach((group: any) => {
+          group.course_subgroups.forEach((sb: any) => {
             ret = ret + sb.max_participants;
           });
         });
 
       });
-    } else {
-      return data.max_participants * data.course_dates.length;
     }
-    return ret;
+    return data.max_participants * data.course_dates.length;
   }
 
   getSportNames(data: any) {
     let ret = '';
-
-    data.forEach((element, idx) => {
-      ret = (element?.sport?.name || element?.name) + (idx + 1 === data.length ? '' : ', ');
-    });
-
+    data.forEach((element: any, idx: any) => ret = (element?.sport?.name || element?.name) + (idx + 1 === data.length ? '' : ', '));
     return ret;
   }
 
@@ -701,10 +619,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   checkIfCourseIdIsSame(data: any[]): boolean {
-    if (data.length === 0) {
-      return false; // o false, según tu lógica de negocio
-    }
-
+    if (data.length === 0) return false;
     const firstCourseId = data[0].course.id;
     return data.every(item => item.course.id === firstCourseId);
   }
@@ -715,53 +630,36 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getMinMaxDates(data: any[]): { minDate: string, maxDate: string, days: number } {
     let days = 0;
-    if (data.length === 0) {
-      return { minDate: '', maxDate: '', days: days };
-    }
+    if (data.length === 0) return { minDate: '', maxDate: '', days: days };
 
     let minDate = new Date(data[0].date);
     let maxDate = new Date(data[0].date);
 
     data.forEach(item => {
       const currentDate = new Date(item.date);
-      if (currentDate < minDate) {
-        minDate = currentDate;
-      }
-      if (currentDate > maxDate) {
-        maxDate = currentDate;
-      }
+      if (currentDate < minDate) minDate = currentDate;
+      if (currentDate > maxDate) maxDate = currentDate;
       days = days + 1;
     });
-
     return { minDate: minDate.toLocaleString(), maxDate: maxDate.toLocaleString(), days: days };
   }
 
   getMinMaxHours(data: any[]): { minHour: string, maxHour: string } {
-    if (data.length === 0) {
-      return { minHour: '', maxHour: '' };
-    }
+    if (data.length === 0) return { minHour: '', maxHour: '' };
     let minHour = null;
     let maxHour = null;
     if (data[0].course.course_type === 2) {
       minHour = data[0].hour_start;
       maxHour = data[0].hour_end.replace(':00', '');
-
     } else {
       minHour = data[0].hour_start;
       maxHour = data[0].hour_end.replace(':00', '');
-
       data.forEach(item => {
-        if (item.hour_start < minHour) {
-          minHour = item.hour_start;
-        }
-        if (item.hour_end > maxHour) {
-          maxHour = item.hour_end.replace(':00', '');
-        }
-      });
+        if (item.hour_start < minHour) minHour = item.hour_start;
+        if (item.hour_end > maxHour) maxHour = item.hour_end.replace(':00', '');
+      })
     }
-
     minHour = minHour.replace(':00', '');
-
     return { minHour, maxHour };
   }
 
