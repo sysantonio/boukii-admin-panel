@@ -98,6 +98,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 st.data.forEach((element: any) => {
                   if (element.id === this.detailData.station_id) this.detailData.station = element
                 });
+                this.extras.push(...this.detailData.extras)
                 //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
                 //  .subscribe((bookingUser) => {
                 //    this.detailData.users = [];
