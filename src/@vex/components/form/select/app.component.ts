@@ -14,11 +14,11 @@ export class ComponenteSelectComponent {
   @Input() form!: FormGroup
   @Input() required: boolean = false
 
-  @Input() table!: any[]
+  @Input() table!: any
   @Input() id!: string
   @Input() name!: string
   @Input() name2!: string
-  
+
 
   @Output() do = new EventEmitter()
 

@@ -6,7 +6,8 @@ flex-direction: column;">
 			style="height: 100%;width: 100%;">
 			<div [style.backgroundColor]="item.color+'33'"
 				[style.border]="'1px solid '+item.color"
-				style="height: 74px; padding: 10px;border-radius: 4px;">
+				(click)="item.modal=!item.modal"
+				style="height: 74px; padding: 10px;border-radius: 4px; cursor: pointer;">
 				<div [style.color]="item.color"
 					style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
 					<img src="assets/icons/icon/award.png"
@@ -15,27 +16,23 @@ flex-direction: column;">
 					<span>
 						{{item.annotation}} {{item.level}}
 					</span>
-					<ng-container *ngIf="item.Subgrupo>0">
-						<mat-icon *ngIf="!courseFormGroup.controls['levelGrop'].value[i].modal"
-							(click)="courseFormGroup.controls['levelGrop'].value[i].modal=true"
-							class="icon24"
-							style="cursor: pointer;margin-left:auto;filter: var(--is-dark-theme,invert(1));">
-							keyboard_arrow_up
-						</mat-icon>
-						<mat-icon *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal"
-							(click)="courseFormGroup.controls['levelGrop'].value[i].modal=false"
-							class="icon24"
-							style="cursor: pointer;margin-left:auto;filter: var(--is-dark-theme,invert(1));">
-							keyboard_arrow_down
-						</mat-icon>
-					</ng-container>
+					<mat-icon *ngIf="!item.modal"
+						class="icon24"
+						style="margin-left:auto;filter: var(--is-dark-theme,invert(1));">
+						keyboard_arrow_up
+					</mat-icon>
+					<mat-icon *ngIf="item.modal"
+						class="icon24"
+						style="margin-left:auto;filter: var(--is-dark-theme,invert(1));">
+						keyboard_arrow_down
+					</mat-icon>
 				</div>
 				<div style="color: var(--color-dark1); font-weight: 400;display: flex;align-items: center;">
 					<img src="assets/icons/icon/people.png"
 						style="filter: var(--is-dark-theme,invert(1));"
 						class="icon16">
 					<span>
-						{{item.Subgrupo || 0}}g · {{item.max_participants ||
+						{{find(courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',item.id)?.course_subgroups?.length}}g · {{item.max_participants ||
                         courseFormGroup.controls['max_participants'].value ||
                         0}}p
 					</span>
@@ -56,13 +53,13 @@ flex-direction: column;">
 						style="filter: var(--is-dark-theme,invert(1));"
 						class="icon16">
 					<span>
-						{{item.age_min || 0}}/{{item.age_max || 99}}
+						{{item.age_min}}/{{item.age_max}}
 					</span>
 					<div style="margin: auto;"></div>
 				</div>
 			</div>
-			<ng-container *ngIf="courseFormGroup.controls['levelGrop'].value[i].modal">
-				<div *ngFor="let ix of [].constructor(item.Subgrupo);;index as i"
+			<ng-container *ngIf="item.modal">
+				<div *ngFor="let ix of find(courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',item.id).course_subgroups;index as i"
 					style="padding: 10px;width: 100%; background-color: #EFF2F5;border: 1px solid #DEE6EA;display: flex;align-items: center;height: 60%;">
 					<div>
 						<ng-container *ngIf="checkbox">
@@ -76,23 +73,33 @@ flex-direction: column;">
                             {{item.level}} {{i+1}}
 						</span>
 						<ng-container *ngIf="!checkbox">
-							<br>
-							<span style="color: var(--Dark-02, #2F3844);
+							<br *ngIf="!ix.monitor">
+							<span *ngIf="!ix.monitor"
+								style="color: var(--Dark-02, #2F3844);
                                 font-style: normal;
                                 font-weight: 400;
                                 line-height: 16px;">
 								{{"text_nomonitorset" | translate}}
 							</span>
-						</ng-container>
+							<ng-container *ngFor="let course_date of courseFormGroup.controls['course_dates'].value">
+								<br *ngIf="ix.monitor">
+								<span *ngIf="ix.monitor"
+									style="color: var(--Dark-02, #2F3844);
+							font-style: normal;
+							font-weight: 400;
+							line-height: 16px;">
+									{{course_date.date | date:'dd.MM.YYYY'}} {{"monitor" | translate}}: {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor.first_name}} {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor.last_name}}
+								</span>
+							</ng-container>
 
+						</ng-container>
 					</div>
-					<div style="margin-left: auto;">
+					<!-- <div style="margin-left: auto;">
 						<span style="color: var(--Dark-02, #2F3844);
                                     font-style: normal;
                                     font-weight: 400;
                                     line-height: 16px;">0/{{item.Subgrupo}}</span>
-					</div>
-
+					</div> -->
 				</div>
 			</ng-container>
 		</div>

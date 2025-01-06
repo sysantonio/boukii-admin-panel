@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { map, forkJoin, mergeMap } from 'rxjs';
+import { map, forkJoin, mergeMap, firstValueFrom } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -134,21 +134,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       status: [true, Validators.required],
     })
   }
-  getSubGroups(levelId: any) {
-    let ret = 0;
-    this.detailData.course_dates.forEach((courseDate: any) => {
-      let find = false;
-      courseDate.course_groups.forEach(group => {
-        if (group.degree_id === levelId && !find) {
-          ret = group.course_subgroups[0]?.max_participants;
-          find = true;
-        }
-      });
 
-    });
-
-    return ret;
-  }
   getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
   getMonitors = () => this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(map(data => data.data));
   getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
@@ -175,7 +161,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   getDegrees = () => this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.courses.courseFormGroup.controls['school_id'].value + '&sport_id=' + this.courses.courseFormGroup.controls['sport_id'].value).subscribe((data) => {
     this.detailData.degrees = [];
     data.data.forEach((element: any) => {
-      if (element.active) this.detailData.degrees.push({ ...element, Subgrupo: this.getSubGroups(element.id) });
+      if (element.active) this.detailData.degrees.push({ ...element, }); //Subgrupo: this.getSubGroups(element.id)
     });
     const levelGrop = []
     this.detailData.degrees.forEach((level: any) => {
@@ -188,7 +174,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
             level.age_min = group.age_min
             level.age_max = group.age_max
             level.max_participants = group.max_participants
-            level.Subgrupo = group.course_subgroups.length
+            level.course_subgroups = group.course_subgroups
           } level.visible = false;
         });
       });
@@ -303,22 +289,42 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   selectLevel = (event: any, i: number) => {
     const levelGrop = this.courses.courseFormGroup.controls['levelGrop'].value
+    const course_dates = this.courses.courseFormGroup.controls['course_dates'].value
     levelGrop[i].active = event.target.checked
     if (event.target.checked) {
       levelGrop[i].age_min = this.courses.courseFormGroup.controls['age_min'].value
       levelGrop[i].age_max = this.courses.courseFormGroup.controls['age_max'].value
       levelGrop[i].max_participants = this.courses.courseFormGroup.controls['max_participants'].value
-      levelGrop[i].Subgrupo = 1
+      for (const course of course_dates) {
+        course.course_groups.push({ ...levelGrop[i], degree_id: levelGrop[i].id, course_subgroups: [] })
+        course.groups.push({ ...levelGrop[i], degree_id: levelGrop[i].id, subgroups: [], })
+      }
     } else {
-      levelGrop[i].Subgrupo = 0
+      for (const course of course_dates) {
+        course.course_groups = course.course_groups.filter((a: any) => a.id !== levelGrop[i].id)
+        course.groups = course.groups.filter((a: any) => a.id !== levelGrop[i].id)
+      }
     }
-    this.courses.courseFormGroup.patchValue({ levelGrop })
+    this.courses.courseFormGroup.patchValue({ levelGrop, course_dates })
+    this.addLevelSubgroup(levelGrop[i], 0, 1)
   }
 
-  addLevelSubgroup = (i: number, add: number) => {
-    const levelGrop = this.courses.courseFormGroup.controls['levelGrop'].value
-    levelGrop[i].Subgrupo += add
-    this.courses.courseFormGroup.patchValue({ levelGrop })
+  addLevelSubgroup = (level: any, j: number, add: number) => {
+    const course_dates = this.courses.courseFormGroup.controls['course_dates'].value
+    for (const course of course_dates) {
+      for (const group in course.groups) {
+        if (course.groups[group].id === level.id) {
+          if (add > 0) {
+            course.groups[group].subgroups.push({ degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null })
+            course.course_groups[group].course_subgroups.push({ degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null })
+          } else {
+            course.groups[group].subgroups.splice(j, 1)
+            course.course_groups[group].course_subgroups.splice(j, 1)
+          }
+        }
+      }
+    }
+    this.courses.courseFormGroup.patchValue({ course_dates })
   }
 
   selectExtra = (event: any, item: any, i: number) => {
@@ -345,19 +351,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
     courseFormGroup.discounts = JSON.stringify(this.courses.courseFormGroup.controls['discounts'].value)
-    console.log(courseFormGroup.levelGrop)
-    console.log(courseFormGroup.course_dates)
-    for (const level of courseFormGroup.levelGrop) {
-      for (const course of courseFormGroup.course_dates) {
-        if (level.active) {
-          const group = { ...level, degree_id: level.id, subgroups: [] }
-          for (const subgroup of [].constructor(level.Subgrupo))
-            group.subgroups.push({ degree_id: level.id, max_participants: level.max_participants })
-          course.course_groups.push(group)
-          if (course.groups) course.groups.push(group)
-        }
-      }
-    }
     if (!courseFormGroup.options) delete courseFormGroup.options;
     this.mode === "create" ?
       this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
@@ -380,5 +373,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
   addCategory = () => this.courses.courseFormGroup.controls['settings'].value.groups.push({ ...this.courses.default_activity_groups })
   addCourseDate = () => this.courses.courseFormGroup.controls['course_dates'].value.push({ ...this.courses.default_course_dates })
-
+  monitorSelect(event: any, level: any, j: number) {
+    let course_dates = this.courses.courseFormGroup.controls['course_dates'].value
+    course_dates[event.i].course_groups[course_dates[event.i].course_groups.findIndex((a: any) => a.degree_id === level.id)].course_subgroups[j].monitor = event.monitor
+    course_dates[event.i].course_groups[course_dates[event.i].course_groups.findIndex((a: any) => a.degree_id === level.id)].course_subgroups[j].monitor_id = event.monitor.id
+    this.courses.courseFormGroup.patchValue({ course_dates })
+  }
 }

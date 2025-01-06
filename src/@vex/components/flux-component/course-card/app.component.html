@@ -280,7 +280,8 @@
 							{{courseFormGroup.controls['course_type'].value===1?(item.date | date:'dd.MM.YYYY'):((item.date | date:'dd.MM.YYYY')+'-'+(item.date_end | date:'dd.MM.YYYY'))}}
 						</span>
 						<span style="color: var(--color-gray1);">
-							{{courseFormGroup.controls['course_type'].value===1?item.hour_start:item.hour_start+'h-'+item.hour_end}}h
+							<!-- courseFormGroup.controls['course_type'].value===1?item.hour_start: -->
+							{{item.hour_start+'h-'+item.hour_end}}h
 						</span>
 						<span>
 							{{courseFormGroup.controls['price'].value | number:'0.2'}}&nbsp;{{courseFormGroup.controls['currency'].value}}

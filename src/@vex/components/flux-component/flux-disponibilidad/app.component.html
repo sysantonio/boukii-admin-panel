@@ -3,7 +3,7 @@
 		<thead>
 			<tr style="  border-bottom: 1px solid #dee6ea; height: 38px;">
 				<td></td>
-				<td *ngFor="let item of [].constructor(30); index as i"
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value;index as i"
 					[style.backgroundColor]="selectDate===i?'white':''"
 					[style.borderTop]="selectDate===i?'3px solid #E91E63':''"
 					(click)="selectDate=i"
@@ -14,7 +14,7 @@
                 font-weight: 600;
                 line-height: 16px;
                 word-wrap: break-word">
-					{{ISODate(i) | date:'dd.MM.YYYY'}}
+					{{item.date | date:'dd.MM.YYYY'}}
 				</td>
 			</tr>
 		</thead>
@@ -32,25 +32,25 @@
 						{{'monitor' | translate}}
 					</div>
 				</td>
-				<td *ngFor="let item of [].constructor(30); index as i"
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
 					[style.backgroundColor]="selectDate===i?'white':''"
 					(click)="selectDate=i">
-				</td>
-			</tr>
-			<tr style="border-bottom: 3px solid #dee6ea;">
-				<td style="background-color: white;padding: 7px;">
-					<app-form-select [table]="monitors"
+					<app-form-select [table]="monitors[i]"
+						[value]="find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor?(find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.first_name + ' ' + find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.last_name):''"
+						(do)="monitorSelect.emit({monitor: $event.option.value,i})"
 						name="first_name"
-						name2="last_name"
-						id="id">
+						name2="last_name">
 					</app-form-select>
+					<!-- <mat-icon class="icon10">circle</mat-icon> -->
 				</td>
-				<td *ngFor="let item of [].constructor(30); index as i"
+				<!-- <td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
 					[style.backgroundColor]="selectDate===i?'white':''"
 					(click)="selectDate=i">
-					<mat-icon class="icon10">circle</mat-icon>
-				</td>
+				</td> -->
 			</tr>
+			<!-- <tr style="border-bottom: 3px solid #dee6ea;">
+				 <td style="background-color: white;padding: 7px;"></td> 
+			</tr> -->
 			<tr style="height: 34px;">
 				<td style="color: var(--color-dark1);
                 font-size: 12px;
@@ -67,7 +67,7 @@
 							style="cursor: pointer; margin-left: auto;margin-right: 10px;">
 					</div>
 				</td>
-				<td *ngFor="let item of [].constructor(30); index as i"
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
 					[style.backgroundColor]="selectDate===i?'white':''"
 					(click)="selectDate=i">
 				</td>
@@ -92,7 +92,7 @@
                         {{calculateAge(item.birth_date)}} {{'years' | translate }}
 					</span>
 				</td>
-				<td *ngFor="let item of [].constructor(30); index as i"
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
 					[style.backgroundColor]="selectDate===i?'white':''"
 					(click)="selectDate=i">
 					<mat-icon class="icon10">circle</mat-icon>
@@ -109,7 +109,7 @@
 						{{"no_user_reserved" | translate}}
 					</div>
 				</td>
-				<td *ngFor="let item of [].constructor(30); index as i"
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
 					[style.backgroundColor]="selectDate===i?'white':''"
 					(click)="selectDate=i">
 				</td>

@@ -201,14 +201,14 @@
 							[table]="courses.hours"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_start=$event.option.value;"
 							style="min-width: 0;width: 100%;"
-							label="hour">
+							label="start_hour">
 						</app-form-select>
-						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
+						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
 							[required]="true"
-							[table]="courses.duration"
-							(do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value"
+							[table]="courses.hours"
+							(do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_end=$event.option.value;"
 							style="min-width: 0;width: 100%;"
-							label="duration">
+							label="end_hour">
 						</app-form-select>
 					</div>
 				</div>
@@ -416,7 +416,7 @@
 								type="number"
 								Suffix="paxes">
 							</app-form-input>
-							<mat-icon (click)="addLevelSubgroup(i,1)"
+							<mat-icon (click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],0,1)"
 								color="primary"
 								style="color: white;
 										height: 30px;
@@ -430,22 +430,28 @@
 								add
 							</mat-icon>
 						</div>
-						<ng-container *ngFor="let item of [].constructor(courses.courseFormGroup.controls['levelGrop'].value[i].Subgrupo); index as j">
-							<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
-								{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
-								<img *ngIf="j!==0"
-									(click)="addLevelSubgroup(i,-1)"
-									src="assets/icons/icon/delete.png"
-									alt
-									class="icon20"
-									style="cursor: pointer; font-size: 20px;align-content: space-evenly;filter: var(--is-dark-theme,invert(1));">
-							</div>
-							<div *ngIf="mode==='update'"
-								style="width: 100%;margin-top: -10px;padding: 10px; background-color: var(--color-grey4);">
-								<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup"
-									[monitors]="monitors"
-									[level]="courses.courseFormGroup.controls['levelGrop'].value[i]"></vex-flux-disponibilidad>
-							</div>
+						<ng-container *ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)">
+							<ng-container *ngFor="let item of find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id).course_subgroups; index as j">
+								<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
+									{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
+									<img *ngIf="j!==0"
+										(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],j,-1)"
+										src="assets/icons/icon/delete.png"
+										alt
+										class="icon20"
+										style="cursor: pointer; font-size: 20px;align-content: space-evenly;filter: var(--is-dark-theme,invert(1));">
+								</div>
+								<div *ngIf="mode==='update'"
+									style="width: 100%;margin-top: -10px;padding: 10px; background-color: var(--color-grey4);">
+									<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup"
+										[level]="courses.courseFormGroup.controls['levelGrop'].value[i]"
+										[group]="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)"
+										[subgroup]="item"
+										[subgroup_index]="j"
+										(monitorSelect)="monitorSelect($event,level,j);">
+									</vex-flux-disponibilidad>
+								</div>
+							</ng-container>
 						</ng-container>
 					</ng-container>
 				</div>
