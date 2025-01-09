@@ -109,7 +109,7 @@
 						[Suffix]="courses.courseFormGroup.controls['currency'].value"
 						style="width: calc(50% - 10px);"
 						control="price"
-						name="price_per_date"
+						name="{{courses.courseFormGroup.controls['is_flexible'].value?'price_per_date':'price_per_course'}}"
 						type="number">
 					</app-form-input>
 					<app-form-input [required]="true"
@@ -220,7 +220,7 @@
 					</button>
 				</div>
 				<div style="background-color: var(--color-grey4);height: 20px;width: 100%;"></div>
-				<div>
+				<div *ngIf="courses.courseFormGroup.controls['is_flexible'].value">
 					<div style="margin: 20px;">
 						<span>
 							{{'courses.reduction_title' | translate}}
@@ -486,7 +486,6 @@
 									[Suffix]="courses.courseFormGroup.controls['currency'].value"
 									[margin]="4"
 									(do)="courses.courseFormGroup.controls['price_range'].value[+rowi][+col]=$event.target.value;"
-									name="price"
 									type="number">
 								</app-form-input>
 							</td>

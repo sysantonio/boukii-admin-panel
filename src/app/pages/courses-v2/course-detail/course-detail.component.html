@@ -8,6 +8,9 @@
 	</vex-breadcrumbs>
 </vex-secondary-toolbar>
 
+
+
+
 <div class="flex flex-col sm:flex-row gap-4"
 	style="width: 100%; float: left;">
 	<div class="card flex-auto">
@@ -131,7 +134,8 @@
 			<mat-checkbox style="width: calc(50% - 10px);">
 				{{'settings.monitors' | translate}}
 			</mat-checkbox>
-			<mat-form-field appearance="outline"
+			<mat-form-field *ngIf="courses.courseFormGroup.controls['course_type'].value>1"
+				appearance="outline"
 				style="width: calc(50% - 10px);">
 				<mat-label>
 					{{'from' | translate}}
@@ -147,7 +151,8 @@
 				<mat-datepicker #date_desde
 					[startAt]="nowDate"></mat-datepicker>
 			</mat-form-field>
-			<mat-form-field appearance="outline"
+			<mat-form-field *ngIf="courses.courseFormGroup.controls['course_type'].value>1"
+				appearance="outline"
 				style="width: calc(50% - 10px);">
 				<mat-label>
 					{{'to' | translate}}

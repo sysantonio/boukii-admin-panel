@@ -88,18 +88,11 @@ flex-direction: column;">
 							font-style: normal;
 							font-weight: 400;
 							line-height: 16px;">
-									{{course_date.date | date:'dd.MM.YYYY'}} {{"monitor" | translate}}: {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor.first_name}} {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor.last_name}}
+									{{course_date.date | date:'dd.MM.YYYY'}} {{"monitor" | translate}}: {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.first_name}} {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.last_name}}
 								</span>
 							</ng-container>
-
 						</ng-container>
 					</div>
-					<!-- <div style="margin-left: auto;">
-						<span style="color: var(--Dark-02, #2F3844);
-                                    font-style: normal;
-                                    font-weight: 400;
-                                    line-height: 16px;">0/{{item.Subgrupo}}</span>
-					</div> -->
 				</div>
 			</ng-container>
 		</div>
