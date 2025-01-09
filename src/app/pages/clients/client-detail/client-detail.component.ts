@@ -373,6 +373,7 @@ export class ClientDetailComponent {
       this.user.schools[0].id, null, null, null, ['sport', 'degrees.degreesSchoolSportGoals'])
       .pipe(
         map((sport) => {
+          this.goals = []
           this.schoolSports = sport.data;
           this.schoolSports.forEach(sport => {
             sport.name = sport.sport.name;
@@ -383,6 +384,7 @@ export class ClientDetailComponent {
                 this.goals.push(goal);
               });
             });
+
             this.clientSport.forEach(element => {
               if (element.sport_id === sport.sport_id) {
                 element.name = sport.name;
@@ -447,7 +449,6 @@ export class ClientDetailComponent {
           this.clientSport = data.data;
           this.selectedSport = this.clientSport[0];
           this.goals = [];
-
           this.clientSport.forEach(element => {
             element.level = element.degree;
           });
@@ -812,7 +813,7 @@ export class ClientDetailComponent {
                 // Si ya existe, actualizar el 'accepted_at'
                 if (existingSchool.accepted_at === null) {
                   this.crudService.update('/clients-schools', { accepted_at: moment().toDate() }, existingSchool.id)
-                    .subscribe(() => {                    });
+                    .subscribe(() => { });
                 }
               } else {
                 // Si no existe, crear la relación
@@ -821,14 +822,14 @@ export class ClientDetailComponent {
                   school_id: this.user.schools[0].id,
                   accepted_at: moment().toDate()
                 })
-                  .subscribe(() => {                  });
+                  .subscribe(() => { });
               }
             } else {  // Si 'active' es false
               // Buscar si existe la relación y actualizar 'accepted_at' a null
               const existingSchool = this.clientSchool.find(element => element.school_id === this.user.schools[0].id);
               if (existingSchool) {
                 this.crudService.update('/clients-schools', { accepted_at: null }, existingSchool.id)
-                  .subscribe(() => {                  });
+                  .subscribe(() => { });
               }
             }
 
@@ -893,7 +894,6 @@ export class ClientDetailComponent {
     this.selectedSport.level = this.allLevels[this.sportIdx];
     this.goals.forEach((element: any) => {
       if (element.degree_id === this.allLevels[this.sportIdx].id) {
-
         this.selectedGoal.push(element);
       }
     });
