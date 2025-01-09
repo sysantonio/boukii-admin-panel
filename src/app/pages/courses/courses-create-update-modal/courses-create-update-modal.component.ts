@@ -974,7 +974,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY') });
+        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('dd.MM.yyyy'), dateTo: moment(result.dateTo).format('dd.MM.yyyy') });
         this.privateDatesTable?.renderRows();
         this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
       }

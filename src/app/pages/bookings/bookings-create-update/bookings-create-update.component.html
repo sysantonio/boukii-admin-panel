@@ -299,9 +299,9 @@
                 {{selectedItem.sport.name}}
               </p>
               <p>
-                {{selectedItem?.course_dates[0].date | date: 'dd-MM-YYYY'}} -
+                {{selectedItem?.course_dates[0].date | date: 'dd.MM.yyyy'}} -
                 {{selectedItem?.course_dates[selectedItem.course_dates.length -
-                1].date | date: 'dd-MM-YYYY'}}
+                1].date | date: 'dd.MM.yyyy'}}
               </p>
               <p style="text-wrap: balance;">
                 {{getAvailableWeekDays(selectedItem.settings)}}
@@ -358,9 +358,9 @@
                         {{course.sport.name}}
                       </p>
                       <p>
-                        {{course?.course_dates[0].date | date: 'dd-MM-YYYY'}} -
+                        {{course?.course_dates[0].date | date: 'dd.MM.yyyy'}} -
                         {{course?.course_dates[course.course_dates.length -
-                        1].date | date: 'dd-MM-YYYY'}}
+                        1].date | date: 'dd.MM.yyyy'}}
                       </p>
                       <p style="text-wrap: balance;">
                         {{getAvailableWeekDays(course.settings)}}

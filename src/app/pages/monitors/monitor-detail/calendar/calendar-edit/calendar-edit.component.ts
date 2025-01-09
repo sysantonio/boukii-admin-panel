@@ -91,7 +91,7 @@ export class CalendarEditComponent implements OnInit {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.defaults.start_time = this.event.hour_start;
-    this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
+    this.defaults.start_date = moment(this.event.date_param, 'dd.MM.yyyy').toDate();
 
     this.form = this.fb.group({
       startAvailable: this.defaults.start_date,
@@ -234,7 +234,7 @@ export class CalendarEditComponent implements OnInit {
       this.openCreateBooking();
     } else {
       if (this.event && this.event.date_param) {
-        this.defaults.start_date = moment(this.event.date_param, 'DD-MM-YYYY').toDate();
+        this.defaults.start_date = moment(this.event.date_param, 'dd.MM.yyyy').toDate();
         //this.defaults.end_date = this.event.end;
         this.defaults.start_time = this.event.hour_start;
         //this.defaults.end_time = this.event.end_time.substring(0, this.event.end_time.length-3);;
@@ -272,7 +272,7 @@ export class CalendarEditComponent implements OnInit {
     const now = moment();
 
     // Convertir la fecha del curso y la hora de inicio/fin a objetos moment
-    const courseDate = moment(this.event.date_param, 'DD-MM-YYYY').format('YYYY-MM-DD')
+    const courseDate = moment(this.event.date_param, 'dd.MM.yyyy').format('YYYY-MM-DD')
     const start = moment(this.event.hour_start, 'HH:mm:ss');
 
     // Primero, comprueba si es el mismo día
@@ -295,7 +295,7 @@ export class CalendarEditComponent implements OnInit {
         monitorId: this.event.monitor_id,
         monitor: this.event.monitor,
         hour: this.event.hour_start,
-        date: moment(this.event.date_param, 'DD-MM-YYYY').format('YYYY-MM-DD')
+        date: moment(this.event.date_param, 'dd.MM.yyyy').format('YYYY-MM-DD')
       }
     });
 

@@ -615,14 +615,14 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
                   this.dataSourceDatePrivate.data.push({ dateFrom: period.from, dateTo: period.to, active: period.active, id: period.id, main: true, mainPeriod: periodIdx });
 
-                  const from = moment(period.from, 'DD-MM-YYYY').startOf('day');
-                  const to = moment(period.to, 'DD-MM-YYYY').startOf('day');
+                  const from = moment(period.from, 'dd.MM.yyyy').startOf('day');
+                  const to = moment(period.to, 'dd.MM.yyyy').startOf('day');
 
                   this.defaults.course_dates.forEach(element => {
                     const current = moment(element.date).startOf('day');
 
                     if (current.isSame(from) || current.isSame(to) || current.isBetween(from, to)) {
-                      this.dataSourceDatePrivate.data.push({ dateFrom: moment(element.date).format('DD-MM-YYYY'), dateTo: moment(element.date).format('DD-MM-YYYY'), active: element.active, id: element.id, main: false, period: periodIdx })
+                      this.dataSourceDatePrivate.data.push({ dateFrom: moment(element.date).format('dd.MM.yyyy'), dateTo: moment(element.date).format('dd.MM.yyyy'), active: element.active, id: element.id, main: false, period: periodIdx })
                     }
                   })
                 });
@@ -1176,8 +1176,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.defaults.settings.periods.push({ from: moment(result.dateFrom).format('DD-MM-YYYY'), to: moment(result.dateTo).format('DD-MM-YYYY'), active: true })
-        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('DD-MM-YYYY'), dateTo: moment(result.dateTo).format('DD-MM-YYYY'), active: true });
+        this.defaults.settings.periods.push({ from: moment(result.dateFrom).format('dd.MM.yyyy'), to: moment(result.dateTo).format('dd.MM.yyyy'), active: true })
+        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('dd.MM.yyyy'), dateTo: moment(result.dateTo).format('dd.MM.yyyy'), active: true });
         this.privateDatesTable?.renderRows();
         this.activityDatesTable?.renderRows();
         this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
@@ -1262,8 +1262,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       if (main) {
         this.dataSourceDatePrivate.data[index].active = false;
         this.defaults.settings.periods[index].active = false;
-        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'DD-MM-YYYY').add(-1, 'd');
-        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'DD-MM-YYYY').add(1, 'd');
+        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'dd.MM.yyyy').add(-1, 'd');
+        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'dd.MM.yyyy').add(1, 'd');
         this.defaults.course_dates.forEach(element => {
           if (moment(element.date).isBetween(from, to)) {
 
@@ -1574,8 +1574,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           } else {
 
             this.dataSourceDatePrivate.data.forEach(element => {
-              const from = moment(element.dateFrom, 'DD-MM-YYYY').startOf('day');
-              const to = moment(element.dateTo, 'DD-MM-YYYY').startOf('day');
+              const from = moment(element.dateFrom, 'dd.MM.yyyy').startOf('day');
+              const to = moment(element.dateTo, 'dd.MM.yyyy').startOf('day');
               const currentDate = moment(existDate.date).startOf('day');
 
               if (currentDate.isBetween(from, to) || currentDate.isSame(from) || currentDate.isSame(to)) {
@@ -2266,7 +2266,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     if (this.defaults.course_type === 2 && this.defaults.is_flexible && this.periodeMultiple) {
       dates = this.dataSourceDatePrivate.data.filter((date) => date.active || date.active === 1);
-      sortedDates = dates.map(d => moment(d.dateFrom, 'DD-MM-YYYY').toDate()).sort((a, b) => a - b);
+      sortedDates = dates.map(d => moment(d.dateFrom, 'dd.MM.yyyy').toDate()).sort((a, b) => a - b);
     } else {
 
       dates = this.dataSource.data.filter((date) => date.active || date.active === 1);

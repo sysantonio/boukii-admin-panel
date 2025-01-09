@@ -1782,7 +1782,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       case 'day':
         dateInfo = {
           date: this.currentDate,
-          date_format: moment(this.currentDate).format('DD-MM-YYYY'),
+          date_format: moment(this.currentDate).format('dd.MM.yyyy'),
           hour: position,
           monitor_id: monitor_id
         };
@@ -1792,7 +1792,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         let weekDayDate = mondayOfWeek.add(position, 'days');
         dateInfo = {
           date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-          date_format: moment(weekDayDate).format('DD-MM-YYYY'),
+          date_format: moment(weekDayDate).format('dd.MM.yyyy'),
           hour: hourDay,
           monitor_id: monitor_id
         };
@@ -1804,7 +1804,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         let monthDayDate = startOfWeek.add(position, 'days');
         dateInfo = {
           date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-          date_format: moment(monthDayDate).format('DD-MM-YYYY'),
+          date_format: moment(monthDayDate).format('dd.MM.yyyy'),
           hour: hourDay,
           monitor_id: monitor_id
         };
@@ -1947,7 +1947,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   createBlockGeneral(): void {
 
-    let currentDateFormat = moment(this.currentDate).format('DD-MM-YYYY');
+    let currentDateFormat = moment(this.currentDate).format('dd.MM.yyyy');
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       data: {
         block_general: true,
