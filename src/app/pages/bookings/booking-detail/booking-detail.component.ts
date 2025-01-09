@@ -530,7 +530,7 @@ export class BookingDetailComponent implements OnInit {
         this.bookingUsersUnique.filter(
           (b) => b.course_id === this.courses[index].id
         ).length
-      ];
+        ];
     } else {
       return this.courses[index].price;
     }
@@ -855,7 +855,17 @@ export class BookingDetailComponent implements OnInit {
             window.open(result.data, "_self");
           }
 
-        });
+        },
+          (error) => {
+            this.loading = false;
+            this.snackbar.open(
+              this.translateService.instant(
+                "snackbar.booking_detail.send_mail.error"
+              ),
+              "OK",
+              { duration: 1000 }
+            );
+          });
     } else {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         data: { title: this.translateService.instant("is_paid") },
@@ -2171,7 +2181,7 @@ export class BookingDetailComponent implements OnInit {
                     this.crudService
                       .post("/admin/bookings/refunds/" + this.id, {
                         amount:
-                          priceToRefund,
+                        priceToRefund,
                       })
                       .subscribe(() => {
                         this.crudService
@@ -2222,7 +2232,7 @@ export class BookingDetailComponent implements OnInit {
                   booking_id: this.id,
                   school_id: this.user.schools[0].id,
                   amount:
-                    priceToRefund,
+                  priceToRefund,
                   status: "refund",
                   notes: "other",
                 })
@@ -2251,9 +2261,9 @@ export class BookingDetailComponent implements OnInit {
           const vData = {
             code: "BOU-" + this.generateRandomNumber(),
             quantity:
-              priceToRefund,
+            priceToRefund,
             remaining_balance:
-              priceToRefund,
+            priceToRefund,
             payed: false,
             client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id,
@@ -2370,12 +2380,13 @@ export class BookingDetailComponent implements OnInit {
     }
 
     let bookingUsers = book.courseDates[0].course.course_type == 1 ?
-      this.getBookingUsersByCourse(book.courseDates[0].course_id) :
+      this.getBookingUsersByCourseAndClientId(book.courseDates[0].course_id, book.courseDates[0].client_id) :
       this.getBookingUsersByCourseDateAndHour(book.courseDates[0].course_date_id, book.courseDates[0].hour_start,
         book.courseDates[0].hour_end, book.courseDates[0].monitor_id)
     if (book.courseDates[0].course.course_type == 1 && book.courseDates[0].course.is_flexible) {
       bookTotalPrice -= this.getDiscountPrice(book);
     }
+
     const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
       width: "1000px", // Asegurarse de que no haya un ancho máximo
       panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
@@ -2747,7 +2758,7 @@ export class BookingDetailComponent implements OnInit {
           "/bookings",
           {
             price_cancellation_insurance:
-              this.booking.price_cancellation_insurance,
+            this.booking.price_cancellation_insurance,
             has_cancellation_insurance: true,
           },
           this.id
@@ -3128,17 +3139,17 @@ export class BookingDetailComponent implements OnInit {
 
     if (this.booking.paid_total && this.booking.paid_total != this.finalPrice) {
       if (this.booking.paid) {
-        this.bookingPendingPrice =
-          this.finalPrice - +this.booking.paid_total - this.priceRefund - this.priceNoRefund
+        this.bookingPendingPrice = 0
       } else if (this.booking.status !== 1) {
         this.bookingPendingPrice =
-          this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew - this.priceRefund - this.priceNoRefund;
+          this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew;
       } else {
         this.bookingPendingPrice = this.finalPrice - parseFloat(this.booking.paid_total) - bonusPricesNew;
       }
     } else {
       this.bookingPendingPrice = 0;
     }
+
   }
 
   deleteBonus(index: number) {
@@ -3381,9 +3392,9 @@ export class BookingDetailComponent implements OnInit {
     this.bookingService.editData.selectedPrice =
       this.courses[index].course_type == 1 ? this.parseFloatValue(this.getTotalBook(index, item)) +
         this.getCourseExtraForfaitPrice(item.courseDates[0]) : this.parseFloatValue(this.getTotalBook(index, item)) +
-      this.getCourseExtraForfaitPriceByDateHour(
-        item.courseDates[0]
-      )
+        this.getCourseExtraForfaitPriceByDateHour(
+          item.courseDates[0]
+        )
 
     this.router.navigate(["bookings/edit/" + this.id]);
   }
@@ -3633,6 +3644,12 @@ export class BookingDetailComponent implements OnInit {
   getBookingUsersByCourse(courseId) {
     return this.bookingUsers.filter(
       (b) => b.course_id === courseId
+    );
+  }
+
+  getBookingUsersByCourseAndClientId(courseId, clientId) {
+    return this.bookingUsers.filter(
+      (b) => b.course_id === courseId && b.client_id === clientId
     );
   }
 
