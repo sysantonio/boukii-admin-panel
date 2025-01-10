@@ -183,9 +183,9 @@
 					style="color:var(--color-dark1);">
 				</p>
 			</div>
-			<div style="width: calc(50% - 10px);">
+			<div style="width: calc(50% - 10px);" *ngIf="!courseFormGroup.controls['is_flexible'].value">
 				<p class="label">
-					{{'price_per_date' | translate }}
+					{{'price_per_course' | translate }}
 				</p>
 				<p [class]="courseFormGroup.controls['price'].value?'':'emptyText'"
 					style="color:var(--color-dark1); font-weight: 400;">
@@ -283,13 +283,13 @@
 							<!-- courseFormGroup.controls['course_type'].value===1?item.hour_start: -->
 							{{item.hour_start+'h-'+item.hour_end}}h
 						</span>
-						<span>
+						<span *ngIf="courseFormGroup.controls['is_flexible'].value">
 							{{courseFormGroup.controls['price'].value | number:'0.2'}}&nbsp;{{courseFormGroup.controls['currency'].value}}
 						</span>
 					</p>
 				</ng-container>
 			</div>
-			<ng-container *ngIf="courseFormGroup.controls['discounts'].value">
+			<ng-container *ngIf="courseFormGroup.controls['discounts'].value && courseFormGroup.controls['is_flexible'].value">
 				<div *ngFor="let item of courseFormGroup.controls['discounts'].value"
 					style="width: 100%; color:var(--color-dark1);font-weight: 400;">
 					· {{"reduction" | translate}} {{item.reduccion}}% {{"booking" | translate}} {{item.day}} {{"days" | translate}}

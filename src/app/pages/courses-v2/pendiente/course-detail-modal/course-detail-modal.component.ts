@@ -953,18 +953,18 @@ export class CourseDetailModalComponent implements OnInit {
           return acc;
         }, [0, 0]);
 
-        this.daysDatesLevels.push({ date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'), dateString: moment(element.date, 'DD-MM-YYYY').locale('es').format('LLL').replace(' 0:00', ''), active: element.active });
+        this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active });
         if (this.defaults.course_type === 2) {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+            date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
           })
         } else {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'DD-MM-YYYY').format('YYYY-MM-DD'),
+            date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
             groups: []
