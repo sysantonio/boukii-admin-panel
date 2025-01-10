@@ -630,19 +630,49 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   getMinMaxDates(data: any[]): { minDate: string, maxDate: string, days: number } {
     let days = 0;
+
+    // Verificar si data está vacío
     if (data.length === 0) return { minDate: '', maxDate: '', days: days };
 
-    let minDate = new Date(data[0].date);
-    let maxDate = new Date(data[0].date);
+    // Validar y convertir las fechas
+    const parseDate = (dateString: string): Date | null => {
+      if (!dateString) return null; // Manejo de cadenas vacías o nulas
+      try {
+        return new Date(dateString); // El constructor de Date debería aceptar ISO 8601
+      } catch {
+        return null; // Si falla, retornar null
+      }
+    };
 
+    let minDate: Date | null = parseDate(data[0].date);
+    let maxDate: Date | null = parseDate(data[0].date);
+
+    if (!minDate || !maxDate) {
+      console.error('Invalid initial date:', data[0].date);
+      return { minDate: '', maxDate: '', days: days };
+    }
+
+    // Iterar sobre los elementos de data
     data.forEach(item => {
-      const currentDate = new Date(item.date);
-      if (currentDate < minDate) minDate = currentDate;
-      if (currentDate > maxDate) maxDate = currentDate;
-      days = days + 1;
+      const currentDate = parseDate(item.date);
+      if (!currentDate) {
+        console.error('Invalid date found in data:', item.date);
+        return;
+      }
+
+      if (currentDate < minDate!) minDate = currentDate;
+      if (currentDate > maxDate!) maxDate = currentDate;
+      days++;
     });
-    return { minDate: minDate.toLocaleString(), maxDate: maxDate.toLocaleString(), days: days };
+
+    return {
+      minDate: minDate!.toISOString(), // Convertir a ISO para evitar problemas
+      maxDate: maxDate!.toISOString(),
+      days
+    };
   }
+
+
 
   getMinMaxHours(data: any[]): { minHour: string, maxHour: string } {
     if (data.length === 0) return { minHour: '', maxHour: '' };

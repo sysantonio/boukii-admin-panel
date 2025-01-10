@@ -1867,8 +1867,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         currency: settings?.taxes?.currency || 'CHF',
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1892,8 +1896,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         currency: settings?.taxes?.currency || 'CHF',
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1921,8 +1929,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         currency: settings?.taxes?.currency || 'CHF',
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -1951,8 +1963,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: settings?.taxes?.currency || 'CHF',
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
@@ -2020,8 +2036,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2048,8 +2068,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2061,6 +2085,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         max_participants: this.defaults.max_participants,
         course_dates: this.defaults.course_dates
       }
+
     } else if (this.defaults.course_type === 2 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -2072,8 +2097,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -2107,8 +2136,12 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: this.defaults.currency,//poner currency de reglajes
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start_res: this.defaults.date_start_res
+        ? this.formatDate(this.defaults.date_start_res)
+        : '',
+        date_end_res: this.defaults.date_end_res
+        ? this.formatDate(this.defaults.date_end_res)
+        : '',
         date_start: lowestDateP,
         date_end: highestDateP,
         active: this.defaults.active,
@@ -2136,6 +2169,14 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
       .subscribe((res) => {
         this.dialogRef.close();
       })
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString); // Crea un objeto Date a partir del string
+    const year = date.getFullYear(); // Obtiene el año
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtiene el mes (0 indexado, por eso +1) y lo formatea con dos dígitos
+    const day = String(date.getDate()).padStart(2, '0'); // Obtiene el día y lo formatea con dos dígitos
+    return `${year}-${month}-${day}`; // Retorna en formato YYYY-MM-DD
   }
 
   checkStep2PrivateNoFlex(stepper: MatStepper) {

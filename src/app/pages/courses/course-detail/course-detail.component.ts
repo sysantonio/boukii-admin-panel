@@ -155,7 +155,7 @@ export class CourseDetailComponent implements OnInit {
   ];
 
   constructor(private fb: UntypedFormBuilder, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private dialog: MatDialog,
-    private snackbar: MatSnackBar, private translateService: TranslateService, private sanitizer: DomSanitizer) {
+              private snackbar: MatSnackBar, private translateService: TranslateService, private sanitizer: DomSanitizer) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
     this.id = this.activatedRoute.snapshot.params.id;
@@ -1271,6 +1271,7 @@ export class CourseDetailComponent implements OnInit {
       });
     }
 
+    debugger;
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       data = {
         course_type: this.defaults.course_type,
@@ -1280,10 +1281,18 @@ export class CourseDetailComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: this.defaults.currency,//poner currency de reglajes
-        date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
+        date_start: this.defaults.date_start_res
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
+        date_end: this.defaults.date_end_res
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
+        date_start_res: this.defaults.date_start_res
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
+        date_end_res: this.defaults.date_end_res
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1303,10 +1312,18 @@ export class CourseDetailComponent implements OnInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: this.defaults.currency,//poner currency de reglajes
-        date_start: moment(this.defaults.date_start).format('YYYY-MM-DD'),
-        date_end: moment(this.defaults.date_end).format('YYYY-MM-DD'),
-        date_start_res: moment(this.defaults.date_start).format('YYYY-MM-DD'),
-        date_end_res: moment(this.defaults.date_end).format('YYYY-MM-DD'),
+        date_start: this.defaults.date_start_res
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
+        date_end: this.defaults.date_end_res
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
+        date_start_res: this.defaults.date_start_res
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
+        date_end_res: this.defaults.date_end_res
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1324,6 +1341,15 @@ export class CourseDetailComponent implements OnInit {
         this.goTo('/courses');
       })
   }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString); // Crea un objeto Date a partir del string
+    const year = date.getFullYear(); // Obtiene el año
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtiene el mes (0 indexado, por eso +1) y lo formatea con dos dígitos
+    const day = String(date.getDate()).padStart(2, '0'); // Obtiene el día y lo formatea con dos dígitos
+    return `${year}-${month}-${day}`; // Retorna en formato YYYY-MM-DD
+  }
+
 
   calculateHourEnd(hour: any, duration: any) {
     if (duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {

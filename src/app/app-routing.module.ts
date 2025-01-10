@@ -44,7 +44,7 @@ const childrenRoutes: VexRoutes = [
       },
       {
         path: 'courses',
-        loadChildren: () => import('./pages/courses-v2/courses.module').then(m => m.CoursesModule),
+        loadChildren: () => import('./pages/courses/courses.module').then(m => m.CoursesModule),
         canActivate: [AuthGuard],
       },
       {
