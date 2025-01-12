@@ -151,11 +151,11 @@
 			<span style="width: 100%; float:left">
 				<p *ngIf="item.amount > 0"
 					style="float:left">
-					{{item.created_at | date: 'dd.MM.YYYY HH:mm'}}h: {{'ispaid' | translate }}: {{item.amount}}
+					{{item.created_at | date: 'dd.MM.yyyy HH:mm'}}h: {{'ispaid' | translate }}: {{item.amount}}
 				</p>
 				<p *ngIf="item.amount <= 0"
 					style="float:left">
-					{{item.created_at | date: 'dd.MM.YYYY HH:mm'}}h: {{'refund' | translate }}: {{item.amount}}
+					{{item.created_at | date: 'dd.MM.yyyy HH:mm'}}h: {{'refund' | translate }}: {{item.amount}}
 				</p>
 			</span>
 		</ng-container>

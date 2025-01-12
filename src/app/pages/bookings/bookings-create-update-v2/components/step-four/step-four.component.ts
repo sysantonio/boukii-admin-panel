@@ -171,7 +171,7 @@ export class StepFourComponent {
       if (!course.is_flexible) {
         // Filtrar si todas las fechas son iguales o posteriores a hoy
         const hasPastDate = course.course_dates.some(d => {
-          const courseDateMoment = moment(d.date, "dd.MM.YYYY");
+          const courseDateMoment = moment(d.date, "dd.MM.yyyy");
           return courseDateMoment.isBefore(moment(), "day");
         });
 
@@ -189,7 +189,7 @@ export class StepFourComponent {
     this.stepForm.get("date").patchValue(this.selectedDateMoment);
     this.cursesInSelectedDate = this.courses.filter(course =>
       course.course_dates.some(d => {
-        const courseDateMoment = moment(d.date, "dd.MM.YYYY");
+        const courseDateMoment = moment(d.date, "dd.MM.yyyy");
         const currentTime = moment(); // Definir la hora actual aquí
 
         // Comprobar si la fecha es hoy
@@ -209,7 +209,7 @@ export class StepFourComponent {
 
     this.courses.forEach((course) => {
       course.course_dates.forEach((courseDate) => {
-        const courseDateMoment = moment(courseDate.date, "dd.MM.YYYY");
+        const courseDateMoment = moment(courseDate.date, "dd.MM.yyyy");
 
         // Si la fecha del curso es hoy, comprobar las horas
         if (courseDateMoment.isSame(moment(), "day")) {
@@ -217,11 +217,11 @@ export class StepFourComponent {
 
           // Solo añadir la fecha si el curso aún no ha empezado
           if (currentTime.isBefore(hourStart)) {
-            ret.push(courseDateMoment.format("dd.MM.YYYY"));
+            ret.push(courseDateMoment.format("dd.MM.yyyy"));
           }
         } else {
           // Si la fecha no es hoy, añadirla sin comprobación de hora
-          ret.push(courseDateMoment.format("dd.MM.YYYY"));
+          ret.push(courseDateMoment.format("dd.MM.yyyy"));
         }
       });
     });
@@ -231,12 +231,12 @@ export class StepFourComponent {
 
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
-      const currentDate = moment(date, "dd.MM.YYYY").format("dd.MM.YYYY");
+      const currentDate = moment(date, "dd.MM.yyyy").format("dd.MM.yyyy");
       if (
         this.coursesDate.indexOf(currentDate) !== -1 &&
-        moment(this.minDate, "dd.MM.YYYY")
+        moment(this.minDate, "dd.MM.yyyy")
           .startOf("day")
-          .isSameOrBefore(moment(date, "dd.MM.YYYY").startOf("day"))
+          .isSameOrBefore(moment(date, "dd.MM.yyyy").startOf("day"))
       ) {
         const colorClass = this.tabs.find(
           (tab) => tab.courseTypeId === this.courseTypeId
@@ -253,8 +253,8 @@ export class StepFourComponent {
     minDate = moment(this.selectedDate);
     maxDate = moment(this.nextMonthDate);
     const rq = {
-      start_date: minDate.format("dd.MM.YYYY"),
-      end_date: maxDate.format("dd.MM.YYYY"),
+      start_date: minDate.format("dd.MM.yyyy"),
+      end_date: maxDate.format("dd.MM.yyyy"),
       course_type: this.courseTypeId,
       sport_id: sportLevel.sport_id,
       client_id: this.client.id,
@@ -278,7 +278,7 @@ export class StepFourComponent {
 
       this.cursesInSelectedDate = this.courses.filter(course =>
         course.course_dates.some(d => {
-          const courseDateMoment = moment(d.date, "dd.MM.YYYY");
+          const courseDateMoment = moment(d.date, "dd.MM.yyyy");
           const currentTime = moment(); // Definir la hora actual aquí
 
           // Comprobar si la fecha es hoy

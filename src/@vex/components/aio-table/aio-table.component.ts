@@ -308,10 +308,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if (this.entity.includes('statistics')) {
         if (this.selectedFrom) {
-          filter = filter + '&start_date=' + moment(this.selectedFrom).format('dd.MM.YYYY');
+          filter = filter + '&start_date=' + moment(this.selectedFrom).format('DD.MM.yyyy');
         }
         if (this.selectedTo) {
-          filter = filter + '&start_to=' + moment(this.selectedTo).format('dd.MM.YYYY');
+          filter = filter + '&start_to=' + moment(this.selectedTo).format('DD.MM.yyyy');
         }
       }
       if (this.entity.includes('vouchers')) {
@@ -484,7 +484,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (this.entity.includes('clients')) {
           const clientSchool = item.clients_schools.find((c) => c.school_id === this.user.schools[0].id);
 
-          this.crudService.update('/clients-schools', { client_id: clientSchool.client_id, school_id: clientSchool.school_id, accepted_at: clientSchool.accepted_at !== null ? null : moment().format('dd.MM.YYYY HH:mm:ss') }, clientSchool.id)
+          this.crudService.update('/clients-schools', { client_id: clientSchool.client_id, school_id: clientSchool.school_id, accepted_at: clientSchool.accepted_at !== null ? null : moment().format('dd.MM.yyyy HH:mm:ss') }, clientSchool.id)
             .subscribe(() => {
               this.getData(this.pageIndex, this.pageSize);
             })
@@ -1102,10 +1102,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         description: item.description,
         price: item.price,
         currency: item.currency,//poner currency de reglajes
-        date_start: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end: moment(item.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(item.date_end_res).format('dd.MM.YYYY'),
+        date_start: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end: moment(item.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(item.date_end_res).format('DD.MM.yyyy'),
         confirm_attendance: false,
         active: item.active,
         online: item.online,
@@ -1153,10 +1153,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         description: item.description,
         price: item.price,
         currency: item.currency,//poner currency de reglajes
-        date_start: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end: moment(item.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(item.date_end_res).format('dd.MM.YYYY'),
+        date_start: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end: moment(item.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(item.date_end_res).format('DD.MM.yyyy'),
         confirm_attendance: false,
         active: item.active,
         online: item.online,
@@ -1203,10 +1203,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         description: item.description,
         price: 0,
         currency: item.currency,
-        date_start: item.unique ? moment(item.date_start).format('dd.MM.YYYY') : moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end: item.unique ? moment(item.date_end).format('dd.MM.YYYY') : moment(item.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(item.date_end_res).format('dd.MM.YYYY'),
+        date_start: item.unique ? moment(item.date_start).format('DD.MM.yyyy') : moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end: item.unique ? moment(item.date_end).format('DD.MM.yyyy') : moment(item.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(item.date_end_res).format('DD.MM.yyyy'),
         active: item.active,
         online: item.online,
         options: item.options,
@@ -1238,10 +1238,10 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         description: item.description,
         price: item.price,
         currency: item.currency,
-        date_start_res: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(item.date_end_res).format('dd.MM.YYYY'),
-        date_start: moment(item.date_start_res).format('dd.MM.YYYY'),
-        date_end: moment(item.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(item.date_end_res).format('DD.MM.yyyy'),
+        date_start: moment(item.date_start_res).format('DD.MM.yyyy'),
+        date_end: moment(item.date_end_res).format('DD.MM.yyyy'),
         active: item.active,
         online: item.online,
         options: item.options,

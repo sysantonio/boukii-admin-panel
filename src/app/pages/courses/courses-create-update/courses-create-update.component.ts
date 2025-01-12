@@ -340,7 +340,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id=' + data.data.id + '&is_active=1')
             .subscribe((season) => {
               this.season = season.data[0];
-              this.minDate = moment(this.season.start_date, 'dd.MM.YYYY').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'dd.MM.YYYY').toDate() : this.minDate;
+              this.minDate = moment(this.season.start_date, 'dd.MM.yyyy').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'dd.MM.yyyy').toDate() : this.minDate;
               this.maxDate = moment(this.season.end_date).toDate();
 
               this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
@@ -606,7 +606,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
             if (this.defaults.course_type === 2 && this.defaults.is_flexible) {
               /*this.defaults.course_dates.forEach(element => {
-                this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('dd.MM.YYYY'), dateTo: moment(element.date).format('dd.MM.YYYY'), active: element.active, id: element.id});
+                this.dataSourceDatePrivate.data.push({dateFrom: moment(element.date).format('DD.MM.yyyy'), dateTo: moment(element.date).format('DD.MM.yyyy'), active: element.active, id: element.id});
               });*/
 
               if (this.defaults.settings.periods) {
@@ -622,7 +622,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
                     const current = moment(element.date).startOf('day');
 
                     if (current.isSame(from) || current.isSame(to) || current.isBetween(from, to)) {
-                      this.dataSourceDatePrivate.data.push({ dateFrom: moment(element.date).format('dd.MM.yyyy'), dateTo: moment(element.date).format('dd.MM.yyyy'), active: element.active, id: element.id, main: false, period: periodIdx })
+                      this.dataSourceDatePrivate.data.push({ dateFrom: moment(element.date).format('DD.MM.yyyy'), dateTo: moment(element.date).format('DD.MM.yyyy'), active: element.active, id: element.id, main: false, period: periodIdx })
                     }
                   })
                 });
@@ -634,7 +634,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
             if (this.defaults.course_type === 1) {
               this.defaults.course_dates.forEach(element => {
                 this.dataSource.data.push({
-                  date: moment(element.date).format('dd.MM.YYYY'), hour: element.hour_start,
+                  date: moment(element.date).format('DD.MM.yyyy'), hour: element.hour_start,
                   duration: this.calculateFormattedDuration(element.hour_start, element.hour_end), active: element.active, id: element.id
                 });
               });
@@ -1002,11 +1002,11 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data.push({ date: moment(result.date).format('dd.MM.YYYY'), duration: result.duration, hour: result.hour, active: true });
+        this.dataSource.data.push({ date: moment(result.date).format('DD.MM.yyyy'), duration: result.duration, hour: result.hour, active: true });
         this.dateTable?.renderRows();
 
         /*if (this.mode === 'update') {
-          this.defaults.course_dates.push({date: moment(result.date).format('dd.MM.YYYY'), hour_start: result.hour, hour_end: this.calculateHourEnd(result.hour, result.duration)});
+          this.defaults.course_dates.push({date: moment(result.date).format('DD.MM.yyyy'), hour_start: result.hour, hour_end: this.calculateHourEnd(result.hour, result.duration)});
           this.activeGroupWhenEdit(this.defaults.course_dates[this.defaults.course_dates.length - 1]);
         }*/
       }
@@ -1105,13 +1105,13 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         dialogRef.afterClosed().subscribe((data: any) => {
           if (data) {
             if (this.defaults.course_dates[index]) {
-              this.defaults.course_dates[index].date = moment(result.date).format('dd.MM.YYYY');
+              this.defaults.course_dates[index].date = moment(result.date).format('DD.MM.yyyy');
               this.defaults.course_dates[index].hour_start = result.hour;
               this.defaults.course_dates[index].hour_end = this.calculateHourEnd(result.hour, result.duration);
             }
 
             if (this.dataSource.data[index]) {
-              this.dataSource.data[index].date = moment(result.date).format('dd.MM.YYYY');
+              this.dataSource.data[index].date = moment(result.date).format('DD.MM.yyyy');
               this.dataSource.data[index].hour = result.hour;
               this.dataSource.data[index].duration = result.duration;
               this.dateTable?.renderRows();
@@ -1176,8 +1176,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.defaults.settings.periods.push({ from: moment(result.dateFrom).format('dd.MM.yyyy'), to: moment(result.dateTo).format('dd.MM.yyyy'), active: true })
-        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('dd.MM.yyyy'), dateTo: moment(result.dateTo).format('dd.MM.yyyy'), active: true });
+        this.defaults.settings.periods.push({ from: moment(result.dateFrom).format('DD.MM.yyyy'), to: moment(result.dateTo).format('DD.MM.yyyy'), active: true })
+        this.dataSourceDatePrivate.data.push({ dateFrom: moment(result.dateFrom).format('DD.MM.yyyy'), dateTo: moment(result.dateTo).format('DD.MM.yyyy'), active: true });
         this.privateDatesTable?.renderRows();
         this.activityDatesTable?.renderRows();
         this.getDatesBetween(moment(result.dateFrom), moment(result.dateTo), true);
@@ -1555,19 +1555,19 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           this.daysDates.push(dayOfWeek.toLowerCase());
 
           /*{
-            date: currentDate.format('dd.MM.YYYY'),
+            date: currentDate.format('DD.MM.yyyy'),
             dayOfWeek: dayOfWeek.toLowerCase()
           }*/
           daysOfWeekAdded.add(dayOfWeek);
         }
 
-        this.daysDatesLevels.push({ date: currentDate.format('dd.MM.YYYY'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '') });
+        this.daysDatesLevels.push({ date: currentDate.format('DD.MM.yyyy'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '') });
 
         if (this.mode === 'update') {
-          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === currentDate.format('dd.MM.YYYY'));
+          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('DD.MM.yyyy') === currentDate.format('DD.MM.yyyy'));
           if (!existDate) {
             this.defaults.course_dates.push({
-              date: currentDate.format('dd.MM.YYYY'),
+              date: currentDate.format('DD.MM.yyyy'),
               hour_start: hourStart,
               hour_end: hourEnd,
             })
@@ -1590,7 +1590,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
         } else {
           this.defaults.course_dates.push({
-            date: currentDate.format('dd.MM.YYYY'),
+            date: currentDate.format('DD.MM.yyyy'),
             hour_start: hourStart,
             hour_end: hourEnd,
           })
@@ -1614,11 +1614,11 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     if (this.mode === 'update') {
       this.dataSource.data.forEach(element => {
-        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === moment(element.date).format('dd.MM.YYYY'));
+        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('DD.MM.yyyy') === moment(element.date).format('DD.MM.yyyy'));
         if (!existDate) {
 
           const dataNew = {
-            date: moment(element.date).format('dd.MM.YYYY'),
+            date: moment(element.date).format('DD.MM.yyyy'),
             hour_start: element.hour,
             hour_end: this.calculateHourEnd(element.hour, element.duration),
             course_groups: []
@@ -1648,11 +1648,11 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
             return acc;
           }, [0, 0]);
 
-          this.daysDatesLevels.push({ date: moment(element.date).format('dd.MM.YYYY'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
+          this.daysDatesLevels.push({ date: moment(element.date).format('DD.MM.yyyy'), dateString: moment(element.date).locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
           if (this.courseType === 'collectif') {
 
             this.defaults.course_dates.push({
-              date: moment(element.date).format('dd.MM.YYYY'),
+              date: moment(element.date).format('DD.MM.yyyy'),
               hour_start: element.hour,
               hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
               groups: []
@@ -1660,7 +1660,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           } else {
 
             this.defaults.course_dates.push({
-              date: moment(element.date).format('dd.MM.YYYY'),
+              date: moment(element.date).format('DD.MM.yyyy'),
               hour_start: element.hour,
               hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
             })
@@ -1668,7 +1668,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
           }
         } else {
-          this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.YYYY').format('dd.MM.YYYY'), dateString: moment(element.date, 'dd.MM.YYYY').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
+          this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.yyyy').format('DD.MM.yyyy'), dateString: moment(element.date, 'dd.MM.yyyy').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
         }
 
       });
@@ -1847,7 +1847,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === moment(this.selectedDate, 'dd.MM.YYYY').format('dd.MM.YYYY')) {
+        if (moment(courseDate.date, 'dd.MM.yyyy').format('DD.MM.yyyy') === moment(this.selectedDate, 'dd.MM.yyyy').format('DD.MM.yyyy')) {
           courseDate.groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.subgroups[subGroupIndex]?.monitor;
@@ -1924,7 +1924,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
       if (!level.old) {
         this.defaults.course_dates.forEach(courseDate => {
-          if (moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === moment(this.selectedDate, 'dd.MM.YYYY').format('dd.MM.YYYY')) {
+          if (moment(courseDate.date, 'dd.MM.yyyy').format('DD.MM.yyyy') === moment(this.selectedDate, 'dd.MM.yyyy').format('DD.MM.yyyy')) {
             courseDate.groups.forEach(group => {
               if (group.degree_id === level.id && !monitorSet) {
 
@@ -2065,10 +2065,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
-        date_start: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2091,10 +2091,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: settings?.taxes?.currency || 'CHF',//poner currency de reglajes
-        date_start: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2121,10 +2121,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.translations.fr.description,
         price: 0,
         currency: settings?.taxes?.currency || 'CHF',
-        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('dd.MM.YYYY') : moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('dd.MM.YYYY') : moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('DD.MM.yyyy') : moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('DD.MM.yyyy') : moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         active: this.defaults.active,
         online: this.defaults.online,
         options: this.defaults.options,
@@ -2156,10 +2156,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.translations.fr.description,
         price: this.defaults.price,
         currency: settings?.taxes?.currency || 'CHF',
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
-        date_start: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
+        date_start: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         active: this.defaults.active,
         online: this.defaults.online,
         options: this.defaults.options,
@@ -2196,10 +2196,10 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.translations.fr.description,
         price: 0,
         currency: settings?.taxes?.currency || 'CHF',
-        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('dd.MM.YYYY') : moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('dd.MM.YYYY') : moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start: this.periodeUnique ? moment(this.defaults.date_start).format('DD.MM.yyyy') : moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end: this.periodeUnique ? moment(this.defaults.date_end).format('DD.MM.yyyy') : moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         active: this.defaults.active,
         online: this.defaults.online,
         options: this.defaults.options,
@@ -2273,8 +2273,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       sortedDates = dates.map(d => new Date(d.date)).sort((a, b) => a - b);
     }
 
-    let lowestDate = moment(sortedDates[0]).format('dd.MM.YYYY');
-    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('dd.MM.YYYY');
+    let lowestDate = moment(sortedDates[0]).format('DD.MM.yyyy');
+    let highestDate = moment(sortedDates[sortedDates.length - 1]).format('DD.MM.yyyy');
 
     if (this.defaults.course_type === 1 && this.defaults.is_flexible) {
       /* this.defaults.date_start_res = this.defaults.date_start;
@@ -2290,8 +2290,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2319,8 +2319,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         currency: this.defaults.currency,//poner currency de reglajes
         date_start: lowestDate,
         date_end: highestDate,
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2344,8 +2344,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         currency: this.defaults.currency,
         date_start: this.defaults.date_start,
         date_end: this.defaults.date_end,
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         active: this.defaults.active,
         online: this.defaults.online,
         options: this.defaults.options,
@@ -2371,8 +2371,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       this.getDatesBetween(this.defaults.course_dates[0].date, this.defaults.date_end_res, true, this.defaults.hour_min, this.defaults.hour_max);
       let sortedDates = this.defaults.course_dates.map(d => new Date(d.date)).sort((a, b) => a - b);
 
-      let lowestDateP = moment(sortedDates[0]).format('dd.MM.YYYY');
-      let highestDateP = moment(sortedDates[sortedDates.length - 1]).format('dd.MM.YYYY');
+      let lowestDateP = moment(sortedDates[0]).format('DD.MM.yyyy');
+      let highestDateP = moment(sortedDates[sortedDates.length - 1]).format('DD.MM.yyyy');
 
       data = {
         course_type: this.defaults.course_type,
@@ -2382,8 +2382,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         description: this.defaults.description,
         price: this.defaults.price,
         currency: this.defaults.currency,
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         date_start: this.defaults.date_start,
         date_end: this.defaults.date_end,
         active: this.defaults.active,
@@ -2419,8 +2419,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         currency: this.defaults.currency,
         date_start: this.defaults.date_start,
         date_end: this.defaults.date_end,
-        date_start_res: moment(this.defaults.date_start_res).format('dd.MM.YYYY'),
-        date_end_res: moment(this.defaults.date_end_res).format('dd.MM.YYYY'),
+        date_start_res: moment(this.defaults.date_start_res).format('DD.MM.yyyy'),
+        date_end_res: moment(this.defaults.date_end_res).format('DD.MM.yyyy'),
         active: this.defaults.active,
         online: this.defaults.online,
         options: this.defaults.options,

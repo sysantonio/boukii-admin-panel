@@ -640,7 +640,7 @@ export class SettingsComponent implements OnInit {
 
   onDateSelect(event: MatDatepickerInputEvent<Date>, index: any) {
     const selectedDate = event.value;
-    const selectedDateFormat = moment(selectedDate).format('dd.MM.YYYY');
+    const selectedDateFormat = moment(selectedDate).format('DD.MM.yyyy');
 
     if (index <= this.holidays.length && this.season && this.season !== null) {
       this.holidays[index] = selectedDateFormat;
@@ -668,14 +668,14 @@ export class SettingsComponent implements OnInit {
       holidays = this.holidays;
     } else {
       this.holidaysSelected.forEach(element => {
-        holidays.push(moment(element).format('dd.MM.YYYY'));
+        holidays.push(moment(element).format('DD.MM.yyyy'));
       });
     }
 
     const data = {
       name: "Temporada 1",
-      start_date: moment(this.selectedFrom,).format('dd.MM.YYYY'),
-      end_date: moment(this.selectedTo,).format('dd.MM.YYYY'),
+      start_date: moment(this.selectedFrom,).format('DD.MM.yyyy'),
+      end_date: moment(this.selectedTo,).format('DD.MM.yyyy'),
       is_active: true,
       school_id: this.user.schools[0].id,
       hour_start: this.selectedFromHour,

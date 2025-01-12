@@ -133,7 +133,7 @@ export class BookingService {
           bookingUser.currency = item.course.currency;
           bookingUser.degree_id = item.sportLevel.id;
           bookingUser.course_date_id = item.course.course_dates.find(d =>
-            moment(d.date).format('dd.MM.YYYY') == moment(date.date).format('dd.MM.YYYY')).id;
+            moment(d.date).format('DD.MM.yyyy') == moment(date.date).format('DD.MM.yyyy')).id;
           bookingUser.hour_start = date.startHour;
           bookingUser.hour_end = date.endHour;
 

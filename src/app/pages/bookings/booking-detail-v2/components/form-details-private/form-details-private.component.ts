@@ -134,14 +134,14 @@ export class FormDetailsPrivateComponent implements OnInit {
             u.last_name === utilizer.last_name)?.extras || [], disabled || isDatePast)
     ));
 
-    let formattedDate = this.date ? this.date.format('dd.MM.YYYY') : null;
+    let formattedDate = this.date ? this.date.format('DD.MM.yyyy') : null;
 
     if (this.courseDates.length > 0) {
       const lastDateGroup = this.courseDates.at(this.courseDates.length - 1);
       const lastDate = lastDateGroup.get('date').value;
 
       // Si quieres ajustar la nueva fecha para que sea al día siguiente
-      formattedDate = moment(lastDate).add(1, 'day').format('dd.MM.YYYY');
+      formattedDate = moment(lastDate).add(1, 'day').format('DD.MM.yyyy');
     }
 
 
@@ -204,7 +204,7 @@ export class FormDetailsPrivateComponent implements OnInit {
         client_id: utilizer.id,
         hour_start: courseDateGroup.get('startHour').value, // Reemplaza ":00" si es necesario
         hour_end: courseDateGroup.get('endHour').value, // Reemplaza ":00" si es necesario
-        date: moment(courseDateGroup.get('date').value).format('dd.MM.YYYY') // Formateamos la fecha
+        date: moment(courseDateGroup.get('date').value).format('DD.MM.yyyy') // Formateamos la fecha
       }));
 
       const hasLocalOverlap = this.checkLocalOverlap(bookingUsers, courseDateGroup);
@@ -229,7 +229,7 @@ export class FormDetailsPrivateComponent implements OnInit {
           resolve(isAvailable); // Resolvemos la promesa con el valor de disponibilidad
         }, (error) => {
           this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-            moment(error.error.data[0].date).format('dd.MM.YYYY') +
+            moment(error.error.data[0].date).format('DD.MM.yyyy') +
             ' | ' + error.error.data[0].hour_start + ' - ' +
             error.error.data[0].hour_end, 'OK', { duration: 3000 })
           resolve(false); // En caso de error, rechazamos la promesa
@@ -250,8 +250,8 @@ export class FormDetailsPrivateComponent implements OnInit {
         if (matchingUtilizer) {
           for (let normalizedDate of normalized.dates) {
             // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
-            const formattedNormalizedDate = moment(normalizedDate.date).format('dd.MM.YYYY');
-            const formattedBookingUserDate = moment(bookingUser.date).format('dd.MM.YYYY');
+            const formattedNormalizedDate = moment(normalizedDate.date).format('DD.MM.yyyy');
+            const formattedBookingUserDate = moment(bookingUser.date).format('DD.MM.yyyy');
 
             if (formattedBookingUserDate === formattedNormalizedDate) {
               // Verificamos solapamiento en las horas
@@ -268,8 +268,8 @@ export class FormDetailsPrivateComponent implements OnInit {
             continue; // Saltamos la comparación si es el mismo FormGroup
           }
           // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
-          const formattedNormalizedDate = moment(normalizedDate.get('date').value).format('dd.MM.YYYY');
-          const formattedBookingUserDate = moment(bookingUser.date).format('dd.MM.YYYY');
+          const formattedNormalizedDate = moment(normalizedDate.get('date').value).format('DD.MM.yyyy');
+          const formattedBookingUserDate = moment(bookingUser.date).format('DD.MM.yyyy');
 
           if (formattedBookingUserDate === formattedNormalizedDate) {
             // Verificamos solapamiento en las horas
@@ -451,7 +451,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       minimumDegreeId: this.sportLevel.id,
       startTime: dateGroup.get('startHour').value,
       endTime: this.utilService.calculateEndHour(dateGroup.get('startHour').value, dateGroup.get('duration').value),
-      date: moment( dateGroup.get('date').value).format('dd.MM.YYYY'),
+      date: moment( dateGroup.get('date').value).format('DD.MM.yyyy'),
       clientIds: this.utilizers.map(utilizer => utilizer.id)
     };
     this.crudService.post("/admin/monitors/available", rq).subscribe((data) => {
@@ -491,7 +491,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       course_dates.forEach((date, index) => {
         course_dates[index].price = totalPrice;
         course_dates[index].course_date_id = this.course.course_dates.find(d =>
-          moment(d.date).format('dd.MM.YYYY') == moment(date.date).format('dd.MM.YYYY')).id;
+          moment(d.date).format('DD.MM.yyyy') == moment(date.date).format('DD.MM.yyyy')).id;
       });
 
       // Actualizar el formulario con las fechas que ahora tienen los precios calculados

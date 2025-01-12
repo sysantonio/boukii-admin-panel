@@ -32,11 +32,11 @@ export class QuickpanelComponent implements OnInit {
   }
 
   getTodayTasks() {
-    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&start_date=' + moment().format('dd.MM.YYYY') + '&end_date=' + moment().format('dd.MM.YYYY')).subscribe((tasks) => this.todayTasks = tasks.data)
+    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&start_date=' + moment().format('DD.MM.yyyy') + '&end_date=' + moment().format('DD.MM.yyyy')).subscribe((tasks) => this.todayTasks = tasks.data)
   }
 
   getAllTasks() {
-    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&start_date=' + moment().add(1, 'd').format('dd.MM.YYYY'))
+    this.crudService.list('/tasks', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&start_date=' + moment().add(1, 'd').format('DD.MM.yyyy'))
       .subscribe((tasks) => this.allTasks = tasks.data)
   }
 

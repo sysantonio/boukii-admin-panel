@@ -64,7 +64,7 @@
 							<span style="margin-left: 10px;font-weight: normal;color: white;">
 								<span style="color: white;">
 									{{detailData.created_at | date:
-                  'dd.MM.YYYY'}}
+                  'dd.MM.yyyy'}}
 								</span>
 								<span style="margin-left: 10px;font-style: italic;color: white;">
 									{{detailData.created_at
@@ -100,8 +100,8 @@
             <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate}}</b></p>
           </div>
           <div style="width: 100%;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd.MM.YYYY'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
-            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.date_end | date: 'dd.MM.YYYY'}}</b> {{detailData.course_dates[0].hour_end}}h</p>
+            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd.MM.yyyy'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.date_end | date: 'dd.MM.yyyy'}}</b> {{detailData.course_dates[0].hour_end}}h</p>
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -162,12 +162,12 @@
 					class="list-holder">
 					<div class="col-left">
 						<b>
-							{{detailData.date_start_res | date: 'dd.MM.YYYY'}}
+							{{detailData.date_start_res | date: 'dd.MM.yyyy'}}
 						</b>
 					</div>
 					<div class="col-right">
 						<b>
-							{{detailData.date_end_res | date: 'dd.MM.YYYY'}}
+							{{detailData.date_end_res | date: 'dd.MM.yyyy'}}
 						</b>
 					</div>
 				</div>
@@ -190,7 +190,7 @@
 					<div class="col-left">
 						<b>
 							{{detailData.date_start | date:
-              'dd.MM.YYYY'}}
+              'dd.MM.yyyy'}}
 						</b>
 						<br>
 						{{detailData.course_dates[0]?.hour_start.substring(0,
@@ -199,7 +199,7 @@
 					<div class="col-right">
 						<b>
 							{{detailData.date_end | date:
-              'dd.MM.YYYY'}}
+              'dd.MM.yyyy'}}
 						</b>
 						<br>
 						{{detailData.course_dates[0]?.hour_end.substring(0,
@@ -291,7 +291,7 @@
 					<ul>
 						<ng-container *ngFor="let item of detailData.course_dates; let i = index">
 							<li *ngIf="item.active || item.active === 1">
-								{{item.date | date:'dd.MM.YYYY'}}
+								{{item.date | date:'dd.MM.yyyy'}}
 								<i style="text-align: right;float:right">
 									{{item?.hour_start.substring(0,
                   5)}}h - {{item?.hour_end.substring(0, 5)}}h
@@ -307,7 +307,7 @@
 					class="list-holder">
 					<ul>
 						<li>
-							{{detailData.course_dates[0]?.date | date:'dd.MM.YYYY'}}
+							{{detailData.course_dates[0]?.date | date:'dd.MM.yyyy'}}
 							<i style="text-align: right;float:right">
 								{{detailData.course_dates[0]?.hour_start.substring(0,
                 5)}}h - {{detailData.course_dates[0]?.hour_end.substring(0,
@@ -315,7 +315,7 @@
 							</i>
 						</li>
 						<li>
-							{{detailData.course_dates[detailData.course_dates.length - 1]?.date | date:'dd.MM.YYYY'}}
+							{{detailData.course_dates[detailData.course_dates.length - 1]?.date | date:'dd.MM.yyyy'}}
 							<i style="text-align: right;float:right">
 								{{detailData.course_dates[detailData.course_dates.length
                 - 1].hour_start.substring(0, 5)}}h -
@@ -384,8 +384,8 @@
             <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate}}</b></p>
           </div>
           <div style="width: 100%;">
-            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd.MM.YYYY'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
-            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.date_end | date: 'dd.MM.YYYY'}}</b> {{detailData.course_dates[0].hour_end}}h</p>
+            <p style="float: left;width: 50%;text-align: left;"><b>{{detailData.date_start | date: 'dd.MM.yyyy'}}</b> {{detailData.course_dates[0].hour_start}}h</p>
+            <p style="float: left;width: 50%;text-align: right;"><b>{{detailData.date_end | date: 'dd.MM.yyyy'}}</b> {{detailData.course_dates[0].hour_end}}h</p>
           </div>
         </div>
         <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>

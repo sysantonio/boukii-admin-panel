@@ -365,8 +365,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
     if (this.timelineView === 'week') {
       const startOfWeekDate = startOfWeek(date, { weekStartsOn: 1 });
       const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
-      firstDate = moment(startOfWeekDate).format('dd.MM.YYYY');
-      lastDate = moment(endOfWeekDate).format('dd.MM.YYYY');
+      firstDate = moment(startOfWeekDate).format('DD.MM.yyyy');
+      lastDate = moment(endOfWeekDate).format('DD.MM.yyyy');
       this.searchBookings(firstDate, lastDate);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
@@ -376,8 +376,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
     } else if (this.timelineView === 'month') {
       const startMonth = startOfMonth(date);
       const endMonth = endOfMonth(date);
-      firstDate = moment(startMonth).format('dd.MM.YYYY');
-      lastDate = moment(endMonth).format('dd.MM.YYYY');
+      firstDate = moment(startMonth).format('DD.MM.yyyy');
+      lastDate = moment(endMonth).format('DD.MM.yyyy');
       this.searchBookings(firstDate, lastDate);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
@@ -386,7 +386,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       });*/
     } else {
       const dateStr = date.toLocaleString().split('T')[0];
-      firstDate = moment(date).format('dd.MM.YYYY');
+      firstDate = moment(date).format('DD.MM.yyyy');
       lastDate = firstDate;
       this.searchBookings(firstDate, lastDate);
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => task.date === dateStr);*/
@@ -716,12 +716,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
           id: booking?.id,
           booking_id: booking?.booking?.id,
           booking_color: booking_color,
-          date: moment(booking.date).format('dd.MM.YYYY'),
+          date: moment(booking.date).format('DD.MM.yyyy'),
           group_id:booking?.group_id,
           date_full: booking.date,
-          date_start: moment(booking.course.date_start).format('dd.MM.YYYY'),
+          date_start: moment(booking.course.date_start).format('DD.MM.yyyy'),
           created_at: booking.booking.created_at,
-          date_end: moment(booking.course.date_end).format('dd.MM.YYYY'),
+          date_end: moment(booking.course.date_end).format('DD.MM.yyyy'),
           hour_start: booking.hour_start.substring(0, 5),
           hour_end: booking.hour_end ? booking.hour_end.substring(0, 5) : this.hoursRange[this.hoursRange.length - 1],
           type: type,
@@ -777,8 +777,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
           school_id: nwd.school_id,
           station_id: nwd.station_id,
           block_id: nwd.id,
-          date: moment(nwd.start_date).format('dd.MM.YYYY'),
-          date_format: moment(nwd.start_date).format('dd.MM.YYYY'),
+          date: moment(nwd.start_date).format('DD.MM.yyyy'),
+          date_format: moment(nwd.start_date).format('DD.MM.yyyy'),
           full_day: nwd.full_day,
           type: type,
           color: nwd.user_nwd_subtype_id === 1 ? '#bbbbbb' : nwd.color,
@@ -817,7 +817,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       const adjustedEnd = min([endMonth, currentWeekEnd]);
 
       const week = {
-        startWeek: format(currentWeekStart, 'dd.MM.YYYY'),
+        startWeek: format(currentWeekStart, 'dd.MM.yyyy'),
         startDayInt: adjustedStart.getDate(),
         startDay: this.formatDayWithFrenchInitial(adjustedStart),
         endDay: this.formatDayWithFrenchInitial(adjustedEnd)
@@ -855,7 +855,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const weekStartDate = new Date(week.startWeek);
     const specificDate = addDays(weekStartDate, dayIndex);
     if (isSameMonth(specificDate, this.currentDate)) {
-      return !this.vacationDays.includes(moment(specificDate).format('dd.MM.YYYY'));
+      return !this.vacationDays.includes(moment(specificDate).format('DD.MM.yyyy'));
     }
     else {
       return false;
@@ -865,7 +865,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   isDayVisibleWeek(dayIndex: number) {
     const startOfWeek = moment(this.currentDate).startOf('isoWeek');
     const specificDate = startOfWeek.add(dayIndex, 'days');
-    return !this.vacationDays.includes(moment(specificDate).format('dd.MM.YYYY'));
+    return !this.vacationDays.includes(moment(specificDate).format('DD.MM.yyyy'));
   }
 
   isDayVisibleDay(): boolean {
@@ -875,7 +875,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
 
     // Verificamos si la fecha actual está en la lista de días de vacaciones
-    return !this.vacationDays.includes(moment(this.currentDate).format('dd.MM.YYYY'));
+    return !this.vacationDays.includes(moment(this.currentDate).format('DD.MM.yyyy'));
   }
   generateHoursRange(start: string, end: string): string[] {
     const startTime = this.parseTime(start);
@@ -1782,7 +1782,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       case 'day':
         dateInfo = {
           date: this.currentDate,
-          date_format: moment(this.currentDate).format('dd.MM.yyyy'),
+          date_format: moment(this.currentDate).format('DD.MM.yyyy'),
           hour: position,
           monitor_id: monitor_id
         };
@@ -1792,7 +1792,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         let weekDayDate = mondayOfWeek.add(position, 'days');
         dateInfo = {
           date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-          date_format: moment(weekDayDate).format('dd.MM.yyyy'),
+          date_format: moment(weekDayDate).format('DD.MM.yyyy'),
           hour: hourDay,
           monitor_id: monitor_id
         };
@@ -1804,7 +1804,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         let monthDayDate = startOfWeek.add(position, 'days');
         dateInfo = {
           date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-          date_format: moment(monthDayDate).format('dd.MM.yyyy'),
+          date_format: moment(monthDayDate).format('DD.MM.yyyy'),
           hour: hourDay,
           monitor_id: monitor_id
         };
@@ -1836,7 +1836,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           const endDate = moment(result.end_date);
 
           while (currentDate <= endDate) {
-            dates.push(currentDate.format('dd.MM.YYYY'));
+            dates.push(currentDate.format('DD.MM.yyyy'));
             currentDate = currentDate.add(1, 'days');
           }
 
@@ -1947,7 +1947,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   createBlockGeneral(): void {
 
-    let currentDateFormat = moment(this.currentDate).format('dd.MM.yyyy');
+    let currentDateFormat = moment(this.currentDate).format('DD.MM.yyyy');
     const dialogRef = this.dialog.open(CalendarEditComponent, {
       data: {
         block_general: true,

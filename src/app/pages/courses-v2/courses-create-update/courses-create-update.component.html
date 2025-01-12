@@ -219,7 +219,7 @@
 						{{'add_date' | translate }}
 					</button>
 				</div>
-				<div style="background-color: var(--color-grey4);height: 20px;width: 100%;"></div>
+				<div style="background-color: var(--color-grey4);height: 20px;width: 100%;"  *ngIf="courses.courseFormGroup.controls['is_flexible'].value"></div>
 				<div *ngIf="courses.courseFormGroup.controls['is_flexible'].value">
 					<div style="margin: 20px;">
 						<span>
@@ -248,7 +248,7 @@
 						</app-form-input>
 						<mat-icon (click)="courses.courseFormGroup.controls['discounts'].value.splice(i,1)"
 							class="icon24"
-							style="margin-left: 16px;cursor: pointer; color: black;height: 50px;">
+							style="margin-left: 16px;cursor: pointer; color: black;filter:  var(--is-dark-theme,invert(1));">
 							delete
 						</mat-icon>
 					</div>

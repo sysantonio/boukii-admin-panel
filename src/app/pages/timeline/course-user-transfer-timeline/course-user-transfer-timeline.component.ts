@@ -61,7 +61,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
         this.course = data.data;
 
         this.course.course_dates.forEach(element => {
-          if (moment(element.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === this.defaults.currentDate.format('dd.MM.YYYY')) {
+          if (moment(element.date, 'dd.MM.yyyy').format('DD.MM.yyyy') === this.defaults.currentDate.format('DD.MM.yyyy')) {
             element.course_groups.forEach(group => {
               group.course_subgroups.forEach(subgroup => {
                 this.courseSubGroups.push(subgroup);

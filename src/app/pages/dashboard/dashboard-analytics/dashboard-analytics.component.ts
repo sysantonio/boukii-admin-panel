@@ -106,14 +106,14 @@ export class DashboardAnalyticsComponent implements OnInit {
   }
 
   getCourses() {
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('dd.MM.YYYY') + '&course_type=1')
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('DD.MM.yyyy') + '&course_type=1')
       .subscribe((data) => {
         this.dispoCol = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
         }, 0);
 
       })
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('dd.MM.YYYY') + '&course_type=2')
+    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('DD.MM.yyyy') + '&course_type=2')
       .subscribe((data) => {
         this.dispoPrivate = data.data.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total_available_places;
@@ -125,7 +125,7 @@ export class DashboardAnalyticsComponent implements OnInit {
   getBookings() {
     this.bookingList = [];
     this.crudService.list('/booking-users', 1, 10000, 'desc', 'id',
-      '&school_id=' + this.user.schools[0].id + '&date=' + this.date.format('dd.MM.YYYY'), '', null, null, ['client'])
+      '&school_id=' + this.user.schools[0].id + '&date=' + this.date.format('DD.MM.yyyy'), '', null, null, ['client'])
       .subscribe((data) => {
         this.bookings = data.data.length;
 

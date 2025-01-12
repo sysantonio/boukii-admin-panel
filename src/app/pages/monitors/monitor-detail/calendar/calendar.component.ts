@@ -90,8 +90,8 @@ export class CalendarComponent implements OnInit {
             id: element.id,
             start_time: element.start_time,
             end_time: element.end_time,
-            start: moment(moment(element.start_date).format('dd.MM.YYYY') + ' ' + moment(element.start_time, 'HH:mm:ss').format('HH:mm:ss')).toDate(),
-            end:moment(moment(element.end_date).format('dd.MM.YYYY') + ' ' + moment(element.end_time, 'HH:mm:ss').format('HH:mm:ss')).toDate(),
+            start: moment(moment(element.start_date).format('DD.MM.yyyy') + ' ' + moment(element.start_time, 'HH:mm:ss').format('HH:mm:ss')).toDate(),
+            end:moment(moment(element.end_date).format('DD.MM.yyyy') + ' ' + moment(element.end_time, 'HH:mm:ss').format('HH:mm:ss')).toDate(),
             title: element.description,
             // TODO: fix these colors
             color: element.color,

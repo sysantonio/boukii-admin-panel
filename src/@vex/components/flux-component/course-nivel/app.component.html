@@ -27,7 +27,7 @@ flex-direction: column;">
 						keyboard_arrow_down
 					</mat-icon>
 				</div>
-				<div style="color: var(--color-dark1); font-weight: 400;display: flex;align-items: center;">
+				<div style="display: flex;align-items: center;">
 					<img src="assets/icons/icon/people.png"
 						style="filter: var(--is-dark-theme,invert(1));"
 						class="icon16">
@@ -60,35 +60,24 @@ flex-direction: column;">
 			</div>
 			<ng-container *ngIf="item.modal">
 				<div *ngFor="let ix of find(courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',item.id).course_subgroups;index as i"
-					style="padding: 10px;width: 100%; background-color: #EFF2F5;border: 1px solid #DEE6EA;display: flex;align-items: center;height: 60%;">
+					style="padding: 10px;width: 100%;border: 1px solid var(--color-grey2);display: flex;align-items: center;height: 60%;background-color: var(--color-grey5);">
 					<div>
 						<ng-container *ngIf="checkbox">
 							<mat-checkbox></mat-checkbox>
 						</ng-container>
-						<span style="color: var(--Dark-02, #2F3844);
-                            font-style: normal;
-                            font-weight: 600;
-                            line-height: 16px;">
+						<span style="font-weight: 600;">
 							{{item.annotation}}
                             {{item.level}} {{i+1}}
 						</span>
 						<ng-container *ngIf="!checkbox">
 							<br *ngIf="!ix.monitor">
-							<span *ngIf="!ix.monitor"
-								style="color: var(--Dark-02, #2F3844);
-                                font-style: normal;
-                                font-weight: 400;
-                                line-height: 16px;">
+							<span *ngIf="!ix.monitor">
 								{{"text_nomonitorset" | translate}}
 							</span>
 							<ng-container *ngFor="let course_date of courseFormGroup.controls['course_dates'].value">
 								<br *ngIf="ix.monitor">
-								<span *ngIf="ix.monitor"
-									style="color: var(--Dark-02, #2F3844);
-							font-style: normal;
-							font-weight: 400;
-							line-height: 16px;">
-									{{course_date.date | date:'dd.MM.YYYY'}} {{"monitor" | translate}}: {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.first_name}} {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.last_name}}
+								<span *ngIf="ix.monitor">
+									{{course_date.date | date:'dd.MM.yyyy'}} {{"monitor" | translate}}: {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.first_name}} {{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.last_name}}
 								</span>
 							</ng-container>
 						</ng-container>

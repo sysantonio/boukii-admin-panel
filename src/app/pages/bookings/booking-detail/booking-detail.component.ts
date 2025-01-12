@@ -530,7 +530,7 @@ export class BookingDetailComponent implements OnInit {
         this.bookingUsersUnique.filter(
           (b) => b.course_id === this.courses[index].id
         ).length
-        ];
+      ];
     } else {
       return this.courses[index].price;
     }
@@ -983,7 +983,7 @@ export class BookingDetailComponent implements OnInit {
                   booking_id: bookingId,
                   amount: element.bonus.reducePrice,
                 })
-                .subscribe((vresult) => {                });
+                .subscribe((vresult) => { });
             });
         }
       });
@@ -1244,8 +1244,8 @@ export class BookingDetailComponent implements OnInit {
     }
 
     const rq = {
-      start_date: minDate.format("dd.MM.YYYY"),
-      end_date: maxDate.format("dd.MM.YYYY"),
+      start_date: minDate.format("dd.MM.yyyy"),
+      end_date: maxDate.format("dd.MM.yyyy"),
       course_type: this.courseTypeId,
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
@@ -1349,7 +1349,7 @@ export class BookingDetailComponent implements OnInit {
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
-      const currentDate = moment(date, "dd.MM.YYYY").format("dd.MM.YYYY");
+      const currentDate = moment(date, "dd.MM.yyyy").format("dd.MM.yyyy");
       if (
         dates.indexOf(currentDate) !== -1 &&
         moment(this.minDate).isSameOrBefore(moment(date))
@@ -1364,7 +1364,7 @@ export class BookingDetailComponent implements OnInit {
   privateDateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, "dd.MM.YYYY").format("dd.MM.YYYY");
+      const currentDate = moment(date, "dd.MM.yyyy").format("dd.MM.yyyy");
       if (
         dates.indexOf(currentDate) !== -1 &&
         moment(this.minDate).isSameOrBefore(moment(date))
@@ -1377,7 +1377,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   canBook(date: any) {
-    return moment(date, "dd.MM.YYYY").isSameOrAfter(moment(this.minDate));
+    return moment(date, "dd.MM.yyyy").isSameOrAfter(moment(this.minDate));
   }
 
   getLevelColor(id: any) {
@@ -1497,7 +1497,7 @@ export class BookingDetailComponent implements OnInit {
     let ret = [];
     this.courses.forEach((course) => {
       course.course_dates.forEach((courseDate) => {
-        ret.push(moment(courseDate.date, "dd.MM.YYYY").format("dd.MM.YYYY"));
+        ret.push(moment(courseDate.date, "dd.MM.yyyy").format("dd.MM.yyyy"));
       });
     });
 
@@ -1508,7 +1508,7 @@ export class BookingDetailComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach((course) => {
       course.course_dates.forEach((courseDate) => {
-        ret.push(moment(courseDate.date, "dd.MM.YYYY").format("dd.MM.YYYY"));
+        ret.push(moment(courseDate.date, "dd.MM.yyyy").format("dd.MM.yyyy"));
       });
     });
 
@@ -2078,7 +2078,7 @@ export class BookingDetailComponent implements OnInit {
                           booking_id: this.id,
                           amount: -vData.quantity,
                         })
-                        .subscribe((vresult) => {                        });
+                        .subscribe((vresult) => { });
                       this.snackbar.open(
                         this.translateService.instant(
                           "snackbar.booking_detail.update"
@@ -2181,7 +2181,7 @@ export class BookingDetailComponent implements OnInit {
                     this.crudService
                       .post("/admin/bookings/refunds/" + this.id, {
                         amount:
-                        priceToRefund,
+                          priceToRefund,
                       })
                       .subscribe(() => {
                         this.crudService
@@ -2232,7 +2232,7 @@ export class BookingDetailComponent implements OnInit {
                   booking_id: this.id,
                   school_id: this.user.schools[0].id,
                   amount:
-                  priceToRefund,
+                    priceToRefund,
                   status: "refund",
                   notes: "other",
                 })
@@ -2261,9 +2261,9 @@ export class BookingDetailComponent implements OnInit {
           const vData = {
             code: "BOU-" + this.generateRandomNumber(),
             quantity:
-            priceToRefund,
+              priceToRefund,
             remaining_balance:
-            priceToRefund,
+              priceToRefund,
             payed: false,
             client_id: this.booking.client_main_id,
             school_id: this.user.schools[0].id,
@@ -2299,7 +2299,7 @@ export class BookingDetailComponent implements OnInit {
                           booking_id: this.id,
                           amount: -vData.quantity,
                         })
-                        .subscribe((vresult) => {                       });
+                        .subscribe((vresult) => { });
                       this.snackbar.open(
                         this.translateService.instant(
                           "snackbar.booking_detail.delete"
@@ -2583,7 +2583,7 @@ export class BookingDetailComponent implements OnInit {
                 booking_id: this.id,
                 amount: -vData.quantity,
               })
-              .subscribe((vresult) => {              });
+              .subscribe((vresult) => { });
           });
           this.snackbar.open(
             this.translateService.instant("snackbar.booking_detail.delete"),
@@ -2758,7 +2758,7 @@ export class BookingDetailComponent implements OnInit {
           "/bookings",
           {
             price_cancellation_insurance:
-            this.booking.price_cancellation_insurance,
+              this.booking.price_cancellation_insurance,
             has_cancellation_insurance: true,
           },
           this.id
@@ -3392,9 +3392,9 @@ export class BookingDetailComponent implements OnInit {
     this.bookingService.editData.selectedPrice =
       this.courses[index].course_type == 1 ? this.parseFloatValue(this.getTotalBook(index, item)) +
         this.getCourseExtraForfaitPrice(item.courseDates[0]) : this.parseFloatValue(this.getTotalBook(index, item)) +
-        this.getCourseExtraForfaitPriceByDateHour(
-          item.courseDates[0]
-        )
+      this.getCourseExtraForfaitPriceByDateHour(
+        item.courseDates[0]
+      )
 
     this.router.navigate(["bookings/edit/" + this.id]);
   }
@@ -3625,7 +3625,7 @@ export class BookingDetailComponent implements OnInit {
     return this.bookingUsers.filter((b) => {
       if (group_id) {
         // Filtrar por group_id si se proporciona
-        return  (
+        return (
           b.course_date_id === dateId && b.group_id === group_id
         );
       } else {

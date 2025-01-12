@@ -499,14 +499,14 @@ export class BookingsCreateUpdateComponent implements OnInit {
   inUseDatesFilter = (d: Date): boolean => {
     if (!d) return false; // Si la fecha es nula o indefinida, no debería ser seleccionable.
 
-    const formattedDate = moment(d).format('dd.MM.YYYY');
+    const formattedDate = moment(d).format('DD.MM.yyyy');
     const time = moment(d).startOf('day').valueOf(); // .getTime() es igual a .valueOf()
 
     // Encuentra si la fecha actual está en myHolidayDates.
     const isHoliday = this.myHolidayDates.some(x => x.getTime() === time);
 
     // Encuentra si la fecha actual está en selectedItem.course_dates y si es activa.
-    const courseDate = this.selectedItem.course_dates.find(s => moment(s.date).format('dd.MM.YYYY') === formattedDate);
+    const courseDate = this.selectedItem.course_dates.find(s => moment(s.date).format('DD.MM.yyyy') === formattedDate);
     const isActive = courseDate ? (courseDate.active || courseDate.active === 1) : false;
 
     // La fecha debería ser seleccionable si no es un día festivo y está activa (o sea, active no es falso ni 0).
@@ -537,7 +537,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.selectedPrivateDates = [];
 
       this.selectedItem = item;
-      let selectedPrivateDateItem = this.selectedItem.course_dates.find(i => moment(i.date).startOf('day').format('dd.MM.YYYY') == moment(this.selectedDatePrivate).startOf('day').format('dd.MM.YYYY'));
+      let selectedPrivateDateItem = this.selectedItem.course_dates.find(i => moment(i.date).startOf('day').format('DD.MM.yyyy') == moment(this.selectedDatePrivate).startOf('day').format('DD.MM.yyyy'));
       this.courseDates.push({
         school_id: this.user.schools[0].id,
         booking_id: null,
@@ -612,7 +612,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
   setCourseDateItemPrivateNoFlexible(item: any, date: any) {
 
     this.selectedItem.course_dates.forEach(element => {
-      if (moment(element.date).startOf('day').format('dd.MM.YYYY') === moment(date.value).startOf('day').format('dd.MM.YYYY')) {
+      if (moment(element.date).startOf('day').format('DD.MM.yyyy') === moment(date.value).startOf('day').format('DD.MM.yyyy')) {
 
         item.course_date_id = element.id;
         item.date = element.date;
@@ -626,12 +626,12 @@ export class BookingsCreateUpdateComponent implements OnInit {
     const now = moment();
 
     // Convertir la fecha del curso y la hora de inicio/fin a objetos moment
-    const courseDate = moment(this.courseDates[courseDateIndex].date, 'dd.MM.YYYY'); // Asumiendo que tienes una propiedad 'date'
+    const courseDate = moment(this.courseDates[courseDateIndex].date, 'dd.MM.yyyy'); // Asumiendo que tienes una propiedad 'date'
     const start = moment(selectedCourseDateItem.hour_start, 'HH:mm:ss');
     const end = moment(selectedCourseDateItem.hour_end, 'HH:mm:ss');
 
     // Convertir la hora proporcionada a un objeto moment (con la fecha del curso para comparaciones correctas)
-    const hour = moment(`${selectedCourseDateItem.date} ${time}`, 'dd.MM.YYYY HH:mm');
+    const hour = moment(`${selectedCourseDateItem.date} ${time}`, 'dd.MM.yyyy HH:mm');
 
     // Primero, comprueba si es el mismo día
     if (!now.isSame(courseDate, 'day')) {
@@ -733,7 +733,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           hour_start: element.hour_start.replace(': 00'),
           hour_end: element.hour_end.replace(': 00'),
           monitor_id: element.monitor_id,
-          date: moment(element.date).format('dd.MM.YYYY'),
+          date: moment(element.date).format('DD.MM.yyyy'),
         })
       });
 
@@ -744,7 +744,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           hour_start: element.hour_start.replace(': 00'),
           hour_end: element.hour_end.replace(': 00'),
           monitor_id: element.monitor_id,
-          date: moment(element.date).format('dd.MM.YYYY'),
+          date: moment(element.date).format('DD.MM.yyyy'),
         })
       });
     } else if ((this.courseTypeId === 2 || this.courseTypeId === 3) && this.selectedItem.is_flexible) {
@@ -754,7 +754,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           hour_start: element.hour_start,
           hour_end: this.calculateHourEnd(element.hour_start, element.duration),
           monitor_id: element.monitor_id,
-          date: moment(element.date).format('dd.MM.YYYY'),
+          date: moment(element.date).format('DD.MM.yyyy'),
         })
         if (this.personsSelectedMultiple[element.course_date_id]?.[element.hour_start]) {
           this.personsSelectedMultiple[element.course_date_id][element.hour_start].forEach((person) => {
@@ -763,7 +763,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               hour_start: element.hour_start,
               hour_end: this.calculateHourEnd(element.hour_start, element.duration),
               monitor_id: element.monitor_id,
-              date: moment(element.date).format('dd.MM.YYYY'),
+              date: moment(element.date).format('DD.MM.yyyy'),
             });
           });
         }
@@ -775,7 +775,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           hour_start: element.hour_start,
           hour_end: this.calculateHourEnd(element.hour_start, this.selectedItem.duration),
           monitor_id: element.monitor_id,
-          date: moment(element.date).format('dd.MM.YYYY'),
+          date: moment(element.date).format('DD.MM.yyyy'),
         })
         if (this.personsSelectedMultiple[element.course_date_id]?.[element.hour_start]) {
           this.personsSelectedMultiple[element.course_date_id][element.hour_start].forEach((person) => {
@@ -784,7 +784,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               hour_start: element.hour_start,
               hour_end: this.calculateHourEnd(element.hour_start, this.selectedItem.duration),
               monitor_id: element.monitor_id,
-              date: moment(element.date).format('dd.MM.YYYY'),
+              date: moment(element.date).format('DD.MM.yyyy'),
             });
           });
         }
@@ -796,7 +796,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     if (overlap) {
       this.snackbar.open(
         this.translateService.instant('snackbar.booking.overlap') +
-        moment(overlap.date).format('dd.MM.YYYY') + ' | ' +
+        moment(overlap.date).format('DD.MM.yyyy') + ' | ' +
         overlap.hour_start + ' - ' +
         overlap.hour_end,
         'OK', { duration: 3000 }
@@ -894,7 +894,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   price: +this.selectedItem.price,
                   currency: this.selectedItem.currency,
                   course: this.selectedItem,
-                  date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                  date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
                 });
               }
             });
@@ -938,7 +938,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   price: parseFloat(this.selectedItem.price),
                   currency: this.selectedItem.currency,
                   course: this.selectedItem,
-                  date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                  date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
                 });
               }
             });
@@ -974,7 +974,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               data.currency = item.currency
 
               data.course = this.selectedItem
-              data.date = moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+              data.date = moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
               let people = [];
               if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
                 people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
@@ -1021,7 +1021,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                 paxes: this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start] ? this.personsSelectedMultiple[item.course_date_id][item.hour_start].length + 1 : 1,
                 //persons: this.personsSelectedMultiple[index] ? this.personsSelectedMultiple[index] : [],
                 course: this.selectedItem,
-                date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
               });
               if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
                 this.personsSelectedMultiple[item.course_date_id][item.hour_start].forEach((person) => {
@@ -1040,7 +1040,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                     paxes: this.personsSelectedMultiple[item.course_date_id] ? this.personsSelectedMultiple[item.course_date_id].length + 1 : 1,
                     //persons: this.personsSelectedMultiple[index] ? this.personsSelectedMultiple[index] : [],
                     course: this.selectedItem,
-                    date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                    date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
                   });
                 });
               }
@@ -1080,7 +1080,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               data.currency = item.currency
 
               data.course = this.selectedItem
-              data.date = moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+              data.date = moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
               let people = [];
               if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
                 people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
@@ -1106,7 +1106,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                           price: parseFloat(item.price),
                           currency: item.currency,
                           course: this.selectedItem,
-                          date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                          date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
                         });
                       });
 
@@ -1142,7 +1142,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                             currency: item.currency,
                             paxes: this.personsSelected.length + 1,
                             course: this.selectedItem,
-                            date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                            date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
                           });
                         });
 
@@ -1159,7 +1159,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
           this.clientsForm.disable();
         }, (error) => {
           this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-            moment(error.error.data[0].date).format('dd.MM.YYYY') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', { duration: 3000 })
+            moment(error.error.data[0].date).format('DD.MM.yyyy') + ' | ' + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK', { duration: 3000 })
         });
     }
 
@@ -1414,7 +1414,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               notes: item.notes,
               school_notes: item.school_notes,
               degree_id: item.degree_id,
-              date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+              date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
             });
             let bookingC = this.bookingsToCreate.find((b) => b.course_date_id === item.course_date_id && b.hour_start == item.hour_start)
             if (bookingC?.people?.length) {
@@ -1435,7 +1435,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
                   notes: item.notes,
                   school_notes: item.school_notes,
                   degree_id: item.degree_id,
-                  date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
+                  date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
                 });
               })
             }
@@ -1464,7 +1464,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
               notes: item.notes,
               school_notes: item.school_notes,
               degree_id: item.degree_id,
-              date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY'),
+              date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy'),
               isActivity: true
             });
           }
@@ -2075,8 +2075,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
     }
 
     const rq = {
-      start_date: minDate.format('dd.MM.YYYY'),
-      end_date: maxDate.format('dd.MM.YYYY'),
+      start_date: minDate.format('DD.MM.yyyy'),
+      end_date: maxDate.format('DD.MM.yyyy'),
       course_type: this.courseTypeId,
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
@@ -2181,8 +2181,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
-      const currentDate = moment(date, 'dd.MM.YYYY').format('dd.MM.YYYY');
-      if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'dd.MM.YYYY').startOf('day').isSameOrBefore(moment(date, 'dd.MM.YYYY').startOf('day'))) {
+      const currentDate = moment(date, 'dd.MM.yyyy').format('DD.MM.yyyy');
+      if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'dd.MM.yyyy').startOf('day').isSameOrBefore(moment(date, 'dd.MM.yyyy').startOf('day'))) {
         return 'with-course';
       } else {
         return;
@@ -2195,7 +2195,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, 'dd.MM.YYYY').format('dd.MM.YYYY');
+      const currentDate = moment(date, 'dd.MM.yyyy').format('DD.MM.yyyy');
       if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).startOf('day').isSameOrBefore(moment(date).startOf('day'))) {
         return 'with-course-private';
       } else {
@@ -2206,8 +2206,8 @@ export class BookingsCreateUpdateComponent implements OnInit {
   }
 
   canBook(date: any) {
-    const incomingDate = moment(date, 'dd.MM.YYYY').startOf('day');
-    const minDate = moment(this.minDate, 'dd.MM.YYYY').startOf('day');
+    const incomingDate = moment(new Date(date), 'dd.MM.yyyy').startOf('day');
+    const minDate = moment(this.minDate, 'dd.MM.yyyy').startOf('day');
     return incomingDate.isSameOrAfter(minDate);
   }
 
@@ -2505,7 +2505,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let ret = [];
     this.courses.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY'));
+        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('DD.MM.yyyy'));
       });
     });
 
@@ -2516,7 +2516,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY'));
+        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('DD.MM.yyyy'));
       });
     });
 
@@ -2836,7 +2836,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
             email: this.defaults.client_main_id.email,
             first_name: data.data.name,
             last_name: data.data.surname,
-            birth_date: moment(data.data.fromDate).format('dd.MM.YYYY'),
+            birth_date: moment(data.data.fromDate).format('DD.MM.yyyy'),
             phone: this.defaults.client_main_id.phone,
             telephone: this.defaults.client_main_id.telephone,
             address: this.defaults.client_main_id.address,
@@ -3029,7 +3029,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       return this.selectedItem.course_dates.find(i => {
         const courseDate = new Date(i.date).toLocaleString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
-        return courseDate === formattedDate; // Comparamos con la fecha en formato dd.MM.YYYY
+        return courseDate === formattedDate; // Comparamos con la fecha en formato dd.MM.yyyy
       });
 
     }*/
@@ -3416,7 +3416,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         minimumDegreeId: this.levelForm.value.id,
         startTime: start,
         endTime: this.calculateHourEnd(start, duration),
-        date: moment(date).format('dd.MM.YYYY'),
+        date: moment(date).format('DD.MM.yyyy'),
         clientIds: [this.clientsForm.value.id]
       };
     } else {
@@ -3425,7 +3425,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
         minimumDegreeId: this.levelForm.value.id,
         startTime: start,
         endTime: this.calculateHourEnd(start, this.selectedItem.duration),
-        date: moment(date).format('dd.MM.YYYY'),
+        date: moment(date).format('DD.MM.yyyy'),
         clientIds: [this.clientsForm.value.id]
       };
     }

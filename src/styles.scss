@@ -776,14 +776,15 @@ span {
 .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text,
 .cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above)
   div.mat-mdc-autocomplete-panel {
-  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,
 .mat-stepper-vertical,
 .mat-stepper-horizontal,
 .simplebar-offset,
-.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
-  background: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel,
+div.mat-mdc-autocomplete-panel {
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222) !important;
 }
 input::placeholder {
   color: var(--is-light-theme, #acacac) var(--is-dark-theme, #ebebeb) !important;

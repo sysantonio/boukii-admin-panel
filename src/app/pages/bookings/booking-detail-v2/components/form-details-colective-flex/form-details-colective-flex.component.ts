@@ -60,7 +60,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
       const courseDatesArray = this.fb.array(
         this.course.course_dates.map((date, index) => {
           // Validar si la fecha es hoy o en el futuro y si cumple con la hora de inicio
-          const dateMoment = moment(date.date, "dd.MM.YYYY");
+          const dateMoment = moment(date.date, "dd.MM.yyyy");
           const currentTime = moment(); // Hora actual
 
           // Verificamos si la fecha es hoy
@@ -103,7 +103,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
           client_id: this.utilizer.id,
           hour_start: courseDateGroup.get('startHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
           hour_end: courseDateGroup.get('endHour').value.replace(':00', ''), // Reemplaza ":00" si es necesario
-          date: moment(courseDateGroup.get('date').value).format('dd.MM.YYYY') // Formateamos la fecha
+          date: moment(courseDateGroup.get('date').value).format('DD.MM.yyyy') // Formateamos la fecha
         }],
         bookingUserIds: []
       };
@@ -124,7 +124,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
           resolve(isAvailable); // Resolvemos la promesa con el valor de disponibilidad
         }, (error) => {
           this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-            moment(error.error.data[0].date).format('dd.MM.YYYY') +
+            moment(error.error.data[0].date).format('DD.MM.yyyy') +
             ' | ' + error.error.data[0].hour_start + ' - ' +
             error.error.data[0].hour_end, 'OK', { duration: 3000 })
           resolve(false); // En caso de error, rechazamos la promesa
@@ -148,8 +148,8 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
         if (matchingUtilizer) {
           for (let normalizedDate of normalized.dates) {
             // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
-            const formattedNormalizedDate = moment(normalizedDate.date).format('dd.MM.YYYY');
-            const formattedBookingUserDate = moment(bookingUser.date).format('dd.MM.YYYY');
+            const formattedNormalizedDate = moment(normalizedDate.date).format('DD.MM.yyyy');
+            const formattedBookingUserDate = moment(bookingUser.date).format('DD.MM.yyyy');
 
             if (formattedBookingUserDate === formattedNormalizedDate) {
               // Verificamos solapamiento en las horas

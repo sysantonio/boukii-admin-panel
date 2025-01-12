@@ -441,7 +441,7 @@
                       <mat-select>
                         <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index" >
                           <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
-                          [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'dd.MM.YYYY' }}</mat-option>
+                          [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'dd.MM.yyyy' }}</mat-option>
                         </ng-container>
 
                       </mat-select>
@@ -660,7 +660,7 @@
                                 <mat-checkbox
                                   [checked]="itemExist(item)"
                                   (change)="addReservableCourseDate(item, $event)">
-                                  {{item.date | date: 'dd.MM.YYYY'}} -
+                                  {{item.date | date: 'dd.MM.yyyy'}} -
                                   <i style="float: right;">{{item.hour_start}} -
                                     {{item.hour_end}}</i></mat-checkbox>
                               </li>
@@ -670,7 +670,7 @@
                             <ng-container
                               *ngFor="let item of course.course_dates">
                               <li *ngIf="canBook(item.date)">
-                                {{ item.date | date: 'dd.MM.YYYY'}}
+                                {{ item.date | date: 'dd.MM.yyyy'}}
                                 <i style="float: right;">{{item.hour_start}} -
                                   {{item.hour_end}}</i>
                               </li>
@@ -681,13 +681,13 @@
                     </div>
                   </mat-list-item>
                   <ng-container
-                    *ngIf="selectedItem !== null && selectedItem.id === course.id">
+                    *ngIf="selectedItem !== null && selectedItem.id == course.id">
                     <ng-container
                       *ngFor="let group of getBookableCourses(course.course_dates)">
                       <ng-container
                         *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
                         <ng-container
-                          *ngIf="getLevelOrder(subgroup.degree_id) === levelForm?.value?.degree_order && subgroup?.degree_id === levelForm?.value?.id && !subgroup?.is_full">
+                          *ngIf="getLevelOrder(subgroup.degree_id) == levelForm?.value?.degree_order && subgroup?.degree_id == levelForm?.value?.id && !subgroup?.is_full">
                           <div
                             style="float: left; width: 100%;margin-top: 5%;padding: 15px;"
                             (click)="selectSubGroupItem(subgroup, subGroupIndex)"
@@ -770,7 +770,7 @@
             mat-raised-button
             type="button"
             *ngIf="courseTypeId === 1"
-            [disabled]="(courseTypeId === 1 && selectedItem === null || selectedSubGroupItem === null)"
+            [disabled]="selectedItem === null || selectedSubGroupItem === null"
             (click)="confirmBooking()">
             {{'confirm' | translate}}
           </button>
@@ -779,7 +779,7 @@
             mat-raised-button
             type="button"
             *ngIf="(courseTypeId === 2 || courseTypeId === 3)"
-            [disabled]="((courseTypeId === 2 || courseTypeId === 3) && selectedItem === null)"
+            [disabled]="selectedItem === null"
             (click)="confirmBooking()">
             {{'confirm' | translate}}
           </button>
@@ -852,7 +852,7 @@
               style="width: 60%;display:inline-block;text-align: left; color:#868686;">
               <b>{{'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;color:white">
-                <span>{{ minDate | date: 'dd.MM.YYYY'}}</span> <span
+                <span>{{ minDate | date: 'dd.MM.yyyy'}}</span> <span
                   style="margin-left: 10px;font-style: italic;">{{ minDate |
                   date: 'HH:mm'}}</span>
               </span>
@@ -1043,7 +1043,7 @@
               <div *ngFor="let courseDateDate of item.courseDates">
                 <div class="list-holder">
                   <div class="col-left">{{ courseDateDate?.date | date:
-                    'dd.MM.YYYY'}}</div>
+                    'dd.MM.yyyy'}}</div>
                   <div class="col-right">{{courseDateDate?.hour_start}} -
                     {{courseDateDate?.course?.course_type === 1 ?
                     courseDateDate?.hour_end :
@@ -1057,7 +1057,7 @@
               <div *ngFor="let courseDateDate of item.courseDates">
                 <div class="list-holder">
                   <div class="col-left">{{ courseDateDate.date | date :
-                    'dd.MM.YYYY'}}</div>
+                    'dd.MM.yyyy'}}</div>
                   <div class="col-right">{{ courseDateDate.hour_start }} -
                     {{courseDateDate?.hour_end}}h</div>
                 </div>
@@ -1278,7 +1278,7 @@
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
                   <strong>{{ "register" | translate }}</strong>:{{
                   bookingsToCreate[0].courseDates[0].created_at
-                  | date: "dd.MM.YYYY"
+                  | date: "dd.MM.yyyy"
                   }}
                   {{
                   bookingsToCreate[0].courseDates[0].created_at
@@ -1982,7 +1982,7 @@
                           [checked]="item?.forfait?.id === forfait.id"
                         >
                           <span>                                  {{forfait.product}} - {{ forfait.name }}
-</span>
+                          </span>
                         </mat-checkbox>
                       </li>
                     </ul>
@@ -2040,7 +2040,7 @@
                           [checked]="people?.forfait?.id === forfait.id"
                         >
                           <span>                                  {{forfait.product}} - {{ forfait.name }}
-</span>
+                          </span>
                         </mat-checkbox>
                       </li>
                     </ul>
@@ -2215,7 +2215,7 @@
                           [checked]="item?.forfait?.id === forfait.id"
                         >
                           <span>                                  {{forfait.product}} - {{ forfait.name }}
-</span>
+                          </span>
                         </mat-checkbox>
                       </li>
                     </ul>
@@ -2356,7 +2356,7 @@
               <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                 <p style="font-size: 12px;">
                   <strong>{{'register' | translate}}</strong
-                  >:{{ minDate | date: 'dd.MM.YYYY'}}
+                  >:{{ minDate | date: 'dd.MM.yyyy'}}
                   {{ minDate | date: 'HH:mm'}}
                 </p>
                 <p style="font-size: 12px;">
