@@ -33,7 +33,7 @@
 	<vex-page-layout-content *ngIf="showDetail"
 		class="fullwidth col-right">
 		<vex-course-detail-card [courseFormGroup]="courses.courseFormGroup"
-			(open)="goTo('courses/detail/'+$event)"
+			(open)="goTo('courses-v2/detail/'+$event)"
 			(close)="showDetail=!showDetail">
 		</vex-course-detail-card>
 	</vex-page-layout-content>

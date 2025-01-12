@@ -441,7 +441,7 @@
                       <mat-select>
                         <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index" >
                           <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
-                          [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'dd/MM/YYYY' }}</mat-option>
+                          [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'dd.MM.YYYY' }}</mat-option>
                         </ng-container>
 
                       </mat-select>
@@ -660,7 +660,7 @@
                                 <mat-checkbox
                                   [checked]="itemExist(item)"
                                   (change)="addReservableCourseDate(item, $event)">
-                                  {{item.date | date: 'dd/MM/YYYY'}} -
+                                  {{item.date | date: 'dd.MM.YYYY'}} -
                                   <i style="float: right;">{{item.hour_start}} -
                                     {{item.hour_end}}</i></mat-checkbox>
                               </li>
@@ -670,7 +670,7 @@
                             <ng-container
                               *ngFor="let item of course.course_dates">
                               <li *ngIf="canBook(item.date)">
-                                {{ item.date | date: 'dd/MM/YYYY'}}
+                                {{ item.date | date: 'dd.MM.YYYY'}}
                                 <i style="float: right;">{{item.hour_start}} -
                                   {{item.hour_end}}</i>
                               </li>
@@ -852,7 +852,7 @@
               style="width: 60%;display:inline-block;text-align: left; color:#868686;">
               <b>{{'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;color:white">
-                <span>{{ minDate | date: 'dd/MM/YYYY'}}</span> <span
+                <span>{{ minDate | date: 'dd.MM.YYYY'}}</span> <span
                   style="margin-left: 10px;font-style: italic;">{{ minDate |
                   date: 'HH:mm'}}</span>
               </span>
@@ -1043,7 +1043,7 @@
               <div *ngFor="let courseDateDate of item.courseDates">
                 <div class="list-holder">
                   <div class="col-left">{{ courseDateDate?.date | date:
-                    'dd/MM/YYYY'}}</div>
+                    'dd.MM.YYYY'}}</div>
                   <div class="col-right">{{courseDateDate?.hour_start}} -
                     {{courseDateDate?.course?.course_type === 1 ?
                     courseDateDate?.hour_end :
@@ -1057,7 +1057,7 @@
               <div *ngFor="let courseDateDate of item.courseDates">
                 <div class="list-holder">
                   <div class="col-left">{{ courseDateDate.date | date :
-                    'dd/MM/YYYY'}}</div>
+                    'dd.MM.YYYY'}}</div>
                   <div class="col-right">{{ courseDateDate.hour_start }} -
                     {{courseDateDate?.hour_end}}h</div>
                 </div>
@@ -1278,7 +1278,7 @@
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
                   <strong>{{ "register" | translate }}</strong>:{{
                   bookingsToCreate[0].courseDates[0].created_at
-                  | date: "dd/MM/YYYY"
+                  | date: "dd.MM.YYYY"
                   }}
                   {{
                   bookingsToCreate[0].courseDates[0].created_at
@@ -2356,7 +2356,7 @@
               <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                 <p style="font-size: 12px;">
                   <strong>{{'register' | translate}}</strong
-                  >:{{ minDate | date: 'dd/MM/YYYY'}}
+                  >:{{ minDate | date: 'dd.MM.YYYY'}}
                   {{ minDate | date: 'HH:mm'}}
                 </p>
                 <p style="font-size: 12px;">

@@ -135,9 +135,9 @@ export class CalendarEditComponent implements OnInit {
     this.defaults.user_nwd_subtype_id = this.type + 1;
     this.defaults.default = false;
     this.defaults.school_id = this.user.schools[0].id;
-    this.defaults.start_date = moment(this.defaults.start_date).format('YYYY-MM-DD');
+    this.defaults.start_date = moment(this.defaults.start_date).format('dd.MM.YYYY');
     if (this.defaults.end_date && moment(this.defaults.end_date).isAfter(this.defaults.start_date)) {
-      this.defaults.end_date = moment(this.defaults.end_date).format('YYYY-MM-DD');
+      this.defaults.end_date = moment(this.defaults.end_date).format('dd.MM.YYYY');
     } else {
       this.defaults.end_date = this.defaults.start_date;
     }
@@ -272,7 +272,7 @@ export class CalendarEditComponent implements OnInit {
     const now = moment();
 
     // Convertir la fecha del curso y la hora de inicio/fin a objetos moment
-    const courseDate = moment(this.event.date_param, 'dd.MM.yyyy').format('YYYY-MM-DD')
+    const courseDate = moment(this.event.date_param, 'dd.MM.yyyy').format('dd.MM.YYYY')
     const start = moment(this.event.hour_start, 'HH:mm:ss');
 
     // Primero, comprueba si es el mismo día
@@ -295,7 +295,7 @@ export class CalendarEditComponent implements OnInit {
         monitorId: this.event.monitor_id,
         monitor: this.event.monitor,
         hour: this.event.hour_start,
-        date: moment(this.event.date_param, 'dd.MM.yyyy').format('YYYY-MM-DD')
+        date: moment(this.event.date_param, 'dd.MM.yyyy').format('dd.MM.YYYY')
       }
     });
 

@@ -86,10 +86,6 @@ export class CourseDetailComponent implements OnInit {
     this.router.navigate([route], { queryParams: query });
   }
 
-  parseDateToDay(date: string, fromFormat: string, toFormat: string): string {
-    return this.courses.parseDateToDay(date, fromFormat, toFormat);
-  }
-
   DateDiff = (value1: string, value2: string): number => Math.round((new Date(value2).getTime() - new Date(value1).getTime()) / 1000 / 60 / 60 / 24)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
 

@@ -43,7 +43,7 @@ export class AddTaskComponent implements OnInit {
     const data = {
       school_id: this.user.schools[0].id,
       time: this.selectedHour,
-      date: moment(this.selectedDate).format('YYYY-MM-DD'),
+      date: moment(this.selectedDate).format('dd.MM.YYYY'),
       name: this.form.value.name
     };
 

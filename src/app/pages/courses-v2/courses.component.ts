@@ -172,10 +172,6 @@ export class CoursesComponent {
     return ret;
   }
 
-  parseDateToText(date: any) {
-    return moment(date).format('LL').replace(' 0:00', '')
-  }
-
   goTo(route: string) {
     this.router.navigate([route]);
   }

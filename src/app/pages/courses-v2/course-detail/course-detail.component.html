@@ -7,10 +7,6 @@
 		class="flex">
 	</vex-breadcrumbs>
 </vex-secondary-toolbar>
-
-
-
-
 <div class="flex flex-col sm:flex-row gap-4"
 	style="width: 100%; float: left;">
 	<div class="card flex-auto">
@@ -63,7 +59,7 @@
 								<vex-course-detail-card [courseFormGroup]="courses.courseFormGroup"
 									[detail]="true"
 									[noneExtras]="!count(courses.courseFormGroup.controls['levelGrop'].value,'active')"
-									(edit)="goTo('courses/update/'+id,{step:$event})"
+									(edit)="goTo('courses-v2/update/'+id,{step:$event})"
 									style="width: 100%">
 								</vex-course-detail-card>
 							</div>
@@ -74,7 +70,7 @@
 									<div style="width: 100%;">
 										<p style="color: var(--color-dark1);font-size: 12px;font-weight: 600;line-height: 16px;word-wrap: break-word">
 											{{'groups' | translate }}
-											<img (click)="goTo('courses/update/'+id,{step:3})"
+											<img (click)="goTo('courses-v2/update/'+id,{step:3})"
 												src="assets/icons/icon/edit2.png"
 												alt
 												style="filter: var(--is-dark-theme,invert(1));"
@@ -90,7 +86,7 @@
 								<vex-course-detail-card [courseFormGroup]="courses.courseFormGroup"
 									[detail]="true"
 									[onlyExtras]="true"
-									(edit)="goTo('courses/update/'+id,{step:$event})"
+									(edit)="goTo('courses-v2/update/'+id,{step:$event})"
 									style="width: 100%">
 								</vex-course-detail-card>
 							</div>

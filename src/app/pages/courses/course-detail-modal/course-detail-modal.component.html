@@ -72,25 +72,17 @@
                   *ngIf="defaults.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
-                  <li>{{parseDateToDay(defaults.course_dates[0].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(defaults.course_dates[0].date,
-                    'YYYY-MM-DD', 'LL')}}
+                  <li>{{defaults.course_dates[0].date|date:'dd.MM.YYYY'}}
                     <i
-                      style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[0].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(defaults.course_dates[0].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i>
+                      style="text-align: right;float:right">
+                      {{defaults.course_dates[0].hour_start|date:'HH:mm'}}h -
+                      {{defaults.course_dates[0].hour_end|date:'HH:mm'}}h</i>
                   </li>
-                  <li>{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                    'YYYY-MM-DD', 'LL')}}
+                  <li>{{defaults.course_dates[defaults.course_dates.length-1].date|date:'dd.MM.YYYY'}}
                     <i
-                      style="text-align: right;float:right">{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i>
+                      style="text-align: right;float:right">
+                      {{defaults.course_dates[defaults.course_dates.length-1].hour_start|date:'HH:mm'}}h -
+                      {{defaults.course_dates[defaults.course_dates.length-1].hour_end|date:'HH:mm'}}h</i>
                   </li>
                 </ul>
 
@@ -99,12 +91,9 @@
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
                   <li
-                    *ngFor="let item of defaults.course_dates">{{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'LL')}} <i
-                      style="text-align: right;float:right">{{parseDateToDay(item.hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i></li>
+                    *ngFor="let item of defaults.course_dates">{{item.date|date:'dd.MM.YYYY'}}
+                     <i style="text-align: right;float:right">
+                      {{item.hour_start}}h - {{item.hour_end}}h</i></li>
                 </ul>
               </div>
               <div style="width:50%; margin-top:2%;float:left">
@@ -170,7 +159,7 @@
                         translate}}</mat-label>
 
                       <input matInput id="dateFrom"
-                        [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
+                        [value]="defaults.date_start_res | date: 'dd.MM.YYYY'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>
@@ -180,7 +169,7 @@
                       <mat-label>{{'courses.date_reservable_to' |
                         translate}}</mat-label>
                       <input matInput id="dateTo"
-                        [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
+                        [value]="defaults.date_end_res | date: 'dd.MM.YYYY'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>
@@ -608,8 +597,8 @@
                     <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd.MM.YYYY'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd.MM.YYYY'}}</b></p>
                 </div>
                 </div>
                 <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -692,10 +681,10 @@
                 <div class="list-holder">
                   <div class="col-left">
                     <b>{{detailData?.course.date_start | date:
-                      'dd/MM/YYYY'}}</b>
+                      'dd.MM.YYYY'}}</b>
                   </div>
                   <div class="col-right">
-                    <b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b>
+                    <b>{{detailData?.course.date_end | date: 'dd.MM.YYYY'}}</b>
                   </div>
                 </div>
                 <div class="title-status">

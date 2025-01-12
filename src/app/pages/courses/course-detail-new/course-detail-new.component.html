@@ -46,7 +46,8 @@
                     </div>
                     <div style="float: right; margin: 0;">
                       <mat-slide-toggle [checked]="course?.online"
-                        [disabled]="true">{{'payment_online' | translate}}</mat-slide-toggle>
+                        [disabled]="true">{{'payment_online' |
+                        translate}}</mat-slide-toggle>
                     </div>
                     <div style="float: right; margin: 0 25px 0 0;">
                       <mat-slide-toggle [checked]="course?.active"
@@ -64,38 +65,27 @@
                 <ul style="margin: 2% 0 0 0;" *ngIf="course.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
-                  <li>{{parseDateToDay(course.course_dates[0].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(course.course_dates[0].date, 'YYYY-MM-DD',
-                    'LL')}}
+                  <li>{{course.course_dates[0].date|date:'dd.MM.YYYY'}},
                     <i
-                      style="text-align: right; float: right;">{{parseDateToDay(course.course_dates[0].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(course.course_dates[0].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i>
+                      style="text-align: right; float: right;">
+                      {{course.course_dates[0].hour_start|date:'HH:mm'}}h -
+                      {{course.course_dates[0].hour_end|date:'HH:mm'}}h</i>
                   </li>
-                  <li>{{parseDateToDay(course.course_dates[course.course_dates.length
-                    - 1].date, 'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(course.course_dates[course.course_dates.length
-                    - 1].date, 'YYYY-MM-DD', 'LL')}}
+                  <li>{{course.course_dates[course.course_dates.length-1].date|date:'dd.MM.YYYY'}},
                     <i
-                      style="text-align: right; float: right;">{{parseDateToDay(course.course_dates[course.course_dates.length
-                      - 1].hour_start, 'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(course.course_dates[course.course_dates.length
-                      - 1].hour_end, 'HH:mm:ss', 'HH:mm')}}h</i>
+                      style="text-align: right; float: right;">
+                      {{course.course_dates[course.course_dates.length-1].hour_start|date:'HH:mm'}}h -
+                      {{course.course_dates[course.course_dates.length-1].hour_end|date:'HH:mm'}}h</i>
                   </li>
                 </ul>
                 <ul style="margin: 2% 0 0 0;" *ngIf="course.course_type === 1">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
                   <li
-                    *ngFor="let item of course.course_dates">{{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'LL')}}
+                    *ngFor="let item of course.course_dates">{{item.date|date:'dd.MM.YYYY'}}
                     <i
-                      style="text-align: right; float: right;">{{parseDateToDay(item.hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h</i>
+                      style="text-align: right; float: right;">
+                      {{item.hour_start}}h - {{item.hour_end}}h</i>
                   </li>
                 </ul>
               </div>
@@ -152,17 +142,19 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                   <div class="flex-auto">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <mat-label>{{'courses.date_reservable' | translate}}</mat-label>
+                      <mat-label>{{'courses.date_reservable' |
+                        translate}}</mat-label>
                       <input matInput id="dateFrom"
-                        [value]="course.date_start_res | date: 'dd/MM/YYYY'"
+                        [value]="course.date_start_res | date: 'dd.MM.YYYY'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>
                   <div class="flex-auto">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <mat-label>{{'courses.date_reservable_to' | translate}}</mat-label>
+                      <mat-label>{{'courses.date_reservable_to' |
+                        translate}}</mat-label>
                       <input matInput id="dateTo"
-                        [value]="course.date_end_res | date: 'dd/MM/YYYY'"
+                        [value]="course.date_end_res | date: 'dd.MM.YYYY'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>

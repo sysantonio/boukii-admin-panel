@@ -478,10 +478,6 @@ export class CourseDetailComponent implements OnInit {
     return monitor && monitor.first_name && monitor.last_name ? monitor.first_name + ' ' + monitor.last_name : '';
   }
 
-  parseDateToDay(date: any, inFormat: string, format: string) {
-    return moment(date, inFormat).format(format);
-  }
-
   goTo(route: string) {
     this.router.navigate([route]);
   }
@@ -605,7 +601,7 @@ export class CourseDetailComponent implements OnInit {
 
   hasMonitorAssigned(date, level, gIndex) {
 
-    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === date.date);
+    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === date.date);
     const group = courseDate.course_groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
 
     if (group) {
@@ -838,7 +834,7 @@ export class CourseDetailComponent implements OnInit {
     if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
+        if (moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY') === moment(this.selectedDate, 'dd.MM.YYYY').format('dd.MM.YYYY')) {
           courseDate.course_groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.course_subgroups[subGroupIndex]?.monitor;
@@ -910,9 +906,9 @@ export class CourseDetailComponent implements OnInit {
 
           if (!level.old) {
             this.defaults.course_dates.forEach(courseDate => {
-              if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
+              if (moment(courseDate.date).format('dd.MM.YYYY') === moment(this.selectedDate).format('dd.MM.YYYY')) {
 
-                this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date, 'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
+                this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date, 'dd.MM.YYYY'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
                   .subscribe((result: any) => {
 
                     if (result.data.available) {
@@ -930,7 +926,7 @@ export class CourseDetailComponent implements OnInit {
             });
           } else {
             this.defaults.course_dates.forEach((courseDate, idx) => {
-              this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
+              this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date).format('dd.MM.YYYY'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
                 .subscribe((result: any) => {
                   if (result.data.available) {
 
@@ -950,7 +946,7 @@ export class CourseDetailComponent implements OnInit {
 
           if (!level.old) {
             this.defaults.course_dates.forEach(courseDate => {
-              if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
+              if (moment(courseDate.date).format('dd.MM.YYYY') === moment(this.selectedDate).format('dd.MM.YYYY')) {
                 courseDate.course_groups.forEach(group => {
                   if (group.degree_id === level.id && !monitorSet) {
 
@@ -1069,7 +1065,7 @@ export class CourseDetailComponent implements OnInit {
   isInDay(date: any, courseUserId: any) {
 
     let ret = false;
-    const course = this.defaults.course_dates.find((c) => moment(c.date).format('YYYY-MM-DD') === date);
+    const course = this.defaults.course_dates.find((c) => moment(c.date).format('dd.MM.YYYY') === date);
     const courseUsers = this.courseUsers.filter((c) => c.client_id === courseUserId);
     if (course) {
       courseUsers.forEach(courseUser => {
@@ -1183,18 +1179,18 @@ export class CourseDetailComponent implements OnInit {
           return acc;
         }, [0, 0]);
 
-        this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active });
+        this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.yyyy').format('dd.MM.YYYY'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active });
         if (this.defaults.course_type === 2) {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'),
+            date: moment(element.date, 'dd.MM.yyyy').format('dd.MM.YYYY'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
           })
         } else {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'),
+            date: moment(element.date, 'dd.MM.yyyy').format('dd.MM.YYYY'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
             groups: []
@@ -1202,8 +1198,8 @@ export class CourseDetailComponent implements OnInit {
         }
       } else {
         this.daysDatesLevels.push({
-          date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
-          dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''),
+          date: moment(element.date, 'dd.MM.YYYY').format('dd.MM.YYYY'),
+          dateString: moment(element.date, 'dd.MM.YYYY').locale('es').format('LLL').replace(' 0:00', ''),
           active: element.active, id: element.id
         });
       }
@@ -1347,7 +1343,7 @@ export class CourseDetailComponent implements OnInit {
     const year = date.getFullYear(); // Obtiene el año
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtiene el mes (0 indexado, por eso +1) y lo formatea con dos dígitos
     const day = String(date.getDate()).padStart(2, '0'); // Obtiene el día y lo formatea con dos dígitos
-    return `${year}-${month}-${day}`; // Retorna en formato YYYY-MM-DD
+    return `${year}-${month}-${day}`; // Retorna en formato dd.MM.YYYY
   }
 
 
@@ -1438,7 +1434,7 @@ export class CourseDetailComponent implements OnInit {
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+        if (moment(element.date).format('dd.MM.YYYY') === moment(this.detailData.date).format('dd.MM.YYYY')) {
           ret = idx + 1;
         }
       });
@@ -1451,7 +1447,7 @@ export class CourseDetailComponent implements OnInit {
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
+        if (moment(element.date).format('dd.MM.YYYY') === moment(this.detailData.date).format('dd.MM.YYYY')) {
           ret = element.course_groups.length;
         }
       });

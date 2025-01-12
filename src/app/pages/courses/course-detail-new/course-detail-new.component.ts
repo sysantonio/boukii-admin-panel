@@ -60,8 +60,4 @@ export class CourseDetailNewComponent implements OnInit{
     this.router.navigate([route]);
   }
 
-  parseDateToDay(date: string, fromFormat: string, toFormat: string): string {
-    return this.courseService.parseDateToDay(date, fromFormat, toFormat);
-  }
-
 }

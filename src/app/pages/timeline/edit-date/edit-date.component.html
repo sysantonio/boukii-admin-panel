@@ -52,7 +52,7 @@
                     [ngModelOptions]="{standalone: true}">
           <mat-option *ngFor="let date of defaults.course.course_dates" [value]="date.id"
                       [disabled]="!isAfter(date)">
-            {{ date.date | date: 'dd/MM/YYYY' }}
+            {{ date.date | date: 'dd.MM.YYYY' }}
           </mat-option>
         </mat-select>
       </mat-form-field>

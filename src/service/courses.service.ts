@@ -183,12 +183,6 @@ export class CoursesService {
     return { age_min, age_max };
   }
 
-
-  parseDateToDay(date: any, inFormat: string, format: string) {
-    return moment(date, inFormat).format(format);
-  }
-
-
   findFirstCombinationWithValues(data: any) {
     if (data !== null) {
       for (const intervalo of data) {

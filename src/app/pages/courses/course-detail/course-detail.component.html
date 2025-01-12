@@ -84,32 +84,21 @@
 									style="margin: 2% 0 0 0;">
 									<li style="margin: 0 0 2% 0">
 										<strong>
-											{{'dates' |
-                    translate}}
+											{{'dates' | translate}}
 										</strong>
 									</li>
 									<li>
-										{{parseDateToDay(defaults.course_dates[0].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(defaults.course_dates[0].date,
-                      'YYYY-MM-DD', 'LL')}}
+										{{defaults.course_dates[0].date|date:'dd.MM.YYYY'}}
 										<i style="text-align: right;float:right">
-											{{parseDateToDay(defaults.course_dates[0].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(defaults.course_dates[0].hour_end,
-                        'HH:mm:ss', 'HH:mm')}}h
+											{{defaults.course_dates[0].hour_start|date:'HH:mm'}}h -
+                      {{defaults.course_dates[0].hour_end| date:'HH:mm'}}h
 										</i>
 									</li>
 									<li>
-										{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                      'YYYY-MM-DD', 'LL')}}
+										{{defaults.course_dates[defaults.course_dates.length-1].date|date:'dd.MM.YYYY'}}
 										<i style="text-align: right;float:right">
-											{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_end,
-                        'HH:mm:ss', 'HH:mm')}}h
+											{{defaults.course_dates[defaults.course_dates.length-1].hour_start|date:'HH:mm'}}h -
+                      {{defaults.course_dates[defaults.course_dates.length-1].hour_end|date:'HH:mm'}}h
 										</i>
 									</li>
 								</ul>
@@ -117,18 +106,13 @@
 									style="margin: 2% 0 0 0;">
 									<li style="margin: 0 0 2% 0">
 										<strong>
-											{{'dates' |
-                    translate}}
+											{{'dates'|translate}}
 										</strong>
 									</li>
 									<li *ngFor="let item of defaults.course_dates">
-										{{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'LL')}}
+										{{item.date| date:'dd.MM.YYYY'}}
 										<i style="text-align: right;float:right">
-											{{parseDateToDay(item.hour_start,
-                    'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end,
-                    'HH:mm:ss', 'HH:mm')}}h
+											{{item.hour_start}}h - {{item.hour_end}}h
 										</i>
 									</li>
 								</ul>
@@ -213,7 +197,7 @@
 												{{'courses.date_reservable' |
                         translate}}
 											</mat-label>
-											<input [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
+											<input [value]="defaults.date_start_res | date: 'dd.MM.YYYY'"
 												[readonly]="true"
 												matInput
 												id="dateFrom">
@@ -226,7 +210,7 @@
 												{{'courses.date_reservable_to' |
                         translate}}
 											</mat-label>
-											<input [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
+											<input [value]="defaults.date_end_res | date: 'dd.MM.YYYY'"
 												[readonly]="true"
 												matInput
 												id="dateTo">
@@ -648,7 +632,7 @@
 											<span style="margin-left: 10px;font-weight: normal;color: white;">
 												<span style="color: white;">
 													{{detailData.created_at |
-                          date: 'dd/MM/YYYY'}}
+                          date: 'dd.MM.YYYY'}}
 												</span>
 												<span style="margin-left: 10px;font-style: italic;color: white;">
 													{{detailData.created_at
@@ -1137,42 +1121,42 @@
                     <ng-container *ngFor="let item of bookingLog">
                       <span style="width: 100%; float:left">
                         <p style="float:left" *ngIf="item.action == 'created by api'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'api_created' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'refund'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'cancel_refund' | translate }}
                         </p>
                         <p
                           style="float:left"
                           *ngIf="item.action == 'refund_boukii_pay'"
                         >
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'refund_boukii_pay' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'full_cancel'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'full_cancel' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'partial_cancel'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'partial_cancel' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'no_refund'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'cancel_no_refund' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'refund_cash'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'refund_cash' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'voucher_refund'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'voucher_refund' | translate }}
                         </p>
                         <p style="float:left" *ngIf="item.action == 'update'">
-                          {{item.created_at | date: 'dd/MM/YYYY hh:mm:ss'}}:
+                          {{item.created_at | date: 'dd.MM.YYYY hh:mm:ss'}}:
                           {{'mails.type3' | translate }}
                         </p>
                       </span>

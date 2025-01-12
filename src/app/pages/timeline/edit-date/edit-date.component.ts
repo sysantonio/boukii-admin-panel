@@ -150,7 +150,7 @@ export class EditDateComponent {
             client_id: element.client_id,
             hour_start: this.hourStart.replace(': 00', ''),
             hour_end: this.calculateHourEnd(this.hourStart, this.duration),
-            date: moment(date.date).format('YYYY-MM-DD'),
+            date: moment(date.date).format('dd.MM.YYYY'),
           })
         });
         this.crudService.post('/admin/bookings/checkbooking', checkAval)
@@ -160,7 +160,7 @@ export class EditDateComponent {
                 {
                   hour_start: this.hourStart,
                   hour_end: this.calculateHourEnd(this.hourStart, this.duration) + ':00',
-                  date: moment(date.date).format('YYYY-MM-DD'),
+                  date: moment(date.date).format('dd.MM.YYYY'),
                   course_date_id: date.id
                 }, element.id))
             });
@@ -182,7 +182,7 @@ export class EditDateComponent {
 
           }, (error) => {
             this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-              moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | '
+              moment(error.error.data[0].date).format('dd.MM.YYYY') + ' | '
               + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK',
               {duration: 3000})
           });

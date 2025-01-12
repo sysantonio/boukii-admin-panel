@@ -50,7 +50,7 @@
 									</div>
 
 
-									<div (click)="goTo('/courses/update/'+this.id)"
+									<div (click)="goTo('/courses-v2/update/'+this.id)"
 										style="float: right;"
 										style="float: right;cursor:pointer">
 										<i class="fa fa-edit"
@@ -99,27 +99,17 @@
 										</strong>
 									</li>
 									<li>
-										{{parseDateToDay(defaults.course_dates[0].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(defaults.course_dates[0].date,
-                    'YYYY-MM-DD', 'LL')}}
+										{{defaults.course_dates[0].date|date:'dd.MM.YYYY'}}
 										<i style="text-align: right;float:right">
-											{{parseDateToDay(defaults.course_dates[0].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(defaults.course_dates[0].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h
+											{{defaults.course_dates[0].hour_start|date:'HH:mm'}}h -
+                      {{defaults.course_dates[0].hour_end|date:'HH:mm'}}h
 										</i>
 									</li>
 									<li>
-										{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                    'YYYY-MM-DD', 'dddd')}},
-                    {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].date,
-                    'YYYY-MM-DD', 'LL')}}
+										{{defaults.course_dates[defaults.course_dates.length-1].date|date:'dd.MM.YYYY'}}
 										<i style="text-align: right;float:right">
-											{{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h -
-                      {{parseDateToDay(defaults.course_dates[defaults.course_dates.length-1].hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h
+											{{defaults.course_dates[defaults.course_dates.length-1].hour_start|date:'HH:mm'}}h -
+                      {{defaults.course_dates[defaults.course_dates.length-1].hour_end|date:'HH:mm'}}h
 										</i>
 									</li>
 								</ul>
@@ -134,13 +124,9 @@
 										</strong>
 									</li>
 									<li *ngFor="let item of defaults.course_dates">
-										{{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'dddd')}}, {{parseDateToDay(item.date,
-                    'YYYY-MM-DD', 'LL')}}
+										{{item.date|date:'dd.MM.YYYY'}}
 										<i style="text-align: right;float:right">
-											{{parseDateToDay(item.hour_start,
-                      'HH:mm:ss', 'HH:mm')}}h - {{parseDateToDay(item.hour_end,
-                      'HH:mm:ss', 'HH:mm')}}h
+											{{item.hour_start}}h - {{item.hour_end}}h
 										</i>
 									</li>
 								</ul>
@@ -234,7 +220,7 @@
 											</mat-label>
 
 
-											<input [value]="defaults.date_start_res | date: 'dd/MM/YYYY'"
+											<input [value]="defaults.date_start_res | date: 'dd.MM.YYYY'"
 												[readonly]="true"
 												matInput
 												id="dateFrom">
@@ -251,7 +237,7 @@
 											</mat-label>
 
 
-											<input [value]="defaults.date_end_res | date: 'dd/MM/YYYY'"
+											<input [value]="defaults.date_end_res | date: 'dd.MM.YYYY'"
 												[readonly]="true"
 												matInput
 												id="dateTo">
@@ -715,8 +701,8 @@
                     <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd/MM/YYYY'}}</b></p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd.MM.YYYY'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd.MM.YYYY'}}</b></p>
                 </div>
                 </div>
                 <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -761,7 +747,7 @@
 										</mat-card-title>
 									</span>
 									<span style="display: inline-block;width: 20%; text-align: right;">
-										<img (click)="goTo('/courses/detail/'+detailData.id)"
+										<img (click)="goTo('/courses-v2/detail/'+detailData.id)"
 											src="assets/img/icons/edit.svg"
 											class="btn-edit">
 										<img (click)="showDetail = false"
@@ -809,12 +795,12 @@
 									<div class="col-left">
 										<b>
 											{{detailData?.course.date_start | date:
-                      'dd/MM/YYYY'}}
+                      'dd.MM.YYYY'}}
 										</b>
 									</div>
 									<div class="col-right">
 										<b>
-											{{detailData?.course.date_end | date: 'dd/MM/YYYY'}}
+											{{detailData?.course.date_end | date: 'dd.MM.YYYY'}}
 										</b>
 									</div>
 								</div>

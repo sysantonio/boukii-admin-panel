@@ -186,7 +186,6 @@ export class CoursesComponent {
     let bookingDifferentUsers = new Set();
 
     if (!this.detailData?.booking_users || this.detailData.booking_users.length === 0) {
-      console.warn('booking_users is empty or undefined');
       return ret;
     }
 
@@ -246,10 +245,6 @@ export class CoursesComponent {
     });
 
     return ret;
-  }
-
-  parseDateToText(date: any) {
-    return moment(date).format('LL').replace(' 0:00', '')
   }
 
   goTo(route: string) {

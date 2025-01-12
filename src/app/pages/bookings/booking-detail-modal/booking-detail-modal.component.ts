@@ -656,7 +656,7 @@ export class BookingDetailModalComponent implements OnInit {
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
-                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
             });
           }
         });
@@ -676,7 +676,7 @@ export class BookingDetailModalComponent implements OnInit {
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
-                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
             });
           }
         });
@@ -695,7 +695,7 @@ export class BookingDetailModalComponent implements OnInit {
               currency: item.currency,
               paxes: item.paxes,
               course: this.selectedItem,
-              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+              date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
           });
         });
       } else if (this.courseTypeId === 2 && !this.selectedItem.is_flexible) {
@@ -712,7 +712,7 @@ export class BookingDetailModalComponent implements OnInit {
             price: +item.price,
             currency: item.currency,
             course: this.selectedItem,
-            date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            date: moment(item.date, 'dd.MM.YYYY').format('dd.MM.YYYY')
           });
         });
       }
@@ -1005,8 +1005,8 @@ export class BookingDetailModalComponent implements OnInit {
 
 
     const rq = {
-      start_date: minDate.format('YYYY-MM-DD'),
-      end_date: maxDate.format('YYYY-MM-DD'),
+      start_date: minDate.format('dd.MM.YYYY'),
+      end_date: maxDate.format('dd.MM.YYYY'),
       course_type: this.courseTypeId,
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
@@ -1094,7 +1094,7 @@ export class BookingDetailModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
-      const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      const currentDate = moment(date, 'dd.MM.YYYY').format('dd.MM.YYYY');
           if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
             return 'with-course';
           } else {
@@ -1108,7 +1108,7 @@ export class BookingDetailModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      const currentDate = moment(date, 'dd.MM.YYYY').format('dd.MM.YYYY');
           if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
             return 'with-course-private';
           } else {
@@ -1119,7 +1119,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   canBook(date: any) {
-    return moment(date, 'YYYY-MM-DD').isSameOrAfter(moment(this.minDate));
+    return moment(date, 'dd.MM.YYYY').isSameOrAfter(moment(this.minDate));
   }
 
   getLevelColor(id: any) {
@@ -1216,7 +1216,7 @@ export class BookingDetailModalComponent implements OnInit {
     let ret = [];
     this.courses.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD'));
+        ret.push(moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY'));
       });
     });
 
@@ -1227,7 +1227,7 @@ export class BookingDetailModalComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD'));
+        ret.push(moment(courseDate.date, 'dd.MM.YYYY').format('dd.MM.YYYY'));
       });
     });
 

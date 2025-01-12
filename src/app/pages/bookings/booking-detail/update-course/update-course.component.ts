@@ -171,7 +171,7 @@ export class UpdateCourseModalComponent implements OnInit {
         minimumDegreeId: this.dates[0].degree_id,
         startTime:  start.length  <=5 ? start : start.replace(':00', ''),
         endTime: this.calculateHourEnd(start, this.duration),
-        date: moment(date.date).format('YYYY-MM-DD'),
+        date: moment(date.date).format('dd.MM.YYYY'),
         clientIds: [this.defaults.mainBooking.client_id],
         bookingUserIds: this.dates.map(d => d.id)
       };
@@ -181,7 +181,7 @@ export class UpdateCourseModalComponent implements OnInit {
         minimumDegreeId: this.dates[0].degree_id,
         startTime: start.length  <=5 ? start : start.replace(':00', ''),
         endTime: this.calculateHourEnd(start, this.duration),
-        date: moment(date.date).format('YYYY-MM-DD'),
+        date: moment(date.date).format('dd.MM.YYYY'),
         clientIds: [this.defaults.mainBooking.client_id],
         bookingUserIds: this.dates.map(d => d.id)
       };
@@ -227,7 +227,7 @@ export class UpdateCourseModalComponent implements OnInit {
               client_id: element.client_id,
               hour_start: this.hourStart.replace(': 00', ''),
               hour_end: this.calculateHourEnd(this.hourStart, this.duration),
-              date: moment(date.date).format('YYYY-MM-DD')
+              date: moment(date.date).format('dd.MM.YYYY')
             })
           });
           this.crudService.post('/admin/bookings/checkbooking', checkAval)
@@ -237,7 +237,7 @@ export class UpdateCourseModalComponent implements OnInit {
                   {monitor_id: this.selectedMonitorId,
                     hour_start: this.hourStart,
                     hour_end: this.calculateHourEnd(this.hourStart, this.duration) + ':00',
-                    date: moment(date.date).format('YYYY-MM-DD')
+                    date: moment(date.date).format('dd.MM.YYYY')
                   }, element.id))
               });
               forkJoin(updateBookingUserRQS)
@@ -258,7 +258,7 @@ export class UpdateCourseModalComponent implements OnInit {
 
             }, (error) => {
               this.snackbar.open(this.translateService.instant('snackbar.booking.overlap') +
-                moment(error.error.data[0].date).format('DD/MM/YYYY') + ' | '
+                moment(error.error.data[0].date).format('dd.MM.YYYY') + ' | '
                 + error.error.data[0].hour_start + ' - ' + error.error.data[0].hour_end, 'OK',
                 {duration: 3000})
             });
@@ -296,7 +296,7 @@ export class UpdateCourseModalComponent implements OnInit {
                 const degreeId = element.degree_id;
                 const hourS = moment(element.hour_start, 'HH:mm:ss').format('HH:mm');
                 monitorAvailableRQS.push(this.checkAvailableMonitors(hourS, this.calculateDuration(element.hour_start, this.calculateHourEnd(element.hour_start, element.mainDuration)),
-                  moment(date[0].date).format('YYYY-MM-DD'), degreeId ? degreeId : this.defaults.dates[0].degree_id));
+                  moment(date[0].date).format('dd.MM.YYYY'), degreeId ? degreeId : this.defaults.dates[0].degree_id));
               });*/
 
               forkJoin(monitorAvailableRQS)
@@ -360,7 +360,7 @@ export class UpdateCourseModalComponent implements OnInit {
                             currency: this.defaults.mainBooking.currency,
                             notes: this.defaults.mainBooking.notes,
                             school_notes: this.defaults.mainBooking.school_notes,
-                            date: moment(date[0].date).format('YYYY-MM-DD'),
+                            date: moment(date[0].date).format('dd.MM.YYYY'),
                             attended: this.defaults.mainBooking.attended
                           });
                         });
@@ -508,7 +508,7 @@ export class UpdateCourseModalComponent implements OnInit {
                         currency: this.defaults.mainBooking.currency,
                         notes: this.defaults.mainBooking.notes,
                         school_notes: this.defaults.mainBooking.school_notes,
-                        date: moment(date[0].date).format('YYYY-MM-DD'),
+                        date: moment(date[0].date).format('dd.MM.YYYY'),
                         attended: this.defaults.mainBooking.attended
                       });
                     });
@@ -706,7 +706,7 @@ export class UpdateCourseModalComponent implements OnInit {
                             currency: this.defaults.mainBooking.currency,
                             notes: this.defaults.mainBooking.notes,
                             school_notes: this.defaults.mainBooking.school_notes,
-                            date: moment(date[0].date).format('YYYY-MM-DD'),
+                            date: moment(date[0].date).format('dd.MM.YYYY'),
                             attended: this.defaults.mainBooking.attended
                           });
                         });
@@ -852,7 +852,7 @@ export class UpdateCourseModalComponent implements OnInit {
                         currency: this.defaults.mainBooking.currency,
                         notes: this.defaults.mainBooking.notes,
                         school_notes: this.defaults.mainBooking.school_notes,
-                        date: moment(date[0].date).format('YYYY-MM-DD'),
+                        date: moment(date[0].date).format('dd.MM.YYYY'),
                         attended: this.defaults.mainBooking.attended
                       });
                     });
@@ -993,7 +993,7 @@ export class UpdateCourseModalComponent implements OnInit {
               currency: this.defaults.mainBooking.currency,
               notes: this.defaults.mainBooking.notes,
               school_notes: this.defaults.mainBooking.school_notes,
-              date: moment(date[0].date).format('YYYY-MM-DD'),
+              date: moment(date[0].date).format('dd.MM.YYYY'),
               attended: this.defaults.mainBooking.attended
             });
           });

@@ -83,7 +83,7 @@
 			class="cardgroup"
 			style="background-color: #2F3844;flex-direction: column;flex-wrap: nowrap;gap: 8px;">
 			<p style="display: flex;flex-wrap: nowrap; color: white; font-size: 16px; font-family: Dinamit; font-weight: 500; line-height: 20px; word-wrap: break-word">
-				{{"Course" | translate }} {{"#" +("00000"+courseFormGroup.controls['id'].value).slice(-5) |translate}}
+				{{"course" | translate }} {{"#" +("00000"+courseFormGroup.controls['id'].value).slice(-5) |translate}}
 				<img (click)="open.emit(courseFormGroup.controls['id'].value)"
 					src="assets/icons/icon/edit.png"
 					class="button icon24"
@@ -96,7 +96,7 @@
 			<p style="color: white;font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
 				{{"register"| translate}}:
 				<span style="font-weight: 600; color: white;">
-					{{courseFormGroup.controls['created_at'].value | date:'dd.MM.YYYY'}}
+					{{courseFormGroup.controls['created_at'].value | date:'dd.MM.YYYY HH:mm'}}h
 				</span>
 			</p>
 			<p *ngIf="courseFormGroup.controls['user'].value"
