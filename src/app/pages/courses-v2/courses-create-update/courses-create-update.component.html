@@ -449,7 +449,6 @@
 										[level]="courses.courseFormGroup.controls['levelGrop'].value[i]"
 										[group]="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)"
 										[subgroup_index]="j"
-										(userSelect)="courses.courseFormGroup.controls['booking_users'].setValue($event)"
 										(monitorSelect)="monitorSelect($event,level,j);">
 									</vex-flux-disponibilidad>
 								</div>

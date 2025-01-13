@@ -6,7 +6,6 @@ import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
-import { CourseUserTransfer2Component } from '../../course-user-transfer/course-user-transfer.component';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -275,21 +274,21 @@ export class CourseDetailModalComponent implements OnInit {
   }
 
   openUserTransfer(group, subgroup, subgroupNumber) {
-    const dialogRef = this.dialog.open(CourseUserTransfer2Component, {
-      width: '800px',
-      height: '800px',
-      maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
-      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
-      data: { group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor, id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate }
-    });
+    //const dialogRef = this.dialog.open(CourseUserTransfer2Component, {
+    //  width: '800px',
+    //  height: '800px',
+    //  maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
+    //  panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
+    //  data: { group: group, subgroup: subgroup, colorKeys: this.colorKeys, groupedByColor: this.groupedByColor, id: this.id, subgroupNumber: subgroupNumber, currentDate: this.subGroupSelectedItemDate }
+    //});
 
-    dialogRef.afterClosed().subscribe((data: any) => {
-      if (data) {
-
-      }
-      this.reset();
-      this.getData();
-    });
+    //dialogRef.afterClosed().subscribe((data: any) => {
+    //  if (data) {
+    //
+    //  }
+    //  this.reset();
+    //  this.getData();
+    //});
   }
 
   deleteSubGroup(subgroup) {

@@ -18,7 +18,6 @@ export class FluxDisponibilidadComponent implements OnInit {
   @Input() subgroup_index!: number
 
   @Output() monitorSelect = new EventEmitter<any>()
-  @Output() userSelect = new EventEmitter<any>()
 
   modified: any[] = []
   modified2: any[] = []
@@ -59,26 +58,31 @@ export class FluxDisponibilidadComponent implements OnInit {
     const monitor = await this.getAvailable({ date: item.date, endTime: item.hour_end, minimumDegreeId: this.level.id, sportId: this.courseFormGroup.controls['sport_id'].value, startTime: item.hour_start })
     this.monitors = monitor.data
   }
+
   ngOnInit(): void {
     this.getAvail(this.courseFormGroup.controls['course_dates'].value[0])
   }
+
   changeMonitor(event: any) {
-    console.log(event)
-    console.log(this.selectUser)
     const bookingUsers = this.courseFormGroup.controls['booking_users'].value;
-    for (const selectedUser of this.selectUser) {
+    for (const selectedUser of [...this.selectUser, ...this.selectUser, ...this.selectUser]) {
       const userToModify = bookingUsers.find((user: any) => user.id === selectedUser.id);
-      console.log(userToModify)
       if (userToModify) {
         userToModify.course_group_id = event.course_group_id;
         userToModify.course_subgroup_id = event.id;
         userToModify.degree_id = event.degree_id;
         userToModify.monitor_id = event.monitor_id;
       }
+      const data = {
+        initialSubgroupId: selectedUser.course_subgroup_id,
+        targetSubgroupId: event.id,
+        clientIds: this.selectUser.map((a: any) => a.client_id),
+        moveAllDays: true
+      }
+      this.crudService.post('/clients/transfer', data).subscribe()
     }
     this.courseFormGroup.controls['booking_users'].setValue(bookingUsers);
     this.cambiarModal = false
-    this.userSelect.emit(bookingUsers)
   }
 
   onCheckboxChange(event: any, item: any): void {
