@@ -90,7 +90,7 @@ export class FormDetailsActivityComponent implements OnInit {
   }
 
   createCourseDateGroup(initialData: any = null): FormGroup {
-    let formattedDate = this.date ? this.date.format('DD.MM.yyyy') : null;
+    let formattedDate = this.date ? this.date.format('YYYY-MM-DD') : null;
     const courseDateGroup = this.fb.group({
       selected: [initialData ? initialData.selected : true],
       date: [initialData ? initialData.date : formattedDate, Validators.required],
@@ -227,7 +227,7 @@ export class FormDetailsActivityComponent implements OnInit {
       minimumDegreeId: this.sportLevel.id,
       startTime: dateGroup.get('startHour').value,
       endTime: this.utilService.calculateEndHour(dateGroup.get('startHour').value, dateGroup.get('duration').value),
-      date: moment(dateGroup.get('date').value).format('DD.MM.yyyy'),
+      date: moment(dateGroup.get('date').value).format('YYYY-MM-DD'),
       clientIds: this.utilizers.map((utilizer) => utilizer.id)
     };
     this.crudService.post('/admin/monitors/available', rq).subscribe((data) => {

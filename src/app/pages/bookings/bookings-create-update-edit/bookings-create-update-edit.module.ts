@@ -40,10 +40,10 @@ import { IconComponent } from 'src/@vex/components/icon/app.component';
 
 export const MY_DATE_FORMATS = {
   parse: {
-    dateInput: 'dd.MM.yyyy',
+    dateInput: 'YYYY-MM-DD',
   },
   display: {
-    dateInput: 'dd.MM.yyyy',
+    dateInput: 'YYYY-MM-DD',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',

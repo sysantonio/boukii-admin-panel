@@ -656,7 +656,7 @@ export class BookingDetailModalComponent implements OnInit {
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
-                date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
+                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }
         });
@@ -676,7 +676,7 @@ export class BookingDetailModalComponent implements OnInit {
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
-                date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
+                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
           }
         });
@@ -695,7 +695,7 @@ export class BookingDetailModalComponent implements OnInit {
               currency: item.currency,
               paxes: item.paxes,
               course: this.selectedItem,
-              date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
+              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
           });
         });
       } else if (this.courseTypeId === 2 && !this.selectedItem.is_flexible) {
@@ -712,7 +712,7 @@ export class BookingDetailModalComponent implements OnInit {
             price: +item.price,
             currency: item.currency,
             course: this.selectedItem,
-            date: moment(item.date, 'dd.MM.yyyy').format('DD.MM.yyyy')
+            date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
           });
         });
       }
@@ -1005,8 +1005,8 @@ export class BookingDetailModalComponent implements OnInit {
 
 
     const rq = {
-      start_date: minDate.format('DD.MM.yyyy'),
-      end_date: maxDate.format('DD.MM.yyyy'),
+      start_date: minDate.format('YYYY-MM-DD'),
+      end_date: maxDate.format('YYYY-MM-DD'),
       course_type: this.courseTypeId,
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
@@ -1094,7 +1094,7 @@ export class BookingDetailModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
-      const currentDate = moment(date, 'dd.MM.yyyy').format('DD.MM.yyyy');
+      const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
           if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
             return 'with-course';
           } else {
@@ -1108,7 +1108,7 @@ export class BookingDetailModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, 'dd.MM.yyyy').format('DD.MM.yyyy');
+      const currentDate = moment(date, 'dd.MM.yyyy').format('YYYY-MM-DD');
           if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
             return 'with-course-private';
           } else {
@@ -1216,7 +1216,7 @@ export class BookingDetailModalComponent implements OnInit {
     let ret = [];
     this.courses.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('DD.MM.yyyy'));
+        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD'));
       });
     });
 
@@ -1227,7 +1227,7 @@ export class BookingDetailModalComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('DD.MM.yyyy'));
+        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD'));
       });
     });
 

@@ -1107,7 +1107,7 @@ export class MonitorDetailComponent {
     this.defaultsUser.email = this.defaults.email;
     this.defaultsUser.image = this.imagePreviewUrl;
     this.defaults.image = this.imagePreviewUrl;
-    this.defaults.birth_date = moment(this.defaults.birth_date, 'dd.MM.yyyy').format('DD.MM.yyyy');
+    this.defaults.birth_date = moment(this.defaults.birth_date, 'YYYY-MM-DD').format('YYYY-MM-DD');
     this.setLanguages();
 
     this.crudService.update('/users', this.defaultsUser, this.defaults.user_id)
@@ -1224,47 +1224,47 @@ export class MonitorDetailComponent {
       }
       /*      this.crudService.get('/admin/courses/'+this.detailData.course_id)
               .subscribe((course) => {
-      
+
                 this.crudService.get('/sports/'+this.detailData.course.sport_id)
                   .subscribe((sport) => {
                     this.detailData.sport = sport.data;
                   });
-      
+
                 if (this.detailData.degree_id !== null) {
                   this.crudService.get('/degrees/'+this.detailData.degree_id)
                     .subscribe((degree) => {
                       this.detailData.degree = degree.data;
                     })
                 }
-      
+
               })*/
       this.showDetail = true;
       /*      this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&booking_id='+this.detailData.booking.id)
               .subscribe((booking) => {
                 this.detailData.users = [];
-      
+
                 booking.data.forEach((element, idx) => {
-                  if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+                  if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
                     this.detailData.users.push(element);
-      
+
                     this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)
                       .subscribe((cd) => {
-      
+
                         if (cd.data.length > 0) {
                           element.sports= [];
-      
+
                           cd.data.forEach(c => {
                             element.sports.push(c);
                           });
                         }
-      
-      
+
+
                       })
-      
+
                   }
                 });
                 this.showDetail = true;
-      
+
               });*/
 
 
@@ -1305,7 +1305,7 @@ export class MonitorDetailComponent {
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
           ret = idx + 1;
         }
       });
@@ -1318,7 +1318,7 @@ export class MonitorDetailComponent {
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
           ret = element.course_groups.length;
         }
       });
@@ -1489,8 +1489,8 @@ export class MonitorDetailComponent {
     if (this.timelineView === 'week') {
       const startOfWeekDate = startOfWeek(date, { weekStartsOn: 1 });
       const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
-      firstDate = moment(startOfWeekDate).format('DD.MM.yyyy');
-      lastDate = moment(endOfWeekDate).format('DD.MM.yyyy');
+      firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
+      lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
       this.searchBookings(firstDate, lastDate);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
@@ -1500,8 +1500,8 @@ export class MonitorDetailComponent {
     } else if (this.timelineView === 'month') {
       const startMonth = startOfMonth(date);
       const endMonth = endOfMonth(date);
-      firstDate = moment(startMonth).format('DD.MM.yyyy');
-      lastDate = moment(endMonth).format('DD.MM.yyyy');
+      firstDate = moment(startMonth).format('YYYY-MM-DD');
+      lastDate = moment(endMonth).format('YYYY-MM-DD');
       this.searchBookings(firstDate, lastDate);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
@@ -1510,7 +1510,7 @@ export class MonitorDetailComponent {
       });*/
     } else {
       const dateStr = date.toLocaleString().split('T')[0];
-      firstDate = moment(date).format('DD.MM.yyyy');
+      firstDate = moment(date).format('YYYY-MM-DD');
       lastDate = firstDate;
       this.searchBookings(firstDate, lastDate);
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => task.date === dateStr);*/
@@ -1662,10 +1662,10 @@ export class MonitorDetailComponent {
         return {
           booking_id: booking?.booking?.id,
           booking_color: booking_color,
-          date: moment(booking.date).format('DD.MM.yyyy'),
+          date: moment(booking.date).format('YYYY-MM-DD'),
           date_full: booking.date,
-          date_start: moment(booking.course.date_start).format('DD.MM.yyyy'),
-          date_end: moment(booking.course.date_end).format('DD.MM.yyyy'),
+          date_start: moment(booking.course.date_start).format('YYYY-MM-DD'),
+          date_end: moment(booking.course.date_end).format('YYYY-MM-DD'),
           hour_start: booking.hour_start.substring(0, 5),
           hour_end: booking.hour_end ? booking.hour_end.substring(0, 5) : '20:00',
           type: type,
@@ -1714,8 +1714,8 @@ export class MonitorDetailComponent {
           school_id: nwd.school_id,
           station_id: nwd.station_id,
           block_id: nwd.id,
-          date: moment(nwd.start_date).format('DD.MM.yyyy'),
-          date_format: moment(nwd.start_date).format('DD.MM.yyyy'),
+          date: moment(nwd.start_date).format('YYYY-MM-DD'),
+          date_format: moment(nwd.start_date).format('YYYY-MM-DD'),
           full_day: nwd.full_day,
           type: type,
           color: nwd.user_nwd_subtype_id === 1 ? '#bbbbbb' : nwd.color,
@@ -1937,7 +1937,7 @@ export class MonitorDetailComponent {
     const weekStartDate = new Date(week.startWeek);
     const specificDate = addDays(weekStartDate, dayIndex);
     if (isSameMonth(specificDate, this.currentDate)) {
-      return !this.vacationDays.includes(moment(specificDate).format('DD.MM.yyyy'));
+      return !this.vacationDays.includes(moment(specificDate).format('YYYY-MM-DD'));
     }
     else {
       return false;
@@ -1947,13 +1947,13 @@ export class MonitorDetailComponent {
   isDayVisibleWeek(dayIndex: number) {
     const startOfWeek = moment(this.currentDate).startOf('isoWeek');
     const specificDate = startOfWeek.add(dayIndex, 'days');
-    return !this.vacationDays.includes(moment(specificDate).format('DD.MM.yyyy'));
+    return !this.vacationDays.includes(moment(specificDate).format('YYYY-MM-DD'));
   }
 
   isDayVisibleDay() {
     if (this.vacationDays) {
 
-      return !this.vacationDays.includes(moment(this.currentDate).format('DD.MM.yyyy'));
+      return !this.vacationDays.includes(moment(this.currentDate).format('YYYY-MM-DD'));
     }
   }
 
@@ -2026,7 +2026,7 @@ export class MonitorDetailComponent {
       case 'day':
         dateInfo = {
           date: this.currentDate,
-          date_format: moment(this.currentDate).format('DD.MM.yyyy'),
+          date_format: moment(this.currentDate).format('YYYY-MM-DD'),
           hour: position,
           monitor_id: this.id
         };
@@ -2036,7 +2036,7 @@ export class MonitorDetailComponent {
         let weekDayDate = mondayOfWeek.add(position, 'days');
         dateInfo = {
           date: moment(weekDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-          date_format: moment(weekDayDate).format('DD.MM.yyyy'),
+          date_format: moment(weekDayDate).format('YYYY-MM-DD'),
           hour: hourDay,
           monitor_id: this.id
         };
@@ -2048,7 +2048,7 @@ export class MonitorDetailComponent {
         let monthDayDate = startOfWeek.add(position, 'days');
         dateInfo = {
           date: moment(monthDayDate).format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)'),
-          date_format: moment(monthDayDate).format('DD.MM.yyyy'),
+          date_format: moment(monthDayDate).format('YYYY-MM-DD'),
           hour: hourDay,
           monitor_id: this.id
         };
@@ -2077,7 +2077,7 @@ export class MonitorDetailComponent {
           const endDate = moment(result.end_date);
 
           while (currentDate <= endDate) {
-            dates.push(currentDate.format('DD.MM.yyyy'));
+            dates.push(currentDate.format('YYYY-MM-DD'));
             currentDate = currentDate.add(1, 'days');
           }
 

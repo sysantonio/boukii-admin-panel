@@ -1244,8 +1244,8 @@ export class BookingDetailComponent implements OnInit {
     }
 
     const rq = {
-      start_date: minDate.format("dd.MM.yyyy"),
-      end_date: maxDate.format("dd.MM.yyyy"),
+      start_date: minDate.format("YYYY-MM-DD"),
+      end_date: maxDate.format("YYYY-MM-DD"),
       course_type: this.courseTypeId,
       sport_id: this.form.value.sport,
       client_id: this.defaultsBookingUser.client_id,
@@ -1349,7 +1349,7 @@ export class BookingDetailComponent implements OnInit {
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
-      const currentDate = moment(date, "dd.MM.yyyy").format("dd.MM.yyyy");
+      const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
       if (
         dates.indexOf(currentDate) !== -1 &&
         moment(this.minDate).isSameOrBefore(moment(date))
@@ -1364,7 +1364,7 @@ export class BookingDetailComponent implements OnInit {
   privateDateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, "dd.MM.yyyy").format("dd.MM.yyyy");
+      const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
       if (
         dates.indexOf(currentDate) !== -1 &&
         moment(this.minDate).isSameOrBefore(moment(date))
@@ -1377,7 +1377,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   canBook(date: any) {
-    return moment(date, "dd.MM.yyyy").isSameOrAfter(moment(this.minDate));
+    return moment(date, "YYYY-MM-DD").isSameOrAfter(moment(this.minDate));
   }
 
   getLevelColor(id: any) {
@@ -1497,7 +1497,7 @@ export class BookingDetailComponent implements OnInit {
     let ret = [];
     this.courses.forEach((course) => {
       course.course_dates.forEach((courseDate) => {
-        ret.push(moment(courseDate.date, "dd.MM.yyyy").format("dd.MM.yyyy"));
+        ret.push(moment(courseDate.date, "YYYY-MM-DD").format("YYYY-MM-DD"));
       });
     });
 
@@ -1508,7 +1508,7 @@ export class BookingDetailComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach((course) => {
       course.course_dates.forEach((courseDate) => {
-        ret.push(moment(courseDate.date, "dd.MM.yyyy").format("dd.MM.yyyy"));
+        ret.push(moment(courseDate.date, "YYYY-MM-DD").format("YYYY-MM-DD"));
       });
     });
 

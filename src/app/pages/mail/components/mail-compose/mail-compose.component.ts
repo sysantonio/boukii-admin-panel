@@ -304,7 +304,7 @@ export class MailComposeComponent implements OnInit {
 
   searchCourses() {
     this.loadingCourses = true;
-    this.crudService.list('/admin/courses', 1, 1000, 'desc', 'id', '&school_id=' + this.school.id + '&start_date=' + moment(this.selectedDateFrom).format('DD.MM.yyyy') + '&end_date=' + moment(this.selectedDateTo).format('DD.MM.yyyy'))
+    this.crudService.list('/admin/courses', 1, 1000, 'desc', 'id', '&school_id=' + this.school.id + '&start_date=' + moment(this.selectedDateFrom).format('YYYY-MM-DD') + '&end_date=' + moment(this.selectedDateTo).format('YYYY-MM-DD'))
       .subscribe((data) => {
         this.courses = data.data;
         this.loadingCourses = false;

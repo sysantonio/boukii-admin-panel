@@ -17,8 +17,8 @@ export class EventService {
     events.forEach((element, idx) => {
       let start1 = moment(element.start);
       let end1 = moment(element.end);
-      let start2 = moment(moment(event2.start_date).format('DD.MM.yyyy') + ' ' + moment(event2.start_time, 'HH:mm:ss').format('HH:mm:ss'))
-      let end2 = moment(moment(event2.end_date).format('DD.MM.yyyy') + ' ' + moment(event2.end_time, 'HH:mm:ss').format('HH:mm:ss'))
+      let start2 = moment(moment(event2.start_date).format('YYYY-MM-DD') + ' ' + moment(event2.start_time, 'HH:mm:ss').format('HH:mm:ss'))
+      let end2 = moment(moment(event2.end_date).format('YYYY-MM-DD') + ' ' + moment(event2.end_time, 'HH:mm:ss').format('HH:mm:ss'))
 
       if (!exist) {
         exist = start1.isBefore(end2) && start2.isBefore(end1);
@@ -31,8 +31,8 @@ export class EventService {
             overlapedId: idx,
             dates: [
               {
-                start_date: newStart.format('DD.MM.yyyy'),
-                end_date: moment(event2.start_date).format('DD.MM.yyyy'),
+                start_date: newStart.format('YYYY-MM-DD'),
+                end_date: moment(event2.start_date).format('YYYY-MM-DD'),
                 start_time: element.start_time,
                 end_time: event2.end_time,
                 monitor_id: event2.monitor_id,
@@ -44,8 +44,8 @@ export class EventService {
                 user_nwd_subtype_id: event2.user_nwd_subtype_id
               },
               {
-                start_date: newStart2.format('DD.MM.yyyy'),
-                end_date: newEnd2.format('DD.MM.yyyy'),
+                start_date: newStart2.format('YYYY-MM-DD'),
+                end_date: newEnd2.format('YYYY-MM-DD'),
                 start_time: event2.start_time,
                 end_time: element.end_time,
                 monitor_id: event2.monitor_id,

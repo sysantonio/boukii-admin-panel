@@ -235,10 +235,10 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     let filter = '';
 
     if (this.selectedFrom) {
-      filter = filter + '&start_date=' + moment(this.selectedFrom).format('DD.MM.yyyy');
+      filter = filter + '&start_date=' + moment(this.selectedFrom).format('YYYY-MM-DD');
     }
     if (this.selectedTo) {
-      filter = filter + '&end_date=' + moment(this.selectedTo).format('DD.MM.yyyy');
+      filter = filter + '&end_date=' + moment(this.selectedTo).format('YYYY-MM-DD');
     }
     if (this.selectedSport) {
       filter = filter + '&sport_id=' + this.selectedSport;

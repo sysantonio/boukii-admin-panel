@@ -386,7 +386,7 @@ export class CourseDetailModalComponent implements OnInit {
 
   hasMonitorAssigned(date, level, gIndex) {
 
-    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('DD.MM.yyyy') === date.date);
+    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === date.date);
     const group = courseDate.course_groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
 
     if (group) {
@@ -618,7 +618,7 @@ export class CourseDetailModalComponent implements OnInit {
     if(!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-          if (moment(courseDate.date,'dd.MM.yyyy').format('DD.MM.yyyy') === moment(this.selectedDate,'dd.MM.yyyy').format('DD.MM.yyyy')) {
+          if (moment(courseDate.date,'dd.MM.yyyy').format('YYYY-MM-DD') === moment(this.selectedDate,'dd.MM.yyyy').format('YYYY-MM-DD')) {
             courseDate.course_groups.forEach(group => {
               if (group.degree_id === level.id) {
                   ret = group.course_subgroups[subGroupIndex]?.monitor;
@@ -678,7 +678,7 @@ export class CourseDetailModalComponent implements OnInit {
 
             if (!level.old) {
               this.defaults.course_dates.forEach(courseDate => {
-                if (moment(courseDate.date).format('DD.MM.yyyy') === moment(this.selectedDate).format('DD.MM.yyyy')) {
+                if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
                   this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'dd.MM.yyyy'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
                     .subscribe((result: any) => {
@@ -698,7 +698,7 @@ export class CourseDetailModalComponent implements OnInit {
               });
             } else {
               this.defaults.course_dates.forEach((courseDate, idx) => {
-                this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('DD.MM.yyyy'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date).format('YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
                   .subscribe((result: any) => {
                     if (result.data.available) {
 
@@ -718,7 +718,7 @@ export class CourseDetailModalComponent implements OnInit {
 
             if (!level.old) {
               this.defaults.course_dates.forEach(courseDate => {
-                if (moment(courseDate.date).format('DD.MM.yyyy') === moment(this.selectedDate).format('DD.MM.yyyy')) {
+                if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
                   courseDate.course_groups.forEach(group => {
                     if(group.degree_id === level.id && !monitorSet) {
 
@@ -834,7 +834,7 @@ export class CourseDetailModalComponent implements OnInit {
   isInDay(date: any, courseUserId: any) {
 
     let ret = false;
-    const course = this.defaults.course_dates.find((c) => moment(c.date).format('DD.MM.yyyy') === date);
+    const course = this.defaults.course_dates.find((c) => moment(c.date).format('YYYY-MM-DD') === date);
     const courseUsers = this.courseUsers.filter((c) => c.client_id === courseUserId);
     if (course) {
       courseUsers.forEach(courseUser => {
@@ -950,25 +950,25 @@ export class CourseDetailModalComponent implements OnInit {
           return acc;
         }, [0, 0]);
 
-        this.daysDatesLevels.push({date: moment(element.date, 'dd.MM.yyyy').format('DD.MM.yyyy'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
+        this.daysDatesLevels.push({date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
         if (this.defaults.course_type === 2) {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'dd.MM.yyyy').format('DD.MM.yyyy'),
+            date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
           })
         } else {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'dd.MM.yyyy').format('DD.MM.yyyy'),
+            date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
             groups: []
           })
         }
       } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'dd.MM.yyyy').format('DD.MM.yyyy'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
+        this.daysDatesLevels.push({date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'), dateString: moment(element.date, 'dd.MM.yyyy').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
       }
 
     });
@@ -1162,7 +1162,7 @@ date_start: this.defaults.date_start_res
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
           ret = idx +1;
         }
       });
@@ -1175,7 +1175,7 @@ date_start: this.defaults.date_start_res
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
           ret = element.course_groups.length;
         }
       });
@@ -1304,7 +1304,7 @@ date_start: this.defaults.date_start_res
           this.detailData.users = [];
 
           booking.data.forEach((element, idx) => {
-            if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
                 this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id='+element.client_id+"&school_id="+this.user.schools[0].id)

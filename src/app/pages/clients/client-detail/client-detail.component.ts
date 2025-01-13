@@ -958,7 +958,7 @@ export class ClientDetailComponent {
               email: this.defaults.email,
               first_name: data.data.first_name,
               last_name: data.data.last_name,
-              birth_date: moment(data.data.fromDate).format('DD.MM.yyyy'),
+              birth_date: moment(data.data.fromDate).format('YYYY-MM-DD'),
               phone: this.defaults.phone,
               telephone: this.defaults.telephone,
               address: this.defaults.address,
@@ -1178,7 +1178,7 @@ export class ClientDetailComponent {
           this.detailData.users = [];
 
           booking.data.forEach((element, idx) => {
-            if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+            if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
               this.detailData.users.push(element);
 
               this.crudService.list('/client-sports', 1, 10000, 'desc', 'id', '&client_id=' + element.client_id + "&school_id=" + this.user.schools[0].id)
@@ -1239,7 +1239,7 @@ export class ClientDetailComponent {
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
           ret = idx + 1;
         }
       });
@@ -1252,7 +1252,7 @@ export class ClientDetailComponent {
     let ret = 0;
     if (this.detailData.course && this.detailData.course.course_dates) {
       this.detailData.course.course_dates.forEach((element, idx) => {
-        if (moment(element.date).format('DD.MM.yyyy') === moment(this.detailData.date).format('DD.MM.yyyy')) {
+        if (moment(element.date).format('YYYY-MM-DD') === moment(this.detailData.date).format('YYYY-MM-DD')) {
           ret = element.course_groups.length;
         }
       });

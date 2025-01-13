@@ -19,7 +19,7 @@ export class UtilsService {
   calculateYears(birthDateString: string) {
     const fechaActual = moment();
     const age = fechaActual.diff(
-      moment(birthDateString, "dd.MM.yyyy"),
+      moment(birthDateString, "YYYY-MM-DD"),
       "years"
     );
     return age;
@@ -34,7 +34,7 @@ export class UtilsService {
     return country ? country.name : "NDF";
   }
 
-  formatDate(date: string, format = "dd.MM.yyyy") {
+  formatDate(date: string, format = "YYYY-MM-DD") {
     return moment(date).format(format);
   }
 
@@ -154,7 +154,7 @@ export class UtilsService {
 
   calculateAvailableHours(date: any, hour: string, course: any): boolean {
     // Obtén la fecha seleccionada y el rango de horas disponibles
-    const selectedDate = moment(date).format('DD.MM.yyyy');
+    const selectedDate = moment(date).format('YYYY-MM-DD');
     const startHour = course.hour_min;
     const endHour = course.hour_max;
 
@@ -164,17 +164,17 @@ export class UtilsService {
     }
 
     // Obtener la hora en formato HH:mm
-    const selectedHour = moment(`${selectedDate} ${hour}`, 'dd.MM.yyyy HH:mm');
+    const selectedHour = moment(`${selectedDate} ${hour}`, 'YYYY-MM-DD HH:mm');
 
     // Combinar la fecha seleccionada con startHour y endHour para formar fechas completas
-    const start = moment(`${selectedDate} ${startHour}`, 'dd.MM.yyyy HH:mm');
-    const end = moment(`${selectedDate} ${endHour}`, 'dd.MM.yyyy HH:mm');
+    const start = moment(`${selectedDate} ${startHour}`, 'YYYY-MM-DD HH:mm');
+    const end = moment(`${selectedDate} ${endHour}`, 'YYYY-MM-DD HH:mm');
 
     // Verificar si la fecha seleccionada es hoy
     if (moment(selectedDate).isSame(moment(), 'day')) {
       // Si la fecha seleccionada es hoy, desactiva horas pasadas
       const now = moment().format('HH:mm');
-      const nowMoment = moment(`${selectedDate} ${now}`, 'dd.MM.yyyy HH:mm');
+      const nowMoment = moment(`${selectedDate} ${now}`, 'YYYY-MM-DD HH:mm');
       if (selectedHour.isBefore(nowMoment, 'minute')) {
         return true; // Desactivar la opción si la hora es anterior al momento actual
       }
@@ -191,9 +191,9 @@ export class UtilsService {
   }
   dateClass(color: string, course: any, minDate:any) {
     return (date: Date): MatCalendarCellCssClasses => {
-      const currentDate = moment(date, "dd.MM.yyyy").format("dd.MM.yyyy");
+      const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
       if (
-        course.course_dates.find(s => moment(s.date).format('DD.MM.yyyy') === currentDate) &&
+        course.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === currentDate) &&
         moment(minDate, "dd.MM.yyyy")
           .startOf("day")
           .isSameOrBefore(moment(date, "dd.MM.yyyy").startOf("day"))
@@ -208,7 +208,7 @@ export class UtilsService {
   inUseDatesFilter = (d: Date, myHolidayDates:any, course:any, allowPast = false): boolean => {
     if (!d) return false; // Si la fecha es nula o indefinida, no debería ser seleccionable.
 
-    const formattedDate = moment(d).format('DD.MM.yyyy');
+    const formattedDate = moment(d).format('YYYY-MM-DD');
     const time = moment(d).startOf('day').valueOf(); // .getTime() es igual a .valueOf()
     const today = moment().startOf('day'); // Fecha actual (sin hora, solo día)
 
@@ -219,7 +219,7 @@ export class UtilsService {
     const isHoliday = myHolidayDates.some(x => x.getTime() === time);
 
     // Encuentra si la fecha actual está en selectedItem.course_dates y si es activa.
-    const courseDate = course.course_dates.find(s => moment(s.date).format('DD.MM.yyyy') === formattedDate);
+    const courseDate = course.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === formattedDate);
     const isActive = courseDate ? (courseDate.active || courseDate.active === 1) : false;
 
     // La fecha debería ser seleccionable si no es un día festivo y está activa (o sea, active no es falso ni 0).
