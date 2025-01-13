@@ -14,6 +14,7 @@ import { FluxModalModule } from '../flux-modal/app.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CoursesDetailCardNivelModule } from '../course-nivel/app.module';
 import { ComponenteSelectModule } from '../../form/select/app.module';
+import { MatListModule } from '@angular/material/list';
 
 
 @NgModule({
@@ -22,7 +23,7 @@ import { ComponenteSelectModule } from '../../form/select/app.module';
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, MatListModule,
     SecondaryToolbarModule,
     TranslateModule, MatFormFieldModule, MatAutocompleteModule, MatSelectModule, MatFormFieldModule,
     MatFormFieldModule,

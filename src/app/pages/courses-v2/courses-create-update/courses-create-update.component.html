@@ -212,14 +212,16 @@
 						</app-form-select>
 					</div>
 				</div>
-				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
+				<div *ngIf="mode==='create'"
+					style="padding: 20px;border-top: 1px solid #DEE6EA;">
 					<button (click)="addCourseDate()"
 						style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
 						type="button">
 						{{'add_date' | translate }}
 					</button>
 				</div>
-				<div style="background-color: var(--color-grey4);height: 20px;width: 100%;"  *ngIf="courses.courseFormGroup.controls['is_flexible'].value"></div>
+				<div *ngIf="courses.courseFormGroup.controls['is_flexible'].value"
+					style="background-color: var(--color-grey4);height: 20px;width: 100%;"></div>
 				<div *ngIf="courses.courseFormGroup.controls['is_flexible'].value">
 					<div style="margin: 20px;">
 						<span>
@@ -327,7 +329,7 @@
 							</app-form-select>
 						</div>
 					</ng-container>
-					<div *ngIf="PeriodoFecha>0">
+					<div *ngIf="PeriodoFecha>0 && mode === 'create'">
 						<button (click)="addCourseDate()"
 							style="margin-top: 0px !important;height: 38px; width: 200px;"
 							mat-button
@@ -446,8 +448,8 @@
 									<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup"
 										[level]="courses.courseFormGroup.controls['levelGrop'].value[i]"
 										[group]="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)"
-										[subgroup]="item"
 										[subgroup_index]="j"
+										(userSelect)="courses.courseFormGroup.controls['booking_users'].setValue($event)"
 										(monitorSelect)="monitorSelect($event,level,j);">
 									</vex-flux-disponibilidad>
 								</div>
@@ -662,14 +664,14 @@
 		</div>
 		<div style="margin: 20px;display: flex;justify-content: space-between;">
 			<button *ngIf="ModalFlux>0"
-				(click)="ModalFlux=ModalFlux-1"
+				(click)="mode==='create'?ModalFlux=ModalFlux-1:router.navigate(['/courses/detail/' + id])"
 				style="margin-top: 0px !important;height: 38px; width: 128px;"
 				mat-button
 				type="button">
 				<mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
 				{{ (mode === 'create' ? 'back' : 'cancel') | translate }}
 			</button>
-			<button (click)="Confirm(1);"
+			<button (click)="mode==='create'?Confirm(1):endCourse()"
 				style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 				color="primary"
 				mat-raised-button

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,7 @@ export class CourseDetailCardNivelComponent {
 
   @Input() courseFormGroup!: UntypedFormGroup
   @Input() checkbox: boolean = false
+  @Output() changeMonitor = new EventEmitter<any>()
 
   week: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",]
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)

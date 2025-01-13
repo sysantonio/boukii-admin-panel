@@ -1,24 +1,6 @@
 <div style="overflow-x: auto;overflow-y: hidden; height: 100%;">
 	<table>
 		<thead>
-			<tr style="border-bottom: 1px solid var(--color-gray2); height: 38px;">
-				<td></td>
-				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value;index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-gray1)':''"
-					[style.borderTop]="selectDate===i?'3px solid #E91E63':''"
-					(click)="selectDate=i"
-					style="
-                color: var(--color-dark1);
-                font-size: 12px;
-                font-family: DM Sans;
-                font-weight: 600;
-                line-height: 16px;
-                word-wrap: break-word">
-					{{item.date | date:'dd.MM.yyyy'}}
-				</td>
-			</tr>
-		</thead>
-		<tbody>
 			<tr style="height: 34px;">
 				<td style="color: var(--color-dark1);
                 font-size: 12px;
@@ -31,31 +13,42 @@
 						{{'monitor' | translate}}
 					</div>
 				</td>
-				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-gray1)':''"
-					(click)="selectDate=i">
-					<app-form-select [table]="monitors[i]"
-						[value]="find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor?(find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.first_name + ' ' + find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.last_name):''"
-						(do)="monitorSelect.emit({monitor: $event.option.value,i})"
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value;index as i"
+					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+					[style.borderTop]="selectDate===i?'3px solid #E91E63':''"
+					(click)="selectDate=i;getAvail(item)"
+					style="
+			color: var(--color-dark1);
+			font-size: 12px;
+			font-family: DM Sans;
+			font-weight: 600;
+			line-height: 16px;
+			word-wrap: break-word">
+					{{item.date | date:'dd.MM.yyyy'}}
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="border-bottom: 3px solid #dee6ea;">
+				<td>
+					<app-form-select [table]="monitors"
+						[value]="find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor?
+						(find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.first_name + ' ' + find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.last_name)
+						:''"
+						(do)="monitorSelect.emit({monitor: $event.option.value,i:selectDate});modified[selectDate]=true"
 						name="first_name"
 						name2="last_name">
 					</app-form-select>
-					<!-- <mat-icon class="icon10">circle</mat-icon> -->
 				</td>
-				<!-- <td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-gray1)':''"
-					(click)="selectDate=i">
-				</td> -->
+				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
+					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+					[style.color]="find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor_id?modified[i]?'#FFCF25':'#31C044':'#C7D0D3'"
+					(click)="selectDate=i;getAvail(item)">
+					<mat-icon class="icon10">circle</mat-icon>
+				</td>
 			</tr>
-			<!-- <tr style="border-bottom: 3px solid #dee6ea;">
-				 <td style="background-color: var(--color-gray1);padding: 7px;"></td> 
-			</tr> -->
 			<tr style="height: 34px;">
-				<td style="color: var(--color-dark1);
-                font-size: 12px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: 16px;background-color: var(--color-gray1);">
+				<td style="font-size: 12px; font-weight: 600;">
 					<div class="flexicon">
 						<img src="assets/icons/icon/alumno.png"
 							class="icon24">
@@ -67,50 +60,40 @@
 					</div>
 				</td>
 				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-gray1)':''"
-					(click)="selectDate=i">
+					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''">
 				</td>
 			</tr>
-			<tr *ngFor="let item of courseFormGroup.controls['booking_users'].value">
-				<td style="background-color: var(--color-gray1);text-align-last: start;">
-					<div class="flexicon"
-						style="color:var(--color-dark1);
-                        font-size: 12px;
-                        font-style: normal;
-                        font-weight: 600;
-                        line-height: 16px;">
-						{{item}}
-					</div>
-					<span style="color:var(--color-dark1);
-                    font-size: 12px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 16px;">
-						{{getLanguage(item.language1_id)}}
-                        · {{getCountry(item.country)}} ·
-                        {{calculateAge(item.birth_date)}} {{'years' | translate }}
-					</span>
-				</td>
-				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-gray1)':''"
-					(click)="selectDate=i">
-					<mat-icon class="icon10">circle</mat-icon>
-				</td>
+			<tr *ngFor="let item of courseFormGroup.controls['booking_users'].value; index as i">
+				<ng-container *ngIf="item.course_subgroup_id === find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].id">
+					<td style="text-align-last: start;">
+						<div class="flexicon"
+							style="font-size: 12px; font-weight: 600;">
+							{{item.client.first_name}} {{item.client.last_name}}
+						</div>
+						<span style="font-size: 12px;">
+							{{getLanguage(item.language1_id)}}
+							· {{getCountry(item.country)}} ·
+							{{calculateAge(item.birth_date)}} {{'years' | translate }}
+						</span>
+					</td>
+					<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
+						[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+						[style.color]="item.attended?'#31C044':modified2[i]?'#FFCF25':item.date<today?'#E70F0F':'#C7D0D3'"
+						(click)="selectDate=i;getAvail(item)">
+						<mat-icon class="icon10">circle</mat-icon>
+					</td>
+				</ng-container>
 			</tr>
-			<tr *ngIf="courseFormGroup.controls['booking_users'].value.length===0">
-				<td style="background-color: var(--color-gray1);text-align-last: start;">
+			<tr *ngIf="!find(courseFormGroup.controls['booking_users'].value,'course_subgroup_id',find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].id)">
+				<td style="text-align-last: start;">
 					<div class="flexicon"
-						style="color:var(--color-dark1);
-                        font-size: 12px;
-                        font-style: normal;
-                        font-weight: 600;
-                        line-height: 16px;">
+						style="font-size: 12px; font-weight: 600;">
 						{{"no_user_reserved" | translate}}
 					</div>
 				</td>
 				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-gray1)':''"
-					(click)="selectDate=i">
+					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+					(click)="selectDate=i;getAvail(item)">
 				</td>
 			</tr>
 		</tbody>
@@ -130,7 +113,9 @@
 						class="icon24">
 					{{"students" | translate}}
 				</div>
-				<mat-checkbox *ngFor="let item of courseFormGroup.controls['booking_users'].value"
+				<mat-checkbox *ngFor="let item of courseFormGroup.controls['booking_users'].value; let i = index"
+					[checked]="selectUser.includes(item)"
+					(change)="onCheckboxChange($event, item)"
 					style="display: flex;">
 					<div style="display: flex; gap: 20px;">
 						<div>
@@ -139,18 +124,10 @@
 						</div>
 						<div>
 							<div class="flexicon"
-								style="color:var(--color-dark1);
-                        font-size: 12px;
-                        font-style: normal;
-                        font-weight: 600;
-                        line-height: 16px;">
-								{{item}}
+								style="font-size: 12px;font-weight: 600;">
+								{{item.client.first_name}} {{item.client.last_name}}
 							</div>
-							<span style="color:var(--color-dark1);
-                    font-size: 12px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 16px;">
+							<span style="font-size: 12px;">
 								{{getLanguage(item.language1_id)}}
                         · {{getCountry(item.country)}} ·
                         {{calculateAge(item.birth_date)}} {{'years' | translate }}
@@ -159,13 +136,9 @@
 					</div>
 				</mat-checkbox>
 				<div *ngIf="courseFormGroup.controls['booking_users'].value.length===0"
-					style="background-color: var(--color-gray1);text-align-last: start;">
+					style="text-align-last: start;">
 					<div class="flexicon"
-						style="color:var(--color-dark1);
-							font-size: 12px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: 16px;">
+						style="font-size: 12px;font-weight: 600;">
 						{{"no_user_reserved" | translate}}
 					</div>
 				</div>
@@ -179,7 +152,8 @@
 				{{'level' | translate}}
 			</div>
 			<vex-course-detail-nivel [checkbox]="true"
-				[courseFormGroup]="courseFormGroup"></vex-course-detail-nivel>
+				[courseFormGroup]="courseFormGroup"
+				(changeMonitor)="changeMonitor($event)"></vex-course-detail-nivel>
 		</div>
 	</div>
 	<div footer
@@ -187,17 +161,15 @@
 		<button (click)="cambiarModal=false"
 			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;"
 			mat-button
-			type="button"
-			class="client-button">
+			type="button">
 			{{'cancel' | translate }}
 		</button>
-		<button (click)="cambiarModal=false"
+		<!--<button (click)="cambiarModal=false"
 			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
 			color="primary"
 			mat-raised-button
-			type="button"
-			class="client-button">
+			type="button">
 			{{'save' | translate }}
-		</button>
+		</button>-->
 	</div>
 </vex-flux-modal>

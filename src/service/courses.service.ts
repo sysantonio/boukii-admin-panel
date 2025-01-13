@@ -19,7 +19,7 @@ export class CoursesService {
       icon: data.sport.icon_unselected,
       levelGrop: data.degrees,
       settings: JSON.parse(data.settings),
-      discounts: JSON.parse(data.discounts)
+      discounts: data.discounts
     })
   }
   user: any = JSON.parse(localStorage.getItem('boukiiUser'))

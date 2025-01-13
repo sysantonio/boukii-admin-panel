@@ -236,7 +236,8 @@
                 {{detailData.is_flexible ? 'flex' : 'fix'}}
                 {{ detailData.sport.name}}
 							</div>
-							<div class="client-ubicacion" *ngIf="detailData.station">
+							<div *ngIf="detailData.station"
+								class="client-ubicacion">
 								{{detailData.station.name}}
 							</div>
 						</div>
@@ -275,7 +276,8 @@
                 {{detailData.is_flexible ? 'flex' : 'fix'}} {{
                 detailData.sport.name}}
 							</div>
-							<div class="client-ubicacion" *ngIf="detailData.station">
+							<div *ngIf="detailData.station"
+								class="client-ubicacion">
 								{{detailData.station.name}}
 							</div>
 						</div>

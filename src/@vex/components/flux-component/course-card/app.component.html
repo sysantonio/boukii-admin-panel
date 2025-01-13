@@ -69,8 +69,8 @@
 								</div>
 							</div>
 							<div style="justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-								<div style="width: 10px; height: 10px; background: #C7D0D3; border-radius: 9999px"></div>
-								<div style="font-size: 14px; font-family: DM Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">
+								<div style="width: 10px; height: 10px; background: #E70F0F; border-radius: 9999px"></div>
+								<div>
 									{{"upcoming_day" | translate}}
 								</div>
 							</div>
@@ -183,7 +183,8 @@
 					style="color:var(--color-dark1);">
 				</p>
 			</div>
-			<div style="width: calc(50% - 10px);" *ngIf="!courseFormGroup.controls['is_flexible'].value">
+			<div *ngIf="!courseFormGroup.controls['is_flexible'].value"
+				style="width: calc(50% - 10px);">
 				<p class="label">
 					{{'price_per_course' | translate }}
 				</p>
@@ -255,7 +256,7 @@
 				</div>
 				<div>
 					<img *ngIf="detail"
-						(click)="edit.emit(3)"
+						(click)="edit.emit(2)"
 						src="assets/icons/icon/edit2.png"
 						alt
 						class="editbutton icon24">
@@ -279,7 +280,7 @@
 						<span>
 							{{courseFormGroup.controls['course_type'].value===1?(item.date | date:'dd.MM.yyyy'):((item.date | date:'dd.MM.yyyy')+'-'+(item.date_end | date:'dd.MM.yyyy'))}}
 						</span>
-						<span style="color: var(--color-gray1);">
+						<span style="color: var(--color-grey1);">
 							<!-- courseFormGroup.controls['course_type'].value===1?item.hour_start: -->
 							{{item.hour_start+'h-'+item.hour_end}}h
 						</span>

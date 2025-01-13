@@ -30,6 +30,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrivateDatesDialogComponent } from './private-dates-dialog/private-dates-dialog.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from './date-time-dialog-edit/date-time-dialog-edit.component';
+import { MatListModule } from '@angular/material/list';
 
 
 @NgModule({
@@ -59,7 +60,7 @@ import { DateTimeDialogEditComponent } from './date-time-dialog-edit/date-time-d
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    TranslateModule
+    TranslateModule, MatListModule
   ],
   declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent, PrivateDatesDialogComponent, DateTimeDialogEditComponent],
   exports: [AioTableComponent]

@@ -54,7 +54,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   user: any;
   id: any = null;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, private schoolService: SchoolService,
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, public router: Router, private schoolService: SchoolService,
     public courses: CoursesService
   ) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
@@ -182,7 +182,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     });
     this.courses.courseFormGroup.patchValue({ levelGrop })
   });
-
   Confirm(add: number) {
     this.courses.courseFormGroup.markAsUntouched()
     this.ModalFlux += add
@@ -350,8 +349,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
-    courseFormGroup.discounts = JSON.stringify(this.courses.courseFormGroup.controls['discounts'].value)
-    if (!courseFormGroup.options) delete courseFormGroup.options;
     this.mode === "create" ?
       this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])

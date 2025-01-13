@@ -750,6 +750,6 @@
   "no_extra_assigned": "Aucun extra attribué",
   "text_nomonitorset": "Aucun moniteur assigné",
   "no_user_reserved": "Aucun participant réservé",
-  "price_per_course": "Prix par cours"
-
+  "price_per_course": "Prix par cours",
+  "change": "Changer"
 }

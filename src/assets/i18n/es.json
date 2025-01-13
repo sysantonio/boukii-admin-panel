@@ -111,6 +111,7 @@
   "Jeudi": "Jueves",
   "Vendredi": "Viernes",
   "Samedi": "Sábado",
+  "change": "Cambiar",
   "Diamanche": "Domingo",
   "monday": "Lunes",
   "tuesday": "Martes",
@@ -770,5 +771,5 @@
   "no_extra_assigned": "No tiene extra asignado",
   "text_nomonitorset": "No tiene monitor asignado",
   "no_user_reserved": "Sin usuario reservado",
-  "price_per_course":"Precio por curso"
+  "price_per_course": "Precio por curso"
 }
