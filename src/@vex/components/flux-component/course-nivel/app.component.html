@@ -11,25 +11,23 @@ flex-direction: column;">
 				<div [style.color]="item.color"
 					style="font-size: 14px; font-weight: 600; display: flex;align-items: center; margin-bottom: 5px;">
 					<img src="assets/icons/icon/award.png"
-						class="icon24"
-						style="filter: var(--is-dark-theme,invert(1));">
+						class="icon24">
 					<span>
 						{{item.annotation}} {{item.level}}
 					</span>
 					<mat-icon *ngIf="!item.modal"
 						class="icon24"
-						style="margin-left:auto;filter: var(--is-dark-theme,invert(1));">
+						style="margin-left:auto;">
 						keyboard_arrow_up
 					</mat-icon>
 					<mat-icon *ngIf="item.modal"
 						class="icon24"
-						style="margin-left:auto;filter: var(--is-dark-theme,invert(1));">
+						style="margin-left:auto;">
 						keyboard_arrow_down
 					</mat-icon>
 				</div>
 				<div style="display: flex;align-items: center;">
 					<img src="assets/icons/icon/people.png"
-						style="filter: var(--is-dark-theme,invert(1));"
 						class="icon16">
 					<span>
 						{{find(courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',item.id)?.course_subgroups?.length}}g · {{item.max_participants ||
@@ -39,7 +37,6 @@ flex-direction: column;">
 					<div style="margin: auto;"></div>
 					<ng-container>
 						<img src="assets/icons/icon/calendar.png"
-							style="filter: var(--is-dark-theme,invert(1));"
 							class="icon16">
 						<span>
 							{{DateDiff(courseFormGroup.controls['date_start'].value,courseFormGroup.controls['date_end'].value) || 0}} {{'days' | translate}}
@@ -50,7 +47,6 @@ flex-direction: column;">
 					</ng-container>
 					<div style="margin: auto;"></div>
 					<img src="assets/icons/icon/ticket.png"
-						style="filter: var(--is-dark-theme,invert(1));"
 						class="icon16">
 					<span>
 						{{item.age_min}}/{{item.age_max}}
@@ -64,7 +60,7 @@ flex-direction: column;">
 					<div>
 						<ng-container *ngIf="checkbox">
 							<button (click)="changeMonitor.emit(ix)"
-								style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
+								style="margin-top: 0px !important;height: 38px; width: 128px;"
 								color="primary"
 								mat-raised-button
 								type="button">

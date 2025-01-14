@@ -611,36 +611,42 @@ body.dark-mode {
   width: 10px;
   font-size: 10px;
   min-width: 10px;
+  filter: var(--is-dark-theme, invert(1));
 }
 .icon16 {
   width: 16px;
   height: 16px;
   font-size: 16px;
   min-width: 16px;
+  filter: var(--is-dark-theme, invert(1));
 }
 .icon20 {
   width: 20px;
   height: 20px;
   font-size: 20px;
   min-width: 20px;
+  filter: var(--is-dark-theme, invert(1));
 }
 .icon24 {
   width: 24px;
   height: 24px;
   font-size: 24px;
   min-width: 24px;
+  filter: var(--is-dark-theme, invert(1));
 }
 .icon36 {
   width: 36px;
   height: 36px;
   font-size: 36px;
   min-width: 36px;
+  filter: var(--is-dark-theme, invert(1));
 }
 .icon40 {
   width: 40px;
   height: 40px;
   font-size: 40px;
   min-width: 40px;
+  filter: var(--is-dark-theme, invert(1));
 }
 .mat-mdc-card {
   height: fit-content;

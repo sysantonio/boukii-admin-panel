@@ -1,5 +1,5 @@
 <div style="overflow-x: auto;overflow-y: hidden; height: 100%;">
-	<table>
+	<table >
 		<thead>
 			<tr style="height: 34px;">
 				<td style="color: var(--color-dark1);
@@ -14,7 +14,7 @@
 					</div>
 				</td>
 				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value;index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+					[style.backgroundColor]="selectDate===i?'var(--is-light-theme, #ffffff) var(--is-dark-theme, black)':' var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7)'"
 					[style.borderTop]="selectDate===i?'3px solid #E91E63':''"
 					(click)="selectDate=i;getAvail(item)"
 					style="
@@ -30,7 +30,7 @@
 		</thead>
 		<tbody>
 			<tr style="border-bottom: 3px solid #dee6ea;">
-				<td>
+				<td style="background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, black);">
 					<app-form-select [table]="monitors"
 						[value]="find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor?
 						(find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.first_name + ' ' + find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor.last_name)
@@ -41,14 +41,14 @@
 					</app-form-select>
 				</td>
 				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+					[style.backgroundColor]="selectDate===i?'var(--is-light-theme, #ffffff) var(--is-dark-theme, black)':'var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7)'"
 					[style.color]="find(item.course_groups,'degree_id',level.id).course_subgroups[subgroup_index].monitor_id?modified[i]?'#FFCF25':'#31C044':'#C7D0D3'"
 					(click)="selectDate=i;getAvail(item)">
 					<mat-icon class="icon10">circle</mat-icon>
 				</td>
 			</tr>
 			<tr style="height: 34px;">
-				<td style="font-size: 12px; font-weight: 600;">
+				<td style="font-size: 12px; font-weight: 600;background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, black);">
 					<div class="flexicon">
 						<img src="assets/icons/icon/alumno.png"
 							class="icon24">
@@ -60,12 +60,12 @@
 					</div>
 				</td>
 				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''">
+					[style.backgroundColor]="selectDate===i?'var(--is-light-theme, #ffffff) var(--is-dark-theme, black)':' var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7)'">
 				</td>
 			</tr>
 			<tr *ngFor="let item of courseFormGroup.controls['booking_users'].value; index as i">
 				<ng-container *ngIf="item.course_subgroup_id === find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].id">
-					<td style="text-align-last: start;">
+					<td style="text-align-last: start;background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, black);">
 						<div class="flexicon"
 							style="font-size: 12px; font-weight: 600;">
 							{{item.client.first_name}} {{item.client.last_name}}
@@ -77,7 +77,7 @@
 						</span>
 					</td>
 					<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-						[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+						[style.backgroundColor]="selectDate===i?'var(--is-light-theme, #ffffff) var(--is-dark-theme, black)':' var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7)'"
 						[style.color]="item.attended?'#31C044':modified2[i]?'#FFCF25':item.date<today?'#E70F0F':'#C7D0D3'"
 						(click)="selectDate=i;getAvail(item)">
 						<mat-icon class="icon10">circle</mat-icon>
@@ -85,14 +85,14 @@
 				</ng-container>
 			</tr>
 			<tr *ngIf="!find(courseFormGroup.controls['booking_users'].value,'course_subgroup_id',find(courseFormGroup.controls['course_dates'].value[selectDate].course_groups,'degree_id',level.id).course_subgroups[subgroup_index].id)">
-				<td style="text-align-last: start;">
+				<td style="text-align-last: start;background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, black);">
 					<div class="flexicon"
 						style="font-size: 12px; font-weight: 600;">
 						{{"no_user_reserved" | translate}}
 					</div>
 				</td>
 				<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as i"
-					[style.backgroundColor]="selectDate===i?'var(--color-grey1)':''"
+					[style.backgroundColor]="selectDate===i?'var(--is-light-theme, #ffffff) var(--is-dark-theme, black)':' var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7)'"
 					(click)="selectDate=i;getAvail(item)">
 				</td>
 			</tr>
@@ -164,12 +164,12 @@
 			type="button">
 			{{'cancel' | translate }}
 		</button>
-		<!--<button (click)="cambiarModal=false"
+		<!-- <button (click)="cambiarModal=false"
 			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: 20px;"
 			color="primary"
 			mat-raised-button
 			type="button">
 			{{'save' | translate }}
-		</button>-->
+		</button> -->
 	</div>
 </vex-flux-modal>

@@ -9,6 +9,11 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+:root {
+  --white: var(--is-light-theme, #ffffff) var(--is-dark-theme, black);
+  --grey: var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7);
+}
+
 .modal-content {
   background-color: #fefefe;
   padding: 20px;
@@ -24,7 +29,7 @@
 
 .close:hover,
 .close:focus {
-  color: var(--color-dark1);
+  color: var(--color-grey5);
   text-decoration: none;
   cursor: pointer;
 }
@@ -54,13 +59,14 @@
 
 table {
   table-layout: fixed;
+  min-width: 100%;
   td {
     min-width: 90px;
     min-height: 48px;
     text-align-last: center;
   }
   tr > td:first-child {
-    min-width: 200px;
+    min-width: 100px;
   }
   tbody {
     td {
@@ -80,5 +86,5 @@ button {
   border-radius: 3px !important;
 }
 td:hover {
-  background-color: var(--color-grey3);
+  background-color: var(--color-grey5);
 }
