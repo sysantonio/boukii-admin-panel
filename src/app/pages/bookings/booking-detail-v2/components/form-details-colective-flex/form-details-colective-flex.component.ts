@@ -60,7 +60,7 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
       const courseDatesArray = this.fb.array(
         this.course.course_dates.map((date, index) => {
           // Validar si la fecha es hoy o en el futuro y si cumple con la hora de inicio
-          const dateMoment = moment(date.date, "dd.MM.yyyy");
+          const dateMoment = moment(date.date, "");
           const currentTime = moment(); // Hora actual
 
           // Verificamos si la fecha es hoy

@@ -65,13 +65,13 @@
                 <ul style="margin: 2% 0 0 0;" *ngIf="course.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
-                  <li>{{course.course_dates[0].date|date:'dd.MM.yyyy'}},
+                  <li>{{course.course_dates[0].date|date:'yyyy-MM-dd'}},
                     <i
                       style="text-align: right; float: right;">
                       {{course.course_dates[0].hour_start|date:'HH:mm'}}h -
                       {{course.course_dates[0].hour_end|date:'HH:mm'}}h</i>
                   </li>
-                  <li>{{course.course_dates[course.course_dates.length-1].date|date:'dd.MM.yyyy'}},
+                  <li>{{course.course_dates[course.course_dates.length-1].date|date:'yyyy-MM-dd'}},
                     <i
                       style="text-align: right; float: right;">
                       {{course.course_dates[course.course_dates.length-1].hour_start|date:'HH:mm'}}h -
@@ -82,7 +82,7 @@
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
                   <li
-                    *ngFor="let item of course.course_dates">{{item.date|date:'dd.MM.yyyy'}}
+                    *ngFor="let item of course.course_dates">{{item.date|date:'yyyy-MM-dd'}}
                     <i
                       style="text-align: right; float: right;">
                       {{item.hour_start}}h - {{item.hour_end}}h</i>
@@ -145,7 +145,7 @@
                       <mat-label>{{'courses.date_reservable' |
                         translate}}</mat-label>
                       <input matInput id="dateFrom"
-                        [value]="course.date_start_res | date: 'dd.MM.yyyy'"
+                        [value]="course.date_start_res | date: 'yyyy-MM-dd'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>
@@ -154,7 +154,7 @@
                       <mat-label>{{'courses.date_reservable_to' |
                         translate}}</mat-label>
                       <input matInput id="dateTo"
-                        [value]="course.date_end_res | date: 'dd.MM.yyyy'"
+                        [value]="course.date_end_res | date: 'yyyy-MM-dd'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>

@@ -1108,7 +1108,7 @@ export class BookingDetailModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, 'dd.MM.yyyy').format('YYYY-MM-DD');
+      const currentDate = moment(date, 'yyyy-MM-dd').format('YYYY-MM-DD');
           if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).isSameOrBefore(moment(date))) {
             return 'with-course-private';
           } else {
@@ -1119,7 +1119,7 @@ export class BookingDetailModalComponent implements OnInit {
   }
 
   canBook(date: any) {
-    return moment(date, 'dd.MM.yyyy').isSameOrAfter(moment(this.minDate));
+    return moment(date, 'yyyy-MM-dd').isSameOrAfter(moment(this.minDate));
   }
 
   getLevelColor(id: any) {
@@ -1216,7 +1216,7 @@ export class BookingDetailModalComponent implements OnInit {
     let ret = [];
     this.courses.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD'));
+        ret.push(moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD'));
       });
     });
 
@@ -1227,7 +1227,7 @@ export class BookingDetailModalComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD'));
+        ret.push(moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD'));
       });
     });
 

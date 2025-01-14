@@ -65,8 +65,8 @@
                 </p>
                 <p
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
-                  <strong>{{ "register" | translate }}</strong>: 
-                  {{ bookingsToCreate[0].courseDates[0].created_at | date: "dd.MM.yyyy HH:mm" }}h
+                  <strong>{{ "register" | translate }}</strong>:
+                  {{ bookingsToCreate[0].courseDates[0].created_at | date: "yyyy-MM-dd HH:mm" }}h
                 </p>
                 <p
                   style="font-size: 10px;padding: 0 5% 0 5%;width: 100%;float: left;color:#868686">
@@ -744,7 +744,7 @@
                       <span
                         style="margin-left: 5px;font-weight: normal;">
                         <span style="color:white;">
-                          {{booking.created_at | date: 'dd.MM.yyyy HH:mm'}}h
+                          {{booking.created_at | date: 'yyyy-MM-dd HH:mm'}}h
                         </span>
                       </span>
                     </div>
@@ -1255,7 +1255,7 @@
                   <div *ngFor="let item of bonus; let i = index">
                     <div class="col-left">
                       {{ item.log ? (item.log.created_at | date:
-                      "dd.MM.yyyy HH:mm") : getCurrentDateFormatted() }}<br>
+                      "yyyy-MM-dd HH:mm") : getCurrentDateFormatted() }}<br>
                       {{ item?.bonus?.code }}
                     </div>
                     <div class="col-right">
@@ -1288,15 +1288,15 @@
                 <ng-container *ngFor="let item of payments">
                   <div style="width: 100%; float:left" *ngIf="item.amount > 0">
                     <div style="float:left" *ngIf="item.status == 'refund'">
-                      {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:
+                      {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:
                       {{ "refund" | translate }}
                     </div>
                     <div style="float:left" *ngIf="item.status == 'no_refund'">
-                      {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:
+                      {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:
                       {{ "no_refund" | translate }}
                     </div>
                     <div style="float:left" *ngIf="item.status == 'paid'">
-                      {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:
+                      {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:
                       {{ "payment" | translate }} - {{ item.notes | translate }}
                     </div>
                     <div style="float:right" *ngIf="item.status === 'refund'">
@@ -1334,61 +1334,61 @@
               <ng-container *ngFor="let item of bookingLog">
                 <div *ngIf="item.action == 'created by api'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "api_created" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'page_created'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "page_created" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'refund'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "cancel_refund" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'refund_boukii_pay'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "refund_boukii_pay" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'full_cancel'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "full_cancel" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'partial_cancel'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "partial_cancel" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'no_refund'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "cancel_no_refund" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'refund_cash'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "refund_cash" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'voucher_refund'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "voucher_refund" | translate }}
                   </div>
                 </div>
                 <div *ngIf="item.action == 'update'">
                   <div class="list-box">
-                    {{ item.created_at | date: "dd.MM.yyyy hh:mm:ss" }}:<br>
+                    {{ item.created_at | date: "yyyy-MM-dd hh:mm:ss" }}:<br>
                     {{ "mails.type3" | translate }}
                   </div>
                 </div>

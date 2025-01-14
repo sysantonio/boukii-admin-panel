@@ -296,9 +296,9 @@
                   {{selectedItem.sport.name}}
                 </p>
                 <p>
-                  {{selectedItem?.course_dates[0].date | date: 'dd.MM.yyyy'}} -
+                  {{selectedItem?.course_dates[0].date | date: 'yyyy-MM-dd'}} -
                   {{selectedItem?.course_dates[selectedItem.course_dates.length
-                  - 1].date | date: 'dd.MM.yyyy'}}
+                  - 1].date | date: 'yyyy-MM-dd'}}
                 </p>
                 <p style="text-wrap: balance;">
                   {{getAvailableWeekDays(selectedItem.settings)}}
@@ -355,10 +355,10 @@
                           {{course.sport.name}}
                         </p>
                         <p>
-                          {{course?.course_dates[0].date | date: 'dd.MM.yyyy'}}
+                          {{course?.course_dates[0].date | date: 'yyyy-MM-dd'}}
                           -
                           {{course?.course_dates[course.course_dates.length -
-                          1].date | date: 'dd.MM.yyyy'}}
+                          1].date | date: 'yyyy-MM-dd'}}
                         </p>
                         <p style="text-wrap: balance;">
                           {{getAvailableWeekDays(course.settings)}}
@@ -440,7 +440,7 @@
                         <mat-select>
                           <ng-container *ngFor="let selectedCourseDateItem of selectedItem.course_dates; let selectedItemCourseDateIndex = index" >
                             <mat-option *ngIf="canBook(selectedCourseDateItem.date)"
-                            [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'dd.MM.yyyy' }}</mat-option>
+                            [value]="selectedCourseDateItem.date" (onSelectionChange)="setCourseDateItemPrivateNoFlexible(courseDate, selectedCourseDateItem)">{{ selectedCourseDateItem.date | date: 'yyyy-MM-dd' }}</mat-option>
                           </ng-container>
 
                         </mat-select>
@@ -653,7 +653,7 @@
                                   <mat-checkbox
                                     [checked]="itemExist(item)"
                                     (change)="addReservableCourseDate(item, $event)">
-                                    {{item.date | date: 'dd.MM.yyyy'}} -
+                                    {{item.date | date: 'yyyy-MM-dd'}} -
                                     <i style="float: right;">{{item.hour_start}}
                                       -
                                       {{item.hour_end}}</i></mat-checkbox>
@@ -664,7 +664,7 @@
                               <ng-container
                                 *ngFor="let item of course.course_dates">
                                 <li *ngIf="canBook(item.date)">
-                                  {{ item.date | date: 'dd.MM.yyyy'}}
+                                  {{ item.date | date: 'yyyy-MM-dd'}}
                                   <i style="float: right;">{{item.hour_start}} -
                                     {{item.hour_end}}</i>
                                 </li>
@@ -823,7 +823,7 @@
             </div>
             <div style="width: 100%;">
               <p style="float: left;width: 60%;text-align: left;color:white">
-                <b>{{ minDate | date: 'dd.MM.yyyy'}}</b>
+                <b>{{ minDate | date: 'yyyy-MM-dd'}}</b>
                 {{ minDate | date: 'HH:mm'}}
               </p>
               <p style="float: left;width: 40%;text-align: right;color:#FAC710">
@@ -967,7 +967,7 @@
                 <ul>
                   <ng-container *ngIf="item.courseDates[0].course?.is_flexible">
                     <li *ngFor="let courseDateDate of item.courseDates">
-                      {{ courseDateDate.date | date : 'dd.MM.yyyy'}}
+                      {{ courseDateDate.date | date : 'yyyy-MM-dd'}}
                       <i style="float: right;">{{ courseDateDate.hour_start }} -
                         {{courseDateDate?.hour_end}}h</i>
                     </li>
@@ -975,7 +975,7 @@
                   <ng-container
                     *ngIf="!item.courseDates[0].course?.is_flexible">
                     <li *ngFor="let courseDateDate of item.courseDates">
-                      {{ courseDateDate?.date | date: 'dd.MM.yyyy'
+                      {{ courseDateDate?.date | date: 'yyyy-MM-dd'
                       }}<i style="float: right;">
                         {{courseDateDate?.hour_start}} -
                         {{courseDateDate?.course?.course_type === 1 ?
@@ -1451,7 +1451,7 @@
                   style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                   <p style="font-size: 12px;color:#868686">
                     <strong>{{'register' | translate}}</strong>:{{ minDate |
-                    date: 'dd.MM.yyyy'}}
+                    date: 'yyyy-MM-dd'}}
                     {{ minDate | date: 'HH:mm'}}
                   </p>
                   <p style="font-size: 12px;color:#868686">

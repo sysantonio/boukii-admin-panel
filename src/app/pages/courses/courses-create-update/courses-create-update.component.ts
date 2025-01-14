@@ -340,7 +340,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           this.crudService.list('/seasons', 1, 10000, 'desc', 'id', '&school_id=' + data.data.id + '&is_active=1')
             .subscribe((season) => {
               this.season = season.data[0];
-              this.minDate = moment(this.season.start_date, 'dd.MM.yyyy').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'dd.MM.yyyy').toDate() : this.minDate;
+              this.minDate = moment(this.season.start_date, 'yyyy-MM-dd').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'yyyy-MM-dd').toDate() : this.minDate;
               this.maxDate = moment(this.season.end_date).toDate();
 
               this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
@@ -615,8 +615,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
                   this.dataSourceDatePrivate.data.push({ dateFrom: period.from, dateTo: period.to, active: period.active, id: period.id, main: true, mainPeriod: periodIdx });
 
-                  const from = moment(period.from, 'dd.MM.yyyy').startOf('day');
-                  const to = moment(period.to, 'dd.MM.yyyy').startOf('day');
+                  const from = moment(period.from, 'yyyy-MM-dd').startOf('day');
+                  const to = moment(period.to, 'yyyy-MM-dd').startOf('day');
 
                   this.defaults.course_dates.forEach(element => {
                     const current = moment(element.date).startOf('day');
@@ -1262,8 +1262,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
       if (main) {
         this.dataSourceDatePrivate.data[index].active = false;
         this.defaults.settings.periods[index].active = false;
-        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'dd.MM.yyyy').add(-1, 'd');
-        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'dd.MM.yyyy').add(1, 'd');
+        const from = moment(this.dataSourceDatePrivate.data[index].dateFrom, 'yyyy-MM-dd').add(-1, 'd');
+        const to = moment(this.dataSourceDatePrivate.data[index].dateTo, 'yyyy-MM-dd').add(1, 'd');
         this.defaults.course_dates.forEach(element => {
           if (moment(element.date).isBetween(from, to)) {
 
@@ -1564,7 +1564,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
         this.daysDatesLevels.push({ date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '') });
 
         if (this.mode === 'update') {
-          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
+          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
           if (!existDate) {
             this.defaults.course_dates.push({
               date: currentDate.format('YYYY-MM-DD'),
@@ -1574,8 +1574,8 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
           } else {
 
             this.dataSourceDatePrivate.data.forEach(element => {
-              const from = moment(element.dateFrom, 'dd.MM.yyyy').startOf('day');
-              const to = moment(element.dateTo, 'dd.MM.yyyy').startOf('day');
+              const from = moment(element.dateFrom, 'yyyy-MM-dd').startOf('day');
+              const to = moment(element.dateTo, 'yyyy-MM-dd').startOf('day');
               const currentDate = moment(existDate.date).startOf('day');
 
               if (currentDate.isBetween(from, to) || currentDate.isSame(from) || currentDate.isSame(to)) {
@@ -1614,7 +1614,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     if (this.mode === 'update') {
       this.dataSource.data.forEach(element => {
-        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
+        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
         if (!existDate) {
 
           const dataNew = {
@@ -1668,7 +1668,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
           }
         } else {
-          this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'), dateString: moment(element.date, 'dd.MM.yyyy').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
+          this.daysDatesLevels.push({ date: moment(element.date, 'yyyy-MM-dd').format('YYYY-MM-DD'), dateString: moment(element.date, 'yyyy-MM-dd').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
         }
 
       });
@@ -1847,7 +1847,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === moment(this.selectedDate, 'dd.MM.yyyy').format('YYYY-MM-DD')) {
+        if (moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(this.selectedDate, 'yyyy-MM-dd').format('YYYY-MM-DD')) {
           courseDate.groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.subgroups[subGroupIndex]?.monitor;
@@ -1924,7 +1924,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
       if (!level.old) {
         this.defaults.course_dates.forEach(courseDate => {
-          if (moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === moment(this.selectedDate, 'dd.MM.yyyy').format('YYYY-MM-DD')) {
+          if (moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(this.selectedDate, 'yyyy-MM-dd').format('YYYY-MM-DD')) {
             courseDate.groups.forEach(group => {
               if (group.degree_id === level.id && !monitorSet) {
 
@@ -2265,7 +2265,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
     if (this.defaults.course_type === 2 && this.defaults.is_flexible && this.periodeMultiple) {
       dates = this.dataSourceDatePrivate.data.filter((date) => date.active || date.active === 1);
-      sortedDates = dates.map(d => moment(d.dateFrom, 'dd.MM.yyyy').toDate()).sort((a, b) => a - b);
+      sortedDates = dates.map(d => moment(d.dateFrom, 'yyyy-MM-dd').toDate()).sort((a, b) => a - b);
     } else {
 
       dates = this.dataSource.data.filter((date) => date.active || date.active === 1);

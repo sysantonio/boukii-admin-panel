@@ -51,7 +51,7 @@
           [ngModelOptions]="{standalone: true}">
           <mat-option *ngFor="let date of selectedDates" [value]="date.id"
             [disabled]="!isAfter(date)">
-            {{ date.date | date: 'dd.MM.yyyy' }}
+            {{ date.date | date: 'yyyy-MM-dd' }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -98,7 +98,7 @@
         <mat-label>{{'dates' | translate}}</mat-label>
         <mat-select multiple [formControl]="datesControl">
           <mat-option *ngFor="let date of selectedDates" [value]="date.id" [disabled]="!isAfter(date)">
-            {{ date.date | date: 'dd.MM.yyyy' }}
+            {{ date.date | date: 'yyyy-MM-dd' }}
           </mat-option>
         </mat-select>
       </mat-form-field>

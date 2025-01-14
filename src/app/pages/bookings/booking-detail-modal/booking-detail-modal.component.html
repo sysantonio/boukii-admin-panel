@@ -40,7 +40,7 @@
                   <span style="color:white">
                     {{
                     bookingsToCreate[0].courseDates[0].created_at | date:
-                    'dd.MM.yyyy'}} {{
+                    'yyyy-MM-dd'}} {{
                     bookingsToCreate[0].courseDates[0].created_at | date:
                     'HH:mm'}}
                   </span>
@@ -633,13 +633,13 @@
                 <span style="width: 100%; float:left">
                   <p style="float:left"
                     *ngIf="item.status == 'refund'">{{item.created_at | date:
-                    'dd.MM.yyyy hh:mm:ss'}}: {{'refund' | translate }}</p>
+                    'yyyy-MM-dd hh:mm:ss'}}: {{'refund' | translate }}</p>
                   <p style="float:left"
                     *ngIf="item.status == 'no_refund'">{{item.created_at | date:
-                    'dd.MM.yyyy hh:mm:ss'}}: {{'no_refund' | translate }}</p>
+                    'yyyy-MM-dd hh:mm:ss'}}: {{'no_refund' | translate }}</p>
                   <p style="float:left"
                     *ngIf="item.status == 'paid'">{{item.created_at | date:
-                    'dd.MM.yyyy hh:mm:ss'}}: {{'payment' | translate }}</p>
+                    'yyyy-MM-dd hh:mm:ss'}}: {{'payment' | translate }}</p>
                   <p style="float:right" *ngIf="item.status === 'refund'">
                     {{item.amount}} {{bookingsToCreate.length > 0 ?
                     bookingsToCreate[0].courseDates[0].currency : ''}}</p>
@@ -662,39 +662,39 @@
                 <span style="width: 100%; float:left">
                   <p style="float:left"
                     *ngIf="item.action == 'created by api'">{{item.created_at |
-                    date: 'dd.MM.yyyy hh:mm:ss'}}: {{'api_created' | translate
+                    date: 'yyyy-MM-dd hh:mm:ss'}}: {{'api_created' | translate
                     }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'refund'">{{item.created_at | date:
-                    'dd.MM.yyyy hh:mm:ss'}}: {{'cancel_refund' | translate
+                    'yyyy-MM-dd hh:mm:ss'}}: {{'cancel_refund' | translate
                     }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'refund_boukii_pay'">{{item.created_at
-                    | date: 'dd.MM.yyyy hh:mm:ss'}}: {{'refund_boukii_pay' |
+                    | date: 'yyyy-MM-dd hh:mm:ss'}}: {{'refund_boukii_pay' |
                     translate }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'full_cancel'">{{item.created_at |
-                    date: 'dd.MM.yyyy hh:mm:ss'}}: {{'full_cancel' | translate
+                    date: 'yyyy-MM-dd hh:mm:ss'}}: {{'full_cancel' | translate
                     }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'partial_cancel'">{{item.created_at |
-                    date: 'dd.MM.yyyy hh:mm:ss'}}: {{'partial_cancel' |
+                    date: 'yyyy-MM-dd hh:mm:ss'}}: {{'partial_cancel' |
                     translate }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'no_refund'">{{item.created_at | date:
-                    'dd.MM.yyyy hh:mm:ss'}}: {{'cancel_no_refund' | translate
+                    'yyyy-MM-dd hh:mm:ss'}}: {{'cancel_no_refund' | translate
                     }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'refund_cash'">{{item.created_at |
-                    date: 'dd.MM.yyyy hh:mm:ss'}}: {{'refund_cash' | translate
+                    date: 'yyyy-MM-dd hh:mm:ss'}}: {{'refund_cash' | translate
                     }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'voucher_refund'">{{item.created_at |
-                    date: 'dd.MM.yyyy hh:mm:ss'}}: {{'voucher_refund' |
+                    date: 'yyyy-MM-dd hh:mm:ss'}}: {{'voucher_refund' |
                     translate }}</p>
                   <p style="float:left"
                     *ngIf="item.action == 'update'">{{item.created_at | date:
-                    'dd.MM.yyyy hh:mm:ss'}}: {{'mails.type3' | translate }}</p>
+                    'yyyy-MM-dd hh:mm:ss'}}: {{'mails.type3' | translate }}</p>
                 </span>
               </ng-container>
 

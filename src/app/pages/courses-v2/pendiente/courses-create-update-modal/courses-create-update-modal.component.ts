@@ -324,7 +324,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
             // Filtra el array de horas
             this.hours = this.hours.filter(hour => hour >= hourStart && hour <= hourEnd);
 
-            this.minDate = moment(this.season.start_date, 'dd.MM.yyyy').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'dd.MM.yyyy').toDate() : this.minDate;
+            this.minDate = moment(this.season.start_date, 'yyyy-MM-dd').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'yyyy-MM-dd').toDate() : this.minDate;
             this.maxDate = moment(this.season.end_date).toDate();
 
             this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];
@@ -1312,7 +1312,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         this.daysDatesLevels.push({ date: currentDate.format('YYYY-MM-DD'), dateString: currentDate.locale('en').format('LLL').replace(' 0:00', '') });
 
         if (this.mode === 'update') {
-          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
+          const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === currentDate.format('YYYY-MM-DD'));
           if (!existDate) {
             this.defaults.course_dates.push({
               date: currentDate.format('YYYY-MM-DD'),
@@ -1350,7 +1350,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
     if (this.mode === 'update') {
       this.dataSource.data.forEach(element => {
-        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
+        const existDate = this.defaults.course_dates.find((c) => moment(c.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(element.date).format('YYYY-MM-DD'));
         if (!existDate) {
 
           const dataNew = {
@@ -1403,7 +1403,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
 
           }
         } else {
-          this.daysDatesLevels.push({ date: moment(element.date, 'dd.MM.yyyy').format('YYYY-MM-DD'), dateString: moment(element.date, 'dd.MM.yyyy').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
+          this.daysDatesLevels.push({ date: moment(element.date, 'yyyy-MM-dd').format('YYYY-MM-DD'), dateString: moment(element.date, 'yyyy-MM-dd').locale(this.translateService.getDefaultLang()).format('LLL').replace(' 0:00', '') });
         }
 
       });
@@ -1628,7 +1628,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
     if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date, 'dd.MM.yyyy').format('YYYY-MM-DD') === moment(this.selectedDate, 'dd.MM.yyyy').format('YYYY-MM-DD')) {
+        if (moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(this.selectedDate, 'yyyy-MM-dd').format('YYYY-MM-DD')) {
           courseDate.groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.subgroups[subGroupIndex]?.monitor;
@@ -1708,7 +1708,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
           this.defaults.course_dates.forEach(courseDate => {
             if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
-              this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date, 'dd.MM.yyyy'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
+              this.crudService.post('/admin/monitors/available/' + monitor.id, { date: moment(courseDate.date, 'yyyy-MM-dd'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end })
                 .subscribe((result: any) => {
 
                   if (result.data.available) {
@@ -2176,7 +2176,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
     const year = date.getFullYear(); // Obtiene el año
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtiene el mes (0 indexado, por eso +1) y lo formatea con dos dígitos
     const day = String(date.getDate()).padStart(2, '0'); // Obtiene el día y lo formatea con dos dígitos
-    return `${year}-${month}-${day}`; // Retorna en formato dd.MM.yyyy
+    return `${year}-${month}-${day}`; // Retorna en formato yyyy-MM-dd
   }
 
   checkStep2PrivateNoFlex(stepper: MatStepper) {

@@ -1467,7 +1467,7 @@ export class MonitorDetailComponent {
       const currentWeekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 1 });
 
       const week = {
-        startWeek: format(currentWeekStart, 'dd.MM.yyyy'),
+        startWeek: format(currentWeekStart, 'yyyy-MM-dd'),
         startDay: this.formatDayWithFrenchInitial(max([startOfMonth(this.currentDate), currentWeekStart])),
         endDay: this.formatDayWithFrenchInitial(min([endOfMonth(this.currentDate), currentWeekEnd]))
       };

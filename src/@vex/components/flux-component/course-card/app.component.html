@@ -96,7 +96,7 @@
 			<p style="color: white;">
 				{{"register"| translate}}:
 				<span style="font-weight: 600; color: white;">
-					{{courseFormGroup.controls['created_at'].value | date:'dd.MM.yyyy HH:mm'}}h
+					{{courseFormGroup.controls['created_at'].value | date:'yyyy-MM-dd HH:mm'}}h
 				</span>
 			</p>
 			<p *ngIf="courseFormGroup.controls['user'].value"
@@ -232,7 +232,7 @@
 					</p>
 					<p [class]="courseFormGroup.controls['date_start'].value?'':'emptyText'"
 						style="color:var(--color-dark1); font-size: 12px;">
-						{{courseFormGroup.controls['date_start'].value | date:'dd.MM.yyyy'}}
+						{{courseFormGroup.controls['date_start'].value | date:'yyyy-MM-dd'}}
 					</p>
 				</div>
 				<div style="width: 100%">
@@ -241,7 +241,7 @@
 					</p>
 					<p [class]="courseFormGroup.controls['date_end'].value?'':'emptyText'"
 						style="color:var(--color-dark1);font-size: 12px;">
-						{{courseFormGroup.controls['date_end'].value | date:'dd.MM.yyyy'}}
+						{{courseFormGroup.controls['date_end'].value | date:'yyyy-MM-dd'}}
 					</p>
 				</div>
 				<div *ngIf="courseFormGroup.controls['course_type'].value>1"
@@ -278,7 +278,7 @@
 					<p *ngFor="let item of courseFormGroup.controls['course_dates'].value"
 						style="font-size: 14px;text-align-last: justify;display: flex;justify-content: space-between;">
 						<span>
-							{{courseFormGroup.controls['course_type'].value===1?(item.date | date:'dd.MM.yyyy'):((item.date | date:'dd.MM.yyyy')+'-'+(item.date_end | date:'dd.MM.yyyy'))}}
+							{{courseFormGroup.controls['course_type'].value===1?(item.date | date:'yyyy-MM-dd'):((item.date | date:'yyyy-MM-dd')+'-'+(item.date_end | date:'yyyy-MM-dd'))}}
 						</span>
 						<span style="color: var(--color-grey1);">
 							<!-- courseFormGroup.controls['course_type'].value===1?item.hour_start: -->

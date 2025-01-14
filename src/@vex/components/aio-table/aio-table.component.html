@@ -539,9 +539,9 @@
               [ngClass]="column.cssClasses" mat-cell>
               <!--Jours {{ getMinMaxDates(data[i].booking_users).days}}<br>-->
               <strong>{{ getMinMaxDates(data[i].booking_users).minDate | date:
-                'dd.MM.yyyy'}}<br>{{
+                'yyyy-MM-dd'}}<br>{{
                 getMinMaxDates(data[i].booking_users).maxDate| date:
-                'dd.MM.yyyy' }}</strong><br>
+                'yyyy-MM-dd' }}</strong><br>
               {{getMinMaxHours(data[i].booking_users).minHour}}h -
               {{getMinMaxHours(data[i].booking_users).maxHour}}h
             </td>
@@ -905,9 +905,9 @@
                   {{'days' | translate}}</span></strong><br>
               <span
                 style="text-align:center">{{findFirstActive(row[column.property]).min
-                | date: 'dd.MM.yyyy'}} -
+                | date: 'yyyy-MM-dd'}} -
                 {{findFirstActive(row[column.property]).max | date:
-                'dd.MM.yyyy'}}</span>
+                'yyyy-MM-dd'}}</span>
             </td>
           </ng-container>
         </ng-container>
@@ -927,7 +927,7 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
             <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label | translate }}</th>
-            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] | date: 'dd.MM.yyyy' }}</td>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] | date: 'yyyy-MM-dd' }}</td>
           </ng-container>
         </ng-container>-->
 
@@ -938,7 +938,7 @@
             <th *matHeaderCellDef class="uppercase" mat-header-cell
               mat-sort-header> {{ column.label | translate }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{
-              row[column.property] | date: 'dd.MM.yyyy' }}
+              row[column.property] | date: 'yyyy-MM-dd' }}
               <br> {{ row[column.property] | date: 'HH:mm' }}</td>
           </ng-container>
         </ng-container>
