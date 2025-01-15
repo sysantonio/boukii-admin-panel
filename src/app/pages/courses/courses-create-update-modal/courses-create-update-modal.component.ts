@@ -324,7 +324,7 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
             // Filtra el array de horas
             this.hours = this.hours.filter(hour => hour >= hourStart && hour <= hourEnd);
 
-            this.minDate = moment(this.season.start_date, 'yyyy-MM-dd').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'yyyy-MM-dd').toDate() : this.minDate;
+            this.minDate = moment(this.season.start_date, 'YYYY-MM-DD').isSameOrAfter(this.minDate) ? moment(this.season.start_date, 'yyyy-MM-dd').toDate() : this.minDate;
             this.maxDate = moment(this.season.end_date).toDate();
 
             this.holidays = this.season.vacation_days !== null && this.season.vacation_days !== '' ? JSON.parse(this.season.vacation_days) : [];

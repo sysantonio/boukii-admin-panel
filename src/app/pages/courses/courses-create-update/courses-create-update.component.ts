@@ -1847,7 +1847,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     if (!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-        if (moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(this.selectedDate, 'yyyy-MM-dd').format('YYYY-MM-DD')) {
+        if (moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
           courseDate.groups.forEach(group => {
             if (group.degree_id === level.id) {
               ret = group.subgroups[subGroupIndex]?.monitor;
@@ -1924,7 +1924,7 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
 
       if (!level.old) {
         this.defaults.course_dates.forEach(courseDate => {
-          if (moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === moment(this.selectedDate, 'yyyy-MM-dd').format('YYYY-MM-DD')) {
+          if (moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
             courseDate.groups.forEach(group => {
               if (group.degree_id === level.id && !monitorSet) {
 

@@ -194,9 +194,9 @@ export class UtilsService {
       const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
       if (
         course.course_dates.find(s => moment(s.date).format('YYYY-MM-DD') === currentDate) &&
-        moment(minDate, "yyyy-MM-dd")
+        moment(minDate, "YYYY-MM-DD")
           .startOf("day")
-          .isSameOrBefore(moment(date, "yyyy-MM-dd").startOf("day"))
+          .isSameOrBefore(moment(date, "YYYY-MM-DD").startOf("day"))
       ) {
         return `with-course ${color}`;
       } else {

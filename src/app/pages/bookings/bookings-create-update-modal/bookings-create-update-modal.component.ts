@@ -800,7 +800,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 price: +this.selectedItem.price,
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
-                date: moment(item.date, 'yyyy-MM-dd').format('YYYY-MM-DD')
+                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
               });
             }
           });
@@ -844,7 +844,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                 price: parseFloat(this.selectedItem.price),
                 currency: this.selectedItem.currency,
                 course: this.selectedItem,
-                date: moment(item.date, 'yyyy-MM-dd').format('YYYY-MM-DD')
+                date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
               });
             }
           });
@@ -1076,7 +1076,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
               notes: item.notes,
               school_notes: item.school_notes,
               degree_id: this.levelForm.value.id,
-              date: moment(item.date, 'yyyy-MM-dd').format('YYYY-MM-DD')
+              date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             });
             let bookingC = this.bookingsToCreate.find((b) => b.course_date_id === item.course_date_id && b.hour_start == item.hour_start)
             if (bookingC?.people?.length) {
@@ -1096,7 +1096,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
                   notes: item.notes,
                   school_notes: item.school_notes,
                   degree_id: item.degree_id,
-                  date: moment(item.date, 'yyyy-MM-dd').format('YYYY-MM-DD')
+                  date: moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
                 });
               })
             }
