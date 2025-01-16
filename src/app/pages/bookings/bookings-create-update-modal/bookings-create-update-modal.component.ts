@@ -879,7 +879,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             data.currency = item.currency
 
             data.course = this.selectedItem
-            data.date = moment(item.date, 'yyyy-MM-dd').format('YYYY-MM-DD')
+            data.date = moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             let people = [];
             if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
               people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
@@ -922,7 +922,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
             data.currency = item.currency
 
             data.course = this.selectedItem
-            data.date = moment(item.date, 'yyyy-MM-dd').format('YYYY-MM-DD')
+            data.date = moment(item.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
             let people = [];
             if (this.personsSelectedMultiple[item.course_date_id]?.[item.hour_start]) {
               people = this.personsSelectedMultiple[item.course_date_id][item.hour_start]
@@ -1676,8 +1676,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.compareCourseDates();
-      const currentDate = moment(date, 'yyyy-MM-dd').format('YYYY-MM-DD');
-      if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'yyyy-MM-dd').startOf('day').isSameOrBefore(moment(date, 'yyyy-MM-dd').startOf('day'))) {
+      const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      if (dates.indexOf(currentDate) !== -1 && moment(this.minDate, 'YYYY-MM-DD').startOf('day').isSameOrBefore(moment(date, 'YYYY-MM-DD').startOf('day'))) {
         return 'with-course';
       } else {
         return;
@@ -1690,7 +1690,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
 
     return (date: Date): MatCalendarCellCssClasses => {
       const dates = this.comparePrivateCourseDates();
-      const currentDate = moment(date, 'yyyy-MM-dd').format('YYYY-MM-DD');
+      const currentDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
       if (dates.indexOf(currentDate) !== -1 && moment(this.minDate).startOf('day').isSameOrBefore(moment(date).startOf('day'))) {
         return 'with-course-private';
       } else {
@@ -1701,8 +1701,8 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
   }
 
   canBook(date: any) {
-    const incomingDate = moment(date, 'yyyy-MM-dd').startOf('day');
-    const minDate = moment(this.minDate, 'yyyy-MM-dd').startOf('day');
+    const incomingDate = moment(date, 'YYYY-MM-DD').startOf('day');
+    const minDate = moment(this.minDate, 'YYYY-MM-DD').startOf('day');
     return incomingDate.isSameOrAfter(minDate);
   }
 
@@ -1957,7 +1957,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let ret = [];
     this.courses.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD'));
+        ret.push(moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD'));
       });
     });
 
@@ -1968,7 +1968,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     let ret = [];
     this.coursesMonth.forEach(course => {
       course.course_dates.forEach(courseDate => {
-        ret.push(moment(courseDate.date, 'yyyy-MM-dd').format('YYYY-MM-DD'));
+        ret.push(moment(courseDate.date, 'YYYY-MM-DD').format('YYYY-MM-DD'));
       });
     });
 

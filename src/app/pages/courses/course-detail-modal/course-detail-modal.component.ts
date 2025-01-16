@@ -386,7 +386,7 @@ export class CourseDetailModalComponent implements OnInit {
 
   hasMonitorAssigned(date, level, gIndex) {
 
-    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'yyyy-MM-dd').format('YYYY-MM-DD') === date.date);
+    const courseDate = this.defaults.course_dates.find((c) => moment(c.date, 'YYYY-MM-DD').format('YYYY-MM-DD') === date.date);
     const group = courseDate.course_groups.find((c) => c.course_date_id === courseDate.id && c.degree_id === level.id);
 
     if (group) {
@@ -618,7 +618,7 @@ export class CourseDetailModalComponent implements OnInit {
     if(!level.old) {
       this.defaults.course_dates.forEach(courseDate => {
 
-          if (moment(courseDate.date,'yyyy-MM-dd').format('YYYY-MM-DD') === moment(this.selectedDate,'yyyy-MM-dd').format('YYYY-MM-DD')) {
+          if (moment(courseDate.date,'YYYY-MM-DD').format('YYYY-MM-DD') === moment(this.selectedDate,'YYYY-MM-DD').format('YYYY-MM-DD')) {
             courseDate.course_groups.forEach(group => {
               if (group.degree_id === level.id) {
                   ret = group.course_subgroups[subGroupIndex]?.monitor;
@@ -680,7 +680,7 @@ export class CourseDetailModalComponent implements OnInit {
               this.defaults.course_dates.forEach(courseDate => {
                 if (moment(courseDate.date).format('YYYY-MM-DD') === moment(this.selectedDate).format('YYYY-MM-DD')) {
 
-                  this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'yyyy-MM-dd'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
+                  this.crudService.post('/admin/monitors/available/'+monitor.id, {date: moment(courseDate.date,'YYYY-MM-DD'), hour_start: courseDate.hour_start, hour_end: courseDate.hour_end})
                     .subscribe((result: any) => {
 
                       if (result.data.available) {
@@ -950,25 +950,25 @@ export class CourseDetailModalComponent implements OnInit {
           return acc;
         }, [0, 0]);
 
-        this.daysDatesLevels.push({date: moment(element.date, 'yyyy-MM-dd').format('YYYY-MM-DD'), dateString: moment(element.date, 'yyyy-MM-dd').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
+        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
         if (this.defaults.course_type === 2) {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'yyyy-MM-dd').format('YYYY-MM-DD'),
+            date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm")
           })
         } else {
 
           this.defaults.course_dates.push({
-            date: moment(element.date, 'yyyy-MM-dd').format('YYYY-MM-DD'),
+            date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'),
             hour_start: element.hour,
             hour_end: moment(hour, "HH:mm").add(hours, 'hours').add(minutes, 'minutes').format("HH:mm"),
             groups: []
           })
         }
       } else {
-        this.daysDatesLevels.push({date: moment(element.date, 'yyyy-MM-dd').format('YYYY-MM-DD'), dateString: moment(element.date, 'yyyy-MM-dd').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
+        this.daysDatesLevels.push({date: moment(element.date, 'YYYY-MM-DD').format('YYYY-MM-DD'), dateString: moment(element.date, 'YYYY-MM-DD').locale('es').format('LLL').replace(' 0:00', ''), active: element.active});
       }
 
     });
@@ -1096,7 +1096,7 @@ date_start: this.defaults.date_start_res
     const year = date.getFullYear(); // Obtiene el año
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Obtiene el mes (0 indexado, por eso +1) y lo formatea con dos dígitos
     const day = String(date.getDate()).padStart(2, '0'); // Obtiene el día y lo formatea con dos dígitos
-    return `${year}-${month}-${day}`; // Retorna en formato yyyy-MM-dd
+    return `${year}-${month}-${day}`; // Retorna en formato YYYY-MM-DD
   }
 
   checkAvailableMonitors(level: any) {
