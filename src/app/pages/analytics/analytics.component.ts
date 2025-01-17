@@ -69,11 +69,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     { label: 'cash', property: 'cash', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium'] },
-    { label: 'online', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'T.Boukii Web', property: 'boukii_web', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Link', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'admin', property: 'admin', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'vouchers', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium'] },
-    { label: 'gift_vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    /*{ label: 'gift_vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium'] },*/
     //{label: 'discount_code', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
     { label: 'total', property: 'total_cost', type: 'price', visible: true },
   ];
