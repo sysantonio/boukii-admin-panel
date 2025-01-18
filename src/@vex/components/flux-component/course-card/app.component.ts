@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { CoursesService } from 'src/service/courses.service';
 
 @Component({
   selector: 'vex-course-detail-card',
@@ -17,6 +18,8 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() close = new EventEmitter()
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
+
+  constructor(private CoursesService: CoursesService) { }
 
   week: any[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
@@ -39,5 +42,14 @@ export class CourseDetailCardComponent implements OnChanges {
       }
       this.courseFormGroup.patchValue({ course_dates })
     }
+  }
+  addMinutesToTime(timeString: string, minutesToAdd: string) {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes + ((this.CoursesService.duration.findIndex((value) => value == minutesToAdd) + 1) * 15));
+    const newHours = String(date.getHours()).padStart(2, "0");
+    const newMinutes = String(date.getMinutes()).padStart(2, "0");
+    return `${newHours}:${newMinutes}`;
   }
 }

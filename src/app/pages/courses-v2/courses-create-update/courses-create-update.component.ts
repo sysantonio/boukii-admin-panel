@@ -173,13 +173,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
             level.old = true;
             level.age_min = group.age_min
             level.age_max = group.age_max
-            level.max_participants = group.max_participants
+            level.max_participants = group.course_subgroups[0].max_participants
             level.course_subgroups = group.course_subgroups
           } level.visible = false;
         });
       });
       levelGrop.push({ ...level })
     });
+    console.log(levelGrop)
     this.courses.courseFormGroup.patchValue({ levelGrop })
   });
   Confirm(add: number) {
@@ -295,8 +296,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
       levelGrop[i].age_max = this.courses.courseFormGroup.controls['age_max'].value
       levelGrop[i].max_participants = this.courses.courseFormGroup.controls['max_participants'].value
       for (const course of course_dates) {
-        course.course_groups.push({ ...levelGrop[i], degree_id: levelGrop[i].id, course_subgroups: [] })
-        course.groups.push({ ...levelGrop[i], degree_id: levelGrop[i].id, subgroups: [], })
+        course.course_groups = [...course.course_groups, { ...levelGrop[i], degree_id: levelGrop[i].id, course_subgroups: [] }]
+        course.groups = [...course.groups, { ...levelGrop[i], degree_id: levelGrop[i].id, subgroups: [] }]
       }
     } else {
       for (const course of course_dates) {
@@ -305,17 +306,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
     }
     this.courses.courseFormGroup.patchValue({ levelGrop, course_dates })
-    this.addLevelSubgroup(levelGrop[i], 0, 1)
+    this.addLevelSubgroup(levelGrop[i], 0, true)
   }
 
-  addLevelSubgroup = (level: any, j: number, add: number) => {
+  addLevelSubgroup = (level: any, j: number, add: boolean) => {
     const course_dates = this.courses.courseFormGroup.controls['course_dates'].value
     for (const course of course_dates) {
       for (const group in course.groups) {
         if (course.groups[group].id === level.id) {
-          if (add > 0) {
-            course.groups[group].subgroups.push({ degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null })
-            course.course_groups[group].course_subgroups.push({ degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null })
+          if (add) {
+            course.groups[group].subgroups = [...course.groups[group].subgroups, { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }]
+            course.course_groups[group].course_subgroups = [...course.course_groups[group].course_subgroups, { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }]
           } else {
             course.groups[group].subgroups.splice(j, 1)
             course.course_groups[group].course_subgroups.splice(j, 1)
@@ -323,6 +324,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
       }
     }
+    console.log(course_dates)
     this.courses.courseFormGroup.patchValue({ course_dates })
   }
 
@@ -349,13 +351,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
-    this.mode === "create" ?
+    if (this.mode === "create") {
       this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
-      }) :
+      })
+    } else {
       this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe((data) => {
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
       })
+    }
   }
 
   getNumberArray = (num: number): any[] => ['intervalo', ...Array.from({ length: num }, (_, i) => `${i + 1}`)];;

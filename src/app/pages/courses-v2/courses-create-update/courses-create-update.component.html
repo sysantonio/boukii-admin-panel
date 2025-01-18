@@ -74,7 +74,8 @@
 				</mat-tab>
 			</mat-tab-group>
 			<div style="padding: 20px 20px 0;">
-				<mat-checkbox formControlName="is_flexible">
+				<mat-checkbox [disabled]="mode!=='update'"
+					formControlName="is_flexible">
 					{{'flexidates' | translate }}
 				</mat-checkbox>
 				<vex-flux-upload-img [imagePreviewUrl]="courses.courseFormGroup.controls['image'].value"
@@ -189,12 +190,11 @@
 					</div>
 					<div style="padding: 20px 20px 0px; display: flex; flex-wrap: nowrap; column-gap: 20px;">
 						<app-form-datepicker [required]="true"
-							[form]="courses.courseFormGroup"
-							[required]="true"
 							[min]="courses.courseFormGroup.controls['date_start'].value"
+							[value]="courses.courseFormGroup.controls['course_dates'].value[i].date"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value"
 							style="min-width: 0;width: 100%;"
-							name="date">
+							label="date">
 						</app-form-datepicker>
 						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_start"
 							[required]="true"
@@ -203,13 +203,20 @@
 							style="min-width: 0;width: 100%;"
 							label="start_hour">
 						</app-form-select>
-						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
+						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
+							[required]="true"
+							[table]="courses.duration"
+							(do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;"
+							style="min-width: 0;width: 100%;"
+							label="duration">
+						</app-form-select>
+						<!-- <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
 							[required]="true"
 							[table]="courses.hours"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_end=$event.option.value;"
 							style="min-width: 0;width: 100%;"
 							label="end_hour">
-						</app-form-select>
+						</app-form-select> -->
 					</div>
 				</div>
 				<div *ngIf="mode==='create'"
@@ -418,7 +425,7 @@
 								type="number"
 								Suffix="paxes">
 							</app-form-input>
-							<mat-icon (click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],0,1)"
+							<mat-icon (click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],0,true)"
 								color="primary"
 								style="color: white;
 										height: 30px;
@@ -437,7 +444,7 @@
 								<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
 									{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
 									<img *ngIf="j!==0"
-										(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],j,-1)"
+										(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],j,false)"
 										src="assets/icons/icon/delete.png"
 										alt
 										class="icon20"

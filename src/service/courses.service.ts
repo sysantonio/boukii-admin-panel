@@ -118,13 +118,13 @@ export class CoursesService {
 
   weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
-  default_course_dates: { date: Date, hour_start: string, hour_end: string, duration: string, date_end: Date, course_groups: any[], groups: any[] } =
+  default_course_dates: { date: Date, hour_start: string, /*hour_end: string,*/ duration: string, date_end: Date, course_groups: any[], groups: any[] } =
     {
       date: this.nowDate,
       hour_start: this.hours[0],
       duration: this.duration[0],
       date_end: this.nowDate,
-      hour_end: this.hours[4],
+      //hour_end: this.hours[4],
       course_groups: [],
       groups: []
     }

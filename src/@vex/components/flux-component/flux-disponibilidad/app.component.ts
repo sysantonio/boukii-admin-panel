@@ -88,8 +88,28 @@ export class FluxDisponibilidadComponent implements OnInit {
   onCheckboxChange(event: any, item: any): void {
     if (event.checked) this.selectUser.push(item);
     else this.selectUser = this.selectUser.filter((selectedItem: any) => selectedItem !== item);
-    this.modified2[item] = true
+    this.modified2[item.id] = true
+  }
+
+  Date = (v: string): Date => new Date(v)
+
+  SelectMonitor(event: any, selectDate: any) {
+    if (this.find(this.courseFormGroup.controls['course_dates'].value[selectDate].course_groups, 'degree_id', this.level.id).course_subgroups[this.subgroup_index].monitor_id != event.option.value.id) {
+      this.monitorSelect.emit({ monitor: event.option.value, i: selectDate });
+      this.modified[selectDate] = Boolean(this.find(this.courseFormGroup.controls['course_dates'].value[selectDate].course_groups, 'degree_id', this.level.id).course_subgroups[this.subgroup_index].monitor_id)
+      const course_dates = this.courseFormGroup.controls['course_dates'].value
+      for (const date in course_dates) {
+        if (!this.find(course_dates[date].course_groups, 'degree_id', this.level.id).course_subgroups[this.subgroup_index].monitor_id) {
+          this.getAvailable({ date: course_dates[date].date, endTime: course_dates[date].hour_end, minimumDegreeId: this.level.id, sportId: this.courseFormGroup.controls['sport_id'].value, startTime: course_dates[date].hour_start })
+            .then((data) => {
+              if (data.data.find((a: any) => a.id === event.option.value.id)) {
+                this.monitorSelect.emit({ monitor: event.option.value, i: date });
+                this.modified[date] = false
+              }
+            }
+            )
+        }
+      }
+    }
   }
 }
-
-
