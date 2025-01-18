@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { CoursesService } from 'src/service/courses.service';
 
 @Component({
@@ -19,9 +20,7 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
 
-  constructor(private CoursesService: CoursesService) { }
-
-  week: any[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+  constructor(public CoursesService: CoursesService, private TranslateService: TranslateService) { }
 
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)
   count = (array: any[], key: string) => Boolean(array.map((a: any) => a[key]).find((a: any) => a))
@@ -52,4 +51,5 @@ export class CourseDetailCardComponent implements OnChanges {
     const newMinutes = String(date.getMinutes()).padStart(2, "0");
     return `${newHours}:${newMinutes}`;
   }
+
 }

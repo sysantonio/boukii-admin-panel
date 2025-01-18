@@ -752,5 +752,7 @@
   "text_nomonitorset": "Nessun monitor assegnato",
   "no_user_reserved": "Nessun partecipante riservato",
   "price_per_course": "Prezzo per corso",
-  "change": "Cambiare"
+  "change": "Cambiare",
+    "all_days_week": "Tutti i giorni della settimana",
+  "workdays_only": "Solo giorni lavorativi"
 }

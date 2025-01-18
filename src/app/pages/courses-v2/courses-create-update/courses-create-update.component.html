@@ -327,13 +327,20 @@
 								style="min-width: 0;width: 100%;"
 								label="start_hour">
 							</app-form-select>
-							<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
+							<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
 								[required]="true"
-								[table]="courses.hours"
-								(do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_end=$event.option.value"
+								[table]="courses.duration"
+								(do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;"
 								style="min-width: 0;width: 100%;"
-								label="end_hour">
+								label="duration">
 							</app-form-select>
+							<!-- <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
+							[required]="true"
+							[table]="courses.hours"
+							(do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_end=$event.option.value"
+							style="min-width: 0;width: 100%;"
+							label="end_hour">
+						</app-form-select> -->
 						</div>
 					</ng-container>
 					<div *ngIf="PeriodoFecha>0 && mode === 'create'">

@@ -56,7 +56,16 @@ flex-direction: column;">
 			</div>
 			<ng-container *ngIf="item.modal">
 				<div *ngFor="let ix of find(courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',item.id).course_subgroups;index as i"
-					style="padding: 10px;width: 100%;border: 1px solid var(--color-grey2);display: flex;align-items: center;height: 60%;background-color: var(--color-grey5);">
+					style="padding: 10px;
+    						width: 100%;
+    						border: 1px solid var(--color-grey2);
+    						display: flex;
+    						align-items: flex-start;
+    						height: 60%;
+    						background-color: var(--color-grey5);
+    						flex-direction: column;
+    						flex-wrap: nowrap;
+								">
 					<div>
 						<ng-container *ngIf="checkbox">
 							<button (click)="changeMonitor.emit(ix)"
@@ -85,6 +94,14 @@ flex-direction: column;">
 							</ng-container>
 						</ng-container>
 					</div>
+					<ng-container *ngFor="let user of courseFormGroup.controls['booking_users'].value">
+						<div *ngIf="ix.id === user.course_subgroup_id"
+							style="padding: 10px;width: 100%;border: 1px solid var(--color-grey2);display: flex;align-items: center;height: 60%;background-color: var(--color-grey4);">
+							<mat-icon [style.color]="user.attended?'#31C044':Date(user.date)<today?'#E70F0F':'#C7D0D3'">circle</mat-icon>
+							{{user.client.first_name}} {{user.client.last_name}}
+						</div>
+					</ng-container>
+
 				</div>
 			</ng-container>
 		</div>

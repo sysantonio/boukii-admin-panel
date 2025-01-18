@@ -297,13 +297,8 @@
 				</div>
 			</ng-container>
 			<div *ngIf="courseFormGroup.controls['settings'].value"
-				style="color: var(--Dark-01, #222); font-size: 12px;font-style: normal;font-weight: 400;line-height: 16px;">
-				<ng-container *ngFor="let item of week; index as i"
-					style="width: 100%; color:var(--color-dark1);font-weight: 400;">
-					<ng-container *ngIf="courseFormGroup.controls['settings'].value.weekDays[+i]">
-						{{item | translate}}
-					</ng-container>
-				</ng-container>
+				style="font-size: 12px;font-style: normal;font-weight: 400;line-height: 16px;">
+				{{CoursesService.weekString()}}
 			</div>
 		</div>
 		<div *ngIf="courseFormGroup.controls['levelGrop'].value && count(courseFormGroup.controls['levelGrop'].value,'active') && !detail"
