@@ -180,7 +180,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
       });
       levelGrop.push({ ...level })
     });
-    console.log(levelGrop)
     this.courses.courseFormGroup.patchValue({ levelGrop })
   });
   Confirm(add: number) {
@@ -206,6 +205,30 @@ export class CoursesCreateUpdateComponent implements OnInit {
           this.courses.courseFormGroup.controls['course_type'].value === 1
         )
       ) {
+        if (!this.courses.courseFormGroup.controls["translations"].value?.es?.name) {
+          setTimeout(async () => {
+            const languages = ['fr', 'en', 'de', 'es', 'it'];
+            const { name, short_description, description } = this.courses.courseFormGroup.controls;
+            const translations: any = {};
+            try {
+              const translationPromises = languages.map(async (lang) => {
+                const translatedName = await this.crudService.translateText(name.value, lang.toUpperCase()).toPromise();
+                const translatedShortDescription = await this.crudService.translateText(short_description.value, lang.toUpperCase()).toPromise();
+                const translatedDescription = await this.crudService.translateText(description.value, lang.toUpperCase()).toPromise();
+
+                translations[lang] = {
+                  name: translatedName.data.translations[0].text,
+                  short_description: translatedShortDescription.data.translations[0].text,
+                  description: translatedDescription.data.translations[0].text,
+                };
+              });
+              await Promise.all(translationPromises);
+              this.courses.courseFormGroup.patchValue({ translations });
+            } catch (error) {
+              console.error("Error translating text:", error);
+            }
+          }, 1000);
+        }
       } else {
         this.courses.courseFormGroup.markAllAsTouched()
         this.ModalFlux -= add
@@ -233,43 +256,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
     else if (this.ModalFlux === 4) {
       if (this.courses.courseFormGroup.controls['course_type'].value === 1) {
         if (this.courses.courseFormGroup.controls['levelGrop'].value.some((item: any) => item.active)) {
-          if (!this.courses.courseFormGroup.controls["translations"].value.es.name) {
-            this.courses.courseFormGroup.patchValue({
-              translations:
-              {
-                es: {
-                  name: this.courses.courseFormGroup.controls["name"].value,
-                  short_description: this.courses.courseFormGroup.controls["short_description"].value,
-                  description: this.courses.courseFormGroup.controls["description"].value
-                },
-                en: {
-                  name: this.courses.courseFormGroup.controls["name"].value,
-                  short_description: this.courses.courseFormGroup.controls["short_description"].value,
-                  description: this.courses.courseFormGroup.controls["description"].value
-                },
-                fr: {
-                  name: this.courses.courseFormGroup.controls["name"].value,
-                  short_description: this.courses.courseFormGroup.controls["short_description"].value,
-                  description: this.courses.courseFormGroup.controls["description"].value
-                },
-                it: {
-                  name: this.courses.courseFormGroup.controls["name"].value,
-                  short_description: this.courses.courseFormGroup.controls["short_description"].value,
-                  description: this.courses.courseFormGroup.controls["description"].value
-                },
-                de: {
-                  name: this.courses.courseFormGroup.controls["name"].value,
-                  short_description: this.courses.courseFormGroup.controls["short_description"].value,
-                  description: this.courses.courseFormGroup.controls["description"].value
-                },
-              }
-            })
-          }
         } else {
           this.ModalFlux -= add
         }
       } else if (this.courses.courseFormGroup.controls['course_type'].value === 2) {
-
       } else {
         const groups = this.courses.courseFormGroup.controls['settings'].value.groups;
         if (groups.every((group: any) => group.groupName && group.ageMin > 0 && group.ageMax > 0 && group.price > 0)) {
@@ -324,7 +314,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
         }
       }
     }
-    console.log(course_dates)
     this.courses.courseFormGroup.patchValue({ course_dates })
   }
 
