@@ -450,7 +450,7 @@
 							<ng-container *ngFor="let subgroup of find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id).course_subgroups; index as j">
 								<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
 									{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
-									<img *ngIf="j!==0 && !subgroup.booking_users"
+									<img *ngIf="j!==0 && subgroup.booking_users.length>0"
 										(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],j,false)"
 										src="assets/icons/icon/delete.png"
 										alt

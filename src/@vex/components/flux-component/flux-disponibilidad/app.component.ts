@@ -65,7 +65,7 @@ export class FluxDisponibilidadComponent implements OnInit {
 
   changeMonitor(event: any) {
     const bookingUsers = this.courseFormGroup.controls['booking_users'].value;
-    for (const selectedUser of [...this.selectUser, ...this.selectUser, ...this.selectUser]) {
+    for (const selectedUser of this.selectUser) {
       const userToModify = bookingUsers.find((user: any) => user.id === selectedUser.id);
       if (userToModify) {
         userToModify.course_group_id = event.course_group_id;

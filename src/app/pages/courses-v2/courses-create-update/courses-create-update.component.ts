@@ -305,7 +305,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const course_dates = this.courses.courseFormGroup.controls['course_dates'].value
     for (const course of course_dates) {
       for (const group in course.course_groups) {
-        if (course.course_groups[group].id === level.id) {
+        if (course.course_groups[group].degree_id === level.id) {
           if (add) {
             if (this.mode === "create") course.groups[group].subgroups = [...course.groups[group].subgroups, { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }]
             course.course_groups[group].course_subgroups = [...course.course_groups[group].course_subgroups, { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }]
