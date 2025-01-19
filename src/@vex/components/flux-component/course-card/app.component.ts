@@ -42,14 +42,5 @@ export class CourseDetailCardComponent implements OnChanges {
       this.courseFormGroup.patchValue({ course_dates })
     }
   }
-  addMinutesToTime(timeString: string, minutesToAdd: string) {
-    const [hours, minutes] = timeString.split(":").map(Number);
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes + ((this.CoursesService.duration.findIndex((value) => value == minutesToAdd) + 1) * 15));
-    const newHours = String(date.getHours()).padStart(2, "0");
-    const newMinutes = String(date.getMinutes()).padStart(2, "0");
-    return `${newHours}:${newMinutes}`;
-  }
 
 }

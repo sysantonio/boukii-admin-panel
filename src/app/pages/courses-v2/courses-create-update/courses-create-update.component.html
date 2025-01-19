@@ -206,7 +206,8 @@
 						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
 							[required]="true"
 							[table]="courses.duration"
-							(do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;"
+							(do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;
+							courses.courseFormGroup.controls['course_dates'].value[i].hour_end=courses.addMinutesToTime(item.hour_start, $event.option.value)"
 							style="min-width: 0;width: 100%;"
 							label="duration">
 						</app-form-select>
@@ -219,8 +220,7 @@
 						</app-form-select> -->
 					</div>
 				</div>
-				<div *ngIf="mode==='create'"
-					style="padding: 20px;border-top: 1px solid #DEE6EA;">
+				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
 					<button (click)="addCourseDate()"
 						style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
 						type="button">
@@ -393,13 +393,13 @@
 				</div>
 				<div class="level"
 					style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px; gap: 10px;">
-					<ng-container *ngFor="let level of detailData.degrees;index as i">
+					<ng-container *ngFor="let level of courses.courseFormGroup.controls['levelGrop'].value;index as i">
 						<div style="display: flex;gap: 16px;">
 							<mat-checkbox [style.backgroundColor]="courses.courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
 								[style.color]="level.color"
 								[style.border]="'1px solid '+level.color"
 								[(ngModel)]="courses.courseFormGroup.controls['levelGrop'].value[i].active"
-								(click)="selectLevel($event,i) "
+								(click)="selectLevel($event,i)"
 								style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;">
 								{{level.annotation}} {{level.level}}
 							</mat-checkbox>
@@ -447,10 +447,10 @@
 							</mat-icon>
 						</div>
 						<ng-container *ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)">
-							<ng-container *ngFor="let item of find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id).course_subgroups; index as j">
+							<ng-container *ngFor="let subgroup of find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id).course_subgroups; index as j">
 								<div style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
 									{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
-									<img *ngIf="j!==0"
+									<img *ngIf="j!==0 && !subgroup.booking_users"
 										(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],j,false)"
 										src="assets/icons/icon/delete.png"
 										alt

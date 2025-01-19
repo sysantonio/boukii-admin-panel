@@ -282,7 +282,7 @@
 						</span>
 						<span style="color: var(--color-grey1);">
 							<!-- courseFormGroup.controls['course_type'].value===1?item.hour_start: -->
-							{{item.hour_start+'h-'+addMinutesToTime(item.hour_start, item.duration)}}h
+							{{item.hour_start+'h-'+CoursesService.addMinutesToTime(item.hour_start, item.duration)}}h
 						</span>
 						<span *ngIf="courseFormGroup.controls['is_flexible'].value">
 							{{courseFormGroup.controls['price'].value | number:'0.2'}}&nbsp;{{courseFormGroup.controls['currency'].value}}
