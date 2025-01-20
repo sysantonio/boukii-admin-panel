@@ -40,6 +40,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
   deleteEntity = '/monitors';
   totalSportHours: number = 0;
   totalPriceSell = 0;
+  totalMonitorPriceSell = 0;
   currency = '';
   sportHoursData: any[] = [];
   selectedFrom = null;
@@ -71,9 +72,10 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     { label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'T.Boukii Web', property: 'boukii_web', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'Link', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'no_paid', property: 'no_paid', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'admin', property: 'admin', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'vouchers', property: 'vouchers', type: 'price', visible: true, cssClasses: ['font-medium'] },
     /*{ label: 'gift_vouchers', property: 'sell_voucher', type: 'price', visible: true, cssClasses: ['font-medium'] },*/
     //{label: 'discount_code', property: 'vouchers_gift', type: 'price', visible: true, cssClasses: ['font-medium']},
     { label: 'total', property: 'total_cost', type: 'price', visible: true },
@@ -112,7 +114,6 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     this.getBookingsByDateSport().subscribe(res => {
       this.updateChartBySport(res.data);
     })
-
     this.getSchoolSports().subscribe(res => {
       this.allSports = res.data;
       let settings = JSON.parse(this.user.schools[0].settings);
@@ -148,10 +149,21 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     this.cdr.detectChanges();
   }
 
-  getBookingsTotal(type): Observable<any> {
+  getBookingsTotalByType(type): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings', 1, 10000,
       'desc', 'id', '&school_id=' + this.user.schools[0].id + '&type=' + type + this.filter);
   }
+
+  getBookingsTotal(): Observable<any> {
+    return this.crudService.list('/admin/statistics/total', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
+  }
+
+  getMonitorsTotal(): Observable<any> {
+    return this.crudService.list('/admin/statistics/monitors/total', 1, 10000,
+      'desc', 'id', '&school_id=' + this.user.schools[0].id + this.filter);
+  }
+
 
   getBookingsByDate(): Observable<any> {
     return this.crudService.list('/admin/statistics/bookings/dates', 1, 10000,
@@ -256,8 +268,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
       { name: this.translateService.instant('course_private'), value: 0, max_value: 0, color: '#33c7ff' },
       { name: this.translateService.instant('activity'), value: 0, max_value: 0, color: '#ff33b8' }
     ];
-    this.getBookingsTotal(1).subscribe(res => {
-      const collectiveText = {
+
+    this.getBookingsTotal().subscribe(res => {
+      this.totalPriceSell = res.data;
+    });
+      this.getBookingsTotalByType(1).subscribe(res => {
+    const collectiveText = {
         'title': this.translateService.instant('course_colective'),
         'subtitle': this.translateService.instant('sales'),
         'price': `${res.data.total_price}${this.currency}`,
@@ -270,11 +286,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
           res.data.total_reservations_places, res.data.total_available_places);
       }
 
-      this.totalPriceSell += res.data.total_price;
+
+
 
     });
 
-    this.getBookingsTotal(2).subscribe(res => {
+    this.getBookingsTotalByType(2).subscribe(res => {
       const collectiveText = {
         'title': this.translateService.instant('course_private'),
         'subtitle': this.translateService.instant('sales'),
@@ -288,11 +305,11 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
           res.data.total_reservations_places, res.data.total_places);
 
       }
-      this.totalPriceSell += res.data.total_price;
+  //    this.totalPriceSell += res.data.total_price;
 
     });
 
-    this.getBookingsTotal(3).subscribe(res => {
+    this.getBookingsTotalByType(3).subscribe(res => {
       const collectiveText = {
         'title': this.translateService.instant('activity'),
         'subtitle': this.translateService.instant('sales'),
@@ -305,7 +322,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
         this.setPlotly('#9747FF', collectiveText, 'activity',
           res.data.total_reservations_places, res.data.total_places);
       }
-      this.totalPriceSell += res.data.total_price;
+    //  this.totalPriceSell += res.data.total_price;
 
     });
 
@@ -319,7 +336,6 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
       plotActiveMonitors = 'activeMonitorsFiltered';
       plotTotalHours = 'totalHoursFiltered';
     }
-
     if (!this.showDetail && this.tabActive != 'sells') {
       this.getActiveMonitors().subscribe(res => {
         let collectiveText = {
@@ -336,6 +352,12 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     }
     if (this.tabActive == 'sells') {
       this.loadSellData();
+    }
+
+    if (this.tabActive == 'monitors') {
+      this.getMonitorsTotal().subscribe(res => {
+        this.totalMonitorPriceSell = res.data;
+      });
     }
     this.getTotalHours().subscribe(res => {
       let collectiveText = {
@@ -355,7 +377,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
   }
 
   loadSellData() {
-    this.getBookingsTotal(1).subscribe(res => {
+   /* this.getBookingsTotal(1).subscribe(res => {
       this.totalPriceSell = 0;
       const collectiveText = {
         'title': this.translateService.instant('course_colective'),
@@ -409,7 +431,7 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
       'price': '0 CHF',
       'subprice': this.translateService.instant('occupation'),
     }
-    this.setPlotly('#E91E63', voucherText, 'voucherSales', 0, 0);
+    this.setPlotly('#E91E63', voucherText, 'voucherSales', 0, 0);*/
   }
 
 
@@ -434,9 +456,9 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
       this.filter = '';
       this.tabActive = 'sells';
       this.showDetail = false;
-      this.getBookingsByDate().subscribe(res => {
+/*      this.getBookingsByDate().subscribe(res => {
         this.setUserSessionAnalytics(false, res.data);
-      })
+      })*/
       this.loadSellData();
     }
   }
