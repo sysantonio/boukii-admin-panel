@@ -752,6 +752,11 @@
   "no_user_reserved": "Aucun participant réservé",
   "price_per_course": "Prix par cours",
   "change": "Changer",
-   "all_days_week": "Tous les jours de la semaine",
-  "workdays_only": "Seulement les jours ouvrables"
+  "all_days_week": "Tous les jours de la semaine",
+  "workdays_only": "Seulement les jours ouvrables",
+  "sales_this_month": "Ventes ce mois",
+  "more_sales": "Plus de ventes",
+  "compared_to_last_month": "par rapport au mois dernier.",
+  "revenue_per_sale": "Revenu par vente",
+  "view_details": "Voir les détails"
 }

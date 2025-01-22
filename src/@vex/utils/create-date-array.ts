@@ -6,7 +6,6 @@ export function createDateArray(length: number) {
   for (let i = 0; i < length; i++) {
     dates.push(+DateTime.local().minus({ day: i }).toJSDate());
   }
-
   return dates.reverse();
 }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, } from '@angular/core';
 import { ApexOptions } from '../../chart/chart.component';
 import { defaultChartOptions } from '../../../utils/default-chart-options';
 import { createDateArray } from '../../../utils/create-date-array';
@@ -7,7 +7,7 @@ import { createDateArray } from '../../../utils/create-date-array';
   selector: 'vex-widget-large-goal-chart',
   templateUrl: './widget-large-goal-chart.component.html'
 })
-export class WidgetLargeGoalChartComponent implements OnInit {
+export class WidgetLargeGoalChartComponent {
 
   @Input() total: string;
   @Input() series: ApexNonAxisChartSeries | ApexAxisChartSeries;
@@ -45,10 +45,5 @@ export class WidgetLargeGoalChartComponent implements OnInit {
       }
     }
   });
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }

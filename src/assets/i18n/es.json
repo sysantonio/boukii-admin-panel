@@ -772,6 +772,11 @@
   "text_nomonitorset": "No tiene monitor asignado",
   "no_user_reserved": "Sin usuario reservado",
   "price_per_course": "Precio por curso",
-    "all_days_week": "Todos los días de la semana",
-  "workdays_only": "Solo días laborales"
+  "all_days_week": "Todos los días de la semana",
+  "workdays_only": "Solo días laborales",
+  "sales_this_month": "Ventas este mes",
+  "more_sales": "Más ventas",
+  "compared_to_last_month": "en comparación con el mes pasado.",
+  "revenue_per_sale": "Ingresos por venta",
+  "view_details": "Ver detalles"
 }
