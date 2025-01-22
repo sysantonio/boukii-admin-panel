@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -8,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class ComponenteInputComponent {
+export class ComponenteInputComponent implements OnInit {
   @Input() control!: string
   @Input() name!: string
   @Input() value!: string
@@ -20,6 +19,12 @@ export class ComponenteInputComponent {
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
   constructor(private translateService: TranslateService,) { }
+
+  ngOnInit(): void {
+    if (this.form && this.control) {
+      this.required = this.form.get(this.control)?.hasValidator(Validators.required) || false
+    }
+  }
 
   getErrorMessage(controlName: string): string {
     const control = this.c[controlName];

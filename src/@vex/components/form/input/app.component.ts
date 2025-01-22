@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class ComponenteInputComponent {
+export class ComponenteInputComponent implements OnInit {
   @Input() control!: string
   @Input() value!: string
   @Input() name!: string
@@ -16,7 +16,7 @@ export class ComponenteInputComponent {
   @Input() required: boolean = false
   @Input() Suffix: string = ""
   @Input() Prefix: string = ""
-  @Input() max: number = 99
+  @Input() max: number = Infinity
   @Input() min: number = 0
   @Input() margin: number = 10
 
@@ -24,6 +24,12 @@ export class ComponenteInputComponent {
   @Output() do = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
+
+  ngOnInit(): void {
+    if (this.form && this.control) {
+      this.required = this.form.get(this.control)?.hasValidator(Validators.required) || false
+    }
+  }
 
   constructor(private TranslateService: TranslateService) { }
   getErrorMessage(controlName: string): string {
