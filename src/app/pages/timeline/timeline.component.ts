@@ -24,8 +24,8 @@ import { FormControl } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { BookingDetailComponent } from '../bookings/booking-detail/booking-detail.component';
-import {UpdateCourseModalComponent} from '../bookings/booking-detail/update-course/update-course.component';
-import {EditDateComponent} from './edit-date/edit-date.component';
+import { UpdateCourseModalComponent } from '../bookings/booking-detail/update-course/update-course.component';
+import { EditDateComponent } from './edit-date/edit-date.component';
 
 moment.locale('fr');
 
@@ -481,8 +481,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
           }
         }
       }
-
-      // Process 'nwds' field
       if (item.nwds) {
         const nwdsArray = this.normalizeToArray(item.nwds);
         if (this.filterMonitor && hasAtLeastOne) {
@@ -576,6 +574,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
         }
       }
     }
+    this.filteredMonitors = this.filteredMonitors.sort((a: any, b: any) => {
+      if (a.id === null && b.id !== null) return -1;
+      if (b.id === null && a.id !== null) return 1;
+      return (a.first_name + a.last_name).localeCompare(b.first_name + b.last_name);
+    });
 
     //ADD all bookingusers and then filter them.
     //get bookingusers
@@ -717,7 +720,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
           booking_id: booking?.booking?.id,
           booking_color: booking_color,
           date: moment(booking.date).format('YYYY-MM-DD'),
-          group_id:booking?.group_id,
+          group_id: booking?.group_id,
           date_full: booking.date,
           date_start: moment(booking.course.date_start).format('YYYY-MM-DD'),
           created_at: booking.booking.created_at,
@@ -1025,7 +1028,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       // Group tasks by course_id, hour_start, and hour_end if course_id is not null
       const groupedByCourseTime = tasksForDate.reduce((group, task) => {
         if (task.course_id != null) {
-          if(task.course.course_type == 1) {
+          if (task.course.course_type == 1) {
             var key = `${task.course_id}-${task.hour_start}-${task.hour_end}`;
           } else {
             key = `${task.course_id}-${task.hour_start}-${task.hour_end}-${task.group_id}`;
@@ -1648,7 +1651,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((userConfirmed: boolean) => {
       if (userConfirmed) {
-          this.crudService.update('/booking-users', {accepted:true}, this.taskDetail.id)
+        this.crudService.update('/booking-users', { accepted: true }, this.taskDetail.id)
           .subscribe(() => {
             dialogRef.close(true)
             this.editedMonitor = null;
