@@ -86,11 +86,12 @@
 				{{"course" | translate }} {{"#" +("00000"+courseFormGroup.controls['id'].value).slice(-5) |translate}}
 				<img (click)="open.emit(courseFormGroup.controls['id'].value)"
 					src="assets/icons/icon/edit.png"
-					class="button icon24"
-					style="margin-left: auto;">
+					class="button"
+					style="margin-left: auto;width: 24px;height: 24px;">
 				<img (click)="close.emit()"
 					src="assets/icons/icon/cancel.png"
-					class="button icon24">
+					style="width: 24px;height: 24px;"
+					class="button">
 			</p>
 			<div style="width: 100%; height: 100%; border: 1px #C7D0D3 solid;margin: 4px 0;"></div>
 			<p style="color: white;">
@@ -153,7 +154,8 @@
 		</div>
 		<div class="cardgroup">
 			<div style="width: 100%;display: flex;">
-				<img [src]="courseFormGroup.controls['image'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+				<img *ngIf="courseFormGroup.controls['image'].value && courseFormGroup.controls['id'].value"
+					[src]="courseFormGroup.controls['image'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
 					[class]="courseFormGroup.controls['image'].value?'':'emptyImg1'"
 					class="Img1"
 					style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
@@ -305,9 +307,21 @@
 			class="cardgroup">
 			<div style="width: 100%;display: flex;gap: 8px;flex-wrap: wrap;">
 				<div style="width: 100%;">
-					<p class="label">
+					<div *ngIf="courseFormGroup.controls['id'].value"
+						class="label"
+						style="display: flex;justify-content: space-between;">
 						{{'levels' | translate }}
-					</p>
+						<div>
+							<mat-icon (click)="exportQR(courseFormGroup.controls['id'].value)"
+								svgIcon="mat:print"
+								style="cursor: pointer;">
+							</mat-icon>
+							<mat-icon (click)="export(courseFormGroup.controls['id'].value)"
+								svgIcon="mat:save"
+								style="cursor: pointer;">
+							</mat-icon>
+						</div>
+					</div>
 				</div>
 				<vex-course-detail-nivel [courseFormGroup]="courseFormGroup"
 					style="width: 100%;"></vex-course-detail-nivel>
