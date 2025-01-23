@@ -57,7 +57,7 @@
             <img *ngIf="!item?.client_sports || !item?.client_sports.length"
                  class="avatarImg icon40"
                  [src]="item?.image || 'assets/img/avatar.png'" />
-            <app-level-user *ngIf="item.client_sports && item.client_sports.length "
+            <app-level-user *ngIf="item.client_sports && item.client_sports.length && allLevels"
                             mat-card-avatar style="margin-right: 5px"
                             [allLevels]="utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels)"
                             [selectLevel]="item.client_sports[0]?.degree_id"
@@ -79,7 +79,7 @@
             <img *ngIf="!utilizers[0]?.client_sports || !utilizers[0]?.client_sports.length"
               class="avatarImg icon40"
               [src]="utilizers[0]?.image || 'assets/img/avatar.png'" />
-            <app-level-user *ngIf="utilizers[0]?.client_sports && utilizers[0]?.client_sports.length "
+            <app-level-user *ngIf="utilizers[0]?.client_sports && utilizers[0]?.client_sports.length && allLevels"
                             mat-card-avatar style="margin-right: 5px"
                             [allLevels]="utilsService.getSportLevels(utilizers[0]?.client_sports[0].sport_id, allLevels)"
                             [selectLevel]="utilizers[0]?.client_sports[0]?.degree_id"

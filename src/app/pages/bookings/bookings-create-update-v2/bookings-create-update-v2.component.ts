@@ -142,6 +142,7 @@ export class BookingsCreateUpdateV2Component {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
       '&school_id=' + user.schools[0].id + '&active=1')
       .subscribe((data) => {
+      //  debugger;
         this.allLevels = data.data;
       })
   }
