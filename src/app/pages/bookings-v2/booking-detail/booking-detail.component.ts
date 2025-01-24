@@ -6,6 +6,7 @@ import { ApiCrudService } from '../../../../service/crud.service';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BookingDialogComponent } from '../bookings-create-update/components/booking-dialog/booking-dialog.component';
 
 @Component({
   selector: 'booking-detail-v2',
@@ -108,7 +109,7 @@ export class BookingDetailV2Component implements OnInit {
           extras: []
         });
       }
-      const dateIndex = acc[groupId].dates.findIndex(date =>
+      const dateIndex = acc[groupId].dates.findIndex((date: any) =>
         date.id === user.course_date_id &&
         date.startHour === user.hour_start &&
         date.endHour === user.hour_end
@@ -116,7 +117,7 @@ export class BookingDetailV2Component implements OnInit {
       if (dateIndex === -1) {
         acc[groupId].dates.push({
           id: user.course_date_id,
-          date: user.course_date.date,
+          date: user.course_date?.date,
           startHour: user.hour_start,
           endHour: user.hour_end,
           duration: user.formattedDuration,
@@ -208,4 +209,6 @@ export class BookingDetailV2Component implements OnInit {
         this.deleteModal = false;
       });
   }
+
+  
 }

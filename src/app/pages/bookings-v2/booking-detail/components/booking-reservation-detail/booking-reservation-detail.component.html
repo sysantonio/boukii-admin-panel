@@ -97,7 +97,7 @@
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
               -{{bookingData.price_reduction}}
-              {{activities[0].course.currency}}
+              {{activities[0]?.course.currency}}
             </p>
           </span>
         </div>
@@ -128,7 +128,7 @@
                 {{item.bonus.code}}</p>
               <p style="float:right">
                 -{{item.bonus.reducePrice}}
-                {{activities[0].course.currency}}
+                {{activities[0]?.course?.currency}}
               </p>
             </span>
           </ng-container>
@@ -145,7 +145,7 @@
           <span class="hour">{{ "op_rem" | translate }}</span>
           <p style="float:right">
             -{{bookingData.price_cancellation_insurance}}
-            {{activities[0].course.currency}}
+            {{activities[0]?.course?.currency}}
           </p>
         </div>
       </div>
@@ -156,7 +156,7 @@
     <ng-container>
       <span class="totalPrice">
         {{ bookingData.price_total}}
-        {{ activities[0].course.currency }}
+        {{ activities[0]?.course?.currency }}
       </span>
     </ng-container>
     <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "to_pay" | translate }}</span>
@@ -164,7 +164,7 @@
     <ng-container>
       <span class="totalPrice" *ngIf="bookingData.price_total - calculateTotalVoucherPrice() != 0">
         {{ bookingData.price_total - calculateTotalVoucherPrice() }}
-        {{ activities[0].course.currency }}
+        {{ activities[0]?.course?.currency }}
       </span>
     </ng-container>
   </div>
