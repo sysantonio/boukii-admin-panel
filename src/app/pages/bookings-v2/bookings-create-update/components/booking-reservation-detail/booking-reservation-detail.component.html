@@ -62,7 +62,7 @@
             }}</span>
           <span class="price">
             <span class="discounted-price">
-              {{ sumActivityTotal().toFixed(2) }} {{
+              {{ sumActivityTotal()| number:'0.2-2' }} {{
               activities[0].course.currency }}
             </span>
           </span>
@@ -93,7 +93,7 @@
               (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
-              -{{bookingData.price_reduction.toFixed(2)}}
+              -{{bookingData.price_reduction| number:'0.2-2'}}
               {{activities[0].course.currency}}
             </p>
           </span>
@@ -142,7 +142,7 @@
             style="float: left;"></mat-checkbox>
           <span class="hour">{{ "op_rem" | translate }}</span>
           <p style="float:right">
-            -{{bookingData.price_cancellation_insurance.toFixed(2)}}
+            -{{bookingData.price_cancellation_insurance| number:'0.2-2'}}
             {{activities[0].course.currency}}
           </p>
         </div>
@@ -153,7 +153,7 @@
     {{ "bookings_page.description.total" | translate }}
     <ng-container>
       <span class="totalPrice">
-        {{ bookingData.price_total.toFixed(2) }}
+        {{ bookingData.price_total| number:'0.2-2' }}
         {{ activities[0].course.currency }}
       </span>
     </ng-container>

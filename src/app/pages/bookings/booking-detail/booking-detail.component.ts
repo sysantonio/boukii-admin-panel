@@ -482,7 +482,7 @@ export class BookingDetailComponent implements OnInit {
                         this.finalPrice -
                         Math.round(
                           (this.finalPrice /
-                            (+this.cancellationInsurance.toFixed(2) + 1)) *
+                            (+this.cancellationInsurance + 1)) *
                           100
                         ) /
                         100,
@@ -2881,7 +2881,7 @@ export class BookingDetailComponent implements OnInit {
         const price =
           this.finalPrice -
           Math.round(
-            (this.finalPrice / (+this.cancellationInsurance.toFixed(2) + 1)) *
+            (this.finalPrice / (+this.cancellationInsurance + 1)) *
             100
           ) /
           100;
@@ -3035,7 +3035,7 @@ export class BookingDetailComponent implements OnInit {
       price -
       Math.round(
         (price /
-          (+this.cancellationInsurance.toFixed(2) + 1)) *
+          (+this.cancellationInsurance + 1)) *
         100
       ) /
       100

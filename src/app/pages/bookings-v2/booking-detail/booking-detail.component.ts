@@ -162,7 +162,7 @@ export class BookingDetailV2Component implements OnInit {
       if (user.monitor_id) acc[groupId].monitors.push(user.monitor_id);
       return acc;
     }, {});
-
+    console.log(groupedActivities)
     return Object.values(groupedActivities);
   }
 

@@ -584,14 +584,14 @@
 
               <span style="width: 100%; float:left" *ngIf="booking.has_tva">
                 <p style="float:left">{{'tva' | translate | uppercase }}</p>
-                <p style="float:right">{{ (tvaPrice).toFixed(2) }}
+                <p style="float:right">{{ tvaPrice| number:'0.2-2' }}
                   {{bookingsToCreate.length > 0 ?
                   bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
 
               <span style="width: 100%; float:left">
                 <p style="float:left">{{'total' | translate | uppercase}}</p>
-                <p style="float:right">{{(finalPrice).toFixed(2)}}
+                <p style="float:right">{{finalPrice| number:'0.2-2'}}
                   {{bookingsToCreate.length > 0 ?
                   bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
@@ -601,7 +601,7 @@
                 <p style="float:left; color:#FB9B1B">{{'refund_text' | translate
                   | uppercase }}</p>
                 <p
-                  style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}}
+                  style="float:right; color:#FB9B1B">{{bookingPendingPrice| number:'0.2-2'}}
                   {{bookingsToCreate.length > 0 ?
                   bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>
@@ -611,7 +611,7 @@
                 <p style="float:left; color:#FB9B1B">{{'pending_payment' |
                   translate | uppercase }}</p>
                 <p
-                  style="float:right; color:#FB9B1B">{{bookingPendingPrice.toFixed(2)}}
+                  style="float:right; color:#FB9B1B">{{bookingPendingPrice| number:'0.2-2'}}
                   {{bookingsToCreate.length > 0 ?
                   bookingsToCreate[0].courseDates[0].currency : ''}}</p>
               </span>

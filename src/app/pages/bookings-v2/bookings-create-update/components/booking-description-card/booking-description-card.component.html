@@ -146,11 +146,11 @@
               <span class="price" *ngIf="date.price">
                 <!-- Mostrar el precio original tachado -->
                 <span *ngIf="isDiscounted(date, i)" class="original-price">
-                  {{ parseFloat(date.price).toFixed(2) }} {{ date.currency }}
+                  {{ parseFloat(date.price)| number:'0.2-2' }} {{ date.currency }}
                 </span>
                 <!-- Mostrar el precio con descuento -->
                 <span class="discounted-price">
-                  {{ calculateDiscountedPrice(date, i).toFixed(2) }} {{
+                  {{ calculateDiscountedPrice(date, i)| number:'0.2-2' }} {{
                     date.currency }}
                 </span>
               </span>

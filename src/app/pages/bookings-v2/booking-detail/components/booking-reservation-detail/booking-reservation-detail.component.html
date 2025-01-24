@@ -64,8 +64,8 @@
             }}</span>
           <span class="price">
             <span class="discounted-price">
-              {{ sumActivityTotal().toFixed(2) }} {{
-              activities[0].course.currency }}
+              {{ sumActivityTotal()| number:'0.2-2' }} {{
+              activities[0]?.course.currency }}
             </span>
           </span>
         </div>

@@ -82,7 +82,7 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   sumActivityTotal(): number {
-    return this.activities.reduce((acc, item) => {
+    return this.activities.reduce((acc: any, item: any) => {
       // Solo suma si el status es 1
       if (item.status != 2) {
         const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, ''));
