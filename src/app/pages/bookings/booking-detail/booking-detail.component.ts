@@ -1930,6 +1930,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   refundBooking() {
+    debugger;
     const dialogRef = this.dialog.open(RefundBookingModalComponent, {
       width: "1000px", // Asegurarse de que no haya un ancho máximo
       panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
@@ -2105,7 +2106,7 @@ export class BookingDetailComponent implements OnInit {
       data: {
         currentBonus: this.currentBonus,
         currentBonusLog: this.bonusLog,
-        itemPrice: this.finalPrice,
+        itemPrice: priceToRefund,
         booking: this.booking,
       },
     });
@@ -2173,7 +2174,7 @@ export class BookingDetailComponent implements OnInit {
               this.crudService
                 .update(
                   "/bookings",
-                  { paid_total: this.booking.price_total, price_total: 0 },
+                  { paid_total: this.booking.price_total - priceToRefund, price_total: 0 },
                   this.booking.id
                 )
                 .subscribe(() => {
