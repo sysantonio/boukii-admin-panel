@@ -537,15 +537,41 @@ export class BookingsCreateUpdateComponent implements OnInit {
       this.selectedPrivateDates = [];
 
       this.selectedItem = item;
-      let selectedPrivateDateItem = this.selectedItem.course_dates.find(i => moment(i.date).startOf('day').format('YYYY-MM-DD') == moment(this.selectedDatePrivate).startOf('day').format('YYYY-MM-DD'));
+
+// Obtener la fecha actual y la hora actual
+      const today = moment().startOf('day');
+      const currentTime = moment();
+
+// Filtrar fechas que sean mayores o iguales a hoy
+      let validCourseDates = this.selectedItem.course_dates.filter(i =>
+        moment(i.date).startOf('day').isSameOrAfter(today)
+      );
+
+// Si hay fechas que coinciden con hoy, verifica las horas disponibles
+      if (validCourseDates.length > 0) {
+        validCourseDates = validCourseDates.filter(i => {
+          const isToday = moment(i.date).startOf('day').isSame(today);
+          if (isToday) {
+            // Si la fecha es hoy, verifica que haya horas disponibles mayores a la hora actual
+            const hasAvailableHours = i.hours.some(hour => moment(hour).isAfter(currentTime));
+            return hasAvailableHours;
+          }
+          return true; // Si no es hoy, ya es válida
+        });
+      }
+
+// Seleccionar la primera fecha válida o mantener un valor por defecto
+      const selectedPrivateDateItem = validCourseDates[0] || null;
+
+// Añadir la fecha seleccionada al array de courseDates
       this.courseDates.push({
         school_id: this.user.schools[0].id,
         booking_id: null,
         client_id: this.defaultsBookingUser.client_id,
         course_subgroup_id: null,
         course_id: item.id,
-        course_date_id: selectedPrivateDateItem ? selectedPrivateDateItem.id : this.selectedItem.course_dates[0].id,
-        date: selectedPrivateDateItem ? selectedPrivateDateItem.date : this.selectedItem.course_dates[0].date,
+        course_date_id: selectedPrivateDateItem ? selectedPrivateDateItem.id : null,
+        date: selectedPrivateDateItem ? selectedPrivateDateItem.date : null,
         hour_start: null,
         hour_end: null,
         price: this.selectedItem.price,
