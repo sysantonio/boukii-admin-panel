@@ -2,14 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChangeMonitorOption } from "src/app/static-data/changeMonitorOptions";
 import { LangService } from "src/service/langService";
 import { UtilsService } from "src/service/utils.service";
-import {
-  BookingDialogComponent
-} from '../../../bookings-create-update-v2/components/booking-dialog/booking-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {FormDetailsPrivateComponent} from '../form-details-private/form-details-private.component';
-import {FormDetailsColectiveFlexComponent} from '../form-details-colective-flex/form-details-colective-flex.component';
-import {FormDetailsColectiveFixComponent} from '../form-details-colective-fix/form-details-colective-fix.component';
-import {StepObservationsComponent} from '../step-observations/step-observations.component';
+import { MatDialog } from '@angular/material/dialog';
+import { FormDetailsPrivateComponent } from '../form-details-private/form-details-private.component';
+import { FormDetailsColectiveFlexComponent } from '../form-details-colective-flex/form-details-colective-flex.component';
+import { FormDetailsColectiveFixComponent } from '../form-details-colective-fix/form-details-colective-fix.component';
+import { StepObservationsComponent } from '../step-observations/step-observations.component';
 
 export interface BookingDescriptionCardDate {
   date: string;
@@ -102,11 +99,11 @@ export class BookingDescriptionCard {
     return dateExtra.map((extra) => extra.price).join(", ");
   }
 
-  sendEditForm(dates: any, course:any, utilizers:any = []) {
-    if(course.course_type == 2) {
+  sendEditForm(dates: any, course: any, utilizers: any = []) {
+    if (course.course_type == 2) {
       this.openPrivateDatesForm(dates, course, utilizers);
-    } else if(course.course_type == 1) {
-      if(course.is_flexible) {
+    } else if (course.course_type == 1) {
+      if (course.is_flexible) {
         this.openCollectiveFlexDatesForm(dates, course, utilizers)
       } else {
         this.openCollectiveFixDatesForm(dates, course, utilizers)
@@ -114,7 +111,7 @@ export class BookingDescriptionCard {
     }
   }
 
-  private openPrivateDatesForm(dates: any, course:any, utilizers:any = []) {
+  private openPrivateDatesForm(dates: any, course: any, utilizers: any = []) {
     const dialogRef = this.dialog.open(FormDetailsPrivateComponent, {
       width: "800px",
       panelClass: "customBookingDialog",
@@ -141,7 +138,7 @@ export class BookingDescriptionCard {
     });
   }
 
-  private openCollectiveFlexDatesForm(dates: any, course:any, utilizers:any = []) {
+  private openCollectiveFlexDatesForm(dates: any, course: any, utilizers: any = []) {
     const dialogRef = this.dialog.open(FormDetailsColectiveFlexComponent, {
       width: "800px",
       height: "800px",
@@ -170,7 +167,7 @@ export class BookingDescriptionCard {
     });
   }
 
-  private openCollectiveFixDatesForm(dates: any, course:any, utilizers:any = []) {
+  private openCollectiveFixDatesForm(dates: any, course: any, utilizers: any = []) {
     const dialogRef = this.dialog.open(FormDetailsColectiveFixComponent, {
       width: "800px",
       panelClass: "customBookingDialog",
@@ -198,7 +195,7 @@ export class BookingDescriptionCard {
     });
   }
 
-  openObservationsForm(clientObs: any, schoolObs:any) {
+  openObservationsForm(clientObs: any, schoolObs: any) {
     const dialogRef = this.dialog.open(StepObservationsComponent, {
       width: "800px",
       panelClass: "customBookingDialog",

@@ -8,11 +8,11 @@ import { ApiCrudService } from '../../../../service/crud.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "bookings-create-update-v2",
-  templateUrl: "./bookings-create-update-v2.component.html",
-  styleUrls: ["./bookings-create-update-v2.component.scss"],
+  selector: "bookings-create-update",
+  templateUrl: "./bookings-create-update.component.html",
+  styleUrls: ["./bookings-create-update.component.scss"],
 })
-export class BookingsCreateUpdateV2Component {
+export class BookingsCreateUpdateComponent {
   currentStep = 0;
   currentBookingData = {};
   mainClient: any;
@@ -142,7 +142,7 @@ export class BookingsCreateUpdateV2Component {
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
       '&school_id=' + user.schools[0].id + '&active=1')
       .subscribe((data) => {
-      //  debugger;
+        //  debugger;
         this.allLevels = data.data;
       })
   }

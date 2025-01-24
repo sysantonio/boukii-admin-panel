@@ -9,9 +9,9 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'booking-detail-v2',
-  templateUrl: './booking-detail-v2.component.html',
-  styleUrls: ['./booking-detail-v2.component.scss']
+  selector: 'booking-detail',
+  templateUrl: './booking-detail.component.html',
+  styleUrls: ['./booking-detail.component.scss']
 })
 export class BookingDetailV2Component implements OnInit {
   payModal: boolean = false;

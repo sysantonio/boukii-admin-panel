@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { BookingsCreateUpdateV2Component } from "./bookings-create-update-v2.component";
+import { BookingsCreateUpdateComponent } from "./bookings-create-update.component";
 import { MatCardModule } from "@angular/material/card";
 import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/secondary-toolbar.module";
 import { BreadcrumbsModule } from "src/@vex/components/breadcrumbs/breadcrumbs.module";
@@ -16,7 +16,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 
 @NgModule({
-  declarations: [BookingsCreateUpdateV2Component],
+  declarations: [BookingsCreateUpdateComponent],
   imports: [
     CommonModule,
     TranslateModule,
@@ -32,6 +32,6 @@ import {FormsModule} from '@angular/forms';
     MatSelectModule,
     FormsModule
   ],
-  exports: [BookingsCreateUpdateV2Component],
+  exports: [BookingsCreateUpdateComponent],
 })
-export class BookingsCreateUpdateV2Module { }
+export class BookingsCreateUpdateModule { }

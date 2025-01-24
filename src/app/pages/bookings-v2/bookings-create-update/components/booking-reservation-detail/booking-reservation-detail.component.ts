@@ -3,8 +3,8 @@ import { LangService } from '../../../../../../service/langService';
 import { UtilsService } from '../../../../../../service/utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddReductionModalComponent } from '../add-reduction/add-reduction.component';
-import { AddDiscountBonusModalComponent } from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
-import {BookingCreateData, BookingService} from '../../../../../../service/bookings.service';
+import { AddDiscountBonusModalComponent } from '../add-discount-bonus/add-discount-bonus.component';
+import { BookingCreateData, BookingService } from '../../../../../../service/bookings.service';
 
 @Component({
   selector: 'booking-reservation-detail',

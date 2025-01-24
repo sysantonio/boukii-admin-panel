@@ -2,12 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LangService } from '../../../../../../service/langService';
 import { UtilsService } from '../../../../../../service/utils.service';
 import { MatDialog } from '@angular/material/dialog';
-import {BookingCreateData, BookingService} from '../../../../../../service/bookings.service';
-import {AddReductionModalComponent} from '../../../bookings-create-update/add-reduction/add-reduction.component';
-import {
-  AddDiscountBonusModalComponent
-} from '../../../bookings-create-update/add-discount-bonus/add-discount-bonus.component';
-import {Observable, Subscription} from 'rxjs';
+import { BookingService } from '../../../../../../service/bookings.service';
+import { AddReductionModalComponent } from '../../../bookings-create-update/components/add-reduction/add-reduction.component';
+import { AddDiscountBonusModalComponent } from '../../../bookings-create-update/components/add-discount-bonus/add-discount-bonus.component';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'booking-detail-reservation-detail',
@@ -51,8 +49,8 @@ export class BookingReservationDetailComponent implements OnInit {
     //this.bookingData = this.bookingService.getBookingData() || this.initializeBookingData();
     this.recalculateBonusPrice();
     this.updateBookingData();
-    this.activitiesChangedSub = this.activitiesChanged.subscribe((res:any) => {
-      if(res) {
+    this.activitiesChangedSub = this.activitiesChanged.subscribe((res: any) => {
+      if (res) {
         this.bookingData = res;
       }
       this.loadExistingVouchers();
@@ -115,7 +113,7 @@ export class BookingReservationDetailComponent implements OnInit {
     let remainingPrice = parseFloat(this.bookingData.price_total) - this.calculateTotalVoucherPrice();
     if (remainingPrice !== 0) {
       this.bookingData.vouchers.forEach(voucher => {
-        if(!voucher.bonus.is_old) {
+        if (!voucher.bonus.is_old) {
           const availableBonus = voucher.bonus.remaining_balance - voucher.bonus.reducePrice;
 
           if (remainingPrice > 0) {
