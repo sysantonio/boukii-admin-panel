@@ -9,8 +9,6 @@ import { BookingComponentsModule } from '../bookings-create-update/components/co
 import { SecondaryToolbarModule } from '../../../../@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { BreadcrumbsModule } from '../../../../@vex/components/breadcrumbs/breadcrumbs.module';
 
-
-
 @NgModule({
   declarations: [
     BookingDetailV2Component

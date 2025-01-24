@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './booking-detail.component.html',
   styleUrls: ['./booking-detail.component.scss']
 })
-export class BookingDetailComponent implements OnInit {
+export class BookingDetailV2Component implements OnInit {
   payModal: boolean = false;
   deleteModal: boolean = false
   endModal: boolean = false

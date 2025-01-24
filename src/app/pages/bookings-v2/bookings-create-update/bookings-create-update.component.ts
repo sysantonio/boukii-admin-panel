@@ -8,11 +8,11 @@ import { ApiCrudService } from '../../../../service/crud.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: "bookings-create-update",
+  selector: "bookings-create-update-v2",
   templateUrl: "./bookings-create-update.component.html",
   styleUrls: ["./bookings-create-update.component.scss"],
 })
-export class BookingsCreateUpdateComponent {
+export class BookingsCreateUpdateV2Component {
   currentStep = 0;
   currentBookingData = {};
   mainClient: any;
