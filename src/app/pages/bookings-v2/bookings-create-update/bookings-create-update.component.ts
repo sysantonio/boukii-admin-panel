@@ -19,18 +19,18 @@ export class BookingsCreateUpdateComponent {
   utilizers: any;
   sport: any;
   sportLevel: any;
-  forceStep;
+  forceStep!: any;
   forms: FormGroup[];
   dates: any;
   allLevels: any;
   normalizedDates: any[];
-  course;
-  monitors;
-  clientObs;
-  schoolObs;
-  total;
-  subtotal;
-  extraPrice;
+  course!: any;
+  monitors!: any;
+  clientObs!: any;
+  schoolObs!: any;
+  total!: any;
+  subtotal!: any;
+  extraPrice!: any;
   deleteModal: boolean = false
   deleteIndex: number = 1
   endModal: boolean = false
@@ -60,7 +60,7 @@ export class BookingsCreateUpdateComponent {
     this.getDegrees();
   }
 
-  handleFormChange(formData) {
+  handleFormChange(formData: any) {
     const {
       step1: { client, mainClient },
       step2: { utilizers },
@@ -79,7 +79,6 @@ export class BookingsCreateUpdateComponent {
     //this.monitors = MOCK_MONITORS;
     this.clientObs = clientObs;
     this.schoolObs = schoolObs;
-    // Calcula el total de la reserva
     if (this.course && this.dates) {
       this.calculateTotal();
     }
@@ -100,28 +99,21 @@ export class BookingsCreateUpdateComponent {
     this.selectedIndexForm = index;
     this.selectedForm = this.forms[index];
     this.forceStep = data.step;
-
-    // Forzar la detección de cambios
     this.cdr.detectChanges();
   }
 
   addNewActivity() {
     this.isDetail = false;
     this.currentStep = 1;
-
-    // Copiar solo el contenido de step1 de this.forms[0]
     const step1Controls = this.forms[0].get('step1').value;
-
-    // Crear un nuevo formGroup solo con los controles de step1 y vaciar el resto
     this.selectedForm = this.fb.group({
-      step1: this.fb.group(step1Controls),        // Copia step1
-      step2: this.fb.group({}),            // Vacío
-      step3: this.fb.group({}),            // Vacío
-      step4: this.fb.group({}),            // Vacío
-      step5: this.fb.group({}),            // Vacío
-      step6: this.fb.group({})             // Vacío
+      step1: this.fb.group(step1Controls),
+      step2: this.fb.group({}),
+      step3: this.fb.group({}),
+      step4: this.fb.group({}),
+      step5: this.fb.group({}),
+      step6: this.fb.group({})
     });
-
     this.utilizers = [];
     this.sport = null;
     this.sportLevel = null;
@@ -129,11 +121,7 @@ export class BookingsCreateUpdateComponent {
     this.dates = [];
     this.clientObs = null;
     this.schoolObs = null;
-
-
     this.forceStep = 1;
-
-    // Forzar la detección de cambios
     this.cdr.detectChanges();
   }
 
@@ -141,64 +129,46 @@ export class BookingsCreateUpdateComponent {
     const user = JSON.parse(localStorage.getItem("boukiiUser"))
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
       '&school_id=' + user.schools[0].id + '&active=1')
-      .subscribe((data) => {
-        //  debugger;
-        this.allLevels = data.data;
-      })
+      .subscribe((data) => this.allLevels = data.data)
   }
 
   calculateTotal() {
     let total = 0;
-
-    // Verifica si el curso es del tipo 1
-    if (this.course.course_type === 1) {
-      total = this.calculateColectivePrice();
-    } else if (this.course.course_type === 2) {
-      total = this.calculatePrivatePrice();
-    }
-
-    // Calcula el total de los extras
-    const extrasTotal = this.dates.reduce((acc, date) => {
+    if (this.course.course_type === 1) total = this.calculateColectivePrice();
+    else if (this.course.course_type === 2) total = this.calculatePrivatePrice();
+    const extrasTotal = this.dates.reduce((acc: any, date: any) => {
       if (date.extras && date.extras.length) {
-        const extrasPrice = date.extras.reduce((extraAcc, extra) => {
-          const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
-          return extraAcc + price * extra.quantity; // Multiplica el precio del extra por la cantidad
+        const extrasPrice = date.extras.reduce((extraAcc: any, extra: any) => {
+          const price = parseFloat(extra.price) || 0;
+          return extraAcc + price * extra.quantity;
         }, 0);
         return acc + extrasPrice;
       }
       return acc;
     }, 0);
-
-    // Total sin extras
     const totalSinExtras = total;
-
-    // Actualiza el total
     total += extrasTotal;
     this.total = `${total.toFixed(2)} ${this.course.currency}`;
-
-    // Opcional: Si deseas también almacenar el total sin extras
     this.subtotal = `${totalSinExtras.toFixed(2)}`;
-    this.extraPrice = `${extrasTotal.toFixed(2)}`; // Total de extras
+    this.extraPrice = `${extrasTotal.toFixed(2)}`;
   }
 
-  deleteActivity(index) {
-    this.forms.splice(index, 1); // Elimina el formulario del array
-    this.normalizedDates.splice(index, 1); // Elimina el formulario del array
+  deleteActivity(index: any) {
+    this.forms.splice(index, 1);
+    this.normalizedDates.splice(index, 1);
     this.deleteModal = false;
     if (this.forms.length == 0) {
       this.currentStep = 0;
       this.isDetail = false;
       this.selectedForm = this.fb.group({
-        step1: this.fb.group({}),        // Copia step1
-        step2: this.fb.group({}),            // Vacío
-        step3: this.fb.group({}),            // Vacío
-        step4: this.fb.group({}),            // Vacío
-        step5: this.fb.group({}),            // Vacío
-        step6: this.fb.group({})             // Vacío
+        step1: this.fb.group({}),
+        step2: this.fb.group({}),
+        step3: this.fb.group({}),
+        step4: this.fb.group({}),
+        step5: this.fb.group({}),
+        step6: this.fb.group({})
       });
       this.forceStep = 0;
-
-      // Forzar la detección de cambios
       this.cdr.detectChanges();
     }
   }
@@ -208,7 +178,7 @@ export class BookingsCreateUpdateComponent {
 
     if (this.course.is_flexible) {
       // Calcula el precio basado en el intervalo y el número de utilizadores para cada fecha
-      this.dates.forEach(date => {
+      this.dates.forEach((date: any) => {
         const duration = date.duration; // Duración de cada fecha
         const selectedUtilizers = this.utilizers.length; // Número de utilizadores
 
@@ -222,7 +192,7 @@ export class BookingsCreateUpdateComponent {
         }
 
         // Suma el precio total de los extras para cada utilizador en esta fecha
-        date.utilizers.forEach(utilizer => {
+        date.utilizers.forEach((utilizer: any) => {
           if (utilizer.extras && utilizer.extras.length) {
             const extrasTotal = utilizer.extras.reduce((acc, extra) => {
               const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
@@ -235,10 +205,10 @@ export class BookingsCreateUpdateComponent {
       });
     } else {
       // Si el curso no es flexible
-      this.dates.forEach(date => {
+      this.dates.forEach((date: any) => {
         const dateTotal = parseFloat(this.course.price) * this.utilizers.length; // Precio por número de utilizadores
         total += dateTotal;
-        date.utilizers.forEach(utilizer => {
+        date.utilizers.forEach((utilizer: any) => {
           if (utilizer.extras && utilizer.extras.length) {
             const extrasTotal = utilizer.extras.reduce((acc, extra) => {
               const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
@@ -364,11 +334,11 @@ export class BookingsCreateUpdateComponent {
     return total;
   }
 
-  private calculatePrivatePriceForDates(course, dates, utilizers) {
+  private calculatePrivatePriceForDates(course: any, dates: any, utilizers: any) {
     let total = 0;
 
     if (course.is_flexible) {
-      dates.forEach(date => {
+      dates.forEach((date: any) => {
         const duration = date.duration;
         const selectedUtilizers = utilizers.length;
 
@@ -391,7 +361,7 @@ export class BookingsCreateUpdateComponent {
         });
       });
     } else {
-      dates.forEach(date => {
+      dates.forEach((date: any) => {
         const dateTotal = parseFloat(course.price) * utilizers.length;
         total += dateTotal;
         date.utilizers.forEach(utilizer => {
@@ -412,7 +382,7 @@ export class BookingsCreateUpdateComponent {
   // Método para obtener el intervalo de precios basado en la duración
   private getPriceInterval(duration: number) {
     const priceRanges = this.course.price_range;
-    return priceRanges.find(interval => {
+    return priceRanges.find((interval: any) => {
       const intervalDuration = this.parseDuration(interval.intervalo);
       return duration <= intervalDuration;
     });
@@ -457,7 +427,7 @@ export class BookingsCreateUpdateComponent {
   }
 
   // Filtra las fechas seleccionadas
-  getSelectedDates(dates) {
+  getSelectedDates(dates: any) {
     return dates.filter((date: any) => date.selected);
   }
 
@@ -493,7 +463,7 @@ export class BookingsCreateUpdateComponent {
     }, 0);
   }
 
-  forceChange(newStep) {
+  forceChange(newStep: any) {
     this.forceStep = newStep;
     this.cdr.detectChanges();
 

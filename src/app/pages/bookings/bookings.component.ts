@@ -12,7 +12,7 @@ import { forkJoin } from 'rxjs';
 import { LayoutService } from 'src/@vex/services/layout.service';
 
 @Component({
-  selector: 'vex-bookings',
+  selector: 'vex-bookings-v2',
   templateUrl: './bookings.component.html',
   styleUrls: ['./bookings.component.scss']
 })
@@ -475,18 +475,16 @@ export class BookingsComponent {
 
   getBonusPrice() {
     let ret = 0;
-
     this.bonus.forEach(element => {
       ret = ret + element.currentPay;
     });
-
-    return ret.toFixed(2);
+    return ret;
   }
 
   getUniqueBookingUsers(data: any) {
     const uniqueEntriesMap = new Map();
 
-    data.forEach(item => {
+    data.forEach((item: any) => {
       const key = `${item.client_id}-${item.course_id}`;
 
       if (!uniqueEntriesMap.has(key)) {
@@ -563,7 +561,7 @@ export class BookingsComponent {
     });
   }
 
-  getBookingsLogs(id) {
+  getBookingsLogs(id: any) {
     this.crudService.list('/booking-logs', 1, 10000, 'desc', 'id', '&booking_id=' + id)
       .subscribe((data) => {
         this.bookingLog = data.data;

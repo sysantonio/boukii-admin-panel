@@ -3,8 +3,7 @@ import { RouterModule } from "@angular/router";
 import { VexRoutes } from "src/@vex/interfaces/vex-route.interface";
 import { BookingsComponent } from "./bookings.component";
 import { BookingsCreateUpdateComponent } from "./bookings-create-update/bookings-create-update.component";
-import { BookingDetailComponent } from "../bookings/booking-detail/booking-detail.component";
-import { BookingsCreateUpdateEditComponent } from "../bookings/bookings-create-update-edit/bookings-create-update-edit.component";
+import { BookingDetailComponent } from "./booking-detail/booking-detail.component";
 
 const routes: VexRoutes = [
   {
@@ -30,7 +29,7 @@ const routes: VexRoutes = [
   },
   {
     path: "edit/:id",
-    component: BookingsCreateUpdateEditComponent,
+    component: BookingsCreateUpdateComponent,
     data: {
       toolbarShadowEnabled: true,
     },
