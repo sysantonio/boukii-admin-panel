@@ -2998,7 +2998,7 @@
                       (click)="reduction = null; calculateFinalPrice()"></mat-icon>
                     <p style="float:left">{{'reduction' |translate}}</p>
                     <p style="float:right">
-                      -{{calculateReduction().toFixed(2)}}
+                      -{{calculateReduction()| number:'0.2-2'}}
                       {{bookingsToCreate.length > 0 ?
                       bookingsToCreate[0].currency : ''}}
                     </p>
@@ -3029,8 +3029,8 @@
                     <p style="float:left">{{'op_rem' | translate}}</p>
                     <p style="float:right">
                       {{+(this.finalPrice - (Math.round(this.finalPrice /
-                      (+this.cancellationInsurance.toFixed(2) + 1) * 100) /
-                      100)).toFixed(2)}}
+                      (+this.cancellationInsurance+ 1) * 100) /
+                      100))| number:'0.2-2'}}
                       {{bookingsToCreate.length > 0 ?
                       bookingsToCreate[0].currency : ''}}
                     </p>
@@ -3042,7 +3042,7 @@
                     <p style="float:left">Boukii Care</p>
                     <p style="float:right">
                       {{(this.boukiiCarePrice * getBookingPaxes() *
-                      getBookingDates()).toFixed(2)}}
+                      getBookingDates())| number:'0.2-2'}}
                       {{bookingsToCreate.length > 0 ?
                       bookingsToCreate[0].currency : ''}}
                     </p>
@@ -3051,7 +3051,7 @@
                   <span style="width: 100%; float:left" *ngIf="this.tva">
                     <p style="float:left">{{'tva' | translate | uppercase}}</p>
                     <p style="float:right">
-                      {{ (tvaPrice).toFixed(2) }}
+                      {{ (tvaPrice)| number:'0.2-2' }}
                       {{bookingsToCreate.length > 0 ?
                       bookingsToCreate[0].currency : ''}}
                     </p>
@@ -3108,7 +3108,7 @@
                       uppercase}}</p>
                     <p style="float:right">
                       {{(bookingService.editData.price - getLastPrice() +
-                      finalPrice).toFixed(2)}}
+                      finalPrice)| number:'0.2-2'}}
                       {{bookingsToCreate.length > 0 ?
                       bookingsToCreate[0].currency : ''}}
                     </p>
@@ -3120,7 +3120,7 @@
                     <p style="float:left">{{'total' | translate |
                       uppercase}}</p>
                     <p style="float:right">
-                      {{(finalPrice).toFixed(2)}}
+                      {{(finalPrice)| number:'0.2-2'}}
                       {{bookingsToCreate.length > 0 ?
                       bookingsToCreate[0].currency : ''}}
                     </p>

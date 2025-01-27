@@ -16,7 +16,7 @@ import { WidgetLargeChartModule } from 'src/@vex/components/widgets/widget-large
 import { WidgetTableModule } from 'src/@vex/components/widgets/widget-table/widget-table.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { MatDialogModule } from '@angular/material/dialog';
-import { BookingsComponent } from './bookings.component';
+import { BookingsV2Component } from './bookings.component';
 import { BookingsRoutingModule } from './bookings-routing.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -24,14 +24,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
-import { DateUniqueByPipe } from '../../pipes/date-unique-by.pipe';
-import { BookingDetailModule } from './booking-detail/booking-detail.module';
-import { BookingDetailModalModule } from './booking-detail-modal/booking-detail-modal.module';
 import { BookingsCreateUpdateModule } from './bookings-create-update/bookings-create-update.module';
-import { BookingsCreateUpdateEditModule } from './bookings-create-update-edit/bookings-create-update-edit.module';
+import { BookingDetailModule } from './booking-detail/booking-detail.module';
 
 @NgModule({
-  declarations: [BookingsComponent, DateUniqueByPipe],
+  declarations: [BookingsV2Component],
   imports: [
     CommonModule,
     LayoutModule,
@@ -58,12 +55,10 @@ import { BookingsCreateUpdateEditModule } from './bookings-create-update-edit/bo
     TranslateModule,
     ComponentsCustomModule,
     IconComponent,
-    BookingDetailModule,
-    BookingDetailModalModule,
     BookingsCreateUpdateModule,
-    BookingsCreateUpdateEditModule
+    BookingDetailModule,
   ],
-  exports: [DateUniqueByPipe]
+  exports: []
 })
 export class BookingsModule {
 }

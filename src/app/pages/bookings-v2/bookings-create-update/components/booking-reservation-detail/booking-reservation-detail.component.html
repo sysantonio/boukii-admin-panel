@@ -1,11 +1,9 @@
 <div class="wrapper">
   <div class="headerWrapper">
-    {{ 'booking' | translate }} #{{bookingData.id}}
-    {{'status' | translate}}    {{bookingData.cancellation_status}}
-    {{'paid' | translate}}    {{bookingData.payment_method_status}}
+    {{ 'booking' | translate }} #****
   </div>
-  <div class="bodyWrapper" style="padding-bottom: 0;">
-    <div class="section">
+  <div class="bodyWrapper">
+    <div class="section" style="padding: 20px;">
       <div class="sectionTitle">
         <img src="assets/img/icons/clientes2.svg" style="min-width: 24px;
         width: 24px;
@@ -43,12 +41,12 @@
         </div>
       </div>
     </div>
-    <div class="section">
+    <div class="section" style="margin: 20px;">
       <div class="dateRow" *ngFor="let activity of activities; let i = index">
-        <div [ngClass]="{ 'line-through': activity.status == 2 }">
+        <div>
           <span class="date">{{("00"+ (i + 1)).slice(-2)}}.</span>
           <span class="hour"> {{ activity.course.name }} </span>
-          <span class="price" [ngClass]="{ 'line-through': activity.status == 2 }">
+          <span class="price">
             <span class="discounted-price">
               {{
               activity.total }}
@@ -57,14 +55,14 @@
         </div>
       </div>
     </div>
-    <div class="section">
+    <div class="section" style="margin: 20px;">
       <div class="dateRow">
         <div>
           <span class="hour">{{ "Subtotal" | translate
             }}</span>
           <span class="price">
             <span class="discounted-price">
-              {{ sumActivityTotal().toFixed(2) }} {{
+              {{ sumActivityTotal()| number:'0.2-2' }} {{
               activities[0].course.currency }}
             </span>
           </span>
@@ -75,9 +73,7 @@
     <div class="section" style="margin-bottom: 0;border: none;">
       <div class="dateRow">
         <div>
-          <span class="hour" (click)="addReduction()"
-            *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
-            < bookingData.price_total && !bookingData.isPaid"
+          <span class="hour" (click)="addReduction()"  *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total"
             style="
             color: #E91E63;
              font-size: 14px;
@@ -89,23 +85,25 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
-          <span style="width: 100%; float:left" *ngIf="bookingData.reduction != null;">
-            <mat-icon *ngIf="!bookingData.isPaid"
+          <span style="width: 100%; float:left"
+            *ngIf="bookingData.reduction !== null;">
+            <mat-icon
               svgIcon="mat:delete"
               style="float: left;color: red; cursor:pointer"
               (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
-              -{{bookingData.price_reduction}}
+              -{{bookingData.price_reduction| number:'0.2-2'}}
               {{activities[0].course.currency}}
             </p>
           </span>
         </div>
       </div>
-      <div class="dateRow">
+      <div class="dateRow"
+       >
         <div>
-          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.isPaid"
-                (click)="addBonus()"
+          <span class="hour"  *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total"
+            (click)="addBonus()"
             style="
           color: #E91E63;
            font-size: 14px;
@@ -120,7 +118,7 @@
           <ng-container *ngIf="bookingData.vouchers?.length">
             <span style="width: 100%; float:left"
               *ngFor="let item of bookingData.vouchers; let i = index">
-              <mat-icon *ngIf="!bookingData.isPaid"
+              <mat-icon
                 svgIcon="mat:delete"
                 style="float: left;color: red; cursor:pointer"
                 (click)="deleteBonus(i);"></mat-icon>
@@ -140,41 +138,46 @@
             color="primary"
             [(ngModel)]="bookingData.has_cancellation_insurance"
             (change)="calculateRem($event)"
-            [disabled]="isNaN(this.cancellationInsurancePercent) && !bookingData.isPaid"
+            [disabled]="isNaN(this.cancellationInsurancePercent)"
             style="float: left;"></mat-checkbox>
           <span class="hour">{{ "op_rem" | translate }}</span>
           <p style="float:right">
-            -{{bookingData.price_cancellation_insurance}}
+            -{{bookingData.price_cancellation_insurance| number:'0.2-2'}}
             {{activities[0].course.currency}}
           </p>
         </div>
       </div>
     </div>
   </div>
-  <div class="footerWrapper">
+  <div class="footerWrapper" style="padding: 20px;">
     {{ "bookings_page.description.total" | translate }}
     <ng-container>
       <span class="totalPrice">
-        {{ bookingData.price_total}}
+        {{ bookingData.price_total| number:'0.2-2' }}
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
-    <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "to_pay" | translate }}</span>
-    <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() <= 0">{{ "A devolver" | translate }}</span>
+    {{ "to_pay" | translate }}
     <ng-container>
-      <span class="totalPrice" *ngIf="bookingData.price_total - calculateTotalVoucherPrice() != 0">
+      <span class="totalPrice">
         {{ bookingData.price_total - calculateTotalVoucherPrice() }}
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
   </div>
 </div>
-<button *ngIf="!bookingData.isPaid"
+<button *ngIf="!hideBotton"
   style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
   color="primary"
   mat-raised-button
   type="button"
   class="client-button" (click)="payClick.emit()">
-  {{ "Pagar" | translate }}
+  {{ "end_reserve_pay" | translate }}
 </button>
-
+<button *ngIf="!hideBotton"
+  style="height: 38px; width: 400px;border-radius: 3px;margin-top: 16px;"
+  mat-raised-button
+  type="button"
+  class="client-button" (click)="addClick.emit()">
+  {{ "add_activity" | translate }}
+</button>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { BookingsCreateUpdateComponent } from './bookings-create-update/bookings-create-update.component';
+import { BookingsCreateUpdateV2Component } from './bookings-create-update/bookings-create-update.component';
 import moment from 'moment';
 import { ApiCrudService } from 'src/service/crud.service';
 import { Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { LayoutService } from 'src/@vex/services/layout.service';
   templateUrl: './bookings.component.html',
   styleUrls: ['./bookings.component.scss']
 })
-export class BookingsComponent {
+export class BookingsV2Component {
   showDetail: boolean = false;
   detailData: any;
   imageAvatar = '../../../assets/img/avatar.png';
@@ -33,7 +33,7 @@ export class BookingsComponent {
   bookingLog: any = [];
   bookingUsersUnique = [];
 
-  createComponent = BookingsCreateUpdateComponent;
+  createComponent = BookingsCreateUpdateV2Component;
   icon = '../../../assets/img/icons/reservas.svg';
   entity = '/bookings';
   deleteEntity = '/bookings';

@@ -1,0 +1,276 @@
+<div [ngClass]="{ 'disabled': status == 2 }"
+	class="wrapper">
+	<div [ngClass]="{ 'headerHover': isDetail }"
+		(click)="isDetail ? summaryMode = !summaryMode : null"
+		class="headerWrapper">
+		<span class="sportTitle">
+			{{("00"+index+1).slice(-2)}}.
+		</span>
+		<div *ngIf="sport || course">
+			<img [class]="{ sportImg: !course, courseImg: course }"
+				[src]="course?.icon || sport.icon_selected"
+				[alt]="sport.name">
+		</div>
+		<ng-container *ngIf="course">
+			<div class="flex flex-col">
+				<h4 class="courseTitle">{{ course.name }}</h4>
+				<span class="courseSubtitle">
+					{{course.typeString | translate}} {{course.is_flexible ? 'Flex' : 'Fix' | translate}} {{course.sport.name}}
+				</span>
+			</div>
+		</ng-container>
+		<div *ngIf="isDetail && status != 2"
+			(click)="deleteActivity.emit(); $event.stopPropagation()"
+			style="margin-left: auto;align-content: space-around;">
+			<img [class]="{ sportImg: !course, courseImg: course }"
+				style="min-width: 24px;
+      width: 24px;
+      height: 24px;"
+				src="assets/icons/icon/delete.png"
+				alt>
+		</div>
+	</div>
+	<div class="bodyWrapper">
+		<div class="section">
+			<div class="sectionTitle">
+				<img src="assets/img/icons/clientes2.svg"
+					style="min-width: 24px;
+        width: 24px;
+        height: 24px;">
+				{{ "bookings_page.description.utilizers" | translate }}
+			</div>
+			<ng-container *ngIf="utilizers">
+				<div *ngIf="!summaryMode; else summaryUtilizer">
+					<div *ngFor="let item of utilizers"
+						class="utilizersWrapper">
+						<img [src]="
+              item.image !== null && item.image !== ''
+                ? item.image
+                : 'assets/img/booking-avatar.svg'
+            "
+							style="min-width: 24px;
+          width: 24px;
+          height: 24px;"
+							class="avatarImg">
+
+						<div class="utilizersWrapper__description">
+							<h4>
+								{{ item.first_name }} {{ item.last_name }}
+							</h4>
+							<span>
+								{{ langService.getLanguage(item.language1_id) }} ·
+                {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
+                  "years" | translate
+                }}
+                · {{ utilsService.getCountry(item.country) }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<ng-template #summaryUtilizer>
+					<div class="utilizersWrapper">
+						<img [src]="utilizers[0]?.image || 'assets/img/booking-avatar.svg'"
+							style="min-width: 24px; width: 24px; height: 24px;"
+							class="avatarImg">
+						<div class="utilizersWrapper__description">
+							<h4>
+								{{ utilizers[0]?.first_name }} {{ utilizers[0]?.last_name
+                }}
+							</h4>
+							<span>
+								{{ langService.getLanguage(utilizers[0]?.language1_id) }} ·
+                {{ utilsService.calculateYears(utilizers[0]?.birth_date) }}
+                &ensp;
+                {{ "years" | translate }} · {{
+                  utilsService.getCountry(utilizers[0]?.country) }}
+							</span>
+						</div>
+						<!-- Mostrar el número de utilizadores restantes -->
+						<div *ngIf="utilizers.length > 1"
+							style="margin-left: auto;background-color: #DEE6EA;border-radius: 3px;
+            height: 28px;
+            width: 28px;
+            text-align: -webkit-center;">
+							<p style="
+            color: #222222;
+             font-size: 14px;
+             font-family: DM Sans;
+             font-weight: 600;
+             line-height: 28px;
+             word-wrap: break-word">
+								+{{ utilizers.length - 1 }}
+							</p>
+						</div>
+					</div>
+				</ng-template>
+			</ng-container>
+		</div>
+
+		<div class="section">
+			<div class="sectionTitle">
+				<img src="assets/img/icons/calendar-1.svg">
+				{{ "bookings_page.description.date" | translate }}
+				<img *ngIf="!summaryMode && isDetail && status != 2"
+					(click)="sendEditForm(dates, course, utilizers)"
+					src="assets/img/icons/edit-grey.svg"
+					style="float: right; min-width: 24px;
+        width: 24px;
+        height: 24px;">
+			</div>
+			<ng-container *ngIf="dates && dates.length">
+				<div *ngIf="!summaryMode; else summaryDates">
+					<div *ngFor="let date of dates; let i = index"
+						[ngClass]="{ 'disabled': date.booking_users[0].status == 2 }"
+						class="dateRow">
+						<div>
+							<span class="date">
+								{{ formatDate(date?.date) }}
+							</span>
+							<span class="hour">
+								{{ date.startHour }}h-{{ date.endHour }}h
+							</span>
+							<span *ngIf="date.price"
+								class="price">
+								<!-- Mostrar el precio original tachado -->
+								<span *ngIf="isDiscounted(date, i)"
+									class="original-price">
+									{{ parseFloat(date.price)| number:'0.2-2' }} {{ date.currency }}
+								</span>
+								<!-- Mostrar el precio con descuento -->
+								<span class="discounted-price">
+									{{ calculateDiscountedPrice(date, i)| number:'0.2-2' }} {{
+                    date.currency }}
+								</span>
+							</span>
+						</div>
+						<div class="monitorRow">
+							<div class="row1">
+								<div class="sectionTitle">
+									<img src="assets/img/icons/monitores-3.svg">
+									{{ "bookings_page.description.monitor" | translate }}
+								</div>
+								<span *ngIf="date.monitor">
+									{{ date.monitor.first_name }} {{ date.monitor.last_name }}
+									<mat-icon *ngIf="date.changeMonitorOption"
+										[class]="date.changeMonitorOption.class"
+										matPrefix
+										class="changeMonitorIcon"
+										fontSet="material-icons-outlined">
+										{{
+                      date.changeMonitorOption.icon }}
+									</mat-icon>
+								</span>
+								<span *ngIf="!date.monitor"
+									class="monitorDetails">
+									{{ 'not_assigned' | translate }}
+								</span>
+							</div>
+
+							<ng-container *ngIf="date.utilizers && date.utilizers.length && hasExtrasForDate(date)">
+								<div class="sectionTitle monitorDetails">
+									{{ "extras" | translate }}
+								</div>
+								<ng-container *ngFor="let utilizer of date.utilizers">
+									<ng-container *ngIf="utilizer.extras && utilizer.extras.length">
+										<div *ngIf="utilizer.extras && utilizer.extras.length"
+											class="dateExtras">
+											<h5>
+												{{ utilizer.first_name }} {{ utilizer.last_name
+                        }}:
+											</h5>
+											<div *ngFor="let extra of utilizer.extras"
+												class="extraDetails">
+												<span>
+													{{ getExtraName([extra]) }} - {{
+                            getExtraDescription([extra]) }}
+												</span>
+												<span class="price">
+													{{ getExtraPrice([extra]) }} {{
+                            date.currency }}
+												</span>
+											</div>
+										</div>
+									</ng-container>
+								</ng-container>
+							</ng-container>
+						</div>
+						<div class="monitorRow">
+							<div *ngIf="date.extras && date.extras.length"
+								class="dateExtras">
+								{{ (date.utilizer && date.utilizer[0]?.first_name) ?? '' }}
+                {{getExtraName(date.extras)}} -
+                {{ getExtraDescription(date.extras) }}
+								<span class="price">
+									{{ getExtraPrice(date.extras) }} {{
+                    date.currency }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<ng-template #summaryDates>
+					<div class="dateRow">
+						<div>
+							<span class="date">
+								{{ formatDate(dates[0]?.date) }}
+							</span>
+							<span class="hour">
+								{{ dates[0]?.startHour }}h-{{ dates[0]?.endHour
+                }}h
+							</span>
+
+							<div *ngIf="dates.length > 1"
+								style="margin-left: auto;background-color: #DEE6EA;border-radius: 3px;
+            height: 28px;
+            width: 28px;
+            text-align: -webkit-center;">
+								<p style="
+            color: #222222;
+             font-size: 14px;
+             font-family: DM Sans;
+             font-weight: 600;
+             line-height: 28px;
+             word-wrap: break-word">
+									+{{ dates.length - 1 }}
+								</p>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</ng-container>
+			<ng-container *ngIf="!dates || !dates.length">
+				<div class="dateSkeletonsWrapper">
+					<div class="skeleton small"></div>
+					<div class="skeleton medium"></div>
+					<div class="skeleton small last"></div>
+				</div>
+			</ng-container>
+		</div>
+
+		<div *ngIf="!summaryMode"
+			class="section observacionSection">
+			<div class="sectionTitle">
+				{{ "observation_client" | translate }}
+				<img *ngIf="!summaryMode && isDetail && status != 2"
+					(click)="openObservationsForm(clientObs, schoolObs)"
+					src="assets/img/icons/edit-grey.svg"
+					style="float: right; min-width: 24px;
+        width: 24px;
+        height: 24px;">
+			</div>
+			<p>{{ clientObs }}</p>
+			<div class="sectionTitle mt-5">
+				{{ "observation_school" | translate
+        }}
+			</div>
+			<p>{{ schoolObs }}</p>
+		</div>
+	</div>
+
+	<div class="footerWrapper">
+		{{ "bookings_page.description.total" | translate }}
+		<ng-container *ngIf="total">
+			<span class="totalPrice">{{ total }}</span>
+		</ng-container>
+	</div>
+</div>

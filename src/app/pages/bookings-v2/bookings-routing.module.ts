@@ -1,36 +1,35 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { VexRoutes } from "src/@vex/interfaces/vex-route.interface";
-import { BookingsComponent } from "./bookings.component";
-import { BookingsCreateUpdateComponent } from "./bookings-create-update/bookings-create-update.component";
-import { BookingDetailComponent } from "./booking-detail/booking-detail.component";
-import { BookingsCreateUpdateEditComponent } from "./bookings-create-update-edit/bookings-create-update-edit.component";
+import { BookingsV2Component } from "./bookings.component";
+import { BookingsCreateUpdateV2Component } from "./bookings-create-update/bookings-create-update.component";
+import { BookingDetailV2Component } from "./booking-detail/booking-detail.component";
 
 const routes: VexRoutes = [
   {
     path: "",
-    component: BookingsComponent,
+    component: BookingsV2Component,
     data: {
       toolbarShadowEnabled: true,
     },
   },
   {
     path: "create",
-    component: BookingsCreateUpdateComponent,
+    component: BookingsCreateUpdateV2Component,
     data: {
       toolbarShadowEnabled: true,
     },
   },
   {
     path: "update/:id",
-    component: BookingDetailComponent,
+    component: BookingDetailV2Component,
     data: {
       toolbarShadowEnabled: true,
     },
   },
   {
     path: "edit/:id",
-    component: BookingsCreateUpdateEditComponent,
+    component: BookingsCreateUpdateV2Component,
     data: {
       toolbarShadowEnabled: true,
     },
