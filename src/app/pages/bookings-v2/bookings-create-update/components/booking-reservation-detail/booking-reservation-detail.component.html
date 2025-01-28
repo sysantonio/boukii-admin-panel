@@ -16,7 +16,7 @@
           [src]="
               client.image !== null && client.image !== ''
                 ? client.image
-                : 'assets/img/booking-avatar.svg'
+                : 'assets/img/avatar.png'
             " />
 
         <div class="utilizersWrapper__description">
@@ -27,15 +27,17 @@
             }}
             · {{ utilsService.getCountry(client.country) }}</span>
           <div style="display: flex;gap: 8px;">
-            <img src="assets/icons/icon/chat.png" style="min-width: 24px;
-              width: 24px;
-              height: 24px;" />
-            <img src="assets/icons/icon/mail.png" style="min-width: 24px;
-                      width: 24px;
-                      height: 24px;" />
-            <img src="assets/icons/icon/phone.png" style="min-width: 24px;
-                              width: 24px;
-                              height: 24px;" />
+           <!-- <vex-icon src="chat"></vex-icon>-->
+            <vex-icon src="mail"
+                      href="mailto:{{client.email}}"
+                      style="cursor:pointer"
+                      title="{{client.email}}">
+            </vex-icon>
+            <vex-icon src="phone"
+                      href="tel:{{client.phone}}"
+                      style="cursor:pointer"
+                      title="{{client.phone}}">
+            </vex-icon>
           </div>
 
         </div>

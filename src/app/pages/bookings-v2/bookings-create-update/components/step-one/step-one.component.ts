@@ -8,6 +8,7 @@ import {
 } from '../../../../clients/client-create-update-modal/client-create-update-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '../../../../../../service/utils.service';
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: "booking-step-one",
@@ -47,22 +48,27 @@ export class StepOneComponent implements OnInit {
       mainClient: [this.mainClient, Validators.required],
     });
 
-    this.filteredOptions = this.stepOneForm.get("client")!.valueChanges.pipe(
-      startWith(""),
+    this.filteredOptions = this.stepOneForm.get('client')!.valueChanges.pipe(
+      startWith(''),
       debounceTime(300),
-      map((value: any) =>
-        typeof value === "string" ? value : this.displayFn(value)
+      switchMap((value: string) =>
+        this.crudService.list(
+          '/admin/clients/mains',
+          1,
+          50, // Solo 50 resultados por página
+          'desc',
+          'id',
+          `&school_id=${this.user.schools[0].id}&active=1&search=${value}`
+        )
       ),
-      map((name) =>
-        name ? this._filter(name) : this.expandClients?.slice(0, 50)
-      )
+      map((response:any) => this.getExpandClients(response.data)),
     );
   }
 
   setClient(ev) {
-    this.selectedClient = ev.source.value;
+    this.selectedClient = ev;
     this.stepOneForm.patchValue({
-      client: ev.source.value,
+      client: ev,
       mainClient: this.selectedClient.main_client || this.selectedClient,
     });
   }
@@ -111,7 +117,7 @@ export class StepOneComponent implements OnInit {
     return this.crudService.list(
       "/admin/clients/mains",
       1,
-      10000,
+      50,
       "desc",
       "id",
       "&school_id=" + this.user.schools[0].id + "&active=1"
@@ -125,15 +131,17 @@ export class StepOneComponent implements OnInit {
   }
 
   private getExpandClients(clients: any[]): any[] {
-    let expandedClients = [];
-    clients.forEach((client) => {
-      expandedClients.push(client);
-      client.utilizers?.forEach((utilizer) => {
-        let expandedUtilizer = { ...utilizer, main_client: client };
-        expandedClients.push(expandedUtilizer);
-      });
-    });
-    return expandedClients;
+    return clients.reduce((expanded, client) => {
+      expanded.push(client);
+      if (client.utilizers?.length) {
+        const utilizers = client.utilizers.map(utilizer => ({
+          ...utilizer,
+          main_client: client,
+        }));
+        expanded.push(...utilizers);
+      }
+      return expanded;
+    }, []);
   }
 
   private _filter(name: string): any[] {

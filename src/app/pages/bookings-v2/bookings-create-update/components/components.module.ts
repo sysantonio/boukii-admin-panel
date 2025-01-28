@@ -37,27 +37,33 @@ import { AddReductionModalComponent } from './add-reduction/add-reduction.compon
 import { AddDiscountBonusModalComponent } from './add-discount-bonus/add-discount-bonus.component';
 import { MatDividerModule } from '@angular/material/divider';
 import {ComponentsCustomModule} from '../../../../components/components-custom.module';
+import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {IconComponent} from '../../../../../@vex/components/icon/app.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatIconModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatButtonModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatRadioModule,
-        TranslateModule,
-        MatDialogModule,
-        MatDatepickerModule,
-        MatSelectModule,
-        MatTabsModule,
-        MatDividerModule,
-        ComponentsCustomModule,
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    TranslateModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatDividerModule,
+    ComponentsCustomModule,
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
+    IconComponent,
+  ],
     declarations: [
         BookingFormStepper,
         StepOneComponent,

@@ -30,7 +30,17 @@ export class BookingDescriptionCard {
   @Input() sport: any;
   @Input() sportLevel: any;
   @Input() course: any;
-  @Input() dates: BookingDescriptionCardDate[];
+  @Input()
+  set dates(value: any[]) {
+    this._dates = value || [];
+    this.extractUniqueMonitors();
+  }
+
+  get dates(): any[] {
+    return this._dates;
+  }
+
+  private _dates: any[] = [];
   @Input() monitors: any;
   @Input() clientObs: any;
   @Input() schoolObs: any;
@@ -38,12 +48,17 @@ export class BookingDescriptionCard {
   @Input() summaryMode = false;
   @Input() isDetail = false;
   @Input() index: number = 1;
+  uniqueMonitors: any[] = []; // Monitores únicos
 
 
   constructor(
     protected langService: LangService,
     protected utilsService: UtilsService
   ) { }
+
+  ngOnInit() {
+    this.extractUniqueMonitors();
+  }
 
   formatDate(date: string) {
     return this.utilsService.formatDate(date);
@@ -68,6 +83,17 @@ export class BookingDescriptionCard {
     }
 
     return price;
+  }
+
+  private extractUniqueMonitors() {
+    if (this._dates.length) {
+      const allMonitors = this._dates.map((date) => date.monitor).filter((monitor) => !!monitor);
+      this.uniqueMonitors = allMonitors.filter(
+        (monitor, index, self) => self.findIndex((m) => m.id === monitor.id) === index
+      );
+    } else {
+      this.uniqueMonitors = [];
+    }
   }
 
   isDiscounted(date: any, index: number): boolean {

@@ -160,7 +160,7 @@ export class CourseUserTransferTimelineComponent implements OnInit {
 
   getUserInSubGroup(subgroup: any) {
     let ret = 0;
-    this.course.booking_users.forEach(element => {
+    this.course.booking_users_active.forEach(element => {
       if (element.course_subgroup_id === subgroup.id && element.status === 1) {
         ret = ret + 1;
       }
