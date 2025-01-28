@@ -68,7 +68,7 @@
 					<td style="text-align-last: start;background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, black);">
 						<div class="flexicon"
 							style="font-size: 12px; font-weight: 600;">
-							{{user.client.first_name}} {{user.client.last_name}}
+							{{user.client?.first_name}} {{user.client?.last_name}}
 						</div>
 						<span style="font-size: 12px;">
 							{{getLanguage(user.language1_id)}}

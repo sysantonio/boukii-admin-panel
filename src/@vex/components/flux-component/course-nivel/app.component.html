@@ -98,7 +98,7 @@ flex-direction: column;">
 						<div *ngIf="ix.id === user.course_subgroup_id"
 							style="padding: 10px;width: 100%;border: 1px solid var(--color-grey2);display: flex;align-items: center;height: 60%;background-color: var(--color-grey4);">
 							<mat-icon [style.color]="user.attended?'#31C044':Date(user.date)<today?'#E70F0F':'#C7D0D3'">circle</mat-icon>
-							{{user.client.first_name}} {{user.client.last_name}}
+							{{user.client?.first_name}} {{user.client?.last_name}}
 						</div>
 					</ng-container>
 
