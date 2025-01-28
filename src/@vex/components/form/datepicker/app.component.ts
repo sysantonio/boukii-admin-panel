@@ -21,8 +21,8 @@ export class ComponenteComponent implements OnInit {
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
   ngOnInit(): void {
-    const offset = this.value.getTimezoneOffset();
-    this.value = new Date(this.value.getTime() - offset * 60 * 1000);
+    const offset = new Date(this.value).getTimezoneOffset();
+    this.value = new Date(new Date(this.value).getTime() - offset * 60 * 1000);
     if (this.form && this.control) {
       this.required = this.form.get(this.control)?.hasValidator(Validators.required) || false
     }

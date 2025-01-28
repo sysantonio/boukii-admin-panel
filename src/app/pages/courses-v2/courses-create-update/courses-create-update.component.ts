@@ -228,7 +228,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
     } else if (this.ModalFlux === 3) {
       if (
-        this.courses.courseFormGroup.controls[" "].status === 'VALID' &&
+        this.courses.courseFormGroup.controls["date_start"].status === 'VALID' &&
         this.courses.courseFormGroup.controls["date_end"].status === 'VALID'
       ) {
       } else {

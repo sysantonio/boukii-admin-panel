@@ -9,6 +9,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 export class CoursesService {
   constructor(private translateService: TranslateService, private fb: UntypedFormBuilder) { }
   courseFormGroup: UntypedFormGroup;
+  nowDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+  minDate = this.nowDate;
+  maxDate = new Date(2099, 12, 31);
 
   settcourseFormGroup(data: any) {
     this.resetcourseFormGroup()
@@ -45,10 +48,10 @@ export class CoursesService {
       icon: ["", Validators.required],
       age_max: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
       age_min: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
-      date_start: [new Date(), Validators.required],
-      date_end: [new Date(), Validators.required],
-      date_start_res: [new Date()],
-      date_end_res: [new Date()],
+      date_start: [this.nowDate, Validators.required],
+      date_end: [this.nowDate, Validators.required],
+      date_start_res: [this.nowDate],
+      date_end_res: [this.nowDate],
       duration: [, Validators.required],
       confirm_attendance: [false],
       active: [true],
@@ -83,9 +86,6 @@ export class CoursesService {
     });
   }
 
-  nowDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
-  minDate = this.nowDate;
-  maxDate = new Date(2099, 12, 31);
   hours: string[] = [
     '08:00', '08:15', '08:30', '08:45', '09:00', '09:15', '09:30', '09:45',
     '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45',
