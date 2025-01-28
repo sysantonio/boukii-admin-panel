@@ -83,7 +83,7 @@ export class CoursesService {
     });
   }
 
-  nowDate = new Date()
+  nowDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
   minDate = this.nowDate;
   maxDate = new Date(2099, 12, 31);
   hours: string[] = [
@@ -124,7 +124,7 @@ export class CoursesService {
       hour_start: this.hours[0],
       duration: this.duration[0],
       date_end: this.nowDate,
-      hour_end: this.hours[4],
+      hour_end: this.hours[1],
       course_groups: [],
       groups: []
     }

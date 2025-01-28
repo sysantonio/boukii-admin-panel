@@ -67,58 +67,63 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
     this.extras = [...extras.food, ...extras.forfait, ...extras.transport]
     this.mode = this.id ? 'update' : 'create';
-    forkJoin({
-      sports: this.getSports(),
-      stations: this.getStations(),
-      monitors: this.getMonitors(),
-    }).subscribe(({ sports, stations, monitors }) => {
-      this.sportData = sports;
-      this.stations = stations;
-      this.courses.resetcourseFormGroup()
-      if (this.mode === "create") {
-        this.courses.courseFormGroup.patchValue({
-          sport_id: this.sportData[0].sport_id,
-          station_id: this.stations[0].id,
-          duration: this.courses.duration[0],
-          school_id: this.user.schools[0].id,
-          hour_min: this.courses.hours[0],
-          hour_max: this.courses.hours[4],
-        })
-        this.Confirm(0)
-        setTimeout(() => this.loading = false, 0);
-      } else {
-        this.monitors = monitors
-        this.crudService.get('/admin/courses/' + this.id,
-          ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
-          .subscribe((data: any) => {
-            this.detailData = data.data
-            this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
-              .subscribe((st: any) => {
-                st.data.forEach((element: any) => {
-                  if (element.id === this.detailData.station_id) this.detailData.station = element
-                });
-                //this.extras.push(...this.detailData.extras)
-                //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
-                //  .subscribe((bookingUser) => {
-                //    this.detailData.users = [];
-                //    this.detailData.users = bookingUser.data;
-                //  })
-                this.courses.settcourseFormGroup(this.detailData)
-                this.getDegrees()
-                setTimeout(() => this.loading = false, 0);
+    forkJoin(
+      this.mode === "update" ?
+        {
+          sports: this.getSports(),
+          stations: this.getStations(),
+          monitors: this.getMonitors(),
+        } : {
+          sports: this.getSports(),
+          stations: this.getStations(),
+        }).subscribe(({ sports, stations, monitors }) => {
+          this.sportData = sports;
+          this.stations = stations;
+          this.courses.resetcourseFormGroup()
+          if (this.mode === "create") {
+            this.courses.courseFormGroup.patchValue({
+              sport_id: this.sportData[0].sport_id,
+              station_id: this.stations[0].id,
+              duration: this.courses.duration[0],
+              school_id: this.user.schools[0].id,
+              hour_min: this.courses.hours[0],
+              hour_max: this.courses.hours[4],
+            })
+            this.Confirm(0)
+            setTimeout(() => this.loading = false, 0);
+          } else {
+            this.monitors = monitors
+            this.crudService.get('/admin/courses/' + this.id,
+              ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
+              .subscribe((data: any) => {
+                this.detailData = data.data
+                this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
+                  .subscribe((st: any) => {
+                    st.data.forEach((element: any) => {
+                      if (element.id === this.detailData.station_id) this.detailData.station = element
+                    });
+                    //this.extras.push(...this.detailData.extras)
+                    //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
+                    //  .subscribe((bookingUser) => {
+                    //    this.detailData.users = [];
+                    //    this.detailData.users = bookingUser.data;
+                    //  })
+                    this.courses.settcourseFormGroup(this.detailData)
+                    this.getDegrees()
+                    setTimeout(() => this.loading = false, 0);
+                  })
               })
+          }
+          this.extrasFormGroup = this.fb.group({
+            id: ["", Validators.required],
+            product: ["", Validators.required],
+            name: ["", Validators.required],
+            price: [1, Validators.required],
+            tva: [21, Validators.required],
+            status: [true, Validators.required],
           })
-      }
-      this.extrasFormGroup = this.fb.group({
-        id: ["", Validators.required],
-        product: ["", Validators.required],
-        name: ["", Validators.required],
-        price: [1, Validators.required],
-        tva: [21, Validators.required],
-        status: [true, Validators.required],
-      })
-      this.schoolService.getSchoolData().subscribe((data) => { this.schoolData = data.data })
-    });
+          this.schoolService.getSchoolData().subscribe((data) => { this.schoolData = data.data })
+        });
   }
 
   createExtras() {
@@ -137,22 +142,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
   getMonitors = () => this.crudService.list('/monitors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(map(data => data.data));
-  getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
-    map(sport => sport.data),
-    mergeMap(sports =>
-      forkJoin(sports.map(element =>
-        this.crudService.get('/sports/' + element.sport_id).pipe(
-          map(data => {
-            element.name = data.data.name;
-            element.icon_selected = data.data.icon_selected;
-            element.icon_unselected = data.data.icon_unselected;
-            element.sport_type = data.data.sport_type;
-            return element;
-          })
-        )
-      ))
-    )
-  );
+  getSports = () => this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id, null, null, null, ['sport']).pipe(map(sport => sport.data));
+
   getStations = () => this.crudService.list('/stations-schools', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id).pipe(
     map(station => station.data),
     mergeMap(stations => forkJoin(stations.map((element: any) => this.crudService.get('/stations/' + element.station_id).pipe(map(data => data.data)))))
@@ -189,7 +180,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     if (this.ModalFlux === 1) {
       if (!this.courses.courseFormGroup.controls["course_type"].value) this.courses.courseFormGroup.patchValue({ course_type: 1 })
       this.courses.courseFormGroup.patchValue({
-        icon: this.sportData.find((a: any) => a.sport_id === this.courses.courseFormGroup.controls['sport_id'].value).icon_unselected
+        icon: this.sportData.find((a: any) => a.sport_id === this.courses.courseFormGroup.controls['sport_id'].value).sport.icon_unselected
       })
       this.getDegrees();
     } else if (this.ModalFlux === 2) {
@@ -237,7 +228,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       }
     } else if (this.ModalFlux === 3) {
       if (
-        this.courses.courseFormGroup.controls["date_start"].status === 'VALID' &&
+        this.courses.courseFormGroup.controls[" "].status === 'VALID' &&
         this.courses.courseFormGroup.controls["date_end"].status === 'VALID'
       ) {
       } else {
