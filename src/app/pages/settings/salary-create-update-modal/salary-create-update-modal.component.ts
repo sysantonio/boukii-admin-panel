@@ -26,7 +26,11 @@ export class SalaryCreateUpdateModalComponent implements OnInit {
     if(this.defaults !== null && this.defaults.id) {
       this.mode = 'update';
     } else {
-
+      this.defaults = {
+        name: null,
+        pay: null,
+        active: false
+      }
       this.mode = 'create';
     }
 
