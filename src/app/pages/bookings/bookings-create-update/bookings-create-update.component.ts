@@ -551,11 +551,11 @@ export class BookingsCreateUpdateComponent implements OnInit {
       if (validCourseDates.length > 0) {
         validCourseDates = validCourseDates.filter(i => {
           const isToday = moment(i.date).startOf('day').isSame(today);
-          if (isToday) {
+/*          if (isToday) {
             // Si la fecha es hoy, verifica que haya horas disponibles mayores a la hora actual
             const hasAvailableHours = i.hours.some(hour => moment(hour).isAfter(currentTime));
             return hasAvailableHours;
-          }
+          }*/
           return true; // Si no es hoy, ya es válida
         });
       }
