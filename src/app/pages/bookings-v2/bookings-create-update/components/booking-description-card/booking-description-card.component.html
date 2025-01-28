@@ -4,7 +4,7 @@
       'header2': course && course.course_type===2,
       'header3': course && course.course_type===3}"
        (click)="isDetail ? summaryMode = !summaryMode : null">
-    <span class="sportTitle">{{("00"+index).slice(-2)}}.</span>
+    <span class="sportTitle">{{("00"+index+1).slice(-2)}}.</span>
     <div *ngIf="sport || course">
       <img class="icon40"
            [class]="{ sportImg: !course, courseImg: course }"
@@ -77,8 +77,8 @@
         <ng-template #summaryUtilizer>
           <div class="utilizersWrapper">
             <img *ngIf="!utilizers[0]?.client_sports || !utilizers[0]?.client_sports.length"
-              class="avatarImg icon40"
-              [src]="utilizers[0]?.image || 'assets/img/avatar.png'" />
+                 class="avatarImg icon40"
+                 [src]="utilizers[0]?.image || 'assets/img/avatar.png'" />
             <app-level-user *ngIf="utilizers[0]?.client_sports && utilizers[0]?.client_sports.length && allLevels"
                             mat-card-avatar style="margin-right: 5px"
                             [allLevels]="utilsService.getSportLevels(utilizers[0]?.client_sports[0].sport_id, allLevels)"
@@ -155,7 +155,7 @@
                 </span>
               </span>
             </div>
-            <div class="monitorRow">
+            <div class="monitorRow" *ngIf="course && course.course_type!==1">
               <div class="row1">
 
                 <div class="sectionTitle">
@@ -246,33 +246,43 @@
         </div>
       </ng-container>
     </div>
-
-    <!--<div class="section">
+    <div class="section" *ngIf="course && course.course_type === 1">
       <div class="sectionTitle">
         <img src="assets/img/icons/monitores-3.svg" />
         {{ "bookings_page.description.monitor" | translate }}
       </div>
-      <ng-container *ngIf="monitors">
-        <div class="monitor__description" *ngFor="let monitor of monitors">
-          <h4>{{ monitor.first_name }} {{ monitor.last_name }}</h4>
-          <span
-          >{{ langService.getLanguage(monitor.language1_id) }} ·
-            {{ utilsService.calculateYears(monitor.birth_date) }} &ensp;{{
-              "years" | translate
-            }}
-            · {{ utilsService.getCountry(monitor.country) }}</span
-          >
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!monitors">
-        <div class="utilizersWrapper">
-          <div class="sportSkeletonsWrapper">
-            <div class="skeleton"></div>
-            <div class="skeleton small"></div>
+      <ng-container *ngIf="dates?.length; else noDates">
+        <ng-container *ngIf="uniqueMonitors.length; else noMonitor">
+          <div class="monitor__description">
+            <h4>{{ uniqueMonitors[0]?.first_name }} {{ uniqueMonitors[0]?.last_name }}
+              <span *ngIf="uniqueMonitors.length > 1"
+                    style="color: var(--color-dark1); font-size: 14px; font-family: DM Sans; font-weight: 600; line-height: 28px; word-wrap: break-word;">
+              +{{ uniqueMonitors.length - 1 }}
+            </span>
+            </h4>
+            <span>
+          {{ langService.getLanguage(uniqueMonitors[0]?.language1_id) }} ·
+              {{ utilsService.calculateYears(uniqueMonitors[0]?.birth_date) }} &ensp;
+              {{ "years" | translate }} ·
+              {{ utilsService.getCountry(uniqueMonitors[0]?.country) }}
+
+        </span>
+
           </div>
-        </div>
+        </ng-container>
       </ng-container>
-    </div>-->
+      <ng-template #noMonitor>
+        <div class="utilizersWrapper">
+          <p>{{ "No monitor assigned" | translate }}</p>
+        </div>
+      </ng-template>
+      <ng-template #noDates>
+        <div class="utilizersWrapper">
+          <p>{{ "No dates available" | translate }}</p>
+        </div>
+      </ng-template>
+    </div>
+
 
     <div class="section observacionSection" *ngIf="!summaryMode">
       <div class="sectionTitle">{{ "observation_client" | translate }}

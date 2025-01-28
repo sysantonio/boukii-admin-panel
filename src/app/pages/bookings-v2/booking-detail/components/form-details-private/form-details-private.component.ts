@@ -134,18 +134,25 @@ export class FormDetailsPrivateComponent implements OnInit {
             u.last_name === utilizer.last_name)?.extras || [], disabled || isDatePast)
     ));
 
-    let formattedDate = this.date ? this.date.format('YYYY-MM-DD') : null;
+    let formattedDate = moment().format('YYYY-MM-DD'); // Fecha por defecto: hoy
 
     if (this.courseDates.length > 0) {
       const lastDateGroup = this.courseDates.at(this.courseDates.length - 1);
       const lastDate = lastDateGroup.get('date').value;
 
-      // Si quieres ajustar la nueva fecha para que sea al día siguiente
-      formattedDate = moment(lastDate).add(1, 'day').format('YYYY-MM-DD');
+      // Encuentra las fechas válidas posteriores a lastDate
+      const validDates = (this.course.course_dates || [])
+        .map(d => moment(d.date)) // Convierte las fechas a objetos moment
+        .filter(d => d.isAfter(moment(lastDate, 'YYYY-MM-DD'))); // Filtra fechas posteriores a lastDate
+
+      // Si hay fechas válidas, toma la primera fecha posterior
+      if (validDates.length > 1) {
+        formattedDate = validDates.sort((a, b) => a.isBefore(b) ? -1 : 1)[1].format('YYYY-MM-DD'); // Ordena y selecciona la primera
+      } else {
+        // Si no hay fechas válidas posteriores, usa la última fecha seleccionada
+        formattedDate = validDates[0].format('YYYY-MM-DD');
+      }
     }
-
-
-
 
     const courseDateGroup = this.fb.group({
       selected: [initialData ? disabled : null],

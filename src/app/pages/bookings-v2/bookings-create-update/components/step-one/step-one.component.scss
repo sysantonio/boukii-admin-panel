@@ -1,7 +1,9 @@
 .stepOneSearchInput {
   width: 100%;
 }
-
+.mat-mdc-card-avatar {
+  margin-bottom: 0 !important;
+}
 .stepOneButtonsWrapper {
   display: flex;
   flex-direction: row;
@@ -33,4 +35,9 @@
     object-fit: cover;
     border-radius: 50%;
   }
+}
+.viewport {
+  height: 200px; /* Altura visible del área de scroll */
+  width: 100%; /* Usar el ancho completo del contenedor */
+  overflow-y: auto; /* Habilita el scroll vertical */
 }

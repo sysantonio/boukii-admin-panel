@@ -107,7 +107,7 @@
               </mat-form-field>
             </div>
             <!-- Selección de extras -->
-            <div class="extra-field-wrapper">
+            <div class="extra-field-wrapper" *ngIf=" this.possibleExtras && this.possibleExtras.length">
               <mat-form-field appearance="outline" class="extras-field">
                 <mat-label>{{ "extras" | translate }}</mat-label>
                 <mat-select formControlName="extras" multiple

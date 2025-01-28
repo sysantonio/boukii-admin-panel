@@ -57,10 +57,12 @@
 			{{ "bookings_page_descriptionModal_button" | translate }}
 		</button>
 		<mat-card class="left-column">
-			<div *ngIf="forceStep < 5 && selectedIndexForm != null">
-				Una vez que selecciones continuar en esté paso se reiniciaran y
-        eliminarán todas las selecciones de los pasos siguientes.
-			</div>
+      <mat-card class="info-message" *ngIf="forceStep < 5 && selectedIndexForm != null">
+        <mat-card-content>
+          <mat-icon color="secondary" style="margin-right: 8px;">info</mat-icon>
+          <span>{{ "Una vez que selecciones confirmar en esté paso se reiniciaran y eliminarán todas las selecciones de los pasos siguientes." | translate }}</span>
+        </mat-card-content>
+      </mat-card>
 			<booking-form-stepper [forceStep]="forceStep"
 				[activitiesBooked]="normalizedDates"
 				[selectedForm]="selectedForm"
