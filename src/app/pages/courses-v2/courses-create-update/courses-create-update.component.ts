@@ -209,9 +209,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 const translatedShortDescription = await this.crudService.translateText(short_description.value, lang.toUpperCase()).toPromise();
                 const translatedDescription = await this.crudService.translateText(description.value, lang.toUpperCase()).toPromise();
                 translations[lang] = {
-                  name: translatedName.data.translations[0].text,
-                  short_description: translatedShortDescription.data.translations[0].text,
-                  description: translatedDescription.data.translations[0].text,
+                  name: translatedName?.data.translations[0].text,
+                  short_description: translatedShortDescription?.data.translations[0].text,
+                  description: translatedDescription?.data.translations[0].text,
                 };
               });
               await Promise.all(translationPromises);
@@ -330,6 +330,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   endCourse() {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
+    console.log(courseFormGroup)
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
     if (this.mode === "create") {
@@ -368,6 +369,4 @@ export class CoursesCreateUpdateComponent implements OnInit {
     course_dates[event.i].course_groups[course_dates[event.i].course_groups.findIndex((a: any) => a.degree_id === level.id)].course_subgroups[j].monitor_id = event.monitor.id
     this.courses.courseFormGroup.patchValue({ course_dates })
   }
-
-
 }

@@ -9,7 +9,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 export class CoursesService {
   constructor(private translateService: TranslateService, private fb: UntypedFormBuilder) { }
   courseFormGroup: UntypedFormGroup;
-  nowDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+  nowDate = new Date(new Date().setHours(-new Date().getTimezoneOffset() / 60, 0, 0, 0));
   minDate = this.nowDate;
   maxDate = new Date(2099, 12, 31);
 
@@ -38,7 +38,7 @@ export class CoursesService {
       user_id: [this.user.id],
       booking_users: [[]],
       course_type: [null, Validators.required],
-      name: ["Name Test", Validators.required],
+      name: ["Curso prueba " + new Date().toISOString(), Validators.required],
       short_description: ["Short Description Test", Validators.required],
       description: ["Description Test", Validators.required],
       price: [100, [Validators.required, Validators.min(1)]],

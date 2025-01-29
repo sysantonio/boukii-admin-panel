@@ -68,6 +68,11 @@ table {
   tr > td:first-child {
     min-width: 100px;
   }
+  thead {
+    td {
+      cursor: pointer;
+    }
+  }
   tbody {
     td {
       padding-left: 10px;

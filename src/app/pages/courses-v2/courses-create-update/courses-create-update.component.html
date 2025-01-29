@@ -315,6 +315,7 @@
 					<ng-container *ngFor="let level of courses.courseFormGroup.controls['levelGrop'].value;index as i">
 						<div style="display: flex;gap: 16px;">
 							<mat-checkbox
+								[disabled]="mode==='update'&&courses.courseFormGroup.controls['levelGrop'].value[i].active"
 								[style.backgroundColor]="courses.courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
 								[style.color]="level.color" [style.border]="'1px solid '+level.color"
 								[(ngModel)]="courses.courseFormGroup.controls['levelGrop'].value[i].active"
