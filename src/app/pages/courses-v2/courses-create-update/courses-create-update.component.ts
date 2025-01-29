@@ -208,7 +208,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 const translatedName = await this.crudService.translateText(name.value, lang.toUpperCase()).toPromise();
                 const translatedShortDescription = await this.crudService.translateText(short_description.value, lang.toUpperCase()).toPromise();
                 const translatedDescription = await this.crudService.translateText(description.value, lang.toUpperCase()).toPromise();
-
                 translations[lang] = {
                   name: translatedName.data.translations[0].text,
                   short_description: translatedShortDescription.data.translations[0].text,

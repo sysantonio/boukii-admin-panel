@@ -84,18 +84,18 @@ export class CoursesComponent {
             this.groupedByColor[level.color].push(level);
           });
           this.colorKeys = Object.keys(this.groupedByColor);
-          this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
-            .subscribe((st: any) => {
-              st.data.forEach((element: any) => {
-                if (element.id === this.detailData.station_id) this.detailData.station = element
-              });
-              this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
-                .subscribe((bookingUser: any) => {
-                  this.detailData.users = bookingUser.data;
-                  this.courses.settcourseFormGroup(this.detailData)
-                  this.showDetail = true;
-                })
-            })
+          //this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
+          //  .subscribe((st: any) => {
+          //    st.data.forEach((element: any) => {
+          //      if (element.id === this.detailData.station_id) this.detailData.station = element
+          //    });
+          //  })
+          //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.//detailData.id)
+          //  .subscribe((bookingUser: any) => {
+          //    this.detailData.users = bookingUser.data;
+          //  })
+          this.courses.settcourseFormGroup(this.detailData)
+          this.showDetail = true;
         });
     } else this.showDetail = event.showDetail;
   }
